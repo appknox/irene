@@ -1,0 +1,44 @@
+<div
+  local-class='offsec-wrapper-root {{if
+    this.isSidebarCollapsed
+    "collapsed"
+    "expanded"
+  }}'
+>
+  <TopNav
+    local-class='offsec-wrapper-header'
+    @title={{t 'offensiveSecurity.title'}}
+    @user={{@user}}
+    as |topNav|
+  >
+    <AkStack local-class='top-nav-content' @justifyContent='space-between'>
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkTypography data-test-topNav-startScanLabel @color='inherit'>
+          {{t 'startNewScan'}}
+        </AkTypography>
+
+        <UploadApp />
+      </AkStack>
+
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
+      </AkStack>
+    </AkStack>
+  </TopNav>
+
+  <SideNav
+    @pendoContainerId='ak-pendo-version-container'
+    @productVersion={{this.productVersion}}
+    @isCollapsed={{this.isSidebarCollapsed}}
+    @toggleSidebar={{this.toggleSidebar}}
+    @menuItems={{this.menuItems}}
+    @productSwitcherFilterKey='offensive-security'
+    @isOffsec={{true}}
+    local-class='offsec-wrapper-sidenav'
+  />
+
+  {{! #id is required for scroll-to-top util }}
+  <main id='ak-dashboard-main-scroll-container' local-class='offsec-wrapper-main'>
+    {{yield}}
+  </main>
+</div>

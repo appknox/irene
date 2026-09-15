@@ -30,6 +30,7 @@ export interface SideNavSignature {
     isCollapsed: boolean;
     toggleSidebar: () => void;
     productSwitcherFilterKey: string;
+    isOffsec?: boolean;
   };
   Element: HTMLElement;
   Blocks: {
@@ -156,8 +157,20 @@ export default class SideNavComponent extends Component<SideNavSignature> {
     return this.freshdesk.freshchatEnabled;
   }
 
+  get showOffensiveSecurity() {
+    return (
+      !this.organization.hideUpsellUIStatus.offensiveSecurity &&
+      this.organization.selected?.features?.offensive_security
+    );
+  }
+
   get showProductSwitcher() {
-    return this.isSecurityEnabled || this.showStoreknox || this.showReport;
+    return (
+      this.isSecurityEnabled ||
+      this.showStoreknox ||
+      this.showReport ||
+      this.showOffensiveSecurity
+    );
   }
 
   @action openChatBox() {

@@ -83,6 +83,7 @@
         @route={{item.route}}
         target={{if item.openInNewTab '_blank'}}
         rel={{if item.openInNewTab 'noopener noreferrer'}}
+        {{on 'click' this.closeSwitcherPopover}}
       >
         <AkStack @direction='row' @alignItems='center' @spacing='1'>
           {{#let (component item.svg) as |SvgIcon|}}

@@ -1,0 +1,11 @@
+{{page-title (t 'offensiveSecurity.title')}}
+
+<OffensiveSecurityWrapper @user={{@model.user}}>
+  {{#if @model.isOffensiveSecurityEnabled}}
+    {{outlet}}
+  {{else}}
+    <PageWrapper>
+      <OffensiveSecurity::Upselling />
+    </PageWrapper>
+  {{/if}}
+</OffensiveSecurityWrapper>

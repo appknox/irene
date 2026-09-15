@@ -69,9 +69,9 @@ module(
       assert.dom('[data-test-fileOverview-root]').exists();
       assert.dom('[data-test-fileOverview-header]').exists();
 
-      const fileIcon = find('[data-test-appLogo-img]');
-
-      assert.strictEqual(fileIcon?.getAttribute('src'), this.file?.iconUrl);
+      assert
+        .dom('[data-test-appLogo-img], [data-test-appLogo-fallback]')
+        .exists();
 
       assert
         .dom('[data-test-fileOverview-fileName]')

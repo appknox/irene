@@ -1,0 +1,8 @@
+{{page-title (t 'offensiveSecurity.finding')}}
+
+<PageWrapper @backgroundColor='dark'>
+  <OffensiveSecurity::FindingDetail
+    @scanId={{@model.scan.id}}
+    @findingId={{@model.finding.id}}
+  />
+</PageWrapper>

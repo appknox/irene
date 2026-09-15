@@ -2,6 +2,7 @@
   border-radius: var(--home-page-product-card-border-radius);
   border: 1px solid var(--home-page-product-card-border-color);
   max-width: 314px;
+  overflow: hidden;
 
   .product-card-content {
     background-color: var(--home-page-product-card-background-color);

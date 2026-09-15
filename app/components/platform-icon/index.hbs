@@ -1,0 +1,43 @@
+{{#if (eq this.numCode 0)}}
+  {{! 0: ANDROID_NATIVE }}
+  <AkSvg::PlatformAndroid width={{this.iconSize}} height={{this.iconSize}} />
+
+{{else if (or (eq this.numCode 1) (eq this.numCode 8))}}
+  {{! 1 & 8: REACT_NATIVE }}
+  <AkIcon @iconName='mdi:react' @size='small' />
+
+{{else if (or (eq this.numCode 2) (eq this.numCode 9))}}
+  {{! 2 & 9: FLUTTER }}
+  <AkIcon @iconName='flutter' @size='small' />
+
+{{else if (or (eq this.numCode 3) (eq this.numCode 10))}}
+  {{! 3 & 10: XAMARIN }}
+  <AkIcon @iconName='mdi:xamarin' @size='small' />
+
+{{else if (or (eq this.numCode 4) (eq this.numCode 11))}}
+  {{! 4 & 11: CORDOVA }}
+  <AkIcon @iconName='mdi:cordova' @size='small' />
+
+{{else if (eq this.numCode 5)}}
+  {{! 5: ANDROID_UNKNOWN }}
+  <AkSvg::PlatformAndroidUnknown
+    width={{this.iconSize}}
+    height={{this.iconSize}}
+  />
+
+{{else if (eq this.numCode 6)}}
+  {{! 6: IOS_NATIVE }}
+  <AkIcon @iconName='ios' @size='small' />
+
+{{else if (eq this.numCode 7)}}
+  {{! 7: IOS_SWIFT }}
+  <AkIcon @iconName='mdi:language-swift' @size='small' />
+
+{{else if (eq this.numCode 12)}}
+  {{! 12: IOS_UNKNOWN }}
+  <AkSvg::PlatformIosUnknown width={{this.iconSize}} height={{this.iconSize}} />
+
+{{else}}
+  {{! default: UNKNOWN }}
+  <AkIcon @iconName='mdi:help-circle-outline' @size='small' />
+{{/if}}

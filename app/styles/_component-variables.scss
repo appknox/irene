@@ -771,6 +771,8 @@ body {
   //variables for app-logo
   --app-logo-border-radius: var(--border-radius);
   --app-logo-border-color: var(--neutral-grey-100);
+  --app-logo-fallback-bg: var(--common-black);
+  --app-logo-fallback-color: var(--primary-contrast-text);
 
   // variables for file/report-drawer/va-reports
   --file-report-dr-va-reports-border-radius: var(--border-radius);
@@ -4117,6 +4119,412 @@ body {
 
   //store-release-readiness/status
   --store-release-readiness-status-bg-color: var(--common-white);
+
+  // variables for offensive-security/status-chip
+  --offensive-security-status-chip-border-radius: var(--border-radius-8);
+  --offensive-security-status-chip-bg-color: var(--background-light);
+  --offensive-security-status-chip-color: var(--text-secondary);
+  --offensive-security-status-chip-completed-bg-color: var(--success-light);
+  --offensive-security-status-chip-completed-color: var(--success-main);
+  --offensive-security-status-chip-failed-bg-color: var(--error-bg);
+  --offensive-security-status-chip-failed-color: var(--error-main);
+  --offensive-security-status-chip-pending-bg-color: var(--background-light);
+  --offensive-security-status-chip-pending-color: var(--text-secondary);
+  --offensive-security-status-chip-running-bg-color: var(--info-light);
+  --offensive-security-status-chip-running-color: var(--info-main);
+  --offensive-security-status-chip-running-track-color: var(--border-color-1);
+
+  // variables for offensive-security/attack-runs
+  --offensive-security-attack-runs-bg-color: var(--common-white);
+  --offensive-security-attack-runs-border: 1px solid var(--border-color-1);
+  --offensive-security-attack-runs-border-radius: var(--border-radius-8);
+  --offensive-security-attack-runs-row-hover-bg-color: var(--background-light);
+  --offensive-security-attack-runs-empty-color: var(--text-secondary);
+  --offensive-security-attack-runs-overline-color: var(--text-secondary);
+  --offensive-security-attack-runs-header-shield-bg: var(
+    --offensive-security-header-shield-bg
+  );
+  --offensive-security-attack-runs-header-shield-color: var(
+    --offensive-security-header-shield-color
+  );
+  --offensive-security-attack-runs-stat-icon-neutral-bg: var(
+    --neutral-grey-100
+  );
+  --offensive-security-attack-runs-stat-icon-neutral-color: var(
+    --neutral-grey-600
+  );
+  --offensive-security-attack-runs-stat-icon-blue-bg: var(--info-light);
+  --offensive-security-attack-runs-stat-icon-blue-color: var(--info-main);
+  --offensive-security-attack-runs-stat-icon-green-bg: var(--success-light);
+  --offensive-security-attack-runs-stat-icon-green-color: var(--success-main);
+  --offensive-security-attack-runs-stat-icon-red-bg: var(--error-light);
+  --offensive-security-attack-runs-stat-icon-red-color: var(--error-main);
+
+  // Risk tokens outlived the Risk column: scan-results/summary-card and
+  // finding-detail still colour their badges from them.
+  --offensive-security-attack-runs-risk-critical-color: var(--error-main);
+  --offensive-security-attack-runs-risk-critical-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-risk-high-color: var(--severity-high);
+  --offensive-security-attack-runs-risk-high-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-risk-medium-color: var(--warn-main);
+  --offensive-security-attack-runs-risk-medium-bg-color: var(--warn-light);
+  --offensive-security-attack-runs-risk-low-color: var(--success-main);
+  --offensive-security-attack-runs-risk-low-bg-color: var(--success-light);
+  --offensive-security-attack-runs-risk-unknown-color: var(--text-secondary);
+  --offensive-security-attack-runs-risk-unknown-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-overline-font-family: var(
+    --font-family-mono
+  );
+
+  // variables for offensive-security/attack-runs/table/resilience
+  --offensive-security-attack-runs-resilience-border-radius: var(
+    --border-radius-8
+  );
+  --offensive-security-attack-runs-resilience-font-family: var(
+    --font-family-mono
+  );
+  --offensive-security-attack-runs-resilience-weak-color: var(--error-main);
+  --offensive-security-attack-runs-resilience-weak-bg-color: var(--error-bg);
+  --offensive-security-attack-runs-resilience-medium-color: var(--warn-dark);
+  --offensive-security-attack-runs-resilience-medium-bg-color: var(
+    --warn-light
+  );
+  --offensive-security-attack-runs-resilience-strong-color: var(--success-main);
+  --offensive-security-attack-runs-resilience-strong-bg-color: var(
+    --success-light
+  );
+  --offensive-security-attack-runs-resilience-very-strong-color: var(
+    --success-main
+  );
+  --offensive-security-attack-runs-resilience-very-strong-bg-color: var(
+    --success-light
+  );
+  --offensive-security-attack-runs-resilience-unknown-color: var(
+    --text-secondary
+  );
+  --offensive-security-attack-runs-resilience-unknown-bg-color: var(
+    --background-light
+  );
+
+  // variables for offensive-security/attack-runs column filter popovers
+  --offensive-security-attack-runs-filter-bg-color: var(--common-white);
+  --offensive-security-attack-runs-filter-box-shadow: var(--box-shadow-1);
+  --offensive-security-attack-runs-filter-border-radius: var(
+    --border-radius-4
+  );
+  --offensive-security-attack-runs-filter-header-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-filter-option-hover-bg-color: var(
+    --background-light
+  );
+  --offensive-security-attack-runs-filter-clear-bg-color: var(
+    --background-light
+  );
+
+  // variables for offensive-security/scan-results
+  --offensive-security-scan-results-card-bg-color: var(--common-white);
+  --offensive-security-scan-results-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-scan-results-card-border-radius: var(--border-radius-8);
+  --offensive-security-scan-results-label-color: var(--text-secondary);
+  --offensive-security-scan-results-value-color: var(--text-primary);
+  --offensive-security-scan-results-divider-color: var(--border-color-1);
+  --offensive-security-scan-results-stat-exploited-color: var(--error-main);
+  --offensive-security-scan-results-stat-defended-color: var(--success-main);
+  --offensive-security-scan-results-artifact-hover-border: var(
+    --offensive-security-artifact-hover-border
+  );
+  --offensive-security-scan-results-artifact-blue-bg: var(
+    --offensive-security-artifact-blue-bg
+  );
+  --offensive-security-scan-results-artifact-blue-color: var(
+    --offensive-security-artifact-blue-color
+  );
+  --offensive-security-scan-results-artifact-purple-bg: var(
+    --offensive-security-artifact-purple-bg
+  );
+  --offensive-security-scan-results-artifact-purple-color: var(
+    --offensive-security-artifact-purple-color
+  );
+  --offensive-security-scan-results-artifact-orange-bg: var(
+    --offensive-security-artifact-orange-bg
+  );
+  --offensive-security-scan-results-artifact-orange-color: var(
+    --offensive-security-artifact-orange-color
+  );
+  --offensive-security-scan-results-artifact-green-bg: var(
+    --offensive-security-artifact-green-bg
+  );
+  --offensive-security-scan-results-artifact-green-color: var(
+    --offensive-security-artifact-green-color
+  );
+
+  // variables for offensive-security/scan-results/agent-log
+  // The log pane is a terminal transcript, so it stays dark in both themes.
+  --offensive-security-agent-log-bg-color: var(--background-dark);
+  --offensive-security-agent-log-color: var(--common-white);
+  --offensive-security-agent-log-border-radius: var(--border-radius-4);
+  --offensive-security-agent-log-dim-color: var(--text-disabled);
+  --offensive-security-agent-log-error-color: var(--error-main);
+  --offensive-security-agent-log-success-color: var(--success-main);
+  --offensive-security-agent-log-accent-color: var(--info-main);
+
+  // variables for offensive-security/finding-detail
+  --offensive-security-finding-detail-card-bg-color: var(--common-white);
+  --offensive-security-finding-detail-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-finding-detail-card-border-radius: var(
+    --border-radius-8
+  );
+  --offensive-security-finding-detail-label-color: var(--text-secondary);
+  --offensive-security-finding-detail-mono-bg-color: var(--background-light);
+  --offensive-security-finding-detail-exploited-color: var(--error-main);
+  --offensive-security-finding-detail-exploited-bg-color: var(--error-bg);
+  --offensive-security-finding-detail-defended-color: var(--success-main);
+  --offensive-security-finding-detail-defended-bg-color: var(--success-light);
+  --offensive-security-finding-detail-neutral-color: var(--text-secondary);
+  --offensive-security-finding-detail-neutral-bg-color: var(
+    --background-light
+  );
+  --offensive-security-finding-detail-detected-bg-color: var(
+    --offensive-security-detected-bg
+  );
+  --offensive-security-finding-detail-detected-color: var(
+    --offensive-security-detected-color
+  );
+  --offensive-security-finding-detail-errored-bg-color: var(
+    --offensive-security-errored-bg
+  );
+  --offensive-security-finding-detail-errored-color: var(
+    --offensive-security-errored-color
+  );
+  --offensive-security-finding-detail-hero-shadow: var(
+    --offensive-security-finding-detail-hero-shadow
+  );
+  --offensive-security-finding-detail-kicker-color: var(
+    --offensive-security-finding-detail-amber-kicker
+  );
+  --offensive-security-finding-detail-pill-breach-color: var(
+    --offensive-security-finding-detail-amber-kicker
+  );
+  --offensive-security-finding-detail-pill-breach-border: var(
+    --offensive-security-finding-detail-amber-border
+  );
+  --offensive-security-finding-detail-pill-breach-bg: var(
+    --offensive-security-finding-detail-amber-bg
+  );
+  --offensive-security-finding-detail-pill-breach-dot: var(
+    --offensive-security-finding-detail-amber-accent
+  );
+  --offensive-security-finding-detail-pill-breach-dot-shadow: var(
+    --offensive-security-finding-detail-amber-shadow
+  );
+  --offensive-security-finding-detail-pill-defended-color: var(
+    --offensive-security-finding-detail-green-dark
+  );
+  --offensive-security-finding-detail-pill-defended-border: var(
+    --offensive-security-finding-detail-green-border
+  );
+  --offensive-security-finding-detail-pill-defended-bg: var(
+    --offensive-security-finding-detail-green-bg
+  );
+  --offensive-security-finding-detail-pill-defended-dot: var(
+    --offensive-security-finding-detail-green-accent
+  );
+  --offensive-security-finding-detail-pill-ok-color: var(
+    --offensive-security-finding-detail-emerald-dark
+  );
+  --offensive-security-finding-detail-pill-ok-border: var(
+    --offensive-security-finding-detail-emerald-border
+  );
+  --offensive-security-finding-detail-pill-ok-bg: var(
+    --offensive-security-finding-detail-emerald-bg
+  );
+  --offensive-security-finding-detail-pill-ok-dot: var(
+    --offensive-security-finding-detail-emerald-accent
+  );
+  --offensive-security-finding-detail-pill-detected-color: var(
+    --offensive-security-detected-color
+  );
+  --offensive-security-finding-detail-pill-detected-border: var(
+    --offensive-security-finding-detail-blue-border
+  );
+  --offensive-security-finding-detail-pill-detected-bg: var(
+    --offensive-security-detected-bg
+  );
+  --offensive-security-finding-detail-pill-detected-dot: var(
+    --offensive-security-finding-detail-blue-accent
+  );
+  --offensive-security-finding-detail-glyph-code-bg: var(
+    --offensive-security-finding-detail-emerald-bg
+  );
+  --offensive-security-finding-detail-glyph-code-border: var(
+    --offensive-security-finding-detail-emerald-border
+  );
+  --offensive-security-finding-detail-glyph-code-color: var(
+    --offensive-security-finding-detail-emerald-accent
+  );
+  --offensive-security-finding-detail-glyph-verify-bg: var(
+    --offensive-security-finding-detail-blue-subtle-bg
+  );
+  --offensive-security-finding-detail-glyph-verify-border: var(
+    --offensive-security-finding-detail-blue-subtle-border
+  );
+  --offensive-security-finding-detail-glyph-verify-color: var(
+    --offensive-security-finding-detail-blue-main
+  );
+  --offensive-security-finding-detail-glyph-attempts-bg: var(
+    --offensive-security-finding-detail-purple-bg
+  );
+  --offensive-security-finding-detail-glyph-attempts-border: var(
+    --offensive-security-finding-detail-purple-border
+  );
+  --offensive-security-finding-detail-glyph-attempts-color: var(
+    --offensive-security-finding-detail-purple-main
+  );
+  --offensive-security-finding-detail-glyph-impact-bg: var(
+    --offensive-security-finding-detail-amber-bg
+  );
+  --offensive-security-finding-detail-glyph-impact-border: var(
+    --offensive-security-finding-detail-amber-border
+  );
+  --offensive-security-finding-detail-glyph-impact-color: var(
+    --offensive-security-finding-detail-amber-accent
+  );
+  --offensive-security-finding-detail-glyph-risk-bg: var(
+    --offensive-security-finding-detail-slate-100
+  );
+  --offensive-security-finding-detail-glyph-risk-border: var(
+    --offensive-security-finding-detail-slate-300
+  );
+  --offensive-security-finding-detail-glyph-risk-color: var(
+    --offensive-security-finding-detail-slate-600
+  );
+  --offensive-security-finding-detail-term-bg: var(
+    --offensive-security-finding-detail-term-bg
+  );
+  --offensive-security-finding-detail-term-border: var(
+    --offensive-security-finding-detail-slate-800
+  );
+  --offensive-security-finding-detail-term-bar-bg: var(
+    --offensive-security-finding-detail-slate-900
+  );
+  --offensive-security-finding-detail-term-fname-color: var(
+    --offensive-security-finding-detail-slate-400
+  );
+  --offensive-security-finding-detail-term-lang-color: var(
+    --offensive-security-finding-detail-slate-500
+  );
+  --offensive-security-finding-detail-term-lang-border: var(
+    --offensive-security-finding-detail-slate-700
+  );
+  --offensive-security-finding-detail-term-copy-color: var(
+    --offensive-security-finding-detail-slate-200
+  );
+  --offensive-security-finding-detail-term-copy-bg: var(
+    --offensive-security-finding-detail-slate-800
+  );
+  --offensive-security-finding-detail-term-copy-border: var(
+    --offensive-security-finding-detail-slate-700
+  );
+  --offensive-security-finding-detail-term-copy-hover-bg: var(
+    --offensive-security-finding-detail-slate-700
+  );
+  --offensive-security-finding-detail-term-copy-hover-border: var(
+    --offensive-security-finding-detail-slate-600
+  );
+  --offensive-security-finding-detail-term-copy-done-color: var(
+    --offensive-security-finding-detail-emerald-light
+  );
+  --offensive-security-finding-detail-term-copy-done-border: var(
+    --offensive-security-finding-detail-emerald-accent
+  );
+  --offensive-security-finding-detail-term-copy-done-bg: var(
+    --offensive-security-finding-detail-emerald-tint
+  );
+  --offensive-security-finding-detail-code-color: var(
+    --offensive-security-finding-detail-slate-200
+  );
+  --offensive-security-finding-detail-step-num-color: var(
+    --offensive-security-finding-detail-emerald-accent
+  );
+  --offensive-security-finding-detail-step-num-border: var(
+    --offensive-security-finding-detail-emerald-border
+  );
+  --offensive-security-finding-detail-step-num-bg: var(
+    --offensive-security-finding-detail-emerald-bg
+  );
+  --offensive-security-finding-detail-step-code-color: var(
+    --offensive-security-finding-detail-slate-900
+  );
+  --offensive-security-finding-detail-step-code-bg: var(
+    --offensive-security-finding-detail-slate-100
+  );
+  --offensive-security-finding-detail-step-code-border: var(
+    --offensive-security-finding-detail-slate-300
+  );
+  --offensive-security-finding-detail-surface-color: var(
+    --offensive-security-finding-detail-blue-main
+  );
+  --offensive-security-finding-detail-surface-bg: var(
+    --offensive-security-finding-detail-blue-subtle-bg
+  );
+  --offensive-security-finding-detail-surface-border: var(
+    --offensive-security-finding-detail-blue-subtle-border
+  );
+  --offensive-security-finding-detail-surface-ok-color: var(
+    --offensive-security-finding-detail-emerald-accent
+  );
+  --offensive-security-finding-detail-surface-ok-border: var(
+    --offensive-security-finding-detail-emerald-border
+  );
+  --offensive-security-finding-detail-surface-ok-bg: var(
+    --offensive-security-finding-detail-emerald-bg
+  );
+  --offensive-security-finding-detail-btn-color: var(
+    --offensive-security-finding-detail-slate-900
+  );
+  --offensive-security-finding-detail-btn-border: var(
+    --offensive-security-finding-detail-slate-300
+  );
+  --offensive-security-finding-detail-btn-hover-bg: var(
+    --offensive-security-finding-detail-slate-50
+  );
+  --offensive-security-finding-detail-btn-hover-border: var(
+    --offensive-security-finding-detail-slate-400
+  );
+  --offensive-security-finding-detail-score-weak-color: var(
+    --offensive-security-finding-detail-amber-accent
+  );
+  --offensive-security-finding-detail-score-mod-color: var(
+    --offensive-security-finding-detail-blue-main
+  );
+  --offensive-security-finding-detail-score-strong-color: var(
+    --offensive-security-finding-detail-green-accent
+  );
+  --offensive-security-finding-detail-score-bar-bg: var(
+    --offensive-security-finding-detail-slate-200
+  );
+  --offensive-security-finding-detail-score-bar-fill: var(
+    --offensive-security-finding-detail-score-gradient
+  );
+  --offensive-security-finding-detail-score-why-color: var(
+    --offensive-security-finding-detail-blue-main
+  );
+  --offensive-security-finding-detail-score-why-hover-color: var(
+    --offensive-security-finding-detail-blue-dark
+  );
+  --offensive-security-finding-detail-drawer-bg: var(--common-white);
+  --offensive-security-finding-detail-drawer-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-finding-detail-drawer-shadow: var(--box-shadow-6);
+  --offensive-security-finding-detail-overlay-bg: var(
+    --backdrop-overlay-background
+  );
+  --offensive-security-finding-detail-code-font-family: var(--font-family-mono);
 
   &.theme-light {
     //variables for appknox-wrapper

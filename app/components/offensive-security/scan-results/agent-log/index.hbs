@@ -1,0 +1,39 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  local-class='log-card'
+  class='p-3'
+  data-test-offensiveSecurity-agentLog
+>
+  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
+    <AkTypography @variant='body1' @fontWeight='medium'>
+      {{t 'offensiveSecurity.attackRun'}}
+    </AkTypography>
+
+    <OffensiveSecurity::StatusChip @scan={{@scan}} />
+  </AkStack>
+
+  {{#if this.showInProgress}}
+    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+      <div local-class='log-line dim'>{{this.statusMessage}}{{this.dotsText}}</div>
+    </div>
+  {{else if @isLoading}}
+    <AkSkeleton @width='100%' @height='320px' />
+  {{else if this.showEmptyState}}
+    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+      <div local-class='log-line dim'>
+        {{if
+          @loadFailed
+          (t 'offensiveSecurity.logUnavailable')
+          (t 'offensiveSecurity.noLogRecorded')
+        }}
+      </div>
+    </div>
+  {{else}}
+    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+      {{#each this.styledLines as |line|}}
+        <div local-class='log-line {{line.tone}}'>{{line.text}}</div>
+      {{/each}}
+    </div>
+  {{/if}}
+</AkStack>

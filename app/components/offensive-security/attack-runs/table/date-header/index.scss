@@ -1,0 +1,12 @@
+.cursor-pointer {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.sort-icon {
+  transition: transform 0.15s ease-in-out;
+}
+
+.sort-icon-desc {
+  transform: rotate(180deg);
+}

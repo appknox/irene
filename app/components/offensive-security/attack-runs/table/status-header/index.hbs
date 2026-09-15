@@ -1,0 +1,68 @@
+<AkStack
+  @spacing='0.5'
+  @alignItems='center'
+  data-test-offensiveSecurity-attackRuns-statusHeader
+>
+  <AkTypography @variant='subtitle2'>
+    {{t 'status'}}
+  </AkTypography>
+
+  <AkIcon
+    @iconName='filter-list'
+    @size='small'
+    @color={{if this.filterApplied 'primary' 'inherit'}}
+    local-class='cursor-pointer'
+    {{on 'click' this.handleClick}}
+    data-test-offensiveSecurity-attackRuns-statusHeader-icon
+  />
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+>
+  <AkStack @direction='column' local-class='column-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography @variant='subtitle2' local-class='filter-header-text'>
+        {{t 'status'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.statusOptions as |option|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        @alignItems='center'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectStatus option.value)}}
+        data-test-offensiveSecurity-attackRuns-statusHeader-option={{option.value}}
+      >
+        <AkRadio @checked={{eq @selectedStatus option.value}} />
+
+        <AkTypography>{{option.label}}</AkTypography>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        @width='full'
+        local-class='clear-filter-section'
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-offensiveSecurity-attackRuns-statusHeader-clearFilter
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>

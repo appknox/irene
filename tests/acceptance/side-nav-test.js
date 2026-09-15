@@ -171,10 +171,11 @@ module('Acceptance | side nav test', function (hooks) {
   test.each(
     'it should show product switcher menu items',
     [
-      { storeknox: true, security: false },
-      { storeknox: true, security: true },
-      { storeknox: false, security: true },
-      { storeknox: false, security: false },
+      { storeknox: true, security: false, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: true },
+      { storeknox: true, security: true, offensive_security: false },
+      { storeknox: false, security: true, offensive_security: true },
+      { storeknox: false, security: false, offensive_security: false },
     ],
     async function (assert, products) {
       this.currentOrganizationMe.update({
@@ -184,12 +185,17 @@ module('Acceptance | side nav test', function (hooks) {
       this.organization.update({
         features: {
           storeknox: products.storeknox,
+          offensive_security: products.offensive_security,
         },
       });
 
       await visit('/dashboard/projects');
 
-      if (!products.security && !products.storeknox) {
+      if (
+        !products.security &&
+        !products.storeknox &&
+        !products.offensive_security
+      ) {
         assert.dom('[data-test-side-menu-switcher]').doesNotExist();
       } else {
         assert.dom('[data-test-side-menu-switcher]').exists();
@@ -198,7 +204,27 @@ module('Acceptance | side nav test', function (hooks) {
 
         assert.dom('[data-test-side-menu-switcher-modal]').exists();
 
-        if (products.security && products.storeknox) {
+        if (
+          products.security &&
+          products.storeknox &&
+          products.offensive_security
+        ) {
+          assert
+            .dom('[data-test-switcher-popover-item-link]')
+            .exists({ count: 3 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('appMonitoring'));
+
+          assert.dom(items[1]).hasText(t('securityDashboard'));
+
+          assert.dom(items[2]).hasText(t('offensiveSecurity.title'));
+        } else if (
+          products.security &&
+          products.storeknox &&
+          !products.offensive_security
+        ) {
           assert
             .dom('[data-test-switcher-popover-item-link]')
             .exists({ count: 2 });
@@ -208,16 +234,34 @@ module('Acceptance | side nav test', function (hooks) {
           assert.dom(items[0]).hasText(t('appMonitoring'));
 
           assert.dom(items[1]).hasText(t('securityDashboard'));
-        } else if (products.storeknox && !products.security) {
+        } else if (
+          products.storeknox &&
+          !products.security &&
+          products.offensive_security
+        ) {
           assert
             .dom('[data-test-switcher-popover-item-link]')
-            .exists({ count: 1 })
-            .hasText(t('appMonitoring'));
-        } else if (!products.storeknox && products.security) {
+            .exists({ count: 2 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('appMonitoring'));
+
+          assert.dom(items[1]).hasText(t('offensiveSecurity.title'));
+        } else if (
+          !products.storeknox &&
+          products.security &&
+          products.offensive_security
+        ) {
           assert
             .dom('[data-test-switcher-popover-item-link]')
-            .exists({ count: 1 })
-            .hasText(t('securityDashboard'));
+            .exists({ count: 2 });
+
+          const items = findAll('[data-test-switcher-popover-item-link]');
+
+          assert.dom(items[0]).hasText(t('securityDashboard'));
+
+          assert.dom(items[1]).hasText(t('offensiveSecurity.title'));
         }
       }
     }

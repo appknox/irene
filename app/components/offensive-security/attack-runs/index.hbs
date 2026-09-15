@@ -1,0 +1,262 @@
+<AkStack @direction='column' @spacing='3' class='p-3'>
+  {{! Page Header }}
+  <div local-class='header-card'>
+    <AkStack
+      @width='full'
+      @justifyContent='space-between'
+      @alignItems='center'
+    >
+      <AkStack @direction='column' @spacing='0.5'>
+        <AkStack @alignItems='center' @spacing='1.5'>
+          <AkTypography
+            @variant='h4'
+            @fontWeight='bold'
+          >
+            {{t 'offensiveSecurity.allTargets'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkTypography @variant='body2' @color='textSecondary' class='mt-1'>
+          {{t 'offensiveSecurity.allTargetsSubtitle'}}
+        </AkTypography>
+      </AkStack>
+
+      {{! Search Box }}
+      <div local-class='search-input'>
+        <AkTextField
+          @placeholder={{t 'offensiveSecurity.searchByTarget'}}
+          @value={{this.searchQuery}}
+          {{on 'input' this.handleSearchChange}}
+          data-test-offensiveSecurity-attackRuns-search
+        >
+          <:leftAdornment>
+            <AkIcon @iconName='search' @color='textSecondary' />
+          </:leftAdornment>
+        </AkTextField>
+      </div>
+    </AkStack>
+  </div>
+
+  {{! 4 Metric Summary Stat Cards }}
+  <div local-class='metric-cards-grid'>
+    {{! Card 1: Total Runs }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-pink'>
+        <AkIcon @iconName='trending-up' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.totalRuns'}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-totalRuns
+        >{{this.totalRunsDisplay}}</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.allTime'}}</span>
+      </div>
+    </div>
+
+    {{! Card 2: Running }}
+    <div local-class='metric-card'>
+      <div
+        local-class='stat-icon-box stat-icon-blue {{unless this.hasRunningScans "paused"}}'
+      >
+        <AkLoader @size={{14}} />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.running'}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-runningCount
+        >{{this.runningCount}}</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.inProgress'}}</span>
+      </div>
+    </div>
+
+    {{! Card 3: Completed }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-green'>
+        <AkIcon @iconName='check-circle-outline' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.completed'}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-completedCount
+        >{{this.completedCount}}</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.successfullyFinished'}}</span>
+      </div>
+    </div>
+
+    {{! Card 4: Failed }}
+    <div local-class='metric-card'>
+      <div local-class='stat-icon-box stat-icon-red'>
+        <AkIcon @iconName='cancel' @size='small' />
+      </div>
+      <div local-class='stat-details'>
+        <span local-class='stat-label'>{{t 'offensiveSecurity.status.failed'}}</span>
+        <span
+          local-class='stat-number'
+          data-test-offensiveSecurity-attackRuns-failedCount
+        >{{this.failedCount}}</span>
+        <span local-class='stat-subtext'>{{t 'offensiveSecurity.withErrors'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <AkPaginationProvider
+    @results={{this.filteredScans}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @totalItems={{this.totalCount}}
+    @nextAction={{this.handlePrevNextAction}}
+    @prevAction={{this.handlePrevNextAction}}
+    @itemPerPageOptions={{array 25 50 100}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.isLoading}}
+      <AkTable::Loading @columns={{this.columns}} />
+    {{else if this.hasNoScans}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+        class='p-4'
+        local-class='empty-state'
+        data-test-offensiveSecurity-attackRuns-emptyState
+      >
+        <AkSvg::NoResult />
+
+        <AkTypography @variant='body1' @fontWeight='medium'>
+          {{t 'offensiveSecurity.noTargetsYet'}}
+        </AkTypography>
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'offensiveSecurity.noTargetsYetSubtitle'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <div local-class='attack-runs-table-container'>
+        <AkTable
+          @hoverable={{true}}
+          data-test-offensiveSecurity-attackRuns-table
+          as |t|
+        >
+          <t.head
+            @sorts={{this.sorts}}
+            @onUpdateSorts={{this.updateSorts}}
+            @columns={{this.columns}}
+            as |h|
+          >
+            <h.row as |r|>
+              <r.cell as |column|>
+                {{#if column.headerComponent}}
+                  {{#let (component column.headerComponent) as |Component|}}
+                    <Component
+                      @selectedPlatform={{this.platformFilter}}
+                      @onPlatformChange={{this.handlePlatformFilterChange}}
+                      @selectedResilience={{this.resilienceFilter}}
+                      @onResilienceChange={{this.handleResilienceFilterChange}}
+                      @selectedStatus={{this.selectedStatusFilter}}
+                      @onStatusChange={{this.handleStatusFilterChange}}
+                    />
+                  {{/let}}
+                {{else}}
+                  {{column.name}}
+
+                  {{#if (this.isSortableColumn column.valuePath)}}
+                    <AkIcon
+                      {{style verticalAlign='middle'}}
+                      @iconName='arrow-upward'
+                      @size='small'
+                      local-class='sort-icon {{unless
+                        (this.isColumnSortedAsc column.valuePath)
+                        "sort-icon-desc"
+                      }}'
+                      data-test-offensiveSecurity-attackRuns-dateHeader-sortToggle
+                      data-test-offensiveSecurity-attackRuns-dateHeader-sortIcon
+                    />
+                  {{/if}}
+                {{/if}}
+              </r.cell>
+            </h.row>
+          </t.head>
+
+          {{#if (gt this.filteredScans.length 0)}}
+            <t.body @rows={{pgc.currentPageResults}} as |b|>
+              <b.row
+                {{style cursor='pointer'}}
+                @onClick={{this.handleRowClick}}
+                data-test-offensiveSecurity-attackRuns-row
+                as |r|
+              >
+                <r.cell as |value|>
+                  {{#if r.columnValue.component}}
+                    {{#let (component r.columnValue.component) as |Component|}}
+                      <Component @scan={{r.rowValue}} />
+                    {{/let}}
+                  {{else}}
+                    <AkTypography
+                      @variant='body2'
+                      @noWrap={{true}}
+                      @align={{or r.columnValue.textAlign 'inherit'}}
+                      title={{value}}
+                    >
+                      {{if (or value (eq value 0)) value '—'}}
+                    </AkTypography>
+                  {{/if}}
+                </r.cell>
+              </b.row>
+            </t.body>
+          {{/if}}
+        </AkTable>
+
+        {{#if (eq this.filteredScans.length 0)}}
+          <AkStack
+            @width='full'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+            class='p-4'
+            local-class='empty-state'
+            data-test-offensiveSecurity-attackRuns-noMatches
+          >
+            <AkSvg::NoResult />
+
+            {{#if this.hasFiltersApplied}}
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'offensiveSecurity.noMatchingTargets'}}
+              </AkTypography>
+            {{else}}
+              <AkTypography @variant='body1' @fontWeight='medium'>
+                {{t 'offensiveSecurity.noTargetsYet'}}
+              </AkTypography>
+
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'offensiveSecurity.noTargetsYetSubtitle'}}
+              </AkTypography>
+            {{/if}}
+          </AkStack>
+        {{/if}}
+      </div>
+
+      {{#if this.showPagination}}
+        <AkPagination
+          @disableNext={{pgc.disableNext}}
+          @nextAction={{pgc.nextAction}}
+          @disablePrev={{pgc.disablePrev}}
+          @prevAction={{pgc.prevAction}}
+          @endItemIdx={{pgc.endItemIdx}}
+          @startItemIdx={{pgc.startItemIdx}}
+          @itemPerPageOptions={{pgc.itemPerPageOptions}}
+          @onItemPerPageChange={{pgc.onItemPerPageChange}}
+          @selectedOption={{pgc.selectedOption}}
+          @tableItemLabel={{t 'offensiveSecurity.scanTargets'}}
+          @perPageTranslation={{t 'recordPerPage'}}
+          @totalItems={{pgc.totalItems}}
+          data-test-offensiveSecurity-attackRuns-pagination
+        />
+      {{/if}}
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>

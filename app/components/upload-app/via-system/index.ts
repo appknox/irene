@@ -8,9 +8,11 @@ import type IntlService from 'ember-intl/services/intl';
 import type FileQueueService from 'ember-file-upload/services/file-queue';
 import type { UploadFile } from 'ember-file-upload';
 
+import type RouterService from '@ember/routing/router-service';
 import type AnalyticsService from 'irene/services/analytics';
 import type UploadAppService from 'irene/services/upload-app';
 import type UploadAppModel from 'irene/models/upload-app';
+import type RealtimeService from 'irene/services/realtime';
 
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
@@ -19,6 +21,8 @@ export default class UploadAppViaSystemComponent extends Component {
   @service declare uploadApp: UploadAppService;
   @service declare fileQueue: FileQueueService;
   @service declare analytics: AnalyticsService;
+  @service declare router: RouterService;
+  @service declare realtime: RealtimeService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
@@ -69,8 +73,12 @@ export default class UploadAppViaSystemComponent extends Component {
     try {
       this.uploadApp.updateSystemFileQueue(queue);
 
+      const isOffsec =
+        this.router.currentRouteName?.includes('offensive-security');
+      const queryParams = isOffsec ? { offsec: true } : {};
+
       const uploadItem = (await waitForPromise(
-        this.store.queryRecord('upload-app', {})
+        this.store.queryRecord('upload-app', queryParams)
       )) as UploadAppModel;
 
       await waitForPromise(
@@ -80,7 +88,11 @@ export default class UploadAppViaSystemComponent extends Component {
         })
       );
 
-      await waitForPromise(uploadItem.save());
+      await waitForPromise(
+        uploadItem.save({ adapterOptions: { offsec: isOffsec } })
+      );
+
+      this.realtime.incrementProperty('SubmissionCounter');
 
       this.analytics.track({
         name: 'UPLOAD_APP_EVENT',
