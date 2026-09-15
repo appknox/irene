@@ -1,4 +1,4 @@
-FROM node:20.18.0-bullseye AS builder
+FROM node:24.21.0-bookworm AS builder
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
@@ -9,7 +9,7 @@ COPY . ./
 RUN npm run deploy:server
 
 
-FROM node:20.18.0-alpine
+FROM node:24.21.0-alpine
 
 LABEL maintainer "Appknox <engineering@appknox.com>"
 
