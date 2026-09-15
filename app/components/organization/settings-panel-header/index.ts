@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 import type { AkIconVariantType } from 'ak-icons';
 
 export interface OrganizationSettingsPanelHeaderSignature {
-  Element: HTMLDivElement;
+  Element: HTMLElement;
 
   Args: {
     iconName?: AkIconVariantType;

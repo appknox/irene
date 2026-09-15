@@ -76,7 +76,7 @@ module(
     });
 
     test('both CYOD enrolment routes get the badge', async function (assert) {
-      pushDevice(this, 'proxyCyod');
+      pushDevice(this, 'withProxyCyod');
 
       await render(TEMPLATE);
 
@@ -84,7 +84,7 @@ module(
         .dom(selectors.badge)
         .exists('a device enrolled through the Mercer proxy is CYOD');
 
-      pushDevice(this, 'webusbCyod');
+      pushDevice(this, 'withWebusbCyod');
 
       await render(TEMPLATE);
 
@@ -94,7 +94,7 @@ module(
     });
 
     test('it renders the device type alongside the badge', async function (assert) {
-      pushDevice(this, 'proxyCyod', { is_tablet: false });
+      pushDevice(this, 'withProxyCyod', { is_tablet: false });
 
       await render(TEMPLATE);
 

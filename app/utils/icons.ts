@@ -199,6 +199,9 @@ export const MaterialSymbolsSet = [
 ] as const;
 
 export const MdiIconsSet = [
+  'apple',
+  'linux',
+  'microsoft-windows',
   'checkbox-marked',
   'checkbox-blank-outline',
   'cordova',

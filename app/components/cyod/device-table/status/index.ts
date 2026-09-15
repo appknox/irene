@@ -1,18 +1,9 @@
-/**
- * Device Status cell for the CYOD device table — Online / Offline chip.
- *
- * Rendered through AkTable's `component` column hook, which passes the row value
- * as `@device`.
- */
 import Component from '@glimmer/component';
-
-import type { DeviceRow } from 'irene/components/cyod/device-table';
+import type OrganizationCyodRegisteredDeviceModel from 'irene/models/organization-cyod-registered-device';
 
 export interface CyodDeviceTableStatusSignature {
   Element: HTMLDivElement;
-  Args: {
-    device: DeviceRow;
-  };
+  Args: { device: OrganizationCyodRegisteredDeviceModel };
 }
 
 export default class CyodDeviceTableStatusComponent extends Component<CyodDeviceTableStatusSignature> {}

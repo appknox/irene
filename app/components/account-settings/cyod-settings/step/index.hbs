@@ -1,0 +1,28 @@
+<AkStack
+  data-test-cyodSettings-step={{@number}}
+  @width='full'
+  @spacing='2'
+  @alignItems='flex-start'
+  ...attributes
+>
+  <AkStack
+    local-class='step-num'
+    @alignItems='center'
+    @justifyContent='center'
+    aria-hidden='true'
+  >
+    {{@number}}
+  </AkStack>
+
+  <AkStack @direction='column' @spacing='1.5' @width='full'>
+    <AkTypography
+      data-test-cyodSettings-stepTitle
+      @variant='body1'
+      @fontWeight='medium'
+    >
+      {{@title}}
+    </AkTypography>
+
+    {{yield}}
+  </AkStack>
+</AkStack>

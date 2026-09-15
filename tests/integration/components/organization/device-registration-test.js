@@ -1,6 +1,13 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, click } from '@ember/test-helpers';
+import {
+  click,
+  find,
+  findAll,
+  render,
+  waitFor,
+  waitUntil,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -10,6 +17,7 @@ import Service from '@ember/service';
 class NotificationsStub extends Service {
   successMsg = null;
   errorMsg = null;
+
   success(msg) {
     this.successMsg = msg;
   }
@@ -17,6 +25,8 @@ class NotificationsStub extends Service {
   error(msg) {
     this.errorMsg = msg;
   }
+
+  setDefaultAutoClear() {}
 }
 
 // ─── Selectors ─────────────────────────────────────────────────────────────────
@@ -30,6 +40,9 @@ const selectors = {
   goToCyodSettings: '[data-test-orgDeviceRegistration-goToCyodSettings]',
   deviceTable: '[data-test-cyodDeviceTable]',
   deviceTableEmpty: '[data-test-cyodDeviceTable-empty]',
+  deviceTableEmptyTitle: '[data-test-cyodDeviceTable-emptyTitle]',
+  deviceTableEmptyDescription: '[data-test-cyodDeviceTable-emptyDescription]',
+  deviceTableRow: '[data-test-cyodDeviceTable-row]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
@@ -70,25 +83,24 @@ module(
       this.notify = this.owner.lookup('service:notifications');
     });
 
+    // ─── Rendering ─────────────────────────────────────────────────────────────
+
     test('it renders the CYOD registration switch turned on', async function (assert) {
-      setupOrganization(this, 'cyodEnabled');
+      setupOrganization(this, 'withCyodEnabled');
 
       await render(TEMPLATE);
 
-      assert
-        .dom(selectors.title)
-        .hasText(t('cyod.registration.title'))
-        .hasTagName('h5', 'title sits at the 16px section size');
-
-      assert.dom(selectors.toggleInput).isChecked();
+      assert.dom(selectors.title).hasText(t('cyod.registration.title'));
 
       assert
         .dom(selectors.description)
         .hasText(t('cyod.registration.description'));
+
+      assert.dom(selectors.toggleInput).isChecked().isNotDisabled();
     });
 
     test('it hides the device table when the switch is off', async function (assert) {
-      setupOrganization(this, 'cyodRegistrationDisabled');
+      setupOrganization(this, 'withCyodRegistrationDisabled');
 
       await render(TEMPLATE);
 
@@ -96,27 +108,79 @@ module(
       assert.dom(selectors.deviceTable).doesNotExist();
     });
 
+    test('it lists the organization devices when the switch is on', async function (assert) {
+      setupOrganization(this, 'withCyodEnabled');
+
+      const devices = this.server.createList(
+        'organization-cyod-registered-device',
+        2
+      );
+
+      await render(TEMPLATE);
+
+      const rows = findAll(selectors.deviceTableRow);
+
+      assert.strictEqual(rows.length, devices.length);
+
+      devices.forEach((device, index) => {
+        assert.dom(rows[index]).containsText(device.name);
+      });
+
+      assert.dom(selectors.deviceTableEmpty).doesNotExist();
+    });
+
+    test('it links to the account CYOD settings from the empty state', async function (assert) {
+      setupOrganization(this, 'withCyodEnabled');
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.deviceTableEmptyTitle)
+        .hasText(t('cyod.deviceTable.emptyTitle'));
+
+      assert
+        .dom(selectors.deviceTableEmptyDescription)
+        .hasText(
+          t('cyod.registration.emptyHint'),
+          'the panel passes its own hint down to the table'
+        );
+
+      assert
+        .dom(selectors.goToCyodSettings)
+        .hasText(t('cyod.registration.goToCyodSettings'));
+    });
+
+    // ─── Toggling ──────────────────────────────────────────────────────────────
+
     test('toggling off persists the new value on the organization', async function (assert) {
-      const { record } = setupOrganization(this, 'cyodEnabled');
+      assert.expect(5);
+
+      const { record } = setupOrganization(this, 'withCyodEnabled');
+
+      this.server.put('/organizations/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        assert.false(
+          data.cyod_registration_enabled,
+          'sends the value the switch was moved to, not its inverse'
+        );
+
+        const organization = schema.organizations.find(req.params.id);
+        organization.update(data);
+
+        return organization.toJSON();
+      });
 
       await render(TEMPLATE);
       await click(selectors.toggleInput);
-
-      const put = this.server.pretender.handledRequests.find(
-        (r) => r.method === 'PUT'
-      );
-
-      assert.ok(put, 'saves the organization');
-
-      assert.false(
-        JSON.parse(put.requestBody).cyod_registration_enabled,
-        'sends the value the switch was moved to, not its inverse'
-      );
 
       assert.false(
         record.cyodRegistrationEnabled,
         'the record keeps the persisted value'
       );
+
+      assert.dom(selectors.toggleInput).isNotChecked();
+      assert.dom(selectors.deviceTable).doesNotExist();
 
       assert.strictEqual(
         this.notify.successMsg,
@@ -125,8 +189,65 @@ module(
       );
     });
 
+    test('toggling on persists the new value and reveals the device table', async function (assert) {
+      assert.expect(5);
+
+      const { record } = setupOrganization(
+        this,
+        'withCyodRegistrationDisabled'
+      );
+
+      this.server.put('/organizations/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        assert.true(data.cyod_registration_enabled);
+
+        const organization = schema.organizations.find(req.params.id);
+        organization.update(data);
+
+        return organization.toJSON();
+      });
+
+      await render(TEMPLATE);
+      await click(selectors.toggleInput);
+
+      assert.true(record.cyodRegistrationEnabled);
+      assert.dom(selectors.toggleInput).isChecked();
+      assert.dom(selectors.deviceTable).exists();
+
+      assert.strictEqual(this.notify.successMsg, t('cyod.registration.saved'));
+    });
+
+    test('the switch is disabled while the save is in flight', async function (assert) {
+      setupOrganization(this, 'withCyodEnabled');
+
+      this.server.put(
+        '/organizations/:id',
+        (schema, req) => {
+          const organization = schema.organizations.find(req.params.id);
+          organization.update(JSON.parse(req.requestBody));
+
+          return organization.toJSON();
+        },
+        { timing: 150 }
+      );
+
+      await render(TEMPLATE);
+
+      click(selectors.toggleInput);
+
+      await waitFor(`${selectors.toggleInput}:disabled`, { timeout: 500 });
+      assert.dom(selectors.toggleInput).isDisabled();
+
+      await waitUntil(() => !find(selectors.toggleInput).disabled, {
+        timeout: 1000,
+      });
+
+      assert.dom(selectors.toggleInput).isNotDisabled();
+    });
+
     test('a failed save rolls the switch back and reports the error', async function (assert) {
-      const { record } = setupOrganization(this, 'cyodEnabled');
+      const { record } = setupOrganization(this, 'withCyodEnabled');
 
       this.server.put('/organizations/:id', () => ({ detail: 'Nope' }), 400);
 
@@ -146,19 +267,6 @@ module(
       );
 
       assert.strictEqual(this.notify.errorMsg, 'Nope', 'surfaces the reason');
-    });
-
-    test('it links to the account CYOD settings from the empty state', async function (assert) {
-      setupOrganization(this, 'cyodEnabled');
-
-      await render(TEMPLATE);
-
-      assert.dom(selectors.deviceTableEmpty).exists();
-
-      assert
-        .dom(selectors.goToCyodSettings)
-        .exists('points members at where they can register a device')
-        .hasText(t('cyod.registration.goToCyodSettings'));
     });
   }
 );

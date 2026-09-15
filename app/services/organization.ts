@@ -1,5 +1,4 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type Store from 'ember-data/store';
 
@@ -34,9 +33,6 @@ export default class OrganizationService extends Service {
     return !!this.orgFeatures?.cyod;
   }
 
-  // Whether members may currently register CYOD devices: the paid entitlement
-  // AND the owner's switch. Surfaces the CYOD registration UI; enforcement lives
-  // server-side in mycroft's Mercer device-register endpoint.
   get isCyodRegistrationEnabled() {
     return this.isCyodEnabled && !!this.selected?.cyodRegistrationEnabled;
   }

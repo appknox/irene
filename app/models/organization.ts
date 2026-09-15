@@ -8,18 +8,18 @@ import type OrganizationTeamModel from './organization-team';
 export interface Features {
   app_monitoring: boolean;
   dynamicscan_automation: boolean;
+  manualscan: boolean;
+  partner_dashboard: boolean;
+  sso: boolean;
+  sbom: boolean;
+  store_release_readiness: boolean;
+  public_apis: boolean;
+  storeknox: boolean;
+  privacy: boolean;
+  upload_via_url: boolean;
   cyod: boolean;
   fake_app_detection: boolean;
-  manualscan: boolean;
   member_override_request: boolean;
-  partner_dashboard: boolean;
-  privacy: boolean;
-  public_apis: boolean;
-  sbom: boolean;
-  sso: boolean;
-  store_release_readiness: boolean;
-  storeknox: boolean;
-  upload_via_url: boolean;
   offensive_security: boolean;
 }
 
@@ -52,9 +52,6 @@ export default class OrganizationModel extends Model {
   @attr('boolean')
   declare mandatoryMfa: boolean;
 
-  // Owner-controlled switch for CYOD device self-registration. Sits *under* the
-  // `cyod` entitlement in `features`: the entitlement says the org may use CYOD,
-  // this says its members may currently register new devices.
   @attr('boolean')
   declare cyodRegistrationEnabled: boolean;
 

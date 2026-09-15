@@ -28,7 +28,8 @@ const ENVHandlerCONST = {
     WHITELABEL_NAME: '',
     WHITELABEL_LOGO: '',
     WHITELABEL_THEME: 'dark',
-    IRENE_MERCER_DOWNLOAD_URL: 'https://www.appknox.com/mercer',
+    IRENE_MERCER_DOWNLOAD_URL:
+      'https://appknox-mercer.s3.amazonaws.com/mercer/releases/latest/',
   },
 
   processENV: Object.keys(process.env).reduce((acc, key) => {
@@ -222,9 +223,6 @@ module.exports = function (environment) {
       duration: 7000, // Milliseconds
     },
     deviceFarmPassword: '1234',
-    // Where the "Download Mercer" button (CYOD device registration) points.
-    // Override per deployment via IRENE_MERCER_DOWNLOAD_URL once the installers
-    // are published; defaults to the product page (see ENVHandlerCONST above).
     mercerDownloadUrl: handler.getEnv('IRENE_MERCER_DOWNLOAD_URL'),
     namespace: 'api',
     namespace_v2: 'api/v2',
