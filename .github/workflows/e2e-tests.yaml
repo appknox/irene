@@ -19,7 +19,7 @@ jobs:
     name: Run E2E Tests
     runs-on: [ubuntu-latest]
     container:
-      image: cypress/browsers:node-20.18.0-chrome-130.0.6723.69-1-ff-131.0.3-edge-130.0.2849.52-1
+      image: cypress/browsers:node-24.21.0-chrome-153.0.8010.36-1-ff-155.0.1-edge-153.0.4234.32-1
       options: --user 1001
 
     permissions:
@@ -32,14 +32,14 @@ jobs:
         containers: [1, 2, 3, 4, 5]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Application
         uses: ./.github/actions/setup-app
 
       - name: Cache cypress binary
         id: cacheCypressBinary
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: /root/.cache/Cypress
           key: ${{ runner.os }}-cypressBinary-${{ hashFiles('**/package-lock.json') }}

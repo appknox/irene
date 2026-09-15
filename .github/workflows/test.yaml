@@ -9,7 +9,7 @@ jobs:
     name: Setup & Build Application
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Application
         uses: ./.github/actions/setup-app
@@ -18,7 +18,7 @@ jobs:
         run: npm run build:test
 
       - name: Upload built ember app
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: dist
@@ -28,10 +28,10 @@ jobs:
     needs: [setup]
     runs-on: [ubuntu-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Restore Cached Node Modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
@@ -82,15 +82,15 @@ jobs:
           - type: Integration Tests - Part 8
             commandArgs: --file-path='/irene/tests/integration*.js' --split=8 --partition=8 --parallel=12 --load-balance
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist
 
       - name: Restore Cached Node Modules
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}

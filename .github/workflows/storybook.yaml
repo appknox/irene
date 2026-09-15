@@ -12,7 +12,7 @@ jobs:
       deployments: write
     name: Publish to Cloudflare Pages
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Setup Application
         uses: ./.github/actions/setup-app
