@@ -49,8 +49,11 @@ class FakeWebSocket {
   binaryType = 'blob';
   closeCallCount = 0;
 
-  constructor(url) {
+  constructor(url, protocols) {
     this.url = url;
+    // The auth token travels in Sec-WebSocket-Protocol, not the query string,
+    // so a fake that drops this argument cannot see the credential at all.
+    this.protocols = protocols;
     this.readyState = FakeWebSocket.CONNECTING;
     FakeWebSocket.instances.push(this);
   }
@@ -153,10 +156,26 @@ module('Integration | Component | cyod-viewer', function (hooks) {
     assert.dom(selectors.canvas).exists();
     assert.dom(selectors.connecting).exists();
     assert.strictEqual(FakeWebSocket.instances.length, 1);
+
+    // The token is deliberately NOT in the query string: the request line is
+    // recorded verbatim by every proxy that terminates TLS on the way here
+    // (Cloudflare, traefik), which would write the credential into their logs.
     assert.strictEqual(
       FakeWebSocket.last.url,
-      'ws://devicefarm.test/devicefarm/ws/scrcpy/SCAN123/?token=auth-token'
+      'ws://devicefarm.test/devicefarm/ws/scrcpy/SCAN123/'
     );
+    assert.notOk(
+      FakeWebSocket.last.url.includes('token'),
+      'the credential never appears in the URL'
+    );
+
+    // It travels as a subprotocol instead: the marker, then the token. The
+    // server echoes the marker back on accept, so the handshake only succeeds
+    // if it understood the scheme.
+    assert.deepEqual(FakeWebSocket.last.protocols, [
+      'moriarty-token',
+      'auth-token',
+    ]);
   });
 
   test('the canvas stays mounted in every state', async function (assert) {
