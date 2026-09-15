@@ -121,6 +121,7 @@ export default class FileDetailsDynamicScanDrawerDevicePrefTableComponent extend
         name: this.intl.t('deviceId'),
         component:
           'file-details/dynamic-scan/action/drawer/device-pref-table/device-id' as const,
+        width: 150,
       },
     ];
   }

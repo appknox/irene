@@ -46,6 +46,14 @@ module('Unit | Utility | parse-error', function () {
       );
     });
 
+    test('a 500 with no title keeps the default rather than showing nothing', function (assert) {
+      assert.strictEqual(
+        parseError({ status: 500 }, 'fallback'),
+        'fallback',
+        'an IreneAjaxService rejection carries no title, so the toast is not empty'
+      );
+    });
+
     test('message, title and the 500/0 statuses are untouched', function (assert) {
       assert.strictEqual(
         parseError({ payload: { message: 'boom' } }, 'fallback'),

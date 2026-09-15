@@ -7,38 +7,27 @@
  * the org's external/Mercer-registered devices — so the only difference between
  * the two callers is the surrounding copy, not the data.
  */
+
+import { InvalidError } from '@ember-data/adapter/error';
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
+import type Store from 'ember-data/store';
 
-import type IreneAjaxService from 'irene/services/ajax';
-import type { AjaxError } from 'irene/services/ajax';
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
+import type DS from 'ember-data';
+
+import type LoggerService from 'irene/services/logger';
 import type OrganizationService from 'irene/services/organization';
+import type OrganizationCyodRegisteredDeviceModel from 'irene/models/organization-cyod-registered-device';
 
-export type RegisteredDevice = {
-  id: number;
-  name?: string;
-  serial_number: string;
-  model: string;
-  platform: number;
-  is_connected: boolean;
-  created_on?: string;
-};
-
-type RegisteredDevicesResponse = {
-  results: RegisteredDevice[];
-};
-
-export type DeviceRow = {
-  id: number;
-  deviceName: string;
-  registeredOn: string;
-  isConnected: boolean;
-};
+type OrganizationCyodRegisteredDeviceQueryResponse =
+  DS.AdapterPopulatedRecordArray<OrganizationCyodRegisteredDeviceModel> & {
+    meta?: { count: number };
+  };
 
 export interface CyodDeviceTableSignature {
   Element: HTMLDivElement;
@@ -63,10 +52,12 @@ export interface CyodDeviceTableSignature {
 
 export default class CyodDeviceTableComponent extends Component<CyodDeviceTableSignature> {
   @service declare intl: IntlService;
-  @service declare ajax: IreneAjaxService;
+  @service declare store: Store;
   @service declare organization: OrganizationService;
+  @service declare logger: LoggerService;
 
-  @tracked devices: RegisteredDevice[] = [];
+  @tracked
+  devicesResponse: OrganizationCyodRegisteredDeviceQueryResponse | null = null;
 
   // The org has CYOD enabled but no devicefarm token configured (mycroft returns
   // 400). Distinct from "configured but no devices yet" so the UI can guide the
@@ -76,16 +67,20 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
   constructor(owner: unknown, args: CyodDeviceTableSignature['Args']) {
     super(owner, args);
 
-    this.reload.perform();
+    this.reloadDevices.perform();
   }
 
-  get devicesUrl() {
-    return `/api/organizations/${this.organization.selected?.id}/registered-devices`;
+  get devices() {
+    return this.devicesResponse?.slice() || [];
+  }
+
+  get devicesCount() {
+    return this.devicesResponse?.meta?.count ?? 0;
   }
 
   get visibleDevices() {
     if (this.args.onlyConnected) {
-      return this.devices.filter((device) => device.is_connected);
+      return this.devices.filter((device) => device.isConnected);
     }
 
     return this.devices;
@@ -96,13 +91,9 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
   }
 
   get isLoading() {
-    return this.reload.isRunning;
+    return this.reloadDevices.isRunning;
   }
 
-  // ember-table spreads leftover width across every column, so the name column
-  // only gets a fair share of it unless it is given a much larger base width.
-  // Weighting it this way pulls the two trailing columns left and leaves room
-  // for long device names before they truncate.
   get columns() {
     return [
       {
@@ -118,8 +109,6 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
         width: 130,
       },
       {
-        // ember-table puts `ember-table__text-align-center` on the header and
-        // body cells alike, so the chip centres under its own heading.
         name: this.intl.t('cyod.deviceTable.status'),
         component: 'cyod/device-table/status',
         textAlign: 'center',
@@ -128,44 +117,37 @@ export default class CyodDeviceTableComponent extends Component<CyodDeviceTableS
     ];
   }
 
-  get rows(): DeviceRow[] {
-    return this.visibleDevices.map((device) => ({
-      id: device.id,
-      deviceName: device.name || device.model || device.serial_number,
-      registeredOn: device.created_on
-        ? dayjs(device.created_on).format('D MMMM YYYY')
-        : '-',
-      isConnected: device.is_connected,
-    }));
-  }
-
   @action
   handleRefresh() {
-    this.reload.perform();
+    this.reloadDevices.perform();
   }
 
-  reload = task({ drop: true }, async () => {
+  reloadDevices = task({ drop: true }, async () => {
     const orgId = this.organization.selected?.id;
-
     this.notConfigured = false;
 
     if (!orgId) {
-      this.devices = [];
+      this.devicesResponse = null;
 
       return;
     }
 
     try {
-      const result = await this.ajax.request<RegisteredDevicesResponse>(
-        this.devicesUrl
-      );
-
-      this.devices = result.results ?? [];
+      this.devicesResponse = (await this.store.query(
+        'organization-cyod-registered-device',
+        {}
+      )) as OrganizationCyodRegisteredDeviceQueryResponse;
     } catch (e) {
-      // 400 = CYOD device farm not configured for this org (no devicefarm
-      // token). Surfaced distinctly instead of the generic empty state.
-      this.notConfigured = (e as AjaxError)?.status === 400;
-      this.devices = [];
+      // The DRF adapter maps 400 to an InvalidError. mycroft answers 400 when
+      // the org has CYOD but no devicefarm token, so this is "not configured"
+      // rather than a failure — surfaced distinctly from the empty state.
+      this.notConfigured = e instanceof InvalidError;
+
+      this.devicesResponse = null;
+
+      if (!this.notConfigured) {
+        this.logger.error('[CYOD] Could not load registered devices:', e);
+      }
     }
   });
 }

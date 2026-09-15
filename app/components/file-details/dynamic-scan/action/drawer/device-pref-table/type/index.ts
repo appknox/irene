@@ -11,19 +11,20 @@ export interface FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature {
 }
 
 export default class FileDetailsDynamicScanDrawerDevicePrefTableTypeComponent extends Component<FileDetailsDynamicScanDrawerDevicePrefTableTypeSignature> {
+  get deviceProps() {
+    return this.args.deviceProps;
+  }
+
   get deviceTypeLabel() {
     return deviceType([
-      this.args.deviceProps?.isTablet
+      this.deviceProps?.isTablet
         ? ENUMS.DS_DEVICE_TYPE.TABLET_REQUIRED
         : ENUMS.DS_DEVICE_TYPE.PHONE_REQUIRED,
     ]);
   }
 
-  // Matched positively rather than as "not FARM": registration_source is absent
-  // from older device payloads, and undefined !== FARM would badge every one of
-  // them as CYOD.
   get isCyodDevice() {
-    const source = this.args.deviceProps?.registrationSource;
+    const source = this.deviceProps?.registrationSource;
 
     return (
       source === ENUMS.DEVICE_REGISTRATION_SOURCE.PROXY ||

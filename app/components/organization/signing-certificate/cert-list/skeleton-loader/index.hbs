@@ -1,0 +1,45 @@
+<AkStack
+  @direction='column'
+  @spacing='1.5'
+  @width='full'
+  data-test-orgSigningCert-skeleton
+  ...attributes
+>
+  {{#each (array 0 1 2)}}
+    <div
+      local-class='cert-card'
+      class='w-full'
+      data-test-orgSigningCert-skeletonCard
+    >
+      <AkStack
+        @alignItems='flex-start'
+        @justifyContent='space-between'
+        @spacing='2'
+      >
+        <AkStack @direction='column' @spacing='1'>
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkSkeleton @width='11em' @height='1.14em' />
+
+            <AkSkeleton @width='4em' @height='1.14em' />
+          </AkStack>
+
+          <AkStack @spacing='1' @alignItems='center'>
+            <AkSkeleton @width='3em' @height='0.86em' />
+
+            <AkSkeleton @width='7em' @height='0.86em' />
+
+            <AkSkeleton @width='4em' @height='0.86em' />
+
+            <AkSkeleton @width='9em' @height='0.86em' />
+          </AkStack>
+        </AkStack>
+
+        <AkStack @spacing='1' @alignItems='center'>
+          <AkSkeleton @width='7em' @height='2.14em' />
+
+          <AkSkeleton @width='1.71em' @height='1.71em' @variant='circular' />
+        </AkStack>
+      </AkStack>
+    </div>
+  {{/each}}
+</AkStack>

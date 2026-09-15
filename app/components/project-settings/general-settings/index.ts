@@ -9,10 +9,12 @@ import {
   canManageSigningCertificates,
   showsProjectSigningCertificate,
 } from 'irene/utils/cyod';
+
 import type ProjectModel from 'irene/models/project';
 import type ProfileModel from 'irene/models/profile';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
+import type LoggerService from 'irene/services/logger';
 
 interface ProjectSettingsGeneralSettingsSignature {
   Args: {
@@ -24,6 +26,7 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
   @service declare me: MeService;
   @service declare store: Store;
   @service declare organization: OrganizationService;
+  @service declare logger: LoggerService;
 
   @tracked profile: ProfileModel | null = null;
 
@@ -40,14 +43,6 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
-  /**
-   * Whether to render the CYOD section and the divider that introduces it.
-   *
-   * The section's divider, width and padding live in this template alongside
-   * where its Teams / Collaborators siblings declare theirs, so this component
-   * decides the divider's visibility — it must go with the section rather than
-   * dangle. Shares one predicate with the panel itself so the two agree.
-   */
   get showCyodSection() {
     return showsProjectSigningCertificate(
       this.organization.isCyodRegistrationEnabled,
@@ -66,7 +61,7 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     } catch (e) {
       this.profile = null;
 
-      return;
+      this.logger.error('Could not load the project profile:', e);
     }
   });
 }

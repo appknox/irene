@@ -1,32 +1,30 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
-import ENUMS from 'irene/enums';
-import ENV from 'irene/config/environment';
+import {
+  installApkViaWebUsb,
+  launchAppViaWebUsb,
+} from 'irene/utils/webusb-adb-install';
+
 import {
   IOS_MODERN_DEVICE_VERSION_CUTOFF,
   getPlatformMajorVersion,
 } from 'irene/utils/dynamic-scan-device';
+
 import { resolveFileProject } from 'irene/utils/resolve-file-project';
+import ENUMS from 'irene/enums';
+import ENV from 'irene/config/environment';
 import type FileModel from 'irene/models/file';
 import type ProjectModel from 'irene/models/project';
 import type DynamicscanModel from 'irene/models/dynamicscan';
 import type DevicefarmService from 'irene/services/devicefarm';
 import type CyodAdbSessionService from 'irene/services/cyod-adb-session';
+import type LoggerService from 'irene/services/logger';
 
-/**
- * Whether a CYOD scan may ask the user to install the app themselves -- the
- * WebUSB auto-install prompt, the APK download link and the iOS itms-services
- * link.
- *
- * Disabled: CYOD installs the app on the device server-side, so the manual path
- * no longer applies. The prompt and everything behind it are left in place; flip
- * this to true to bring them back.
- */
 const MANUAL_INSTALL_ENABLED = false;
 
 export interface VncViewerSignature {
@@ -46,6 +44,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
   @service declare store: Store;
   @service declare devicefarm: DevicefarmService;
   @service('cyod-adb-session') declare cyodAdbSession: CyodAdbSessionService;
+  @service declare logger: LoggerService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked webusbInstallStage: string | null = null;
@@ -244,10 +243,6 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
     }
 
     try {
-      const { installApkViaWebUsb, launchAppViaWebUsb } = await import(
-        'irene/utils/webusb-adb-install'
-      );
-
       await installApkViaWebUsb(adb, downloadUrl, packageName, {
         onProgress: (progress) => {
           this.webusbInstallStage = progress.stage;
@@ -263,7 +258,7 @@ export default class VncViewerComponent extends Component<VncViewerSignature> {
       this.webusbInstallStage = 'done';
     } catch (err) {
       this.notify.error(this.intl.t('cyod.autoInstall.failed'));
-      throw err;
+      this.logger.error('[CYOD] WebUSB auto-install failed:', err);
     }
   });
 }

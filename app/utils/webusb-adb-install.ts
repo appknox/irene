@@ -37,10 +37,11 @@ export async function installApkViaWebUsb(
     );
   }
 
-  const contentLength = parseInt(
+  const contentLength = Number.parseInt(
     response.headers.get('content-length') ?? '0',
     10
   );
+
   const apkBytes = await readWithProgress(
     response,
     contentLength,
@@ -100,22 +101,6 @@ export async function installApkViaWebUsb(
   onProgress?.({ stage: 'done' });
 }
 
-/** Uninstall a package by name. Does not throw if not installed. */
-export async function uninstallApkViaWebUsb(
-  adb: Adb,
-  packageName: string
-): Promise<void> {
-  try {
-    await adb.subprocess.noneProtocol.spawnWaitText([
-      'pm',
-      'uninstall',
-      packageName,
-    ]);
-  } catch {
-    // not installed
-  }
-}
-
 /** Launch an app by package name via monkey. */
 export async function launchAppViaWebUsb(
   adb: Adb,
@@ -149,12 +134,14 @@ async function readWithProgress(
 
   for (;;) {
     const { done, value } = await reader.read();
+
     if (done) {
       break;
     }
 
     chunks.push(value);
     received += value.length;
+
     if (totalBytes > 0) {
       onPercent(Math.round((received / totalBytes) * 100));
     }
