@@ -71,6 +71,9 @@ export default class SkAppModel extends Model {
   declare archivedOn: Date;
 
   @attr('date')
+  declare decommissionedOn: Date;
+
+  @attr('date')
   declare unarchiveAvailableOn: Date;
 
   @attr('date')
@@ -172,6 +175,22 @@ export default class SkAppModel extends Model {
 
   get isArchived() {
     return !!this.archivedOn && this.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
+  }
+
+  get isDecommissioned() {
+    return this.appStatus === ENUMS.SK_APP_STATUS.DECOMMISSIONED;
+  }
+
+  /**
+   * True when the app cannot be acted on at all.
+   *
+   * Roughly ten call sites ask `isArchived` when they mean this. Each would
+   * otherwise grow its own `|| isDecommissioned`, and missing one leaves a
+   * live action on a dead app. Sites that must tell the two states apart --
+   * banner copy, the archive button -- keep asking `isDecommissioned`.
+   */
+  get isReadOnly() {
+    return this.isArchived || this.isDecommissioned;
   }
 
   get isApproved() {
