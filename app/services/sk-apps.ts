@@ -95,7 +95,14 @@ export default class SkAppsService extends Service {
       limit: this.limit,
       offset: this.offset,
       approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
-      app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+      // Both statuses, as a comma-separated string -- the JSON:API query
+      // serializer brackets array query params (`app_status[]=1&...`), which
+      // the backend's bare `app_status` filter can't see. A decommissioned
+      // app stays in the inventory as a read-only record -- it is not
+      // hidden, it is shown with what happened to it. Sending ACTIVE alone
+      // would drop it the instant the presence pipeline marked it, and no
+      // filter could bring it back.
+      app_status: `${ENUMS.SK_APP_STATUS.ACTIVE},${ENUMS.SK_APP_STATUS.DECOMMISSIONED}`,
 
       ...(this.monitoringStatusFilter !== -1 && {
         monitoring_status: this.monitoringStatusFilter,
