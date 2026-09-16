@@ -47,6 +47,10 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusHeaderCompone
         key: this.intl.t('storeknox.noActionNeeded'),
         value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.NO_ACTION_NEEDED,
       },
+      {
+        key: this.intl.t('storeknox.decommissioned'),
+        value: ENUMS.SK_APP_MONITORING_STATUS_FILTER.DECOMMISSIONED,
+      },
     ];
   }
 

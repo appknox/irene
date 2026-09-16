@@ -2590,6 +2590,8 @@
     "initializingMsgFakeApp": "Monitoring is still being initialized for <strong>Fake App &amp; Brand Abuse</strong>. However, we have completed monitoring for <strong>Unscanned Versions</strong> of this app, and found none is its respective store.",
     "initializingMsgStoreMonitoring": "Monitoring is still being initialized for <strong>Unscanned Versions</strong>. However, we have completed monitoring for <strong>Fake Apps or Brand Abuse</strong> related to this app, and detected none.",
     "disabledMsg": "Monitoring has been disabled for this app.",
+    "decommissioned": "提供終了",
+    "decommissionedMsg": "このアプリはストアから削除されました。監視は停止し、ライセンスは解放されました。",
     "noUnscannedVersions": "<strong>No unscanned versions</strong>",
     "noUnscannedVersionsOrFakeAppsDetectedMsg": "<strong>No unscanned versions</strong> or <strong>Suspected Brand Abuse/Fake Apps</strong>",
     "inventory": "Inventory",

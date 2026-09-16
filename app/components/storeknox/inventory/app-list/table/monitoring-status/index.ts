@@ -77,6 +77,10 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   get tooltipMessage() {
     const app = this.app;
 
+    if (app?.isDecommissioned) {
+      return this.intl.t('storeknox.decommissionedMsg');
+    }
+
     if (app?.appMonitoringIsInDisabledState) {
       return this.intl.t('storeknox.disabledMsg');
     }
@@ -125,6 +129,16 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
   get iconDetails() {
     const app = this.app;
 
+    if (app?.isDecommissioned) {
+      // Reuses the disabled icon deliberately: decommissioned apps are
+      // presented as a kind of disabled app, so they get the same visual
+      // weight rather than a new one.
+      return {
+        icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
+        key: 'disabled',
+      };
+    }
+
     if (app?.appMonitoringIsInDisabledState) {
       return {
         icon: 'ak-svg/sox-monitoring-stats-icons/disabled' as const,
@@ -154,6 +168,10 @@ export default class StoreknoxInventoryAppListTableMonitoringStatusComponent ext
 
   get statusText() {
     const app = this.app;
+
+    if (app?.isDecommissioned) {
+      return this.intl.t('storeknox.decommissioned');
+    }
 
     if (app?.needsAction) {
       return this.intl.t('storeknox.needsAction');

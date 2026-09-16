@@ -377,6 +377,32 @@ module(
       }
     );
 
+    // --- Decommissioned apps ---
+
+    test('it renders a decommissioned app as decommissioned, not disabled', async function (assert) {
+      this.set(
+        'app',
+        this.createFakeApp({
+          app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+          monitoring_enabled: false,
+          store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+          fake_app_detection_status:
+            ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+        })
+      );
+
+      await render(hbs`
+        <Storeknox::Inventory::AppList::Table::MonitoringStatus
+          @app={{this.app}}
+          @loading={{false}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxInventory-appListTable-monitoringStatusText]')
+        .hasText(t('storeknox.decommissioned'));
+    });
+
     // --- Loading state ---
 
     test('it renders skeleton elements when loading is true', async function (assert) {
