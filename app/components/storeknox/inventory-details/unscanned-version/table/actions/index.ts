@@ -182,7 +182,11 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   get appIsArchived() {
-    return this.skApp.get('isArchived');
+    // Named for history; means "cannot be acted on". Covers decommissioned
+    // apps too -- this is a second, independent upload path from the one in
+    // va-results, and it has its own hard guard inside the initiateUpload
+    // task below.
+    return this.skApp.get('isReadOnly');
   }
 
   get isScanned() {

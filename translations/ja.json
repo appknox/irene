@@ -2592,6 +2592,7 @@
     "disabledMsg": "Monitoring has been disabled for this app.",
     "decommissioned": "提供終了",
     "decommissionedMsg": "このアプリはストアから削除されました。監視は停止し、ライセンスは解放されました。",
+    "decommissionedActionDisabled": "このアプリはストアから削除されているため、操作を行うことはできません。",
     "noUnscannedVersions": "<strong>No unscanned versions</strong>",
     "noUnscannedVersionsOrFakeAppsDetectedMsg": "<strong>No unscanned versions</strong> or <strong>Suspected Brand Abuse/Fake Apps</strong>",
     "inventory": "Inventory",

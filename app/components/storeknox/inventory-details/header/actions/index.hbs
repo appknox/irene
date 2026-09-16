@@ -14,7 +14,7 @@
       {{style height='32px' border='none'}}
       data-test-storeknoxInventoryDetails-pageInfoTag
     />
-  {{else if (not @skInventoryApp.isArchived)}}
+  {{else if (not @skInventoryApp.isReadOnly)}}
     <AkStack
       @alignItems='center'
       @spacing='1'

@@ -125,7 +125,7 @@ export default class StoreknoxInventoryDetailsHeaderActionsComponent extends Com
   }
 
   get showArchivedAppsInfoTagDivider() {
-    if (!this.skInventoryApp.isArchived) {
+    if (!this.skInventoryApp.isReadOnly) {
       return true;
     }
 
@@ -133,7 +133,10 @@ export default class StoreknoxInventoryDetailsHeaderActionsComponent extends Com
   }
 
   get showArchiveButton() {
-    return this.isOwnerOrAdmin;
+    // Hidden, not disabled. Archiving a decommissioned app would overwrite
+    // app_status and orphan decommissioned_on -- mycroft refuses it, and the
+    // button has no meaning here.
+    return this.isOwnerOrAdmin && !this.skInventoryApp?.isDecommissioned;
   }
 }
 

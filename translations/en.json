@@ -2592,6 +2592,7 @@
     "disabledMsg": "Monitoring has been disabled for this app.",
     "decommissioned": "Decommissioned",
     "decommissionedMsg": "This app has been removed from the store. Monitoring has stopped and its licence has been released.",
+    "decommissionedActionDisabled": "This app has been removed from the store, so no action can be taken on it.",
     "noUnscannedVersions": "<strong>No unscanned versions</strong>",
     "noUnscannedVersionsOrFakeAppsDetectedMsg": "<strong>No unscanned versions</strong> or <strong>Suspected Brand Abuse/Fake Apps</strong>",
     "inventory": "Inventory",

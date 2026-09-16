@@ -17,7 +17,7 @@ interface StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature {
 
 export default class StoreknoxInventoryDetailsAppDetailsActionsListButtonComponent extends Component<StoreknoxInventoryDetailsAppDetailsActionsListButtonSignature> {
   get isArchived() {
-    return this.args.skInventoryApp?.isArchived;
+    return this.args.skInventoryApp?.isReadOnly;
   }
 
   get leftIconName() {
