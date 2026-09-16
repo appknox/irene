@@ -137,40 +137,6 @@
               </AkTypography>
             </AkButton>
 
-            {{#if node.dataObject.originalComponent.isStaleVulnData}}
-              <AkTooltip
-                @title={{t 'sbomModule.staleVulnDataTooltip'}}
-                @arrow={{true}}
-                @placement='bottom'
-              >
-                <span local-class='stale-icon-wrap'>
-                  <AkIcon
-                    data-test-component-tree-staleVulnIcon
-                    @iconName='shield-question'
-                    @size='small'
-                    @color='info'
-                  />
-                </span>
-              </AkTooltip>
-            {{/if}}
-
-            {{#if node.dataObject.originalComponent.isStaleVersionData}}
-              <AkTooltip
-                @title={{t 'sbomModule.staleVersionDataTooltip'}}
-                @arrow={{true}}
-                @placement='bottom'
-              >
-                <span local-class='stale-icon-wrap'>
-                  <AkIcon
-                    data-test-component-tree-staleVersionIcon
-                    @iconName='clock-arrow-up'
-                    @size='small'
-                    @color='info'
-                  />
-                </span>
-              </AkTooltip>
-            {{/if}}
-
             <Sbom::ComponentStatus
               @sbomComponent={{node.dataObject.originalComponent}}
             />

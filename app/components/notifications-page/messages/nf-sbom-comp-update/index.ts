@@ -13,6 +13,7 @@ export interface NotificationsPageMessagesNfSbomCompUpdateComponentArgs {
 
 export default class NotificationsPageMessagesNfSbomCompUpdateComponent extends Component<NotificationsPageMessagesNfSbomCompUpdateComponentArgs> {
   @service declare router: RouterService;
+  @service('browser/window') declare window: Window;
 
   @action
   viewComponent() {
@@ -24,7 +25,11 @@ export default class NotificationsPageMessagesNfSbomCompUpdateComponent extends 
 
   @action
   viewDirectory() {
-    this.router.transitionTo('authenticated.dashboard.sbom.apps');
+    const url = this.args.context.registry_url;
+
+    if (url) {
+      this.window.open(url, '_blank');
+    }
   }
 }
 
