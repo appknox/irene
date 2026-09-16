@@ -401,6 +401,52 @@ module(
       assert
         .dom('[data-test-storeknoxInventory-appListTable-monitoringStatusText]')
         .hasText(t('storeknox.decommissioned'));
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusIcon="disabled"]'
+        )
+        .exists('decommissioned: reuses the disabled icon');
+    });
+
+    test('it shows the decommissioned tooltip, not the disabled tooltip, for a decommissioned app', async function (assert) {
+      this.set(
+        'app',
+        this.createFakeApp({
+          app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+          monitoring_enabled: false,
+          store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+          fake_app_detection_status:
+            ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+        })
+      );
+
+      await render(hbs`
+        <Storeknox::Inventory::AppList::Table::MonitoringStatus
+          @app={{this.app}}
+          @loading={{false}}
+        />
+      `);
+
+      const trigger = find(
+        '[data-test-storeknoxInventory-appListTable-monitoringStatusText]'
+      );
+
+      await triggerEvent(trigger, 'mouseenter');
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText]'
+        )
+        .containsText(t('storeknox.decommissionedMsg'));
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventory-appListTable-monitoringStatusTooltipText]'
+        )
+        .doesNotContainText(t('storeknox.disabledMsg'));
+
+      await triggerEvent(trigger, 'mouseleave');
     });
 
     // --- Loading state ---
