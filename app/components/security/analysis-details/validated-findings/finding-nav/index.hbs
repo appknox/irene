@@ -1,0 +1,62 @@
+<AkStack
+  @alignItems='center'
+  @spacing='1'
+  local-class='finding-nav'
+  data-test-securityAnalysisDetails-validatedFindings-nav
+>
+  <AkIconButton
+    @size='small'
+    disabled={{@isFirstFinding}}
+    aria-label={{t 'securityAnalysisDetails.validatedFindings.previousFinding'}}
+    {{on 'click' @onPrevious}}
+    local-class='finding-nav-button'
+    data-test-securityAnalysisDetails-validatedFindings-navPrevBtn
+  >
+    <AkIcon @iconName='chevron-left' @size='small' />
+  </AkIconButton>
+
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkTypography @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.finding'}}
+    </AkTypography>
+
+    <AkSelect
+      @options={{@positionOptions}}
+      @selected={{@selectedPositionOption}}
+      @onChange={{@onPositionSelect}}
+      @searchEnabled={{false}}
+      @verticalPosition='below'
+      local-class='position-select'
+      data-test-securityAnalysisDetails-validatedFindings-navPositionSelect
+      as |option|
+    >
+      <AkTypography
+        @fontWeight='medium'
+        data-test-securityAnalysisDetails-validatedFindings-navPositionOption='{{option.position}}'
+      >
+        {{option.label}}
+      </AkTypography>
+    </AkSelect>
+
+    <AkTypography
+      @fontWeight='medium'
+      data-test-securityAnalysisDetails-validatedFindings-navTotal
+    >
+      {{t
+        'securityAnalysisDetails.validatedFindings.findingOf'
+        total=@formattedTotalFindings
+      }}
+    </AkTypography>
+  </AkStack>
+
+  <AkIconButton
+    @size='small'
+    disabled={{@isLastFinding}}
+    aria-label={{t 'securityAnalysisDetails.validatedFindings.nextFinding'}}
+    {{on 'click' @onNext}}
+    local-class='finding-nav-button'
+    data-test-securityAnalysisDetails-validatedFindings-navNextBtn
+  >
+    <AkIcon @iconName='chevron-right' @size='small' />
+  </AkIconButton>
+</AkStack>

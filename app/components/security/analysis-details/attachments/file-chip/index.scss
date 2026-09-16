@@ -1,0 +1,99 @@
+$extensions-list: (
+  apk: #5eb533,
+  ipa: #8e44ad,
+  txt: #a6b1b5,
+  log: #373a43,
+  pdf: #db3e3d,
+  doc: #307cf1,
+  docx: #307cf1,
+  xls: #0f9d58,
+  xlsx: #0f9d58,
+  xlsm: #0f9d58,
+  zip: #855d40,
+  jpg: #80c081,
+  jpeg: #80c081,
+  png: #80c081,
+  bmp: #80c081,
+);
+
+.attachment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5714em;
+  max-width: 100%;
+  padding: 0.2857em 0.5714em 0.2857em 0.2857em;
+  background-color: var(
+    --security-analysis-details-attachments-chip-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-attachments-chip-border-color);
+  border-radius: 9999px;
+  box-shadow: var(--security-analysis-details-attachments-chip-box-shadow);
+}
+
+.attachment-chip-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.7143rem;
+  height: 1.7143rem;
+  font-size: 0.5714rem;
+  line-height: 1;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--security-analysis-details-attachments-chip-badge-color);
+  background-color: var(
+    --security-analysis-details-attachments-chip-badge-background-color
+  );
+  border-radius: 9999px;
+
+  @each $extn, $color in $extensions-list {
+    &[data-type='#{$extn}'] {
+      background-color: $color;
+    }
+  }
+}
+
+.attachment-chip-name {
+  max-width: 14.2857em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--security-analysis-details-attachments-chip-name-color);
+}
+
+.attachment-chip-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0.2857em;
+  color: var(--security-analysis-details-attachments-chip-action-color);
+  background: none;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+
+  &.is-muted {
+    color: var(--security-analysis-details-attachments-chip-action-muted-color);
+  }
+
+  &:hover:not(:disabled) {
+    color: var(--security-analysis-details-attachments-chip-action-color);
+    background-color: var(
+      --security-analysis-details-attachments-chip-action-hover-background-color
+    );
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.attachment-chip-badge.is-loading {
+  background-color: transparent;
+}

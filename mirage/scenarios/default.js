@@ -43,7 +43,7 @@ export default function (server) {
   server.createList('organization', organizationCount);
   server.create('organization-me');
   server.create('organization-member');
-  server.create('partnerclient-plan');
+  server.create('partner/partnerclient-plan');
   for (var teamId = 1; teamId <= teamCount; teamId++) {
     server.create('team', {
       users: users,
@@ -74,13 +74,44 @@ export default function (server) {
         vulnerabilityId++
       ) {
         server.create('analysis', {
-          file: file,
+          fileId: file.id,
           vulnerabilityId: vulnerabilityId,
         });
       }
     }
     project.fileIds = fileIds;
   }
-  var currentUser = server.db.users.get(currentUserId);
-  currentUser.projectIds = projectIds;
+  server.db.users.update(currentUserId, { projectIds: projectIds });
+
+  seedSecurityAnalysis(server);
+}
+
+/**
+ * Seeds one fully populated security analysis so the analysis details page can
+ * be previewed at /security/analysis/<id> with `ember serve -e mirage`.
+ */
+function seedSecurityAnalysis(server) {
+  var securityProject = server.create('security/project');
+
+  var securityFile = server.create('security/file', {
+    project: securityProject.id,
+  });
+
+  var securityAnalysis = server.create(
+    'security/analysis',
+    'withAllRegulatory',
+    {
+      file: securityFile.id,
+      vulnerability: 1,
+      status: 3,
+      risk: 4,
+      cvss_version: 4,
+      active_cvss_version: 4,
+      legacy_cvss_version: 3,
+    }
+  );
+
+  server.createList('security/analysis-finding', 3);
+
+  return securityAnalysis;
 }

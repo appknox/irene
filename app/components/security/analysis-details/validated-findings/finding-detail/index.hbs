@@ -1,0 +1,180 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @spacing='2.5'
+  data-test-securityAnalysisDetails-validatedFindings-detail
+>
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.confidence'}}
+    </AkTypography>
+
+    <AkSelect
+      @selected={{this.validation.confidence_label}}
+      @options={{this.confidenceOptions}}
+      @onChange={{this.selectConfidence}}
+      @disabled={{@disabled}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.selectConfidence'
+      }}
+      class='w-full'
+      data-test-securityAnalysisDetails-validatedFindings-confidenceSelect
+      as |confidence|
+    >
+      {{confidence}}
+    </AkSelect>
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.summary'}}
+    </AkTypography>
+
+    <Textarea
+      @value={{this.validation.finding_summary}}
+      disabled={{@disabled}}
+      rows='3'
+      local-class='summary-input'
+      aria-label={{t 'securityAnalysisDetails.validatedFindings.summary'}}
+      {{on 'input' this.updateSummary}}
+      data-test-securityAnalysisDetails-validatedFindings-summaryInput
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.evidence'}}
+    </AkTypography>
+
+    <AkRichTextEditor
+      @value={{this.validation.evidence}}
+      @disabled={{@disabled}}
+      @onChange={{this.updateEvidence}}
+      data-test-securityAnalysisDetails-validatedFindings-evidenceEditor
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.reasoning'}}
+    </AkTypography>
+
+    <AkRichTextEditor
+      @value={{this.validation.reasoning}}
+      @disabled={{@disabled}}
+      @onChange={{this.updateReasoning}}
+      data-test-securityAnalysisDetails-validatedFindings-reasoningEditor
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' local-class='panel-group'>
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+      @panelId={{this.panel.REMEDIATION}}
+      @title={{t 'securityAnalysisDetails.validatedFindings.remediation'}}
+      @iconName='lightbulb'
+      @iconColor='success'
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.REMEDIATION}}
+      @onToggle={{@onTogglePanel}}
+      @onSave={{@onSavePanel}}
+    >
+      <Security::AnalysisDetails::ValidatedFindings::StepList
+        @steps={{this.remediationSteps}}
+        @disabled={{@disabled}}
+        @addLabel={{t
+          'securityAnalysisDetails.validatedFindings.addRemediationStep'
+        }}
+        @bodyPlaceholder={{t
+          'securityAnalysisDetails.validatedFindings.addRemediation'
+        }}
+        @onChange={{this.updateRemediationSteps}}
+      />
+    </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
+
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+      @panelId={{this.panel.STEPS_TO_REPRODUCE}}
+      @title={{t 'securityAnalysisDetails.validatedFindings.stepsToReproduce'}}
+      @iconName='experiment'
+      @iconColor='warn'
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.STEPS_TO_REPRODUCE}}
+      @onToggle={{@onTogglePanel}}
+      @onSave={{@onSavePanel}}
+    >
+      <Security::AnalysisDetails::ValidatedFindings::StepList
+        @steps={{this.reproductionSteps}}
+        @disabled={{@disabled}}
+        @addLabel={{t
+          'securityAnalysisDetails.validatedFindings.addReproductionStep'
+        }}
+        @bodyPlaceholder={{t
+          'securityAnalysisDetails.validatedFindings.addStepsToReproduce'
+        }}
+        @onChange={{this.updateReproductionSteps}}
+      />
+    </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
+
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+      @panelId={{this.panel.EXPLOITABILITY}}
+      @title={{t
+        'securityAnalysisDetails.validatedFindings.exploitabilityAnalysis'
+      }}
+      @iconName='bug-report'
+      @iconColor='error'
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.EXPLOITABILITY}}
+      @onToggle={{@onTogglePanel}}
+      @onSave={{@onSavePanel}}
+    >
+      <AkStack @direction='column' @width='full' @spacing='1.5'>
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'securityAnalysisDetails.validatedFindings.selectLikelihood'}}
+        </AkTypography>
+
+        <AkSelect
+          @selected={{this.exploitability.exploitability_likelihood}}
+          @options={{this.likelihoodOptions}}
+          @onChange={{this.selectLikelihood}}
+          @disabled={{@disabled}}
+          @placeholder={{t
+            'securityAnalysisDetails.validatedFindings.selectLikelihood'
+          }}
+          class='w-full'
+          data-test-securityAnalysisDetails-validatedFindings-likelihoodSelect
+          as |likelihood|
+        >
+          {{likelihood}}
+        </AkSelect>
+
+        <AkRichTextEditor
+          @value={{this.exploitability.exploitability_analysis.body}}
+          @disabled={{@disabled}}
+          @onChange={{this.updateExploitabilityBody}}
+          data-test-securityAnalysisDetails-validatedFindings-exploitabilityEditor
+        />
+      </AkStack>
+    </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
+
+    <button
+      type='button'
+      local-class='expand-all-action'
+      {{on 'click' @onToggleExpandAll}}
+      data-test-securityAnalysisDetails-validatedFindings-expandAllBtn
+    >
+      <AkIcon
+        @iconName={{if @areAllPanelsOpen 'arrow-drop-up' 'arrow-drop-down'}}
+        @size='small'
+        @color='primary'
+      />
+
+      <AkTypography @variant='subtitle2' @color='primary'>
+        {{#if @areAllPanelsOpen}}
+          {{t 'securityAnalysisDetails.validatedFindings.collapseAll'}}
+        {{else}}
+          {{t 'securityAnalysisDetails.validatedFindings.expandAll'}}
+        {{/if}}
+      </AkTypography>
+    </button>
+  </AkStack>
+
+</AkStack>

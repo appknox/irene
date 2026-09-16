@@ -1,64 +1,60 @@
-<AkStack
-  @width='full'
-  @alignItems='center'
-  @justifyContent='space-between'
-  data-test-securityAnalysisDetails-cvssMetrics-header
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.cvssMetrics.title'}}
+  @testId='cvssMetrics'
 >
-  <AkTypography @variant='h5'>
-    CVSS Metrics
-  </AkTypography>
+  <:actions>
+    <AkButton
+      {{on 'click' this.setActiveCVSSDetailsToUntested}}
+      data-test-securityAnalysisDetails-cvssMetrics-setUntestedBtn
+    >
+      <:leftIcon><AkIcon @iconName='close' /></:leftIcon>
+      <:default>{{t 'securityAnalysisDetails.cvssMetrics.setToUntested'}}</:default>
+    </AkButton>
+  </:actions>
 
-  <AkButton
-    {{on 'click' this.setActiveCVSSDetailsToUntested}}
-    data-test-securityAnalysisDetails-cvssMetrics-setUntestedBtn
-  >
-    <:leftIcon><AkIcon @iconName='close' /></:leftIcon>
-    <:default>Set to Untested</:default>
-  </AkButton>
-</AkStack>
-
-<AkDivider @color='dark' class='my-2' />
-
-{{#if this.analysisCurrentCvssIsLegacyCvss}}
-  <AkStack
-    @width='full'
-    @spacing='1.5'
-    @alignItems='center'
-    class='mb-3 p-2'
-    local-class='legacy-cvss-banner'
-    data-test-securityAnalysisDetails-cvssMetrics-legacyBanner
-  >
-    <AkIcon @iconName='info' @color='primary' />
-
-    <AkTypography @variant='body2' @fontWeight='medium'>
-      This analysis uses CVSS v3. To edit any analysis properties, please add
-      the CVSS v4 metrics. Note that the CVSS v3 metrics will become legacy.
-    </AkTypography>
-  </AkStack>
-{{/if}}
-
-<AkAccordion
-  @isExpanded={{this.isLegacyCvssExpanded}}
-  @onChange={{this.handleToggleLegacyCvss}}
-  @summaryText={{this.legacyCVSSTitle}}
-  @unmountContentOnCollapse={{true}}
-  class='mb-3'
-  data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo
->
   <:content>
+    {{#if this.analysisCurrentCvssIsLegacyCvss}}
+      <AkStack
+        @width='full'
+        @spacing='1.5'
+        @alignItems='center'
+        class='mb-3 p-2'
+        local-class='legacy-cvss-banner'
+        data-test-securityAnalysisDetails-cvssMetrics-legacyBanner
+      >
+        <AkIcon @iconName='info' @color='primary' />
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          This analysis uses CVSS v3. To edit any analysis properties, please add
+          the CVSS v4 metrics. Note that the CVSS v3 metrics will become legacy.
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    <AkAccordion
+      @isExpanded={{this.isLegacyCvssExpanded}}
+      @onChange={{this.handleToggleLegacyCvss}}
+      @summaryText={{this.legacyCVSSTitle}}
+      @unmountContentOnCollapse={{true}}
+      class='mb-3'
+      data-test-securityAnalysisDetails-cvssMetrics-legacyCvssInfo
+    >
+      <:content>
+        <Security::AnalysisDetails::CvssMetrics::CvssPanel
+          @cvssVersion={{this.legacyCVSSDetails.version}}
+          @cvssDetails={{this.legacyCVSSDetails}}
+          @selectDataList={{this.legacyCVSSSelectDataList}}
+          class='py-3'
+        />
+      </:content>
+    </AkAccordion>
+
+    <AkDivider @color='dark' class='mb-2' />
+
     <Security::AnalysisDetails::CvssMetrics::CvssPanel
-      @cvssVersion={{this.legacyCVSSDetails.version}}
-      @cvssDetails={{this.legacyCVSSDetails}}
-      @selectDataList={{this.legacyCVSSSelectDataList}}
-      class='py-3'
+      @cvssVersion={{this.analysisActiveCvssVersion}}
+      @cvssDetails={{this.currentCVSSDetails}}
+      @selectDataList={{this.currentCVSSSelectDataList}}
     />
   </:content>
-</AkAccordion>
-
-<AkDivider @color='dark' class='mb-2' />
-
-<Security::AnalysisDetails::CvssMetrics::CvssPanel
-  @cvssVersion={{this.analysisActiveCvssVersion}}
-  @cvssDetails={{this.currentCVSSDetails}}
-  @selectDataList={{this.currentCVSSSelectDataList}}
-/>
+</Security::AnalysisDetails::SectionCard>

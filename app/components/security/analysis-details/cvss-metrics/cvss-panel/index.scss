@@ -1,3 +1,8 @@
+.metric-label {
+  width: 320px;
+  color: var(--security-analysis-details-cvss-metrics-label-color);
+}
+
 .colored-box {
   display: flex;
   width: 130px;

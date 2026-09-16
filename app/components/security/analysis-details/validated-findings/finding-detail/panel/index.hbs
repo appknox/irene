@@ -1,0 +1,69 @@
+<AkAccordion
+  @isExpanded={{@isExpanded}}
+  @onChange={{this.handleToggle}}
+  @mountContentOnExpand={{true}}
+  local-class='finding-panel'
+  data-test-securityAnalysisDetails-validatedFindings-panel='{{@panelId}}'
+>
+  <:summary as |accordion|>
+    <div local-class='panel-header'>
+      <button
+        type='button'
+        local-class='panel-header-trigger'
+        {{on 'click' accordion.onSummaryClick}}
+        data-test-securityAnalysisDetails-validatedFindings-panelToggle='{{@panelId}}'
+      >
+        <AkIcon
+          @iconName={{@iconName}}
+          @size='small'
+          @color={{@iconColor}}
+          data-test-securityAnalysisDetails-validatedFindings-panelIcon='{{@panelId}}'
+        />
+
+        <AkTypography
+          @fontWeight='bold'
+          local-class='panel-title'
+          data-test-securityAnalysisDetails-validatedFindings-panelTitle='{{@panelId}}'
+        >
+          {{@title}}
+        </AkTypography>
+      </button>
+
+      <AkStack @alignItems='center' @spacing='1'>
+        <AkButton
+          @variant='filled'
+          @disabled={{@disabled}}
+          local-class='panel-save-button'
+          {{on 'click' this.handleSave}}
+          data-test-securityAnalysisDetails-validatedFindings-panelSaveBtn='{{@panelId}}'
+        >
+          {{t 'save'}}
+        </AkButton>
+
+        <AkIconButton
+          @size='small'
+          @variant='outlined'
+          aria-label={{@title}}
+          local-class='expand-icon-btn'
+          {{on 'click' accordion.onSummaryClick}}
+          data-test-securityAnalysisDetails-validatedFindings-panelChevron='{{@panelId}}'
+        >
+          <AkIcon
+            @iconName='arrow-drop-down'
+            @size='small'
+            local-class='expand-icon {{if accordion.isExpanded "expanded"}}'
+          />
+        </AkIconButton>
+      </AkStack>
+    </div>
+  </:summary>
+
+  <:content>
+    <div
+      local-class='panel-body'
+      data-test-securityAnalysisDetails-validatedFindings-panelContent='{{@panelId}}'
+    >
+      {{yield}}
+    </div>
+  </:content>
+</AkAccordion>

@@ -69,6 +69,19 @@
   "admin": "管理者",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",
   "aiPoweredFeatures": "AI Powered Features",
+  "akRichTextEditor": {
+    "addLink": "リンクを追加",
+    "bold": "太字",
+    "bulletList": "箇条書き",
+    "codeBlock": "コードブロック",
+    "inlineCode": "インラインコード",
+    "italic": "斜体",
+    "linkPlaceholder": "リンクのURLを入力",
+    "orderedList": "番号付きリスト",
+    "removeLink": "リンクを削除",
+    "strikethrough": "取り消し線",
+    "underline": "下線"
+  },
   "all": "All",
   "allFutureAnalyses": "All Future Analyses",
   "allPlatforms": "全プラットフォーム",
@@ -2296,6 +2309,87 @@
   "security": "セキュリティ",
   "securityDashboard": "Security Dashboard",
   "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
+  "securityAnalysisDetails": {
+    "aeis": {
+      "reset": "リセット",
+      "resetDone": "すべてのAEIS基準が「不明」にリセットされました。",
+      "signal": {
+        "false": "いいえ",
+        "true": "はい",
+        "unknown": "不明"
+      },
+      "title": "AEIS",
+      "untested": "未テスト"
+    },
+    "attachments": {
+      "description": "この分析に関連するファイル",
+      "dropzoneLabel": "ファイルを選択するか、ここにドラッグ＆ドロップしてください",
+      "maxFileSize": "ファイルサイズは最大500MBです",
+      "noFiles": "アップロードされたファイルはありません",
+      "openInNewTab": "新しいタブで開く",
+      "previewUnavailable": "このファイル形式はプレビューできません。",
+      "removeFileConfirm": "このファイルを削除してもよろしいですか？",
+      "title": "添付ファイル",
+      "upload": "アップロード",
+      "view": "表示"
+    },
+    "businessImplication": {
+      "placeholder": "この所見がビジネスに与える影響を記述してください",
+      "title": "ビジネスへの影響"
+    },
+    "cvssMetrics": {
+      "invalidVector": "無効なベクター",
+      "riskScoreCaption": "CVSSv{version}メトリクスに基づくリスクスコア",
+      "setToUntested": "未テストに設定",
+      "title": "CVSSメトリクス"
+    },
+    "header": {
+      "analysisStatus": "分析ステータス",
+      "analysisStatusDescription": "ここでステータスを変更すると、ファイルページ上のこの分析の現在のステータスも変更されます。",
+      "markAsPassed": "合格としてマーク",
+      "selectStatus": "ステータスを選択",
+      "visitDashboard": "ダッシュボードを開く"
+    },
+    "regulatoryCategories": {
+      "notSet": "未設定",
+      "selectedCount": "{count}件選択中",
+      "title": "規制カテゴリ"
+    },
+    "validatedFindings": {
+      "addFinding": "所見を追加",
+      "addRemediation": "修正方法を追加",
+      "addRemediationStep": "修正手順",
+      "addReproductionStep": "再現手順",
+      "addStepsToReproduce": "再現手順を追加",
+      "atLeastOneRequired": "少なくとも1件の所見が必要です",
+      "collapseAll": "すべて折りたたむ",
+      "confidence": "確度",
+      "deleteAllFindingsConfirm": "すべての所見を削除してもよろしいですか？",
+      "deleteFindingConfirm": "この所見を削除してもよろしいですか？",
+      "deleteOverallFinding": "所見全体を削除",
+      "deleteThisFinding": "この所見を削除",
+      "emptyState": "この脆弱性に追加された所見はありません。",
+      "evidence": "証拠",
+      "expandAll": "すべて展開",
+      "exploitabilityAnalysis": "悪用可能性の分析",
+      "finding": "所見",
+      "findingOf": "／ {total}",
+      "findingSaved": "所見を保存しました",
+      "heading": "見出し",
+      "limitReached": "所見は{limit}件までです",
+      "nextFinding": "次の所見",
+      "passedEmptyState": "この分析は合格としてマークされているため、検証する所見はありません。",
+      "previousFinding": "前の所見",
+      "reasoning": "根拠",
+      "remediation": "修正方法",
+      "selectConfidence": "確度を選択",
+      "selectLikelihood": "悪用可能性を選択",
+      "step": "ステップ {number}",
+      "stepsToReproduce": "再現手順",
+      "summary": "概要",
+      "title": "検証済みの所見"
+    }
+  },
   "selectAll": "Select All",
   "selectAnyTeam": "チームを選択してください",
   "selectThePath": "Select the path",
@@ -2749,8 +2843,6 @@
     "lastScannedVersion": "Last Scanned Version",
     "lastMonitoredOn": "Last monitored on",
     "monitoringStatus": "Monitoring Status",
-    "playStore": "Play Store",
-    "appStore": "App Store",
     "appIsPartOf": "This App is part of",
     "checkOn": "Check on",
     "unscannedVersionsTitle": "<strong>Unscanned versions</strong>",

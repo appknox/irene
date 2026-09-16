@@ -203,6 +203,9 @@
 
   // special case variables for knoxiq/code-block
   --knoxiq-code-block-content-color: #f9fafb;
+
+  // special case variable for ak-rich-text-editor code blocks
+  --ak-rich-text-editor-code-block-content: #f9fafb;
   --knoxiq-code-block-copy-button-border: #374151;
   --knoxiq-code-block-copy-button-hover-color: #1f2937;
 
@@ -230,6 +233,10 @@
   // special case variables for knoxiq/validated-findings/finding-nav
   --knoxiq-validated-findings-finding-nav-button-border: #f1f1f1;
   --knoxiq-validated-findings-finding-nav-select-border: #dddddd;
+
+  // special case variables for security/analysis-details/validated-findings/finding-nav
+  --security-analysis-details-validated-findings-nav-button-border: #f1f1f1;
+  --security-analysis-details-validated-findings-nav-select-border: #dddddd;
 
   // special case variables for knoxiq/validated-findings/remediation
   --knoxiq-validated-findings-remediation-icon: #06b6d4;

@@ -1,0 +1,183 @@
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.validatedFindings.title'}}
+  @testId='validatedFindings'
+>
+  <:actions>
+    <AkStack @alignItems='center' local-class='header-actions'>
+      {{#if this.hasFindings}}
+        <Security::AnalysisDetails::ValidatedFindings::FindingNav
+          @isFirstFinding={{this.isFirstFinding}}
+          @isLastFinding={{this.isLastFinding}}
+          @positionOptions={{this.findingPositionOptions}}
+          @selectedPositionOption={{this.selectedFindingPositionOption}}
+          @formattedTotalFindings={{this.formattedTotalFindings}}
+          @onPrevious={{this.goToPreviousFinding}}
+          @onNext={{this.goToNextFinding}}
+          @onPositionSelect={{this.selectFindingPosition}}
+        />
+
+        <AkDivider
+          @direction='vertical'
+          @color='dark'
+          @height='2.4286em'
+          data-test-securityAnalysisDetails-validatedFindings-actionsDivider
+        />
+      {{/if}}
+
+      <AkButton
+        @variant='outlined'
+        @disabled={{this.hasReachedFindingsLimit}}
+        title={{this.addFindingTooltip}}
+        {{on 'click' this.addFinding}}
+        local-class='add-finding-button'
+        data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='add' @size='small' />
+        </:leftIcon>
+
+        <:default>
+          {{t 'securityAnalysisDetails.validatedFindings.addFinding'}}
+        </:default>
+      </AkButton>
+
+      <AkButton
+        @variant='filled'
+        @disabled={{this.saveFinding.isRunning}}
+        {{on 'click' this.saveSelectedFinding}}
+        data-test-securityAnalysisDetails-validatedFindings-saveBtn
+      >
+        {{t 'save'}}
+      </AkButton>
+
+      <AkIconButton
+        @size='small'
+        {{on 'click' this.openMoreMenu}}
+        data-test-securityAnalysisDetails-validatedFindings-moreMenuBtn
+      >
+        <AkIcon @iconName='more-vert' @size='small' />
+      </AkIconButton>
+    </AkStack>
+  </:actions>
+
+  <:content>
+    {{#if this.isLoading}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @justifyContent='center'
+        class='p-3'
+        data-test-securityAnalysisDetails-validatedFindings-loader
+      >
+        <AkLoader @size={{24}} />
+      </AkStack>
+
+    {{else if this.isPassed}}
+      <AkStack
+        @width='full'
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+        class='p-3'
+        data-test-securityAnalysisDetails-validatedFindings-passedState
+      >
+        <AkIcon @iconName='check-circle' @color='success' />
+
+        <AkTypography @variant='body2' @color='textSecondary' @align='center'>
+          {{t 'securityAnalysisDetails.validatedFindings.passedEmptyState'}}
+        </AkTypography>
+      </AkStack>
+
+    {{else if this.selectedFinding}}
+      <Security::AnalysisDetails::ValidatedFindings::FindingDetail
+        @finding={{this.selectedFinding}}
+        @disabled={{this.saveFinding.isRunning}}
+        @areAllPanelsOpen={{this.areAllPanelsOpen}}
+        @isPanelOpen={{this.isPanelOpen}}
+        @onTogglePanel={{this.togglePanel}}
+        @onToggleExpandAll={{this.toggleExpandAll}}
+        @onSavePanel={{this.savePanel}}
+      />
+
+    {{else}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1'
+        class='p-3'
+        data-test-securityAnalysisDetails-validatedFindings-emptyState
+      >
+        <AkIcon @iconName='info' @size='small' />
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'securityAnalysisDetails.validatedFindings.emptyState'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </:content>
+</Security::AnalysisDetails::SectionCard>
+
+<AkMenu
+  @anchorRef={{this.moreMenuRef}}
+  @placement='bottom'
+  @arrow={{true}}
+  @onClose={{this.closeMoreMenu}}
+  as |akm|
+>
+  <akm.listItem
+    @button={{true}}
+    @disabled={{this.isLastRemainingFinding}}
+    @onClick={{this.openDeleteFindingConfirm}}
+    @divider={{true}}
+    title={{this.deleteDisabledReason}}
+    data-test-securityAnalysisDetails-validatedFindings-deleteFindingMenuItem
+    as |li|
+  >
+    <li.leftIcon>
+      <AkIcon @size='small' @iconName='delete-outline' @color='textPrimary' />
+    </li.leftIcon>
+
+    <li.text
+      @primaryTextClass={{this.classes.menuItemText}}
+      @primaryText={{t
+        'securityAnalysisDetails.validatedFindings.deleteThisFinding'
+      }}
+    />
+  </akm.listItem>
+
+  <akm.listItem
+    @button={{true}}
+    @disabled={{this.isLastRemainingFinding}}
+    @onClick={{this.openDeleteAllFindingsConfirm}}
+    title={{this.deleteDisabledReason}}
+    data-test-securityAnalysisDetails-validatedFindings-deleteAllFindingsMenuItem
+    as |li|
+  >
+    <li.leftIcon>
+      <AkIcon @iconName='delete-outline' @color='error' @size='small' />
+    </li.leftIcon>
+
+    <li.text
+      @primaryTextClass={{this.classes.menuItemText}}
+      @primaryText={{t
+        'securityAnalysisDetails.validatedFindings.deleteOverallFinding'
+      }}
+    />
+  </akm.listItem>
+</AkMenu>
+
+<ConfirmBox
+  @isActive={{this.showDeleteFindingConfirm}}
+  @title={{t 'securityAnalysisDetails.validatedFindings.deleteFindingConfirm'}}
+  @confirmAction={{this.deleteSelectedFinding}}
+  @cancelAction={{this.closeDeleteFindingConfirm}}
+/>
+
+<ConfirmBox
+  @isActive={{this.showDeleteAllFindingsConfirm}}
+  @title={{t
+    'securityAnalysisDetails.validatedFindings.deleteAllFindingsConfirm'
+  }}
+  @confirmAction={{this.deleteAllFindings}}
+  @cancelAction={{this.closeDeleteAllFindingsConfirm}}
+/>

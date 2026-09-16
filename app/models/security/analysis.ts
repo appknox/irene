@@ -29,6 +29,18 @@ import type EucraModel from '../eucra';
 
 irregular('asvs', 'asvses');
 
+/**
+ * AEIS signals are a keyed map rather than fixed fields: the backend decides
+ * which criteria apply, and the labels are derived from the keys.
+ */
+export interface SecurityAnalysisAeis {
+  score: number | null;
+  label: string;
+  signals: Record<string, SecurityAnalysisAeisSignal>;
+}
+
+export type SecurityAnalysisAeisSignal = 'unknown' | 'true' | 'false';
+
 export interface SecurityAnalysisFinding {
   id?: number;
   title: string | null;
@@ -104,6 +116,12 @@ export default class SecurityAnalysisModel extends Model {
   @attr('string') declare overriddenRiskComment: string;
   @attr('boolean') declare overriddenRiskToProfile: boolean;
   @attr('string') declare computedRisk: string;
+
+  @attr()
+  declare aeis: SecurityAnalysisAeis | null;
+
+  @attr('string')
+  declare businessImplication: string;
 
   @belongsTo('security/file', { async: true, inverse: 'analyses' })
   declare file: AsyncBelongsTo<SecurityFileModel>;

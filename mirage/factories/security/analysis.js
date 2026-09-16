@@ -11,6 +11,32 @@ export default Factory.extend({
   },
   cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
 
+  business_implication() {
+    return faker.lorem.sentence();
+  },
+
+  aeis() {
+    const signalKeys = [
+      'public_exploit_exists',
+      'remote_exploitation',
+      'no_auth_required',
+      'minimal_user_interaction',
+      'requires_chaining',
+      'local_exploitation_only',
+    ];
+
+    return {
+      score: faker.number.float({ min: 1.0, max: 9.9, fractionDigits: 1 }),
+      label: faker.helpers.arrayElement(['Critical', 'High', 'Medium', 'Low']),
+      signals: Object.fromEntries(
+        signalKeys.map((key) => [
+          key,
+          faker.helpers.arrayElement(['unknown', 'true', 'false']),
+        ])
+      ),
+    };
+  },
+
   attack_vector() {
     return faker.helpers.arrayElement(ENUMS.CVSS_V3_ATTACK_VECTOR.BASE_VALUES);
   },

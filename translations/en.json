@@ -69,6 +69,19 @@
   "admin": "Admin",
   "adminPermissionProject": "Admin permission is required to connect project to JIRA",
   "aiPoweredFeatures": "AI Powered Features",
+  "akRichTextEditor": {
+    "addLink": "Add link",
+    "bold": "Bold",
+    "bulletList": "Bulleted list",
+    "codeBlock": "Code block",
+    "inlineCode": "Inline code",
+    "italic": "Italic",
+    "linkPlaceholder": "Enter a link URL",
+    "orderedList": "Numbered list",
+    "removeLink": "Remove link",
+    "strikethrough": "Strikethrough",
+    "underline": "Underline"
+  },
   "all": "All",
   "allFutureAnalyses": "All Future Analyses",
   "allPlatforms": "All Platforms",
@@ -2296,6 +2309,87 @@
   "security": "Security",
   "securityDashboard": "Security Dashboard",
   "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
+  "securityAnalysisDetails": {
+    "aeis": {
+      "reset": "Reset",
+      "resetDone": "All AEIS criteria have been reset to Unknown.",
+      "signal": {
+        "false": "False",
+        "true": "True",
+        "unknown": "Unknown"
+      },
+      "title": "AEIS",
+      "untested": "Untested"
+    },
+    "attachments": {
+      "description": "Files relevant to this analysis",
+      "dropzoneLabel": "Choose a file or drag & drop it here",
+      "maxFileSize": "Maximum 500 MB file size",
+      "noFiles": "No Files Uploaded",
+      "openInNewTab": "Open in new tab",
+      "previewUnavailable": "Preview is not available for this file type.",
+      "removeFileConfirm": "Are you sure you want to remove this file?",
+      "title": "Attachments",
+      "upload": "Upload",
+      "view": "View"
+    },
+    "businessImplication": {
+      "placeholder": "Describe the business impact of this finding",
+      "title": "Business Implication"
+    },
+    "cvssMetrics": {
+      "invalidVector": "Invalid vector",
+      "riskScoreCaption": "Risk Score Based on CVSSv{version} Metrics",
+      "setToUntested": "Set to Untested",
+      "title": "CVSS Metrics"
+    },
+    "header": {
+      "analysisStatus": "Analysis Status",
+      "analysisStatusDescription": "Changing the status here will change the current status for this analysis in the file page.",
+      "markAsPassed": "Mark as Passed",
+      "selectStatus": "Select Status",
+      "visitDashboard": "Visit Dashboard"
+    },
+    "regulatoryCategories": {
+      "notSet": "Not set",
+      "selectedCount": "{count} selected",
+      "title": "Regulatory Categories"
+    },
+    "validatedFindings": {
+      "addFinding": "Add Finding",
+      "addRemediation": "Add Remediation",
+      "addRemediationStep": "Remediation Steps",
+      "addReproductionStep": "Steps to Reproduce",
+      "addStepsToReproduce": "Add Steps to Reproduce",
+      "atLeastOneRequired": "At least one finding is required",
+      "collapseAll": "Collapse All",
+      "confidence": "Confidence",
+      "deleteAllFindingsConfirm": "Are you sure you want to delete all findings?",
+      "deleteFindingConfirm": "Are you sure you want to delete this finding?",
+      "deleteOverallFinding": "Delete Overall Finding",
+      "deleteThisFinding": "Delete this Finding",
+      "emptyState": "No findings added for this vulnerability.",
+      "evidence": "Evidence",
+      "expandAll": "Expand All",
+      "exploitabilityAnalysis": "Exploitability Analysis",
+      "finding": "Finding",
+      "findingOf": "of {total}",
+      "findingSaved": "Finding saved",
+      "heading": "Heading",
+      "limitReached": "Limit of {limit} findings reached",
+      "nextFinding": "Next finding",
+      "passedEmptyState": "This analysis has been marked as passed, so there are no findings left to validate.",
+      "previousFinding": "Previous finding",
+      "reasoning": "Reasoning",
+      "remediation": "Remediation",
+      "selectConfidence": "Select confidence",
+      "selectLikelihood": "Select Exploitability Likelihood",
+      "step": "Step {number}",
+      "stepsToReproduce": "Steps to Reproduce",
+      "summary": "Summary",
+      "title": "Validated Findings"
+    }
+  },
   "selectAll": "Select All",
   "selectAnyTeam": "Please select any team",
   "selectThePath": "Select the path",

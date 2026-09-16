@@ -381,6 +381,12 @@ module.exports = function (environment) {
     ENV.ENVHandlerCONST.processENV['IRENE_API_HOST'] = '/';
   }
 
+  // Mirage registers its routes under ENV.host, so the dev server has to make
+  // requests against that same origin instead of relative '/' URLs.
+  if (environment === 'mirage') {
+    ENV.ENVHandlerCONST.processENV['IRENE_API_HOST'] = ENV['host'];
+  }
+
   if (environment === 'production') {
     ENV['ember-cli-mirage'] = {
       enabled: false,

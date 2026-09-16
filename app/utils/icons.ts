@@ -78,6 +78,12 @@ export const MaterialSymbolsSet = [
   'draft-outline',
   'compare-arrows',
   'format-list-bulleted',
+  'format-list-numbered',
+  'format-bold',
+  'format-italic',
+  'format-underlined',
+  'format-strikethrough',
+  'code',
   'play-arrow',
   'stop',
   'terminal',
@@ -248,6 +254,8 @@ export const FluentIconsSet = [
   'shield-task-24-regular',
   'shield-error-24-regular',
 ] as const;
+
+export const IconParkOutlineIconsSet = ['code-one'] as const;
 
 export const StreamlinePlumpIconsSet = ['threat-phone'] as const;
 

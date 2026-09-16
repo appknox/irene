@@ -77,6 +77,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @service declare notifications: NotificationService;
   @service declare intl: IntlService;
 
+  @tracked openCategoryKey: string | null = null;
+
   @tracked owaspsData: RegulatoryDataModel<OwaspModel> = null;
   @tracked owaspmobile2024sData: RegulatoryDataModel<OwaspMobile2024Model> =
     null;
@@ -336,7 +338,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         onChange: this.onCategorySelect('eucra'),
       },
     ] as Array<{
-      key: string;
+      key: RegulatoryCategoryOptionKeys;
       title: string;
       placeholder: string;
       labelKeys: string[];
@@ -347,6 +349,25 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       ) => void;
       hidden?: boolean;
     }>;
+  }
+
+  @action isCategoryOpen(key: string) {
+    return this.openCategoryKey === key;
+  }
+
+  // Only one category is open at a time, so opening a row closes the previous.
+  @action toggleCategory(key: string) {
+    this.openCategoryKey = this.openCategoryKey === key ? null : key;
+  }
+
+  @action removeCategoryValue(
+    key: RegulatoryCategoryOptionKeys,
+    selected: Array<RegulatoryCategoryModels>,
+    value: RegulatoryCategoryModels
+  ) {
+    const remaining = selected.filter((item) => item !== value);
+
+    this.analysis?.set(key, remaining);
   }
 
   @action onCategorySelect(key: RegulatoryCategoryOptionKeys) {
