@@ -5,10 +5,12 @@ import { tracked } from 'tracked-built-ins';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
 export interface StoreknoxFakeAppsDetailsHeaderSignature {
   Args: {
     fakeApp: SkFakeAppModel;
+    skInventoryApp?: SkInventoryAppModel;
     isFakeAppIgnored: boolean;
   };
 }
@@ -28,6 +30,15 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
     return this.args.isFakeAppIgnored;
   }
 
+  // Deliberately narrower than the model's `isReadOnly` (isArchived ||
+  // isDecommissioned): this page has never guarded archived apps, and
+  // widening to isReadOnly would newly disable actions for them. Only the
+  // decommissioned case is in scope for this lock -- see sk-app.ts's
+  // isReadOnly doc comment for the "tell the two states apart" guidance.
+  get appIsDecommissioned() {
+    return Boolean(this.args.skInventoryApp?.isDecommissioned);
+  }
+
   get isAndroid() {
     return this.fakeApp?.isAndroid;
   }
@@ -38,6 +49,20 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
 
   get isApkModyOrAptoideStore() {
     return this.fakeApp?.isApkModyStore || this.fakeApp?.isAptoideStore;
+  }
+
+  get addToInventoryDisabled() {
+    return this.appIsDecommissioned || this.isApkModyOrAptoideStore;
+  }
+
+  get addToInventoryTooltipTitle() {
+    if (this.appIsDecommissioned) {
+      return this.intl.t('storeknox.decommissionedActionDisabled');
+    }
+
+    return this.intl.t(
+      'storeknox.fakeApps.cannotIgnoreNonAppStoreAndPlayStoreApps'
+    );
   }
 
   get isBrandAbuseFakeApp() {
@@ -75,6 +100,10 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
 
   @action
   openIgnoreDrawer(addToInventory = false) {
+    if (this.appIsDecommissioned) {
+      return;
+    }
+
     this.addToInventory = addToInventory;
     this.showIgnoreDrawer = true;
   }

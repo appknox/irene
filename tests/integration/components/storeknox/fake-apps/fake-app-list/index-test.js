@@ -168,5 +168,30 @@ module(
         .dom('[data-test-storeknoxFakeAppsFakeAppList]')
         .hasClass(/.*archived/, 'applies archived class'); //NOSONAR
     });
+
+    test('it applies the same layout-offset class when inventory app is decommissioned', async function (assert) {
+      this.skInventoryAppRecord.setProperties({
+        appStatus: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+        fakeAppDetectionStatus: 3,
+        fakeAppCounts: {
+          brand_abuse: 1,
+          fake_app: 1,
+          ignored: 1,
+        },
+      });
+
+      await render(hbs`
+        <Storeknox::FakeApps::FakeAppList
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsFakeAppList]')
+        .hasClass(
+          /.*archived/,
+          'a decommissioned app also gets the layout offset'
+        ); //NOSONAR
+    });
   }
 );
