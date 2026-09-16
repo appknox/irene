@@ -2656,6 +2656,7 @@
     "archivedBannerMessage": "Note - This app has been archived on <strong>{archivedDate}</strong>. You will be able to unarchive the app again after the 6 months of lock-period on <strong>{unarchiveDate}</strong>.",
     "monitoringDisabledBannerMessage": "Note - Monitoring has been turned off. <strong>Kindly turn on the monitoring action.</strong>",
     "decommissionedBannerMessage": "注意 - このアプリは<strong>{decommissionedDate}</strong>にストアから削除されました。監視と偽アプリ検出は停止し、ライセンスは解放されました。既存の結果は以下で引き続き確認できます。",
+    "decommissionedBannerMessageNoDate": "注意 - このアプリはストアから削除されました。監視と偽アプリ検出は停止し、ライセンスは解放されました。既存の結果は以下で引き続き確認できます。",
     "actionDisabledDueToLockPeriod": "Action Disabled - Due to lock period",
     "archiveLockPeriodMessage": "There will be 6 months of lock-period to unarchive the app again.  Are you sure you want to archive <strong>\"{appTitle}\"</strong> app?",
     "unarchiveLockPeriodMessage": "Are you sure you want to unarchive <strong>\"{appTitle}\"</strong>?",

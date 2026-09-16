@@ -35,6 +35,12 @@ export default class StoreknoxInventoryDetailsBannerComponent extends Component<
 
   get bannerMessage() {
     if (this.isDecommissioned) {
+      if (!this.skInventoryApp.decommissionedOn) {
+        return this.intl.t('storeknox.decommissionedBannerMessageNoDate', {
+          htmlSafe: true,
+        });
+      }
+
       return this.intl.t('storeknox.decommissionedBannerMessage', {
         htmlSafe: true,
         decommissionedDate: this.decommissionedOnString,

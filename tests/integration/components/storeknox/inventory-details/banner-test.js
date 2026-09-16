@@ -72,7 +72,51 @@ module(
 
       assert
         .dom('[data-test-storeknoxInventoryDetails-bannerText]')
-        .exists('the ordinary disabled banner must be unaffected');
+        .includesText(
+          t('storeknox.monitoringDisabledBannerMessage').replace(
+            /<[^>]+>/g,
+            ''
+          ),
+          'the ordinary disabled banner must still render its own message'
+        );
+    });
+
+    test('a decommissioned app with no removal timestamp does not fabricate a date', async function (assert) {
+      this.skInventoryApp = this.buildApp({
+        app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+        monitoring_enabled: false,
+        decommissioned_on: null,
+      });
+
+      await render(
+        hbs`<Storeknox::InventoryDetails::Banner
+              @skInventoryApp={{this.skInventoryApp}}
+            />`
+      );
+
+      const bannerText = document
+        .querySelector('[data-test-storeknoxInventoryDetails-bannerText]')
+        .textContent.trim();
+
+      assert.notOk(
+        /Invalid Date/.test(bannerText),
+        'must not render "Invalid Date"'
+      );
+
+      assert.notOk(
+        bannerText.includes(dayjs().format('MMM DD, YYYY')),
+        "must not fabricate today's date as the removal date"
+      );
+
+      assert
+        .dom('[data-test-storeknoxInventoryDetails-bannerText]')
+        .includesText(
+          t('storeknox.decommissionedBannerMessageNoDate').replace(
+            /<[^>]+>/g,
+            ''
+          ),
+          'must fall back to the dateless decommissioned copy'
+        );
     });
 
     test('an archived app keeps its existing archived banner', async function (assert) {
