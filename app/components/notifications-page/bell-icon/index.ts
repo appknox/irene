@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import type RouterService from '@ember/routing/router-service';
 
 import type AkNotificationsService from 'irene/services/ak-notifications';
 import type SkNotificationsService from 'irene/services/sk-notifications';
@@ -16,10 +17,11 @@ interface NotificationsPageBellIconSignature {
 export default class NotificationsPageBellIconComponent extends Component<NotificationsPageBellIconSignature> {
   @service declare akNotifications: AkNotificationsService;
   @service declare skNotifications: SkNotificationsService;
-
-  @tracked anchorRef: HTMLElement | null = null;
+  @service declare router: RouterService;
 
   notificationServiceMap: NotificationServiceMap;
+
+  @tracked anchorRef: HTMLElement | null = null;
 
   constructor(
     owner: unknown,
@@ -31,6 +33,8 @@ export default class NotificationsPageBellIconComponent extends Component<Notifi
       appknox: this.akNotifications,
       storeknox: this.skNotifications,
     };
+
+    this.router.on('routeDidChange', this.closeNotification);
   }
 
   get notificationService() {
@@ -57,6 +61,11 @@ export default class NotificationsPageBellIconComponent extends Component<Notifi
   @action
   fetchNotifications() {
     this.notificationService.fetchUnRead.perform();
+  }
+
+  willDestroy() {
+    super.willDestroy();
+    this.router.off('routeDidChange', this.closeNotification);
   }
 }
 
