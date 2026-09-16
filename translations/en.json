@@ -2655,6 +2655,7 @@
     "dateOfArchive": "Date of Archive",
     "archivedBannerMessage": "Note - This app has been archived on <strong>{archivedDate}</strong>. You will be able to unarchive the app again after the 6 months of lock-period on <strong>{unarchiveDate}</strong>.",
     "monitoringDisabledBannerMessage": "Note - Monitoring has been turned off. <strong>Kindly turn on the monitoring action.</strong>",
+    "decommissionedBannerMessage": "Note - This app was removed from the store on <strong>{decommissionedDate}</strong>. Monitoring has stopped, fake app detection has stopped, and its licence has been released. Existing results are still available below.",
     "actionDisabledDueToLockPeriod": "Action Disabled - Due to lock period",
     "archiveLockPeriodMessage": "There will be 6 months of lock-period to unarchive the app again.  Are you sure you want to archive <strong>\"{appTitle}\"</strong> app?",
     "unarchiveLockPeriodMessage": "Are you sure you want to unarchive <strong>\"{appTitle}\"</strong>?",

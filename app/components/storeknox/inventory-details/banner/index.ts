@@ -21,6 +21,10 @@ export default class StoreknoxInventoryDetailsBannerComponent extends Component<
     return this.skInventoryApp.isArchived;
   }
 
+  get isDecommissioned() {
+    return this.skInventoryApp.isDecommissioned;
+  }
+
   get monitoringEnabled() {
     return this.skInventoryApp.monitoringEnabled;
   }
@@ -30,6 +34,13 @@ export default class StoreknoxInventoryDetailsBannerComponent extends Component<
   }
 
   get bannerMessage() {
+    if (this.isDecommissioned) {
+      return this.intl.t('storeknox.decommissionedBannerMessage', {
+        htmlSafe: true,
+        decommissionedDate: this.decommissionedOnString,
+      });
+    }
+
     if (this.isArchived) {
       return this.intl.t('storeknox.archivedBannerMessage', {
         htmlSafe: true,
@@ -41,6 +52,10 @@ export default class StoreknoxInventoryDetailsBannerComponent extends Component<
     return this.intl.t('storeknox.monitoringDisabledBannerMessage', {
       htmlSafe: true,
     });
+  }
+
+  get decommissionedOnString() {
+    return dayjs(this.skInventoryApp.decommissionedOn).format('MMM DD, YYYY');
   }
 
   get unarchiveDateString() {
