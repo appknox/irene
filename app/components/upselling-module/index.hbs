@@ -34,6 +34,29 @@
         <AkTypography>{{feature}}</AkTypography>
       </AkStack>
     {{/each}}
+
+    {{#each @featureGroups as |group|}}
+      <AkTypography
+        data-test-upselling-module-feature-group-title
+        local-class='feature-group-title'
+        @variant='subtitle1'
+        @fontWeight='bold'
+      >
+        {{group.title}}
+      </AkTypography>
+
+      {{#each group.features as |feature|}}
+        <AkStack
+          @spacing='1'
+          @alignItems='center'
+          data-test-upselling-module-feature
+        >
+          <AkIcon @iconName='verified-user' @color='success' />
+
+          <AkTypography>{{feature}}</AkTypography>
+        </AkStack>
+      {{/each}}
+    {{/each}}
   </AkStack>
 
   <AkStack

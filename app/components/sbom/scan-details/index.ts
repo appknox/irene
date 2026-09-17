@@ -56,6 +56,8 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @tracked openViewReportDrawer = false;
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
+  @tracked activeTab: 'sbom' | 'aibom' = 'sbom';
+  @tracked sbomViewType: 'tree' | 'list' = 'tree';
 
   constructor(owner: unknown, args: SbomScanDetailsSignature['Args']) {
     super(owner, args);
@@ -67,16 +69,39 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       component_type,
       component_limit,
       component_offset,
+      is_ai_component,
+      ai_artifact_class,
+      ai_confidence,
+      ordering,
     } = args.queryParams;
+
+    // Always set is_ai_component explicitly; outdated files stay pinned to SBOM since they have no tab bar.
+    const resolvedIsAiComponent = this.isNotOutdated
+      ? (is_ai_component ?? 'false')
+      : 'false';
+
+    this.activeTab = resolvedIsAiComponent === 'true' ? 'aibom' : 'sbom';
+
+    // Force list mode for AI-BOM and outdated files to preserve filters and avoid the tree-mode default.
+    const resolvedViewType =
+      resolvedIsAiComponent === 'true' || this.args.sbomFile.isOutdated
+        ? 'list'
+        : view_type;
+
+    this.sbomViewType = this.isNotOutdated ? (view_type ?? 'tree') : 'list';
 
     // Fetch with default queries from the route
     this.sbomScanDetailsService
       .setQueryData({
         sbomFile: this.args.sbomFile,
-        view_type,
+        view_type: resolvedViewType,
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
+        is_ai_component: resolvedIsAiComponent,
+        ai_artifact_class,
+        ai_confidence,
+        ordering,
       })
       .setLimitOffset({
         limit: Number(component_limit),
@@ -151,10 +176,13 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
 
   @action
   handleTreeViewClick() {
+    this.sbomViewType = 'tree';
+
     const queryParams = {
       view_type: 'tree' as const,
       component_type: -1,
       is_dependency: null,
+      is_ai_component: null,
       component_query: '',
     };
 
@@ -163,7 +191,44 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   @action
+  selectTab(tab: 'sbom' | 'aibom') {
+    this.activeTab = tab;
+    const is_ai_component = tab === 'aibom' ? 'true' : 'false';
+
+    // AI-BOM always uses list mode; reset tab-specific filters, ordering and the
+    // page offset on switch so the URL cannot drift from the service state.
+    const queryParams = {
+      is_ai_component,
+      component_query: '',
+      ai_artifact_class: null,
+      ai_confidence: null,
+      component_type: -1,
+      is_dependency: null,
+      ordering: null,
+      component_offset: 0,
+      view_type: tab === 'aibom' ? ('list' as const) : this.sbomViewType,
+    };
+
+    this.router.transitionTo({ queryParams });
+    this.sbomScanDetailsService
+      .setQueryData({
+        is_ai_component: queryParams.is_ai_component,
+        component_query: queryParams.component_query,
+        ai_artifact_class: queryParams.ai_artifact_class,
+        ai_confidence: queryParams.ai_confidence,
+        component_type: queryParams.component_type,
+        dependency_type: queryParams.is_dependency,
+        ordering: queryParams.ordering,
+        view_type: queryParams.view_type,
+      })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  @action
   handleListViewClick() {
+    this.sbomViewType = 'list';
+
     const queryParams = { view_type: 'list' as const };
 
     this.router.transitionTo({ queryParams });
