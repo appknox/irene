@@ -101,6 +101,7 @@ export enum AkSvgComponentInvocationByNames {
   TpMinimalRisk,
   TpMediumRisk,
   TpHighRisk,
+  PlugConnector,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -148,6 +149,7 @@ export enum AkSvgComponentInvocationByPaths {
   'tp-medium-risk',
   'tp-high-risk',
   'ai-bom-upload',
+  'plug-connector',
 }
 
 type AkSvgComponent = ComponentLike<{
