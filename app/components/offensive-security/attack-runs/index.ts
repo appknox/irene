@@ -208,7 +208,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     return [
       {
         name: this.intl.t('targetID'),
-        valuePath: 'id',
+        valuePath: 'displayTargetId',
         textAlign: 'center',
         width: 100,
         isSortable: false,

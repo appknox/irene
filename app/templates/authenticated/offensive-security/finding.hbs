@@ -2,6 +2,7 @@
 
 <PageWrapper @backgroundColor='dark'>
   <OffensiveSecurity::FindingDetail
+    @scan={{@model.scan}}
     @scanId={{@model.scan.id}}
     @findingId={{@model.finding.id}}
   />

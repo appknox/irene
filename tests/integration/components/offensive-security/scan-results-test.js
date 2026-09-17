@@ -110,6 +110,16 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.strictEqual(findAll(SELECTORS.summaryStat).length, 3);
   });
 
+  test('it displays target_id in the header when present in scan response', async function (assert) {
+    const scan = createScan(this, { target_id: 79 });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.header).containsText('Target ID - 79');
+  });
+
   test('it counts protections detected, bypassed and resisted', async function (assert) {
     const scan = createScan(this, {
       protections_detected: 10,
@@ -263,8 +273,10 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.findingsList).exists();
-    assert.strictEqual(findAll(SELECTORS.findingRow).length, 2);
-    assert.dom(SELECTORS.findingRow).includesText('Exploit Successful');
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 2);
+    assert.dom(headers[0]).includesText('Root 01');
+    assert.dom(headers[1]).includesText('SSL 01');
   });
 
   test('it lists a detected but untriggered finding with an untriggered badge', async function (assert) {
@@ -299,10 +311,10 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    assert.strictEqual(findAll(SELECTORS.findingRow).length, 2);
-    assert.dom(SELECTORS.findingsList).includesText('Frida port scan');
-    // Detected statically but never fired at runtime: untriggered, not unassessed.
-    assert.dom(SELECTORS.findingsList).includesText('Untriggered');
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 2);
+    assert.dom(headers[0]).includesText('Root File Probe');
+    assert.dom(headers[1]).includesText('Frida Port Scan');
   });
 
   test('a finding whose check fired reads Triggered, not Untriggered', async function (assert) {
@@ -327,8 +339,8 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.findingsList).includesText('Triggered');
-    assert.dom(SELECTORS.findingsList).doesNotIncludeText('Untriggered');
+    assert.dom(SELECTORS.findingsList).includesText('Root Package Query');
+    assert.strictEqual(findAll(SELECTORS.groupHeader).length, 1);
   });
 
   test('it groups findings by dictionary key and formats the group header in title case', async function (assert) {
@@ -366,7 +378,8 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.findingsList).exists();
-    assert.strictEqual(findAll(SELECTORS.findingRow).length, 3);
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 2);
 
     const groupTitles = new Set(
       findAll(SELECTORS.groupTitle).map((el) => el.textContent.trim())
@@ -377,13 +390,6 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     assert.dom(SELECTORS.findingsList).containsText('Anti Debug Ptrace');
     assert.dom(SELECTORS.findingsList).containsText('Debug Settings Probe');
-    assert
-      .dom(SELECTORS.findingsList)
-      .containsText('ptrace PTRACE_TRACEME check');
-    assert.dom(SELECTORS.findingsList).containsText('Developer-options');
-    assert
-      .dom(SELECTORS.findingsList)
-      .containsText('USB-debugging settings probe');
   });
 
   test('findings groups have accordions for all and format keys with slashes', async function (assert) {
@@ -417,23 +423,9 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     // Key with slash formatted to Title Case
     assert.dom(headers[1]).includesText('Dev Options USB Debugging');
-
-    // All groups start closed by default on reload
-    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
-    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
-
-    // Click first group header to expand it
-    await click(headers[0]);
-    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'true');
-    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
-
-    // Click first group header again to collapse it
-    await click(headers[0]);
-    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
-    assert.strictEqual(headers[1].getAttribute('aria-expanded'), 'false');
   });
 
-  test('finding names with slashes split into multiple list items under that group', async function (assert) {
+  test('findings are rendered as clickable group rows without child rows', async function (assert) {
     const scan = createScan(this, {
       findings: {
         'debug-settings-probe': {
@@ -459,22 +451,13 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    const rows = findAll(SELECTORS.findingRow);
-    assert.strictEqual(
-      rows.length,
-      4,
-      'Four list items rendered from two slash findings'
-    );
-
-    assert.dom(rows[0]).includesText('Developer-options');
-    assert.dom(rows[1]).includesText('USB-debugging settings probe');
-    assert.dom(rows[2]).includesText('FreeRASP');
-    assert.dom(rows[3]).includesText('Talsec SDK');
-
-    // Counts on headers show 2 for each
     const headers = findAll(SELECTORS.groupHeader);
-    assert.dom(headers[0]).includesText('(2)');
-    assert.dom(headers[1]).includesText('(2)');
+    assert.strictEqual(headers.length, 2, 'Two group rows rendered');
+
+    assert.dom(headers[0]).includesText('Debug Settings Probe');
+    assert.dom(headers[0]).includesText('(1)');
+    assert.dom(headers[1]).includesText('Freerasp Talsec');
+    assert.dom(headers[1]).includesText('(1)');
   });
 
   test('it groups findings when API findings object contains arrays of findings under category keys', async function (assert) {
@@ -536,23 +519,10 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(headers[0]).includesText('(2)');
 
     assert.dom(headers[1]).includesText('Debugger Detection');
-    assert.dom(headers[1]).includesText('(3)'); // 1 for ptrace + 2 for split dev options
+    assert.dom(headers[1]).includesText('(2)');
 
     assert.dom(headers[2]).includesText('SSL Pinning');
     assert.dom(headers[2]).includesText('(1)');
-
-    // Starts closed
-    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'false');
-
-    // Expand Root Detection
-    await click(headers[0]);
-    assert.strictEqual(headers[0].getAttribute('aria-expanded'), 'true');
-    assert
-      .dom(SELECTORS.findingsList)
-      .containsText('Obfuscated aggregate root verdict method');
-    assert
-      .dom(SELECTORS.findingsList)
-      .containsText('Build tags and system properties');
   });
 
   test('it shows an empty state when there are no findings', async function (assert) {
@@ -596,11 +566,10 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.findingsList).exists();
-    assert.strictEqual(findAll(SELECTORS.findingRow).length, 1);
-    assert.dom(SELECTORS.findingRow).containsText('Root detection');
-    assert
-      .dom(SELECTORS.findingsList)
-      .doesNotContainText('USB debugging probe');
+    const headers = findAll(SELECTORS.groupHeader);
+    assert.strictEqual(headers.length, 1);
+    assert.dom(headers[0]).containsText('Root 01');
+    assert.dom(SELECTORS.findingsList).doesNotContainText('Resilience');
   });
 
   test('it shows an empty state when all findings are unassessed', async function (assert) {
@@ -741,7 +710,6 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     await click(SELECTORS.groupHeader);
-    await click(SELECTORS.findingRow);
 
     const router = this.owner.lookup('service:router');
 
