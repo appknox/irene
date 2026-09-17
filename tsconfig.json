@@ -1,20 +1,19 @@
 {
   "extends": "@tsconfig/ember/tsconfig.json",
   "compilerOptions": {
-    // The combination of `baseUrl` with `paths` allows Ember's classic package
-    // layout, which is not resolvable with the Node resolution algorithm, to
-    // work with TypeScript.
+    // `paths` maps Ember's classic package layout, which is not resolvable with
+    // the Node resolution algorithm, onto real directories. It is written
+    // relative to this file: `baseUrl` is deprecated and removed in TS 7.
     "declarationMap": false,
     "resolveJsonModule": true,
-    "baseUrl": ".",
     "verbatimModuleSyntax": false, // TODO: remove this later
     "paths": {
-      "fetch": ["node_modules/ember-fetch"],
-      "irene/tests/*": ["tests/*"],
-      "irene/mirage/*": ["mirage/*"],
-      "irene/translations/*": ["translations/*"],
-      "irene/*": ["app/*"],
-      "*": ["types/*"]
+      "fetch": ["./node_modules/ember-fetch"],
+      "irene/tests/*": ["./tests/*"],
+      "irene/mirage/*": ["./mirage/*"],
+      "irene/translations/*": ["./translations/*"],
+      "irene/*": ["./app/*"],
+      "*": ["./types/*"]
     }
   },
   "glint": {
