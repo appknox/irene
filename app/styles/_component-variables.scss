@@ -826,7 +826,9 @@ body {
   );
 
   // variables for sbom/component-inventory/details-drawer
-  --sbom-component-inventory-details-drawer-bom-ref-box-text-color: var(--common-white);
+  --sbom-component-inventory-details-drawer-bom-ref-box-text-color: var(
+    --common-white
+  );
   --sbom-component-inventory-details-drawer-bom-ref-box-background-color: var(
     --common-black
   );
@@ -1630,11 +1632,14 @@ body {
   );
   --vnc-viewer-modal-background: var(--background-main);
   --vnc-viewer-modal-text-color: var(--text-primary);
-  --vnc-viewer-note-border-radius: var(--border-radius);
-  --vnc-viewer-note-background: var(--secondary-main);
-  --vnc-viewer-note-text-color: var(--common-white);
   --vnc-viewer-info-border-color: var(--neutral-grey-300);
   --vnc-viewer-info-background: var(--neutral-grey-100);
+  --vnc-viewer-info-border-radius: var(--border-radius);
+
+  // variables for vnc-viewer/automated-scan-note
+  --vnc-viewer-automated-scan-note-background: var(--secondary-main);
+  --vnc-viewer-automated-scan-note-text-color: var(--common-white);
+  --vnc-viewer-automated-scan-note-border-radius: var(--border-radius);
 
   // variables for file-list
   --file-list-selected-file-chip-color: var(--text-primary);
@@ -1800,6 +1805,44 @@ body {
   --account-settings-notification-settings-group-border-color: var(
     --border-color-1
   );
+
+  // variables for account-settings/cyod-settings/step
+  --account-settings-cyod-settings-step-num-background: var(--primary-light);
+  --account-settings-cyod-settings-step-num-color: var(--primary-dark);
+  --account-settings-cyod-settings-step-num-border-radius: var(
+    --border-radius-capsule
+  );
+  --account-settings-cyod-settings-step-num-font-weight: var(
+    --font-weight-medium
+  );
+
+  // variables for account-settings/cyod-settings
+  --account-settings-cyod-settings-background: var(--common-white);
+  --account-settings-cyod-settings-disabled-state-border-color: var(
+    --divider-dark
+  );
+  --account-settings-cyod-settings-disabled-state-border-radius: var(
+    --border-radius
+  );
+  --account-settings-cyod-settings-url-field-background: var(
+    --background-light
+  );
+  --account-settings-cyod-settings-url-field-border-color: var(--divider-dark);
+  --account-settings-cyod-settings-url-field-border-radius: var(
+    --border-radius
+  );
+  --account-settings-cyod-settings-url-value-font-family: var(
+    --font-family-mono
+  );
+
+  // variables for cyod/device-table
+  --cyod-device-table-empty-state-background: var(--background-light);
+  --cyod-device-table-empty-state-border-color: var(--divider-dark);
+  --cyod-device-table-empty-state-border-radius: var(--border-radius);
+  --cyod-device-table-empty-state-block-border-color: var(--divider-dark);
+  --cyod-device-table-empty-state-block-border-radius: var(--border-radius);
+  --cyod-device-table-loading-state-border-color: var(--divider-dark);
+  --cyod-device-table-loading-state-border-radius: var(--border-radius);
 
   // variables for account-settings-page-content-wrapper-border-color
   --account-settings-page-content-wrapper-border-color: var(--border-color-1);
@@ -2666,7 +2709,9 @@ body {
     --neutral-grey-100
   );
 
-  --storeknox-inventory-details-header-app-info-bg-color: var(--background-main);
+  --storeknox-inventory-details-header-app-info-bg-color: var(
+    --background-main
+  );
 
   --storeknox-inventory-details-header-title-container-border-color: var(
     --border-color-1
@@ -2999,16 +3044,32 @@ body {
   );
 
   // variables for storeknox/fake-apps/findings-signal-row
-  --storeknox-fake-apps-findings-signal-row-hover-background-color: var(--background-light);
-  --storeknox-fake-apps-findings-signal-row-result-high-color: var(--severity-critical);
-  --storeknox-fake-apps-findings-signal-row-result-medium-color: var(--severity-high);
-  --storeknox-fake-apps-findings-signal-row-result-low-color: var(--severity-passed);
+  --storeknox-fake-apps-findings-signal-row-hover-background-color: var(
+    --background-light
+  );
+  --storeknox-fake-apps-findings-signal-row-result-high-color: var(
+    --severity-critical
+  );
+  --storeknox-fake-apps-findings-signal-row-result-medium-color: var(
+    --severity-high
+  );
+  --storeknox-fake-apps-findings-signal-row-result-low-color: var(
+    --severity-passed
+  );
 
   // variables for storeknox/fake-apps/signal-detail-drawer
-  --storeknox-fake-apps-signal-detail-drawer-content-border-color: var(--border-color-1);
-  --storeknox-fake-apps-signal-detail-drawer-result-high-color: var(--severity-critical);
-  --storeknox-fake-apps-signal-detail-drawer-result-medium-color: var(--severity-high);
-  --storeknox-fake-apps-signal-detail-drawer-result-low-color: var(--severity-passed);
+  --storeknox-fake-apps-signal-detail-drawer-content-border-color: var(
+    --border-color-1
+  );
+  --storeknox-fake-apps-signal-detail-drawer-result-high-color: var(
+    --severity-critical
+  );
+  --storeknox-fake-apps-signal-detail-drawer-result-medium-color: var(
+    --severity-high
+  );
+  --storeknox-fake-apps-signal-detail-drawer-result-low-color: var(
+    --severity-passed
+  );
 
   // variables for storeknox/fake-apps/ignore-drawer
   --storeknox-fake-apps-ignore-drawer-content-border-color: var(
@@ -3273,6 +3334,39 @@ body {
 
   // variables for organization/settings-wrapper
   --organization-settings-wrapper-background-color: var(--background-light);
+
+  // variables for organization/settings-panel-header
+  --organization-settings-panel-header-icon-background: var(--primary-light);
+  --organization-settings-panel-header-icon-border-radius: var(--border-radius);
+
+  // variables for organization/signing-certificate
+  --organization-signing-certificate-background: var(--common-white);
+  --organization-signing-certificate-border-color: var(--divider-dark);
+  --organization-signing-certificate-border-radius: var(--border-radius-8);
+  --organization-signing-certificate-tip-callout-background: var(
+    --neutral-grey-100
+  );
+  --organization-signing-certificate-tip-callout-border-color: var(
+    --primary-main
+  );
+  --organization-signing-certificate-tip-callout-border-radius: var(
+    --border-radius-4
+  );
+  --organization-signing-certificate-delete-confirm-background-main: var(
+    --background-main
+  );
+  --organization-signing-certificate-delete-confirm-border-radius: var(
+    --border-radius
+  );
+  --organization-signing-certificate-delete-confirm-border-color: var(
+    --border-color-1
+  );
+  --organization-signing-certificate-delete-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --organization-signing-certificate-delete-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for organization/ai-powered-features
   --organization-ai-powered-features-bg-color: var(--common-white);
@@ -4362,9 +4456,7 @@ body {
   // variables for offensive-security/attack-runs column filter popovers
   --offensive-security-attack-runs-filter-bg-color: var(--common-white);
   --offensive-security-attack-runs-filter-box-shadow: var(--box-shadow-1);
-  --offensive-security-attack-runs-filter-border-radius: var(
-    --border-radius-4
-  );
+  --offensive-security-attack-runs-filter-border-radius: var(--border-radius-4);
   --offensive-security-attack-runs-filter-header-bg-color: var(
     --background-light
   );
@@ -4377,8 +4469,7 @@ body {
 
   // variables for offensive-security/scan-results
   --offensive-security-scan-results-card-bg-color: var(--common-white);
-  --offensive-security-scan-results-card-border: 1px solid
-    var(--border-color-1);
+  --offensive-security-scan-results-card-border: 1px solid var(--border-color-1);
   --offensive-security-scan-results-card-border-radius: var(--border-radius-8);
   --offensive-security-scan-results-label-color: var(--text-secondary);
   --offensive-security-scan-results-value-color: var(--text-primary);
@@ -4437,9 +4528,7 @@ body {
   --offensive-security-finding-detail-defended-color: var(--success-main);
   --offensive-security-finding-detail-defended-bg-color: var(--success-light);
   --offensive-security-finding-detail-neutral-color: var(--text-secondary);
-  --offensive-security-finding-detail-neutral-bg-color: var(
-    --background-light
-  );
+  --offensive-security-finding-detail-neutral-bg-color: var(--background-light);
   --offensive-security-finding-detail-detected-bg-color: var(
     --offensive-security-detected-bg
   );

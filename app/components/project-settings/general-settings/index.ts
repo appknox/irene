@@ -5,9 +5,16 @@ import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 
+import {
+  canManageSigningCertificates,
+  showsProjectSigningCertificate,
+} from 'irene/utils/cyod';
+
 import type ProjectModel from 'irene/models/project';
 import type ProfileModel from 'irene/models/profile';
 import type MeService from 'irene/services/me';
+import type OrganizationService from 'irene/services/organization';
+import type LoggerService from 'irene/services/logger';
 
 interface ProjectSettingsGeneralSettingsSignature {
   Args: {
@@ -18,6 +25,8 @@ interface ProjectSettingsGeneralSettingsSignature {
 export default class ProjectSettingsGeneralSettingsComponent extends Component<ProjectSettingsGeneralSettingsSignature> {
   @service declare me: MeService;
   @service declare store: Store;
+  @service declare organization: OrganizationService;
+  @service declare logger: LoggerService;
 
   @tracked profile: ProfileModel | null = null;
 
@@ -34,6 +43,14 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
+  get showCyodSection() {
+    return showsProjectSigningCertificate(
+      this.organization.isCyodRegistrationEnabled,
+      this.args.project?.platform,
+      canManageSigningCertificates(this.me.org?.is_admin, this.me.org?.is_owner)
+    );
+  }
+
   fetchProfile = task(async () => {
     try {
       const profileId = this.args.project?.activeProfileId;
@@ -44,7 +61,7 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     } catch (e) {
       this.profile = null;
 
-      return;
+      this.logger.error('Could not load the project profile:', e);
     }
   });
 }

@@ -1,0 +1,21 @@
+.cyod-viewer-root {
+  height: 100%;
+  position: relative;
+}
+
+.cyod-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: pointer;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.cyod-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}

@@ -1,5 +1,4 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type Store from 'ember-data/store';
 
@@ -28,6 +27,14 @@ export default class OrganizationService extends Service {
 
   get hideUpsellUI() {
     return this.selected?.hideUpsellFeatures;
+  }
+
+  get isCyodEnabled() {
+    return !!this.orgFeatures?.cyod;
+  }
+
+  get isCyodRegistrationEnabled() {
+    return this.isCyodEnabled && !!this.selected?.cyodRegistrationEnabled;
   }
 
   get enableLegacyCvssReports() {

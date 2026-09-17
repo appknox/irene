@@ -1,0 +1,44 @@
+<div
+  local-class='delete-confirm-container'
+  data-test-orgSigningCert-deleteConfirm
+  ...attributes
+>
+  <AkTypography
+    data-test-orgSigningCert-deleteConfirmTitle
+    @variant='h5'
+    @fontWeight='medium'
+    class='p-2'
+  >
+    {{t 'cyod.signingCert.deleteQuestion' name=this.certName htmlSafe=true}}
+  </AkTypography>
+
+  <AkDivider @color='dark' />
+
+  <div local-class='delete-confirm-note'>
+    <AkTypography data-test-orgSigningCert-deleteConfirmInfo @variant='body2'>
+      {{t 'cyod.signingCert.deleteReason'}}
+    </AkTypography>
+  </div>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @alignItems='center'
+    @spacing='1.5'
+    local-class='delete-action-container'
+    class='p-2'
+  >
+    {{#each this.deleteActionBtnDetails as |btn|}}
+      <AkButton
+        data-test-orgSigningCert-deleteAction='{{btn.id}}'
+        @variant={{btn.variant}}
+        @color={{btn.color}}
+        @loading={{btn.loading}}
+        @disabled={{@isDeleting}}
+        {{on 'click' btn.action}}
+      >
+        {{btn.label}}
+      </AkButton>
+    {{/each}}
+  </AkStack>
+</div>

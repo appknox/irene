@@ -41,7 +41,16 @@ module('Integration | Component | file-chart', function (hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(async function () {
-    const { file_risk_info } = setupFileModelEndpoints(this.server);
+    const { file_risk_info: fileRiskInfo } = setupFileModelEndpoints(
+      this.server
+    );
+
+    // The icon only renders when the count is above zero, and the factory
+    // draws it from 0-100. Pin it to the two completed analyses overridden to
+    // passed in RISK_VALUES.
+    const file_risk_info = { ...fileRiskInfo, overridden_passed_risk_count: 2 };
+
+    this.server.get('/v3/files/:id/risk', () => file_risk_info);
 
     // Server mocks
     this.server.get('/profiles/:id/unknown_analysis_status', (_, req) => {

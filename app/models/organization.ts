@@ -8,17 +8,18 @@ import type OrganizationTeamModel from './organization-team';
 export interface Features {
   app_monitoring: boolean;
   dynamicscan_automation: boolean;
-  fake_app_detection: boolean;
   manualscan: boolean;
-  member_override_request: boolean;
   partner_dashboard: boolean;
-  privacy: boolean;
-  public_apis: boolean;
-  sbom: boolean;
   sso: boolean;
+  sbom: boolean;
   store_release_readiness: boolean;
+  public_apis: boolean;
   storeknox: boolean;
+  privacy: boolean;
   upload_via_url: boolean;
+  cyod: boolean;
+  fake_app_detection: boolean;
+  member_override_request: boolean;
   offensive_security: boolean;
 }
 
@@ -50,6 +51,9 @@ export default class OrganizationModel extends Model {
 
   @attr('boolean')
   declare mandatoryMfa: boolean;
+
+  @attr('boolean')
+  declare cyodRegistrationEnabled: boolean;
 
   @hasMany('organization-member', { async: true, inverse: null })
   declare members: AsyncHasMany<OrganizationMemberModel>;

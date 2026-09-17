@@ -5,6 +5,38 @@ import type { ModelInstance, Server } from 'miragejs';
 
 import ENUMS from 'irene/enums';
 
+type UpdatableRecord = { update: (attrs: Record<string, unknown>) => void };
+
+export const FARM_DEVICE_USED = {
+  device_identifier: 'BXCRS21',
+  platform: ENUMS.PLATFORM.ANDROID,
+  vnc_mode: ENUMS.DEVICE_VNC_MODE.VNC,
+  registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.FARM,
+  scan_source: 'FARM',
+  is_tablet: false,
+};
+
+export const PROXY_CYOD_DEVICE_USED = {
+  device_identifier: 'emulator-5554',
+  platform: ENUMS.PLATFORM.ANDROID,
+  vnc_mode: ENUMS.DEVICE_VNC_MODE.SCRCPY,
+  registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.PROXY,
+  scan_source: 'PROXY_CYOD',
+  bundle_id: 'com.example.app',
+  android_download_url: 'https://example.com/patched.apk',
+};
+
+export const REMOTE_CYOD_DEVICE_USED = {
+  device_identifier: 'user-iphone',
+  platform: ENUMS.PLATFORM.IOS,
+  vnc_mode: ENUMS.DEVICE_VNC_MODE.NONE,
+  registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.WEBUSB,
+  scan_source: 'REMOTE_CYOD',
+  bundle_id: 'com.example.iosapp',
+  ios_itms_url:
+    'itms-services://?action=download-manifest&url=https://example.com/manifest.plist',
+};
+
 export default Factory.extend({
   id(i: number) {
     return i + 1;
@@ -29,6 +61,25 @@ export default Factory.extend({
   device_preference: null,
   error_code: '',
   error_message: '',
+
+  withFarmDevice: trait({
+    afterCreate(ds: UpdatableRecord) {
+      ds.update({ device_used: FARM_DEVICE_USED });
+    },
+  }),
+
+  withProxyCyodDevice: trait({
+    afterCreate(ds: UpdatableRecord) {
+      ds.update({ device_used: PROXY_CYOD_DEVICE_USED });
+    },
+  }),
+
+  withRemoteCyodDevice: trait({
+    afterCreate(ds: UpdatableRecord) {
+      ds.update({ device_used: REMOTE_CYOD_DEVICE_USED });
+    },
+  }),
+
   scenarioUserRole: null,
 
   withUserRole: trait({
