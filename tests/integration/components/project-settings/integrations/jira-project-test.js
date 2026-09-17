@@ -82,6 +82,62 @@ module(
       });
     });
 
+    test('it explains itself when the organization is on Jira Cloud Security', async function (assert) {
+      // Same 404 as "not integrated", different cause. Telling the user Jira is
+      // not integrated sends them to a settings page that says the opposite.
+      this.server.get('/projects/:id/jira', () => {
+        return new Response(
+          404,
+          {},
+          { detail: 'JIRA Cloud Security integrated' }
+        );
+      });
+
+      await render(
+        hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
+      );
+
+      // The organization is on Jira, just not the one with per-project setup.
+      await click('[data-test-org-integration-card-manageBtn]');
+
+      assert
+        .dom(
+          '[data-test-prjSettings-integrations-jiraProject-jiraSecurityNote]'
+        )
+        .hasText(t('jiraSecurityProjectNote'));
+
+      // The old message links to organization settings, which is the dead end
+      // this case exists to avoid.
+      assert
+        .dom('[data-test-prjSettings-integrations-jiraProject-noProject]')
+        .doesNotExist();
+
+      // Nothing to select or save here.
+      assert.dom('[data-test-org-integration-card-selectBtn]').doesNotExist();
+
+      assert
+        .dom('[data-test-prjSettings-integrations-configDrawer-saveBtn]')
+        .doesNotExist();
+    });
+
+    test('it still reports a missing classic Jira integration', async function (assert) {
+      this.server.get('/projects/:id/jira', () => {
+        return new Response(404, {}, { detail: 'JIRA not integrated' });
+      });
+
+      await render(
+        hbs`<ProjectSettings::Integrations::JiraProject @project={{this.project}} />`
+      );
+
+      assert.dom('[data-test-org-integration-card-connectBtn]').exists();
+
+      assert
+        .dom(
+          '[data-test-prjSettings-integrations-jiraProject-jiraSecurityNote]'
+        )
+        .doesNotExist();
+    });
+
     test('it renders with no JIRA projects', async function (assert) {
       this.server.get('/organizations/:id/jira_projects', () => {
         return { count: 0, next: null, previous: null, results: [] };
