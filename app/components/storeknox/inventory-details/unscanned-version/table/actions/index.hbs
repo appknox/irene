@@ -87,7 +87,9 @@
             @color='inherit'
             data-test-skAppVersionTable-initiateUploadBtn-tooltipText
           >
-            {{#if this.appIsArchived}}
+            {{#if this.skApp.isDecommissioned}}
+              {{t 'storeknox.decommissionedActionDisabled'}}
+            {{else if this.appIsArchived}}
               {{t 'storeknox.cannotUploadForArchivedApps'}}
             {{else}}
               {{t 'storeknox.initiateUploadComingSoon'}}
