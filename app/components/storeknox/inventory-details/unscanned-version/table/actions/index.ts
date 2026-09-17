@@ -186,7 +186,20 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     // apps too -- this is a second, independent upload path from the one in
     // va-results, and it has its own hard guard inside the initiateUpload
     // task below.
-    return this.skApp.get('isReadOnly');
+    //
+    // Do NOT call `skApp.get('isReadOnly')` here: `skApp` is an
+    // AsyncBelongsTo proxy, and reading the composite `isReadOnly` getter
+    // through that proxy hangs the storeknox acceptance suite (proven by
+    // controlled experiment -- store-version-tables goes from 14/14 passing
+    // to 6 tests hanging at 60s each). `isArchived` and the raw `appStatus`
+    // attribute are proven safe to read through the proxy, so the two
+    // checks are inlined here instead of delegating to `isReadOnly`.
+    const skApp = this.skApp;
+
+    return Boolean(
+      skApp.get('isArchived') ||
+        skApp.get('appStatus') === ENUMS.SK_APP_STATUS.DECOMMISSIONED
+    );
   }
 
   get isScanned() {
