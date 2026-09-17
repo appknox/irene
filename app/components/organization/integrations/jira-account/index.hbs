@@ -9,6 +9,7 @@
   @drawerTitle={{t
     (if this.showRevokeJIRAConfirmBox 'confirmation' 'jiraIntegration')
   }}
+  @noFooter={{this.isJiraCloudSecurity}}
   @loadingDrawerSaveAction={{this.integrateJIRA.isRunning}}
   @drawerSaveAction={{if
     this.showIntegratedOrLoadingUI
@@ -55,7 +56,58 @@
       </AkStack>
     {{else}}
       <AkStack local-class='drawer-content' @direction='column'>
-        {{#if this.showIntegratedOrLoadingUI}}
+        <AkRadio::Group
+          @groupDirection='row'
+          @value={{this.jiraType}}
+          @onChange={{this.handleJiraTypeChange}}
+          as |ctx|
+        >
+          <AkFormControlLabel @label={{t 'jiraCloud'}}>
+            <AkRadio
+              data-test-jiraAccount-jiraType-cloud
+              @radioCtx={{ctx}}
+              @value='cloud'
+              @disabled={{this.hasJiraSecuritySetup}}
+            />
+          </AkFormControlLabel>
+
+          <AkFormControlLabel class='ml-2' @label={{t 'jiraDataCenter'}}>
+            <AkRadio
+              data-test-jiraAccount-jiraType-dataCenter
+              @radioCtx={{ctx}}
+              @value='dataCenter'
+              @disabled={{this.hasJiraSecuritySetup}}
+            />
+          </AkFormControlLabel>
+
+          <AkFormControlLabel class='ml-2' @label={{t 'jiraSecurity.title'}}>
+            <AkRadio
+              data-test-jiraAccount-jiraType-cloudSecurity
+              @radioCtx={{ctx}}
+              @value='cloudSecurity'
+              @disabled={{this.isJIRAConnected}}
+            />
+          </AkFormControlLabel>
+        </AkRadio::Group>
+
+        {{#if this.isOtherJiraIntegrationInUse}}
+          <AkTypography
+            class='px-1'
+            @variant='body2'
+            @color='textSecondary'
+            local-class='note'
+            data-test-jiraAccount-oneAtATimeNote
+          >
+            {{t 'jiraOneIntegrationAtATime'}}
+          </AkTypography>
+        {{/if}}
+
+        {{#if this.isJiraCloudSecurity}}
+          <Organization::Integrations::JiraSecurity
+            @onStatusChange={{this.handleJiraSecurityStatusChange}}
+          />
+
+        {{else if this.showIntegratedOrLoadingUI}}
           <Organization::Integrations::IntegratedUi
             @imageSource='/images/jira-icon.png'
             @imageAlt='jira icon'
@@ -67,30 +119,6 @@
 
         {{else}}
           <form local-class='form' class='p-2'>
-            <AkRadio::Group
-              class='mb-2'
-              @groupDirection='row'
-              @value={{this.jiraType}}
-              @onChange={{this.handleJiraTypeChange}}
-              as |ctx|
-            >
-              <AkFormControlLabel @label={{t 'jiraCloud'}}>
-                <AkRadio
-                  data-test-jiraAccount-jiraType-cloud
-                  @radioCtx={{ctx}}
-                  @value='cloud'
-                />
-              </AkFormControlLabel>
-
-              <AkFormControlLabel class='ml-3' @label={{t 'jiraDataCenter'}}>
-                <AkRadio
-                  data-test-jiraAccount-jiraType-dataCenter
-                  @radioCtx={{ctx}}
-                  @value='dataCenter'
-                />
-              </AkFormControlLabel>
-            </AkRadio::Group>
-
             <AkStack @direction='column' @spacing='2'>
               <AkTextField
                 data-test-jiraAccount-hostInput
