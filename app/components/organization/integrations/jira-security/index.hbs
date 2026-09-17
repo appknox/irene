@@ -1,0 +1,256 @@
+{{! Setup is a two-way handshake: Appknox issues a secret, the admin pastes it
+into their Jira app, and the app registers itself back. The drawer walks that
+sequence rather than presenting a single form, because the middle step happens
+in another product. }}
+<Organization::Integrations::Card
+  @data={{this.data}}
+  @onIntegrateClick={{this.openDrawer}}
+  @loading={{this.isLoading}}
+/>
+
+<Organization::Integrations::ConfigDrawer
+  @openDrawer={{this.drawerIsOpen}}
+  @drawerTitle={{t 'jiraSecurity.drawerTitle'}}
+  @closeDrawerHandler={{this.closeDrawer}}
+  @noFooter={{true}}
+>
+  <:drawerContent>
+    <AkStack local-class='drawer-content form' @direction='column' @spacing='2'>
+
+      {{#if this.showRegenerateConfirm}}
+        <AkTypography
+          @variant='body1'
+          data-test-orgIntegrations-jiraSecurity-regenerateWarning
+        >
+          {{t 'jiraSecurity.regenerateWarning'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.generateSecret.isRunning}}
+            @disabled={{this.generateSecret.isRunning}}
+            {{on 'click' (perform this.generateSecret)}}
+            data-test-orgIntegrations-jiraSecurity-confirmRegenerateBtn
+          >
+            {{t 'jiraSecurity.yesRegenerate'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeRegenerateConfirm}}
+            data-test-orgIntegrations-jiraSecurity-cancelRegenerateBtn
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+
+      {{else if this.showDisconnectConfirm}}
+        <AkTypography
+          @variant='body1'
+          data-test-orgIntegrations-jiraSecurity-disconnectWarning
+        >
+          {{t 'jiraSecurity.disconnectWarning'}}
+        </AkTypography>
+
+        <AkStack @spacing='1.5'>
+          <AkButton
+            @variant='filled'
+            @loading={{this.disconnect.isRunning}}
+            @disabled={{this.disconnect.isRunning}}
+            {{on 'click' (perform this.disconnect)}}
+            data-test-orgIntegrations-jiraSecurity-confirmDisconnectBtn
+          >
+            {{t 'jiraSecurity.yesDisconnect'}}
+          </AkButton>
+
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            {{on 'click' this.closeDisconnectConfirm}}
+            data-test-orgIntegrations-jiraSecurity-cancelDisconnectBtn
+          >
+            {{t 'cancel'}}
+          </AkButton>
+        </AkStack>
+
+      {{else}}
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='subtitle2'
+            data-test-orgIntegrations-jiraSecurity-status
+          >
+            {{this.statusLabel}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            data-test-orgIntegrations-jiraSecurity-help
+          >
+            {{this.helpText}}
+          </AkTypography>
+        </AkStack>
+
+        {{! Install the app. Only while setting up, and only where this
+        deployment has a link configured -- an admin who already installed it
+        can simply move on. }}
+        {{#if (and (not this.isConnected) this.installUrl)}}
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='subtitle2'>
+              {{t 'jiraSecurity.step1'}}
+            </AkTypography>
+
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'jiraSecurity.step1Help'}}
+            </AkTypography>
+
+            <AkStack>
+              <AkButton
+                @variant='outlined'
+                {{on 'click' this.openInstallPage}}
+                data-test-orgIntegrations-jiraSecurity-installBtn
+              >
+                {{t 'jiraSecurity.installApp'}}
+              </AkButton>
+            </AkStack>
+          </AkStack>
+        {{/if}}
+
+        {{#if this.isConnected}}
+          {{#if this.connectedOn}}
+            <AkTypography
+              @variant='body2'
+              @color='textSecondary'
+              data-test-orgIntegrations-jiraSecurity-connectedOn
+            >
+              {{t 'jiraSecurity.connectedOn'}}
+              {{this.connectedOn}}
+            </AkTypography>
+          {{/if}}
+        {{else}}
+          {{! Site address drives the deep link to the app's page in their Jira.
+          Collected before the secret so the admin can go straight there as soon
+          as they have one. }}
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='subtitle2'>
+              {{t 'jiraSecurity.siteLabel'}}
+            </AkTypography>
+
+            <AkTextField
+              @placeholder={{t 'jiraSecurity.sitePlaceholder'}}
+              @value={{this.jiraSite}}
+              @error={{this.showSiteError}}
+              {{on 'input' this.updateJiraSite}}
+              data-test-orgIntegrations-jiraSecurity-siteInput
+            />
+
+            {{#if this.showSiteError}}
+              <AkTypography
+                @variant='body3'
+                @color='error'
+                data-test-orgIntegrations-jiraSecurity-siteError
+              >
+                {{t 'jiraSecurity.invalidSite'}}
+              </AkTypography>
+            {{/if}}
+
+            {{! Fallback when the deployment has no configure path set, so the
+            admin is never left without a route forward. }}
+            {{#unless this.configurePath}}
+              <AkTypography
+                @variant='body2'
+                @color='textSecondary'
+                data-test-orgIntegrations-jiraSecurity-manualSteps
+              >
+                {{t 'jiraSecurity.manualSteps'}}
+              </AkTypography>
+            {{/unless}}
+          </AkStack>
+        {{/if}}
+
+        {{! Appears once a secret exists, carrying the way into Jira with it:
+        sending an admin there beforehand leaves them on a page with nothing to
+        paste. Rendered for this one pass only -- the API never returns the
+        secret again. }}
+        {{#if this.generatedSecret}}
+          <AkStack @direction='column' @spacing='0.5'>
+            <AkTypography @variant='subtitle2'>
+              {{t 'jiraSecurity.secretHeading'}}
+            </AkTypography>
+
+            <AkTypography
+              @variant='body2'
+              @color='error'
+              data-test-orgIntegrations-jiraSecurity-secretWarning
+            >
+              {{t 'jiraSecurity.secretShownOnce'}}
+            </AkTypography>
+
+            <AkTextField
+              @value={{this.generatedSecret}}
+              readonly={{true}}
+              data-test-orgIntegrations-jiraSecurity-secret
+            />
+
+            <AkStack @spacing='1.5' class='pt-1'>
+              <AkButton
+                @variant='outlined'
+                {{on 'click' this.copySecret}}
+                data-test-orgIntegrations-jiraSecurity-copyBtn
+              >
+                {{t 'jiraSecurity.copy'}}
+              </AkButton>
+
+              {{#if this.configurePath}}
+                <AkButton
+                  @variant='filled'
+                  @disabled={{not this.canContinueToJira}}
+                  {{on 'click' this.openConfigurePage}}
+                  data-test-orgIntegrations-jiraSecurity-continueBtn
+                >
+                  {{t 'jiraSecurity.continueToJira'}}
+                </AkButton>
+              {{/if}}
+            </AkStack>
+          </AkStack>
+        {{/if}}
+
+        <AkStack @spacing='1.5'>
+          {{#if this.isConnected}}
+            <AkButton
+              @variant='outlined'
+              {{on 'click' this.openDisconnectConfirm}}
+              data-test-orgIntegrations-jiraSecurity-disconnectBtn
+            >
+              {{t 'disconnect'}}
+            </AkButton>
+          {{/if}}
+
+          {{#if (or this.isConnected this.isAwaitingJira)}}
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              {{on 'click' this.openRegenerateConfirm}}
+              data-test-orgIntegrations-jiraSecurity-regenerateBtn
+            >
+              {{t 'jiraSecurity.regenerate'}}
+            </AkButton>
+          {{else}}
+            <AkButton
+              @variant='filled'
+              @loading={{this.generateSecret.isRunning}}
+              @disabled={{this.generateSecret.isRunning}}
+              {{on 'click' (perform this.generateSecret)}}
+              data-test-orgIntegrations-jiraSecurity-generateBtn
+            >
+              {{t 'jiraSecurity.generateSecret'}}
+            </AkButton>
+          {{/if}}
+        </AkStack>
+      {{/if}}
+
+    </AkStack>
+  </:drawerContent>
+</Organization::Integrations::ConfigDrawer>

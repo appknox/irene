@@ -5,6 +5,7 @@ const possibleENVS = [
   'IRENE_ENABLE_MARKETPLACE',
   'IRENE_POSTHOG_API_KEY',
   'IRENE_POSTHOG_API_HOST',
+  'IRENE_JIRA_SECURITY_INSTALL_URL',
   'ENTERPRISE',
   'WHITELABEL_ENABLED',
   'WHITELABEL_NAME',
@@ -22,6 +23,10 @@ const ENVHandlerCONST = {
     IRENE_ENABLE_MARKETPLACE: false,
     IRENE_POSTHOG_API_KEY: '',
     IRENE_POSTHOG_API_HOST: '',
+    // Atlassian install link for the Appknox Jira app. Empty until a
+    // deployment supplies one; the setup UI drops the install step rather
+    // than offering a dead button.
+    IRENE_JIRA_SECURITY_INSTALL_URL: '',
     ENTERPRISE: false,
     WHITELABEL_ENABLED: false,
     WHITELABEL_NAME: '',
@@ -214,6 +219,10 @@ module.exports = function (environment) {
     enableMarketplace: handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE'),
     posthogApiKey: handler.getEnv('IRENE_POSTHOG_API_KEY'),
     posthogApiHost: handler.getEnv('IRENE_POSTHOG_API_HOST'),
+    // jiraSecurityInstallUrl: handler.getEnv('IRENE_JIRA_SECURITY_INSTALL_URL'),
+    // TODO: Remove the hardcoded URL below before deployment (TEST ONLY).
+    jiraSecurityInstallUrl:
+      'https://developer.atlassian.com/console/install/490630f6-c877-4f1d-9a2f-94c101d56f6f?signature=AYABeKHjLNhWjus%2FNqrSCabbSRUAAAADAAdhd3Mta21zAEthcm46YXdzOmttczp1cy13ZXN0LTI6NzA5NTg3ODM1MjQzOmtleS83MDVlZDY3MC1mNTdjLTQxYjUtOWY5Yi1lM2YyZGNjMTQ2ZTcAuAECAQB4IOp8r3eKNYw8z2v%2FEq3%2FfvrZguoGsXpNSaDveR%2FF%2Fo0B5iUvYWvv14bEF%2BEqge%2BMFgAAAH4wfAYJKoZIhvcNAQcGoG8wbQIBADBoBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDBSoV5FZ2gCShcN8vwIBEIA7yUMBg%2BxlybKYJ%2F4jjIW6e%2F0s6LhU7XCb%2B0mVGKzFgumhnvd%2Fdn68uPPXoysQY2IskAu8VCZVyiWFwagAB2F3cy1rbXMAS2Fybjphd3M6a21zOmV1LXdlc3QtMTo3MDk1ODc4MzUyNDM6a2V5LzQ2MzBjZTZiLTAwYzMtNGRlMi04NzdiLTYyN2UyMDYwZTVjYwC4AQICAHijmwVTMt6Oj3F%2B0%2B0cVrojrS8yZ9ktpdfDxqPMSIkvHAGBlyU13PN%2FAjNFnSwVpv64AAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMyZCE%2FzHX47GIXwn8AgEQgDs1frZXEiv99OnRtm%2FaFgUab%2BNUuYop%2BiRG%2B7k7ZYLEdjvD7q%2BJmDAHe3e0LlHn1DBE7l08VM1tMGKonwAHYXdzLWttcwBLYXJuOmF3czprbXM6dXMtZWFzdC0xOjcwOTU4NzgzNTI0MzprZXkvNmMxMjBiYTAtNGNkNS00OTg1LWI4MmUtNDBhMDQ5NTJjYzU3ALgBAgIAeLKa7Dfn9BgbXaQmJGrkKztjV4vrreTkqr7wGwhqIYs5AUypkru3H4%2BmzwGZRoRl1o8AAAB%2BMHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAxqOgJXzXu3UitezxcCARCAO6c1QwNUYj1qBSxLv5Vt3j7wU50hgA4JfUoK1IWnNLU6bbadE%2BxbyMxPpkoVJEqXBYCwTNBfguO8qDAqAgAAAAAMAAAQAAAAAAAAAAAAAAAAAAx39ayjtX6fWmvEvIDKGHr%2F%2F%2F%2F%2FAAAAAQAAAAAAAAAAAAAAAQAAADLzQ57EAr0zUTyCKJ4467%2FDfqeUp0dIOowJH2czlgnAoOJtRnl8VfSymm0V9DRuiBXh1zFsPd0oosV4MonfRwzdaiQ%3D&product=jira',
 
     notifications: {
       autoClear: true,
@@ -280,6 +289,7 @@ module.exports = function (environment) {
       integrateServiceNow: 'servicenow',
       integrateSlack: 'slack',
       integrateSplunk: 'splunk',
+      integrateJiraSecurity: 'jira_security',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
