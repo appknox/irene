@@ -13,6 +13,7 @@ import parseError from 'irene/utils/parse-error';
 import type OffsecFindingModel from 'irene/models/offsec-finding';
 import type { OffsecFindingEvidence } from 'irene/models/offsec-finding';
 import type OffsecScanModel from 'irene/models/offsec-scan';
+import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 
 export interface OffensiveSecurityFindingDetailSignature {
@@ -850,6 +851,143 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     );
   }
 
+  get currentGroupKey(): string | null {
+    const findingId = String(this.finding?.id || this.args.findingId || '');
+    const allFindings = this.scan?.findingList ?? [];
+
+    if (findingId && allFindings.length > 0) {
+      const matched = allFindings.find((f) => String(f.id) === findingId);
+      if (matched) {
+        const matchedRecord = matched as unknown as Record<string, unknown>;
+        const group =
+          matched.group ||
+          (matchedRecord['check_type'] as string) ||
+          (matchedRecord['checkType'] as string) ||
+          matched.signature_id;
+        if (group) {
+          return group;
+        }
+      }
+    }
+
+    const findingRecord = this.finding as unknown as Record<string, unknown>;
+
+    return (
+      (findingRecord?.['group'] as string) ||
+      this.finding?.checkType ||
+      (findingRecord?.['check_type'] as string) ||
+      null
+    );
+  }
+
+  get findingList(): OffsecScanEmbeddedFinding[] {
+    const allFindings = this.scan?.findingList ?? [];
+    const groupKey = this.currentGroupKey;
+    if (!groupKey) {
+      return allFindings;
+    }
+
+    const scopedFindings = allFindings.filter((f) => {
+      const fRecord = f as unknown as Record<string, unknown>;
+      const fGroup =
+        f.group ||
+        (fRecord['check_type'] as string) ||
+        (fRecord['checkType'] as string) ||
+        f.signature_id;
+      const fCheckType =
+        (fRecord['check_type'] as string) ||
+        (fRecord['checkType'] as string) ||
+        f.check_type;
+
+      return (
+        fGroup === groupKey ||
+        fCheckType === groupKey ||
+        f.signature_id === groupKey
+      );
+    });
+
+    return scopedFindings.length > 0 ? scopedFindings : allFindings;
+  }
+
+  get currentFindingIndex(): number {
+    const currentId = String(this.finding?.id || this.args.findingId || '');
+    if (!currentId) {
+      return -1;
+    }
+
+    return this.findingList.findIndex((f) => String(f.id) === currentId);
+  }
+
+  get isFirstFinding(): boolean {
+    return this.currentFindingIndex <= 0;
+  }
+
+  get isLastFinding(): boolean {
+    if (this.currentFindingIndex === -1 || this.findingList.length === 0) {
+      return true;
+    }
+
+    return this.currentFindingIndex >= this.findingList.length - 1;
+  }
+
+  get currentFindingPosition(): number {
+    return this.currentFindingIndex >= 0 ? this.currentFindingIndex + 1 : 1;
+  }
+
+  get totalFindingsCount(): number {
+    return this.findingList.length;
+  }
+
+  get hasMultipleFindings(): boolean {
+    return this.totalFindingsCount > 1;
+  }
+
+  @action
+  goToPreviousFinding(): void {
+    if (this.isFirstFinding) {
+      return;
+    }
+
+    const prevFinding = this.findingList[this.currentFindingIndex - 1];
+    if (prevFinding?.id && this.scanId) {
+      const prevId = String(prevFinding.id);
+      this.loadFinding.perform(prevId);
+      this.router.transitionTo(
+        'authenticated.offensive-security.finding',
+        this.scanId,
+        prevId
+      );
+    }
+  }
+
+  @action
+  goToNextFinding(): void {
+    if (this.isLastFinding) {
+      return;
+    }
+
+    const nextFinding = this.findingList[this.currentFindingIndex + 1];
+    if (nextFinding?.id && this.scanId) {
+      const nextId = String(nextFinding.id);
+      this.loadFinding.perform(nextId);
+      this.router.transitionTo(
+        'authenticated.offensive-security.finding',
+        this.scanId,
+        nextId
+      );
+    }
+  }
+
+  @action
+  handleFindingIdChange(): void {
+    if (
+      this.args.findingId &&
+      String(this.finding?.id) !== String(this.args.findingId)
+    ) {
+      this.loadFinding.perform(this.args.findingId);
+    }
+  }
+
   @action
   goToHome(): void {
     this.router.transitionTo('authenticated.offensive-security.index');
@@ -887,7 +1025,15 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         }
 
         if (!this.scan && this.scanId) {
-          this.scan = this.store.peekRecord('offsec-scan', this.scanId);
+          this.scan =
+            (this.store.peekRecord(
+              'offsec-scan',
+              this.scanId
+            ) as OffsecScanModel | null) ||
+            ((await this.store.findRecord(
+              'offsec-scan',
+              this.scanId
+            )) as OffsecScanModel);
         }
       } catch (error) {
         this.notify?.error?.(parseError(error, this.intl.t('pleaseTryAgain')));

@@ -179,6 +179,19 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.strictEqual(findAll(SELECTORS.row).length, 2);
   });
 
+  test('the target ID column shows target_id from the API payload and falls back to id', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 1, target_id: 79 }),
+      buildScan({ id: 2 }),
+    ]);
+
+    await render(TEMPLATE);
+
+    const rows = findAll(SELECTORS.row);
+    assert.dom(rows[0]).includesText('79');
+    assert.dom(rows[1]).includesText('2');
+  });
+
   test('the target column shows the friendly app name', async function (assert) {
     serveScans(this, [
       buildScan({

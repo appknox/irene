@@ -7,9 +7,7 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import { OFFSEC_SAMPLE_LOG_LINES } from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
@@ -92,6 +90,10 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   get isLoading(): boolean {
     return this.loadScan.isRunning || !this.scan;
+  }
+
+  get displayTargetId(): string | number {
+    return this.scan?.displayTargetId ?? this.args.scanId;
   }
 
   get findings() {
@@ -378,7 +380,27 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.scan.cachedLogUrl = targetUrl;
     }
 
-    const response = await fetch(targetUrl);
+    let response: Response;
+    try {
+      response = await fetch(targetUrl);
+    } catch (fetchError) {
+      // In local development, direct cross-origin fetch from localhost:4200 to DigitalOcean Spaces
+      // is blocked by bucket CORS policy. Fall back to local dev proxy if available.
+      if (
+        typeof window !== 'undefined' &&
+        (window.location.hostname === 'localhost' ||
+          window.location.hostname === '127.0.0.1')
+      ) {
+        try {
+          const proxyUrl = `/_dev_proxy_log?url=${encodeURIComponent(targetUrl)}`;
+          response = await fetch(proxyUrl);
+        } catch {
+          throw fetchError;
+        }
+      } else {
+        throw fetchError;
+      }
+    }
 
     if (!response.ok) {
       throw new Error(`log fetch failed: ${response.status}`);
@@ -401,19 +423,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     } catch {
       return false;
     }
-  }
-
-  private fallbackDevelopmentLog(): boolean {
-    if (ENV.environment !== 'development') {
-      return false;
-    }
-
-    this.logLines = this.scan?.isFailed ? [] : [...OFFSEC_SAMPLE_LOG_LINES];
-    if (this.scan && this.logLines.length > 0) {
-      this.scan.cachedLogLines = this.logLines;
-    }
-
-    return true;
   }
 
   loadLog = task({ drop: true }, async () => {
@@ -444,10 +453,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       if (await this.fallbackLogStream()) {
         this.logLoadFailed = false;
 
-        return;
-      }
-
-      if (this.fallbackDevelopmentLog()) {
         return;
       }
 
