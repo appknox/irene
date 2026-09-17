@@ -62,7 +62,11 @@
       @color='textSecondary'
       data-test-offensiveSecurity-artifactsCard-empty
     >
-      {{t 'offensiveSecurity.noArtifacts'}}
+      {{if
+        @scan.isInProgress
+        (t 'offensiveSecurity.artifactsGenerating')
+        (t 'offensiveSecurity.noArtifacts')
+      }}
     </AkTypography>
   {{/if}}
 </AkStack>

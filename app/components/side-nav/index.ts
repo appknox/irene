@@ -41,6 +41,7 @@ export interface SideNavSignature {
 export interface MenuItem {
   label: string;
   icon?: string;
+  svg?: string;
   route?: string;
   query?: Record<string, string | number>;
   currentWhen?: string;

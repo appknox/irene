@@ -496,5 +496,62 @@ module(
       assert.dom(this.element).includesText('root_detection: su path');
       assert.dom(this.element).includesText('libhnb.so');
     });
+
+    test('it uses scan.packageName in reproduce steps when exploit is present', async function (assert) {
+      this.server.create('offsec-scan', {
+        id: '20',
+        package_name: 'com.example.bankingapp',
+      });
+
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-build-props',
+        name: 'Build tags',
+        outcome: 'bypassed',
+        frida_script: 'Java.perform(function() {});',
+      });
+
+      this.set('scanId', '20');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('Working exploit');
+      assert.dom(this.element).includesText('com.example.bankingapp');
+      assert.dom(this.element).doesNotIncludeText('com.target.app');
+    });
+
+    test('it falls back to finding package or evidence when scan package is empty', async function (assert) {
+      this.server.create('offsec-scan', {
+        id: '21',
+        package_name: '',
+      });
+
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-build-props',
+        name: 'Build tags',
+        outcome: 'bypassed',
+        frida_script: 'Java.perform(function() {});',
+        detail: {
+          package_name: 'com.fallback.fromdetail',
+        },
+      });
+
+      this.set('scanId', '21');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('com.fallback.fromdetail');
+    });
   }
 );

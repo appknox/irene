@@ -48,20 +48,16 @@
     outline: 2px solid var(--primary-main);
     outline-offset: -2px;
   }
-
-  &.expanded {
-    border-bottom: 1px solid
-      var(--offensive-security-scan-results-divider-color);
-  }
 }
 
-.group-expand-icon {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: rotate(0deg);
+.group-nav-icon {
+  transition: transform 0.15s ease, color 0.15s ease;
+  color: var(--text-secondary);
+}
 
-  &.expanded {
-    transform: rotate(-180deg);
-  }
+.group-header:hover .group-nav-icon {
+  transform: translateX(2px);
+  color: var(--text-primary);
 }
 
 .group-content {
@@ -121,7 +117,7 @@
   font-size: 0.75rem;
 }
 
-.outcome-tag {
+.outcome-badge {
   flex-shrink: 0;
   padding: 0.25rem 0.625rem;
   border-radius: 4px;

@@ -1,5 +1,4 @@
 import Model, { attr } from '@ember-data/model';
-import { tracked } from '@glimmer/tracking';
 import dayjs from 'dayjs';
 
 import ENUMS from 'irene/enums';
@@ -53,6 +52,9 @@ export interface OffsecScanEmbeddedFinding {
 }
 
 export default class OffsecScanModel extends Model {
+  @attr('number')
+  declare targetId: number | null;
+
   @attr('number')
   declare fileId: number;
 
@@ -192,9 +194,9 @@ export default class OffsecScanModel extends Model {
   @attr('date')
   declare updatedAt: Date | null;
 
-  @tracked cachedLogLines?: string[];
-  @tracked cachedLogUrl?: string;
-  @tracked logAttempted?: boolean;
+  cachedLogLines?: string[];
+  cachedLogUrl?: string;
+  logAttempted?: boolean;
 
   get formattedUploadedOn(): string | null {
     if (!this.createdAt) {
@@ -226,6 +228,23 @@ export default class OffsecScanModel extends Model {
     }
 
     return this.id ? String(this.id) : null;
+  }
+
+  get displayTargetId(): number | string {
+    const rawTargetId =
+      this.targetId ??
+      (this as unknown as Record<string, unknown>)['target_id'] ??
+      (this as unknown as Record<string, unknown>)['targetId'];
+
+    if (
+      rawTargetId !== null &&
+      rawTargetId !== undefined &&
+      String(rawTargetId).trim() !== ''
+    ) {
+      return rawTargetId as number | string;
+    }
+
+    return this.id;
   }
 
   get sha1Value(): string | null {

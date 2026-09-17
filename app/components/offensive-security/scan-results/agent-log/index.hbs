@@ -1,39 +1,114 @@
+{{#if this.isExpanded}}
+  <button
+    type='button'
+    local-class='log-backdrop'
+    aria-label='Close expanded terminal'
+    {{on 'click' this.toggleExpand}}
+    data-test-offensiveSecurity-agentLog-backdrop
+  />
+{{/if}}
+
 <AkStack
   @direction='column'
   @spacing='2'
-  local-class='log-card'
+  local-class='log-card {{if this.isExpanded "is-expanded"}}'
   class='p-3'
   data-test-offensiveSecurity-agentLog
 >
-  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
-    <AkTypography @variant='body1' @fontWeight='medium'>
-      {{t 'offensiveSecurity.attackRun'}}
-    </AkTypography>
+  <AkStack
+    @width='full'
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='log-header'
+  >
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkTypography @variant='body1' @fontWeight='medium'>
+        {{t 'offensiveSecurity.attackRun'}}
+      </AkTypography>
 
-    <OffensiveSecurity::StatusChip @scan={{@scan}} />
+      {{#if (and this.isExpanded (gt this.styledLines.length 0))}}
+        <span local-class='line-count-badge'>
+          {{this.styledLines.length}} lines
+        </span>
+      {{/if}}
+    </AkStack>
+
+    <AkStack @alignItems='center' @spacing='1'>
+      <OffensiveSecurity::StatusChip @scan={{@scan}} />
+
+      {{#if (gt this.styledLines.length 15)}}
+        <AkIconButton
+          @size='small'
+          @variant='default'
+          aria-label={{if this.isScrolledUp 'Jump to latest' 'Scroll to top'}}
+          title={{if this.isScrolledUp 'Jump to latest' 'Scroll to top'}}
+          local-class='scroll-nav-btn'
+          {{on 'click' this.scrollNav}}
+          data-test-offensiveSecurity-agentLog-scrollNav
+        >
+          <AkIcon
+            @iconName={{if this.isScrolledUp 'arrow-downward' 'arrow-upward'}}
+            @size='small'
+          />
+        </AkIconButton>
+      {{/if}}
+
+      <AkIconButton
+        @size='small'
+        @variant='default'
+        aria-label={{if this.isExpanded (t 'offensiveSecurity.collapseTerminal') (t 'offensiveSecurity.expandTerminal')}}
+        title={{if this.isExpanded 'Collapse terminal (Esc)' 'Expand terminal'}}
+        local-class='expand-btn'
+        {{on 'click' this.toggleExpand}}
+        data-test-offensiveSecurity-agentLog-expandBtn
+      >
+        <AkIcon @iconName={{if this.isExpanded 'close' 'open-in-full'}} />
+      </AkIconButton>
+    </AkStack>
   </AkStack>
 
-  {{#if this.showInProgress}}
-    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
-      <div local-class='log-line dim'>{{this.statusMessage}}{{this.dotsText}}</div>
-    </div>
-  {{else if @isLoading}}
-    <AkSkeleton @width='100%' @height='320px' />
-  {{else if this.showEmptyState}}
-    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
-      <div local-class='log-line dim'>
-        {{if
-          @loadFailed
-          (t 'offensiveSecurity.logUnavailable')
-          (t 'offensiveSecurity.noLogRecorded')
-        }}
+  <div local-class='log-body-container'>
+    {{#if this.showInProgress}}
+      <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+        <div local-class='log-line dim'>{{this.statusMessage}}{{this.dotsText}}</div>
       </div>
-    </div>
-  {{else}}
-    <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
-      {{#each this.styledLines as |line|}}
-        <div local-class='log-line {{line.tone}}'>{{line.text}}</div>
-      {{/each}}
-    </div>
-  {{/if}}
+    {{else if @isLoading}}
+      <AkSkeleton @width='100%' @height={{if this.isExpanded '100%' '320px'}} />
+    {{else if this.showEmptyState}}
+      <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
+        <div local-class='log-line dim'>
+          {{if
+            @loadFailed
+            (t 'offensiveSecurity.logUnavailable')
+            (t 'offensiveSecurity.noLogRecorded')
+          }}
+          {{#if (and @loadFailed @scan.cachedLogUrl)}}
+            <div local-class='log-link-row'>
+              <a
+                href={{@scan.cachedLogUrl}}
+                target='_blank'
+                rel='noopener noreferrer'
+                local-class='log-direct-link'
+              >
+                Open log file directly ↗
+              </a>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+    {{else}}
+      <div
+        local-class='log-pane'
+        data-test-offensiveSecurity-agentLog-pane
+        {{did-insert this.setupLogPane}}
+        {{did-update this.handleLinesUpdated @lines @lines.length}}
+        {{on 'scroll' this.handleScroll}}
+      >
+        {{#each this.styledLines as |line|}}
+          <div local-class='log-line {{line.tone}}'>{{line.text}}</div>
+        {{/each}}
+      </div>
+
+    {{/if}}
+  </div>
 </AkStack>

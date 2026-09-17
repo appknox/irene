@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
+import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
 
 export interface FindingGroup {
@@ -12,6 +13,7 @@ export interface FindingGroup {
 
 export interface OffensiveSecurityScanResultsFindingsListSignature {
   Args: {
+    scan?: OffsecScanModel | null;
     findings: OffsecScanEmbeddedFinding[];
     onFindingClick: (findingId: number) => void;
   };
@@ -64,7 +66,6 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
   /**
    * Groups findings by their key (e.g. "anti-debug-ptrace", "debug-settings-probe")
    * and formats the group title to Title Case ("Anti Debug Ptrace").
-   * If a finding name contains '/', it is split into separate items in the list.
    */
   get groupedFindings(): FindingGroup[] {
     const weight = (outcome: string) =>
@@ -90,29 +91,11 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
       const groupKey =
         finding.group || finding.signature_id || finding.category || 'other';
 
-      const rawName =
-        finding.name || this.formatGroupTitle(finding.signature_id || '');
-      const nameParts = rawName.includes('/')
-        ? rawName
-            .split('/')
-            .map((p) => p.trim())
-            .filter(Boolean)
-        : [rawName];
-
-      const splitFindings: OffsecScanEmbeddedFinding[] =
-        nameParts.length > 1
-          ? nameParts.map((partName, partIdx) => ({
-              ...finding,
-              name: partName,
-              order: (finding.order ?? 0) + partIdx * 0.1,
-            }))
-          : [finding];
-
       const existing = groupMap.get(groupKey);
       if (existing) {
-        existing.push(...splitFindings);
+        existing.push(finding);
       } else {
-        groupMap.set(groupKey, [...splitFindings]);
+        groupMap.set(groupKey, [finding]);
       }
     }
 
@@ -137,6 +120,24 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
 
   get sortedFindings(): OffsecScanEmbeddedFinding[] {
     return this.groupedFindings.flatMap((group) => group.findings);
+  }
+
+  @action
+  handleCategoryClick(group: FindingGroup): void {
+    const firstFinding = group.findings[0];
+    if (firstFinding?.id) {
+      this.handleClick(firstFinding.id);
+    }
+  }
+
+  @action
+  handleCategoryKeydown(group: FindingGroup, event: KeyboardEvent): void {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    this.handleCategoryClick(group);
   }
 
   @action

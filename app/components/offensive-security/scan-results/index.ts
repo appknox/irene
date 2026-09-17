@@ -7,9 +7,7 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
-import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import { OFFSEC_SAMPLE_LOG_LINES } from 'irene/utils/offsec-sample-log';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
@@ -92,6 +90,10 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   get isLoading(): boolean {
     return this.loadScan.isRunning || !this.scan;
+  }
+
+  get displayTargetId(): string | number {
+    return this.scan?.displayTargetId ?? this.args.scanId;
   }
 
   get findings() {
@@ -403,19 +405,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     }
   }
 
-  private fallbackDevelopmentLog(): boolean {
-    if (ENV.environment !== 'development') {
-      return false;
-    }
-
-    this.logLines = this.scan?.isFailed ? [] : [...OFFSEC_SAMPLE_LOG_LINES];
-    if (this.scan && this.logLines.length > 0) {
-      this.scan.cachedLogLines = this.logLines;
-    }
-
-    return true;
-  }
-
   loadLog = task({ drop: true }, async () => {
     if (this.scan?.cachedLogLines?.length) {
       this.logLines = this.scan.cachedLogLines;
@@ -444,10 +433,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       if (await this.fallbackLogStream()) {
         this.logLoadFailed = false;
 
-        return;
-      }
-
-      if (this.fallbackDevelopmentLog()) {
         return;
       }
 

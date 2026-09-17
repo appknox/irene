@@ -80,7 +80,7 @@
             <AkTypography @variant='subtitle1'>
               {{t 'targetID'}}
               -
-              <strong>{{if this.scan.id this.scan.id @scanId}}</strong>
+              <strong>{{this.displayTargetId}}</strong>
             </AkTypography>
           </AkStack>
 
@@ -208,6 +208,7 @@
         <OffensiveSecurity::ScanResults::SummaryCard @scan={{this.scan}} />
 
         <OffensiveSecurity::ScanResults::ArtifactsCard
+          @scan={{this.scan}}
           @artifacts={{this.artifacts}}
           @onDownload={{perform this.downloadArtifact}}
           @isDownloading={{this.downloadArtifact.isRunning}}
@@ -217,6 +218,7 @@
 
     {{! Findings }}
     <OffensiveSecurity::ScanResults::FindingsList
+      @scan={{this.scan}}
       @findings={{this.findings}}
       @onFindingClick={{this.handleFindingClick}}
     />
