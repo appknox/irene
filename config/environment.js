@@ -5,6 +5,7 @@ const possibleENVS = [
   'IRENE_ENABLE_MARKETPLACE',
   'IRENE_POSTHOG_API_KEY',
   'IRENE_POSTHOG_API_HOST',
+  'IRENE_JIRA_SECURITY_INSTALL_URL',
   'ENTERPRISE',
   'WHITELABEL_ENABLED',
   'WHITELABEL_NAME',
@@ -23,6 +24,7 @@ const ENVHandlerCONST = {
     IRENE_ENABLE_MARKETPLACE: false,
     IRENE_POSTHOG_API_KEY: '',
     IRENE_POSTHOG_API_HOST: '',
+    IRENE_JIRA_SECURITY_INSTALL_URL: '',
     ENTERPRISE: false,
     WHITELABEL_ENABLED: false,
     WHITELABEL_NAME: '',
@@ -217,7 +219,7 @@ module.exports = function (environment) {
     enableMarketplace: handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE'),
     posthogApiKey: handler.getEnv('IRENE_POSTHOG_API_KEY'),
     posthogApiHost: handler.getEnv('IRENE_POSTHOG_API_HOST'),
-
+    jiraSecurityInstallUrl: handler.getEnv('IRENE_JIRA_SECURITY_INSTALL_URL'),
     notifications: {
       autoClear: true,
       duration: 7000, // Milliseconds
@@ -284,6 +286,7 @@ module.exports = function (environment) {
       integrateServiceNow: 'servicenow',
       integrateSlack: 'slack',
       integrateSplunk: 'splunk',
+      integrateJiraSecurity: 'jira_security',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',
