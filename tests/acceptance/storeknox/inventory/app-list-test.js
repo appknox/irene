@@ -738,10 +738,12 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       this.server.get('v2/sk_app', (schema, req) => {
         const { app_status, approval_status } = req.queryParams;
 
+        const statuses = String(app_status).split(',').map(Number);
+
         const inventoryApps = schema.skInventoryApps
           .where(
             (a) =>
-              a.app_status === Number(app_status) &&
+              statuses.includes(a.app_status) &&
               a.approval_status === Number(approval_status)
           )
           .models.map((a) => ({
@@ -848,10 +850,12 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
 
         const filterValue = Number(monitoring_status ?? -1);
 
+        const statuses = String(app_status).split(',').map(Number);
+
         const inventoryApps = schema.skApps
           .where(
             (a) =>
-              a.app_status === Number(app_status) &&
+              statuses.includes(a.app_status) &&
               a.approval_status === Number(approval_status)
           )
           .filter((a) => filterAppsByMonitoringStatus(a, filterValue))

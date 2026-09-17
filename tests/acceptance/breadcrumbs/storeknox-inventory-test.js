@@ -98,10 +98,12 @@ module('Acceptance | breadcrumbs/storeknox-inventory', function (hooks) {
     this.server.get('v2/sk_app', (schema, req) => {
       const { app_status, approval_status } = req.queryParams;
 
+      const statuses = String(app_status).split(',').map(Number);
+
       const inventoryApps = schema.skInventoryApps
         .where(
           (a) =>
-            a.app_status === Number(app_status) &&
+            statuses.includes(a.app_status) &&
             a.approval_status === Number(approval_status)
         )
         .models.map((a) => ({
