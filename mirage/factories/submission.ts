@@ -7,7 +7,7 @@ export const SUBMISSION_FACTORY_DEF = {
   reason: faker.lorem.sentence(),
   package_name: faker.internet.domainName(),
   status_humanized: faker.lorem.sentence(3),
-  url: () => faker.helpers.arrayElement([faker.internet.url, '']),
+  url: () => faker.helpers.arrayElement([faker.internet.url(), '']),
 
   status() {
     return faker.helpers.arrayElement(ENUMS.SUBMISSION_STATUS.VALUES);
