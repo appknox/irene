@@ -7,7 +7,9 @@ import { module, test } from 'qunit';
 import Service from '@ember/service';
 
 import ENUMS from 'irene/enums';
+import { Response } from 'miragejs';
 import {
+  disableKnoxiqForTests,
   enableKnoxiqForTests,
   setupFileExploitabilityMirageEndpoint,
   setupKnoxiqScanStatusMirage,
@@ -113,6 +115,7 @@ module('Integration | Component | file-details', function (hooks) {
 
     const store = this.owner.lookup('service:store');
     const project = this.server.create('project', { id: '1' });
+    store.push(store.normalize('project', project.toJSON()));
     const profile = this.server.create('profile');
     const file = this.server.create('file', { project: project.id });
 
@@ -239,4 +242,105 @@ module('Integration | Component | file-details', function (hooks) {
         );
     }
   );
+
+  module('superuser bypass for a KnoxIQ-disabled org', function () {
+    // FileDetailsComponent reads `me.org.is_superuser` only once, synchronously,
+    // in its constructor. In the real app this is always already resolved by
+    // then (the parent `authenticated` route awaits `me.getMembership()` in
+    // its model hook before any nested route renders), so mirror that here by
+    // awaiting the me service's own fetch before rendering the component.
+    async function makeSuperuser(context) {
+      context.server.schema.organizationMes.first().update({
+        is_superuser: true,
+      });
+
+      await context.owner.lookup('service:me').fetchOrganizationMe();
+    }
+
+    test('does not fetch or show KnoxIQ status when org KnoxIQ is disabled and the viewer is not a superuser', async function (assert) {
+      disableKnoxiqForTests(this);
+      this.file.isStaticDone = true;
+
+      setupKnoxiqScanStatusMirage(this.server, {
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+      });
+
+      await render(hbs`
+        <FileDetails
+          @file={{this.file}}
+          @fileAnalysesListContext={{this.fileAnalysesListContext}}
+        />
+      `);
+
+      assert.dom('[data-test-knoxiq-status-card]').doesNotExist();
+    });
+
+    test('a superuser can see already-completed KnoxIQ status even when the file org has KnoxIQ disabled', async function (assert) {
+      await makeSuperuser(this);
+      disableKnoxiqForTests(this);
+      this.file.isStaticDone = true;
+
+      setupKnoxiqScanStatusMirage(this.server, {
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+      });
+
+      await render(hbs`
+        <FileDetails
+          @file={{this.file}}
+          @fileAnalysesListContext={{this.fileAnalysesListContext}}
+        />
+      `);
+
+      await waitFor('[data-test-knoxiq-status-card]', { timeout: 5000 });
+
+      assert.dom('[data-test-knoxiq-status-card]').exists();
+      assert
+        .dom('[data-test-knoxiq-status-card-icon]')
+        .hasClass(/status-card-icon-completed/);
+    });
+
+    test('a superuser never sees the run-KnoxIQ trigger CTA for a file whose org has KnoxIQ disabled', async function (assert) {
+      await makeSuperuser(this);
+      disableKnoxiqForTests(this);
+      this.file.isStaticDone = true;
+
+      setupKnoxiqScanStatusMirage(this.server, {
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+      });
+
+      await render(hbs`
+        <FileDetails
+          @file={{this.file}}
+          @fileAnalysesListContext={{this.fileAnalysesListContext}}
+        />
+      `);
+
+      assert.dom('[data-test-knoxiq-status-card]').doesNotExist();
+    });
+
+    test('quietly ignores an expected 403 when a superuser probes a disabled org file with no KnoxIQ history yet', async function (assert) {
+      await makeSuperuser(this);
+      disableKnoxiqForTests(this);
+      this.file.isStaticDone = true;
+
+      this.server.get('/knoxiq/file/:fileId/knoxiq_scan/status', () => {
+        return new Response(403);
+      });
+
+      await render(hbs`
+        <FileDetails
+          @file={{this.file}}
+          @fileAnalysesListContext={{this.fileAnalysesListContext}}
+        />
+      `);
+
+      const notifications = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(notifications.errorMsg, null);
+      assert.dom('[data-test-knoxiq-status-card]').doesNotExist();
+    });
+  });
 });

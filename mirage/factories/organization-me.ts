@@ -6,4 +6,5 @@ export default Factory.extend({
   is_member: false,
   can_access_partner_dashboard: false,
   has_security_permission: false,
+  is_superuser: false,
 });

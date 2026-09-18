@@ -19,6 +19,9 @@ export default class OrganizationMeModel extends Model {
 
   @attr('boolean')
   declare has_security_permission: boolean;
+
+  @attr('boolean')
+  declare is_superuser: boolean;
 }
 
 declare module 'ember-data/types/registries/model' {
