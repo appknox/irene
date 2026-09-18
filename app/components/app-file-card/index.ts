@@ -1,8 +1,6 @@
 import Component from '@glimmer/component';
-import { service } from '@ember/service';
 
 import type FileModel from 'irene/models/file';
-import type OrganizationService from 'irene/services/organization';
 import type { KnoxIqProjectCardAccent } from 'irene/components/knox-iq/project-card';
 
 interface AppFileCardSignature {
@@ -23,10 +21,13 @@ interface AppFileCardSignature {
 }
 
 export default class AppFileCardComponent extends Component<AppFileCardSignature> {
-  @service declare organization: OrganizationService;
-
+  // The file's own is_knoxiq_enabled, not the viewer's selected org's flag:
+  // the backend already resolved this (org flag on, or superuser bypass) for
+  // the request that fetched this file, so trust it instead of re-deriving
+  // it from an org record the viewer may not even have loaded (e.g. a
+  // superuser browsing a different org's project).
   get isKnoxIqEnabled() {
-    return this.organization.isKnoxIqEnabled;
+    return Boolean(this.args.file?.isKnoxiqEnabled);
   }
 }
 

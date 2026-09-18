@@ -36,6 +36,7 @@ module('Integration | Component | app-file-card', function (hooks) {
 
     const store = this.owner.lookup('service:store');
     const project = this.server.create('project');
+    store.push(store.normalize('project', project.toJSON()));
     const profile = this.server.create('profile');
     const file = this.server.create('file', { project: project.id });
 
@@ -68,6 +69,23 @@ module('Integration | Component | app-file-card', function (hooks) {
     assert.dom('[data-test-fileOverview-root]').exists();
     assert.dom('[data-test-knoxiq-project-card]').doesNotExist();
     assert.dom('[data-test-fileOverview-fileName]').hasText(this.file.name);
+  });
+
+  test('it renders the KnoxIQ project card driven by the file own flag, not the viewer selected org', async function (assert) {
+    // The viewer's own selected org has KnoxIQ disabled (e.g. a superuser
+    // whose own org never has it on), but the backend already resolved
+    // is_knoxiq_enabled=true for this specific file (org flag on, or a
+    // superuser bypass) and put it on the file itself.
+    disableKnoxiqForTests(this);
+    this.file.isKnoxiqEnabled = true;
+    setupKnoxiqMirageEndpoints(this.server);
+
+    await render(
+      hbs`<AppFileCard @file={{this.file}} @showCheckbox={{true}} />`
+    );
+
+    assert.dom('[data-test-knoxiq-project-card]').exists();
+    assert.dom('[data-test-fileOverview-root]').doesNotExist();
   });
 
   module('when KnoxIQ is enabled', function (nestedHooks) {
