@@ -11,7 +11,7 @@ import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
 import type { KnoxIqStatusCardState } from 'irene/components/knox-iq/status-card';
 import type LoggerService from 'irene/services/logger';
-import type OrganizationService from 'irene/services/organization';
+import type MeService from 'irene/services/me';
 import type FileModel from 'irene/models/file';
 import type { FileDetailsAnalysesProviderContext } from './analyses-provider';
 import type KnoxiqScanModel from 'irene/models/knoxiq-scan';
@@ -71,7 +71,7 @@ export interface FileDetailsSignature {
 export default class FileDetailsComponent extends Component<FileDetailsSignature> {
   @service declare store: Store;
   @service declare logger: LoggerService;
-  @service declare organization: OrganizationService;
+  @service declare me: MeService;
   @service declare intl: IntlService;
   @service('notifications') declare notify: NotificationService;
 
@@ -80,17 +80,48 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   constructor(owner: unknown, args: FileDetailsSignature['Args']) {
     super(owner, args);
 
-    if (this.isKnoxiqEnabled) {
+    if (this.canFetchKnoxiqData) {
       this.fetchKnoxiqFileScans.perform();
     }
   }
 
+  /**
+   * The file's own org's KnoxIQ setting — resolved from the file itself,
+   * not the viewing user's org, since a superuser's own org has nothing
+   * to do with whether this file's org has KnoxIQ on. Trigger-related UI
+   * stays gated on this strict flag even for superusers; only viewing
+   * already-produced results is bypassable (see `canFetchKnoxiqData`).
+   *
+   * Known limitation: for a file in an org the viewer doesn't belong to,
+   * `project.organization` may not resolve (fetching another org's record
+   * is scoped to the requester's own orgs), so this can read `false` even
+   * when that org's flag is genuinely on. That only suppresses the
+   * trigger-prompt UI for a not-yet-triggered cross-org file — a missing
+   * affordance, not a security issue — and is out of scope for the
+   * viewing-existing-results problem this fix targets.
+   */
   get isKnoxiqEnabled() {
     if (this.args.file.isLegacyKnoxIQScan) {
       return false;
     }
 
-    return this.organization.isKnoxIqEnabled;
+    return Boolean(
+      this.args.file.project?.get('organization')?.get('aiFeatures')?.knoxiq
+    );
+  }
+
+  get isSuperuser() {
+    return Boolean(this.me.org?.is_superuser);
+  }
+
+  /**
+   * A superuser may still view KnoxIQ results already produced for a file
+   * even after the file's org disables KnoxIQ. The backend enforces the
+   * same rule (and denies when no such data exists yet), so it's safe to
+   * always attempt the fetch here and let a 403 fail quietly.
+   */
+  get canFetchKnoxiqData() {
+    return this.isKnoxiqEnabled || this.isSuperuser;
   }
 
   get knoxiqScanRecord() {
@@ -112,7 +143,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
   get hasKnoxiqScanStatusLoaded() {
     return (
-      this.isKnoxiqEnabled &&
+      this.canFetchKnoxiqData &&
       this.fetchKnoxiqFileScans.isIdle &&
       this.knoxiqScanRecord != null
     );
@@ -147,7 +178,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   get knoxiqStatusCardConfig(): KnoxiqStatusCardConfig | null {
     if (
       this.args.file.isKnoxiqAutomated ||
-      !this.isKnoxiqEnabled ||
+      !this.canFetchKnoxiqData ||
       !this.fetchKnoxiqFileScans.isIdle ||
       !this.hasKnoxiqScanStatusLoaded
     ) {
@@ -172,6 +203,14 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     if (sastStatus === COMPLETED && dastStatus === COMPLETED) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.completed);
+    }
+
+    // Everything below here prompts the viewer to trigger a scan, which
+    // stays gated by the org's real flag -- a superuser viewing another
+    // org's already-produced results must never see a "run KnoxIQ" CTA
+    // the backend would reject.
+    if (!this.isKnoxiqEnabled) {
+      return null;
     }
 
     if (this.args.file.isStaticDone && sastStatus === NOT_TRIGGERED) {
@@ -221,7 +260,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   });
 
   fetchKnoxiqFileScans = task(async () => {
-    if (!this.isKnoxiqEnabled) {
+    if (!this.canFetchKnoxiqData) {
       return;
     }
 
@@ -233,6 +272,19 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
         })
       );
     } catch (error) {
+      // A superuser probing another org's file that has no KnoxIQ history
+      // yet is expected to be denied here -- fail quietly instead of
+      // toasting an error for what is really just "nothing to show".
+      const isExpectedDenial =
+        this.isSuperuser &&
+        !this.isKnoxiqEnabled &&
+        (error as { errors?: { status?: string }[] })?.errors?.[0]?.status ===
+          '403';
+
+      if (isExpectedDenial) {
+        return;
+      }
+
       this.notify.error(parseError(error));
     }
   });

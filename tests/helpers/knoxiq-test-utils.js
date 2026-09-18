@@ -72,15 +72,28 @@ export function enableKnoxiqForTests(context, options = {}) {
   const organizationService = context.owner.lookup('service:organization');
   const { knoxiq = true, automated = false } = options;
 
-  organizationService.selected?.set('aiFeatures', {
+  const aiFeatures = {
     ...(organizationService.selected?.aiFeatures ?? {}),
     knoxiq,
-  });
+  };
+
+  organizationService.selected?.set('aiFeatures', aiFeatures);
 
   if (context.file) {
     context.file.knoxiqStatus =
       options.knoxiqStatus ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
     context.file.isKnoxiqAutomated = automated;
+
+    // FileDetailsComponent reads the flag off the file's own org, not the
+    // viewer's selected org (a superuser's org may differ from the file's).
+    // Keep them in sync here for tests that only set up one organization.
+    const fileOrg = context.file.project?.get('organization');
+
+    if (fileOrg) {
+      fileOrg.set('aiFeatures', aiFeatures);
+    } else if (context.file.project && organizationService.selected) {
+      context.file.project.set('organization', organizationService.selected);
+    }
   }
 }
 
