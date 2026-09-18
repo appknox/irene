@@ -5,11 +5,25 @@
   @isFullscreenSupported={{this.dynamicScan.isReady}}
 >
   <:statusChip>
-    <FileDetails::DynamicScan::StatusChip
-      @status={{this.cumulativeScanStatus}}
-      @statusText={{this.dynamicScan.statusText}}
-      @errorMessage={{this.dynamicScan.errorMessage}}
-    />
+    <AkTooltip
+      @arrow={{true}}
+      @placement='bottom'
+      @disabled={{not this.statusChipTooltipMessage}}
+      data-test-fileDetails-dynamicScan-manual-statusChipErrorTooltip
+    >
+      <:tooltipContent>
+        <div local-class='tooltip-content-container'>
+          {{this.statusChipTooltipMessage}}
+        </div>
+      </:tooltipContent>
+
+      <:default>
+        <FileDetails::DynamicScan::StatusChip
+          @status={{this.cumulativeScanStatus}}
+          @statusText={{this.dynamicScan.statusText}}
+        />
+      </:default>
+    </AkTooltip>
   </:statusChip>
 
   <:actionButton as |dw|>

@@ -16,7 +16,6 @@ export interface DynamicScanStatusChipSignature {
   Args: {
     status: DsStatusGroup | undefined;
     statusText?: string;
-    errorMessage?: string;
     runningAsWarn?: boolean;
   };
 }
@@ -38,12 +37,6 @@ export default class DynamicScanStatusChipComponent extends Component<DynamicSca
 
   get statusText() {
     return this.args.statusText;
-  }
-
-  get errorMessageToShow() {
-    return this.status === DsStatusGroup.ERRORED
-      ? this.args.errorMessage
-      : undefined;
   }
 
   get chipColor() {

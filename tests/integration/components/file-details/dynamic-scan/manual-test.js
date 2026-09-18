@@ -1051,5 +1051,83 @@ module(
         }
       }
     );
+
+    // The tooltip is the only place a manual scan surfaces its error, and it is
+    // limited to CYOD: those failures are the customer's own device to fix,
+    // while a farm failure is ours and its raw message stays internal.
+    test.each(
+      'status chip error tooltip',
+      [
+        {
+          isCyod: true,
+          deviceUsed: {
+            registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.WEBUSB,
+          },
+        },
+        {
+          isCyod: false,
+          deviceUsed: {
+            registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.FARM,
+          },
+        },
+      ],
+      async function (assert, { isCyod, deviceUsed }) {
+        const errorMessage = 'Device disconnected before the scan finished.';
+
+        const dynamicscan = this.server.create('dynamicscan', {
+          file: '10',
+          mode: ENUMS.DYNAMIC_MODE.MANUAL,
+          engine: ENUMS.DYNAMIC_SCAN_ENGINE.USER_MANUAL,
+          status: ENUMS.DYNAMIC_SCAN_STATUS.ERROR,
+          error_message: errorMessage,
+          device_used: deviceUsed,
+        });
+
+        this.file = this.store.push(
+          this.store.normalize(
+            'file',
+            this.server.create('file', { id: '10', is_active: true }).toJSON()
+          )
+        );
+
+        this.server.get('/v2/dynamicscans/:id', (schema, req) => {
+          return schema.dynamicscans.find(`${req.params.id}`).toJSON();
+        });
+
+        this.server.get('/v3/files/:id/last_manual_dynamic_scan', (schema) => {
+          const foundScan = schema.dynamicscans.find(dynamicscan.id)?.toJSON();
+
+          return foundScan ? [foundScan] : [];
+        });
+
+        await render(hbs`
+          <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+        `);
+
+        assert
+          .dom('[data-test-fileDetails-dynamicScan-statusChip]')
+          .hasText(t('errored'));
+
+        // The chip itself never carries the message — only the tooltip does.
+        assert
+          .dom('[data-test-fileDetails-dynamicScan-statusChip-error]')
+          .doesNotExist();
+
+        assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+
+        const tooltip =
+          '[data-test-fileDetails-dynamicScan-manual-statusChipErrorTooltip]';
+
+        await triggerEvent(find(tooltip), 'mouseenter');
+
+        if (isCyod) {
+          assert
+            .dom('[data-test-ak-tooltip-content]')
+            .containsText(errorMessage);
+        } else {
+          assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+        }
+      }
+    );
   }
 );

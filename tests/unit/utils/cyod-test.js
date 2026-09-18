@@ -2,10 +2,50 @@ import { module, test } from 'qunit';
 import ENUMS from 'irene/enums';
 import {
   canManageSigningCertificates,
+  isCyodScan,
   showsProjectSigningCertificate,
 } from 'irene/utils/cyod';
 
 module('Unit | Utility | cyod', function () {
+  module('isCyodScan', function () {
+    test('a device registered through the proxy or WebUSB is CYOD', function (assert) {
+      assert.true(
+        isCyodScan({
+          registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.PROXY,
+        })
+      );
+
+      assert.true(
+        isCyodScan({
+          registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.WEBUSB,
+        })
+      );
+    });
+
+    test('a download URL alone marks the scan as CYOD', function (assert) {
+      // registration_source is absent on scans predating it, so the URL the
+      // customer installs from is the only signal left.
+      assert.true(isCyodScan({ android_download_url: 'https://x/app.apk' }));
+      assert.true(isCyodScan({ ios_itms_url: 'itms-services://?url=x' }));
+    });
+
+    test('a farm device is not CYOD', function (assert) {
+      assert.false(
+        isCyodScan({
+          registration_source: ENUMS.DEVICE_REGISTRATION_SOURCE.FARM,
+        })
+      );
+    });
+
+    test('a scan with no device is not CYOD', function (assert) {
+      // deviceUsed is null until a device is allocated, and undefined while the
+      // scan record loads. Failing closed keeps the tooltip off a farm scan.
+      assert.false(isCyodScan(null));
+      assert.false(isCyodScan(undefined));
+      assert.false(isCyodScan({}));
+    });
+  });
+
   module('canManageSigningCertificates', function () {
     test('either management role qualifies', function (assert) {
       assert.true(
