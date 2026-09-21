@@ -28,6 +28,7 @@ interface NodeDataObject {
     | 'scopePublicApiUserWrite'
     | 'scopePublicApiUploadApp'
     | 'scopePublicApiTeamOperations'
+    | 'scopePublicApiStoreReleaseReadiness'
     | 'scopeAutoApproveNewNameSpaces'
     | 'scopeCli'
     | 'cliScopeAutoApproveNewNameSpaces'
@@ -50,6 +51,7 @@ enum ScopeNodeKey {
   TEAM_OPERATIONS = 'team-operations',
   CLI = 'cli',
   CLI_AUTO_APPROVE_NEW_NAME_SPACES = 'cli-auto-approve-new-name-spaces',
+  STORE_RELEASE_READINESS = 'store-release-readiness',
 }
 
 export default class OrganizationServiceAccountSectionSelectScopeComponent extends Component<OrganizationServiceAccountSectionSelectScopeSignature> {
@@ -179,6 +181,12 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
             showCheckbox: this.isEditOrCreateView,
             checked: this.args.serviceAccount?.scopePublicApiTeamOperations,
           },
+          {
+            key: ScopeNodeKey.STORE_RELEASE_READINESS,
+            showCheckbox: this.isEditOrCreateView,
+            checked:
+              this.args.serviceAccount?.scopePublicApiStoreReleaseReadiness,
+          },
         ],
       },
       {
@@ -208,6 +216,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
           'scopePublicApiUserWrite',
           'scopePublicApiUploadApp',
           'scopePublicApiTeamOperations',
+          'scopePublicApiStoreReleaseReadiness',
           'scopeAutoApproveNewNameSpaces',
         ],
       },
@@ -292,6 +301,16 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
           'serviceAccountModule.scopes.cli-auto-approve-new-name-spaces.description'
         ),
         accessType: this.intl.t('write'),
+      },
+      [ScopeNodeKey.STORE_RELEASE_READINESS]: {
+        scopeKeys: ['scopePublicApiStoreReleaseReadiness'],
+        scopeLabel: this.intl.t(
+          'serviceAccountModule.scopes.store-release-readiness.label'
+        ),
+        scopeDescription: this.intl.t(
+          'serviceAccountModule.scopes.store-release-readiness.description'
+        ),
+        accessType: `${this.intl.t('read')}`,
       },
     };
   }

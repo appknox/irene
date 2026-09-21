@@ -102,6 +102,17 @@ const scopeDetails = () => [
         accessType: t('write'),
         scopeKey: 'scopePublicApiTeamOperations',
       },
+      {
+        key: 'store-release-readiness',
+        scopeLabel: t(
+          'serviceAccountModule.scopes.store-release-readiness.label'
+        ),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.store-release-readiness.description'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiStoreReleaseReadiness',
+      },
     ],
   },
   {
@@ -289,6 +300,7 @@ module(
             scopePublicApiUploadApp: true,
             scopeAutoApproveNewNameSpaces: true,
             scopePublicApiTeamOperations: false,
+            scopePublicApiStoreReleaseReadiness: true,
           },
         },
         {
@@ -322,6 +334,7 @@ module(
           scope_public_api_user_write: allChecked,
           scope_public_api_upload_app: allChecked,
           scope_public_api_team_operations: allChecked,
+          scope_public_api_store_release_readiness: allChecked,
           scope_auto_approve_new_name_spaces: allChecked,
         });
 
