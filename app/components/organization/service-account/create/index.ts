@@ -67,6 +67,8 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
         duplicateServiceAccount?.scopePublicApiUploadApp ?? false,
       scopePublicApiTeamOperations:
         duplicateServiceAccount?.scopePublicApiTeamOperations ?? false,
+      scopePublicApiStoreReleaseReadiness:
+        duplicateServiceAccount?.scopePublicApiStoreReleaseReadiness ?? false,
       scopeAutoApproveNewNameSpaces:
         duplicateServiceAccount?.scopeAutoApproveNewNameSpaces ?? false,
       serviceAccountType: ServiceAccountType.USER,

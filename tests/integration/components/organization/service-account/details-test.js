@@ -109,6 +109,17 @@ const scopeDetails = () => [
         accessType: t('write'),
         scopeKey: 'scopePublicApiTeamOperations',
       },
+      {
+        key: 'store-release-readiness',
+        scopeLabel: t(
+          'serviceAccountModule.scopes.store-release-readiness.label'
+        ),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.store-release-readiness.description'
+        ),
+        accessType: t('write'),
+        scopeKey: 'scopePublicApiStoreReleaseReadiness',
+      },
     ],
   },
 ];
