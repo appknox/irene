@@ -25,16 +25,17 @@ export const SBOM_PROJECT_FACTORY_DEF = {
   // Common field (returned in both default and history modes)
   dependency_type: () => faker.helpers.arrayElement(['direct', 'transitive']),
 
-  // History-mode fields
-  sb_file: () => faker.number.int({ min: 1, max: 100 }),
+  // History-mode fields (only returned when ?history=true, so null by
+  // default — override per-test when exercising history rows)
+  sb_file: () => null,
 
-  vulnerabilities_count: () => faker.number.int({ min: 0, max: 20 }),
+  vulnerabilities_count: () => null,
 
-  status: () => faker.helpers.arrayElement(['VULNERABLE', 'SECURE']),
+  status: () => null,
 
-  composition_scan_completed_at: () => faker.date.past().toISOString(),
+  composition_scan_completed_at: () => null,
 
-  vulnerability_scan_completed_at: () => faker.date.past().toISOString(),
+  vulnerability_scan_completed_at: () => null,
 };
 
 export default Factory.extend(SBOM_PROJECT_FACTORY_DEF);

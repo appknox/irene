@@ -162,27 +162,18 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
       let sbomFileId: string | number | undefined;
       let projectId: string | number | undefined;
 
-      console.log('[navigateToApp] showHistory:', this.showHistory);
-      console.log('[navigateToApp] sbomProject.id:', sbomProject.id);
-      console.log('[navigateToApp] sbomProject.sbFile:', sbomProject.sbFile);
-
       if (this.showHistory) {
         sbomFileId = sbomProject.sbFile ?? undefined;
         projectId = sbomProject.belongsTo('project').id() ?? undefined;
-        console.log('[navigateToApp] history mode — sbomFileId:', sbomFileId, '| projectId (from belongsTo):', projectId);
       } else {
         const sbomFile = await sbomProject.latestSbFile;
         sbomFileId = sbomFile?.id;
         projectId = sbomProject.id;
-        console.log('[navigateToApp] default mode — sbomFileId:', sbomFileId, '| projectId:', projectId);
       }
 
       if (!component || !sbomFileId || !projectId) {
-        console.warn('[navigateToApp] early return — missing:', { component: !!component, sbomFileId, projectId });
         return;
       }
-
-      console.log('[navigateToApp] querying sbom-component with sbomFileId:', sbomFileId, 'q:', component.componentName || component.name);
 
       try {
         const response = await this.store.query('sbom-component', {
@@ -191,16 +182,11 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
           limit: 100,
         });
 
-        console.log('[navigateToApp] sbom-component response count:', response.length);
-
         const match = this.findMatchingSbFileComponent(
           response.slice() as SbomComponentModel[]
         );
 
-        console.log('[navigateToApp] match found:', match?.id ?? null);
-
         if (match) {
-          console.log('[navigateToApp] transitioning to:', { projectId, sbomFileId, componentId: match.id });
           this.router.transitionTo(
             'authenticated.dashboard.sbom.component-details.overview',
             projectId,
@@ -214,7 +200,6 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
           );
         }
       } catch (e) {
-        console.error('[navigateToApp] error:', e);
         this.notify.error(parseError(e, this.tPleaseTryAgain));
       }
     }

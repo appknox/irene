@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 import { capitalize } from '@ember/string';
 
-import SbomProjectModel from 'irene/models/sbom-project';
+import type SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomComponentInventoryDetailsDrawerDependencyTypeSignature {
   Args: {
