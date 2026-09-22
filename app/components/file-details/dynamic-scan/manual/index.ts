@@ -7,6 +7,7 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
 import { getDsStatusGroupForScan } from 'irene/utils/ds-status-group';
+import { isCyodScan } from 'irene/utils/cyod';
 import type FileModel from 'irene/models/file';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type DynamicscanModel from 'irene/models/dynamicscan';
@@ -77,6 +78,19 @@ export default class FileDetailsDastManual extends Component<FileDetailsDastManu
 
   get cumulativeScanStatus() {
     return getDsStatusGroupForScan(this.dynamicScan?.status ?? 0);
+  }
+
+  // Only CYOD failures are the customer's to act on — their own device dropped
+  // or refused the install. Farm failures are ours, so the raw message stays
+  // internal and an empty string leaves the tooltip disabled.
+  get statusChipTooltipMessage() {
+    if (!this.dynamicScan?.isStatusError) {
+      return '';
+    }
+
+    return isCyodScan(this.dynamicScan.deviceUsed)
+      ? this.dynamicScan.errorMessage
+      : '';
   }
 
   @action
