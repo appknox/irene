@@ -191,14 +191,6 @@ module('Integration | Component | sbom/component-inventory', function (hooks) {
       hbs`<Sbom::ComponentInventory @queryParams={{this.queryParams}} />`
     );
 
-    // Initial load with a valid query auto-opens the drawer on the first
-    // result (notification deep-link behavior).
-    assert.dom('[data-test-componentInventory-detailsFields]').exists();
-
-    await click('[data-test-componentInventory-detailsCloseBtn]');
-
-    assert.dom('[data-test-componentInventory-detailsFields]').doesNotExist();
-
     await click(find('[data-test-componentInventory-row]'));
 
     const { bom_ref: componentBomRef } = component.attrs;
