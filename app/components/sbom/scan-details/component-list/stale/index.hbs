@@ -14,7 +14,11 @@
     {{/if}}
 
     {{#if this.isStaleVersionData}}
-      <AkTooltip @title={{this.versionTooltip}} @arrow={{true}} @placement='bottom'>
+      <AkTooltip
+        @title={{t 'sbomModule.staleVersionDataTooltip' htmlSafe=true}}
+        @arrow={{true}}
+        @placement='bottom'
+      >
         <span local-class='stale-icon-wrap'>
           <AkIcon
             data-test-sbomComponent-staleVersion

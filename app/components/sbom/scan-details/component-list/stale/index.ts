@@ -28,10 +28,6 @@ export default class SbomScanDetailsComponentListStaleComponent extends Componen
   get vulnTooltip() {
     return this.intl.t('sbomModule.staleVulnDataTooltip');
   }
-
-  get versionTooltip() {
-    return this.intl.t('sbomModule.staleVersionDataTooltip');
-  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

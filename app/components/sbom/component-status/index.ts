@@ -69,10 +69,6 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     return this.intl.t('sbomModule.staleVulnDataTooltip');
   }
 
-  get versionTooltip() {
-    return this.intl.t('sbomModule.staleVersionDataTooltip');
-  }
-
   get componentStatus() {
     const status = [] as ComponentStatus[];
     const component = this.args.sbomComponent;

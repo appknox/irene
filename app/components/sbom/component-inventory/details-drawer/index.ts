@@ -155,7 +155,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   }
 
   navigateToApp = task(
-    { drop: true },
+    { restartable: true },
     async (sbomProject: SbomProjectModel) => {
       const component = this.args.component;
 
@@ -244,7 +244,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   });
 
   fetchSbomProjects = task(
-    { drop: true },
+    { restartable: true },
     async (limit: string | number, offset: string | number) => {
       const component = this.args.component;
 

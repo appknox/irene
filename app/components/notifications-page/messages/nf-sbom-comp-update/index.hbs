@@ -15,7 +15,9 @@
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.new_version}}</AkTypography>
+        >
+          {{@context.new_version}}
+        </AkTypography>
       </AkTypography>
 
       <AkTypography @tag='p' @color='textSecondary'>
@@ -24,7 +26,10 @@
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.affectedAppsLabel}}</AkTypography>
+        >
+          {{@context.affected_apps_count}}
+          {{t 'appOrS'}}
+        </AkTypography>
       </AkTypography>
     </div>
   </div>
