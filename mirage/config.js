@@ -175,6 +175,42 @@ function routes() {
 
   this.namespace = config.namespace;
 
+  this.get('/knoxiq/project/:projectId/autofix_prs/', (schema, request) => {
+    const { file_id: fileId, limit = 10, offset = 0 } = request.queryParams;
+    const projectId = Number(request.params.projectId);
+    const records = schema.autofixPrs.all().models.filter((record) => {
+      const belongsToProject = Number(record.attrs.project) === projectId;
+
+      if (!fileId) {
+        return belongsToProject;
+      }
+
+      return (
+        belongsToProject &&
+        record.attrs.commits.some(
+          (commit) => Number(commit.file) === Number(fileId)
+        )
+      );
+    });
+    const filteredRecords = records.map((record) => ({
+      ...record.attrs,
+      commits: fileId
+        ? record.attrs.commits.filter(
+            (commit) => Number(commit.file) === Number(fileId)
+          )
+        : record.attrs.commits,
+    }));
+    const start = Number(offset);
+    const end = start + Number(limit);
+
+    return {
+      count: filteredRecords.length,
+      next: null,
+      previous: null,
+      results: filteredRecords.slice(start, end),
+    };
+  });
+
   this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });

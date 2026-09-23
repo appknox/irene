@@ -111,16 +111,37 @@
     </:header>
 
     <:headerCTA>
-      {{#if (or this.baseFile this.fileToCompare)}}
-        <AkButton
-          @disabled={{this.disableCompareBtn}}
-          {{style minWidth='100px'}}
-          {{on 'click' this.onCompareBtnClick}}
-          data-test-fileList-projectOverview-header-compareBtn
-        >
-          {{t 'compare'}}
-        </AkButton>
-      {{/if}}
+      <AkStack @alignItems='center' @spacing='1.5'>
+        {{#if this.isKnoxIqEnabled}}
+          <AkLink
+            @route='authenticated.dashboard.project.autofix'
+            @model={{this.project.id}}
+            @query={{hash file_id=null}}
+            @color='primary'
+            @fontWeight='bold'
+            @underline='none'
+            data-test-fileList-projectOverview-autofixHistoryLink
+          >
+            <:leftIcon>
+              <AkIcon @iconName='history' />
+            </:leftIcon>
+            <:default>
+              {{t 'autofix.historyTitle'}}
+            </:default>
+          </AkLink>
+        {{/if}}
+
+        {{#if (or this.baseFile this.fileToCompare)}}
+          <AkButton
+            @disabled={{this.disableCompareBtn}}
+            {{style minWidth='100px'}}
+            {{on 'click' this.onCompareBtnClick}}
+            data-test-fileList-projectOverview-header-compareBtn
+          >
+            {{t 'compare'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
     </:headerCTA>
   </FileCompare::Header>
 

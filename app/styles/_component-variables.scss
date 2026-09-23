@@ -3951,6 +3951,10 @@ body {
   );
   --knoxiq-scan-summary-border-color: var(--border-color-1);
 
+  // variables for knox-iq/autofix-history
+  --knoxiq-autofix-history-summary-border-color: var(--border-color-1);
+  --knoxiq-autofix-history-summary-background-color: var(--background-main);
+
   // variables for knox-iq/status-card
   --knoxiq-status-card-border-color: var(--border-color-1);
   --knoxiq-status-card-border-radius: var(--border-radius-8);
