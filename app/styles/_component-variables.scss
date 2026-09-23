@@ -839,6 +839,9 @@ body {
   --sbom-app-platform-color-ios: var(--ios);
   --sbom-app-platform-color-android: var(--android);
 
+  // variables for sbom/component-status
+  --sbom-component-status-stale-icon-wrap-background-color: var(--info-light);
+
   // variables for sbom/scan-report-drawer
   --sbom-scan-report-dr-border-radius: var(--border-radius);
   --sbom-scan-report-dr-border-color: var(--border-color-1);
@@ -866,6 +869,16 @@ body {
   );
   --sbom-scan-details-component-list-container-border-radius: var(
     --border-radius
+  );
+
+  // variables for sbom/scan-details/component-list/name
+  --sbom-scan-details-component-list-name-stale-icon-wrap-background-color: var(
+    --info-light
+  );
+
+  // variables for sbom/scan-details/component-list/stale
+  --sbom-scan-details-component-list-stale-icon-wrap-background-color: var(
+    --info-light
   );
 
   // variables for sbom/scan-details/component-list/type-header
@@ -1041,6 +1054,9 @@ body {
   );
   --sbom-scan-details-component-tree-highlighted-text-color: var(
     --common-white
+  );
+  --sbom-scan-details-component-tree-stale-icon-wrap-background-color: var(
+    --info-light
   );
 
   // variables for sbom/scan-details/ai-bom-component-list
@@ -3916,6 +3932,28 @@ body {
 
   // variables for notifications-page/messages/nf-jira-push-err
   --notifications-page-messages-nf-jira-push-err-error-container-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for notifications-page/messages/nf-sbom-comp-update
+  --notifications-page-messages-nf-sbom-comp-update-component-card-border-color: var(
+    --neutral-grey-100
+  );
+  --notifications-page-messages-nf-sbom-comp-update-component-name-background-color: var(
+    --neutral-grey-50
+  );
+  --notifications-page-messages-nf-sbom-comp-update-component-details-border-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for notifications-page/messages/nf-sbom-vuln-update
+  --notifications-page-messages-nf-sbom-vuln-update-component-card-border-color: var(
+    --neutral-grey-100
+  );
+  --notifications-page-messages-nf-sbom-vuln-update-component-name-background-color: var(
+    --neutral-grey-50
+  );
+  --notifications-page-messages-nf-sbom-vuln-update-component-details-border-color: var(
     --neutral-grey-100
   );
 
