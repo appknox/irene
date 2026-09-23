@@ -1,0 +1,32 @@
+.pr-summary {
+  display: grid;
+  grid-template-columns:
+    minmax(140px, 1.1fr)
+    minmax(120px, 0.8fr)
+    minmax(200px, 1.5fr)
+    minmax(110px, 0.7fr)
+    max-content
+    max-content;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.7857em 1.4285em;
+  border: 1px solid var(--knoxiq-autofix-history-summary-border-color);
+  background-color: var(--knoxiq-autofix-history-summary-background-color);
+
+  > * {
+    min-width: 0;
+  }
+
+  p {
+    overflow-wrap: anywhere;
+  }
+}
+
+.expand-icon {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.expanded {
+    transform: rotate(-180deg);
+  }
+}

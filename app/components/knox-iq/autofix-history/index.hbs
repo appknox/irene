@@ -1,0 +1,244 @@
+<AkStack @direction='column' @spacing='2.5'>
+  <AkBreadcrumbs::AutoTrail
+    data-test-knoxIqAutofixHistory-breadcrumbs
+  />
+
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography
+      @variant='h5'
+      data-test-knoxIqAutofixHistory-title
+    >
+      {{t 'autofix.historyTitle'}}
+    </AkTypography>
+
+    <AkTypography
+      @color='textSecondary'
+      data-test-knoxIqAutofixHistory-description
+    >
+      {{this.pageSubtitle}}
+    </AkTypography>
+  </AkStack>
+
+  <AkPaginationProvider
+    @results={{this.autofixPRs}}
+    @onItemPerPageChange={{this.updatePagination}}
+    @totalItems={{this.totalAutofixPRs}}
+    @nextAction={{this.updatePagination}}
+    @prevAction={{this.updatePagination}}
+    @itemPerPageOptions={{array 10 20 30}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.fetchAutofixHistory.isRunning}}
+      <AkStack
+        class='py-7'
+        @alignItems='center'
+        @justifyContent='center'
+        data-test-knoxIqAutofixHistory-loading
+      >
+        <AkLoader @size={{32}} />
+      </AkStack>
+    {{else if this.hasNoHistory}}
+      <AkStack
+        class='py-7'
+        @alignItems='center'
+        @justifyContent='center'
+        @direction='column'
+        @spacing='1'
+        data-test-knoxIqAutofixHistory-empty
+      >
+        <AkIcon @iconName='history' @size='medium' @color='textSecondary' />
+        <AkTypography @variant='h5'>
+          {{t 'autofix.emptyTitle'}}
+        </AkTypography>
+        <AkTypography @color='textSecondary' @align='center'>
+          {{t 'autofix.emptyDescription'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <AkAccordion::Group @openMultiple={{true}} as |group|>
+        <AkStack @direction='column' @spacing='1.5'>
+          {{#each pgc.currentPageResults as |pr|}}
+            <AkAccordion
+              @id='autofix-pr-{{pr.id}}'
+              @accordionCtx={{group}}
+              @variant='secondary'
+              data-test-knoxIqAutofixHistory-pr={{pr.id}}
+            >
+              <:summary as |accordion|>
+                <div
+                  local-class='pr-summary'
+                  data-test-knoxIqAutofixHistory-prSummary
+                >
+                  <AkStack @direction='column' @spacing='0.5'>
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{t 'autofix.repository'}}
+                    </AkTypography>
+                    <AkTypography
+                      @fontWeight='bold'
+                      data-test-knoxIqAutofixHistory-repository
+                    >
+                      {{pr.repo}}
+                    </AkTypography>
+                  </AkStack>
+
+                  <AkStack @direction='column' @spacing='0.5'>
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{t 'autofix.baseBranch'}}
+                    </AkTypography>
+                    <AkTypography data-test-knoxIqAutofixHistory-baseBranch>
+                      {{pr.baseBranch}}
+                    </AkTypography>
+                  </AkStack>
+
+                  <AkStack @direction='column' @spacing='0.5'>
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{t 'autofix.branch'}}
+                    </AkTypography>
+                    <AkTypography data-test-knoxIqAutofixHistory-branch>
+                      {{pr.branch}}
+                    </AkTypography>
+                  </AkStack>
+
+                  <AkStack @direction='column' @spacing='0.5'>
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{t 'autofix.updated'}}
+                    </AkTypography>
+                    <AkTypography data-test-knoxIqAutofixHistory-updatedOn>
+                      {{dayjs-from-now pr.updatedOn}}
+                    </AkTypography>
+                  </AkStack>
+
+                  <a
+                    href={{pr.prUrl}}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    data-test-knoxIqAutofixHistory-prLink
+                  >
+                    <AkStack @alignItems='center' @spacing='0.5'>
+                      <AkTypography @color='primary'>
+                        {{t 'autofix.openPullRequest'}}
+                      </AkTypography>
+                      <AkIcon @iconName='open-in-new' @color='primary' />
+                    </AkStack>
+                  </a>
+
+                  <AkIconButton
+                    @size='small'
+                    aria-label={{t 'autofix.toggleCommitHistory'}}
+                    {{on 'click' accordion.onSummaryClick}}
+                    data-test-knoxIqAutofixHistory-toggle
+                  >
+                    <AkIcon
+                      @iconName='arrow-drop-down'
+                      local-class='expand-icon {{if
+                        accordion.isExpanded
+                        "expanded"
+                      }}'
+                    />
+                  </AkIconButton>
+                </div>
+              </:summary>
+
+              <:content>
+                <AkStack class='p-3' @direction='column' @spacing='2'>
+                  <AkTypography @variant='subtitle1' @fontWeight='bold'>
+                    {{t 'autofix.commits'}}
+                  </AkTypography>
+
+                  {{#each pr.commits as |commit|}}
+                    <AkStack
+                      @direction='column'
+                      @spacing='1'
+                      data-test-knoxIqAutofixHistory-commit={{commit.id}}
+                    >
+                      <AkStack
+                        @alignItems='center'
+                        @spacing='1'
+                      >
+                        <AkTypography
+                          @variant='body3'
+                          data-test-knoxIqAutofixHistory-commitFile
+                        >
+                          {{t 'autofix.fileId' fileId=commit.file}}
+                        </AkTypography>
+
+                        <a
+                          href={{concat
+                            'https://github.com/'
+                            pr.repo
+                            '/commit/'
+                            commit.commit_sha
+                          }}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          data-test-knoxIqAutofixHistory-commitLink
+                        >
+                          <AkTypography @color='primary'>
+                            {{commit.commit_sha}}
+                          </AkTypography>
+                        </a>
+
+                        <AkTypography
+                          @variant='body3'
+                          @color='textSecondary'
+                          data-test-knoxIqAutofixHistory-commitDate
+                        >
+                          {{dayjs-from-now commit.created_on}}
+                        </AkTypography>
+                      </AkStack>
+
+                      <AkStack @spacing='1' @alignItems='center'>
+                        <AkTypography
+                          @variant='body3'
+                          @color='textSecondary'
+                        >
+                          {{t 'autofix.patchedFiles'}}
+                        </AkTypography>
+
+                        <AkStack @spacing='0.5' @alignItems='center'>
+                          {{#each commit.patched_files as |patchedFile|}}
+                            <AkChip
+                              @label={{patchedFile}}
+                              @variant='outlined'
+                              @size='small'
+                              data-test-knoxIqAutofixHistory-patchedFile
+                            />
+                          {{else}}
+                            <AkTypography @variant='body3'>
+                              {{t 'autofix.noPatchedFiles'}}
+                            </AkTypography>
+                          {{/each}}
+                        </AkStack>
+                      </AkStack>
+                    </AkStack>
+
+                    <AkDivider />
+                  {{/each}}
+                </AkStack>
+              </:content>
+            </AkAccordion>
+          {{/each}}
+        </AkStack>
+      </AkAccordion::Group>
+
+      <AkPagination
+        class='mt-3'
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @totalItems={{pgc.totalItems}}
+        @tableItemLabel={{t 'autofix.pullRequests'}}
+        @perPageTranslation={{t 'autofix.itemsPerPage'}}
+        data-test-knoxIqAutofixHistory-pagination
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>

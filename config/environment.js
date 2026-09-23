@@ -348,6 +348,7 @@ module.exports = function (environment) {
       capturedApiScanStart: 'start_apiscan_v2',
       amAppVersions: 'v2/am_app_versions',
       userVaNotificationPref: 'nf_email_notification_preference',
+      autofixPrs: 'autofix_prs',
     },
     whitelabel: {
       theme: 'dark',
