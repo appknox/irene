@@ -144,10 +144,9 @@
   }
 
   .menu-item-icon-svg {
-    font-size: 1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
-    display: inline-block;
+    path {
+      stroke: var(--side-nav-inherit-background-text-color) !important;
+    }
   }
 
   .lower-menu {
