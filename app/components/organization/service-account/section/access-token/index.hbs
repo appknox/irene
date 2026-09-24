@@ -39,7 +39,7 @@
             <AkTextField
               data-test-serviceAccountSection-accessToken-expiryInDaysInput
               data-test-cy='serviceAccountSection-accessToken-expiryInDaysInput'
-              @disabled={{this.doesNotExpire}}
+              @disabled={{this.effectiveDoesNotExpire}}
               @value='{{this.expiryInDays}}'
               {{on 'keyup' this.handleExpireInDaysChange}}
             >
@@ -48,7 +48,7 @@
                   <AkIconButton
                     data-test-serviceAccountSection-accessToken-expiryInDaysDecrementBtn
                     @size='small'
-                    disabled={{this.doesNotExpire}}
+                    disabled={{this.effectiveDoesNotExpire}}
                     {{on 'click' this.handleExpireInDaysDecrement}}
                   >
                     <AkIcon @iconName='remove' />
@@ -59,7 +59,7 @@
                   <AkIconButton
                     data-test-serviceAccountSection-accessToken-expiryInDaysIncrementBtn
                     @size='small'
-                    disabled={{this.doesNotExpire}}
+                    disabled={{this.effectiveDoesNotExpire}}
                     {{on 'click' this.handleExpireInDaysIncrement}}
                   >
                     <AkIcon @iconName='add' />
@@ -91,28 +91,40 @@
           <AkCheckbox
             data-test-serviceAccountSection-accessToken-doesNotExpireCheckbox
             data-test-cy='serviceAccountSection-accessToken-doesNotExpireCheckbox'
-            @checked={{this.doesNotExpire}}
+            @checked={{this.effectiveDoesNotExpire}}
+            @disabled={{this.isCliEnabled}}
             @onChange={{this.handleNoExpiryChange}}
           />
         </AkFormControlLabel>
       </AkStack>
 
-      <AkTypography
-        data-test-serviceAccountSection-accessToken-expiryHelperText
-        class='mt-2'
-        @color='secondary'
-        @fontWeight='medium'
-      >
-        {{if
-          this.doesNotExpire
-          (t 'serviceAccountModule.doesNotExpireHelperText')
-          (t
-            'serviceAccountModule.expiryHelperText'
-            date=this.expiryInDate
-            htmlSafe=true
-          )
-        }}
-      </AkTypography>
+      {{#if this.isCliEnabled}}
+        <AkTypography
+          data-test-serviceAccountSection-accessToken-cliEnabledExpiryNote
+          class='mt-2'
+          @color='secondary'
+          @fontWeight='medium'
+        >
+          {{t 'serviceAccountModule.cliEnabledNoExpiryNote'}}
+        </AkTypography>
+      {{else}}
+        <AkTypography
+          data-test-serviceAccountSection-accessToken-expiryHelperText
+          class='mt-2'
+          @color='secondary'
+          @fontWeight='medium'
+        >
+          {{if
+            this.effectiveDoesNotExpire
+            (t 'serviceAccountModule.doesNotExpireHelperText')
+            (t
+              'serviceAccountModule.expiryHelperText'
+              date=this.expiryInDate
+              htmlSafe=true
+            )
+          }}
+        </AkTypography>
+      {{/if}}
     {{else}}
       <AkStack @direction='column' @spacing='0.5'>
         <AkTypography
@@ -240,7 +252,7 @@
             data-test-serviceAccountSection-accessToken-expiryValue
             data-test-cy='serviceaccountsection-accesstoken-expiryvalue'
           >
-            {{if this.doesNotExpire (t 'noExpiry') this.expiresOn}}
+            {{if this.effectiveDoesNotExpire (t 'noExpiry') this.expiresOn}}
           </AkTypography>
         {{/if}}
       </AkStack>

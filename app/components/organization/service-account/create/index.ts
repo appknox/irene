@@ -46,7 +46,7 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
   willDestroy(): void {
     super.willDestroy();
 
-    this.serviceAccountService.selectedProjectsForCreate = {};
+    this.serviceAccountService.pendingProjectSelections = {};
   }
 
   initServiceAccount(duplicateServiceAccount: ServiceAccountModel | null) {
@@ -71,6 +71,9 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
         duplicateServiceAccount?.scopeAutoApproveNewNameSpaces ?? false,
       serviceAccountType: ServiceAccountType.USER,
       allProjects: duplicateServiceAccount?.allProjects ?? true,
+      // Never copied from a duplicated account: at most one CLI-enabled
+      // service account per access level is allowed per organization.
+      cliEnabled: false,
       ...(noExpiry ? { expiry: null } : {}),
     });
   }
@@ -90,7 +93,7 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
 
       if (!serviceAccount.allProjects) {
         for (const project of Object.values(
-          this.serviceAccountService.selectedProjectsForCreate
+          this.serviceAccountService.pendingProjectSelections
         )) {
           await waitForPromise(serviceAccount.addProject(Number(project.id)));
         }

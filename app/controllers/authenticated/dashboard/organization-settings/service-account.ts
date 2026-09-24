@@ -6,11 +6,17 @@ import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
 export default class AuthenticatedDashboardOrganizationSettingsServiceAccountController extends Controller {
   @service declare intl: IntlService;
 
-  queryParams = ['sa_limit', 'sa_offset', 'show_system_created'];
+  queryParams = [
+    'sa_limit',
+    'sa_offset',
+    'show_system_created',
+    'show_cli_enabled',
+  ];
 
   sa_limit = 10;
   sa_offset = 0;
   show_system_created = false;
+  show_cli_enabled = false;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {

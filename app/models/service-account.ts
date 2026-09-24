@@ -45,6 +45,9 @@ export default class ServiceAccountModel extends Model {
   @attr('boolean')
   declare allProjects: boolean;
 
+  @attr('boolean')
+  declare cliEnabled: boolean;
+
   @hasMany('service-account-project', { async: true, inverse: null })
   declare projects: AsyncHasMany<ServiceAccountProjectModel>;
 

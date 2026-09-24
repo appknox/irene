@@ -107,6 +107,7 @@
             @model={{project}}
             @isEditView={{@isEditView}}
             @isCreateView={{@isCreateView}}
+            @isPendingSave={{@isPendingSave}}
             @setServiceAccountProjectToDelete={{this.setServiceAccountProjectToDelete}}
           />
         {{/each}}
@@ -135,6 +136,7 @@
 
 <Organization::ServiceAccount::AddProject::Drawer
   @isCreateView={{@isCreateView}}
+  @isPendingSave={{@isPendingSave}}
   @open={{this.openAddProjectDrawer}}
   @onClose={{this.handleCloseAddProjectDrawer}}
   @serviceAccount={{@serviceAccount}}

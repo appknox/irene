@@ -422,6 +422,50 @@ module('Acceptance | Organization Service Account List', function (hooks) {
     }
   );
 
+  test('a CLI-enabled service account cannot be deleted', async function (assert) {
+    // feature is enabled
+    this.organization.update({
+      features: {
+        public_apis: true,
+      },
+    });
+
+    // role set to owner
+    this.organizationMe.update({
+      is_owner: true,
+      is_admin: true,
+    });
+
+    const cliServiceAccount = this.server.create('service-account', {
+      service_account_type: ServiceAccountType.USER,
+      cli_enabled: true,
+    });
+
+    this.server.get('/service_accounts', (schema) => {
+      const results = schema.db.serviceAccounts.where({
+        service_account_type: 1,
+      });
+
+      return { previous: null, next: null, count: results.length, results };
+    });
+
+    await visit('/dashboard/organization/settings/service-account');
+
+    const cliRow = find(
+      `[data-test-cy="serviceAccountList-row-${cliServiceAccount.id}"]`
+    );
+
+    const moreOptionBtn = cliRow.querySelector(
+      '[data-test-serviceAccountList-moreOptionBtn]'
+    );
+
+    await click(moreOptionBtn);
+
+    assert
+      .dom(`[data-test-serviceAccountList-moreOptionMenuItem="${t('delete')}"]`)
+      .doesNotExist();
+  });
+
   test('it should navigate to service account details page', async function (assert) {
     // feature is enabled
     this.organization.update({
