@@ -2547,6 +2547,10 @@
         "label": "Team Operations",
         "description": "Read and Write access for listing, creating, updating and deleting all teams of this organization"
       },
+      "store-release-readiness": {
+        "label": "Store Release Readiness",
+        "description": "Read access for requesting store release readiness results for this organization"
+      },
       "auto-approve-new-name-spaces": {
         "label": "Auto Approve New Namespaces",
         "writeDescription": "Write access for auto approving new namespaces in this organization"
