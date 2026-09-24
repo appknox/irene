@@ -20,6 +20,8 @@ export interface OrganizationServiceAccountSectionSelectProjectListSignature {
     serviceAccount: ServiceAccountModel;
     isEditView: boolean;
     isCreateView: boolean;
+    isPendingSave: boolean;
+    registerRefreshFn?: (fn: () => void) => void;
   };
 }
 
@@ -52,12 +54,18 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
   ) {
     super(owner, args);
 
+    this.args.registerRefreshFn?.(this.handleSelectedProjectsRefresh);
+
     this.fetchSelectedProjects.perform(this.limit, this.offset);
   }
 
+  get isStaged() {
+    return this.args.isCreateView || this.args.isPendingSave;
+  }
+
   get selectedProjectList() {
-    return this.args.isCreateView
-      ? Object.values(this.serviceAccount.selectedProjectsForCreate).slice(
+    return this.isStaged
+      ? Object.values(this.serviceAccount.pendingProjectSelections).slice(
           this.offset,
           this.offset + this.limit
         )
@@ -65,8 +73,8 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
   }
 
   get totalSelectedProjectCount() {
-    return this.args.isCreateView
-      ? Object.keys(this.serviceAccount.selectedProjectsForCreate).length
+    return this.isStaged
+      ? Object.keys(this.serviceAccount.pendingProjectSelections).length
       : this.serviceAccountProjectResponse?.meta?.count || 0;
   }
 
@@ -127,10 +135,15 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
 
   @action
   handleSelectedProjectsRefresh() {
+    // `force: true` — called after a real save (project just added, or the
+    // access level just switched away from pending), so the fetch must run
+    // even if `isPendingSave` hasn't been re-derived from the parent's
+    // updated args yet at this exact point in the run loop.
     this.fetchSelectedProjects.perform(
       this.limit,
       this.offset,
-      this.searchQuery
+      this.searchQuery,
+      true
     );
   }
 
@@ -176,8 +189,8 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
   );
 
   fetchSelectedProjects = task(
-    async (limit: number, offset: number, query = '') => {
-      if (!this.args.isCreateView) {
+    async (limit: number, offset: number, query = '', force = false) => {
+      if (!this.isStaged || force) {
         try {
           this.serviceAccountProjectResponse = (await this.store.query(
             'service-account-project',

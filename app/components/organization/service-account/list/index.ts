@@ -46,6 +46,7 @@ export default class OrganizationServiceAccountListComponent extends Component<O
       this.limit,
       this.offset,
       this.showSystemCreated,
+      this.showCliEnabled,
       false
     );
   }
@@ -54,7 +55,7 @@ export default class OrganizationServiceAccountListComponent extends Component<O
     return [
       {
         name: this.intl.t('accountName'),
-        valuePath: 'name',
+        component: 'organization/service-account/list/name',
       },
       {
         name: this.intl.t('accessKeyID'),
@@ -90,6 +91,10 @@ export default class OrganizationServiceAccountListComponent extends Component<O
     return this.args.queryParams.show_system_created;
   }
 
+  get showCliEnabled() {
+    return this.args.queryParams.show_cli_enabled;
+  }
+
   get serviceAccountList() {
     return this.serviceAccountResponse?.slice() || [];
   }
@@ -118,17 +123,42 @@ export default class OrganizationServiceAccountListComponent extends Component<O
 
   @action
   handleShowSystemCreated(event: Event, checked: boolean) {
-    this.fetchServiceAccounts.perform(this.limit, 0, checked);
+    this.fetchServiceAccounts.perform(
+      this.limit,
+      0,
+      checked,
+      this.showCliEnabled
+    );
+  }
+
+  @action
+  handleShowCliEnabled(event: Event, checked: boolean) {
+    this.fetchServiceAccounts.perform(
+      this.limit,
+      0,
+      this.showSystemCreated,
+      checked
+    );
   }
 
   @action
   handleNextPrevAction({ limit, offset }: { limit: number; offset: number }) {
-    this.fetchServiceAccounts.perform(limit, offset, this.showSystemCreated);
+    this.fetchServiceAccounts.perform(
+      limit,
+      offset,
+      this.showSystemCreated,
+      this.showCliEnabled
+    );
   }
 
   @action
   handleItemPerPageChange({ limit }: { limit: number }) {
-    this.fetchServiceAccounts.perform(limit, 0, this.showSystemCreated);
+    this.fetchServiceAccounts.perform(
+      limit,
+      0,
+      this.showSystemCreated,
+      this.showCliEnabled
+    );
   }
 
   @action
@@ -136,20 +166,23 @@ export default class OrganizationServiceAccountListComponent extends Component<O
     this.fetchServiceAccounts.perform(
       this.limit,
       this.offset,
-      this.showSystemCreated
+      this.showSystemCreated,
+      this.showCliEnabled
     );
   }
 
   setRouteQueryParams(
     limit?: number,
     offset?: number,
-    showSystemCreated?: boolean
+    showSystemCreated?: boolean,
+    showCliEnabled?: boolean
   ) {
     this.router.transitionTo({
       queryParams: {
         sa_limit: limit,
         sa_offset: offset,
         show_system_created: showSystemCreated,
+        show_cli_enabled: showCliEnabled,
       },
     });
   }
@@ -159,16 +192,26 @@ export default class OrganizationServiceAccountListComponent extends Component<O
       limit: number,
       offset: number,
       showSystemCreated: boolean,
+      showCliEnabled: boolean,
       setQueryParams = true
     ) => {
       if (setQueryParams) {
-        this.setRouteQueryParams(limit, offset, showSystemCreated);
+        this.setRouteQueryParams(
+          limit,
+          offset,
+          showSystemCreated,
+          showCliEnabled
+        );
       }
 
-      const data: Record<string, number> = { limit, offset };
+      const data: Record<string, number | boolean> = { limit, offset };
 
       if (!showSystemCreated) {
         data['service_account_type'] = ServiceAccountType.USER;
+      }
+
+      if (showCliEnabled) {
+        data['cli_enabled'] = true;
       }
 
       try {

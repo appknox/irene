@@ -110,6 +110,64 @@ module(
       }
     );
 
+    test('it forces no-expiry when the account is CLI enabled', async function (assert) {
+      this.serviceAccount.cliEnabled = true;
+
+      await render(hbs`<Organization::ServiceAccount::Section::AccessToken
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-accessToken-actionBtn]');
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-accessToken-doesNotExpireCheckbox]'
+        )
+        .isChecked()
+        .isDisabled();
+
+      assert
+        .dom('[data-test-serviceAccountSection-accessToken-expiryInDaysInput]')
+        .isDisabled();
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-accessToken-cliEnabledExpiryNote]'
+        )
+        .hasText(t('serviceAccountModule.cliEnabledNoExpiryNote'));
+
+      assert
+        .dom('[data-test-serviceAccountSection-accessToken-expiryHelperText]')
+        .doesNotExist();
+    });
+
+    test('it regenerates with no expiry for a CLI enabled account', async function (assert) {
+      assert.expect(1);
+
+      this.serviceAccount.cliEnabled = true;
+
+      this.server.put('/service_accounts/:id/key_reset', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        assert.strictEqual(data.expiry, null);
+
+        return schema.serviceAccounts
+          .find(req.params.id)
+          .update({ expiry: null })
+          .toJSON();
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::AccessToken
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-accessToken-actionBtn]');
+
+      await click(
+        '[data-test-serviceAccountSection-accessToken-regenerateBtn]'
+      );
+    });
+
     test.each(
       'it should regenerate access token',
       [{ noExpiry: true }, { noExpiry: false }, { fail: true }],
