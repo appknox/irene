@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
+import { capitalize } from '@ember/string';
 
 import type {
   HealthScoreAuditTrailEntry,
@@ -170,8 +171,24 @@ export default class FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerComp
     return `${formatted} · ${this.intl.t('completed')}`;
   }
 
+  private formatTitle(text: string) {
+    if (!text) {
+      return '';
+    }
+
+    return text
+      .split(/[^a-zA-Z0-9]+/)
+      .filter(Boolean)
+      .map((word) => capitalize(word.toLowerCase()))
+      .join(' ');
+  }
+
   private scanType(eventType: string) {
-    return eventType.split('_')[0] ?? '';
+    const knownPrefix = ['sast', 'dast', 'api', 'manual'].find(
+      (prefix) => eventType === prefix || eventType.startsWith(`${prefix}_`)
+    );
+
+    return knownPrefix ?? eventType;
   }
 
   private titleFor(
@@ -181,13 +198,17 @@ export default class FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerComp
   ) {
     if (entry.knoxiq_ran) {
       const shortKey = SCAN_TYPE_SHORT_KEYS[type];
-      const scanType = shortKey ? this.intl.t(shortKey) : type;
+      const scanType = shortKey
+        ? this.intl.t(shortKey)
+        : this.formatTitle(entry.event_type);
 
       return this.intl.t('healthScore.knoxiqOnScan', { scanType });
     }
 
     const titleKey = SCAN_TYPE_TITLE_KEYS[type];
-    const baseTitle = titleKey ? this.intl.t(titleKey) : entry.event_type;
+    const baseTitle = titleKey
+      ? this.intl.t(titleKey)
+      : this.formatTitle(entry.event_type);
 
     if (runNumber == null) {
       return baseTitle;
