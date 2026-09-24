@@ -49,6 +49,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   @tracked sbomProjectResponse: SbomProjectQueryResponse | null = null;
   @tracked limit = 10;
   @tracked offset = 0;
+  @tracked showHistory = false;
 
   tPleaseTryAgain: string;
 
@@ -82,6 +83,10 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
       {
         name: this.intl.t('namespace'),
         component: 'sbom/component-inventory/details-drawer/namespace',
+      },
+      {
+        name: this.intl.t('sbomModule.dependencyType'),
+        component: 'sbom/component-inventory/details-drawer/dependency-type',
       },
       {
         name: this.intl.t('sbomModule.lastSbomAnalysisOn'),
@@ -130,6 +135,12 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
     this.downloadExport.perform();
   }
 
+  @action
+  toggleHistory() {
+    this.showHistory = !this.showHistory;
+    this.fetchSbomProjects.perform(this.limit, 0);
+  }
+
   /* Reload the apps list whenever a different component is selected. */
   @action
   loadApps() {
@@ -144,19 +155,30 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   }
 
   navigateToApp = task(
-    { drop: true },
+    { restartable: true },
     async (sbomProject: SbomProjectModel) => {
       const component = this.args.component;
-      const sbomFile = await sbomProject.latestSbFile;
 
-      if (!component || !sbomFile) {
+      let sbomFileId: string | number | undefined;
+      let projectId: string | number | undefined;
+
+      if (this.showHistory) {
+        sbomFileId = sbomProject.sbFile ?? undefined;
+        projectId = sbomProject.belongsTo('project').id() ?? undefined;
+      } else {
+        const sbomFile = await sbomProject.latestSbFile;
+        sbomFileId = sbomFile?.id;
+        projectId = sbomProject.id;
+      }
+
+      if (!component || !sbomFileId || !projectId) {
         return;
       }
 
       try {
         const response = await this.store.query('sbom-component', {
-          sbomFileId: sbomFile.id,
-          q: component.name,
+          sbomFileId,
+          q: component.componentName || component.name,
           limit: 100,
         });
 
@@ -167,8 +189,8 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
         if (match) {
           this.router.transitionTo(
             'authenticated.dashboard.sbom.component-details.overview',
-            sbomProject.id,
-            sbomFile.id,
+            projectId,
+            sbomFileId,
             match.id,
             0
           );
@@ -222,7 +244,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
   });
 
   fetchSbomProjects = task(
-    { drop: true },
+    { restartable: true },
     async (limit: string | number, offset: string | number) => {
       const component = this.args.component;
 
@@ -238,6 +260,7 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
           sbomComponentId: component.id,
           limit,
           offset,
+          ...(this.showHistory ? { history: true } : {}),
         })) as SbomProjectQueryResponse;
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));

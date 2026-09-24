@@ -1,0 +1,37 @@
+{{#if this.isStale}}
+  <AkStack @spacing='1' @alignItems='center' data-test-sbomComponent-stale>
+    {{#if this.isStaleVulnData}}
+      <AkTooltip @title={{this.vulnTooltip}} @arrow={{true}} @placement='bottom'>
+        <span local-class='stale-icon-wrap'>
+          <AkIcon
+            data-test-sbomComponent-staleVuln
+            @size='small'
+            @iconName='shield-question'
+            @color='info'
+          />
+        </span>
+      </AkTooltip>
+    {{/if}}
+
+    {{#if this.isStaleVersionData}}
+      <AkTooltip
+        @title={{t 'sbomModule.staleVersionDataTooltip' htmlSafe=true}}
+        @arrow={{true}}
+        @placement='bottom'
+      >
+        <span local-class='stale-icon-wrap'>
+          <AkIcon
+            data-test-sbomComponent-staleVersion
+            @size='small'
+            @iconName='clock-arrow-up'
+            @color='info'
+          />
+        </span>
+      </AkTooltip>
+    {{/if}}
+  </AkStack>
+{{else}}
+  <AkTypography data-test-sbomComponent-stale-none @color='textSecondary'>
+    -
+  </AkTypography>
+{{/if}}

@@ -48,6 +48,27 @@ export default class SbomComponentStatusComponent extends Component<SbomComponen
     );
   }
 
+  get isStaleVulnData() {
+    const component = this.args.sbomComponent as SbomComponentModel;
+
+    return Boolean(component?.isStaleVulnData);
+  }
+
+  get isStaleVersionData() {
+    const component = this.args.sbomComponent as SbomComponentModel;
+
+    return Boolean(component?.isStaleVersionData);
+  }
+
+  // Show stale-version icon only when no OUTDATED chip is already displayed
+  get showStaleVersionIcon() {
+    return this.isStaleVersionData && !this.isOutdated;
+  }
+
+  get vulnTooltip() {
+    return this.intl.t('sbomModule.staleVulnDataTooltip');
+  }
+
   get componentStatus() {
     const status = [] as ComponentStatus[];
     const component = this.args.sbomComponent;

@@ -8,6 +8,21 @@
           {{this.packageName}}
         </AkTypography>
 
+        {{#if @sbomFile.isStale}}
+          <AkTooltip
+            @title={{t 'sbomModule.staleFileTooltip'}}
+            @arrow={{true}}
+            @placement='bottom'
+          >
+            <AkIcon
+              data-test-sbomScanDetails-staleIcon
+              @iconName='mdi:clock-alert-outline'
+              @size='small'
+              @color='warn'
+            />
+          </AkTooltip>
+        {{/if}}
+
         <Sbom::AppPlatform @sbomProject={{@sbomProject}} />
       </AkStack>
     </:summary>

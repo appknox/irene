@@ -1,0 +1,71 @@
+<AkStack @direction='column' @spacing='1.5' @alignItems='stretch'>
+  <AkTypography data-test-nf-sbom-comp-update-primary-message>
+    {{t 'notificationModule.messages.nf-sbom-comp-update'}}
+  </AkTypography>
+
+  <div local-class='component-card' data-test-nf-sbom-comp-update-card>
+    <AkTypography
+      data-test-nf-sbom-comp-update-component-name
+      local-class='component-name'
+      @tag='p'
+      @fontWeight='bold'
+    >
+      {{this.displayName}}
+    </AkTypography>
+
+    <div local-class='component-details'>
+      <AkTypography
+        data-test-nf-sbom-comp-update-new-version
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
+        {{t 'notificationModule.newVersion'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >
+          {{@context.new_version}}
+        </AkTypography>
+      </AkTypography>
+
+      <AkTypography
+        data-test-nf-sbom-comp-update-affects
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
+        {{t 'notificationModule.affects'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >
+          {{@context.affected_apps_count}}
+          {{t 'appOrS'}}
+        </AkTypography>
+      </AkTypography>
+    </div>
+  </div>
+
+  <AkStack @spacing='1'>
+    <AkButton
+      data-test-nf-sbom-comp-update-link
+      @variant='filled'
+      @color='primary'
+      {{on 'click' this.viewComponent}}
+    >
+      {{t 'notificationModule.viewComponent'}}
+    </AkButton>
+
+    <AkButton
+      data-test-nf-sbom-comp-update-directory-link
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' this.viewDirectory}}
+    >
+      {{t 'notificationModule.viewDirectory'}}
+    </AkButton>
+  </AkStack>
+</AkStack>
