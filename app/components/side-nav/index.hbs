@@ -59,13 +59,6 @@
                   data-test-side-menu-item-icon
                   @iconName={{it.icon}}
                 />
-              {{else if it.svg}}
-                {{#let (component it.svg) as |SvgIcon|}}
-                  <SvgIcon
-                    local-class='menu-item-icon menu-item-icon-svg'
-                    data-test-side-menu-item-icon
-                  />
-                {{/let}}
               {{/if}}
             </li.leftIcon>
 

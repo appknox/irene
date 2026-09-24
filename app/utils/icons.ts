@@ -72,6 +72,7 @@ export const MaterialSymbolsSet = [
   'trending-down',
   'info',
   'block',
+  'block-outline',
   'help',
   'description',
   'description-outline',
@@ -269,3 +270,5 @@ export const IxIconsSet = ['ai'] as const;
 export const MajesticonsIconsSet = ['pulse'] as const;
 
 export const MiIconsSet = ['select'] as const;
+
+export const AntDesginIconsSet = ['security-scan-outlined'] as const;
