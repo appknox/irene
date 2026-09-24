@@ -46,6 +46,24 @@ export default class OrganizationServiceAccountSectionAccessTokenComponent exten
     return this.args.renderType || 'view';
   }
 
+  get isCliEnabled() {
+    return this.args.serviceAccount.cliEnabled;
+  }
+
+  // CLI-enabled accounts are long-lived automation credentials and cannot
+  // have an expiry (enforced server-side too) — see
+  // serviceAccountModule.cliEnabledDescription. Settable (delegating to the
+  // underlying tracked field) because the checkbox binds to it two-way; the
+  // checkbox is also disabled while CLI is enabled, so the setter is only
+  // ever reached through the non-CLI path.
+  get effectiveDoesNotExpire() {
+    return this.isCliEnabled || this.doesNotExpire;
+  }
+
+  set effectiveDoesNotExpire(value: boolean) {
+    this.doesNotExpire = value;
+  }
+
   get isEditOrCreateView() {
     return this.isEditView || this.renderType === 'create';
   }
@@ -82,7 +100,7 @@ export default class OrganizationServiceAccountSectionAccessTokenComponent exten
 
   setCreateServiceAccountExpiry() {
     if (this.renderType === 'create') {
-      this.args.serviceAccount.expiry = this.doesNotExpire
+      this.args.serviceAccount.expiry = this.effectiveDoesNotExpire
         ? null
         : this.expiryInNativeDate;
     }
@@ -167,7 +185,7 @@ export default class OrganizationServiceAccountSectionAccessTokenComponent exten
 
       const res = await waitForPromise(
         serviceAccount.resetKey(
-          this.doesNotExpire ? null : this.expiryInNativeDate
+          this.effectiveDoesNotExpire ? null : this.expiryInNativeDate
         )
       );
 
