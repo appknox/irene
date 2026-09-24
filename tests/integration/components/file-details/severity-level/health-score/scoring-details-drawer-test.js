@@ -216,6 +216,50 @@ module(
       assert.dom(selectors.entryTitle, entries[2]).hasText(t('dastTitle'));
     });
 
+    test('unknown event types with special characters (e.g. edit_analysis) are formatted in title case with run numbers', async function (assert) {
+      const record = this.server.create('file-health-score-audit');
+
+      this.set('auditTrail', [
+        { ...record.audit_trail[0], event_type: 'edit_analysis' },
+        {
+          ...record.audit_trail[0],
+          event_type: 'edit_analysis',
+          previous_score: 75,
+          score: 80,
+        },
+      ]);
+
+      await render(TEMPLATE);
+
+      const entries = findAll(selectors.timelineEntry);
+
+      assert
+        .dom(selectors.entryTitle, entries[1])
+        .hasText(
+          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 1 })
+        );
+
+      assert
+        .dom(selectors.entryTitle, entries[2])
+        .hasText(
+          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 2 })
+        );
+    });
+
+    test('a single run of an unknown event type formats title with no run number', async function (assert) {
+      const record = this.server.create('file-health-score-audit');
+
+      this.set('auditTrail', [
+        { ...record.audit_trail[0], event_type: 'edit_analysis' },
+      ]);
+
+      await render(TEMPLATE);
+
+      const entries = findAll(selectors.timelineEntry);
+
+      assert.dom(selectors.entryTitle, entries[1]).hasText('Edit Analysis');
+    });
+
     // ─── Score change ─────────────────────────────────────────────────────────────
     test.each(
       'score change text reflects the delta between previous and current score',
