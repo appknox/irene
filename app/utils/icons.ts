@@ -231,6 +231,7 @@ export const MdiIconsSet = [
   'web',
   'frame',
   'file-outline',
+  'clock-alert-outline',
 ] as const;
 
 export const HugeIconsSet = [

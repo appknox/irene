@@ -17,14 +17,4 @@ export class NfSbomCompUpdateContext {
     this.name = input_json.name ?? '';
     this.registry_url = input_json.registry_url ?? '';
   }
-
-  get displayName(): string {
-    if (this.name) {
-      return this.name;
-    }
-
-    const parts = this.component_name.split('::');
-
-    return parts[1] || this.component_name;
-  }
 }

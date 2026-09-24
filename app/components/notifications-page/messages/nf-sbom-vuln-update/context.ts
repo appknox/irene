@@ -17,32 +17,4 @@ export class NfSbomVulnUpdateContext {
     this.name = input_json.name ?? '';
     this.advisory_urls = input_json.advisory_urls ?? [];
   }
-
-  get displayName(): string {
-    if (this.name) {
-      return this.name;
-    }
-
-    const parts = this.component_name.split('::');
-
-    return parts[1] || this.component_name;
-  }
-
-  get advisoryLinks(): Array<{ label: string; url: string }> {
-    if (this.advisory_urls.length > 0) {
-      return this.advisory_urls.map((url, i) => ({
-        label: this.ghsa_ids[i] ?? `Advisory ${i + 1}`,
-        url,
-      }));
-    }
-
-    return this.ghsa_ids.map((id) => ({
-      label: id,
-      url: `https://github.com/advisories/${id}`,
-    }));
-  }
-
-  get ghsa_ids_display(): string {
-    return this.ghsa_ids.join(', ');
-  }
 }

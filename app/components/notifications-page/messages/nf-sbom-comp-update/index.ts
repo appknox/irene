@@ -15,6 +15,18 @@ export default class NotificationsPageMessagesNfSbomCompUpdateComponent extends 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
 
+  get displayName() {
+    const { context } = this.args;
+
+    if (context.name) {
+      return context.name;
+    }
+
+    const parts = context.component_name.split('::');
+
+    return parts[1] || context.component_name;
+  }
+
   @action
   viewComponent() {
     this.router.transitionTo(
