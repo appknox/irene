@@ -1,0 +1,111 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @spacing='2'
+  data-test-securityAnalysisDetails-validatedFindings-stepList
+>
+  {{#each this.steps key='step_number' as |step index|}}
+    <AkStack
+      @direction='column'
+      @width='full'
+      draggable='true'
+      local-class='step-card {{if (this.isDropTarget index) "is-drop-target"}}'
+      {{on 'dragstart' (fn this.handleDragStart index)}}
+      {{on 'dragover' (fn this.handleDragOver index)}}
+      {{on 'dragleave' (fn this.handleDragLeave index)}}
+      {{on 'dragend' this.handleDragEnd}}
+      {{on 'drop' (fn this.handleDrop index)}}
+      data-test-securityAnalysisDetails-validatedFindings-step='{{index}}'
+    >
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @justifyContent='space-between'
+        local-class='step-card-header'
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkIcon
+            @iconName='drag-indicator'
+            @size='small'
+            @color='textSecondary'
+            data-test-securityAnalysisDetails-validatedFindings-stepDragHandle='{{index}}'
+          />
+
+          <AkTypography
+            @fontWeight='bold'
+            data-test-securityAnalysisDetails-validatedFindings-stepTitle='{{index}}'
+          >
+            {{t
+              'securityAnalysisDetails.validatedFindings.step'
+              number=step.step_number
+            }}
+          </AkTypography>
+        </AkStack>
+
+        <AkButton
+          @variant='outlined'
+          @color='neutral'
+          @disabled={{@disabled}}
+          {{on 'click' (fn this.removeStep index)}}
+          data-test-securityAnalysisDetails-validatedFindings-stepDeleteBtn='{{index}}'
+        >
+          <:leftIcon>
+            <AkIcon @iconName='delete-outline' @size='small' @color='error' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'delete'}}
+          </:default>
+        </AkButton>
+      </AkStack>
+
+      <AkDivider @color='dark' />
+
+      <AkStack
+        @direction='column'
+        @width='full'
+        @spacing='1'
+        local-class='step-card-body'
+      >
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'securityAnalysisDetails.validatedFindings.heading'}}
+        </AkTypography>
+
+        <Input
+          @value={{step.heading}}
+          disabled={{@disabled}}
+          local-class='step-heading-input'
+          aria-label={{t 'securityAnalysisDetails.validatedFindings.heading'}}
+          {{on 'input' (fn this.updateHeading index)}}
+          data-test-securityAnalysisDetails-validatedFindings-stepHeadingInput='{{index}}'
+        />
+
+        <AkRichTextEditor
+          @value={{step.body}}
+          @placeholder={{@bodyPlaceholder}}
+          @disabled={{@disabled}}
+          @onChange={{fn this.updateBody index}}
+          data-test-securityAnalysisDetails-validatedFindings-stepBodyEditor='{{index}}'
+        />
+      </AkStack>
+    </AkStack>
+  {{/each}}
+
+  <AkButton
+    @variant='outlined'
+    @disabled={{@disabled}}
+    local-class='add-step-button'
+    {{on 'click' this.addStep}}
+    data-test-securityAnalysisDetails-validatedFindings-addStepBtn
+  >
+    <:leftIcon>
+      <AkIcon @iconName='add' @size='small' />
+    </:leftIcon>
+
+    <:default>
+      <AkTypography @tag='span' @color='inherit' @fontWeight='bold'>
+        {{@addLabel}}
+      </AkTypography>
+    </:default>
+  </AkButton>
+</AkStack>

@@ -1,0 +1,65 @@
+.score-box {
+  display: flex;
+  width: 130px;
+  height: 130px;
+  color: var(--security-analysis-details-score-chip-text-color);
+  border-radius: 0.4em;
+  border: 4px solid;
+
+  &.is-info {
+    background-color: var(--security-analysis-details-score-chip-risk-low-color);
+    border-color: var(--security-analysis-details-score-chip-risk-low-color);
+  }
+
+  &.is-warning {
+    background-color: var(
+      --security-analysis-details-score-chip-risk-medium-color
+    );
+    border-color: var(--security-analysis-details-score-chip-risk-medium-color);
+  }
+
+  &.is-danger {
+    background-color: var(
+      --security-analysis-details-score-chip-risk-high-color
+    );
+    border-color: var(--security-analysis-details-score-chip-risk-high-color);
+  }
+
+  &.is-critical {
+    background-color: var(
+      --security-analysis-details-score-chip-risk-critical-color
+    );
+    border-color: var(
+      --security-analysis-details-score-chip-risk-critical-color
+    );
+  }
+
+  &.is-success {
+    background-color: var(
+      --security-analysis-details-score-chip-risk-passed-color
+    );
+    border-color: var(--security-analysis-details-score-chip-risk-passed-color);
+  }
+
+  &.is-progress {
+    background-color: var(
+      --security-analysis-details-score-chip-risk-untested-color
+    );
+    border-color: var(
+      --security-analysis-details-score-chip-risk-untested-color
+    );
+  }
+
+  &.is-error {
+    background-color: var(--security-analysis-details-score-chip-error-color);
+    border-color: var(--security-analysis-details-score-chip-error-color);
+  }
+}
+
+.score-value {
+  font-size: 3.42em;
+}
+
+.score-label {
+  text-transform: uppercase;
+}

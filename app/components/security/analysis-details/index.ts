@@ -60,6 +60,10 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
 
   @tracked isSaveActionOnly = false;
 
+  // CVSS edits live in v3State/v4State rather than on the model, so they are
+  // flagged here; every other section writes model attrs.
+  @tracked hasUnsavedCvssChanges = false;
+
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
 
   readonly v4State = new CvssV4VersionState();
@@ -74,6 +78,13 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     this.analysisDetails = this.args.analysisDetails;
 
     runTask(this, () => this.setDefaultCVSSDetails());
+  }
+
+  get isDirty() {
+    return (
+      this.hasUnsavedCvssChanges ||
+      Boolean(this.analysisDetails?.hasDirtyAttributes)
+    );
   }
 
   get tPleaseTryAgain() {
@@ -140,6 +151,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @action triggerUpdateCurrentCVSSDetails(
     details: AnalysisCvssUpdateDetails
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v4State.applyMetrics(details.cvssMetrics);
     this.v4State.base = details.cvssBase;
     this.v4State.risk = details.risk;
@@ -150,6 +163,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @action triggerUpdateLegacyCVSSDetails(
     details: AnalysisCvssUpdateDetailsLegacy
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v3State.applyMetrics(details.cvssMetrics);
     this.v3State.base = details.cvssBase;
     this.v3State.risk = details.risk;
@@ -330,6 +345,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       risk: this.v4State.risk,
       legacy_cvss_risk: this.v3State.risk,
       status,
+      aeis: details?.aeis,
+      business_implication: details?.businessImplication,
       findings: details?.findings,
       owasp: owasp?.map((a) => a.id),
       owaspmobile2024: owaspmobile2024?.map((a) => a.id),
@@ -397,6 +414,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       this.analysisDetails?.set('risk', response['risk']);
 
       this.setDefaultCVSSDetails();
+
+      this.hasUnsavedCvssChanges = false;
 
       // Return to the file page if requested
       if (backToFilePage) {

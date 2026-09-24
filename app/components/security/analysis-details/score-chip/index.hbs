@@ -1,0 +1,70 @@
+<AkStack
+  @direction='column'
+  @alignItems='center'
+  @justifyContent='center'
+  @spacing='2'
+  ...attributes
+  data-test-securityAnalysisDetails-scoreChip='{{@testId}}'
+>
+  {{#if @caption}}
+    <AkTypography
+      @fontWeight='medium'
+      @align='center'
+      data-test-securityAnalysisDetails-scoreChip-caption
+    >
+      {{@caption}}
+    </AkTypography>
+
+    <AkDivider @color='dark' @width='50%' />
+  {{/if}}
+
+  <AkStack
+    @justifyContent='center'
+    @alignItems='center'
+    local-class='score-box {{this.boxClass}}'
+    data-test-securityAnalysisDetails-scoreChip-box
+  >
+    {{#if @isInvalid}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2.5'
+        data-test-securityAnalysisDetails-scoreChip-invalid
+      >
+        <AkIcon @iconName='warning' />
+
+        <AkTypography
+          @variant='h5'
+          @color='inherit'
+          @align='center'
+          local-class='score-label'
+          data-test-securityAnalysisDetails-scoreChip-invalidLabel
+        >
+          {{@invalidLabel}}
+        </AkTypography>
+      </AkStack>
+
+    {{else}}
+      <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
+        <AkTypography
+          @variant='h1'
+          @color='inherit'
+          local-class='score-value'
+          data-test-securityAnalysisDetails-scoreChip-score
+        >
+          {{@score}}
+        </AkTypography>
+
+        <AkTypography
+          @variant='h5'
+          @color='inherit'
+          local-class='score-label'
+          data-test-securityAnalysisDetails-scoreChip-label
+        >
+          {{@label}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkStack>

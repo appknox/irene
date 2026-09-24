@@ -1,0 +1,66 @@
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.aeis.title'}}
+  @testId='aeis'
+>
+  <:actions>
+    <AkButton
+      {{on 'click' this.resetSignals}}
+      data-test-securityAnalysisDetails-aeis-resetBtn
+    >
+      <:leftIcon>
+        <AkIcon @iconName='close' />
+      </:leftIcon>
+
+      <:default>
+        {{t 'securityAnalysisDetails.aeis.reset'}}
+      </:default>
+    </AkButton>
+  </:actions>
+
+  <:content>
+    <AkStack
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      @spacing='3.5'
+    >
+      <AkStack @width='6/12' @justifyContent='center'>
+        <Security::AnalysisDetails::ScoreChip
+          @score={{this.score}}
+          @label={{this.scoreLabel}}
+          @riskClass={{this.scoreRiskClass}}
+          @testId='aeis'
+        />
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='2.5' @width='6/12'>
+        {{#each this.signalRows as |row|}}
+          <AkStack
+            @spacing='3.5'
+            @width='full'
+            @justifyContent='space-between'
+            @alignItems='center'
+          >
+            <AkTypography
+              local-class='signal-label'
+              data-test-securityAnalysisDetails-aeis-signalLabel='{{row.key}}'
+            >
+              {{row.label}}
+            </AkTypography>
+
+            <AkSelect
+              @selected={{row.selected}}
+              @options={{this.signalValues}}
+              @onChange={{fn this.selectSignal row.key}}
+              local-class='signal-select'
+              data-test-securityAnalysisDetails-aeis-signalSelect='{{row.key}}'
+              as |value|
+            >
+              {{this.signalOptionLabel value}}
+            </AkSelect>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  </:content>
+</Security::AnalysisDetails::SectionCard>

@@ -165,6 +165,31 @@ body {
   --ak-button-color-text-disabled: var(--text-disabled);
   --ak-button-disabled-background: var(--disabled-background-button);
 
+  // variables for ak-rich-text-editor
+  --ak-rich-text-editor-font-family: var(--font-family);
+  --ak-rich-text-editor-border-color: var(--border-color-1);
+  --ak-rich-text-editor-border-radius: var(--border-radius);
+  --ak-rich-text-editor-background-color: var(--common-white);
+  --ak-rich-text-editor-toolbar-background-color: var(--neutral-grey-50);
+  --ak-rich-text-editor-toolbar-button-color: var(--text-secondary);
+  --ak-rich-text-editor-toolbar-button-active-color: var(--primary-main);
+  --ak-rich-text-editor-toolbar-button-active-background: var(
+    --primary-main-10
+  );
+  --ak-rich-text-editor-text-color: var(--text-primary);
+  --ak-rich-text-editor-placeholder-color: var(--text-secondary);
+  --ak-rich-text-editor-code-background-color: var(--neutral-grey-100);
+  --ak-rich-text-editor-code-block-background-color: var(--common-black);
+  --ak-rich-text-editor-code-block-color: var(
+    --ak-rich-text-editor-code-block-content
+  );
+  --ak-rich-text-editor-code-block-border-radius: var(--border-radius-8);
+  --ak-rich-text-editor-code-block-font-family: var(--font-family-mono);
+  --ak-rich-text-editor-code-color: var(--primary-main);
+  --ak-rich-text-editor-link-color: var(--primary-main);
+  --ak-rich-text-editor-link-input-border-color: var(--border-color-1);
+  --ak-rich-text-editor-disabled-background-color: var(--background-main);
+
   // variables for ak-chip
   --ak-chip-font-family: var(--font-family);
   --ak-chip-border-radius: var(--border-radius);
@@ -424,6 +449,9 @@ body {
   );
 
   // variables for security/analysis-details/cvss-metrics
+  --security-analysis-details-cvss-metrics-label-color: var(
+    --neutral-grey-700
+  );
   --security-analysis-details-cvss-metrics-white-color: var(--common-white);
   --security-analysis-details-cvss-metrics-risk-medium-color: var(
     --severity-medium
@@ -457,6 +485,137 @@ body {
     --border-color-1
   );
 
+  // variables for security/analysis-details/validated-findings
+  --security-analysis-details-validated-findings-font-family: var(
+    --font-family
+  );
+  --security-analysis-details-validated-findings-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-validated-findings-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-validated-findings-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-validated-findings-text-color: var(
+    --text-primary
+  );
+  --security-analysis-details-validated-findings-drop-target-border-color: var(
+    --primary-main
+  );
+  --security-analysis-details-validated-findings-panel-background-color: var(
+    --background-main
+  );
+  --security-analysis-details-validated-findings-expand-all-background-color: var(
+    --error-bg
+  );
+  --security-analysis-details-validated-findings-panel-header-background-color: var(
+    --neutral-grey-50
+  );
+  --security-analysis-details-validated-findings-expand-all-border-radius: var(
+    --border-radius-8
+  );
+  --security-analysis-details-validated-findings-nav-border-radius: var(
+    --border-radius-8
+  );
+  --security-analysis-details-validated-findings-expand-icon-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-validated-findings-expand-icon-border-radius: var(
+    --border-radius-4
+  );
+  --security-analysis-details-validated-findings-expand-icon-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-validated-findings-expand-icon-color: var(
+    --neutral-grey-600
+  );
+  --security-analysis-details-validated-findings-expand-icon-hover-background-color: var(
+    --neutral-grey-100
+  );
+  --security-analysis-details-validated-findings-nav-button-border-color: var(
+    --security-analysis-details-validated-findings-nav-button-border
+  );
+  --security-analysis-details-validated-findings-nav-select-border-color: var(
+    --security-analysis-details-validated-findings-nav-select-border
+  );
+
+  // variables for security/analysis-details/regulatory-categories
+  --security-analysis-details-regulatory-categories-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-regulatory-categories-border-radius: var(
+    --border-radius
+  );
+  --security-analysis-details-regulatory-categories-body-background-color: var(
+    --background-main
+  );
+  --security-analysis-details-regulatory-categories-summary-background-color: var(
+    --neutral-grey-50
+  );
+  --security-analysis-details-regulatory-categories-expand-icon-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-regulatory-categories-expand-icon-border-radius: var(
+    --border-radius-4
+  );
+  --security-analysis-details-regulatory-categories-expand-icon-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-regulatory-categories-expand-icon-color: var(
+    --neutral-grey-600
+  );
+  --security-analysis-details-regulatory-categories-expand-icon-hover-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for security/analysis-details/business-implication
+  --security-analysis-details-business-implication-font-family: var(
+    --font-family
+  );
+  --security-analysis-details-business-implication-text-color: var(
+    --text-primary
+  );
+  --security-analysis-details-business-implication-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-business-implication-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-business-implication-border-radius: var(
+    --border-radius
+  );
+
+  // variables for security/analysis-details/aeis
+  --security-analysis-details-aeis-label-color: var(--neutral-grey-700);
+
+  // variables for security/analysis-details/section-card
+  --security-analysis-details-section-card-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-section-card-border-color: var(--border-color-1);
+  --security-analysis-details-section-card-border-radius: var(--border-radius);
+  --security-analysis-details-section-card-box-shadow: var(--box-shadow-3);
+
+  // variables for security/analysis-details/score-chip
+  --security-analysis-details-score-chip-text-color: var(--common-white);
+  --security-analysis-details-score-chip-risk-low-color: var(--severity-low);
+  --security-analysis-details-score-chip-risk-medium-color: var(
+    --severity-medium
+  );
+  --security-analysis-details-score-chip-risk-high-color: var(--severity-high);
+  --security-analysis-details-score-chip-risk-critical-color: var(
+    --severity-critical
+  );
+  --security-analysis-details-score-chip-risk-passed-color: var(
+    --severity-passed
+  );
+  --security-analysis-details-score-chip-risk-untested-color: var(
+    --severity-untested
+  );
+  --security-analysis-details-score-chip-error-color: var(--primary-main);
+
   // variables for security/analysis-details/footer
   --security-analysis-details-footer-white-background-color: var(
     --common-white
@@ -465,6 +624,45 @@ body {
   --security-analysis-details-footer-cta-box-shadow: var(--box-shadow-6);
 
   // variables for security/analysis-details/attachments
+  --security-analysis-details-attachments-dropzone-border-color: var(
+    --border-color-2
+  );
+  --security-analysis-details-attachments-dropzone-border-radius: var(
+    --border-radius-6
+  );
+  --security-analysis-details-attachments-dropzone-background-color: var(
+    --neutral-grey-50
+  );
+  --security-analysis-details-attachments-dropzone-hover-background-color: var(
+    --neutral-grey-100
+  );
+  --security-analysis-details-attachments-dropzone-active-border-color: var(
+    --primary-main
+  );
+  --security-analysis-details-attachments-dropzone-active-background-color: var(
+    --primary-main-10
+  );
+  --security-analysis-details-attachments-upload-pill-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-attachments-upload-pill-hover-background-color: var(
+    --neutral-grey-50
+  );
+  --security-analysis-details-attachments-upload-pill-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-attachments-upload-pill-color: var(
+    --text-primary
+  );
+  --security-analysis-details-attachments-upload-pill-box-shadow: var(
+    --box-shadow-6
+  );
+  --security-analysis-details-attachments-dropzone-title-color: var(
+    --text-primary
+  );
+  --security-analysis-details-attachments-dropzone-hint-color: var(
+    --neutral-grey-500
+  );
   --security-analysis-details-attachments-list-box-shadow: var(--box-shadow-7);
   --security-analysis-details-attachments-list-border-radius: var(
     --border-radius
@@ -476,6 +674,27 @@ body {
     --text-default
   );
   --security-analysis-details-attachments-type-text-color: var(--common-white);
+  --security-analysis-details-attachments-chip-background-color: var(
+    --common-white
+  );
+  --security-analysis-details-attachments-chip-border-color: var(
+    --border-color-1
+  );
+  --security-analysis-details-attachments-chip-box-shadow: var(--box-shadow-6);
+  --security-analysis-details-attachments-chip-name-color: var(--text-primary);
+  --security-analysis-details-attachments-chip-badge-background-color: var(
+    --primary-main
+  );
+  --security-analysis-details-attachments-chip-badge-color: var(--common-white);
+  --security-analysis-details-attachments-chip-action-color: var(
+    --neutral-grey-600
+  );
+  --security-analysis-details-attachments-chip-action-muted-color: var(
+    --neutral-grey-400
+  );
+  --security-analysis-details-attachments-chip-action-hover-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for security/analysis-details/finding/add-form
   --security-analysis-details-finding-add-form-note-background-color: var(

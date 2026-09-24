@@ -1,0 +1,18 @@
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.businessImplication.title'}}
+  @testId='businessImplication'
+>
+  <:content>
+    <Textarea
+      @value={{this.businessImplication}}
+      rows='3'
+      local-class='business-implication-input'
+      placeholder={{t
+        'securityAnalysisDetails.businessImplication.placeholder'
+      }}
+      aria-label={{t 'securityAnalysisDetails.businessImplication.title'}}
+      {{on 'input' this.updateBusinessImplication}}
+      data-test-securityAnalysisDetails-businessImplication-input
+    />
+  </:content>
+</Security::AnalysisDetails::SectionCard>

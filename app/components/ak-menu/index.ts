@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import type { Modifier } from '@popperjs/core';
+import type { Modifier, Placement } from '@popperjs/core';
 import type { WithBoundArgs } from '@glint/template';
 
 import type AkListItemComponent from 'irene/components/ak-list/item';
@@ -10,6 +10,7 @@ export interface AkMenuSignature {
   Args: {
     anchorRef?: HTMLElement | null;
     offset?: [number, number];
+    placement?: Placement;
     renderInPlace?: boolean;
     arrow?: boolean;
     onClose?: () => void;

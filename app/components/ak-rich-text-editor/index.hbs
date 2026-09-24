@@ -1,0 +1,181 @@
+<div
+  local-class='rich-text-editor {{if @disabled "is-disabled"}}'
+  ...attributes
+  data-test-akRichTextEditor-root
+>
+  <AkStack
+    @alignItems='center'
+    @spacing='0.5'
+    local-class='toolbar'
+    data-test-akRichTextEditor-toolbar
+  >
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.bold'}}
+      local-class='toolbar-button {{if (this.isActive "bold") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'bold')}}
+      data-test-akRichTextEditor-formatBtn='bold'
+    >
+      <AkIcon @iconName='format-bold' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.italic'}}
+      local-class='toolbar-button {{if (this.isActive "italic") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'italic')}}
+      data-test-akRichTextEditor-formatBtn='italic'
+    >
+      <AkIcon @iconName='format-italic' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.underline'}}
+      local-class='toolbar-button {{if (this.isActive "underline") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'underline')}}
+      data-test-akRichTextEditor-formatBtn='underline'
+    >
+      <AkIcon @iconName='format-underlined' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.strikethrough'}}
+      local-class='toolbar-button {{if (this.isActive "strike") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'strike')}}
+      data-test-akRichTextEditor-formatBtn='strike'
+    >
+      <AkIcon @iconName='format-strikethrough' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.inlineCode'}}
+      local-class='toolbar-button {{if (this.isActive "code") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'code')}}
+      data-test-akRichTextEditor-formatBtn='code'
+    >
+      <AkIcon @iconName='code' @size='small' />
+    </AkIconButton>
+
+    <AkDivider @direction='vertical' @color='dark' @height='16px' />
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.bulletList'}}
+      local-class='toolbar-button {{if (this.isActive "bulletList") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'bulletList')}}
+      data-test-akRichTextEditor-formatBtn='bulletList'
+    >
+      <AkIcon @iconName='format-list-bulleted' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.orderedList'}}
+      local-class='toolbar-button
+        {{if (this.isActive "orderedList") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'orderedList')}}
+      data-test-akRichTextEditor-formatBtn='orderedList'
+    >
+      <AkIcon @iconName='format-list-numbered' @size='small' />
+    </AkIconButton>
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t 'akRichTextEditor.codeBlock'}}
+      local-class='toolbar-button {{if (this.isActive "codeBlock") "is-active"}}'
+      {{on 'click' (fn this.toggleFormat 'codeBlock')}}
+      data-test-akRichTextEditor-formatBtn='codeBlock'
+    >
+      <AkIcon @iconName='icon-park-outline:code-one' @size='small' />
+    </AkIconButton>
+
+    <AkDivider @direction='vertical' @color='dark' @height='16px' />
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t this.linkButtonLabelKey}}
+      local-class='toolbar-button {{if this.isLinkActive "is-active"}}'
+      {{on 'click' this.toggleLink}}
+      data-test-akRichTextEditor-formatBtn='link'
+    >
+      <AkIcon @iconName='link' @size='small' />
+    </AkIconButton>
+  </AkStack>
+
+  {{#if this.isLinkFieldOpen}}
+    <form
+      local-class='link-field'
+      {{on 'submit' this.applyLink}}
+      data-test-akRichTextEditor-linkForm
+    >
+      <input
+        type='url'
+        value={{this.linkUrl}}
+        placeholder={{t 'akRichTextEditor.linkPlaceholder'}}
+        aria-label={{t 'akRichTextEditor.linkPlaceholder'}}
+        local-class='link-input'
+        {{on 'input' this.updateLinkUrl}}
+        {{autofocus}}
+        data-test-akRichTextEditor-linkInput
+      />
+
+      <AkIconButton
+        @type='submit'
+        @size='small'
+        aria-label={{t 'apply'}}
+        local-class='link-action-button'
+        data-test-akRichTextEditor-linkApplyBtn
+      >
+        <AkIcon @iconName='check' @size='small' @color='success' />
+      </AkIconButton>
+
+      <AkIconButton
+        @type='button'
+        @size='small'
+        aria-label={{t 'cancel'}}
+        local-class='link-action-button'
+        {{on 'click' this.closeLinkField}}
+        data-test-akRichTextEditor-linkCancelBtn
+      >
+        <AkIcon @iconName='close' @size='small' @color='error' />
+      </AkIconButton>
+    </form>
+  {{/if}}
+
+  <div local-class='editor-surface'>
+    {{#if this.showPlaceholder}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        local-class='editor-placeholder'
+        data-test-akRichTextEditor-placeholder
+      >
+        {{@placeholder}}
+      </AkTypography>
+    {{/if}}
+
+    <div
+      local-class='editor-content'
+      {{tiptap-editor
+        value=@value
+        editable=this.isEditable
+        onCreate=this.registerEditor
+        onChange=this.handleChange
+        onStateChange=this.readEditorState
+      }}
+      data-test-akRichTextEditor-content
+    ></div>
+  </div>
+</div>

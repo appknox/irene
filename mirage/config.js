@@ -175,6 +175,89 @@ function routes() {
 
   this.namespace = config.namespace;
 
+  // ─── Regulatory category lists ─────────────────────────────────────────────
+  // owasp and pcidss use JSONAPISerializer app-side, so the shorthand (which
+  // runs mirage's JSON:API serializer) is correct for them. Every other
+  // regulatory model falls back to the DRF application serializer.
+  const jsonApiRegulatory = { owasp: 'owasps', pcidss: 'pcidsses' };
+
+  const drfRegulatory = {
+    owaspmobile2024: 'owaspmobile2024s',
+    owaspapi2023: 'owaspapi2023s',
+    pcidss4: 'pcidss4s',
+    hipaa: 'hipaas',
+    masvs: 'masvses',
+    mstg: 'mstgs',
+    asvs: 'asvses',
+    cwe: 'cwes',
+    gdpr: 'gdprs',
+    nistsp800171: 'nistsp800171s',
+    nistsp80053: 'nistsp80053s',
+    sama: 'samas',
+    dora: 'doras',
+    eucra: 'eucras',
+  };
+
+  Object.entries(jsonApiRegulatory).forEach(([modelName, path]) => {
+    this.get(`/${path}`, modelName);
+    this.get(`/${path}/:id`, modelName);
+  });
+
+  Object.entries(drfRegulatory).forEach(([modelName, path]) => {
+    this.get(`/${path}`, (schema) => {
+      const results = schema.all(modelName).models.map((it) => it.toJSON());
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.get(`/${path}/:id`, (schema, req) =>
+      schema.find(modelName, `${req.params.id}`)?.toJSON()
+    );
+  });
+
+  // ─── Security dashboard: analysis details ──────────────────────────────────
+  // These endpoints are DRF-shaped, so the records are returned flat via
+  // toJSON() rather than through mirage's JSON:API serializer.
+  this.get('/hudson-api/analyses/:id', (schema, req) =>
+    schema['security/analyses'].find(`${req.params.id}`)?.toJSON()
+  );
+
+  this.put('/hudson-api/analyses/:id', (schema, req) => {
+    schema.db['security/analyses'].update(
+      req.params.id,
+      JSON.parse(req.requestBody)
+    );
+
+    return schema['security/analyses'].find(`${req.params.id}`).toJSON();
+  });
+
+  this.get('/hudson-api/analyses/:analysisId/findings', (schema) => {
+    const results = schema['security/analysisFindings']
+      .all()
+      .models.map((finding) => finding.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
+  });
+
+  this.put('/hudson-api/analyses/:analysisId/findings/:id', (schema, req) => {
+    schema.db['security/analysisFindings'].update(
+      req.params.id,
+      JSON.parse(req.requestBody)
+    );
+
+    return schema['security/analysisFindings']
+      .find(`${req.params.id}`)
+      .toJSON();
+  });
+
+  this.get('/hudson-api/files/:id', (schema, req) =>
+    schema['security/files'].find(`${req.params.id}`)?.toJSON()
+  );
+
+  this.get('/hudson-api/projects/:id', (schema, req) =>
+    schema['security/projects'].find(`${req.params.id}`)?.toJSON()
+  );
+
   this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
@@ -475,16 +558,18 @@ function routes() {
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
   this.get('/organizations', (schema) => {
-    return schema.organizations.all().models;
+    const results = schema.organizations
+      .all()
+      .models.map((organization) => organization.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
   });
   this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
-  this.get('/vulnerabilities', (schema) => {
-    return schema.vulnerabilities.all().models;
-  });
+  this.get('/vulnerabilities', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');
@@ -744,12 +829,16 @@ function routes() {
   });
 
   this.get('/organizations/:id/members', (schema) => {
-    return schema.organizationMembers.all().models;
+    const results = schema.organizationMembers
+      .all()
+      .models.map((member) => member.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
   });
 
-  this.get('/organizations/:orgId/members/:memId', (schema, request) => {
-    return schema.organizationMembers.find(request.params.memId);
-  });
+  this.get('/organizations/:orgId/members/:memId', (schema, request) =>
+    schema.organizationMembers.find(request.params.memId)?.toJSON()
+  );
 
   this.put('/organizations/:orgId/members/:memId', () => {
     return {};
@@ -780,9 +869,13 @@ function routes() {
       .all()
       .models.find((user) => user.organizationId === req.params.id);
 
-    const me = schema.organizationMes.find(currentUser.id);
+    // The default scenario seeds no current-user, so fall back to the first
+    // organization-me rather than throwing on an undefined lookup.
+    const me = currentUser
+      ? schema.organizationMes.find(currentUser.id)
+      : schema.organizationMes.all().models[0];
 
-    return this.serialize(me).organizationMe;
+    return me ? this.serialize(me).organizationMe : {};
   });
 
   this.put('/v2/am_configurations/:id', () => {

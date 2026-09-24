@@ -1,0 +1,48 @@
+<AkModal
+  @showHeader={{true}}
+  @headerTitle={{@name}}
+  @onClose={{@onClose}}
+  @onClickOverlay={{@onClose}}
+  data-test-attachmentPreviewModal
+>
+  {{#if this.isImage}}
+    <img
+      src={{@url}}
+      alt={{@name}}
+      local-class='preview-image'
+      data-test-attachmentPreviewModal-image
+    />
+
+  {{else if this.isPdf}}
+    <iframe
+      src={{@url}}
+      title={{@name}}
+      local-class='preview-frame'
+      data-test-attachmentPreviewModal-frame
+    ></iframe>
+
+  {{else}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @justifyContent='center'
+      @spacing='1.5'
+      local-class='preview-fallback'
+      data-test-attachmentPreviewModal-fallback
+    >
+      <AkIcon @iconName='draft-outline' @color='textSecondary' />
+
+      <AkTypography @variant='body2' @color='textSecondary' @align='center'>
+        {{t 'securityAnalysisDetails.attachments.previewUnavailable'}}
+      </AkTypography>
+
+      <AkButton
+        @variant='outlined'
+        {{on 'click' @onOpenInNewTab}}
+        data-test-attachmentPreviewModal-openBtn
+      >
+        {{t 'securityAnalysisDetails.attachments.openInNewTab'}}
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkModal>

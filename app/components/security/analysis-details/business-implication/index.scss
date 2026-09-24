@@ -1,0 +1,16 @@
+.business-implication-input {
+  width: 100%;
+  padding: 0.6em 0.75em;
+  font-family: var(--security-analysis-details-business-implication-font-family);
+  color: var(--security-analysis-details-business-implication-text-color);
+  background-color: var(
+    --security-analysis-details-business-implication-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-business-implication-border-color);
+  border-radius: var(
+    --security-analysis-details-business-implication-border-radius
+  );
+  outline: none;
+  resize: vertical;
+}
