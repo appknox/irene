@@ -53,6 +53,36 @@
             {{t 'serviceAccountModule.projectAccessDescription'}}
           </AkTypography>
         </AkStack>
+
+        <AkStack class='mt-2' @alignItems='center' @spacing='0.5'>
+          <AkFormControlLabel @label={{t 'serviceAccountModule.cliEnabled'}}>
+            <AkCheckbox
+              data-test-serviceAccountSection-selectProject-cliEnabledCheckbox
+              @checked={{@serviceAccount.cliEnabled}}
+              @onChange={{this.handleCliEnabledChange}}
+            />
+          </AkFormControlLabel>
+
+          <AkTooltip @placement='right' @arrow={{true}}>
+            <:tooltipContent>
+              <div
+                data-test-serviceAccountSection-selectProject-cliEnabledTooltipContent
+                local-class='tooltip-content-container'
+              >
+                {{t 'serviceAccountModule.cliEnabledDescription' htmlSafe=true}}
+              </div>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon
+                data-test-serviceAccountSection-selectProject-cliEnabledInfoIcon
+                @iconName='info'
+                @size='small'
+                @color='textPrimary'
+              />
+            </:default>
+          </AkTooltip>
+        </AkStack>
       {{else}}
         <AkStack @alignItems='center' @spacing='1'>
           <AkTypography
@@ -93,13 +123,63 @@
             htmlSafe=true
           }}
         </AkTypography>
+
+        <AkStack class='mt-1' @alignItems='center' @spacing='1'>
+          <AkTypography
+            @variant='subtitle1'
+            data-test-serviceAccountSection-selectProject-cliEnabledLabel
+          >
+            {{t 'serviceAccountModule.cliEnabled'}}
+          </AkTypography>
+
+          <AkTooltip @placement='right' @arrow={{true}}>
+            <:tooltipContent>
+              <div
+                data-test-serviceAccountSection-selectProject-cliEnabledTooltipContent
+                local-class='tooltip-content-container'
+              >
+                {{t 'serviceAccountModule.cliEnabledDescription' htmlSafe=true}}
+              </div>
+            </:tooltipContent>
+
+            <:default>
+              <AkIcon
+                data-test-serviceAccountSection-selectProject-cliEnabledInfoIcon
+                @iconName='info'
+                @size='small'
+                @color='textPrimary'
+              />
+            </:default>
+          </AkTooltip>
+        </AkStack>
+
+        <AkTypography
+          local-class='selected-project-access-value'
+          data-test-serviceAccountSection-selectProject-cliEnabledValue
+        >
+          {{if @serviceAccount.cliEnabled (t 'enabled') (t 'disabled')}}
+        </AkTypography>
       {{/if}}
     </AkStack>
 
     {{#unless @serviceAccount.allProjects}}
+      {{#if this.forceUserToUpdate}}
+        <AkStack class='mt-3 mb-1' @alignItems='center' @spacing='0.5'>
+          <AkIcon @iconName='info' @size='small' @color='textPrimary' />
+
+          <AkTypography
+            data-test-serviceAccountSection-selectProject-forceUpdateNote
+          >
+            {{t 'serviceAccountModule.forceUpdateToManageProjectsNote'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
       <Organization::ServiceAccount::Section::SelectProject::List
         @isEditView={{this.isEditView}}
         @isCreateView={{this.isCreateView}}
+        @isPendingSave={{this.forceUserToUpdate}}
+        @registerRefreshFn={{this.registerListRefresh}}
         @serviceAccount={{@serviceAccount}}
       />
     {{/unless}}

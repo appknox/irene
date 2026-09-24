@@ -78,7 +78,15 @@ module(
         { allProjects: false, hasProjects: false },
       ],
       async function (assert, { allProjects, hasProjects }) {
-        assert.expect(allProjects ? 7 : !allProjects && hasProjects ? 13 : 12);
+        let expectedAssertionCount = 14;
+
+        if (allProjects) {
+          expectedAssertionCount = 9;
+        } else if (hasProjects) {
+          expectedAssertionCount = 15;
+        }
+
+        assert.expect(expectedAssertionCount);
 
         this.serviceAccount.allProjects = allProjects;
 
@@ -233,8 +241,77 @@ module(
         }
 
         assert.dom('[data-test-serviceAccountSection-footer]').doesNotExist();
+
+        assert
+          .dom(
+            '[data-test-serviceAccountSection-selectProject-cliEnabledLabel]'
+          )
+          .hasText(t('serviceAccountModule.cliEnabled'));
+
+        assert
+          .dom(
+            '[data-test-serviceAccountSection-selectProject-cliEnabledValue]'
+          )
+          .hasText(t('disabled'));
       }
     );
+
+    test('it renders the CLI enabled checkbox when editing', async function (assert) {
+      this.server.get('/service_accounts/:id/service_account_projects', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-selectProject-cliEnabledCheckbox]'
+        )
+        .exists()
+        .isNotChecked();
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-selectProject-cliEnabledInfoIcon]'
+        )
+        .exists();
+    });
+
+    test('it should update cli_enabled', async function (assert) {
+      assert.expect(2);
+
+      this.server.get('/service_accounts/:id/service_account_projects', () => {
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      this.server.put('/service_accounts/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        assert.true(data.cli_enabled);
+
+        return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
+
+      await click(
+        '[data-test-serviceAccountSection-selectProject-cliEnabledCheckbox]'
+      );
+
+      await click('[data-test-serviceAccountSection-selectProject-updateBtn]');
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-cliEnabledValue]')
+        .hasText(t('enabled'));
+    });
 
     test.each(
       'it should update project access type',
@@ -383,6 +460,107 @@ module(
         }
       }
     );
+
+    test('it lets the user pick projects in one step when switching away from all projects', async function (assert) {
+      // The account starts as all_projects=true (factory default). Switching
+      // to "For Specific Projects" in edit mode should let the user pick
+      // projects immediately (like the create page does), staged locally
+      // until Update is clicked — which then saves the access-level change
+      // and adds the picked projects together, in one action.
+      this.server.put('/service_accounts/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
+      });
+
+      const newProjects = this.server.createList('project', 3);
+
+      this.server.get('/v3/projects/:id', (schema, req) => {
+        return schema.projects.find(req.params.id).toJSON();
+      });
+
+      this.server.get('/v3/projects', () => {
+        return {
+          count: newProjects.length,
+          next: null,
+          previous: null,
+          results: newProjects,
+        };
+      });
+
+      this.server.post(
+        '/service_accounts/:id/service_account_projects',
+        (schema, req) => {
+          const data = JSON.parse(req.requestBody);
+
+          return schema.serviceAccountProjects
+            .create({
+              service_account: req.params.id,
+              project: data.project_id,
+            })
+            .toJSON();
+        }
+      );
+
+      this.server.get(
+        '/service_accounts/:id/service_account_projects',
+        (schema) => {
+          const results = schema.serviceAccountProjects.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
+
+      await selectChoose(
+        `[data-test-serviceAccountSection-selectProject-projectAccessSelect] .${classes.trigger}`,
+        t('serviceAccountModule.forSpecificProjects')
+      );
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-forceUpdateNote]')
+        .hasText(t('serviceAccountModule.forceUpdateToManageProjectsNote'));
+
+      assert
+        .dom(
+          '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
+        )
+        .isNotDisabled();
+
+      await click(
+        '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
+      );
+
+      const rows = findAll('[data-test-serviceAccountAddProjectList-row]');
+
+      assert.strictEqual(rows.length, newProjects.length);
+
+      await click(rows[0].querySelector('[data-test-checkbox]'));
+
+      await click('[data-test-serviceAccountAddProjectList-addBtn]');
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProjectList-item]')
+        .exists({ count: 1 });
+
+      await click('[data-test-serviceAccountSection-selectProject-updateBtn]');
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-forceUpdateNote]')
+        .doesNotExist();
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.successMsg,
+        t('serviceAccountModule.editSuccessMsg')
+      );
+    });
 
     test.each(
       'it should add project to service account',

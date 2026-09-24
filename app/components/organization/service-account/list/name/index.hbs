@@ -1,0 +1,37 @@
+<AkStack @direction='column' @spacing='0.5'>
+  <AkTypography
+    data-test-serviceAccountList-nameValue
+    @noWrap={{true}}
+    title={{@serviceAccount.name}}
+  >
+    {{@serviceAccount.name}}
+  </AkTypography>
+
+  {{#if @serviceAccount.cliEnabled}}
+    <AkStack @spacing='0.5'>
+      <AkChip
+        data-test-serviceAccountList-cliChip
+        @label={{t 'serviceAccountModule.cliLabel'}}
+        @size='small'
+        @variant='outlined'
+        @color='default'
+      >
+        <:icon>
+          <AkIcon @iconName='terminal-2' />
+        </:icon>
+      </AkChip>
+
+      <AkChip
+        data-test-serviceAccountList-cliLevelChip
+        @label={{if
+          @serviceAccount.allProjects
+          (t 'serviceAccountModule.ownerLevelLabel')
+          (t 'serviceAccountModule.memberLevelLabel')
+        }}
+        @size='small'
+        @variant='outlined'
+        @color='default'
+      />
+    </AkStack>
+  {{/if}}
+</AkStack>

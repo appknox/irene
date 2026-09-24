@@ -10,6 +10,7 @@ export interface OrganizationSettingsServiceAccountRouteQueryParams {
   sa_limit: number;
   sa_offset: number;
   show_system_created: boolean;
+  show_cli_enabled: boolean;
 }
 
 export default class AuthenticatedDashboardOrganizationSettingsServiceAccountRoute extends ScrollToTop(
@@ -27,6 +28,9 @@ export default class AuthenticatedDashboardOrganizationSettingsServiceAccountRou
       refreshModel: true,
     },
     show_system_created: {
+      refreshModel: true,
+    },
+    show_cli_enabled: {
       refreshModel: true,
     },
   };

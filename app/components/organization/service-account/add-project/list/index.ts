@@ -19,6 +19,7 @@ import parseError from 'irene/utils/parse-error';
 export interface OrganizationServiceAccountAddProjectListComponentSignature {
   Args: {
     isCreateView: boolean;
+    isPendingSave: boolean;
     serviceAccount: ServiceAccountModel;
     refreshSelectedProjects: () => void;
     drawerCloseHandler: () => void;
@@ -49,8 +50,8 @@ export default class OrganizationServiceAccountAddProjectListComponent extends C
   ) {
     super(owner, args);
 
-    if (this.args.isCreateView) {
-      this.selectedProjects = this.serviceAccount.selectedProjectsForCreate;
+    if (this.args.isCreateView || this.args.isPendingSave) {
+      this.selectedProjects = this.serviceAccount.pendingProjectSelections;
     }
 
     this.fetchProjects.perform(this.limit, this.offset);
@@ -176,8 +177,8 @@ export default class OrganizationServiceAccountAddProjectListComponent extends C
 
   @action
   handleAddSelectedProjects() {
-    if (this.args.isCreateView) {
-      this.serviceAccount.selectedProjectsForCreate = this.selectedProjects;
+    if (this.args.isCreateView || this.args.isPendingSave) {
+      this.serviceAccount.pendingProjectSelections = this.selectedProjects;
 
       // close the drawer
       this.args.drawerCloseHandler();
@@ -194,7 +195,7 @@ export default class OrganizationServiceAccountAddProjectListComponent extends C
         q: query,
       };
 
-      if (!this.args.isCreateView) {
+      if (!this.args.isCreateView && !this.args.isPendingSave) {
         queryParams['adapterOptions'] = {
           baseUrlModel: 'service-account',
           id: this.args.serviceAccount.id,
