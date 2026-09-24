@@ -62,7 +62,7 @@ export default class StoreReleaseReadinessScanResultsAssessmentTableStatusCellCo
     const isBlocker = severity === FINDING_SEVERITY.BLOCKER;
 
     return {
-      iconName: isBlocker ? 'block' : 'error',
+      iconName: isBlocker ? 'block-outline' : 'error',
       label: isBlocker
         ? this.intl.t('storeReleaseReadiness.summaryBlocker')
         : this.intl.t('storeReleaseReadiness.summaryWarning'),

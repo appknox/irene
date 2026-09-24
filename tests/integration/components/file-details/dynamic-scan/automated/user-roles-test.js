@@ -184,7 +184,7 @@ module(
       const cases = [
         { status: SCAN_STATUS.ANALYSIS_COMPLETED, icon: 'check-circle' },
         { status: SCAN_STATUS.ERROR, icon: 'error' },
-        { status: SCAN_STATUS.CANCELLED, icon: 'block' },
+        { status: SCAN_STATUS.CANCELLED, icon: 'block-outline' },
         { status: SCAN_STATUS.NOT_STARTED, icon: 'info' },
       ];
 

@@ -271,4 +271,4 @@ export const MajesticonsIconsSet = ['pulse'] as const;
 
 export const MiIconsSet = ['select'] as const;
 
-export const AntDesginIconsSet = ['security-scan-outlined'] as const;
+export const AntDesignIconsSet = ['security-scan-outlined'] as const;
