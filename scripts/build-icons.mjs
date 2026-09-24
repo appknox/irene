@@ -34,7 +34,7 @@ import {
   IxIconsSet,
   MajesticonsIconsSet,
   MiIconsSet,
-  AntDesginIconsSet,
+  AntDesignIconsSet,
 } from '../app/utils/icons.ts';
 
 // Load all icon sets
@@ -65,7 +65,7 @@ const majesticonsCollection = getIcons(MajesticonsIcons, MajesticonsIconsSet);
 
 const miCollection = getIcons(MiIcons, MiIconsSet);
 
-const antDesignCollection = getIcons(AntDesignIcons, AntDesginIconsSet);
+const antDesignCollection = getIcons(AntDesignIcons, AntDesignIconsSet);
 
 // Merge everything into one big object
 const output = {
