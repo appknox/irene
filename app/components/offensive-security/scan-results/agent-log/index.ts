@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 
@@ -18,7 +19,12 @@ export interface OffensiveSecurityScanResultsAgentLogSignature {
 
 export default class OffensiveSecurityScanResultsAgentLogComponent extends Component<OffensiveSecurityScanResultsAgentLogSignature> {
   @tracked dotCount = 1;
+  @tracked isExpanded = false;
+  @tracked isScrolledUp = false;
+
   private readonly dotsTimer?: ReturnType<typeof setInterval>;
+  private logPaneElement: HTMLElement | null = null;
+  private shouldAutoScroll = true;
 
   constructor(
     owner: unknown,
@@ -29,12 +35,88 @@ export default class OffensiveSecurityScanResultsAgentLogComponent extends Compo
     this.dotsTimer = setInterval(() => {
       this.dotCount = (this.dotCount % 3) + 1;
     }, 500);
+
+    window.addEventListener('keydown', this.handleDocumentKeyDown);
   }
 
   willDestroy(): void {
     super.willDestroy();
     if (this.dotsTimer) {
       clearInterval(this.dotsTimer);
+    }
+    window.removeEventListener('keydown', this.handleDocumentKeyDown);
+    document.body.style.overflow = '';
+  }
+
+  @action
+  handleDocumentKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.isExpanded) {
+      event.preventDefault();
+      this.toggleExpand();
+    }
+  }
+
+  @action
+  toggleExpand(): void {
+    this.isExpanded = !this.isExpanded;
+    if (this.isExpanded) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+
+    requestAnimationFrame(() => {
+      if (this.shouldAutoScroll) {
+        this.scrollToBottom();
+      }
+    });
+  }
+
+  @action
+  setupLogPane(element: HTMLElement): void {
+    this.logPaneElement = element;
+    this.scrollToBottom();
+  }
+
+  @action
+  handleScroll(event: Event): void {
+    const el = event.target as HTMLElement;
+    if (!el) {
+      return;
+    }
+
+    const distanceFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    this.shouldAutoScroll = distanceFromBottom < 60;
+    this.isScrolledUp = distanceFromBottom >= 60;
+  }
+
+  @action
+  handleLinesUpdated(): void {
+    if (this.shouldAutoScroll) {
+      requestAnimationFrame(() => {
+        this.scrollToBottom();
+      });
+    }
+  }
+
+  @action
+  scrollNav(): void {
+    if (this.isScrolledUp) {
+      // Currently scrolled up → jump to bottom (latest)
+      this.shouldAutoScroll = true;
+      this.isScrolledUp = false;
+      this.scrollToBottom();
+    } else {
+      // Already at bottom → scroll to top
+      if (this.logPaneElement) {
+        this.logPaneElement.scrollTop = 0;
+      }
+    }
+  }
+
+  scrollToBottom(): void {
+    if (this.logPaneElement) {
+      this.logPaneElement.scrollTop = this.logPaneElement.scrollHeight;
     }
   }
 

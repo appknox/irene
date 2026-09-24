@@ -23,7 +23,7 @@ interface TabItem {
   route: string;
   activeRoutes: string;
   iconDetails?: {
-    icon: 'check-circle' | 'warning' | 'block';
+    icon: 'check-circle' | 'warning' | 'block-outline';
     color: 'success' | 'warn' | 'error';
   } | null;
   inProgress?: boolean;
@@ -206,7 +206,7 @@ export default class FileDetailsDastHeader extends Component<FileDetailsDastHead
     }
 
     if (status === DsComputedStatus.CANCELLED) {
-      return { icon: 'block' as const, color: 'error' as const };
+      return { icon: 'block-outline' as const, color: 'error' as const };
     }
 
     return null;

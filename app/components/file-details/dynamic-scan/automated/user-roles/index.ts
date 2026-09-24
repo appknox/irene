@@ -93,7 +93,10 @@ export default class FileDetailsDynamicScanAutomatedUserRolesComponent extends C
         };
 
       case DsStatusGroup.CANCELLED:
-        return { icon: 'block' as const, color: 'textSecondary' as const };
+        return {
+          icon: 'block-outline' as const,
+          color: 'textSecondary' as const,
+        };
 
       default:
         return {

@@ -3,10 +3,12 @@ import { action } from '@ember/object';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
+import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 
 export interface OffensiveSecurityScanResultsArtifactsCardSignature {
   Args: {
+    scan?: OffsecScanModel | null;
     artifacts: OffsecScanArtifact[];
     onDownload: (artifact: OffsecScanArtifact | string) => void;
     isDownloading?: boolean;

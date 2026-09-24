@@ -40,7 +40,7 @@ export default class OffensiveSecurityWrapperComponent extends Component<Offensi
     return [
       {
         label: this.intl.t('offensiveSecurity.attackRuns'),
-        icon: 'terminal-2',
+        icon: 'ant-design:security-scan-outlined',
         route: 'authenticated.offensive-security',
         currentWhen: 'authenticated.offensive-security',
       },

@@ -13,12 +13,14 @@ import parseError from 'irene/utils/parse-error';
 import type OffsecFindingModel from 'irene/models/offsec-finding';
 import type { OffsecFindingEvidence } from 'irene/models/offsec-finding';
 import type OffsecScanModel from 'irene/models/offsec-scan';
+import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 
 export interface OffensiveSecurityFindingDetailSignature {
   Args: {
-    scanId: string;
+    scanId?: string;
     findingId: string;
+    scan?: OffsecScanModel | null;
   };
 }
 
@@ -55,7 +57,9 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
   ) {
     super(owner, args);
 
-    if (args.scanId) {
+    if (args.scan) {
+      this.scan = args.scan;
+    } else if (args.scanId) {
       this.scan = this.store.peekRecord('offsec-scan', args.scanId);
     }
 
@@ -277,8 +281,77 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
   }
 
   get targetPackage(): string {
-    // Try to find package from evidence content/metadata
-    for (const ev of this.evidence) {
+    // 1. Scan record carries the authoritative application package name
+    const scan =
+      this.scan ||
+      (this.scanId
+        ? (this.store.peekRecord(
+            'offsec-scan',
+            this.scanId
+          ) as OffsecScanModel | null)
+        : null);
+
+    const scanPkg =
+      scan?.packageName ||
+      ((scan as unknown as Record<string, unknown>)?.['package_name'] as
+        | string
+        | undefined) ||
+      ((scan as unknown as Record<string, unknown>)?.['package'] as
+        | string
+        | undefined);
+
+    if (typeof scanPkg === 'string' && scanPkg.trim()) {
+      return scanPkg.trim();
+    }
+
+    // 2. Finding detail or finding attributes
+    const findingRecord = this.finding as unknown as Record<string, unknown>;
+    const detail = this.finding?.detail as Record<string, unknown> | undefined;
+
+    const findingPkg =
+      (typeof detail?.['package_name'] === 'string' &&
+        detail['package_name']) ||
+      (typeof detail?.['packageName'] === 'string' && detail['packageName']) ||
+      (typeof detail?.['package'] === 'string' && detail['package']) ||
+      (typeof detail?.['target_package'] === 'string' &&
+        detail['target_package']) ||
+      (typeof detail?.['targetPackage'] === 'string' &&
+        detail['targetPackage']) ||
+      (typeof findingRecord?.['package_name'] === 'string' &&
+        findingRecord['package_name']) ||
+      (typeof findingRecord?.['packageName'] === 'string' &&
+        findingRecord['packageName']) ||
+      (typeof findingRecord?.['package'] === 'string' &&
+        findingRecord['package']);
+
+    if (typeof findingPkg === 'string' && findingPkg.trim()) {
+      return findingPkg.trim();
+    }
+
+    // 3. Finding attempts or bypass attempt
+    const attemptPkg =
+      (typeof this.effectiveAttempt?.['package_name'] === 'string' &&
+        this.effectiveAttempt['package_name']) ||
+      (typeof this.effectiveAttempt?.['package'] === 'string' &&
+        this.effectiveAttempt['package']) ||
+      (typeof this.effectiveAttempt?.['target_package'] === 'string' &&
+        this.effectiveAttempt['target_package']) ||
+      (typeof this.finding?.bypassAttempted?.['package_name'] === 'string' &&
+        this.finding.bypassAttempted['package_name']) ||
+      (typeof this.finding?.bypassAttempted?.['package'] === 'string' &&
+        this.finding.bypassAttempted['package']);
+
+    if (typeof attemptPkg === 'string' && attemptPkg.trim()) {
+      return attemptPkg.trim();
+    }
+
+    // 4. Try to find package from all evidence (including raw navigation/UI evidence)
+    const rawEvidenceList: OffsecFindingEvidence[] =
+      (Array.isArray(this.finding?.evidence) ? this.finding.evidence : null) ||
+      (this.finding?.evidenceList?.length ? this.finding.evidenceList : null) ||
+      this.evidence;
+
+    for (const ev of rawEvidenceList) {
       const content = ev.content || ev.metadata;
       if (typeof content === 'object' && content !== null) {
         const obj = content as Record<string, unknown>;
@@ -288,16 +361,21 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         const clicked = obj['clicked'] as Record<string, unknown> | undefined;
         const pkg =
           (typeof obj['package'] === 'string' && obj['package']) ||
+          (typeof obj['package_name'] === 'string' && obj['package_name']) ||
           (typeof currentApp?.['package'] === 'string' &&
             currentApp['package']) ||
-          (typeof clicked?.['package'] === 'string' && clicked['package']);
-        if (pkg) {
-          return pkg;
+          (typeof currentApp?.['package_name'] === 'string' &&
+            currentApp['package_name']) ||
+          (typeof clicked?.['package'] === 'string' && clicked['package']) ||
+          (typeof clicked?.['package_name'] === 'string' &&
+            clicked['package_name']);
+        if (pkg && pkg.trim()) {
+          return pkg.trim();
         }
       } else if (typeof content === 'string') {
-        const match = /"package":\s*"([^"]+)"/.exec(content);
-        if (match?.[1]) {
-          return match[1];
+        const match = /"(?:package|package_name)":\s*"([^"]+)"/.exec(content);
+        if (match?.[1] && match[1].trim()) {
+          return match[1].trim();
         }
       }
     }
@@ -835,6 +913,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
 
     return (
       this.args.scanId ||
+      (this.args.scan?.id ? String(this.args.scan.id) : undefined) ||
       (typeof findingRecord?.['scan_id'] === 'string'
         ? findingRecord['scan_id']
         : undefined) ||
@@ -848,6 +927,143 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return (
       this.scan?.displayName || (this.scanId ? `Scan ${this.scanId}` : 'Scan')
     );
+  }
+
+  get currentGroupKey(): string | null {
+    const findingId = String(this.finding?.id || this.args.findingId || '');
+    const allFindings = this.scan?.findingList ?? [];
+
+    if (findingId && allFindings.length > 0) {
+      const matched = allFindings.find((f) => String(f.id) === findingId);
+      if (matched) {
+        const matchedRecord = matched as unknown as Record<string, unknown>;
+        const group =
+          matched.group ||
+          (matchedRecord['check_type'] as string) ||
+          (matchedRecord['checkType'] as string) ||
+          matched.signature_id;
+        if (group) {
+          return group;
+        }
+      }
+    }
+
+    const findingRecord = this.finding as unknown as Record<string, unknown>;
+
+    return (
+      (findingRecord?.['group'] as string) ||
+      this.finding?.checkType ||
+      (findingRecord?.['check_type'] as string) ||
+      null
+    );
+  }
+
+  get findingList(): OffsecScanEmbeddedFinding[] {
+    const allFindings = this.scan?.findingList ?? [];
+    const groupKey = this.currentGroupKey;
+    if (!groupKey) {
+      return allFindings;
+    }
+
+    const scopedFindings = allFindings.filter((f) => {
+      const fRecord = f as unknown as Record<string, unknown>;
+      const fGroup =
+        f.group ||
+        (fRecord['check_type'] as string) ||
+        (fRecord['checkType'] as string) ||
+        f.signature_id;
+      const fCheckType =
+        (fRecord['check_type'] as string) ||
+        (fRecord['checkType'] as string) ||
+        f.check_type;
+
+      return (
+        fGroup === groupKey ||
+        fCheckType === groupKey ||
+        f.signature_id === groupKey
+      );
+    });
+
+    return scopedFindings.length > 0 ? scopedFindings : allFindings;
+  }
+
+  get currentFindingIndex(): number {
+    const currentId = String(this.finding?.id || this.args.findingId || '');
+    if (!currentId) {
+      return -1;
+    }
+
+    return this.findingList.findIndex((f) => String(f.id) === currentId);
+  }
+
+  get isFirstFinding(): boolean {
+    return this.currentFindingIndex <= 0;
+  }
+
+  get isLastFinding(): boolean {
+    if (this.currentFindingIndex === -1 || this.findingList.length === 0) {
+      return true;
+    }
+
+    return this.currentFindingIndex >= this.findingList.length - 1;
+  }
+
+  get currentFindingPosition(): number {
+    return this.currentFindingIndex >= 0 ? this.currentFindingIndex + 1 : 1;
+  }
+
+  get totalFindingsCount(): number {
+    return this.findingList.length;
+  }
+
+  get hasMultipleFindings(): boolean {
+    return this.totalFindingsCount > 1;
+  }
+
+  @action
+  goToPreviousFinding(): void {
+    if (this.isFirstFinding) {
+      return;
+    }
+
+    const prevFinding = this.findingList[this.currentFindingIndex - 1];
+    if (prevFinding?.id && this.scanId) {
+      const prevId = String(prevFinding.id);
+      this.loadFinding.perform(prevId);
+      this.router.transitionTo(
+        'authenticated.offensive-security.finding',
+        this.scanId,
+        prevId
+      );
+    }
+  }
+
+  @action
+  goToNextFinding(): void {
+    if (this.isLastFinding) {
+      return;
+    }
+
+    const nextFinding = this.findingList[this.currentFindingIndex + 1];
+    if (nextFinding?.id && this.scanId) {
+      const nextId = String(nextFinding.id);
+      this.loadFinding.perform(nextId);
+      this.router.transitionTo(
+        'authenticated.offensive-security.finding',
+        this.scanId,
+        nextId
+      );
+    }
+  }
+
+  @action
+  handleFindingIdChange(): void {
+    if (
+      this.args.findingId &&
+      String(this.finding?.id) !== String(this.args.findingId)
+    ) {
+      this.loadFinding.perform(this.args.findingId);
+    }
   }
 
   @action
@@ -887,7 +1103,15 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
         }
 
         if (!this.scan && this.scanId) {
-          this.scan = this.store.peekRecord('offsec-scan', this.scanId);
+          this.scan =
+            (this.store.peekRecord(
+              'offsec-scan',
+              this.scanId
+            ) as OffsecScanModel | null) ||
+            ((await this.store.findRecord(
+              'offsec-scan',
+              this.scanId
+            )) as OffsecScanModel);
         }
       } catch (error) {
         this.notify?.error?.(parseError(error, this.intl.t('pleaseTryAgain')));

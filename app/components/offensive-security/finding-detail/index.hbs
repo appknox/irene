@@ -1,4 +1,4 @@
-<div local-class='finding-detail-wrap'>
+<div local-class='finding-detail-wrap' {{did-update this.handleFindingIdChange @findingId}}>
   {{#if this.isLoading}}
     <AkStack @direction='column' @spacing='3' class='p-3'>
       <AkSkeleton @width='100%' @height='40px' />
@@ -6,11 +6,48 @@
       <AkSkeleton @width='100%' @height='340px' />
     </AkStack>
   {{else if this.finding}}
-    {{! ---------- BREADCRUMB ---------- }}
-    <AkBreadcrumbs::AutoTrail
-      aria-label='Breadcrumb'
-      class='mb-3'
-    />
+    {{! ---------- BREADCRUMB & GLOBAL NAV ---------- }}
+    <AkStack
+      @direction='row'
+      @justifyContent='space-between'
+      @alignItems='center'
+      local-class='global-nav-bar'
+    >
+      <AkBreadcrumbs::AutoTrail
+        aria-label='Breadcrumb'
+      />
+
+      {{#if (gt this.totalFindingsCount 0)}}
+        <div local-class='finding-nav' data-test-offensiveSecurity-findingNav>
+          <AkIconButton
+            @size='small'
+            disabled={{this.isFirstFinding}}
+            {{on 'click' this.goToPreviousFinding}}
+            aria-label='Previous finding'
+            local-class='nav-arrow-btn'
+            data-test-offensiveSecurity-findingNav-prev
+          >
+            <AkIcon @iconName='chevron-left' />
+          </AkIconButton>
+
+          <span local-class='nav-counter' data-test-offensiveSecurity-findingNav-counter>
+            Finding {{this.currentFindingPosition}} of {{this.totalFindingsCount}}
+          </span>
+
+          <AkIconButton
+            @size='small'
+            disabled={{this.isLastFinding}}
+            {{on 'click' this.goToNextFinding}}
+            aria-label='Next finding'
+            local-class='nav-arrow-btn'
+            data-test-offensiveSecurity-findingNav-next
+          >
+            <AkIcon @iconName='chevron-right' />
+          </AkIconButton>
+        </div>
+      {{/if}}
+    </AkStack>
+
     {{! ---------- HERO CARD ---------- }}
     <section local-class='hero'>
       <div local-class='hero-grid'>
@@ -61,9 +98,12 @@
             {{/if}}
           </div>
 
-          <p local-class='lede'>{{this.ledeDescription}}</p>
+          {{#if this.ledeDescription}}
+            <p local-class='lede'>{{this.ledeDescription}}</p>
+          {{/if}}
         </div>
 
+        {{!-- Resilience score card - commented out for now
         <div local-class='hero-score'>
           <div local-class='score-label'>Resilience score</div>
           <div local-class='score-num'>
@@ -77,17 +117,8 @@
           <div local-class='bar'>
             <i style={{this.scoreProgressStyle}}></i>
           </div>
-          {{!-- View details drawer button - commented out for now
-          <button
-            type='button'
-            local-class='whybtn'
-            {{on 'click' this.openDrawer}}
-            aria-haspopup='dialog'
-          >
-            View details <span local-class='chev'>›</span>
-          </button>
-          --}}
         </div>
+        --}}
       </div>
     </section>
 
@@ -106,30 +137,14 @@
             <h2>Working exploit</h2>
           </div>
           <div local-class='card-b'>
-            <div local-class='term'>
-              <div local-class='term-bar'>
-                <span local-class='fname'>{{this.exploitFileName}}</span>
-                <span local-class='lang'>Frida · JavaScript</span>
-                <button
-                  type='button'
-                  local-class='copy {{if this.isExploitCopied "done"}}'
-                  {{on 'click' this.copyExploit}}
-                >
-                  {{#if this.isExploitCopied}}
-                    <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'>
-                      <polyline points='20 6 9 17 4 12' />
-                    </svg>
-                    Copied
-                  {{else}}
-                    <svg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-                      <rect x='9' y='9' width='13' height='13' rx='2' />
-                      <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1' />
-                    </svg>
-                    Copy
-                  {{/if}}
-                </button>
+            <div local-class='evi'>
+              <div local-class='evi-h'>
+                <span local-class='evi-name'>{{this.exploitFileName}}</span>
+                <span local-class='evi-surface'>Frida · JavaScript</span>
               </div>
-              <pre local-class='code-block'><code>{{this.exploitScript}}</code></pre>
+              <div local-class='evi-code-wrapper'>
+                <KnoxIq::CodeBlock @code={{this.exploitScript}} />
+              </div>
             </div>
 
             <div local-class='repro'>
@@ -137,12 +152,14 @@
               {{#each this.reproduceSteps as |step|}}
                 <div local-class='step'>
                   <span local-class='step-num'>{{step.step}}</span>
-                  <span local-class='step-text'>
-                    {{step.text}}
+                  <div local-class='step-content'>
+                    <span local-class='step-text'>{{step.text}}</span>
                     {{#if step.code}}
-                      <code>{{step.code}}</code>
+                      <div local-class='step-code-wrapper'>
+                        <KnoxIq::CodeBlock @code={{step.code}} />
+                      </div>
                     {{/if}}
-                  </span>
+                  </div>
                 </div>
               {{/each}}
             </div>

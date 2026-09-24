@@ -37,7 +37,7 @@ type SummaryCountsMetricRow = {
   summaryKind: SummaryCountsMetricKind;
   leadingDotClass?: string;
   leadingIcon?: {
-    iconName: 'block' | 'warning';
+    iconName: 'block-outline' | 'warning';
     iconColor: 'error';
   };
   labelKey: string;
@@ -110,7 +110,7 @@ export default class StoreReleaseReadinessScanResultsDetailsComponent extends Co
 
     const blocker: SummaryCountsMetricRow = {
       summaryKind: 'blocker',
-      leadingIcon: { iconName: 'block', iconColor: 'error' },
+      leadingIcon: { iconName: 'block-outline', iconColor: 'error' },
       labelKey: 'storeReleaseReadiness.summaryBlocker',
       labelStrong: false,
       labelMuted: true,
