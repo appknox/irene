@@ -9,6 +9,7 @@ import Service from '@ember/service';
 import ENUMS from 'irene/enums';
 import {
   enableKnoxiqForTests,
+  pushAnalysisOverviewForKnoxiq,
   setupFileExploitabilityMirageEndpoint,
   setupKnoxiqScanStatusMirage,
 } from 'irene/tests/helpers/knoxiq-test-utils';
@@ -188,6 +189,107 @@ module('Integration | Component | file-details', function (hooks) {
 
     assert.dom('[data-test-knoxiq-vulnerability-analysis]').doesNotExist();
     assert.dom('[data-test-vulnerability-analysis-emptyTitle]').exists();
+  });
+
+  // ─── Table swap-over ───────────────────────────────────────────────────────
+  module('KnoxIQ table swap-over', function (hooks) {
+    hooks.beforeEach(function () {
+      this.file.isStaticDone = true;
+      this.file.isKnoxiqAutomated = false;
+
+      // Two untested analyses — the table must not be waiting on a verdict.
+      this.pushAnalysis = () => {
+        const vulnerability = this.server.create('vulnerability');
+
+        return pushAnalysisOverviewForKnoxiq(
+          this.server,
+          this.owner.lookup('service:store'),
+          {
+            file: this.file.id,
+            vulnerability: vulnerability.id,
+            risk: ENUMS.RISK.HIGH,
+            computed_risk: ENUMS.RISK.HIGH,
+            overridden_risk: null,
+            is_knoxiq_all_fp: false,
+            exploitability_likelihood: ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN,
+          }
+        );
+      };
+
+      this.fileAnalysesListContext = {
+        ...this.fileAnalysesListContext,
+        analyses: [this.pushAnalysis(), this.pushAnalysis()],
+      };
+
+      this.renderFileDetails = () =>
+        render(hbs`
+          <FileDetails
+            @file={{this.file}}
+            @fileAnalysesListContext={{this.fileAnalysesListContext}}
+          />
+        `);
+    });
+
+    test.each(
+      'shows the KnoxIQ table as soon as a KnoxIQ scan is underway',
+      [
+        [ENUMS.KNOXIQ_SCAN_STATUS.PENDING],
+        [ENUMS.KNOXIQ_SCAN_STATUS.RUNNING],
+        [ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED],
+      ],
+      async function (assert, [sast]) {
+        setupKnoxiqScanStatusMirage(this.server, {
+          sast,
+          dast: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        });
+
+        await this.renderFileDetails();
+
+        assert.dom('[data-test-knoxiq-vulnerability-analysis]').exists();
+
+        assert
+          .dom('[data-test-knoxiq-vulnerability-analysis-row]')
+          .exists({ count: 2 }, 'unscored analyses are listed straight away');
+
+        assert
+          .dom(
+            '[data-test-knoxiq-vulnerability-analysis-exploitability-tooltip]'
+          )
+          .exists({ count: 2 }, 'and keep the untested flames until scored');
+      }
+    );
+
+    test('a DAST run alone is enough to swap the table', async function (assert) {
+      setupKnoxiqScanStatusMirage(this.server, {
+        sast: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        dast: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+      });
+
+      await this.renderFileDetails();
+
+      assert.dom('[data-test-knoxiq-vulnerability-analysis]').exists();
+    });
+
+    test.each(
+      'keeps the legacy table while KnoxIQ has not started',
+      [
+        [ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED],
+        [ENUMS.KNOXIQ_SCAN_STATUS.DISABLED],
+
+        // a failed run is surfaced by the status card, not by an empty table
+        [ENUMS.KNOXIQ_SCAN_STATUS.ERRORED],
+      ],
+      async function (assert, [sast]) {
+        setupKnoxiqScanStatusMirage(this.server, {
+          sast,
+          dast: sast,
+        });
+
+        await this.renderFileDetails();
+
+        assert.dom('[data-test-knoxiq-vulnerability-analysis]').doesNotExist();
+      }
+    );
   });
 
   test('card is absent when knoxiq is automated', async function (assert) {
