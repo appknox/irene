@@ -25,6 +25,7 @@ export default Base.extend({
   updated_by_user: (i) => i + 1,
   service_account_type: () => faker.helpers.arrayElement([1, 2]),
   all_projects: true,
+  cli_enabled: false,
 
   projects() {
     const id = this.id as number;
