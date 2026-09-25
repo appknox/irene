@@ -27,6 +27,7 @@ declare const config: {
   enableMarketplace: boolean;
   posthogApiKey: string;
   posthogApiHost: string;
+  jiraSecurityInstallUrl: string;
   notifications: Notifications;
   deviceFarmPassword: string;
   mercerDownloadUrl: string;
@@ -68,6 +69,7 @@ export interface Defaults {
   IRENE_ENABLE_MARKETPLACE: boolean;
   IRENE_POSTHOG_API_KEY: string;
   IRENE_POSTHOG_API_HOST: string;
+  IRENE_JIRA_SECURITY_INSTALL_URL: string;
   ENTERPRISE: boolean;
   WHITELABEL_ENABLED: boolean;
   WHITELABEL_NAME: string;
