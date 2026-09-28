@@ -1,0 +1,39 @@
+{{#if this.hasOverdueVulnerabilities}}
+  <AkStack
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1.5'
+    local-class='overdue-banner'
+    data-test-fileDetails-overdueVulnerabilities
+    ...attributes
+  >
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <span local-class='overdue-icon'>
+        <AkIcon
+          @iconName='notifications'
+          @size='small'
+          data-test-fileDetails-overdueVulnerabilities-icon
+        />
+      </span>
+
+      <AkTypography
+        @fontWeight='medium'
+        @color='error'
+        data-test-fileDetails-overdueVulnerabilities-count
+      >
+        {{t 'overdueVulnerabilities.count' count=this.overdueCount}}
+      </AkTypography>
+    </AkStack>
+
+    <AkLink
+      @route='authenticated.dashboard.file.overdue-vulnerabilities'
+      @model={{@file.id}}
+      @color='textPrimary'
+      @underline='always'
+      @fontWeight='medium'
+      data-test-fileDetails-overdueVulnerabilities-reviewLink
+    >
+      {{t 'overdueVulnerabilities.review'}}
+    </AkLink>
+  </AkStack>
+{{/if}}

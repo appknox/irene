@@ -1,0 +1,18 @@
+<AkStack
+  @alignItems='center'
+  @spacing='0.5'
+  local-class='overdue-by-chip'
+  data-test-overdueVulnerabilities-table-overdueBy
+>
+  <AkIcon @iconName='schedule' @size='small' @color='error' />
+
+  <AkTypography
+    @variant='body2'
+    @fontWeight='medium'
+    @color='error'
+    @noWrap={{true}}
+    data-test-overdueVulnerabilities-table-overdueByText
+  >
+    {{t 'overdueVulnerabilities.overdueDays' count=this.overdueDays}}
+  </AkTypography>
+</AkStack>

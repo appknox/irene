@@ -1,0 +1,73 @@
+{{#if this.fetchPolicies.isRunning}}
+  <AkStack
+    @justifyContent='center'
+    class='p-4'
+    data-test-overdueVulnerabilities-slaPolicyDrawer-loader
+  >
+    <AkLoader @size={{24}} />
+  </AkStack>
+{{else}}
+  <AkStack @direction='column' @spacing='4' class='p-3'>
+    {{#if this.organizationPolicy}}
+      <AkStack
+        @direction='column'
+        @spacing='1.5'
+        @width='full'
+        data-test-overdueVulnerabilities-slaPolicyDrawer-organization
+      >
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='h6'
+            data-test-overdueVulnerabilities-slaPolicyDrawer-organizationTitle
+          >
+            {{t 'overdueVulnerabilities.organizationConfiguredAs'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            data-test-overdueVulnerabilities-slaPolicyDrawer-organizationDescription
+          >
+            {{t 'overdueVulnerabilities.organizationPolicyDescription'}}
+          </AkTypography>
+        </AkStack>
+
+        <VulnerabilitySla::PolicyTable
+          @rows={{this.organizationRows}}
+          @readonly={{true}}
+        />
+      </AkStack>
+    {{/if}}
+
+    {{#if this.projectPolicy}}
+      <AkStack
+        @direction='column'
+        @spacing='1.5'
+        @width='full'
+        data-test-overdueVulnerabilities-slaPolicyDrawer-project
+      >
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='h6'
+            data-test-overdueVulnerabilities-slaPolicyDrawer-projectTitle
+          >
+            {{t 'overdueVulnerabilities.projectConfiguredAs'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            data-test-overdueVulnerabilities-slaPolicyDrawer-projectDescription
+          >
+            {{t 'overdueVulnerabilities.projectPolicyDescription'}}
+          </AkTypography>
+        </AkStack>
+
+        <VulnerabilitySla::PolicyTable
+          @rows={{this.projectRows}}
+          @readonly={{true}}
+        />
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{/if}}
