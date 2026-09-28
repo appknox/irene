@@ -244,7 +244,7 @@ export default class UploadAppStatusComponent extends Component {
 
       const submissionsById = new Map<string, SubmissionModel>();
 
-      [...validatingSubs, ...trackedSubs].forEach((sub) => {
+      [...validatingSubs.slice(), ...trackedSubs].forEach((sub) => {
         if (sub) {
           submissionsById.set(sub.id, sub);
         }
