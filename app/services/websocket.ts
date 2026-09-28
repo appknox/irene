@@ -21,6 +21,7 @@ import {
   AnalysisEventHandler,
   DynamicScanEventHandler,
   OffsecScanEventHandler,
+  SubmissionEventHandler,
 } from 'irene/utils/ws-model-ev-handlers';
 
 interface SocketIOService {
@@ -162,6 +163,7 @@ export default class WebsocketService extends Service {
       new AnalysisEventHandler(this.store, this.eventBus, this.realtime),
       new DynamicScanEventHandler(this.store, this.eventBus, this.realtime),
       new OffsecScanEventHandler(this.store, this.eventBus, this.realtime),
+      new SubmissionEventHandler(this.store, this.eventBus, this.realtime),
     ];
 
     handlers.forEach((handler) => {
