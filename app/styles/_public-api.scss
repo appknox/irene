@@ -76,6 +76,10 @@
           display: none;
         }
 
+        code {
+          padding: 5px 7px !important;
+        }
+
         ul {
           list-style: disc;
           padding-left: 1em;
@@ -196,6 +200,8 @@
 
 // Swagger UI Description
 .swagger-ui-description {
+  width: 100%;
+
   h3 {
     margin: unset;
   }
