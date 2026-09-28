@@ -1,17 +1,16 @@
 /* eslint-disable ember/no-observers */
 /* eslint-disable ember/use-ember-data-rfc-395-imports */
-import type DS from 'ember-data';
 import { tracked } from 'tracked-built-ins';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import type Store from 'ember-data/store';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import type RouterService from '@ember/routing/router-service';
@@ -50,8 +49,7 @@ export default class UploadAppStatusComponent extends Component {
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked submissions: DS.AdapterPopulatedRecordArray<SubmissionModel> | null =
-    null;
+  @tracked submissions: SubmissionModel[] | null = null;
 
   constructor(owner: unknown, args: object) {
     super(owner, args);
@@ -240,7 +238,19 @@ export default class UploadAppStatusComponent extends Component {
       // To persist submissions in the popover even if the popover is not opened
       validatingSubs.forEach((sub) => this.uploadApp.submissionSet.add(sub.id));
 
-      this.submissions = validatingSubs;
+      const trackedSubs = Array.from(this.uploadApp.submissionSet)
+        .map((id) => this.store.peekRecord('submission', id))
+        .filter((sub): sub is SubmissionModel => Boolean(sub));
+
+      const submissionsById = new Map<string, SubmissionModel>();
+
+      [...validatingSubs, ...trackedSubs].forEach((sub) => {
+        if (sub) {
+          submissionsById.set(sub.id, sub);
+        }
+      });
+
+      this.submissions = Array.from(submissionsById.values());
     } catch (err) {
       this.notify.error(parseError(err));
     }

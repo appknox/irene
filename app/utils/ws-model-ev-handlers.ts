@@ -108,6 +108,9 @@ export class SubmissionEventHandler extends WsModelEventHandler<SubmissionModel>
     return 'submission' as const;
   }
 
-  onCreate() {}
+  onCreate() {
+    this.realtime.incrementProperty('SubmissionCounter');
+  }
+
   onUpdate() {}
 }
