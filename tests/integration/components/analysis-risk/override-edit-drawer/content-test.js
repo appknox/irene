@@ -21,6 +21,7 @@ const selectors = {
     '[data-test-analysisRisk-overrideEditDrawer-overrideForm-overrideToLabel]',
   formSaveBtn:
     '[data-test-analysisRisk-overrideEditDrawer-overrideForm-saveBtn]',
+  slaNote: '[data-test-analysisRisk-overrideEditDrawer-slaNote]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
@@ -72,6 +73,14 @@ module(
         ],
         ...extra,
       });
+
+      this.server.create('organization-vulnerability-sla', 'withEnabled', {
+        id: '1',
+      });
+
+      this.server.get('/organizations/:id/vulnerability-sla', (schema) =>
+        schema.organizationVulnerabilitySlas.find('1').toJSON()
+      );
 
       this.setProperties({
         pushOverrideRequest,
@@ -170,6 +179,45 @@ module(
       assert
         .dom(selectors.detailsOverriddenAsTitle)
         .hasText(t('editOverrideVulnerability.overriddenAs'));
+    });
+
+    // ─── SLA note ────────────────────────────────────────────────────────────
+    test('the SLA note renders below the override form', async function (assert) {
+      this.dataModel = this.buildDataModel({ isOverridden: false });
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.slaNote)
+        .hasText(`${t('note')} - ${t('editOverrideVulnerability.slaNote')}`);
+
+      const saveBtn = document.querySelector(selectors.formSaveBtn);
+      const note = document.querySelector(selectors.slaNote);
+
+      assert.true(
+        Boolean(
+          saveBtn.compareDocumentPosition(note) &
+            Node.DOCUMENT_POSITION_FOLLOWING
+        ),
+        'the note is rendered after the form actions'
+      );
+    });
+
+    test('the SLA note is hidden outside the override form', async function (assert) {
+      this.dataModel = this.buildDataModel({
+        isOverridden: true,
+        overriddenRisk: ENUMS.RISK.LOW,
+        overriddenRiskComment: 'Accepted risk',
+        overrideCriteria: 'current_file',
+      });
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.detailsOverriddenAsTitle)
+        .hasText(t('editOverrideVulnerability.overriddenAs'));
+
+      assert.dom(selectors.slaNote).doesNotExist();
     });
   }
 );

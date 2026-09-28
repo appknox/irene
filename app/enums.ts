@@ -597,6 +597,13 @@ const ENUMS = {
     COMPLETED: 3,
     FAILED: 4,
   },
+
+  SLA_REMEDIATION_TIME_TYPE: {
+    DAY: 1,
+    WEEK: 2,
+    MONTH: 3,
+    YEAR: 4,
+  },
 };
 
 export const ENUMS_DISPLAY = {
