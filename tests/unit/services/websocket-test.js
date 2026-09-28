@@ -98,6 +98,81 @@ module('Unit | Service | websocket', function (hooks) {
     assert.strictEqual(emittedData.data.room, 'room-123');
   });
 
+  test('onConnect registers a handler for submission model events', function (assert) {
+    const service = this.owner.lookup('service:websocket');
+    service.currentSocketID = 'room-123';
+
+    service.connectedSocket = {
+      emit: () => {},
+      on: () => {},
+      off: () => {},
+      reconnect: () => {},
+      close: () => {},
+    };
+
+    service.onConnect();
+
+    assert.ok(service.handlers.get('submission'));
+  });
+
+  test('a submission create notification increments SubmissionCounter', function (assert) {
+    const service = this.owner.lookup('service:websocket');
+    const store = this.owner.lookup('service:store');
+
+    store.normalize = (modelName, data) => ({
+      data: { id: data.id, type: modelName, attributes: data },
+    });
+    store.push = () => {};
+
+    service.currentSocketID = 'room-123';
+    service.connectedSocket = {
+      emit: () => {},
+      on: () => {},
+      off: () => {},
+      reconnect: () => {},
+      close: () => {},
+    };
+    service.onConnect();
+
+    assert.strictEqual(service.realtime.SubmissionCounter, 0);
+
+    service.onModelCreatedNotification({
+      model_name: 'submission',
+      data: { id: '1' },
+    });
+
+    assert.strictEqual(service.realtime.SubmissionCounter, 1);
+  });
+
+  test('a submission update notification does not increment SubmissionCounter', function (assert) {
+    const service = this.owner.lookup('service:websocket');
+    const store = this.owner.lookup('service:store');
+
+    store.normalize = (modelName, data) => ({
+      data: { id: data.id, type: modelName, attributes: data },
+    });
+    store.push = () => {};
+
+    service.currentSocketID = 'room-123';
+    service.connectedSocket = {
+      emit: () => {},
+      on: () => {},
+      off: () => {},
+      reconnect: () => {},
+      close: () => {},
+    };
+    service.onConnect();
+
+    // already-tracked submissions rely on the unconditional store.push in
+    // onModelNotification to stay live, not on a requery of the popover
+    service.onModelNotification({
+      model_name: 'submission',
+      data: { id: '1' },
+    });
+
+    assert.strictEqual(service.realtime.SubmissionCounter, 0);
+  });
+
   test('onModelNotification pushes model to store', function (assert) {
     const service = this.owner.lookup('service:websocket');
     const store = this.owner.lookup('service:store');

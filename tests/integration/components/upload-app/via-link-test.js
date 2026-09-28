@@ -139,7 +139,7 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
     'test upload app via link',
     [true, false],
     async function (assert, fail) {
-      assert.expect(fail ? 11 : 10);
+      assert.expect(fail ? 12 : 11);
 
       const appLink =
         'https://play.google.com/store/apps/details?id=com.example.app';
@@ -185,6 +185,8 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
 
       await click('[data-test-uploadAppViaLinkModal-confirmBtn]');
 
+      const realtime = this.owner.lookup('service:realtime');
+
       if (fail) {
         assert.dom('[data-test-ak-modal-header]').exists();
 
@@ -195,9 +197,13 @@ module('Integration | Component | upload-app/via-link', function (hooks) {
         const notify = this.owner.lookup('service:notifications');
 
         assert.ok(notify.errorMsg);
+        assert.strictEqual(realtime.SubmissionCounter, 0);
       } else {
         // should close modal on success
         assert.dom('[data-test-ak-modal-header]').doesNotExist();
+
+        // should notify the status popover to refetch and show the new submission
+        assert.strictEqual(realtime.SubmissionCounter, 1);
       }
     }
   );

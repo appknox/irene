@@ -292,6 +292,56 @@ module('Integration | Component | upload-app/status', function (hooks) {
     }
   });
 
+  test('shows a submission that failed before ever reaching VALIDATING (e.g. store/URL upload)', async function (assert) {
+    // Simulate the real backend: only submissions currently in the queried
+    // status are returned - unlike the other tests' mock which returns everything.
+    this.server.get('/submissions', (schema, request) => {
+      const status = Number(request.queryParams.status);
+
+      return schema.submissions
+        .all()
+        .models.filter((submission) => submission.status === status);
+    });
+
+    const failedUrlUpload = this.server.create('submission', {
+      status: ENUMS.SUBMISSION_STATUS.STORE_URL_VALIDATION_FAILED,
+    });
+
+    const uploadApp = this.owner.lookup('service:upload-app');
+
+    // Mimic upload-app/via-link adding the id as soon as the upload is created,
+    // before this submission ever reaches the VALIDATING status being queried.
+    uploadApp.submissionSet.add(String(failedUrlUpload.id));
+
+    // Mimic websocket#onModelNotification pushing the submission's latest
+    // state straight into the store (this happens regardless of the query above).
+    this.store.push(
+      this.store.normalize('submission', {
+        id: failedUrlUpload.id,
+        status: failedUrlUpload.status,
+        created_on: failedUrlUpload.created_on,
+      })
+    );
+
+    await render(hbs`<UploadApp::Status />`);
+
+    await click('[data-test-uploadAppStatus-icon]');
+
+    // the 2 default (still-VALIDATING) submissions from beforeEach are running;
+    // only the store/URL upload is failed
+    assert
+      .dom('[data-test-uploadAppStatus-submissionCount="running"]')
+      .hasText('02');
+
+    assert
+      .dom('[data-test-uploadAppStatus-submissionCount="failed"]')
+      .hasText('01');
+
+    assert
+      .dom(`[data-test-uploadAppStatus-submission="${failedUrlUpload.id}"]`)
+      .exists('the failed store/URL submission is rendered in the popover');
+  });
+
   test('test submission list popup status counts', async function (assert) {
     // create failed submissions
     const failedSubmissions = [

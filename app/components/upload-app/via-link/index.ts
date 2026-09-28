@@ -21,6 +21,7 @@ import {
 import type AnalyticsService from 'irene/services/analytics';
 import type UploadAppService from 'irene/services/upload-app';
 import type UploadAppUrlModel from 'irene/models/upload-app-url';
+import type RealtimeService from 'irene/services/realtime';
 
 type ChangesetBufferProps = BufferedChangeset & {
   url: string;
@@ -42,6 +43,7 @@ export default class UploadAppViaLinkComponent extends Component<UploadAppViaLin
   @service declare intl: IntlService;
   @service declare uploadApp: UploadAppService;
   @service declare analytics: AnalyticsService;
+  @service declare realtime: RealtimeService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked showLinkUploadModal = false;
@@ -105,6 +107,7 @@ export default class UploadAppViaLinkComponent extends Component<UploadAppViaLin
       )) as UploadAppUrlModel;
 
       this.uploadApp.submissionSet.add(uploadedApp.id);
+      this.realtime.incrementProperty('SubmissionCounter');
 
       this.analytics.track({
         name: 'UPLOAD_APP_EVENT',
