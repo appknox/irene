@@ -128,6 +128,14 @@ const scopeDetails = [
     accessType: 'write',
     scopeKey: 'scopePublicApiTeamOperations',
   },
+  {
+    key: 'store-release-readiness',
+    scopeLabel: 'serviceAccountModule.scopes.store-release-readiness.label',
+    scopeDescription:
+      'serviceAccountModule.scopes.store-release-readiness.description',
+    accessType: 'write',
+    scopeKey: 'scopePublicApiStoreReleaseReadiness',
+  },
 ];
 
 const projectAccessOptions = [
@@ -490,7 +498,7 @@ module('Acceptance | Create service account', function (hooks) {
     'it creates service account',
     [{ duplicate: false }, { duplicate: true }],
     async function (assert, { duplicate }) {
-      assert.expect(duplicate ? 33 : 23);
+      assert.expect(duplicate ? 34 : 24);
 
       // feature is enabled
       this.organization.update({

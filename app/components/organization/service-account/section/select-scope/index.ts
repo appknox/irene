@@ -25,6 +25,7 @@ interface NodeDataObject {
     | 'scopePublicApiUserWrite'
     | 'scopePublicApiUploadApp'
     | 'scopePublicApiTeamOperations'
+    | 'scopePublicApiStoreReleaseReadiness'
     | 'scopeAutoApproveNewNameSpaces'
   )[];
   scopeLabel?: string;
@@ -43,6 +44,7 @@ enum ScopeNodeKey {
   UPLOAD_APP = 'upload-app',
   AUTO_APPROVE_NEW_NAME_SPACES = 'auto-approve-new-name-spaces',
   TEAM_OPERATIONS = 'team-operations',
+  STORE_RELEASE_READINESS = 'store-release-readiness',
 }
 
 export default class OrganizationServiceAccountSectionSelectScopeComponent extends Component<OrganizationServiceAccountSectionSelectScopeSignature> {
@@ -124,6 +126,12 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
             showCheckbox: this.isEditOrCreateView,
             checked: this.args.serviceAccount?.scopePublicApiTeamOperations,
           },
+          {
+            key: ScopeNodeKey.STORE_RELEASE_READINESS,
+            showCheckbox: this.isEditOrCreateView,
+            checked:
+              this.args.serviceAccount?.scopePublicApiStoreReleaseReadiness,
+          },
         ],
       },
     ]);
@@ -139,6 +147,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
           'scopePublicApiUserWrite',
           'scopePublicApiUploadApp',
           'scopePublicApiTeamOperations',
+          'scopePublicApiStoreReleaseReadiness',
           'scopeAutoApproveNewNameSpaces',
         ],
       },
@@ -204,6 +213,16 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
         ),
         scopeDescription: this.intl.t(
           'serviceAccountModule.scopes.team-operations.description'
+        ),
+        accessType: `${this.intl.t('read')}, ${this.intl.t('write')}`,
+      },
+      [ScopeNodeKey.STORE_RELEASE_READINESS]: {
+        scopeKeys: ['scopePublicApiStoreReleaseReadiness'],
+        scopeLabel: this.intl.t(
+          'serviceAccountModule.scopes.store-release-readiness.label'
+        ),
+        scopeDescription: this.intl.t(
+          'serviceAccountModule.scopes.store-release-readiness.description'
         ),
         accessType: `${this.intl.t('read')}, ${this.intl.t('write')}`,
       },

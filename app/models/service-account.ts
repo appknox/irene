@@ -37,6 +37,9 @@ export default class ServiceAccountModel extends Model {
   declare scopePublicApiTeamOperations: boolean;
 
   @attr('boolean')
+  declare scopePublicApiStoreReleaseReadiness: boolean;
+
+  @attr('boolean')
   declare isExpired: boolean;
 
   @attr('boolean')
