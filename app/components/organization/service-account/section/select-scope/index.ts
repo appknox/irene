@@ -7,7 +7,10 @@ import { task } from 'ember-concurrency';
 import type IntlService from 'ember-intl/services/intl';
 
 import type ServiceAccountModel from 'irene/models/service-account';
-import type { AkTreeProviderCheckExpandFuncType } from 'irene/components/ak-tree/provider';
+import type {
+  AkTreeProviderCheckExpandFuncType,
+  AkTreeNodeFlattenedProps,
+} from 'irene/components/ak-tree/provider';
 import parseError from 'irene/utils/parse-error';
 
 export interface OrganizationServiceAccountSectionSelectScopeSignature {
@@ -26,6 +29,8 @@ interface NodeDataObject {
     | 'scopePublicApiUploadApp'
     | 'scopePublicApiTeamOperations'
     | 'scopeAutoApproveNewNameSpaces'
+    | 'scopeCli'
+    | 'cliScopeAutoApproveNewNameSpaces'
   )[];
   scopeLabel?: string;
   scopeDescription?: string;
@@ -43,6 +48,8 @@ enum ScopeNodeKey {
   UPLOAD_APP = 'upload-app',
   AUTO_APPROVE_NEW_NAME_SPACES = 'auto-approve-new-name-spaces',
   TEAM_OPERATIONS = 'team-operations',
+  CLI = 'cli',
+  CLI_AUTO_APPROVE_NEW_NAME_SPACES = 'cli-auto-approve-new-name-spaces',
 }
 
 export default class OrganizationServiceAccountSectionSelectScopeComponent extends Component<OrganizationServiceAccountSectionSelectScopeSignature> {
@@ -123,6 +130,21 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
             key: ScopeNodeKey.TEAM_OPERATIONS,
             showCheckbox: this.isEditOrCreateView,
             checked: this.args.serviceAccount?.scopePublicApiTeamOperations,
+          },
+        ],
+      },
+      {
+        key: ScopeNodeKey.CLI,
+        showCheckbox: this.isEditOrCreateView,
+        checked:
+          this.args.serviceAccount?.scopeCli ||
+          this.args.serviceAccount?.cliScopeAutoApproveNewNameSpaces,
+        children: [
+          {
+            key: ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES,
+            showCheckbox: this.isEditOrCreateView,
+            checked:
+              this.args.serviceAccount?.cliScopeAutoApproveNewNameSpaces,
           },
         ],
       },
@@ -207,6 +229,23 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
         ),
         accessType: `${this.intl.t('read')}, ${this.intl.t('write')}`,
       },
+      [ScopeNodeKey.CLI]: {
+        scopeKeys: ['scopeCli'],
+        scopeLabel: this.intl.t('serviceAccountModule.scopes.cli.label'),
+        scopeDescription: this.intl.t(
+          'serviceAccountModule.scopes.cli.description'
+        ),
+      },
+      [ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES]: {
+        scopeKeys: ['cliScopeAutoApproveNewNameSpaces'],
+        scopeLabel: this.intl.t(
+          'serviceAccountModule.scopes.cli-auto-approve-new-name-spaces.label'
+        ),
+        scopeDescription: this.intl.t(
+          'serviceAccountModule.scopes.cli-auto-approve-new-name-spaces.description'
+        ),
+        accessType: this.intl.t('write'),
+      },
     };
   }
 
@@ -236,7 +275,103 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
     });
   }
 
-  // Special handling for Upload and Auto Approve scopes
+  // Shared cascade for a (parent, primary-access child, auto-approve child)
+  // triple — used identically by the public API's Upload group and the
+  // CLI group:
+  //   1. Toggling the parent cascades to both children.
+  //   2. Turning the primary-access child off also turns auto-approve off
+  //      (auto-approve is meaningless without the access it approves for).
+  //   3. Turning auto-approve on forces the parent and primary-access
+  //      child on too (can't auto-approve without that access).
+  @action
+  applyAutoApproveCascade(
+    node: AkTreeNodeFlattenedProps,
+    parentKey: ScopeNodeKey,
+    primaryChildKey: ScopeNodeKey,
+    autoApproveKey: ScopeNodeKey
+  ) {
+    if (
+      node.key !== parentKey &&
+      node.key !== primaryChildKey &&
+      node.key !== autoApproveKey
+    ) {
+      return;
+    }
+
+    if (node.key === parentKey) {
+      [primaryChildKey, autoApproveKey].forEach((childKey) => {
+        const childObj = this.dataObjectForNode[childKey];
+        this.updateScopes(childObj, Boolean(node.checked));
+
+        if (node.checked) {
+          if (!this.checked.includes(childKey)) {
+            this.checked = [...this.checked, childKey];
+          }
+        } else {
+          this.checked = this.checked.filter((k) => k !== childKey);
+        }
+      });
+    }
+
+    if (node.key === primaryChildKey && !node.checked) {
+      const autoApproveObj = this.dataObjectForNode[autoApproveKey];
+      this.updateScopes(autoApproveObj, false);
+
+      this.checked = this.checked.filter((k) => k !== autoApproveKey);
+    }
+
+    if (node.key === autoApproveKey && node.checked) {
+      const primaryObj = this.dataObjectForNode[primaryChildKey];
+      this.updateScopes(primaryObj, true);
+
+      [parentKey, primaryChildKey].forEach((requiredKey) => {
+        if (!this.checked.includes(requiredKey)) {
+          this.checked = [...this.checked, requiredKey];
+        }
+      });
+    }
+  }
+
+  // CLI's own row doubles as its "access" leaf (no separate access child —
+  // see select-scope for why: one row, expandable to reveal Auto Approve).
+  // Unlike the Upload group, checking CLI does NOT cascade auto-approve on
+  // — the team explicitly wants CLI access and CLI auto-approve to be
+  // independent settings, not implicitly linked. Only the safety direction
+  // applies: turning CLI off also turns its auto-approve off (meaningless
+  // without access), and turning auto-approve on forces CLI on (can't
+  // auto-approve without access).
+  @action
+  applyCliAutoApproveCascade(node: AkTreeNodeFlattenedProps) {
+    if (
+      node.key !== ScopeNodeKey.CLI &&
+      node.key !== ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES
+    ) {
+      return;
+    }
+
+    if (node.key === ScopeNodeKey.CLI && !node.checked) {
+      const autoApproveObj =
+        this.dataObjectForNode[ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES];
+      this.updateScopes(autoApproveObj, false);
+
+      this.checked = this.checked.filter(
+        (k) => k !== ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES
+      );
+    }
+
+    if (
+      node.key === ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES &&
+      node.checked
+    ) {
+      const cliObj = this.dataObjectForNode[ScopeNodeKey.CLI];
+      this.updateScopes(cliObj, true);
+
+      if (!this.checked.includes(ScopeNodeKey.CLI)) {
+        this.checked = [...this.checked, ScopeNodeKey.CLI];
+      }
+    }
+  }
+
   @action
   onCheck(...args: Parameters<AkTreeProviderCheckExpandFuncType>) {
     const [checked, node] = args;
@@ -249,58 +384,14 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
     // Update the node itself
     this.updateScopes(dataObject, Boolean(node.checked));
 
-    if (
-      node.key === ScopeNodeKey.UPLOAD ||
-      node.key === ScopeNodeKey.UPLOAD_APP ||
-      node.key === ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES
-    ) {
-      // Case 1: UPLOAD toggled → children follow
-      if (node.key === ScopeNodeKey.UPLOAD) {
-        [
-          ScopeNodeKey.UPLOAD_APP,
-          ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES,
-        ].forEach((childKey) => {
-          const childObj = this.dataObjectForNode[childKey];
-          this.updateScopes(childObj, Boolean(node.checked));
+    this.applyAutoApproveCascade(
+      node,
+      ScopeNodeKey.UPLOAD,
+      ScopeNodeKey.UPLOAD_APP,
+      ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES
+    );
 
-          if (node.checked) {
-            if (!this.checked.includes(childKey)) {
-              this.checked = [...this.checked, childKey];
-            }
-          } else {
-            this.checked = this.checked.filter((k) => k !== childKey);
-          }
-        });
-      }
-
-      // Case 2: UPLOAD_APP off → AUTO_APPROVE off
-      if (node.key === ScopeNodeKey.UPLOAD_APP && !node.checked) {
-        const autoApproveObj =
-          this.dataObjectForNode[ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES];
-        this.updateScopes(autoApproveObj, false);
-
-        this.checked = this.checked.filter(
-          (k) => k !== ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES
-        );
-      }
-
-      // Case 3: AUTO_APPROVE on → force UPLOAD + UPLOAD_APP
-      if (
-        node.key === ScopeNodeKey.AUTO_APPROVE_NEW_NAME_SPACES &&
-        node.checked
-      ) {
-        const uploadObj = this.dataObjectForNode[ScopeNodeKey.UPLOAD_APP];
-        this.updateScopes(uploadObj, true);
-
-        [ScopeNodeKey.UPLOAD, ScopeNodeKey.UPLOAD_APP].forEach(
-          (requiredKey) => {
-            if (!this.checked.includes(requiredKey)) {
-              this.checked = [...this.checked, requiredKey];
-            }
-          }
-        );
-      }
-    }
+    this.applyCliAutoApproveCascade(node);
   }
 
   @action

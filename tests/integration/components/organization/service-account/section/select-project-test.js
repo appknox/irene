@@ -78,12 +78,12 @@ module(
         { allProjects: false, hasProjects: false },
       ],
       async function (assert, { allProjects, hasProjects }) {
-        let expectedAssertionCount = 14;
+        let expectedAssertionCount = 12;
 
         if (allProjects) {
-          expectedAssertionCount = 9;
+          expectedAssertionCount = 7;
         } else if (hasProjects) {
-          expectedAssertionCount = 15;
+          expectedAssertionCount = 13;
         }
 
         assert.expect(expectedAssertionCount);
@@ -241,77 +241,8 @@ module(
         }
 
         assert.dom('[data-test-serviceAccountSection-footer]').doesNotExist();
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-cliEnabledLabel]'
-          )
-          .hasText(t('serviceAccountModule.cliEnabled'));
-
-        assert
-          .dom(
-            '[data-test-serviceAccountSection-selectProject-cliEnabledValue]'
-          )
-          .hasText(t('disabled'));
       }
     );
-
-    test('it renders the CLI enabled checkbox when editing', async function (assert) {
-      this.server.get('/service_accounts/:id/service_account_projects', () => {
-        return { count: 0, next: null, previous: null, results: [] };
-      });
-
-      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
-        @serviceAccount={{this.serviceAccount}}
-      />`);
-
-      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
-
-      assert
-        .dom(
-          '[data-test-serviceAccountSection-selectProject-cliEnabledCheckbox]'
-        )
-        .exists()
-        .isNotChecked();
-
-      assert
-        .dom(
-          '[data-test-serviceAccountSection-selectProject-cliEnabledInfoIcon]'
-        )
-        .exists();
-    });
-
-    test('it should update cli_enabled', async function (assert) {
-      assert.expect(2);
-
-      this.server.get('/service_accounts/:id/service_account_projects', () => {
-        return { count: 0, next: null, previous: null, results: [] };
-      });
-
-      this.server.put('/service_accounts/:id', (schema, req) => {
-        const data = JSON.parse(req.requestBody);
-
-        assert.true(data.cli_enabled);
-
-        return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
-      });
-
-      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
-        @serviceAccount={{this.serviceAccount}}
-      />`);
-
-      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
-
-      await click(
-        '[data-test-serviceAccountSection-selectProject-cliEnabledCheckbox]'
-      );
-
-      await click('[data-test-serviceAccountSection-selectProject-updateBtn]');
-
-      assert
-        .dom('[data-test-serviceAccountSection-selectProject-cliEnabledValue]')
-        .hasText(t('enabled'));
-    });
 
     test.each(
       'it should update project access type',
