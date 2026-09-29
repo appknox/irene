@@ -1,0 +1,104 @@
+.rtf-field {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-4);
+  overflow: hidden;
+  background: var(--common-white);
+
+  &:focus-within {
+    border-color: var(--neutral-grey-500);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.rtf-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-color-1);
+  background: var(--neutral-grey-50);
+}
+
+.rtf-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  margin: 0 4px;
+  background: var(--border-color-1);
+}
+
+.rtf-toolbar-btn {
+  border: none;
+  background: transparent;
+  border-radius: var(--border-radius-4);
+  padding: 6px 8px;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--neutral-grey-600);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--neutral-grey-200);
+  }
+}
+
+.rtf-editor {
+  min-height: 7em;
+  max-height: 24em;
+  overflow-y: auto;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+
+  &:empty::before {
+    content: attr(data-placeholder);
+    color: var(--text-disabled);
+  }
+
+  :global(a) {
+    color: var(--primary-accessible);
+    text-decoration: underline;
+  }
+
+  :global(pre) {
+    background: var(--neutral-grey-900);
+    color: var(--common-white);
+    padding: 12px;
+    border-radius: var(--border-radius-8);
+    overflow-x: auto;
+    font-size: 12px;
+  }
+
+  :global(code) {
+    font-family: var(--font-family-mono, monospace);
+  }
+
+  :global(pre code) {
+    background: none;
+    color: inherit;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  // Inline code only (not the dark <pre><code> blocks above).
+  :global(code):not(:global(pre code)) {
+    background: var(--error-bg);
+    color: var(--error-main);
+    padding: 2px 4px;
+    border-radius: var(--border-radius-4);
+    font-size: 12px;
+  }
+
+  :global(ul),
+  :global(ol) {
+    padding-left: 20px;
+  }
+
+  :global(li) {
+    margin-top: 6px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+}

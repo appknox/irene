@@ -1,0 +1,61 @@
+{{! template-lint-disable no-pointer-down-event-binding }}
+{{! mousedown (not click) is required here so preventDefault runs before the
+    browser moves focus/selection out of the contenteditable editor }}
+<div local-class='rtf-field' ...attributes>
+  <div local-class='rtf-toolbar'>
+    {{#each this.toolbarCommands as |btn|}}
+      <button
+        type='button'
+        title={{btn.title}}
+        local-class='rtf-toolbar-btn'
+        {{on 'mousedown' (fn this.runCommand btn.command)}}
+      >{{btn.label}}</button>
+    {{/each}}
+
+    <button
+      type='button'
+      title='Inline code'
+      local-class='rtf-toolbar-btn'
+      {{on 'mousedown' this.insertInlineCode}}
+    >&lt;/&gt;</button>
+
+    <button
+      type='button'
+      title='Bullet list'
+      local-class='rtf-toolbar-btn'
+      {{on 'mousedown' (fn this.runCommand 'insertUnorderedList')}}
+    >&bull; List</button>
+
+    <button
+      type='button'
+      title='Numbered list'
+      local-class='rtf-toolbar-btn'
+      {{on 'mousedown' (fn this.runCommand 'insertOrderedList')}}
+    >1. List</button>
+
+    <span local-class='rtf-toolbar-divider'></span>
+
+    <button
+      type='button'
+      title='Code block'
+      local-class='rtf-toolbar-btn'
+      {{on 'mousedown' this.insertCodeBlock}}
+    >{ }</button>
+
+    <button
+      type='button'
+      title='Link'
+      local-class='rtf-toolbar-btn'
+      {{on 'mousedown' this.insertLink}}
+    >Link</button>
+  </div>
+
+  <div
+    local-class='rtf-editor'
+    contenteditable='true'
+    data-placeholder={{@placeholder}}
+    {{did-insert this.setup}}
+    {{did-update this.syncValue @value}}
+    {{on 'input' this.onInput}}
+  ></div>
+</div>
