@@ -9,6 +9,17 @@
     @updateLegacyCVSSDetails={{this.triggerUpdateLegacyCVSSDetails}}
   />
 
+  {{#if this.isKnoxiqEnabled}}
+    <AkStack
+      @direction='column'
+      @width='full'
+      local-class='analysis-details-section-wrapper'
+      class='p-2 my-2'
+    >
+      <Security::AnalysisDetails::AeisScore @analysis={{this.analysisDetails}} />
+    </AkStack>
+  {{/if}}
+
   <AkStack
     @direction='column'
     @width='full'
@@ -41,7 +52,13 @@
     local-class='analysis-details-section-wrapper'
     class='p-2 my-2'
   >
-    <Security::AnalysisDetails::Findings @analysis={{this.analysisDetails}} />
+    {{#if this.isKnoxiqEnabled}}
+      <Security::AnalysisDetails::ValidatedFindings
+        @analysis={{this.analysisDetails}}
+      />
+    {{else}}
+      <Security::AnalysisDetails::Findings @analysis={{this.analysisDetails}} />
+    {{/if}}
   </AkStack>
 
   <AkStack

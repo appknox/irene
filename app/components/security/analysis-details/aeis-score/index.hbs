@@ -1,0 +1,117 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  data-test-securityAnalysisDetails-aeisScore-root
+>
+  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+    <AkStack @direction='column' data-test-securityAnalysisDetails-aeisScore-infoTexts>
+      <AkTypography @variant='h5'>
+        AEIS Score
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        Appknox Exploit Intelligence Score for this vulnerability
+      </AkTypography>
+    </AkStack>
+
+    {{#unless this.isEditing}}
+      <AkButton
+        @variant='outlined'
+        {{on 'click' this.startEdit}}
+        data-test-securityAnalysisDetails-aeisScore-editBtn
+      >
+        <:leftIcon>
+          <AkIcon @iconName='edit' />
+        </:leftIcon>
+
+        <:default>
+          Edit
+        </:default>
+      </AkButton>
+    {{/unless}}
+  </AkStack>
+
+  <AkDivider @color='dark' class='my-2' />
+
+  {{#if this.isEditing}}
+    <AkStack @direction='column' @spacing='2.5' @width='7/12'>
+      <AkTextField
+        @label='Score (0-10)'
+        @placeholder='e.g. 8.5'
+        @labelTypographyColor='secondary'
+        @labelTypographyVariant='subtitle2'
+        @value={{this.scoreInput}}
+        {{on 'input' this.setScoreInput}}
+        data-test-securityAnalysisDetails-aeisScore-scoreInput
+      />
+
+      <AkSelect
+        @placeholder='Select likelihood'
+        @selected={{this.likelihoodInput}}
+        @options={{this.likelihoodOptions}}
+        @onChange={{this.selectLikelihood}}
+        data-test-securityAnalysisDetails-aeisScore-likelihoodSelect
+        as |option|
+      >
+        {{option.label}}
+      </AkSelect>
+
+      <AkStack @spacing='1.5'>
+        <AkButton
+          @variant='filled'
+          @disabled={{this.saveOverride.isRunning}}
+          {{on 'click' this.triggerSave}}
+          data-test-securityAnalysisDetails-aeisScore-saveBtn
+        >
+          Save
+        </AkButton>
+
+        <AkButton
+          @variant='outlined'
+          @disabled={{this.saveOverride.isRunning}}
+          {{on 'click' this.cancelEdit}}
+          data-test-securityAnalysisDetails-aeisScore-cancelBtn
+        >
+          Cancel
+        </AkButton>
+
+        {{#if this.hasAeisData}}
+          <AkButton
+            @variant='outlined'
+            @color='error'
+            @disabled={{this.clearOverride.isRunning}}
+            {{on 'click' this.triggerClear}}
+            data-test-securityAnalysisDetails-aeisScore-clearBtn
+          >
+            Clear Override
+          </AkButton>
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{else if this.hasAeisData}}
+    <AkStack @spacing='4' data-test-securityAnalysisDetails-aeisScore-display>
+      <AkStack @direction='column'>
+        <AkTypography @variant='body2' @color='textSecondary'>Score</AkTypography>
+        <AkTypography @variant='h6'>{{this.currentScore}}</AkTypography>
+      </AkStack>
+
+      <AkStack @direction='column'>
+        <AkTypography @variant='body2' @color='textSecondary'>Likelihood</AkTypography>
+        <AkTypography @variant='h6'>{{this.currentLikelihoodLabel}}</AkTypography>
+      </AkStack>
+    </AkStack>
+  {{else}}
+    <AkStack
+      @direction='row'
+      @alignItems='center'
+      @spacing='1'
+      data-test-securityAnalysisDetails-aeisScore-noDataInfoText
+    >
+      <AkIcon @iconName='info' @size='small' />
+
+      <AkTypography @color='textSecondary' @variant='body2' @fontWeight='light'>
+        No AEIS score available for this vulnerability yet.
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+</AkStack>

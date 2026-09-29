@@ -1,0 +1,144 @@
+.findings-card {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-8);
+  background: var(--common-white);
+  box-shadow: var(--box-shadow-3);
+  overflow: hidden;
+}
+
+.findings-card-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.findings-card-title {
+  font-size: 14px;
+}
+
+.findings-body {
+  padding: 20px;
+}
+
+.field-group + .field-group {
+  margin-top: 20px;
+}
+
+.field-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--neutral-grey-700);
+}
+
+.summary-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-4);
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+
+  &:focus {
+    border-color: var(--neutral-grey-500);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.evidence-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  // AkTextField's root doesn't accept a width/class override, so grow it
+  // via its position in this fixed 3-child row (dot, field, delete button).
+  > :nth-child(2) {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.evidence-row + .evidence-row {
+  margin-top: 8px;
+}
+
+.evidence-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neutral-grey-400);
+  flex-shrink: 0;
+}
+
+.add-dashed-row {
+  margin-top: 8px;
+}
+
+// Collapsible group: the bordered card wrapping the Remediation / Steps to
+// Reproduce / Exploitability sections, plus the Expand-All footer bar.
+.collapsible-group {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-8);
+  overflow: hidden;
+}
+
+.accordion-summary {
+  padding: 12px 20px;
+  cursor: pointer;
+  background: var(--neutral-grey-50);
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.accordion-content {
+  padding: 20px;
+}
+
+.expand-icon {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: rotate(0deg);
+
+  &.expanded {
+    transform: rotate(-180deg);
+  }
+}
+
+// Matches the design system's "Expand All" bar (tinted error-bg with
+// primary-colored text) rather than a plain link, per the mockup's `Wa`.
+.expand-all-action {
+  cursor: pointer;
+  padding: 12px 20px;
+  background: var(--error-bg);
+  color: var(--primary-main);
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.step-card {
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-8);
+  background: var(--common-white);
+  overflow: hidden;
+}
+
+.step-card + .step-card {
+  margin-top: 16px;
+}
+
+.step-card-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.step-card-body {
+  padding: 16px;
+}
+
+.step-card-field + .step-card-field {
+  margin-top: 12px;
+}

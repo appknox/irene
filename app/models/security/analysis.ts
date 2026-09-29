@@ -26,6 +26,7 @@ import type Nistsp800171Model from '../nistsp800171';
 import type SamaModel from '../sama';
 import type Pcidss4Model from '../pcidss4';
 import type EucraModel from '../eucra';
+import type { KnoxiqValidatedFindingExploitability } from '../knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
 
@@ -161,6 +162,17 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
+
+  // AEIS: rollup from KnoxIQ, or a human override. Null for orgs without
+  // KnoxIQ enabled - the UI gates the panel on organization.isKnoxIqEnabled.
+  @attr('number', { defaultValue: null })
+  declare exploitabilityScore: number | null;
+
+  @attr('number', { defaultValue: null })
+  declare exploitabilityLikelihood: number | null;
+
+  @attr()
+  declare exploitability: KnoxiqValidatedFindingExploitability | null;
 
   get isPassed() {
     return this.risk === ENUMS.RISK.NONE;

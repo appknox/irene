@@ -23,6 +23,7 @@ import {
 
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
+import type OrganizationService from 'irene/services/organization';
 
 import type {
   CvssV3Metrics,
@@ -57,6 +58,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @service declare router: RouterService;
   @service declare notifications: NotificationService;
   @service declare ajax: IreneAjaxService;
+  @service declare organization: OrganizationService;
 
   @tracked isSaveActionOnly = false;
 
@@ -78,6 +80,10 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
 
   get tPleaseTryAgain() {
     return this.intl.t('pleaseTryAgain');
+  }
+
+  get isKnoxiqEnabled() {
+    return this.organization.isKnoxIqEnabled;
   }
 
   get hasLegacyCvssData() {

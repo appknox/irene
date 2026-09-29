@@ -1,0 +1,465 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='findings-card'
+  data-test-securityAnalysisDetails-validatedFindings-root
+>
+  <AkStack @direction='column' @spacing='0.5' local-class='findings-card-header'>
+    <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+      <AkTypography @fontWeight='bold' local-class='findings-card-title'>
+        Validated Findings
+      </AkTypography>
+
+      {{#if this.draft}}
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkStack @alignItems='center' @spacing='1'>
+            <AkIconButton
+              @variant='outlined'
+              disabled={{this.isFirst}}
+              {{on 'click' this.goToPrevious}}
+              data-test-securityAnalysisDetails-validatedFindings-prevBtn
+            >
+              <AkIcon @iconName='chevron-left' />
+            </AkIconButton>
+
+            <AkTypography @fontWeight='medium'>Finding</AkTypography>
+
+            <AkSelect
+              @options={{this.positionOptions}}
+              @selected={{this.selectedPositionOption}}
+              @onChange={{this.onPositionSelect}}
+              @searchEnabled={{false}}
+              data-test-securityAnalysisDetails-validatedFindings-positionSelect
+              as |option|
+            >
+              {{option.label}}
+            </AkSelect>
+
+            <AkTypography @fontWeight='medium' data-test-securityAnalysisDetails-validatedFindings-total>
+              of {{this.formattedTotal}}
+            </AkTypography>
+
+            <AkIconButton
+              @variant='outlined'
+              disabled={{this.isLast}}
+              {{on 'click' this.goToNext}}
+              data-test-securityAnalysisDetails-validatedFindings-nextBtn
+            >
+              <AkIcon @iconName='chevron-right' />
+            </AkIconButton>
+          </AkStack>
+
+          <AkButton
+            @variant='outlined'
+            @disabled={{this.addFinding.isRunning}}
+            {{on 'click' this.triggerAddFinding}}
+            data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
+          >
+            + Add Finding
+          </AkButton>
+
+          <AkButton
+            @variant='filled'
+            @disabled={{this.saveFinding.isRunning}}
+            {{on 'click' this.triggerSave}}
+            data-test-securityAnalysisDetails-validatedFindings-saveBtn
+          >
+            Save
+          </AkButton>
+
+          <AkIconButton
+            @variant='outlined'
+            disabled={{this.deleteFinding.isRunning}}
+            {{on 'click' this.triggerDeleteFinding}}
+            data-test-securityAnalysisDetails-validatedFindings-deleteFindingBtn
+          >
+            <AkIcon @iconName='delete' @size='small' @color='error' />
+          </AkIconButton>
+        </AkStack>
+      {{else if (and (not this.isLoading) (not this.loadError))}}
+        <AkButton
+          @variant='outlined'
+          @disabled={{this.addFinding.isRunning}}
+          {{on 'click' this.triggerAddFinding}}
+          data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
+        >
+          + Add Finding
+        </AkButton>
+      {{/if}}
+    </AkStack>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      AI-validated KnoxIQ findings for this vulnerability. Edits here update the
+      same findings shown on the KnoxIQ analysis page.
+    </AkTypography>
+  </AkStack>
+
+  <div local-class='findings-body'>
+    {{#if this.isLoading}}
+      <AkTypography @color='textSecondary'>Loading findings...</AkTypography>
+    {{else if this.draft}}
+      <AkStack @direction='column' @width='full'>
+        <div local-class='field-group'>
+          <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Confidence</AkTypography>
+          <AkSelect
+            @placeholder='Select confidence'
+            @selected={{this.selectedConfidenceOption}}
+            @options={{this.confidenceOptions}}
+            @onChange={{this.setConfidence}}
+            data-test-securityAnalysisDetails-validatedFindings-confidenceSelect
+            as |option|
+          >
+            {{option.label}}
+          </AkSelect>
+        </div>
+
+        <div local-class='field-group'>
+          <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Summary</AkTypography>
+          <Textarea
+            @value={{this.draft.summary}}
+            {{on 'input' (fn this.setField 'summary')}}
+            rows='3'
+            placeholder='Summarize what the scanner flagged...'
+            aria-label='Summary'
+            local-class='summary-textarea'
+            data-test-securityAnalysisDetails-validatedFindings-summaryInput
+          />
+        </div>
+
+        <div local-class='field-group'>
+          <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Evidence</AkTypography>
+
+          {{#each this.draft.evidence key="@index" as |line index|}}
+            <div local-class='evidence-row'>
+              <span local-class='evidence-dot'></span>
+
+              <AkTextField
+                @value={{line}}
+                {{on 'input' (fn this.setEvidenceLine index)}}
+                data-test-securityAnalysisDetails-validatedFindings-evidenceInput={{index}}
+              />
+
+              <AkIconButton
+                @variant='outlined'
+                {{on 'click' (fn this.removeEvidenceLine index)}}
+              >
+                <AkIcon @iconName='close' @size='small' />
+              </AkIconButton>
+            </div>
+          {{/each}}
+
+          <div local-class='add-dashed-row'>
+            <AkButton
+              @variant='outlined'
+              {{on 'click' this.addEvidenceLine}}
+              data-test-securityAnalysisDetails-validatedFindings-addEvidenceBtn
+            >
+              + Add evidence line
+            </AkButton>
+          </div>
+        </div>
+
+        <div local-class='field-group'>
+          <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Reasoning</AkTypography>
+          <Security::AnalysisDetails::ValidatedFindings::RichTextField
+            @value={{this.draft.reasoning}}
+            @onChange={{fn this.setFieldValue 'reasoning'}}
+            @placeholder='Why does this matter?'
+            data-test-securityAnalysisDetails-validatedFindings-reasoningInput
+          />
+        </div>
+      </AkStack>
+
+      <div local-class='collapsible-group' class='mt-3'>
+        <AkAccordion
+          @isExpanded={{this.isPanelOpen this.accordionPanel.REMEDIATION}}
+          @onChange={{fn this.togglePanel this.accordionPanel.REMEDIATION}}
+          @mountContentOnExpand={{true}}
+          data-test-securityAnalysisDetails-validatedFindings-accordion-remediation
+        >
+          <:summary as |accordion|>
+            <AkStack
+              @width='full'
+              @alignItems='center'
+              @justifyContent='space-between'
+              {{on 'click' accordion.onSummaryClick}}
+              local-class='accordion-summary'
+            >
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkIcon @iconName='lightbulb' @size='small' @color='success' />
+                <AkTypography @fontWeight='bold'>Remediation</AkTypography>
+              </AkStack>
+
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkButton
+                  @variant='filled'
+                  @disabled={{this.saveFinding.isRunning}}
+                  {{on 'click' this.triggerSave}}
+                >
+                  Save
+                </AkButton>
+
+                <AkIcon
+                  @iconName='arrow-drop-down'
+                  local-class='expand-icon {{if accordion.isExpanded "expanded"}}'
+                />
+              </AkStack>
+            </AkStack>
+          </:summary>
+
+          <:content>
+            <div local-class='accordion-content'>
+              {{#each this.draft.remediation_steps key="@index" as |step index|}}
+                <div local-class='step-card'>
+                  <AkStack @width='full' @alignItems='center' @justifyContent='space-between' local-class='step-card-header'>
+                    <AkTypography @fontWeight='bold'>Step {{add index 1}}</AkTypography>
+                    <AkButton
+                      @variant='outlined'
+                      @color='error'
+                      {{on 'click' (fn this.removeStep 'remediation_steps' index)}}
+                    >
+                      Delete
+                    </AkButton>
+                  </AkStack>
+
+                  <div local-class='step-card-body'>
+                    <div local-class='step-card-field'>
+                      <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Heading</AkTypography>
+                      <AkTextField
+                        @value={{step.heading}}
+                        {{on 'input' (fn this.setStep 'remediation_steps' index 'heading')}}
+                      />
+                    </div>
+
+                    <div local-class='step-card-field'>
+                      <Security::AnalysisDetails::ValidatedFindings::RichTextField
+                        @value={{step.body}}
+                        @onChange={{fn this.setStepValue 'remediation_steps' index 'body'}}
+                        @placeholder='Add Remediation'
+                      />
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+
+              <div local-class='add-dashed-row'>
+                <AkButton
+                  @variant='outlined'
+                  class='w-full'
+                  {{on 'click' (fn this.addStep 'remediation_steps')}}
+                  data-test-securityAnalysisDetails-validatedFindings-addRemediationStepBtn
+                >
+                  + Remediation Steps
+                </AkButton>
+              </div>
+            </div>
+          </:content>
+        </AkAccordion>
+
+        <AkAccordion
+          @isExpanded={{this.isPanelOpen this.accordionPanel.STEPS_TO_REPRODUCE}}
+          @onChange={{fn this.togglePanel this.accordionPanel.STEPS_TO_REPRODUCE}}
+          @mountContentOnExpand={{true}}
+          data-test-securityAnalysisDetails-validatedFindings-accordion-stepsToReproduce
+        >
+          <:summary as |accordion|>
+            <AkStack
+              @width='full'
+              @alignItems='center'
+              @justifyContent='space-between'
+              {{on 'click' accordion.onSummaryClick}}
+              local-class='accordion-summary'
+            >
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkIcon @iconName='experiment' @size='small' @color='warn' />
+                <AkTypography @fontWeight='bold'>Steps to Reproduce</AkTypography>
+              </AkStack>
+
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkButton
+                  @variant='filled'
+                  @disabled={{this.saveFinding.isRunning}}
+                  {{on 'click' this.triggerSave}}
+                >
+                  Save
+                </AkButton>
+
+                <AkIcon
+                  @iconName='arrow-drop-down'
+                  local-class='expand-icon {{if accordion.isExpanded "expanded"}}'
+                />
+              </AkStack>
+            </AkStack>
+          </:summary>
+
+          <:content>
+            <div local-class='accordion-content'>
+              {{#each this.draft.steps_to_reproduce key="@index" as |step index|}}
+                <div local-class='step-card'>
+                  <AkStack @width='full' @alignItems='center' @justifyContent='space-between' local-class='step-card-header'>
+                    <AkTypography @fontWeight='bold'>Step {{add index 1}}</AkTypography>
+                    <AkButton
+                      @variant='outlined'
+                      @color='error'
+                      {{on 'click' (fn this.removeStep 'steps_to_reproduce' index)}}
+                    >
+                      Delete
+                    </AkButton>
+                  </AkStack>
+
+                  <div local-class='step-card-body'>
+                    <div local-class='step-card-field'>
+                      <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Heading</AkTypography>
+                      <AkTextField
+                        @value={{step.heading}}
+                        {{on 'input' (fn this.setStep 'steps_to_reproduce' index 'heading')}}
+                      />
+                    </div>
+
+                    <div local-class='step-card-field'>
+                      <Security::AnalysisDetails::ValidatedFindings::RichTextField
+                        @value={{step.body}}
+                        @onChange={{fn this.setStepValue 'steps_to_reproduce' index 'body'}}
+                        @placeholder='Add Steps to Reproduce'
+                      />
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+
+              <div local-class='add-dashed-row'>
+                <AkButton
+                  @variant='outlined'
+                  class='w-full'
+                  {{on 'click' (fn this.addStep 'steps_to_reproduce')}}
+                  data-test-securityAnalysisDetails-validatedFindings-addStepBtn
+                >
+                  + Steps to Reproduce
+                </AkButton>
+              </div>
+            </div>
+          </:content>
+        </AkAccordion>
+
+        <AkAccordion
+          @isExpanded={{this.isPanelOpen this.accordionPanel.EXPLOITABILITY}}
+          @onChange={{fn this.togglePanel this.accordionPanel.EXPLOITABILITY}}
+          @mountContentOnExpand={{true}}
+          data-test-securityAnalysisDetails-validatedFindings-accordion-exploitability
+        >
+          <:summary as |accordion|>
+            <AkStack
+              @width='full'
+              @alignItems='center'
+              @justifyContent='space-between'
+              {{on 'click' accordion.onSummaryClick}}
+              local-class='accordion-summary'
+            >
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkIcon @iconName='bug-report' @size='small' @color='error' />
+                <AkTypography @fontWeight='bold'>Exploitability Analysis</AkTypography>
+              </AkStack>
+
+              <AkStack @alignItems='center' @spacing='1'>
+                <AkButton
+                  @variant='filled'
+                  @disabled={{this.saveFinding.isRunning}}
+                  {{on 'click' this.triggerSave}}
+                >
+                  Save
+                </AkButton>
+
+                <AkIcon
+                  @iconName='arrow-drop-down'
+                  local-class='expand-icon {{if accordion.isExpanded "expanded"}}'
+                />
+              </AkStack>
+            </AkStack>
+          </:summary>
+
+          <:content>
+            <div local-class='accordion-content'>
+              <div local-class='step-card-field'>
+                <AkTypography @fontWeight='medium' local-class='field-label' @tag='label'>Select Exploitability Likelihood</AkTypography>
+                <AkSelect
+                  @placeholder='Select likelihood'
+                  @selected={{this.selectedExploitabilityOption}}
+                  @options={{this.exploitabilityOptions}}
+                  @onChange={{this.setExploitabilityLikelihood}}
+                  data-test-securityAnalysisDetails-validatedFindings-exploitabilityLikelihoodSelect
+                  as |option|
+                >
+                  {{option.label}}
+                </AkSelect>
+              </div>
+
+              <div local-class='step-card-field'>
+                <Security::AnalysisDetails::ValidatedFindings::RichTextField
+                  @value={{this.draft.exploitability_analysis}}
+                  @onChange={{fn this.setFieldValue 'exploitability_analysis'}}
+                  @placeholder='Add Exploitability Analysis'
+                  data-test-securityAnalysisDetails-validatedFindings-exploitabilityAnalysisInput
+                />
+              </div>
+            </div>
+          </:content>
+        </AkAccordion>
+
+        <AkStack
+          @direction='row'
+          @alignItems='center'
+          @spacing='0.5'
+          {{on 'click' this.toggleExpandAll}}
+          local-class='expand-all-action'
+          data-test-securityAnalysisDetails-validatedFindings-expandAll
+        >
+          <AkIcon
+            @iconName='arrow-drop-down'
+            @size='small'
+            local-class='expand-icon {{if this.areAllPanelsOpen "expanded"}}'
+          />
+          <AkTypography @variant='subtitle2' @fontWeight='bold' @color='inherit'>
+            {{if this.areAllPanelsOpen 'Collapse All' 'Expand All'}}
+          </AkTypography>
+        </AkStack>
+      </div>
+    {{else if this.loadError}}
+      <AkStack
+        @direction='column'
+        @alignItems='flex-start'
+        @spacing='1'
+        data-test-securityAnalysisDetails-validatedFindings-loadError
+      >
+        <AkStack @direction='row' @alignItems='center' @spacing='1'>
+          <AkIcon @iconName='error' @size='small' @color='error' />
+
+          <AkTypography @color='error' @variant='body2'>
+            Couldn't load findings: {{this.loadError}}
+          </AkTypography>
+        </AkStack>
+
+        <AkButton
+          @variant='outlined'
+          {{on 'click' this.triggerRetry}}
+          @disabled={{this.loadFindings.isRunning}}
+          data-test-securityAnalysisDetails-validatedFindings-retryBtn
+        >
+          Retry
+        </AkButton>
+      </AkStack>
+    {{else}}
+      <AkStack
+        @direction='row'
+        @alignItems='center'
+        @spacing='1'
+        data-test-securityAnalysisDetails-validatedFindings-empty
+      >
+        <AkIcon @iconName='info' @size='small' />
+
+        <AkTypography @color='textSecondary' @variant='body2' @fontWeight='light'>
+          No validated KnoxIQ findings for this vulnerability yet.
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </div>
+</AkStack>
