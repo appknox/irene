@@ -36,7 +36,7 @@ export default class OrganizationServiceAccountMoreMenuComponent extends Compone
   @tracked showDeleteConfirm = false;
 
   get menuItems(): MenuItem[] {
-    const items: MenuItem[] = [
+    return [
       {
         link: true,
         route: 'authenticated.dashboard.service-account-create',
@@ -44,19 +44,12 @@ export default class OrganizationServiceAccountMoreMenuComponent extends Compone
         label: 'Duplicate',
         divider: true,
       },
-    ];
-
-    // A CLI-enabled service account cannot be deleted — see
-    // serviceAccountModule.cliEnabledDescription.
-    if (!this.args.serviceAccount.cliEnabled) {
-      items.push({
+      {
         button: true,
         label: this.intl.t('delete'),
         onClick: this.handleDeleteClick,
-      });
-    }
-
-    return items;
+      },
+    ];
   }
 
   @action

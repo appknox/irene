@@ -211,7 +211,7 @@ export default class OrganizationServiceAccountListComponent extends Component<O
       }
 
       if (showCliEnabled) {
-        data['cli_enabled'] = true;
+        data['scope_cli'] = true;
       }
 
       try {

@@ -95,19 +95,6 @@ export default class OrganizationServiceAccountSectionSelectProjectComponent ext
   }
 
   @action
-  handleCliEnabledChange(event: Event, checked: boolean) {
-    this.args.serviceAccount.cliEnabled = checked;
-
-    // CLI-enabled accounts cannot have an expiry — see
-    // serviceAccountModule.cliEnabledDescription. The access-token section
-    // also disables its own inputs based on `cliEnabled`, but this covers a
-    // stale expiry set before CLI was enabled.
-    if (checked) {
-      this.args.serviceAccount.expiry = null;
-    }
-  }
-
-  @action
   handleUpdateServiceAccount() {
     this.updateServiceAccount.perform();
   }

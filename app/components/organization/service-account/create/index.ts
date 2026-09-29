@@ -71,9 +71,9 @@ export default class ServiceAccountCreateComponent extends Component<ServiceAcco
         duplicateServiceAccount?.scopeAutoApproveNewNameSpaces ?? false,
       serviceAccountType: ServiceAccountType.USER,
       allProjects: duplicateServiceAccount?.allProjects ?? true,
-      // Never copied from a duplicated account: at most one CLI-enabled
-      // service account per access level is allowed per organization.
-      cliEnabled: false,
+      scopeCli: duplicateServiceAccount?.scopeCli ?? false,
+      cliScopeAutoApproveNewNameSpaces:
+        duplicateServiceAccount?.cliScopeAutoApproveNewNameSpaces ?? false,
       ...(noExpiry ? { expiry: null } : {}),
     });
   }
