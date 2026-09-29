@@ -1,4 +1,7 @@
-<div local-class='component-inventory-container'>
+<div
+  local-class='component-inventory-container'
+  {{did-update this.handleQueryParamChange @queryParams.component_query}}
+>
   <AkStack
     @width='full'
     @direction='column'

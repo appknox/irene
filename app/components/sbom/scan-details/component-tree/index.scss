@@ -3,7 +3,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: var(--info-light);
+  background-color: var(
+    --sbom-scan-details-component-tree-stale-icon-wrap-background-color
+  );
   border-radius: 50%;
   padding: 0.2em;
 }

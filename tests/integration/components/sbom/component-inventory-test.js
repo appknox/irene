@@ -1,4 +1,4 @@
-import { render, findAll, find, click } from '@ember/test-helpers';
+import { render, findAll, find, click, settled } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -191,14 +191,6 @@ module('Integration | Component | sbom/component-inventory', function (hooks) {
       hbs`<Sbom::ComponentInventory @queryParams={{this.queryParams}} />`
     );
 
-    // Initial load with a valid query auto-opens the drawer on the first
-    // result (notification deep-link behavior).
-    assert.dom('[data-test-componentInventory-detailsFields]').exists();
-
-    await click('[data-test-componentInventory-detailsCloseBtn]');
-
-    assert.dom('[data-test-componentInventory-detailsFields]').doesNotExist();
-
     await click(find('[data-test-componentInventory-row]'));
 
     const { bom_ref: componentBomRef } = component.attrs;
@@ -338,5 +330,35 @@ module('Integration | Component | sbom/component-inventory', function (hooks) {
       lastRequest.component_type,
       'the type param is omitted once the filter is cleared'
     );
+  });
+
+  test('it re-searches when component_query changes externally', async function (assert) {
+    this.setQuery('junit');
+
+    await render(
+      hbs`<Sbom::ComponentInventory @queryParams={{this.queryParams}} />`
+    );
+
+    assert.strictEqual(this.componentRequests.length, 1);
+    assert.strictEqual(this.componentRequests[0].q, 'junit');
+
+    // Simulates clicking "view component" in the notifications pane while
+    // already on this screen: the route refreshes and the new
+    // component_query arrives as updated args on the same component
+    // instance.
+    this.setQuery('react');
+
+    await settled();
+
+    assert
+      .dom('[data-test-componentInventory-searchInput]')
+      .hasValue('react', 'the search box reflects the new query');
+
+    const lastRequest =
+      this.componentRequests[this.componentRequests.length - 1];
+
+    assert.strictEqual(this.componentRequests.length, 2);
+    assert.strictEqual(lastRequest.q, 'react', 'refetches with the new query');
+    assert.strictEqual(lastRequest.offset, '0', 'resets to the first page');
   });
 });

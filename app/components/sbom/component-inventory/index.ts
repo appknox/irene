@@ -55,8 +55,7 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
         this.offset,
         this.searchQuery,
         this.componentType,
-        false,
-        true
+        false
       );
     }
   }
@@ -190,6 +189,25 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
     this.fetchComponents.perform(this.limit, 0, '', this.componentType);
   }
 
+  @action
+  handleQueryParamChange() {
+    const query = this.args.queryParams.component_query || '';
+
+    if (query === this.searchQuery) {
+      return;
+    }
+
+    this.searchQuery = query;
+
+    this.fetchComponents.perform(
+      this.limit,
+      0,
+      query,
+      this.componentType,
+      false
+    );
+  }
+
   setRouteQueryParams(
     limit: string | number,
     offset: string | number,
@@ -213,8 +231,7 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
       offset: string | number,
       query: string,
       componentType: string,
-      setQueryParams = true,
-      autoOpenFirst = false
+      setQueryParams = true
     ) => {
       if (setQueryParams) {
         this.setRouteQueryParams(limit, offset, query, componentType);
@@ -238,12 +255,6 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
             ...(componentType ? { component_type: componentType } : {}),
           }
         )) as SbomComponentInventoryQueryResponse;
-
-        // Auto-open the details drawer for the first row when arriving from
-        // a notification deep-link (initial load with a valid query param).
-        if (autoOpenFirst && this.queryResponse.firstObject) {
-          this.selectedComponent = this.queryResponse.firstObject;
-        }
       } catch (e) {
         this.notify.error(parseError(e, this.tPleaseTryAgain));
       }

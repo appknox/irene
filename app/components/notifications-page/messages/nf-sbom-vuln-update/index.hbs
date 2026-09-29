@@ -8,36 +8,63 @@
   </AkTypography>
 
   <div local-class='component-card' data-test-nf-sbom-vuln-update-card>
-    <AkTypography local-class='component-name' @tag='p' @fontWeight='bold'>
-      {{@context.displayName}}
+    <AkTypography
+      data-test-nf-sbom-vuln-update-component-name
+      local-class='component-name'
+      @tag='p'
+      @fontWeight='bold'
+    >
+      {{this.displayName}}
     </AkTypography>
 
     <div local-class='component-details'>
-      <AkTypography @tag='p' @color='textSecondary'>
+      <AkTypography
+        data-test-nf-sbom-vuln-update-advisory
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
         {{t 'notificationModule.advisory'}}:
         <AkTypography
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.ghsa_ids_display}}</AkTypography>
+        >
+          {{this.ghsaIdsDisplay}}
+        </AkTypography>
       </AkTypography>
 
-      <AkTypography @tag='p' @color='textSecondary'>
+      <AkTypography
+        data-test-nf-sbom-vuln-update-fixed-version
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
         {{t 'notificationModule.fixedInVersion'}}:
         <AkTypography
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.fixed_version}}</AkTypography>
+        >
+          {{@context.fixed_version}}
+        </AkTypography>
       </AkTypography>
 
-      <AkTypography @tag='p' @color='textSecondary'>
+      <AkTypography
+        data-test-nf-sbom-vuln-update-affects
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
         {{t 'notificationModule.affects'}}:
         <AkTypography
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.affectedAppsLabel}}</AkTypography>
+        >
+          {{@context.affected_apps_count}}
+          {{t 'appOrS'}}
+        </AkTypography>
       </AkTypography>
     </div>
   </div>

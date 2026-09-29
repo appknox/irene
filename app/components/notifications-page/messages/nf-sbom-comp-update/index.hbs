@@ -4,27 +4,47 @@
   </AkTypography>
 
   <div local-class='component-card' data-test-nf-sbom-comp-update-card>
-    <AkTypography local-class='component-name' @tag='p' @fontWeight='bold'>
-      {{@context.displayName}}
+    <AkTypography
+      data-test-nf-sbom-comp-update-component-name
+      local-class='component-name'
+      @tag='p'
+      @fontWeight='bold'
+    >
+      {{this.displayName}}
     </AkTypography>
 
     <div local-class='component-details'>
-      <AkTypography @tag='p' @color='textSecondary'>
+      <AkTypography
+        data-test-nf-sbom-comp-update-new-version
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
         {{t 'notificationModule.newVersion'}}:
         <AkTypography
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.new_version}}</AkTypography>
+        >
+          {{@context.new_version}}
+        </AkTypography>
       </AkTypography>
 
-      <AkTypography @tag='p' @color='textSecondary'>
+      <AkTypography
+        data-test-nf-sbom-comp-update-affects
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
         {{t 'notificationModule.affects'}}:
         <AkTypography
           @tag='span'
           @color='textPrimary'
           @fontWeight='bold'
-        >{{@context.affectedAppsLabel}}</AkTypography>
+        >
+          {{@context.affected_apps_count}}
+          {{t 'appOrS'}}
+        </AkTypography>
       </AkTypography>
     </div>
   </div>
