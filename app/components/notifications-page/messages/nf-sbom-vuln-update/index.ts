@@ -15,6 +15,38 @@ export default class NotificationsPageMessagesNfSbomVulnUpdateComponent extends 
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
 
+  get displayName() {
+    const { context } = this.args;
+
+    if (context.name) {
+      return context.name;
+    }
+
+    const parts = context.component_name.split('::');
+
+    return parts[1] || context.component_name;
+  }
+
+  get advisoryLinks(): Array<{ label: string; url: string }> {
+    const { advisory_urls, ghsa_ids } = this.args.context;
+
+    if (advisory_urls.length > 0) {
+      return advisory_urls.map((url, i) => ({
+        label: ghsa_ids[i] ?? `Advisory ${i + 1}`,
+        url,
+      }));
+    }
+
+    return ghsa_ids.map((id) => ({
+      label: id,
+      url: `https://github.com/advisories/${id}`,
+    }));
+  }
+
+  get ghsaIdsDisplay() {
+    return this.args.context.ghsa_ids.join(', ');
+  }
+
   @action
   viewComponent() {
     this.router.transitionTo(
@@ -25,7 +57,7 @@ export default class NotificationsPageMessagesNfSbomVulnUpdateComponent extends 
 
   @action
   viewDirectory() {
-    const url = this.args.context.advisoryLinks[0]?.url;
+    const url = this.advisoryLinks[0]?.url;
 
     if (url) {
       this.window.open(url, '_blank');

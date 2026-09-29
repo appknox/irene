@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SbomComponentModel from 'irene/models/sbom-component';
@@ -27,10 +27,6 @@ export default class SbomScanDetailsComponentListStaleComponent extends Componen
 
   get vulnTooltip() {
     return this.intl.t('sbomModule.staleVulnDataTooltip');
-  }
-
-  get versionTooltip() {
-    return this.intl.t('sbomModule.staleVersionDataTooltip');
   }
 }
 
