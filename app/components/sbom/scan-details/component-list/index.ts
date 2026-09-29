@@ -104,7 +104,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return [
       {
         name: this.intl.t('sbomModule.componentName'),
-        valuePath: 'name',
+        component: 'sbom/scan-details/component-list/name',
         width: 150,
       },
       {

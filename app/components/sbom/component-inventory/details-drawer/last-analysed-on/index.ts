@@ -11,7 +11,11 @@ export interface SbomComponentInventoryDetailsDrawerLastAnalysedOnSignature {
 
 export default class SbomComponentInventoryDetailsDrawerLastAnalysedOnComponent extends Component<SbomComponentInventoryDetailsDrawerLastAnalysedOnSignature> {
   get lastAnalysedOn() {
-    const value = this.args.sbomProject.lastScaAnalysisOn;
+    // In history mode, prefer vulnerabilityScanCompletedAt; fall back to
+    // lastScaAnalysisOn for the default (latest-scan) mode.
+    const value =
+      this.args.sbomProject.vulnerabilityScanCompletedAt ||
+      this.args.sbomProject.lastScaAnalysisOn;
 
     return value ? dayjs(value).format('DD MMM YYYY') : '-';
   }

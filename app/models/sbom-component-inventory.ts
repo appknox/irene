@@ -14,6 +14,9 @@ export default class SbomComponentInventoryModel extends Model {
   declare name: string;
 
   @attr('string')
+  declare componentName: string;
+
+  @attr('string')
   declare version: string;
 
   @attr('string')
@@ -33,6 +36,10 @@ export default class SbomComponentInventoryModel extends Model {
 
   @attr('string')
   declare status: SbomComponentInventoryStatus;
+
+  get displayName() {
+    return this.componentName || this.bomRef || this.name || '-';
+  }
 
   get hasVersion() {
     return Boolean(this.version?.trim());

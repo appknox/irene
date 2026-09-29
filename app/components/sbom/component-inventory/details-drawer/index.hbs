@@ -50,7 +50,7 @@
               local-class='bom-ref-box'
               data-test-componentInventory-detailsName
             >
-              {{@component.bomRef}}
+              {{@component.displayName}}
             </AkTypography>
           </AkStack>
 
@@ -125,13 +125,32 @@
 
       <AkDivider @color='dark' />
 
-      <AkTypography
-        @color='textSecondary'
+      <AkStack
+        @width='full'
+        @justifyContent='space-between'
+        @alignItems='center'
         class='pt-3 px-3'
-        data-test-componentInventory-detailsAppsTitle
       >
-        {{t 'sbomModule.componentInventory.appsTitle'}}
-      </AkTypography>
+        <AkTypography
+          @color='textSecondary'
+          data-test-componentInventory-detailsAppsTitle
+        >
+          {{t 'sbomModule.componentInventory.appsTitle'}}
+        </AkTypography>
+
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkTypography @color='textSecondary'>
+            {{t 'sbomModule.componentInventory.showHistory'}}
+          </AkTypography>
+
+          <AkCheckbox
+            @checked={{this.showHistory}}
+            @onChange={{this.toggleHistory}}
+            @color='primary'
+            data-test-componentInventory-historyToggle
+          />
+        </AkStack>
+      </AkStack>
 
       <div class='p-3'>
         <AkPaginationProvider
@@ -148,7 +167,9 @@
           <Sbom::EmptyLoadingView
             @empty={{this.hasNoSbomProject}}
             @loading={{this.fetchSbomProjects.isRunning}}
-            @height='200px'
+            @height='120px'
+            @emptySvgHeight='60px'
+            @loadingSvgHeight='60px'
           >
             <:emptyText>
               <AkTypography @color='textSecondary'>
