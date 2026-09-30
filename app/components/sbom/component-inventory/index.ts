@@ -106,7 +106,7 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
     return [
       {
         name: this.intl.t('sbomModule.componentName'),
-        valuePath: 'bomRef',
+        valuePath: 'displayName',
         width: 300,
       },
       {
@@ -187,6 +187,25 @@ export default class SbomComponentInventoryComponent extends Component<SbomCompo
     this.searchQuery = '';
 
     this.fetchComponents.perform(this.limit, 0, '', this.componentType);
+  }
+
+  @action
+  handleQueryParamChange() {
+    const query = this.args.queryParams.component_query || '';
+
+    if (query === this.searchQuery) {
+      return;
+    }
+
+    this.searchQuery = query;
+
+    this.fetchComponents.perform(
+      this.limit,
+      0,
+      query,
+      this.componentType,
+      false
+    );
   }
 
   setRouteQueryParams(

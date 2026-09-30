@@ -179,6 +179,8 @@ export const MaterialSymbolsSet = [
   'license-outline-rounded',
   'shield',
   'shield-outline',
+  'shield-question',
+  'clock-arrow-up',
   'indeterminate-check-box',
   'supervisor-account',
   'supervisor-account-outline',
@@ -230,6 +232,7 @@ export const MdiIconsSet = [
   'web',
   'frame',
   'file-outline',
+  'clock-alert-outline',
 ] as const;
 
 export const HugeIconsSet = [

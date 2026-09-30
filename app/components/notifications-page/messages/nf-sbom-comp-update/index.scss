@@ -1,0 +1,36 @@
+.component-card {
+  width: 100%;
+  border: 1px solid
+    var(
+      --notifications-page-messages-nf-sbom-comp-update-component-card-border-color
+    );
+  border-radius: 0.2em;
+  overflow: hidden;
+}
+
+.component-name {
+  background-color: var(
+    --notifications-page-messages-nf-sbom-comp-update-component-name-background-color
+  );
+  padding: 0.5em 0.9em;
+  margin: 0;
+  word-break: break-all;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.component-details {
+  border-top: 1px solid
+    var(
+      --notifications-page-messages-nf-sbom-comp-update-component-details-border-color
+    );
+  padding: 0.9em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.component-detail {
+  margin: 0;
+  font-size: 0.9em;
+}

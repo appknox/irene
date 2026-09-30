@@ -1,0 +1,91 @@
+<AkStack @direction='column' @spacing='1.5' @alignItems='stretch'>
+  <AkTypography data-test-nf-sbom-vuln-update-primary-message>
+    {{t
+      'notificationModule.messages.nf-sbom-vuln-update'
+      htmlSafe=true
+      max_severity=@context.max_severity
+    }}
+  </AkTypography>
+
+  <div local-class='component-card' data-test-nf-sbom-vuln-update-card>
+    <AkTypography
+      data-test-nf-sbom-vuln-update-component-name
+      local-class='component-name'
+      @tag='p'
+      @fontWeight='bold'
+    >
+      {{this.displayName}}
+    </AkTypography>
+
+    <div local-class='component-details'>
+      <AkTypography
+        data-test-nf-sbom-vuln-update-advisory
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
+        {{t 'notificationModule.advisory'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >
+          {{this.ghsaIdsDisplay}}
+        </AkTypography>
+      </AkTypography>
+
+      <AkTypography
+        data-test-nf-sbom-vuln-update-fixed-version
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
+        {{t 'notificationModule.fixedInVersion'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >
+          {{@context.fixed_version}}
+        </AkTypography>
+      </AkTypography>
+
+      <AkTypography
+        data-test-nf-sbom-vuln-update-affects
+        local-class='component-detail'
+        @tag='p'
+        @color='textSecondary'
+      >
+        {{t 'notificationModule.affects'}}:
+        <AkTypography
+          @tag='span'
+          @color='textPrimary'
+          @fontWeight='bold'
+        >
+          {{@context.affected_apps_count}}
+          {{t 'appOrS'}}
+        </AkTypography>
+      </AkTypography>
+    </div>
+  </div>
+
+  <AkStack @spacing='1'>
+    <AkButton
+      data-test-nf-sbom-vuln-update-link
+      @variant='filled'
+      @color='primary'
+      {{on 'click' this.viewComponent}}
+    >
+      {{t 'notificationModule.viewComponent'}}
+    </AkButton>
+
+    <AkButton
+      data-test-nf-sbom-vuln-update-directory-link
+      @variant='outlined'
+      @color='neutral'
+      {{on 'click' this.viewDirectory}}
+    >
+      {{t 'notificationModule.viewDirectory'}}
+    </AkButton>
+  </AkStack>
+</AkStack>

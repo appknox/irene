@@ -117,8 +117,20 @@ export default class SbomComponentModel extends Model {
   @attr()
   declare externalReferences: SbomComponentExternalReferences;
 
+  // Server-side flag: new GHSA vuln data published after the file's last vuln scan; re-scan recommended.
+  @attr('boolean')
+  declare isStaleVulnData: boolean;
+
+  // Server-side flag: newer upstream version published after the file's last composition scan; re-scan recommended.
+  @attr('boolean')
+  declare isStaleVersionData: boolean;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
+  }
+
+  get isStale() {
+    return this.isStaleVulnData || this.isStaleVersionData;
   }
 
   get cleanVersion() {

@@ -1,4 +1,10 @@
-import { render, findAll, click, waitUntil } from '@ember/test-helpers';
+import {
+  render,
+  findAll,
+  click,
+  waitUntil,
+  settled,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -401,6 +407,55 @@ module(
         notify.errorMsg,
         t('sbomModule.componentInventory.exportFailed'),
         'shows an export-failed error'
+      );
+    });
+
+    test('it resets the history filter when a different component is opened', async function (assert) {
+      const projectRequests = [];
+
+      this.server.get('/v2/sb_components/:id/sb_projects', (schema, req) => {
+        projectRequests.push(req.queryParams);
+
+        return { count: 0, next: null, previous: null, results: [] };
+      });
+
+      await render(hbs`
+        <Sbom::ComponentInventory::DetailsDrawer
+          @component={{this.component}}
+          @open={{true}}
+          @onClose={{this.onClose}}
+        />
+      `);
+
+      await click('[data-test-componentInventory-historyToggle]');
+
+      assert
+        .dom('[data-test-componentInventory-historyToggle]')
+        .isChecked('history filter is on');
+
+      assert.ok(
+        projectRequests[projectRequests.length - 1].history,
+        'apps refetch includes the history flag'
+      );
+
+      // Simulate the drawer reopening for a different component: the parent
+      // swaps @component on the same drawer instance.
+      const otherModel = this.server.create('sbom-component-inventory');
+
+      this.set(
+        'component',
+        await this.store.findRecord('sbom-component-inventory', otherModel.id)
+      );
+
+      await settled();
+
+      assert
+        .dom('[data-test-componentInventory-historyToggle]')
+        .isNotChecked('history filter resets for the new component');
+
+      assert.notOk(
+        projectRequests[projectRequests.length - 1].history,
+        'the new fetch drops the history flag'
       );
     });
   }

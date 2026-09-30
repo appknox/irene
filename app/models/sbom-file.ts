@@ -1,6 +1,6 @@
 import type { AsyncBelongsTo } from '@ember-data/model';
 import Model, { belongsTo, attr } from '@ember-data/model';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 
 import type FileModel from './file';
@@ -33,6 +33,10 @@ export default class SbomFileModel extends Model {
 
   @attr('boolean')
   declare isOutdated: boolean;
+
+  // Server-side aggregate: true if any component in this file has stale vuln/version data.
+  @attr('boolean')
+  declare isStale: boolean;
 
   get statusValue() {
     switch (this.status) {

@@ -1560,7 +1560,9 @@
       "nf-ovrreq-approved": "<strong>{reviewer_email}</strong> has approved the vulnerability override request raised by <strong>{requester_email}</strong>.",
       "nf-ovrreq-approved-reqstr": "<strong>{reviewer_email}</strong> has approved the vulnerability override request.",
       "nf-ovrreq-raised": "<strong>{requester_email}</strong> has sent an edit request to override a vulnerability.",
-      "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request"
+      "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request",
+      "nf-sbom-comp-update": "A new version is available for this component",
+      "nf-sbom-vuln-update": "New vulnerability advisory <strong>{max_severity}</strong> detected"
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1573,6 +1575,12 @@
     "viewStoreMonitoring": "View store monitoring",
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewSBOMResults": "View SCA results",
+    "viewComponent": "View component",
+    "viewDirectory": "View Directory",
+    "advisory": "Advisory",
+    "fixedInVersion": "Fixed in version",
+    "affects": "Affects",
+    "newVersion": "New version",
     "viewMonitoringResults": "View monitoring results",
     "viewAppOnStore": "View App on Store"
   },
@@ -2262,6 +2270,7 @@
     "generatedDate": "Generated Date",
     "versionCode": "Version Code",
     "lastSbomAnalysisOn": "Last SCA Analysis On",
+    "dependencyType": "Dependency Type",
     "latestVersion": "Latest Version",
     "parentComponentNotFound": "Parent component not found",
     "pastSbomAnalyses": "Past SCA Analyses",
@@ -2316,7 +2325,8 @@
       "noAppsFound": "No apps found for this component.",
       "componentNotFoundInApp": "Could not find this component in the selected app.",
       "downloadXlsx": "Download .xlsx",
-      "exportFailed": "Couldn't generate the export. Please try again."
+      "exportFailed": "Couldn't generate the export. Please try again.",
+      "showHistory": "Include scan history"
     },
     "allComponentsAndVulnerabilities": "All Components and Vulnerabilities",
     "components": "Components",
@@ -2325,6 +2335,10 @@
     "componentDetailsDescription": "View additional information related to each component.",
     "componentDescription": "View the list of components detected in your application.",
     "componentName": "Component Name",
+    "stale": "Stale",
+    "staleVulnDataTooltip": "Vulnerability info may be outdated — re-scan recommended.",
+    "staleVersionDataTooltip": "A newer upstream version is available<br/>than what was captured at scan.",
+    "staleFileTooltip": "One or more components in this scan have stale data — re-scan recommended.",
     "sbomComponents": "SBOM Components",
     "aiBomComponents": "AI BoM Components",
     "purpose": "Purpose",

@@ -1560,7 +1560,9 @@
       "nf-ovrreq-approved": "<strong>{reviewer_email}</strong> has approved the vulnerability override request raised by <strong>{requester_email}</strong>.",
       "nf-ovrreq-approved-reqstr": "<strong>{reviewer_email}</strong> has approved the vulnerability override request.",
       "nf-ovrreq-raised": "<strong>{requester_email}</strong> has sent an edit request to override a vulnerability.",
-      "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request"
+      "nf-ovrreq-rejected": "<strong>{reviewer_email}</strong> has rejected the vulnerability override request",
+      "nf-sbom-comp-update": "このコンポーネントの新しいバージョンが利用可能です",
+      "nf-sbom-vuln-update": "新しい脆弱性アドバイザリ<strong>{max_severity}</strong>が検出されました"
     },
     "namespaceMessage": {
       "approved": "{moderaterName} approved this namespace",
@@ -1574,6 +1576,12 @@
     "viewStoreMonitoringResults": "View store monitoring results",
     "viewMonitoringResults": "View monitoring results",
     "viewSBOMResults": "View SCA results",
+    "viewComponent": "コンポーネントを表示",
+    "viewDirectory": "ディレクトリを表示",
+    "advisory": "アドバイザリ",
+    "fixedInVersion": "修正バージョン",
+    "affects": "影響",
+    "newVersion": "新しいバージョン",
     "viewAppOnStore": "View App on Store"
   },
   "notificationPreferences": "Notification Preferences",
@@ -2262,6 +2270,7 @@
     "generatedDate": "Generated Date",
     "versionCode": "Version Code",
     "lastSbomAnalysisOn": "Last SCA Analysis On",
+    "dependencyType": "依存関係タイプ",
     "latestVersion": "Latest Version",
     "parentComponentNotFound": "Parent component not found",
     "pastSbomAnalyses": "Past SCA Analyses",
@@ -2319,7 +2328,8 @@
       "noAppsFound": "No apps found for this component.",
       "componentNotFoundInApp": "Could not find this component in the selected app.",
       "downloadXlsx": "Download .xlsx",
-      "exportFailed": "Couldn't generate the export. Please try again."
+      "exportFailed": "エクスポートを生成できませんでした。もう一度お試しください。",
+      "showHistory": "スキャン履歴を含める"
     },
     "allComponentsAndVulnerabilities": "All Components and Vulnerabilities",
     "components": "Components",
@@ -2328,6 +2338,10 @@
     "componentDetailsDescription": "View additional information related to each component.",
     "componentDescription": "View the list of components detected in your application.",
     "componentName": "Component Name",
+    "stale": "古いデータ",
+    "staleVulnDataTooltip": "脆弱性情報が古い可能性があります。再スキャンを推奨します。",
+    "staleVersionDataTooltip": "スキャン時に記録されたものより<br/>新しいアップストリームバージョンが利用可能です。",
+    "staleFileTooltip": "このスキャンの1つ以上のコンポーネントでデータが古い可能性があります。再スキャンを推奨します。",
     "sbomComponents": "SBOM Components",
     "aiBomComponents": "AI BoM Components",
     "purpose": "Purpose",
@@ -2789,8 +2803,6 @@
     "riskScoreUnavailable": "Unavailable",
     "riskAssessmentErrorTitle": "Something has gone wrong",
     "riskAssessmentErrorDescription": "We couldn't load the risk assessment for this app. Please reach out to our support team for assistance.",
-    "appStore": "App Store",
-    "playStore": "Play Store",
     "riskStatus": {
       "minimal": "Minimal Risk",
       "medium": "Medium Risk",
