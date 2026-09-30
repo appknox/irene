@@ -109,6 +109,34 @@ module(
       assert
         .dom('[data-test-storeknoxFakeAppsFakeAppList-successState]')
         .containsText(t('storeknox.fakeApps.noSuspectedApps'));
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsFakeAppList-successStateDescription]')
+        .hasText(t('storeknox.fakeApps.noSuspectedAppsDescription'));
+    });
+
+    test('it does not promise future results in the success state of a decommissioned app', async function (assert) {
+      this.skInventoryAppRecord.setProperties({
+        appStatus: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+        fakeAppDetectionStatus: ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+        fakeAppCounts: {
+          brand_abuse: 0,
+          fake_app: 0,
+          ignored: 0,
+        },
+      });
+
+      await render(hbs`
+        <Storeknox::FakeApps::FakeAppList
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsFakeAppList-successStateDescription]')
+        .hasText(
+          t('storeknox.fakeApps.noSuspectedAppsDecommissionedDescription')
+        );
     });
 
     test('it renders tabs with correct labels and counts', async function (assert) {
@@ -167,6 +195,31 @@ module(
       assert
         .dom('[data-test-storeknoxFakeAppsFakeAppList]')
         .hasClass(/.*archived/, 'applies archived class'); //NOSONAR
+    });
+
+    test('it applies the same layout-offset class when inventory app is decommissioned', async function (assert) {
+      this.skInventoryAppRecord.setProperties({
+        appStatus: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+        fakeAppDetectionStatus: ENUMS.SK_FAKE_APP_DETECTION_STATUS.HAS_RESULTS,
+        fakeAppCounts: {
+          brand_abuse: 1,
+          fake_app: 1,
+          ignored: 1,
+        },
+      });
+
+      await render(hbs`
+        <Storeknox::FakeApps::FakeAppList
+          @skInventoryApp={{this.skInventoryAppRecord}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxFakeAppsFakeAppList]')
+        .hasClass(
+          /archived/,
+          'a decommissioned app also gets the layout offset'
+        ); //NOSONAR
     });
   }
 );

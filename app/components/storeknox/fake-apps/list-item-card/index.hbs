@@ -81,6 +81,16 @@
           {{t 'by'}}
           {{this.skApp.appMetadata.devName}}
         </AkTypography>
+
+        {{#if this.skApp.isDecommissioned}}
+          <AkChip
+            @size='small'
+            @variant='semi-filled'
+            @color='error'
+            @label={{t 'storeknox.decommissioned'}}
+            data-test-storeknoxFakeAppsListItemCard-decommissionedChip
+          />
+        {{/if}}
       </AkStack>
     </AkStack>
 

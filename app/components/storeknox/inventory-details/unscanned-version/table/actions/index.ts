@@ -181,8 +181,14 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
     return this.skApp.get('isIos');
   }
 
-  get appIsArchived() {
-    return this.skApp.get('isArchived');
+  // skApp is an AsyncBelongsTo proxy: read raw attributes. Composite getters
+  // like isReadOnly hang the acceptance suite when read through it.
+  get appIsReadOnly() {
+    return Boolean(this.skApp.get('isArchived') || this.appIsDecommissioned);
+  }
+
+  get appIsDecommissioned() {
+    return this.skApp.get('appStatus') === ENUMS.SK_APP_STATUS.DECOMMISSIONED;
   }
 
   get isScanned() {
@@ -234,7 +240,11 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   get disableInitiateUploadBtn() {
-    return this.appIsArchived;
+    return this.appIsReadOnly;
+  }
+
+  get disableRetryBtn() {
+    return !this.canInitiateUpload || this.appIsReadOnly;
   }
 
   @action triggerInitiateUpload() {
@@ -278,7 +288,7 @@ export default class StoreknoxInventoryDetailsUnscannedVersionTableActionsCompon
   }
 
   initiateUpload = task(async () => {
-    if (this.appIsArchived) {
+    if (this.appIsReadOnly) {
       return;
     }
 

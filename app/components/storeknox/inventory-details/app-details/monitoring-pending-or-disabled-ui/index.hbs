@@ -7,7 +7,34 @@
   class='p-6'
   {{style minHeight='300px'}}
 >
-  {{#if @skInventoryApp.monitoringEnabled}}
+  {{#if @skInventoryApp.isDecommissioned}}
+    <AkSvg::SoxMonitoringResultsPendingWithMonitoringOff
+      data-test-storeknoxInventoryDetails-decommissionedIllustration
+    />
+
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='0.5'
+      {{style maxWidth='485px'}}
+    >
+      <AkTypography
+        @variant='h5'
+        @align='center'
+        data-test-storeknoxInventoryDetails-decommissionedHeaderText
+      >
+        {{t 'storeknox.appDecommissionedHeading'}}
+      </AkTypography>
+
+      <AkTypography
+        @align='center'
+        data-test-storeknoxInventoryDetails-decommissionedDescription
+      >
+        {{t 'storeknox.decommissionedMsg'}}
+      </AkTypography>
+    </AkStack>
+
+  {{else if @skInventoryApp.monitoringEnabled}}
     <AkSvg::SoxMonitoringResultsPending
       data-test-storeknoxInventoryDetails-monitoringResultsPendingIllustration
     />

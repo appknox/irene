@@ -44,6 +44,22 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
     return this.skInventoryApp?.fakeAppDetectionIsInitializing;
   }
 
+  get isDecommissioned() {
+    return this.skInventoryApp?.isDecommissioned;
+  }
+
+  get storeMonitoringNoDataTooltip() {
+    return this.isDecommissioned
+      ? this.intl.t('storeknox.decommissionedActionDisabled')
+      : this.intl.t('storeknox.noStoreMonitoringDataTooltip');
+  }
+
+  get fakeAppDetectionNoDataTooltip() {
+    return this.isDecommissioned
+      ? this.intl.t('storeknox.decommissionedActionDisabled')
+      : this.intl.t('storeknox.noFakeAppDetectionDataTooltip');
+  }
+
   get actionsList() {
     return [
       {
@@ -67,7 +83,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
 
         disabledTooltipMessage: this.storeMonitoringStatusIsPending
           ? this.intl.t('storeknox.initializingMsg')
-          : this.intl.t('storeknox.noStoreMonitoringDataTooltip'),
+          : this.storeMonitoringNoDataTooltip,
       },
       this.orgHasFakeAppDetectionFeature
         ? {
@@ -92,7 +108,7 @@ export default class StoreknoxInventoryDetailsAppDetailsActionsListComponent ext
 
             disabledTooltipMessage: this.fakeAppDetectionIsInitializing
               ? this.intl.t('storeknox.initializingMsg')
-              : this.intl.t('storeknox.noFakeAppDetectionDataTooltip'),
+              : this.fakeAppDetectionNoDataTooltip,
           }
         : {
             id: 'brand-abuse',

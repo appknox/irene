@@ -36,6 +36,16 @@ export default class StoreknoxInventoryDetailsUnscannedVersionHeaderComponent ex
     return this.skInventoryApp?.monitoringEnabled;
   }
 
+  get monitoringStatusLabel() {
+    if (this.skInventoryApp?.isDecommissioned) {
+      return this.intl.t('storeknox.decommissioned');
+    }
+
+    return this.monitoringEnabled
+      ? this.intl.t('active')
+      : this.intl.t('inactive');
+  }
+
   get lastMonitoredOn() {
     return dayjs(this.skInventoryApp?.lastMonitoredOn).format('DD MMMM, YYYY');
   }

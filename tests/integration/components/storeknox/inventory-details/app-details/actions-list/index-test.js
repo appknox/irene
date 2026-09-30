@@ -437,6 +437,26 @@ module(
             has_fake_app_detection_data: false,
           },
         },
+        {
+          btnKey: 'unscanned-version',
+          tooltipText: () => t('storeknox.decommissionedActionDisabled'),
+          attrs: {
+            app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+            decommissioned_on: new Date().toISOString(),
+            has_store_monitoring_data: false,
+            has_fake_app_detection_data: true,
+          },
+        },
+        {
+          btnKey: 'brand-abuse',
+          tooltipText: () => t('storeknox.decommissionedActionDisabled'),
+          attrs: {
+            app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+            decommissioned_on: new Date().toISOString(),
+            has_store_monitoring_data: true,
+            has_fake_app_detection_data: false,
+          },
+        },
       ],
       async function (assert, { btnKey, isArchived, tooltipText, attrs }) {
         this.set(

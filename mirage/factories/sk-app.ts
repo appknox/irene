@@ -24,7 +24,13 @@ export default Factory.extend({
   archived_on: () => faker.date.past(),
   unarchive_available_on: () => faker.date.future(),
 
-  app_status: () => faker.helpers.arrayElement(ENUMS.SK_APP_STATUS.BASE_VALUES),
+  // Not BASE_VALUES: opt in to DECOMMISSIONED via the `decommissioned` trait.
+  app_status: () =>
+    faker.helpers.arrayElement([
+      ENUMS.SK_APP_STATUS.INACTIVE,
+      ENUMS.SK_APP_STATUS.ACTIVE,
+      ENUMS.SK_APP_STATUS.ARCHIVED,
+    ]),
 
   approval_status: () =>
     faker.helpers.arrayElement(ENUMS.SK_APPROVAL_STATUS.BASE_VALUES),
@@ -114,5 +120,13 @@ export default Factory.extend({
   withAddedToAppknox: trait({
     approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
     app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+  }),
+
+  decommissioned: trait({
+    app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+    monitoring_enabled: false,
+    decommissioned_on: () => faker.date.recent(),
+    store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+    fake_app_detection_status: ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
   }),
 });

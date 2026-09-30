@@ -14,11 +14,18 @@ export default class AuthenticatedStoreknoxInventoryDetailsUnscannedVersionRoute
   }
 
   beforeModel() {
+    const app = this.skInventoryApp;
+
+    // A decommissioned app reports DISABLED but keeps its history viewable.
+    const isDecommissionedWithHistory =
+      app.isDecommissioned && app.hasStoreMonitoringData;
+
     // Redirect user to details page if app status is being initialized or disabled
     if (
-      this.skInventoryApp.storeMonitoringStatusIsPending ||
-      (this.skInventoryApp.storeMonitoringStatusIsDisabled &&
-        !this.skInventoryApp.storeMonitoringStatusIsActionNeeded)
+      app.storeMonitoringStatusIsPending ||
+      (app.storeMonitoringStatusIsDisabled &&
+        !app.storeMonitoringStatusIsActionNeeded &&
+        !isDecommissionedWithHistory)
     ) {
       this.router.transitionTo(
         'authenticated.storeknox.inventory-details.index',

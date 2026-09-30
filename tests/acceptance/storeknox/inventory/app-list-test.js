@@ -47,6 +47,7 @@ const MONITORING_STATUS_FILTERS = {
   INITIALIZING: ENUMS.SK_APP_MONITORING_STATUS_FILTER.INITIALIZING,
   ACTION_NEEDED: ENUMS.SK_APP_MONITORING_STATUS_FILTER.ACTION_NEEDED,
   NO_ACTION_NEEDED: ENUMS.SK_APP_MONITORING_STATUS_FILTER.NO_ACTION_NEEDED,
+  DECOMMISSIONED: ENUMS.SK_APP_MONITORING_STATUS_FILTER.DECOMMISSIONED,
 };
 
 // App Config for different monitoring statuses
@@ -275,16 +276,24 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       store_monitoring_status,
       fake_app_detection_status,
       monitoring_enabled,
+      app_status,
     } = a;
+
+    const isDecommissioned = app_status === ENUMS.SK_APP_STATUS.DECOMMISSIONED;
 
     // No filter applied
     if (filterValue === -1) {
       return true;
     }
 
+    // Decommissioned is its own bucket, as in the backend
+    if (filterValue === MONITORING_STATUS_FILTERS.DECOMMISSIONED) {
+      return isDecommissioned;
+    }
+
     // Disabled filter applied
     if (filterValue === MONITORING_STATUS_FILTERS.DISABLED) {
-      return monitoring_enabled === false;
+      return monitoring_enabled === false && !isDecommissioned;
     }
 
     // Action needed filter applied
@@ -738,10 +747,12 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       this.server.get('v2/sk_app', (schema, req) => {
         const { app_status, approval_status } = req.queryParams;
 
+        const statuses = new Set(String(app_status).split(',').map(Number));
+
         const inventoryApps = schema.skInventoryApps
           .where(
             (a) =>
-              a.app_status === Number(app_status) &&
+              statuses.has(a.app_status) &&
               a.approval_status === Number(approval_status)
           )
           .models.map((a) => ({
@@ -848,10 +859,12 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
 
         const filterValue = Number(monitoring_status ?? -1);
 
+        const statuses = new Set(String(app_status).split(',').map(Number));
+
         const inventoryApps = schema.skApps
           .where(
             (a) =>
-              a.app_status === Number(app_status) &&
+              statuses.has(a.app_status) &&
               a.approval_status === Number(approval_status)
           )
           .filter((a) => filterAppsByMonitoringStatus(a, filterValue))
@@ -1002,4 +1015,61 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
       assert.dom(filterOptionTextSelector, filterOption).hasText(key());
     }
   );
+
+  test('it filters decommissioned apps', async function (assert) {
+    assert.expect(4);
+
+    [1, 2, 3].forEach(() =>
+      this.server.create('sk-app', 'withApprovedStatus', {
+        monitoring_enabled: true,
+        store_monitoring_status: MONITORING_STATUSES.NO_ACTION_NEEDED,
+        fake_app_detection_status: FAKE_APP_DETECTION_STATUSES.NO_RESULTS,
+      })
+    );
+
+    const decommissionedIds = [1, 2].map(
+      () =>
+        this.server.create('sk-app', 'withApprovedStatus', 'decommissioned').id
+    );
+
+    this.server.get('v2/sk_app', (schema, req) => {
+      const { app_status, approval_status, monitoring_status } =
+        req.queryParams;
+
+      const filterValue = Number(monitoring_status ?? -1);
+      const statuses = new Set(String(app_status).split(',').map(Number));
+
+      const results = schema.skApps
+        .where(
+          (a) =>
+            statuses.has(a.app_status) &&
+            a.approval_status === Number(approval_status)
+        )
+        .filter((a) => filterAppsByMonitoringStatus(a, filterValue))
+        .models.map((a) => ({ ...a.toJSON(), app_metadata: a.app_metadata }));
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    await visit('/dashboard/storeknox/inventory/app-list');
+
+    assert.strictEqual(
+      findAll('[data-test-storeknoxInventory-appListTable-row]').length,
+      5
+    );
+
+    await openMonitoringStatusFilter(assert);
+
+    await click(
+      `[data-test-storeknoxInventory-appListTable-monitoringStatus-header-option='${t('storeknox.decommissioned')}']`
+    );
+
+    const rowIds = findAll(
+      '[data-test-storeknoxInventory-appListTable-row]'
+    ).map((row) => row.dataset.testStoreknoxinventoryApplisttableRowid);
+
+    const byId = (a, b) => a.localeCompare(b);
+
+    assert.deepEqual([...rowIds].sort(byId), [...decommissionedIds].sort(byId));
+  });
 });

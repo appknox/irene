@@ -275,5 +275,32 @@ module(
 
       assert.strictEqual(router.lastModel, '42', 'passes the correct app id');
     });
+
+    test.each(
+      'it marks only decommissioned apps with a chip',
+      [
+        { appStatus: ENUMS.SK_APP_STATUS.DECOMMISSIONED, showsChip: true },
+        { appStatus: ENUMS.SK_APP_STATUS.ACTIVE, showsChip: false },
+        { appStatus: ENUMS.SK_APP_STATUS.ARCHIVED, showsChip: false },
+      ],
+      async function (assert, { appStatus, showsChip }) {
+        this.skFakeAppInventoryRecord.set('appStatus', appStatus);
+
+        await render(hbs`
+          <Storeknox::FakeApps::ListItemCard @skFakeApp={{this.skFakeAppInventoryRecord}} />
+        `);
+
+        if (showsChip) {
+          assert
+            .dom('[data-test-storeknoxFakeAppsListItemCard-decommissionedChip]')
+            .exists()
+            .containsText(t('storeknox.decommissioned'));
+        } else {
+          assert
+            .dom('[data-test-storeknoxFakeAppsListItemCard-decommissionedChip]')
+            .doesNotExist();
+        }
+      }
+    );
   }
 );

@@ -356,6 +356,7 @@ const ENUMS = {
     INACTIVE: 0,
     ACTIVE: 1,
     ARCHIVED: 2,
+    DECOMMISSIONED: 3,
   },
 
   DEPENDENCY_TYPE: {
@@ -376,6 +377,7 @@ const ENUMS = {
     NO_ACTION_NEEDED: 1,
     INITIALIZING: 2,
     ACTION_NEEDED: 3,
+    DECOMMISSIONED: 4,
   },
 
   SK_FAKE_APP_STATUS: {

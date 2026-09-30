@@ -87,7 +87,9 @@
             @color='inherit'
             data-test-skAppVersionTable-initiateUploadBtn-tooltipText
           >
-            {{#if this.appIsArchived}}
+            {{#if this.appIsDecommissioned}}
+              {{t 'storeknox.decommissionedActionDisabled'}}
+            {{else if this.appIsReadOnly}}
               {{t 'storeknox.cannotUploadForArchivedApps'}}
             {{else}}
               {{t 'storeknox.initiateUploadComingSoon'}}
@@ -117,7 +119,7 @@
             </:default>
           </AkButton>
 
-          {{#unless this.appIsArchived}}
+          {{#unless this.appIsReadOnly}}
             <AkChip
               @variant='outlined'
               @size='small'
@@ -205,7 +207,7 @@
       >
         <AkButton
           @variant='filled'
-          @disabled={{not this.canInitiateUpload}}
+          @disabled={{this.disableRetryBtn}}
           @loading={{this.initiateUpload.isRunning}}
           {{on 'click' this.retryAppVersionUpload}}
           data-test-skAppVersionTable-initiateUpload-retryBtn

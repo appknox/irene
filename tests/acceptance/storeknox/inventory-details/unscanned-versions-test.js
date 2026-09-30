@@ -263,5 +263,51 @@ module(
         );
       }
     );
+
+    test.each(
+      'a decommissioned app opens its version history only when it has some',
+      [
+        { hasData: true, staysOnPage: true },
+        { hasData: false, staysOnPage: false },
+      ],
+      async function (assert, { hasData, staysOnPage }) {
+        const file = this.server.create('file');
+        const core_project = this.server.create('project');
+
+        const inventoryApp = this.server.create(
+          'sk-inventory-app',
+          'decommissioned',
+          {
+            core_project: core_project.id,
+            core_project_latest_version: file.id,
+            has_store_monitoring_data: hasData,
+          }
+        );
+
+        const inventoryAppRecord = this.normalizeSKInventoryApp(inventoryApp);
+
+        this.server.get('/v2/sk_app/:id/sk_app_version', () => {
+          return { count: 0, next: null, previous: null, results: [] };
+        });
+
+        const detailsURL = `/dashboard/storeknox/inventory-details/${inventoryAppRecord.id}`;
+
+        await visit(`${detailsURL}/unscanned-version`);
+
+        if (!staysOnPage) {
+          assert.strictEqual(currentURL(), detailsURL);
+
+          return;
+        }
+
+        assert.strictEqual(currentURL(), `${detailsURL}/unscanned-version`);
+
+        assert
+          .dom(
+            '[data-test-storeknoxInventoryDetails-unscannedVersionHeader-monitoringStatusChip]'
+          )
+          .hasText(t('storeknox.decommissioned'));
+      }
+    );
   }
 );

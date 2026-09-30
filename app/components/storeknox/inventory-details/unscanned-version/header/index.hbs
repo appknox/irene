@@ -2,7 +2,7 @@
   <AkTabs
     local-class='storeknox-inventory-details-unscanned-version-header-tabs
     {{if this.skInventoryApp.appIsNotAvailableOnAppknox "not-appknox"}}
-    {{if this.skInventoryApp.isArchived "archived"}}'
+    {{if this.skInventoryApp.isReadOnly "archived"}}'
     as |Akt|
   >
     {{#each this.tabItems as |item|}}
@@ -116,7 +116,7 @@
               @size='small'
               @variant='semi-filled'
               @color={{if this.monitoringEnabled 'success' 'error'}}
-              @label={{if this.monitoringEnabled (t 'active') (t 'inactive')}}
+              @label={{this.monitoringStatusLabel}}
               local-class='status'
               data-test-storeknoxInventoryDetails-unscannedVersionHeader-monitoringStatusChip
             />

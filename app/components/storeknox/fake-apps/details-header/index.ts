@@ -5,10 +5,12 @@ import { tracked } from 'tracked-built-ins';
 
 import type IntlService from 'ember-intl/services/intl';
 import type SkFakeAppModel from 'irene/models/sk-fake-app';
+import type SkInventoryAppModel from 'irene/models/sk-inventory-app';
 
 export interface StoreknoxFakeAppsDetailsHeaderSignature {
   Args: {
     fakeApp: SkFakeAppModel;
+    skInventoryApp?: SkInventoryAppModel;
     isFakeAppIgnored: boolean;
   };
 }
@@ -28,6 +30,11 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
     return this.args.isFakeAppIgnored;
   }
 
+  // Only decommissioned apps are locked here; archived apps keep their existing actions.
+  get appIsDecommissioned() {
+    return Boolean(this.args.skInventoryApp?.isDecommissioned);
+  }
+
   get isAndroid() {
     return this.fakeApp?.isAndroid;
   }
@@ -38,6 +45,20 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
 
   get isApkModyOrAptoideStore() {
     return this.fakeApp?.isApkModyStore || this.fakeApp?.isAptoideStore;
+  }
+
+  get addToInventoryDisabled() {
+    return this.appIsDecommissioned || this.isApkModyOrAptoideStore;
+  }
+
+  get addToInventoryTooltipTitle() {
+    if (this.appIsDecommissioned) {
+      return this.intl.t('storeknox.decommissionedActionDisabled');
+    }
+
+    return this.intl.t(
+      'storeknox.fakeApps.cannotIgnoreNonAppStoreAndPlayStoreApps'
+    );
   }
 
   get isBrandAbuseFakeApp() {
@@ -75,6 +96,11 @@ export default class StoreknoxFakeAppsDetailsHeaderComponent extends Component<S
 
   @action
   openIgnoreDrawer(addToInventory = false) {
+    // Viewing an already-ignored fake app stays allowed.
+    if (this.appIsDecommissioned && !this.isFakeAppIgnored) {
+      return;
+    }
+
     this.addToInventory = addToInventory;
     this.showIgnoreDrawer = true;
   }

@@ -35,6 +35,14 @@ export default class StoreknoxFakeAppsFakeAppListComponent extends Component<Sto
     return !this.isInitializing && this.allCountsZero;
   }
 
+  get successStateDescription() {
+    return this.args.skInventoryApp?.isDecommissioned
+      ? this.intl.t(
+          'storeknox.fakeApps.noSuspectedAppsDecommissionedDescription'
+        )
+      : this.intl.t('storeknox.fakeApps.noSuspectedAppsDescription');
+  }
+
   get showTabs() {
     return !this.isInitializing && !this.allCountsZero;
   }
