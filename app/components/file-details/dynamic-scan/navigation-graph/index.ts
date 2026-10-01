@@ -2,7 +2,12 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import cytoscape from 'cytoscape';
+import { waitForPromise } from '@ember/test-waiters';
+
+// Type-only import - erased at build time, doesn't pull cytoscape into the
+// main bundle. Only loadCytoscape() below does that, and only when this
+// component (a single niche route) actually renders.
+import type cytoscape from 'cytoscape';
 
 import {
   DOUBLE_TAP_WINDOW_MS,
@@ -31,6 +36,19 @@ const INITIAL_LAYOUT: NavigationGraphLayout = 'grid';
 // Fallback icon size (px) at zoom 1; scaled by the live zoom so the icon grows
 // and shrinks with the node it sits on.
 const FALLBACK_ICON_BASE_PX = 40;
+
+let cytoscapePromise: Promise<typeof cytoscape> | null = null;
+
+/** Loads cytoscape on demand, caching the import so it only fetches once. */
+function loadCytoscape() {
+  if (!cytoscapePromise) {
+    cytoscapePromise = waitForPromise(
+      import('cytoscape').then((module) => module.default)
+    );
+  }
+
+  return cytoscapePromise;
+}
 
 export interface FileDetailsDynamicScanNavigationGraphSignature {
   Element: HTMLElement;
@@ -427,8 +445,19 @@ export default class FileDetailsDynamicScanNavigationGraphComponent extends Comp
   }
 
   @action
-  buildGraph() {
+  async buildGraph() {
     if (!this.canvasEl) {
+      return;
+    }
+
+    const cytoscape = await loadCytoscape();
+
+    // The import above can take a tick (or, on the first call, a real
+    // network fetch) - the component may be destroyed before it resolves
+    // (e.g. navigating away mid-load). willDestroy() already tears down any
+    // existing `cy`, so just bail rather than building a new instance onto
+    // a dead component.
+    if (this.isDestroying) {
       return;
     }
 
