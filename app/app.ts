@@ -7,6 +7,9 @@ import type { DateLibrary } from 'ember-power-calendar/utils';
 import config from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import DateUtils from 'irene/utils/power-calendar-dayjs';
+import addPreconnectHints from 'irene/utils/add-preconnect-hints';
+
+addPreconnectHints([config.host, config.posthogApiHost]);
 
 config.isDevknox = 'secure.devknox.io' === location.hostname;
 config.isAppknox = !config.isDevknox;

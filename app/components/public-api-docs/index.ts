@@ -1,6 +1,3 @@
-// @ts-expect-error no type defs
-import SwaggerUI from 'swagger-ui';
-
 import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
@@ -10,6 +7,8 @@ import type IntlService from 'ember-intl/services/intl';
 import { waitForPromise } from '@ember/test-waiters';
 
 import parseError from 'irene/utils/parse-error';
+import loadSwaggerUI from 'irene/utils/load-swagger-ui';
+import loadPublicApiDocsStyles from 'irene/utils/load-public-api-docs-styles';
 import type MeService from 'irene/services/me';
 import type IreneAjaxService from 'irene/services/ajax';
 
@@ -67,8 +66,17 @@ export default class PublicApiDocsComponent extends Component {
   }
 
   @action
-  intializeSwaggerUI(element: HTMLDivElement) {
+  async intializeSwaggerUI(element: HTMLDivElement) {
     try {
+      const [SwaggerUI] = await Promise.all([
+        loadSwaggerUI(),
+        loadPublicApiDocsStyles(),
+      ]);
+
+      if (this.isDestroying) {
+        return;
+      }
+
       SwaggerUI({
         spec: { ...this.data, paths: {}, components: {} },
         domNode: element,
