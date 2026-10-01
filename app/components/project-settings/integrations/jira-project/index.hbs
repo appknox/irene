@@ -19,7 +19,11 @@
     this.openDeleteJIRAConfirmBox
   }}
   @showDeleteButton={{if this.showSelectUI false true}}
-  @noFooter={{or this.showDeleteJIRAConfirmBox this.hasNoJIRAProjects}}
+  @noFooter={{or
+    this.showDeleteJIRAConfirmBox
+    this.hasNoJIRAProjects
+    this.jiraSecurityConnected
+  }}
 >
   <:drawerContent>
     {{#if this.hasJIRAProject}}
@@ -163,6 +167,7 @@
     {{else}}
       <ProjectSettings::Integrations::JiraProject::NoProject
         @reconnect={{this.reconnect}}
+        @jiraSecurityConnected={{this.jiraSecurityConnected}}
       />
     {{/if}}
   </:drawerContent>
