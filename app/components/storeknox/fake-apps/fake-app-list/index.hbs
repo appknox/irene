@@ -1,6 +1,6 @@
 <div
   local-class='fake-app-list-root
-  {{if @skInventoryApp.isArchived "archived"}}
+  {{if @skInventoryApp.isReadOnly "archived"}}
   '
   data-test-storeknoxFakeAppsFakeAppList
 >
@@ -41,8 +41,12 @@
         {{t 'storeknox.fakeApps.noSuspectedApps'}}
       </AkTypography>
 
-      <AkTypography @align='center' {{style maxWidth='550px'}}>
-        {{t 'storeknox.fakeApps.noSuspectedAppsDescription'}}
+      <AkTypography
+        @align='center'
+        {{style maxWidth='550px'}}
+        data-test-storeknoxFakeAppsFakeAppList-successStateDescription
+      >
+        {{this.successStateDescription}}
       </AkTypography>
     </AkStack>
 

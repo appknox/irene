@@ -1123,6 +1123,14 @@ module(
           hasSubmission: false,
           isArchived: true,
         },
+
+        // SCENARIO 9: Decommissioned app (backend still reports it uploadable)
+        {
+          canInitiateUpload: true,
+          canAccessSubmission: true,
+          hasSubmission: false,
+          isDecommissioned: true,
+        },
       ],
       async function (
         assert,
@@ -1136,6 +1144,7 @@ module(
           uploadFailed,
           uploadInProgress,
           isArchived,
+          isDecommissioned,
         }
       ) {
         // Update org props
@@ -1158,6 +1167,7 @@ module(
         const inventoryApp = this.server.create(
           'sk-inventory-app',
           isArchived ? 'withArchivedStatus' : 'withApprovedStatus',
+          ...(isDecommissioned ? ['decommissioned'] : []),
           {
             availability: { appknox: false, storeknox: true },
             can_initiate_upload: canInitiateUpload,
@@ -1381,6 +1391,55 @@ module(
               '[data-test-skAppVersionTable-initiateUploadBtn-tooltipContent]'
             )
             .containsText(t('storeknox.cannotUploadForArchivedApps'));
+
+          await triggerEvent(uploadBtnIcon, 'mouseleave');
+
+          // Archived apps keep the upload-to-Appknox header banner
+          assert
+            .dom(
+              '[data-test-storeknoxInventoryDetails-appNotPartOfAppknoxIconText]'
+            )
+            .exists();
+        }
+
+        // SCENARIO 9: Disabled upload button if app is decommissioned
+        if (isDecommissioned) {
+          assert.dom('[data-test-storeknoxInventoryDetails-banner]').exists();
+
+          assert
+            .dom('[data-test-storeknoxInventoryDetails-initiateUploadBtn]')
+            .isDisabled();
+
+          assert
+            .dom(
+              '[data-test-storeknoxInventoryDetails-initiateUploadHeaderMsg]'
+            )
+            .doesNotContainText(
+              t('storeknox.initiateUploadMessages.uploadPendingCompletion')
+            );
+
+          assert
+            .dom('[data-test-storeknoxInventoryDetails-viewNamespacesLink]')
+            .doesNotExist();
+
+          // It can never be uploaded, so no "Upload now" header banner
+          assert
+            .dom(
+              '[data-test-storeknoxInventoryDetails-appNotPartOfAppknoxIconText]'
+            )
+            .doesNotExist();
+
+          const uploadBtnIcon = find(
+            '[data-test-storeknoxInventoryDetails-initiateUploadBtnIcon]'
+          );
+
+          await triggerEvent(uploadBtnIcon, 'mouseenter');
+
+          assert
+            .dom(
+              '[data-test-skAppVersionTable-initiateUploadBtn-tooltipContent]'
+            )
+            .containsText(t('storeknox.decommissionedActionDisabled'));
 
           await triggerEvent(uploadBtnIcon, 'mouseleave');
         }

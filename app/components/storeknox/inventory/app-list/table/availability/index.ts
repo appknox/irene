@@ -24,7 +24,10 @@ export default class StoreknoxInventoryAppListTableAvailabilityComponent extends
   }
 
   get appIsDisabled() {
-    return this.skApp?.appStatus === ENUMS.SK_APP_STATUS.INACTIVE;
+    return (
+      this.skApp?.appStatus === ENUMS.SK_APP_STATUS.INACTIVE ||
+      this.skApp?.appStatus === ENUMS.SK_APP_STATUS.DECOMMISSIONED
+    );
   }
 
   get svgComponent() {

@@ -53,7 +53,9 @@
             @variant='body2'
             data-test-skAppVersionTable-initiateUploadBtn-tooltipContent
           >
-            {{#if this.skInventoryApp.isArchived}}
+            {{#if this.skInventoryApp.isDecommissioned}}
+              {{t 'storeknox.decommissionedActionDisabled'}}
+            {{else if this.skInventoryApp.isArchived}}
               {{t 'storeknox.cannotUploadForArchivedApps'}}
             {{else}}
               {{t 'storeknox.initiateUploadComingSoon'}}

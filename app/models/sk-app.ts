@@ -71,6 +71,9 @@ export default class SkAppModel extends Model {
   declare archivedOn: Date;
 
   @attr('date')
+  declare decommissionedOn: Date;
+
+  @attr('date')
   declare unarchiveAvailableOn: Date;
 
   @attr('date')
@@ -172,6 +175,15 @@ export default class SkAppModel extends Model {
 
   get isArchived() {
     return !!this.archivedOn && this.appStatus === ENUMS.SK_APP_STATUS.ARCHIVED;
+  }
+
+  get isDecommissioned() {
+    return this.appStatus === ENUMS.SK_APP_STATUS.DECOMMISSIONED;
+  }
+
+  /** Archived or decommissioned: no action can be taken on the app. */
+  get isReadOnly() {
+    return this.isArchived || this.isDecommissioned;
   }
 
   get isApproved() {

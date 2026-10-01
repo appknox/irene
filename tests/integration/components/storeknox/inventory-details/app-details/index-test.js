@@ -1,6 +1,6 @@
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { setupIntl } from 'ember-intl/test-support';
+import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { render } from '@ember/test-helpers';
@@ -337,5 +337,41 @@ module(
         }
       }
     );
+
+    test('it shows the decommissioned state instead of "enable monitoring" for a decommissioned app with no prior data', async function (assert) {
+      this.set(
+        'skInventoryApp',
+        this.createInventoryApp({
+          app_status: ENUMS.SK_APP_STATUS.DECOMMISSIONED,
+          decommissioned_on: new Date().toISOString(),
+          monitoring_enabled: false,
+          store_monitoring_status: ENUMS.SK_APP_MONITORING_STATUS.DISABLED,
+          fake_app_detection_status:
+            ENUMS.SK_FAKE_APP_DETECTION_STATUS.DISABLED,
+          has_store_monitoring_data: false,
+          has_fake_app_detection_data: false,
+        })
+      );
+
+      await render(hbs`
+        <Storeknox::InventoryDetails::AppDetails
+          @skInventoryApp={{this.skInventoryApp}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-storeknoxInventoryDetails-decommissionedHeaderText]')
+        .hasText(t('storeknox.appDecommissionedHeading'));
+
+      assert
+        .dom('[data-test-storeknoxInventoryDetails-decommissionedDescription]')
+        .hasText(t('storeknox.decommissionedMsg'));
+
+      assert
+        .dom(
+          '[data-test-storeknoxInventoryDetails-monitoringDisabledWithNoResultsHeaderText]'
+        )
+        .doesNotExist();
+    });
   }
 );

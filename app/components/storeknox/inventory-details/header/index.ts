@@ -71,7 +71,8 @@ export default class StoreknoxInventoryDetailsHeaderComponent extends Component<
   get showUploadToAppknoxBanner() {
     return (
       !this.args.hideUploadToAppknoxBanner &&
-      this.skInventoryApp?.appIsNotAvailableOnAppknox
+      this.skInventoryApp?.appIsNotAvailableOnAppknox &&
+      !this.skInventoryApp?.isDecommissioned
     );
   }
 

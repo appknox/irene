@@ -95,7 +95,8 @@ export default class SkAppsService extends Service {
       limit: this.limit,
       offset: this.offset,
       approval_status: ENUMS.SK_APPROVAL_STATUS.APPROVED,
-      app_status: ENUMS.SK_APP_STATUS.ACTIVE,
+      // CSV, not an array: the JSON:API serializer brackets arrays (app_status[]=).
+      app_status: `${ENUMS.SK_APP_STATUS.ACTIVE},${ENUMS.SK_APP_STATUS.DECOMMISSIONED}`,
 
       ...(this.monitoringStatusFilter !== -1 && {
         monitoring_status: this.monitoringStatusFilter,

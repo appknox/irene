@@ -116,27 +116,33 @@
           {{t 'downloadReport'}}
         </AkButton> --}}
 
-        <AkButton
-          @variant='outlined'
-          @color='neutral'
-          {{on 'click' (fn this.openIgnoreDrawer false)}}
-          data-test-storeknoxFakeAppsDetailsHeader-ignoreAppBtn
-        >
-          {{t 'storeknox.ignoreApp'}}
-        </AkButton>
-
         <AkTooltip
           @arrow={{true}}
           @placement='top'
-          @disabled={{not this.isApkModyOrAptoideStore}}
-          @title={{t
-            'storeknox.fakeApps.cannotIgnoreNonAppStoreAndPlayStoreApps'
-          }}
+          @disabled={{not this.appIsDecommissioned}}
+          @title={{t 'storeknox.decommissionedActionDisabled'}}
         >
           <AkButton
             @variant='outlined'
             @color='neutral'
-            @disabled={{this.isApkModyOrAptoideStore}}
+            @disabled={{this.appIsDecommissioned}}
+            {{on 'click' (fn this.openIgnoreDrawer false)}}
+            data-test-storeknoxFakeAppsDetailsHeader-ignoreAppBtn
+          >
+            {{t 'storeknox.ignoreApp'}}
+          </AkButton>
+        </AkTooltip>
+
+        <AkTooltip
+          @arrow={{true}}
+          @placement='top'
+          @disabled={{not this.addToInventoryDisabled}}
+          @title={{this.addToInventoryTooltipTitle}}
+        >
+          <AkButton
+            @variant='outlined'
+            @color='neutral'
+            @disabled={{this.addToInventoryDisabled}}
             {{on 'click' (fn this.openIgnoreDrawer true)}}
             data-test-storeknoxFakeAppsDetailsHeader-ignoreAddToInventoryBtn
           >

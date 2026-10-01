@@ -125,7 +125,7 @@ export default class StoreknoxInventoryDetailsHeaderActionsComponent extends Com
   }
 
   get showArchivedAppsInfoTagDivider() {
-    if (!this.skInventoryApp.isArchived) {
+    if (!this.skInventoryApp.isReadOnly) {
       return true;
     }
 
@@ -133,7 +133,8 @@ export default class StoreknoxInventoryDetailsHeaderActionsComponent extends Com
   }
 
   get showArchiveButton() {
-    return this.isOwnerOrAdmin;
+    // Archiving would overwrite the decommissioned state.
+    return this.isOwnerOrAdmin && !this.skInventoryApp?.isDecommissioned;
   }
 }
 
