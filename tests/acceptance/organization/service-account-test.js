@@ -245,6 +245,89 @@ module('Acceptance | Organization Service Account List', function (hooks) {
     assert.strictEqual(rows.length, serviceAccounts.length);
   });
 
+  test('test show CLI enabled checkbox change', async function (assert) {
+    // feature is enabled
+    this.organization.update({
+      features: {
+        public_apis: true,
+      },
+    });
+
+    // role set to owner
+    this.organizationMe.update({
+      is_owner: true,
+      is_admin: true,
+    });
+
+    this.server.create('service-account', {
+      service_account_type: ServiceAccountType.USER,
+      scope_cli: true,
+    });
+
+    let requestedScopeCli;
+
+    this.server.get('/service_accounts', (schema, req) => {
+      requestedScopeCli = req.queryParams['scope_cli'];
+      const accountType = req.queryParams['service_account_type'];
+
+      const results = schema.db.serviceAccounts.where({
+        ...(accountType ? { service_account_type: Number(accountType) } : {}),
+        ...(requestedScopeCli ? { scope_cli: true } : {}),
+      });
+
+      return { previous: null, next: null, count: results.length, results };
+    });
+
+    await visit('/dashboard/organization/settings/service-account');
+
+    assert
+      .dom('[data-test-serviceAccountList-showCliEnabledCheckbox]')
+      .isNotChecked();
+    assert.strictEqual(requestedScopeCli, undefined);
+
+    // check show CLI enabled
+    await click('[data-test-serviceAccountList-showCliEnabledCheckbox]');
+
+    assert
+      .dom('[data-test-serviceAccountList-showCliEnabledCheckbox]')
+      .isChecked();
+
+    assert.strictEqual(
+      currentURL(),
+      '/dashboard/organization/settings/service-account?show_cli_enabled=true'
+    );
+
+    // the actual API request must carry scope_cli, not the old cli_enabled
+    // (query params always arrive as strings, hence 'true' not true)
+    assert.strictEqual(requestedScopeCli, 'true');
+
+    let rows = findAll('[data-test-serviceAccountList-row]');
+    let serviceAccounts = this.server.db.serviceAccounts.where({
+      service_account_type: ServiceAccountType.USER,
+      scope_cli: true,
+    });
+
+    assert.strictEqual(rows.length, serviceAccounts.length);
+
+    // uncheck show CLI enabled
+    await click('[data-test-serviceAccountList-showCliEnabledCheckbox]');
+
+    assert
+      .dom('[data-test-serviceAccountList-showCliEnabledCheckbox]')
+      .isNotChecked();
+
+    assert.strictEqual(
+      currentURL(),
+      '/dashboard/organization/settings/service-account'
+    );
+    assert.strictEqual(requestedScopeCli, undefined);
+
+    rows = findAll('[data-test-serviceAccountList-row]');
+    serviceAccounts = this.getServiceAccounts();
+
+    assert.strictEqual(rows.length, serviceAccounts.length);
+  });
+
   test.each(
     'it renders expiry chip correctly',
     [{ noExpiry: true, expired: false }, { expired: false }, { expired: true }],
@@ -421,6 +504,50 @@ module('Acceptance | Organization Service Account List', function (hooks) {
       }
     }
   );
+
+  test('a CLI-enabled service account can be deleted like any other', async function (assert) {
+    // feature is enabled
+    this.organization.update({
+      features: {
+        public_apis: true,
+      },
+    });
+
+    // role set to owner
+    this.organizationMe.update({
+      is_owner: true,
+      is_admin: true,
+    });
+
+    const cliServiceAccount = this.server.create('service-account', {
+      service_account_type: ServiceAccountType.USER,
+      scope_cli: true,
+    });
+
+    this.server.get('/service_accounts', (schema) => {
+      const results = schema.db.serviceAccounts.where({
+        service_account_type: 1,
+      });
+
+      return { previous: null, next: null, count: results.length, results };
+    });
+
+    await visit('/dashboard/organization/settings/service-account');
+
+    const cliRow = find(
+      `[data-test-cy="serviceAccountList-row-${cliServiceAccount.id}"]`
+    );
+
+    const moreOptionBtn = cliRow.querySelector(
+      '[data-test-serviceAccountList-moreOptionBtn]'
+    );
+
+    await click(moreOptionBtn);
+
+    assert
+      .dom(`[data-test-serviceAccountList-moreOptionMenuItem="${t('delete')}"]`)
+      .exists();
+  });
 
   test('it should navigate to service account details page', async function (assert) {
     // feature is enabled
