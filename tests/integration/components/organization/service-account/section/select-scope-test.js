@@ -144,10 +144,7 @@ async function assertScopeNode(assert, scope, container, serviceAccount) {
 
   if (scope.scopeLabel) {
     assert
-      .dom(
-        '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-        container
-      )
+      .dom('[data-test-serviceAccountSection-selectScope-nodeLabel]', container)
       .containsText(scope.scopeLabel);
   }
 
@@ -187,7 +184,9 @@ async function assertScopeNode(assert, scope, container, serviceAccount) {
 // checked the same way (one level deep — matches the tree's actual depth).
 async function assertRenderedTree(assert, serviceAccount) {
   for (const scope of scopeDetails()) {
-    const container = find(`[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`);
+    const container = find(
+      `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+    );
 
     if (container) {
       if (scope.label) {
@@ -212,7 +211,12 @@ async function assertRenderedTree(assert, serviceAccount) {
       );
 
       if (childContainer) {
-        await assertScopeNode(assert, childScope, childContainer, serviceAccount);
+        await assertScopeNode(
+          assert,
+          childScope,
+          childContainer,
+          serviceAccount
+        );
       }
     }
   }
@@ -243,6 +247,8 @@ module(
       });
     });
 
+    // assertion count depends on the rendered scope tree, so no fixed expect()
+    // eslint-disable-next-line qunit/require-expect
     test('it renders selected scope', async function (assert) {
       await render(hbs`<Organization::ServiceAccount::Section::SelectScope
         @serviceAccount={{this.serviceAccount}}
@@ -612,7 +618,9 @@ module(
       const cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
 
       await click(
-        cliContainer.querySelector('[data-test-ak-checkbox-tree-nodeExpandIcon]')
+        cliContainer.querySelector(
+          '[data-test-ak-checkbox-tree-nodeExpandIcon]'
+        )
       );
 
       const container = find(

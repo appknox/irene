@@ -143,8 +143,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
           {
             key: ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES,
             showCheckbox: this.isEditOrCreateView,
-            checked:
-              this.args.serviceAccount?.cliScopeAutoApproveNewNameSpaces,
+            checked: this.args.serviceAccount?.cliScopeAutoApproveNewNameSpaces,
           },
         ],
       },
