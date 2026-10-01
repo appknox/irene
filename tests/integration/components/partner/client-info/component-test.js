@@ -12,7 +12,7 @@ import styles from 'irene/components/partner/client-info/index.scss';
 function serializer(payload) {
   const serializedPayload = {};
 
-  Object.keys(payload.attrs).map((_key) => {
+  Object.keys(payload.attrs).forEach((_key) => {
     serializedPayload[underscore(_key)] = payload[_key];
   });
 
