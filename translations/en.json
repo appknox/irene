@@ -1163,6 +1163,7 @@
       "runningTooltip": "KnoxIQ Analysis in progress"
     },
     "statusCard": {
+      "apiReadySubtitle": "API Scan has found new vulnerabilities and ready for KnoxIQ analysis.",
       "completeDastSubtitle": "Kindly complete the DAST scan, to get started with the KnoxIQ",
       "completeDastTitle": "Complete the DAST Scan",
       "dastReadySubtitle": "DAST Scan has found new vulnerabilities and ready for KnoxIQ analysis.",
