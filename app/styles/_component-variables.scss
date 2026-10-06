@@ -1663,6 +1663,23 @@ body {
     --neutral-grey-100
   );
 
+  // variables for file-details/vulnerability-analysis/sla-indicator
+  --file-details-vulnerability-analysis-sla-indicator-due-color: var(
+    --warn-dark
+  );
+  --file-details-vulnerability-analysis-sla-indicator-due-background-color: var(
+    --warn-light
+  );
+  --file-details-vulnerability-analysis-sla-indicator-overdue-color: var(
+    --error-main
+  );
+  --file-details-vulnerability-analysis-sla-indicator-overdue-background-color: var(
+    --error-light
+  );
+  --file-details-vulnerability-analysis-sla-indicator-border-color: var(
+    --border-color-1
+  );
+
   // variables for file-details/proxy-settings
   --file-details-proxy-settings-neutral-color: var(--neutral-grey-300);
 
