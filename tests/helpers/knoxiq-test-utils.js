@@ -72,15 +72,36 @@ export function enableKnoxiqForTests(context, options = {}) {
   const organizationService = context.owner.lookup('service:organization');
   const { knoxiq = true, automated = false } = options;
 
-  organizationService.selected?.set('aiFeatures', {
+  const aiFeatures = {
     ...(organizationService.selected?.aiFeatures ?? {}),
     knoxiq,
-  });
+  };
+
+  organizationService.selected?.set('aiFeatures', aiFeatures);
 
   if (context.file) {
     context.file.knoxiqStatus =
       options.knoxiqStatus ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED;
     context.file.isKnoxiqAutomated = automated;
+    // Mirrors the backend's per-request is_knoxiq_enabled (org flag or
+    // superuser bypass) — app-file-card reads this directly off the file.
+    context.file.isKnoxiqEnabled = knoxiq;
+
+    // FileDetailsComponent reads the flag off the file's own org, not the
+    // viewer's selected org (a superuser's org may differ from the file's).
+    // Keep them in sync here for tests that only set up one organization.
+    // Use belongsTo(...).value() rather than the plain property accessor:
+    // the latter returns a PromiseBelongsTo proxy that may still be
+    // unresolved (content undefined) right after a synchronous `.set()`,
+    // and calling `.set()` on such a proxy throws.
+    const projectRecord = context.file.belongsTo('project').value();
+    const fileOrg = projectRecord?.belongsTo('organization').value();
+
+    if (fileOrg) {
+      fileOrg.set('aiFeatures', aiFeatures);
+    } else if (projectRecord && organizationService.selected) {
+      projectRecord.set('organization', organizationService.selected);
+    }
   }
 }
 

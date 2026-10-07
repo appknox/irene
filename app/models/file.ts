@@ -81,6 +81,9 @@ export default class FileModel extends ModelBaseMixin {
   declare isKnoxiqAutomated: boolean;
 
   @attr('boolean')
+  declare isKnoxiqEnabled: boolean;
+
+  @attr('boolean')
   declare isActive: boolean;
 
   @attr('boolean')

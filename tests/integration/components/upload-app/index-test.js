@@ -91,10 +91,13 @@ module('Integration | Component | upload-app', function (hooks) {
     this.server.put(
       '/:id/s3_upload_file',
       () => {
-        // create a new via system submission
+        // create a new via system submission; url must be empty since
+        // submission.viaLink is just !isEmpty(url), and the factory default
+        // randomizes it between a fake url and '' for other tests' variety
         const submission = server.create('submission', {
           status: ENUMS.SUBMISSION_STATUS.VALIDATING,
           created_on: dayjs(Date.now()),
+          url: '',
         });
 
         this.set('viaSystemSubmission', submission);
