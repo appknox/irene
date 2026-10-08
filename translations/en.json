@@ -2093,6 +2093,7 @@
   "reportPreferencesChooseTypes": "Choose types of scans to be included in the report",
   "reportSendTo": "and sent to following Email IDS:",
   "reportType": "Report Type",
+  "request": "Request",
   "requestBody": "Request Body",
   "requestCookies": "Request Cookies",
   "requestHeaders": "Request Headers",

@@ -57,6 +57,30 @@ export interface KnoxiqValidatedFindingExploitability {
   ai_fallback_used: boolean;
 }
 
+export interface KnoxiqValidatedFindingApiRequest {
+  method: string | null;
+  url: string | null;
+  headers: Record<string, string> | null;
+  body: unknown;
+  params: Record<string, unknown> | null;
+  cookies: Record<string, unknown> | null;
+}
+
+export interface KnoxiqValidatedFindingApiResponse {
+  status_code: number | null;
+  headers: Record<string, string> | null;
+  text: string | null;
+  reason: string | null;
+  url: string | null;
+  error: string | null;
+}
+
+export interface KnoxiqValidatedFindingRequestResponsePair {
+  label: string;
+  request: KnoxiqValidatedFindingApiRequest | null;
+  response: KnoxiqValidatedFindingApiResponse | null;
+}
+
 export default class KnoxiqValidatedFindingModel extends Model {
   @attr('string')
   declare title: string;
@@ -78,6 +102,14 @@ export default class KnoxiqValidatedFindingModel extends Model {
 
   @attr()
   declare exploitability: KnoxiqValidatedFindingExploitability;
+
+  // API-scan findings only: every live request/response the validation
+  // agent actually sent while investigating (captured replay, mutation
+  // probes, JWT-none controls, ...). null for SAST/DAST findings.
+  @attr()
+  declare requestResponsePairs:
+    | KnoxiqValidatedFindingRequestResponsePair[]
+    | null;
 }
 
 declare module 'ember-data/types/registries/model' {

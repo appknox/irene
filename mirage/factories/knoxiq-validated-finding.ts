@@ -54,6 +54,10 @@ export const KNOXIQ_VALIDATED_FINDING_FACTORY_DEF = {
 
   developer_prompt: faker.lorem.sentence(),
 
+  // API-scan only; null for SAST/DAST findings. Tests override explicitly
+  // when exercising the request/response UI.
+  request_response_pairs: null,
+
   exploitability() {
     return {
       score: faker.number.float({ min: 1, max: 10, fractionDigits: 1 }),
