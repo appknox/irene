@@ -1,0 +1,76 @@
+<AkDrawer
+  @open={{@open}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  @drawerContainerClass={{this.classes.drawerContainer}}
+  data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer
+  as |dr|
+>
+  <AkAppbar @justifyContent='space-between' as |ab|>
+    <AkTypography
+      @variant='h5'
+      @color='inherit'
+      data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-title
+    >
+      {{t 'securityAnalysisDetails.validatedFindings.originalAnalysisTitle'}}
+    </AkTypography>
+
+    <AkIconButton
+      class={{ab.classes.defaultIconBtn}}
+      {{on 'click' dr.closeHandler}}
+      data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-closeBtn
+    >
+      <AkIcon @iconName='close' />
+    </AkIconButton>
+  </AkAppbar>
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    @spacing='1.5'
+    local-class='drawer-body'
+  >
+    {{#if this.hasFindings}}
+      {{#each this.findings as |finding index|}}
+        <AkStack
+          @direction='column'
+          @width='full'
+          @spacing='1'
+          data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-finding='{{index}}'
+        >
+          {{#if finding.title}}
+            <AkTypography
+              @variant='body2'
+              @fontWeight='regular'
+              data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-findingTitle='{{index}}'
+            >
+              {{finding.title}}
+            </AkTypography>
+          {{/if}}
+
+          <AkStack @alignItems='center' @width='full' local-class='finding-row'>
+            <div local-class='finding-description-container'>
+              <pre
+                local-class='finding-description'
+                data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-findingDescription='{{index}}'
+              >{{finding.description}}</pre>
+            </div>
+          </AkStack>
+        </AkStack>
+      {{/each}}
+    {{else}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1'
+        data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer-emptyState
+      >
+        <AkIcon @iconName='info' @size='small' />
+
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t 'securityAnalysisDetails.validatedFindings.originalAnalysisEmpty'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkDrawer>

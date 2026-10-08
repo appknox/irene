@@ -69,6 +69,7 @@ type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 export interface SecurityAnalysisDetailsRegulatoryCategoriesComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
+    onChange?: () => void;
   };
 }
 
@@ -76,6 +77,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @service declare store: Store;
   @service declare notifications: NotificationService;
   @service declare intl: IntlService;
+
+  @tracked openCategoryKey: string | null = null;
 
   @tracked owaspsData: RegulatoryDataModel<OwaspModel> = null;
   @tracked owaspmobile2024sData: RegulatoryDataModel<OwaspMobile2024Model> =
@@ -336,7 +339,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         onChange: this.onCategorySelect('eucra'),
       },
     ] as Array<{
-      key: string;
+      key: RegulatoryCategoryOptionKeys;
       title: string;
       placeholder: string;
       labelKeys: string[];
@@ -349,6 +352,26 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     }>;
   }
 
+  @action isCategoryOpen(key: string) {
+    return this.openCategoryKey === key;
+  }
+
+  // Only one category is open at a time, so opening a row closes the previous.
+  @action toggleCategory(key: string) {
+    this.openCategoryKey = this.openCategoryKey === key ? null : key;
+  }
+
+  @action removeCategoryValue(
+    key: RegulatoryCategoryOptionKeys,
+    selected: Array<RegulatoryCategoryModels>,
+    value: RegulatoryCategoryModels
+  ) {
+    const remaining = selected.filter((item) => item !== value);
+
+    this.analysis?.set(key, remaining);
+    this.args.onChange?.();
+  }
+
   @action onCategorySelect(key: RegulatoryCategoryOptionKeys) {
     return (value: SecurityAnalysisModel[RegulatoryCategoryOptionKeys]) =>
       this.handleCategorySelect(key, value);
@@ -359,6 +382,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     value: SecurityAnalysisModel[typeof key]
   ) {
     this.analysis?.set(key, value);
+
+    // Categories are hasMany relationships, which never set
+    // hasDirtyAttributes, so the page is told about the edit directly.
+    this.args.onChange?.();
   }
 
   @action getCategoryOptionLabel<T extends RegulatoryCategoryModels>(

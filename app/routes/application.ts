@@ -3,6 +3,8 @@ import { service } from '@ember/service';
 import { all } from 'rsvp';
 import type IntlService from 'ember-intl/services/intl';
 
+import ENV from 'irene/config/environment';
+
 import type { SessionService } from 'irene/adapters/auth-base';
 import type ConfigurationService from 'irene/services/configuration';
 import type WhitelabelService from 'irene/services/whitelabel';
@@ -30,6 +32,8 @@ export default class ApplicationRoute extends Route {
       this.logger.error('Failed to setup session', error);
     }
 
+    this.autoAuthenticateForMirage();
+
     // Fetch server and frontend configuration
     await all([
       this.configuration.serverConfigFetch(),
@@ -43,6 +47,21 @@ export default class ApplicationRoute extends Route {
     }
 
     return this.intl.setLocale(['en']);
+  }
+
+  /**
+   * Signs in automatically when the app runs against mirage, so seeded data can
+   * be previewed without a backend. The mirage environment is never deployed.
+   */
+  autoAuthenticateForMirage(): void {
+    if (ENV.environment !== 'mirage' || this.session.isAuthenticated) {
+      return;
+    }
+
+    this.session.authenticate('authenticator:login', {
+      user_id: 1,
+      token: 'secret',
+    });
   }
 
   afterModel(): void {

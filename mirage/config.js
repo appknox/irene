@@ -175,6 +175,199 @@ function routes() {
 
   this.namespace = config.namespace;
 
+  // ─── Regulatory category lists ─────────────────────────────────────────────
+  // owasp and pcidss use JSONAPISerializer app-side, so the shorthand (which
+  // runs mirage's JSON:API serializer) is correct for them. Every other
+  // regulatory model falls back to the DRF application serializer.
+  const jsonApiRegulatory = { owasp: 'owasps', pcidss: 'pcidsses' };
+
+  const drfRegulatory = {
+    owaspmobile2024: 'owaspmobile2024s',
+    owaspapi2023: 'owaspapi2023s',
+    pcidss4: 'pcidss4s',
+    hipaa: 'hipaas',
+    masvs: 'masvses',
+    mstg: 'mstgs',
+    asvs: 'asvses',
+    cwe: 'cwes',
+    gdpr: 'gdprs',
+    nistsp800171: 'nistsp800171s',
+    nistsp80053: 'nistsp80053s',
+    sama: 'samas',
+    dora: 'doras',
+    eucra: 'eucras',
+  };
+
+  Object.entries(jsonApiRegulatory).forEach(([modelName, path]) => {
+    this.get(`/${path}`, modelName);
+    this.get(`/${path}/:id`, modelName);
+  });
+
+  Object.entries(drfRegulatory).forEach(([modelName, path]) => {
+    this.get(`/${path}`, (schema) => {
+      const results = schema.all(modelName).models.map((it) => it.toJSON());
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    this.get(`/${path}/:id`, (schema, req) =>
+      schema.find(modelName, `${req.params.id}`)?.toJSON()
+    );
+  });
+
+  // ─── Security dashboard: analysis details ──────────────────────────────────
+  // These endpoints are DRF-shaped, so the records are returned flat via
+  // toJSON() rather than through mirage's JSON:API serializer.
+  this.get('/hudson-api/analyses/:id', (schema, req) =>
+    schema['security/analyses'].find(`${req.params.id}`)?.toJSON()
+  );
+
+  this.put('/hudson-api/analyses/:id', (schema, req) => {
+    schema.db['security/analyses'].update(
+      req.params.id,
+      JSON.parse(req.requestBody)
+    );
+
+    return schema['security/analyses'].find(`${req.params.id}`).toJSON();
+  });
+
+  // PUT/DELETE /api/v2/analyses/:id/aeis-override. The backend layers the
+  // override over the AI rollup, so mirage merges into exploitability the
+  // same way rather than replacing it.
+  this.put('/v2/analyses/:id/aeis-override', (schema, req) => {
+    const analysis = schema['security/analyses'].find(`${req.params.id}`);
+    const override = JSON.parse(req.requestBody);
+
+    analysis.update({
+      exploitability: {
+        ...analysis.exploitability,
+        score: override.score,
+        exploitability_likelihood: override.likelihood,
+        signals: { ...analysis.exploitability?.signals, ...override.signals },
+      },
+      exploitability_score: override.score,
+    });
+
+    return analysis.toJSON();
+  });
+
+  this.delete('/v2/analyses/:id/aeis-override', (schema, req) =>
+    schema['security/analyses'].find(`${req.params.id}`).toJSON()
+  );
+
+  // KnoxIQ findings. The API reads nested and writes flat, so these routes
+  // merge the flat body back into the nested blobs the way
+  // KnoxIQFindingSerializer.update does.
+  const CONFIDENCE_LABELS = {
+    3: 'HIGH',
+    2: 'MEDIUM',
+    1: 'LOW',
+    '-1': 'UNKNOWN',
+  };
+
+  const LIKELIHOOD_LABELS = {
+    3: 'High',
+    2: 'Medium',
+    1: 'Low',
+    '-1': 'Unknown',
+  };
+
+  function mergeFindingContent(finding, body) {
+    return {
+      validation: {
+        ...finding.validation,
+        confidence_label:
+          CONFIDENCE_LABELS[body.confidence] ??
+          finding.validation?.confidence_label,
+        finding_summary: body.summary ?? finding.validation?.finding_summary,
+        evidence: body.evidence ?? finding.validation?.evidence,
+        reasoning: body.reasoning ?? finding.validation?.reasoning,
+      },
+      remediation: {
+        ...finding.remediation,
+        steps: body.remediation_steps ?? finding.remediation?.steps,
+      },
+      poc: {
+        ...finding.poc,
+        verification_steps: (body.steps_to_reproduce ?? []).map(
+          (step, index) => ({
+            step_number: index + 1,
+            title: step.heading,
+            command: '',
+            expected_result: step.body,
+          })
+        ),
+      },
+      exploitability: {
+        ...finding.exploitability,
+        exploitability_likelihood:
+          LIKELIHOOD_LABELS[body.exploitability_likelihood] ??
+          finding.exploitability?.exploitability_likelihood,
+        exploitability_analysis: {
+          ...finding.exploitability?.exploitability_analysis,
+          summary:
+            body.exploitability_analysis ??
+            finding.exploitability?.exploitability_analysis?.summary,
+        },
+      },
+    };
+  }
+
+  this.get('/knoxiq/analyses/:analysisId/findings', (schema) => {
+    const results = schema['security/validatedFindings']
+      .all()
+      .models.map((finding) => finding.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
+  });
+
+  this.post('/knoxiq/analyses/:analysisId/findings', (schema, req) => {
+    const body = JSON.parse(req.requestBody);
+
+    const finding = schema['security/validatedFindings'].create({
+      finding_id: `manual-${schema['security/validatedFindings'].all().length + 1}`,
+      title: '',
+      description: '',
+      ...mergeFindingContent({}, body),
+    });
+
+    return finding.toJSON();
+  });
+
+  this.patch('/knoxiq/analyses/:analysisId/findings/:id', (schema, req) => {
+    const finding = schema['security/validatedFindings'].find(
+      `${req.params.id}`
+    );
+
+    finding.update(mergeFindingContent(finding, JSON.parse(req.requestBody)));
+
+    return finding.toJSON();
+  });
+
+  this.put('/knoxiq/analyses/:analysisId/findings/:id', (schema, req) => {
+    const finding = schema['security/validatedFindings'].find(
+      `${req.params.id}`
+    );
+
+    finding.update(mergeFindingContent(finding, JSON.parse(req.requestBody)));
+
+    return finding.toJSON();
+  });
+
+  this.delete('/knoxiq/analyses/:analysisId/findings/:id', (schema, req) => {
+    schema['security/validatedFindings'].find(`${req.params.id}`)?.destroy();
+
+    return new Response(204);
+  });
+
+  this.get('/hudson-api/files/:id', (schema, req) =>
+    schema['security/files'].find(`${req.params.id}`)?.toJSON()
+  );
+
+  this.get('/hudson-api/projects/:id', (schema, req) =>
+    schema['security/projects'].find(`${req.params.id}`)?.toJSON()
+  );
+
   this.get('/organizations/:id/projects', (schema) => {
     return schema.projects.all().models;
   });
@@ -475,16 +668,18 @@ function routes() {
   this.get('/pricings/:id', 'pricing');
   this.get('/teams', 'team');
   this.get('/organizations', (schema) => {
-    return schema.organizations.all().models;
+    const results = schema.organizations
+      .all()
+      .models.map((organization) => organization.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
   });
   this.get('/teams/:id', 'team');
   this.get('/submissions/:id', 'submission');
   this.get('/submissions', 'submission');
   this.get('/files/:id', 'file');
   this.get('/vulnerabilities/:id', 'vulnerability');
-  this.get('/vulnerabilities', (schema) => {
-    return schema.vulnerabilities.all().models;
-  });
+  this.get('/vulnerabilities', 'vulnerability');
   this.get('/invitations/:id', 'invitation');
   this.get('/devices', 'device');
   this.get('/invoices', 'invoice');
@@ -744,12 +939,16 @@ function routes() {
   });
 
   this.get('/organizations/:id/members', (schema) => {
-    return schema.organizationMembers.all().models;
+    const results = schema.organizationMembers
+      .all()
+      .models.map((member) => member.toJSON());
+
+    return { count: results.length, next: null, previous: null, results };
   });
 
-  this.get('/organizations/:orgId/members/:memId', (schema, request) => {
-    return schema.organizationMembers.find(request.params.memId);
-  });
+  this.get('/organizations/:orgId/members/:memId', (schema, request) =>
+    schema.organizationMembers.find(request.params.memId)?.toJSON()
+  );
 
   this.put('/organizations/:orgId/members/:memId', () => {
     return {};
@@ -780,9 +979,13 @@ function routes() {
       .all()
       .models.find((user) => user.organizationId === req.params.id);
 
-    const me = schema.organizationMes.find(currentUser.id);
+    // The default scenario seeds no current-user, so fall back to the first
+    // organization-me rather than throwing on an undefined lookup.
+    const me = currentUser
+      ? schema.organizationMes.find(currentUser.id)
+      : schema.organizationMes.all().models[0];
 
-    return this.serialize(me).organizationMe;
+    return me ? this.serialize(me).organizationMe : {};
   });
 
   this.put('/v2/am_configurations/:id', () => {

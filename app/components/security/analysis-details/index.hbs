@@ -1,20 +1,22 @@
-<AkStack @direction='column' @width='full'>
+<AkStack @direction='column' @width='full' local-class='analysis-details-root'>
   <AkBreadcrumbs::AutoTrail />
 
   <Security::AnalysisDetails::Header
     @analysis={{this.analysisDetails}}
+    @isKnoxIqEnabled={{this.isKnoxIqEnabled}}
     @currentCVSSMetrics={{this.currentCVSSDetails.metrics}}
     @updateAnalysis={{this.triggerUpdateAnalysis}}
     @updateCVSSDetails={{this.triggerUpdateCurrentCVSSDetails}}
     @updateLegacyCVSSDetails={{this.triggerUpdateLegacyCVSSDetails}}
   />
 
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='analysis-details-section-wrapper'
-    class='p-2 my-2'
-  >
+  {{#if this.isKnoxIqEnabled}}
+    <AkStack @direction='column' @width='full' class='my-2'>
+      <Security::AnalysisDetails::Aeis @analysis={{this.analysisDetails}} />
+    </AkStack>
+  {{/if}}
+
+  <AkStack @direction='column' @width='full' class='my-2'>
     <Security::AnalysisDetails::CvssMetrics
       @analysis={{this.analysisDetails}}
       @currentCVSSDetails={{this.currentCVSSDetails}}
@@ -24,32 +26,24 @@
     />
   </AkStack>
 
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='analysis-details-section-wrapper'
-    class='p-2 my-2'
-  >
+  <AkStack @direction='column' @width='full' class='my-2'>
+    {{#if this.isKnoxIqEnabled}}
+      <Security::AnalysisDetails::ValidatedFindings
+        @analysis={{this.analysisDetails}}
+      />
+    {{else}}
+      <Security::AnalysisDetails::Findings @analysis={{this.analysisDetails}} />
+    {{/if}}
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' class='my-2'>
     <Security::AnalysisDetails::RegulatoryCategories
       @analysis={{this.analysisDetails}}
+      @onChange={{this.markRegulatoryChanged}}
     />
   </AkStack>
 
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='analysis-details-section-wrapper'
-    class='p-2 my-2'
-  >
-    <Security::AnalysisDetails::Findings @analysis={{this.analysisDetails}} />
-  </AkStack>
-
-  <AkStack
-    @direction='column'
-    @width='full'
-    local-class='analysis-details-section-wrapper'
-    class='p-2 my-2'
-  >
+  <AkStack @direction='column' @width='full' class='my-2'>
     <Security::AnalysisDetails::Attachments
       @analysis={{this.analysisDetails}}
       @updateAnalysis={{this.triggerUpdateAnalysis}}
@@ -61,5 +55,6 @@
     @saveAnalysis={{this.triggerSaveAnalysis}}
     @isSavingAnalysis={{this.saveAnalysis.isRunning}}
     @isSaveActionOnly={{this.isSaveActionOnly}}
+    @isDirty={{this.isDirty}}
   />
 </AkStack>

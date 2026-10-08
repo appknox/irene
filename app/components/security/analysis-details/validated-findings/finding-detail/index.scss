@@ -1,0 +1,48 @@
+.summary-input {
+  width: 100%;
+  padding: 0.6em 0.75em;
+  font-family: var(--security-analysis-details-validated-findings-font-family);
+  color: var(--security-analysis-details-validated-findings-text-color);
+  background-color: var(
+    --security-analysis-details-validated-findings-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  outline: none;
+  resize: vertical;
+}
+
+.panel-group {
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-top: none;
+  // Bottom corners match the expand-all row so the clip and the row agree.
+  border-radius: var(
+      --security-analysis-details-validated-findings-border-radius
+    )
+    var(--security-analysis-details-validated-findings-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius);
+  overflow: hidden;
+}
+
+.expand-all-action {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  width: 100%;
+  padding: 0.6em 0.85em;
+  background-color: var(
+    --security-analysis-details-validated-findings-expand-all-background-color
+  );
+  border: none;
+  border-top: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: 0 0
+    var(--security-analysis-details-validated-findings-expand-all-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius);
+  cursor: pointer;
+}

@@ -1,0 +1,53 @@
+.signal-label {
+  flex: 1;
+  color: var(--security-analysis-details-aeis-label-color);
+}
+
+.signal-select {
+  width: 250px;
+}
+
+.likelihood-field {
+  width: 250px;
+}
+
+.likelihood-label {
+  color: var(--security-analysis-details-aeis-label-color);
+}
+
+// The stepper is the score's own control: always visible, so there is no
+// edit mode to enter and nothing in the card acts on the panel as a whole.
+.score-stepper {
+  padding: 0.25rem;
+  border: 1px solid var(--security-analysis-details-aeis-stepper-border-color);
+  border-radius: var(--security-analysis-details-aeis-stepper-border-radius);
+  background-color: var(
+    --security-analysis-details-aeis-stepper-background-color
+  );
+}
+
+.score-input {
+  width: 4.5rem;
+  padding: 0.25rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+
+  &:focus {
+    outline: 0;
+  }
+
+  // The stepper buttons are the control, so the native arrows only crowd it.
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &[type='number'] {
+    appearance: textfield;
+  }
+}

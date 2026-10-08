@@ -60,6 +60,11 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
 
   @tracked isSaveActionOnly = false;
 
+  // CVSS edits live in v3State/v4State rather than on the model, so they are
+  // flagged here; every other section writes model attrs.
+  @tracked hasUnsavedCvssChanges = false;
+  @tracked hasUnsavedRegulatoryChanges = false;
+
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
 
   readonly v4State = new CvssV4VersionState();
@@ -74,6 +79,28 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     this.analysisDetails = this.args.analysisDetails;
 
     runTask(this, () => this.setDefaultCVSSDetails());
+  }
+
+  /**
+   * KnoxIQ gating. The hudson analysis response carries no organization
+   * flag, so a null exploitability rollup is the only signal that KnoxIQ is
+   * off for the analysed file's organization.
+   */
+  get isKnoxIqEnabled() {
+    return Boolean(this.analysisDetails?.exploitability);
+  }
+
+  get isDirty() {
+    return (
+      this.hasUnsavedCvssChanges ||
+      this.hasUnsavedRegulatoryChanges ||
+      Boolean(this.analysisDetails?.hasDirtyAttributes)
+    );
+  }
+
+  @action
+  markRegulatoryChanged() {
+    this.hasUnsavedRegulatoryChanges = true;
   }
 
   get tPleaseTryAgain() {
@@ -108,11 +135,17 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   }
 
   get analysisLegacyCvssVersion() {
-    return this.hasLegacyCvssData
-      ? this.analysisDetails?.legacyCvssVersion
-      : this.analysisIsV4WithoutLegacyCvss
-        ? ENUMS.SUPPORTED_CVSS_VERSIONS.V3
-        : this.analysisCurrentCvssVersion;
+    if (this.hasLegacyCvssData) {
+      return this.analysisDetails?.legacyCvssVersion;
+    }
+
+    // A v4-only analysis has no legacy vector yet, so the legacy panel opens
+    // on v3 rather than mirroring the current version.
+    if (this.analysisIsV4WithoutLegacyCvss) {
+      return ENUMS.SUPPORTED_CVSS_VERSIONS.V3;
+    }
+
+    return this.analysisCurrentCvssVersion;
   }
 
   get analysisCurrentCvssIsLegacyCvss() {
@@ -140,6 +173,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @action triggerUpdateCurrentCVSSDetails(
     details: AnalysisCvssUpdateDetails
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v4State.applyMetrics(details.cvssMetrics);
     this.v4State.base = details.cvssBase;
     this.v4State.risk = details.risk;
@@ -150,6 +185,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @action triggerUpdateLegacyCVSSDetails(
     details: AnalysisCvssUpdateDetailsLegacy
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v3State.applyMetrics(details.cvssMetrics);
     this.v3State.base = details.cvssBase;
     this.v3State.risk = details.risk;
@@ -397,6 +434,9 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       this.analysisDetails?.set('risk', response['risk']);
 
       this.setDefaultCVSSDetails();
+
+      this.hasUnsavedCvssChanges = false;
+      this.hasUnsavedRegulatoryChanges = false;
 
       // Return to the file page if requested
       if (backToFilePage) {

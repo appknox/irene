@@ -24,9 +24,17 @@ import {
   PASSED_CVSS_V4_VECTOR,
 } from 'irene/utils/cvss-metrics';
 
+import {
+  SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE,
+  aeisOverrideUrl,
+} from 'irene/utils/security-aeis';
+
+import type IreneAjaxService from 'irene/services/ajax';
+
 export interface SecurityAnalysisDetailsHeaderComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
+    isKnoxIqEnabled?: boolean;
     currentCVSSMetrics: CvssV4Metrics;
     updateCVSSDetails(analysisCvssDetails: AnalysisCvssUpdateDetails): void;
     updateLegacyCVSSDetails(
@@ -38,6 +46,7 @@ export interface SecurityAnalysisDetailsHeaderComponentSignature {
 
 export default class SecurityAnalysisDetailsHeaderComponent extends Component<SecurityAnalysisDetailsHeaderComponentSignature> {
   @service declare intl: IntlService;
+  @service declare ajax: IreneAjaxService;
   @service declare notifications: NotificationService;
 
   @tracked showMarkPassedConfirmBox = false;
@@ -64,6 +73,12 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
     return this.statuses.find((s) => s.value === this.analysis?.status);
   }
 
+  // A KnoxIQ analysis has its own page on the main dashboard, with the
+  // validated findings and AEIS detail the plain analysis page does not show.
+  get ireneAnalysisRoute() {
+    return this.args.isKnoxIqEnabled ? 'knox-analysis' : 'analysis';
+  }
+
   get ireneFilePath() {
     if (this.analysis?.file) {
       const fileId = this.analysis.file.get('id');
@@ -73,7 +88,7 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
         ireneHost,
         'dashboard/file',
         fileId,
-        'analysis',
+        this.ireneAnalysisRoute,
         this.analysis?.id,
       ].join('/');
     }
@@ -95,6 +110,28 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
 
   @action triggerMarkAsPassed() {
     this.markAsPassed.perform();
+  }
+
+  /**
+   * The backend does not touch AEIS when an analysis is marked passed, so the
+   * dashboard mirrors the canonical passed CVSS vector with the equivalent
+   * AEIS override. Without it the card keeps showing the AI's original score
+   * beside a Passed badge.
+   */
+  async markAeisAsPassed() {
+    if (
+      this.analysis?.exploitabilityScore === null ||
+      this.analysis?.exploitabilityScore === undefined
+    ) {
+      return;
+    }
+
+    await this.ajax.put(aeisOverrideUrl(this.analysis.id), {
+      namespace: ENV.namespace_v2,
+      data: JSON.stringify(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE),
+    });
+
+    await this.analysis.reload();
   }
 
   markAsPassed = task(async () => {
@@ -127,6 +164,8 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
         legacyCvssRisk: ENUMS.RISK.NONE,
         ...passedCVSSProperties,
       });
+
+      await this.markAeisAsPassed();
 
       this.notifications.success('Analysis Updated');
       this.closeMarkPassedConfirmBox();

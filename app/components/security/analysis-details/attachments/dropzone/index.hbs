@@ -1,0 +1,59 @@
+{{#let
+  (file-queue name='analysisAttachmentFileUpload' onFileAdded=@onFileAdded)
+  as |queue|
+}}
+  <FileDropzone
+    @queue={{queue}}
+    local-class='dropzone'
+    data-test-attachmentDropzone
+    as |dropzone|
+  >
+    <label
+      local-class='dropzone-inner
+        {{if dropzone.active "is-active"}}
+        {{if @isUploading "is-disabled"}}'
+      data-test-attachmentDropzone-label
+    >
+      {{! A real button here would not open the picker from inside the label,
+          so the pill is presentational and the label owns the click }}
+      <span local-class='upload-pill'>
+        {{#if @isUploading}}
+          <AkLoader @size={{14}} />
+        {{else}}
+          <AkIcon @iconName='file-upload' @size='small' />
+        {{/if}}
+
+        <AkTypography @tag='span' @color='inherit' @fontWeight='bold'>
+          {{#if @isUploading}}
+            {{t 'uploading'}}...
+          {{else}}
+            {{t 'securityAnalysisDetails.attachments.upload'}}
+          {{/if}}
+        </AkTypography>
+      </span>
+
+      <span local-class='dropzone-copy'>
+        <AkTypography
+          @tag='span'
+          @fontWeight='bold'
+          local-class='dropzone-title'
+        >
+          {{t 'securityAnalysisDetails.attachments.dropzoneLabel'}}
+        </AkTypography>
+
+        <AkTypography @tag='span' local-class='dropzone-hint'>
+          {{t 'securityAnalysisDetails.attachments.maxFileSize'}}
+        </AkTypography>
+      </span>
+
+      <input
+        type='file'
+        disabled={{@isUploading}}
+        id='upload-analysis-details-file-input'
+        {{style display='none'}}
+        {{queue.selectFile}}
+        data-test-attachmentDropzone-input
+      />
+    </label>
+  </FileDropzone>
+{{/let}}

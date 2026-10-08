@@ -11,6 +11,7 @@ import { icons as PhIcons } from '@iconify-json/ph';
 import { icons as MynauiIcons } from '@iconify-json/mynaui';
 import { icons as SolarIcons } from '@iconify-json/solar';
 import { icons as IconoirIcons } from '@iconify-json/iconoir';
+import { icons as IconParkOutlineIcons } from '@iconify-json/icon-park-outline';
 import { icons as FluentIcons } from '@iconify-json/fluent';
 import { icons as StreamlinePlumpIcons } from '@iconify-json/streamline-plump';
 import { icons as IxIcons } from '@iconify-json/ix';
@@ -29,6 +30,7 @@ import {
   MynauiIconsSet,
   SolarIconsSet,
   IconoirIconsSet,
+  IconParkOutlineIconsSet,
   FluentIconsSet,
   StreamlinePlumpIconsSet,
   IxIconsSet,
@@ -52,6 +54,11 @@ const phCollection = getIcons(PhIcons, PhIconsSet);
 const mynauiCollection = getIcons(MynauiIcons, MynauiIconsSet);
 const solarCollection = getIcons(SolarIcons, SolarIconsSet);
 const iconoirCollection = getIcons(IconoirIcons, IconoirIconsSet);
+
+const iconParkOutlineCollection = getIcons(
+  IconParkOutlineIcons,
+  IconParkOutlineIconsSet
+);
 const fluentCollection = getIcons(FluentIcons, FluentIconsSet);
 
 const streamlinePlumpCollection = getIcons(
@@ -79,6 +86,7 @@ const output = {
   mynauiCollection,
   solarCollection,
   iconoirCollection,
+  iconParkOutlineCollection,
   fluentCollection,
   streamlinePlumpCollection,
   ixCollection,

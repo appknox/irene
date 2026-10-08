@@ -1,0 +1,134 @@
+.rich-text-editor {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-family: var(--ak-rich-text-editor-font-family);
+  color: var(--ak-rich-text-editor-text-color);
+  background-color: var(--ak-rich-text-editor-background-color);
+  border: 1px solid var(--ak-rich-text-editor-border-color);
+  border-radius: var(--ak-rich-text-editor-border-radius);
+  overflow: hidden;
+
+  &.is-disabled {
+    background-color: var(--ak-rich-text-editor-disabled-background-color);
+  }
+}
+
+.toolbar {
+  padding: 0.25em 0.5em;
+  background-color: var(--ak-rich-text-editor-toolbar-background-color);
+  border-bottom: 1px solid var(--ak-rich-text-editor-border-color);
+}
+
+.toolbar-button {
+  color: var(--ak-rich-text-editor-toolbar-button-color);
+
+  &.is-active {
+    color: var(--ak-rich-text-editor-toolbar-button-active-color);
+    background-color: var(--ak-rich-text-editor-toolbar-button-active-background);
+  }
+}
+
+.link-field {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em;
+  border-bottom: 1px solid var(--ak-rich-text-editor-border-color);
+}
+
+.link-action-button {
+  flex-shrink: 0;
+  border: 1px solid var(--ak-rich-text-editor-link-input-border-color);
+  border-radius: var(--ak-rich-text-editor-border-radius);
+}
+
+.link-input {
+  flex: 1;
+  padding: 0.5em;
+  font-family: inherit;
+  color: inherit;
+  background-color: var(--ak-rich-text-editor-background-color);
+  border: 1px solid var(--ak-rich-text-editor-link-input-border-color);
+  border-radius: var(--ak-rich-text-editor-border-radius);
+  outline: none;
+}
+
+.editor-surface {
+  position: relative;
+  width: 100%;
+}
+
+.editor-placeholder {
+  position: absolute;
+  top: 0.75em;
+  left: 0.85em;
+  font-size: 0.875rem;
+  color: var(--ak-rich-text-editor-placeholder-color);
+  pointer-events: none;
+}
+
+.editor-content {
+  width: 100%;
+
+  // ProseMirror renders its own contenteditable node inside this element, so
+  // the editable surface can only be reached from here.
+  :global(.ProseMirror) {
+    min-height: 6em;
+    padding: 0.75em 0.85em;
+    font-size: 0.875rem;
+    outline: none;
+
+    p {
+      margin: 0 0 0.5em;
+    }
+
+    // _reset.scss clears `list-style` on every ul, so the editor restores it.
+    ul,
+    ol {
+      margin: 0 0 0.5em;
+      padding-left: 1.4em;
+      list-style-position: outside;
+    }
+
+    ul {
+      list-style-type: disc;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    a {
+      color: var(--ak-rich-text-editor-link-color);
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+      cursor: pointer;
+    }
+
+    code {
+      padding: 0.1em 0.35em;
+      color: var(--ak-rich-text-editor-code-color);
+      background-color: var(--ak-rich-text-editor-code-background-color);
+      border-radius: var(--ak-rich-text-editor-border-radius);
+    }
+
+    pre {
+      padding: 0.875em 1em;
+      color: var(--ak-rich-text-editor-code-block-color);
+      background-color: var(--ak-rich-text-editor-code-block-background-color);
+      border-radius: var(--ak-rich-text-editor-code-block-border-radius);
+      font-family: var(--ak-rich-text-editor-code-block-font-family);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      overflow-x: auto;
+
+      code {
+        padding: 0;
+        color: inherit;
+        font-family: inherit;
+        background-color: transparent;
+      }
+    }
+  }
+}

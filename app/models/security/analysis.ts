@@ -29,6 +29,42 @@ import type EucraModel from '../eucra';
 
 irregular('asvs', 'asvses');
 
+/**
+ * A signal is tri-state: the backend stores booleans for a decided vector and
+ * the literal string 'unknown' for an undecided one.
+ */
+export type SecurityAnalysisExploitabilitySignal = boolean | 'unknown';
+
+export const SECURITY_ANALYSIS_AEIS_LIKELIHOODS = [
+  'low',
+  'medium',
+  'high',
+  'critical',
+] as const;
+
+export type SecurityAnalysisAeisLikelihood =
+  (typeof SECURITY_ANALYSIS_AEIS_LIKELIHOODS)[number];
+
+/** Request body for PUT /api/v2/analyses/:id/aeis-override. */
+export interface SecurityAnalysisAeisOverridePayload {
+  score: number;
+  likelihood: SecurityAnalysisAeisLikelihood;
+  signals?: Record<string, SecurityAnalysisExploitabilitySignal>;
+}
+
+export interface SecurityAnalysisExploitability {
+  score: number | null;
+  exploitability_likelihood: string | null;
+  signals: Record<string, SecurityAnalysisExploitabilitySignal>;
+  signal_reasoning?: Record<string, string>;
+  attack_scenario?: string[];
+  references?: string[];
+  exploitability_analysis?: {
+    summary?: string;
+    evidence?: string[];
+  } | null;
+}
+
 export interface SecurityAnalysisFinding {
   id?: number;
   title: string | null;
@@ -104,6 +140,15 @@ export default class SecurityAnalysisModel extends Model {
   @attr('string') declare overriddenRiskComment: string;
   @attr('boolean') declare overriddenRiskToProfile: boolean;
   @attr('string') declare computedRisk: string;
+
+  @attr('number')
+  declare exploitabilityScore: number | null;
+
+  @attr('number')
+  declare exploitabilityLikelihood: number | null;
+
+  @attr()
+  declare exploitability: SecurityAnalysisExploitability | null;
 
   @belongsTo('security/file', { async: true, inverse: 'analyses' })
   declare file: AsyncBelongsTo<SecurityFileModel>;

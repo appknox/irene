@@ -1,0 +1,45 @@
+.step-card {
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  background-color: var(
+    --security-analysis-details-validated-findings-background-color
+  );
+
+  &.is-drop-target {
+    border-color: var(
+      --security-analysis-details-validated-findings-drop-target-border-color
+    );
+  }
+}
+
+.step-card-header {
+  padding: 0.5em 0.85em;
+}
+
+.step-card-body {
+  padding: 0.85em;
+}
+
+.step-heading-input {
+  width: 100%;
+  padding: 0.6em 0.75em;
+  font-family: var(--security-analysis-details-validated-findings-font-family);
+  color: var(--security-analysis-details-validated-findings-text-color);
+  background-color: var(
+    --security-analysis-details-validated-findings-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  outline: none;
+}
+
+.add-step-button {
+  width: 100%;
+  border-style: dashed !important;
+}

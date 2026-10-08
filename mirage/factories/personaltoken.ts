@@ -5,5 +5,7 @@ import { faker } from '@faker-js/faker';
 export default Factory.extend({
   key: faker.person.firstName(),
   name: faker.person.firstName(),
-  created: faker.date.past,
+  // Mirage calls attribute functions with the record index, so passing the
+  // bare faker helper made the first record call date.past(0), which throws.
+  created: () => faker.date.past(),
 });

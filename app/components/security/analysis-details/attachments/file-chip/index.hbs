@@ -1,0 +1,58 @@
+<span local-class='attachment-chip' ...attributes data-test-attachmentFileChip>
+  {{#if @isUploading}}
+    <span local-class='attachment-chip-badge is-loading'>
+      <AkLoader @size={{12}} />
+    </span>
+  {{else}}
+    <span
+      local-class='attachment-chip-badge'
+      data-type={{@extension}}
+      data-test-attachmentFileChip-extension
+    >
+      {{@extension}}
+    </span>
+  {{/if}}
+
+  <span
+    local-class='attachment-chip-name'
+    title={{@name}}
+    data-test-attachmentFileChip-name
+  >
+    {{@name}}
+  </span>
+
+  <button
+    type='button'
+    local-class='attachment-chip-action'
+    aria-label={{t 'securityAnalysisDetails.attachments.view'}}
+    disabled={{@isUploading}}
+    {{on 'click' @onView}}
+    data-test-attachmentFileChip-viewBtn
+  >
+    <AkIcon @iconName='visibility' @size='small' @color='inherit' />
+  </button>
+
+  {{#if @onDownload}}
+    <button
+      type='button'
+      local-class='attachment-chip-action'
+      aria-label={{t 'download'}}
+      disabled={{@isUploading}}
+      {{on 'click' @onDownload}}
+      data-test-attachmentFileChip-downloadBtn
+    >
+      <AkIcon @iconName='download' @size='small' @color='inherit' />
+    </button>
+  {{/if}}
+
+  <button
+    type='button'
+    local-class='attachment-chip-action is-muted'
+    aria-label={{t 'delete'}}
+    disabled={{@removeDisabled}}
+    {{on 'click' @onRemove}}
+    data-test-attachmentFileChip-removeBtn
+  >
+    <AkIcon @iconName='close' @size='small' @color='inherit' />
+  </button>
+</span>

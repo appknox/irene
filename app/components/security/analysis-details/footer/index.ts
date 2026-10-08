@@ -7,10 +7,15 @@ export interface SecurityAnalysisDetailsFooterComponentSignature {
     saveAnalysis(backToFilePage: boolean): void;
     isSavingAnalysis: boolean;
     isSaveActionOnly: boolean;
+    isDirty: boolean;
   };
 }
 
-export default class SecurityAnalysisDetailsFooterComponent extends Component<SecurityAnalysisDetailsFooterComponentSignature> {}
+export default class SecurityAnalysisDetailsFooterComponent extends Component<SecurityAnalysisDetailsFooterComponentSignature> {
+  get isSaveDisabled() {
+    return this.args.isSavingAnalysis || !this.args.isDirty;
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

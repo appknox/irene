@@ -27,18 +27,18 @@
   <AkStack @alignItems='stretch' @spacing='1.5'>
     {{#if this.showMarkAsPassedButton}}
       <AkButton
-        @variant='outlined'
-        @color='neutral'
+        @variant='filled'
+        @color='success'
         {{on 'click' this.openMarkPassedConfirmBox}}
         local-class='mark-as-passed-button'
         data-test-securityAnalysisDetailsHeader-markAsPassedBtn
       >
         <:leftIcon>
-          <AkIcon @color='success' @iconName='check' />
+          <AkIcon @color='inherit' @iconName='check' />
         </:leftIcon>
 
         <:default>
-          Mark as Passed
+          {{t 'securityAnalysisDetails.header.markAsPassed'}}
         </:default>
       </AkButton>
     {{/if}}
@@ -55,39 +55,26 @@
   </AkStack>
 </AkStack>
 
-<AkStack
-  @width='full'
-  @direction='column'
-  local-class='analysis-details-header-section'
-  class='p-2'
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.header.analysisStatus'}}
+  @description={{t 'securityAnalysisDetails.header.analysisStatusDescription'}}
+  @testId='analysisStatus'
+  class='my-2'
 >
-  <AkStack
-    @direction='column'
-    class='mb-2'
-    data-test-securityAnalysisDetailsHeader-analysisStatusInfoText
-  >
-    <AkTypography @variant='h5'>
-      Analysis Status
-    </AkTypography>
-
-    <AkTypography @variant='body2' @color='textSecondary'>
-      Changing the status here will change the current status for this analysis
-      in the file page.
-    </AkTypography>
-  </AkStack>
-
-  <AkSelect
-    @placeholder='Select Status'
-    @selected={{this.analysisStatus}}
-    @options={{this.statuses}}
-    @onChange={{this.selectStatus}}
-    {{style width='160px'}}
-    data-test-securityAnalysisDetailsHeader-analysisStatusSelector
-    as |status|
-  >
-    {{analysis-status status}}
-  </AkSelect>
-</AkStack>
+  <:content>
+    <AkSelect
+      @placeholder={{t 'securityAnalysisDetails.header.selectStatus'}}
+      @selected={{this.analysisStatus}}
+      @options={{this.statuses}}
+      @onChange={{this.selectStatus}}
+      {{style width='160px'}}
+      data-test-securityAnalysisDetailsHeader-analysisStatusSelector
+      as |status|
+    >
+      {{analysis-status status}}
+    </AkSelect>
+  </:content>
+</Security::AnalysisDetails::SectionCard>
 
 <ConfirmBox
   @isActive={{this.showMarkPassedConfirmBox}}

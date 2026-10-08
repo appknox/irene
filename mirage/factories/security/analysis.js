@@ -2,6 +2,15 @@ import { Factory, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 import ENUMS from 'irene/enums';
 
+// knoxiq.enums.ExploitabilityEnum. Critical has no DB tier and folds
+// into High, so the nested string is what the UI reads back.
+const EXPLOITABILITY_LIKELIHOOD_ENUM = {
+  low: 2,
+  medium: 3,
+  high: 4,
+  critical: 4,
+};
+
 export default Factory.extend({
   analiser_version: 1,
   cvss_version: 3,
@@ -10,6 +19,46 @@ export default Factory.extend({
     return faker.number.float({ min: 1.0, max: 9.9, fractionDigits: 1 });
   },
   cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
+
+  // Mirrors the hudson analysis serializer: the AI exploitability rollup
+  // with any aeis_override already layered on by the backend.
+  exploitability() {
+    const signalKeys = [
+      'requires_chaining',
+      'remote_exploitation',
+      'public_exploit_exists',
+      'local_exploitation_only',
+      'minimal_user_interaction',
+      'no_authentication_required',
+      'obscure_or_environment_specific',
+    ];
+
+    return {
+      score: faker.number.float({ min: 1.0, max: 9.9, fractionDigits: 1 }),
+      exploitability_likelihood: faker.helpers.arrayElement([
+        'critical',
+        'high',
+        'medium',
+        'low',
+      ]),
+      signals: Object.fromEntries(
+        signalKeys.map((key) => [
+          key,
+          faker.helpers.arrayElement([true, false, 'unknown']),
+        ])
+      ),
+    };
+  },
+
+  exploitability_score() {
+    return this.exploitability.score;
+  },
+
+  exploitability_likelihood() {
+    return EXPLOITABILITY_LIKELIHOOD_ENUM[
+      this.exploitability.exploitability_likelihood
+    ];
+  },
 
   attack_vector() {
     return faker.helpers.arrayElement(ENUMS.CVSS_V3_ATTACK_VECTOR.BASE_VALUES);
