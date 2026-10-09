@@ -41,6 +41,7 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
 
   @tracked jiraProjectsResponse: JiraProjectsQueryResponse | null = null;
   @tracked noIntegration = false;
+  @tracked jiraSecurityConnected = false;
   @tracked reconnect = false;
   @tracked noAccess = false;
 
@@ -116,7 +117,9 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
       title: this.intl.t('jira'),
       description: this.intl.t('jiraIntegrationDesc'),
       logo: '../../../../images/jira-icon.png',
-      isIntegrated: !this.noIntegration && !this.noAccess && !this.reconnect,
+      isIntegrated:
+        (!this.noIntegration && !this.noAccess && !this.reconnect) ||
+        this.jiraSecurityConnected,
       showSelectBtn:
         !this.currentJiraProject && !this.noIntegration && !this.noAccess,
       selectBtnText: this.intl.t('selectProject'),
@@ -204,6 +207,14 @@ export default class ProjectSettingsIntegrationsJiraProjectComponent extends Com
 
       if (errorDetail === 'JIRA not integrated') {
         this.noIntegration = true;
+
+        return;
+      }
+
+      // Same 404, different cause: the organization is on Jira Cloud Security
+      if (errorDetail === 'JIRA Cloud Security integrated') {
+        this.noIntegration = true;
+        this.jiraSecurityConnected = true;
 
         return;
       }
