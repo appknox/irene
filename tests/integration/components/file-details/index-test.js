@@ -279,6 +279,7 @@ module('Integration | Component | file-details', function (hooks) {
     test('a superuser can see already-completed KnoxIQ status even when the file org has KnoxIQ disabled', async function (assert) {
       await makeSuperuser(this);
       disableKnoxiqForTests(this);
+      this.file.isKnoxiqEnabled = true;
       this.file.isStaticDone = true;
 
       setupKnoxiqScanStatusMirage(this.server, {
@@ -299,11 +300,16 @@ module('Integration | Component | file-details', function (hooks) {
       assert
         .dom('[data-test-knoxiq-status-card-icon]')
         .hasClass(/status-card-icon-completed/);
+
+      assert
+        .dom('[data-test-fileDetailScanActions-staticScan-accent]')
+        .exists();
     });
 
     test('a superuser never sees the run-KnoxIQ trigger CTA for a file whose org has KnoxIQ disabled', async function (assert) {
       await makeSuperuser(this);
       disableKnoxiqForTests(this);
+      this.file.isKnoxiqEnabled = true;
       this.file.isStaticDone = true;
 
       setupKnoxiqScanStatusMirage(this.server, {
@@ -324,6 +330,7 @@ module('Integration | Component | file-details', function (hooks) {
     test('quietly ignores an expected 403 when a superuser probes a disabled org file with no KnoxIQ history yet', async function (assert) {
       await makeSuperuser(this);
       disableKnoxiqForTests(this);
+      this.file.isKnoxiqEnabled = true;
       this.file.isStaticDone = true;
 
       this.server.get('/knoxiq/file/:fileId/knoxiq_scan/status', () => {
@@ -341,6 +348,33 @@ module('Integration | Component | file-details', function (hooks) {
 
       assert.strictEqual(notifications.errorMsg, null);
       assert.dom('[data-test-knoxiq-status-card]').doesNotExist();
+    });
+
+    test('a superuser does not fetch KnoxIQ data for a file whose is_knoxiq_enabled is false', async function (assert) {
+      await makeSuperuser(this);
+      disableKnoxiqForTests(this);
+      this.file.isStaticDone = true;
+
+      let statusRequests = 0;
+
+      this.server.get('/knoxiq/file/:fileId/knoxiq_scan/status', () => {
+        statusRequests += 1;
+
+        return new Response(403);
+      });
+
+      await render(hbs`
+        <FileDetails
+          @file={{this.file}}
+          @fileAnalysesListContext={{this.fileAnalysesListContext}}
+        />
+      `);
+
+      assert.strictEqual(statusRequests, 0);
+      assert.dom('[data-test-knoxiq-status-card]').doesNotExist();
+      assert
+        .dom('[data-test-fileDetailScanActions-staticScan-accent]')
+        .doesNotExist();
     });
   });
 });

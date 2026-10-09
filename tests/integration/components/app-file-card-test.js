@@ -71,11 +71,10 @@ module('Integration | Component | app-file-card', function (hooks) {
     assert.dom('[data-test-fileOverview-fileName]').hasText(this.file.name);
   });
 
-  test('it renders the KnoxIQ project card driven by the file own flag, not the viewer selected org', async function (assert) {
-    // The viewer's own selected org has KnoxIQ disabled (e.g. a superuser
-    // whose own org never has it on), but the backend already resolved
-    // is_knoxiq_enabled=true for this specific file (org flag on, or a
-    // superuser bypass) and put it on the file itself.
+  test('it renders FileOverview when the selected org has KnoxIQ disabled, even if the file reports KnoxIQ enabled', async function (assert) {
+    // A superuser's own org never has KnoxIQ on; the project card (and its
+    // exploitability fetch) must not render just because a client file
+    // has is_knoxiq_enabled=true.
     disableKnoxiqForTests(this);
     this.file.isKnoxiqEnabled = true;
     setupKnoxiqMirageEndpoints(this.server);
@@ -84,9 +83,96 @@ module('Integration | Component | app-file-card', function (hooks) {
       hbs`<AppFileCard @file={{this.file}} @showCheckbox={{true}} />`
     );
 
-    assert.dom('[data-test-knoxiq-project-card]').exists();
-    assert.dom('[data-test-fileOverview-root]').doesNotExist();
+    assert.dom('[data-test-knoxiq-project-card]').doesNotExist();
+    assert.dom('[data-test-fileOverview-root]').exists();
   });
+
+  module(
+    'out-of-org file (e.g. superuser viewing a client project)',
+    function (nestedHooks) {
+      nestedHooks.beforeEach(function () {
+        this.exploitabilityRequests = 0;
+
+        this.server.get('/v3/files/:id/exploitability', (_, req) => {
+          this.exploitabilityRequests += 1;
+
+          return { id: req.params.id };
+        });
+
+        setupKnoxiqMirageEndpoints(this.server);
+      });
+
+      // Points the file's project at a client org other than the viewer's
+      // selected org; call after enable/disableKnoxiqForTests.
+      function moveFileToClientOrg(context, { isKnoxiqEnabled, knoxiqStatus }) {
+        const store = context.owner.lookup('service:store');
+        const clientOrg = context.server.create('organization');
+
+        const clientOrgRecord = store.push(
+          store.normalize('organization', clientOrg.toJSON())
+        );
+
+        context.file
+          .belongsTo('project')
+          .value()
+          .set('organization', clientOrgRecord);
+        context.file.isKnoxiqEnabled = isKnoxiqEnabled;
+        context.file.knoxiqStatus = knoxiqStatus;
+      }
+
+      test('renders FileOverview without fetching exploitability when the client file has KnoxIQ disabled, even if the viewer org has KnoxIQ on', async function (assert) {
+        enableKnoxiqForTests(this);
+
+        moveFileToClientOrg(this, {
+          isKnoxiqEnabled: false,
+          knoxiqStatus: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        });
+
+        await render(
+          hbs`<AppFileCard @file={{this.file}} @showCheckbox={{true}} />`
+        );
+
+        assert.dom('[data-test-fileOverview-root]').exists();
+        assert.dom('[data-test-knoxiq-project-card]').doesNotExist();
+        assert.strictEqual(this.exploitabilityRequests, 0);
+      });
+
+      test('renders FileOverview when the client file has KnoxIQ enabled but no KnoxIQ history', async function (assert) {
+        enableKnoxiqForTests(this);
+
+        moveFileToClientOrg(this, {
+          isKnoxiqEnabled: true,
+          knoxiqStatus: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        });
+
+        await render(
+          hbs`<AppFileCard @file={{this.file}} @showCheckbox={{true}} />`
+        );
+
+        assert.dom('[data-test-fileOverview-root]').exists();
+        assert.dom('[data-test-knoxiq-project-card]').doesNotExist();
+        assert.strictEqual(this.exploitabilityRequests, 0);
+      });
+
+      test('renders FileOverview without fetching exploitability for a client file with KnoxIQ results', async function (assert) {
+        // KnoxIQ details for a client file are shown only on file details.
+        enableKnoxiqForTests(this);
+
+        moveFileToClientOrg(this, {
+          isKnoxiqEnabled: true,
+          knoxiqStatus: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        });
+
+        await render(
+          hbs`<AppFileCard @file={{this.file}} @showCheckbox={{true}} />`
+        );
+
+        assert.dom('[data-test-fileOverview-root]').exists();
+        assert.dom('[data-test-knoxiq-project-card]').doesNotExist();
+        assert.strictEqual(this.exploitabilityRequests, 0);
+      });
+    }
+  );
 
   module('when KnoxIQ is enabled', function (nestedHooks) {
     nestedHooks.beforeEach(function () {

@@ -115,13 +115,24 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   }
 
   /**
-   * A superuser may still view KnoxIQ results already produced for a file
-   * even after the file's org disables KnoxIQ. The backend enforces the
-   * same rule (and denies when no such data exists yet), so it's safe to
-   * always attempt the fetch here and let a 403 fail quietly.
+   * A superuser never gets KnoxIQ enabled for their own org, but may still
+   * view KnoxIQ results on a client file. For them, rely on the file's own
+   * backend-resolved is_knoxiq_enabled so we only hit the KnoxIQ endpoints
+   * for files that actually have KnoxIQ on.
    */
   get canFetchKnoxiqData() {
-    return this.isKnoxiqEnabled || this.isSuperuser;
+    return (
+      this.isKnoxiqEnabled ||
+      (this.isSuperuser && Boolean(this.args.file.isKnoxiqEnabled))
+    );
+  }
+
+  /**
+   * Display-only KnoxIQ UI (scan card chips/accents). Unlike trigger UI,
+   * this also shows for a superuser once the file's KnoxIQ status loads.
+   */
+  get showKnoxiqScanStatus() {
+    return this.isKnoxiqEnabled || this.hasKnoxiqScanStatusLoaded;
   }
 
   get knoxiqScanRecord() {
