@@ -1,0 +1,21 @@
+.overdue-banner {
+  padding: 0.75em 1em;
+  border: 1px solid var(--file-details-overdue-vulnerabilities-border-color);
+  border-radius: var(--file-details-overdue-vulnerabilities-border-radius);
+  background-color: var(
+    --file-details-overdue-vulnerabilities-background-color
+  );
+}
+
+.overdue-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: var(--file-details-overdue-vulnerabilities-icon-color);
+  background-color: var(
+    --file-details-overdue-vulnerabilities-icon-background-color
+  );
+}

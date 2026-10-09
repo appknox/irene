@@ -48,11 +48,21 @@ export interface Finding {
   description: string;
 }
 
+export interface AnalysisMttr {
+  original: {
+    days_to_closure: number | null;
+    human_readable: string;
+  };
+}
+
 export default class AnalysisModel extends Model {
   @service declare intl: IntlService;
 
   @attr
   declare findings: Finding[];
+
+  @attr
+  declare mttr: AnalysisMttr | null;
 
   @attr('number')
   declare risk: number;
@@ -316,6 +326,14 @@ export default class AnalysisModel extends Model {
 
   get vulnerabilityTypes() {
     return this.vulnerability.get('types');
+  }
+
+  get daysToClosure() {
+    return this.mttr?.original?.days_to_closure ?? null;
+  }
+
+  getSla() {
+    return this.store.adapterFor('analysis').getSla(this);
   }
 }
 

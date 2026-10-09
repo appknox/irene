@@ -1,0 +1,12 @@
+{{#if this.isSlaEnabled}}
+  <AkTypography
+    @variant='body2'
+    @color='textSecondary'
+    local-class='sla-note'
+    data-test-analysisRisk-overrideEditDrawer-slaNote
+  >
+    <strong local-class='sla-note-label'>{{t 'note'}}</strong>
+    -
+    {{t 'editOverrideVulnerability.slaNote'}}
+  </AkTypography>
+{{/if}}
