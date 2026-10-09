@@ -25,6 +25,8 @@ export default Base.extend({
   updated_by_user: (i) => i + 1,
   service_account_type: () => faker.helpers.arrayElement([1, 2]),
   all_projects: true,
+  scope_cli: false,
+  cli_scope_auto_approve_new_name_spaces: false,
 
   projects() {
     const id = this.id as number;

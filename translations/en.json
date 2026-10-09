@@ -2511,8 +2511,12 @@
     "emptyTitle": "No service account has been created",
     "emptyDescription": "Create a service account by clicking on \"<strong>Create</strong>\" button",
     "showSystemCreated": "Show System Created",
+    "showCliEnabled": "Show CLI Enabled",
     "deleteConfirmText": "Are you sure you want to delete <strong>\"{name}\"</strong> service account ?",
     "deleteSuccessMsg": "Service account has been deleted successfully",
+    "cliLabel": "CLI",
+    "ownerLevelLabel": "Owner",
+    "memberLevelLabel": "Member",
     "createSuccessMsg": "Service Account created successfully",
     "editSuccessMsg": "All Edit(s) have been saved successfully",
     "nameOfTheServiceAccount": "Name of the Service Account",
@@ -2528,6 +2532,7 @@
     "regenerateKey": "Re-generate Key",
     "projectAccess": "Project Access",
     "projectAccessDescription": "These projects are applicable for the particular scope(scan) of the projects",
+    "forceUpdateToManageProjectsNote": "Select the specific projects below, then click Update to save this access change together with your project selection.",
     "selectedProjectAccess": "Selected - <strong>{projectAccess}</strong>",
     "forSpecificProjects": "For Specific Projects",
     "emptyProjectListTitle": "No project has been added",
@@ -2567,7 +2572,15 @@
       },
       "auto-approve-new-name-spaces": {
         "label": "Auto Approve New Namespaces",
-        "writeDescription": "Write access for auto approving new namespaces in this organization"
+        "writeDescription": "Write access for auto approving new namespaces uploaded through the public API. This is independent of the Auto Approve New Namespaces setting under CLI below — each channel has its own switch. Once a namespace is approved by either one, it stays approved for every channel from then on."
+      },
+      "cli": {
+        "label": "CLI",
+        "description": "Allows this service account to access dashboard APIs and authenticate with the Appknox CLI, for either all projects or the specific projects configured under Project Access above. There is no limit on the number of CLI-enabled service accounts an organization can have, and you can set your own expiry for one just like any other service account."
+      },
+      "cli-auto-approve-new-name-spaces": {
+        "label": "Auto Approve New Namespaces",
+        "description": "Write access for auto approving new namespaces uploaded through the CLI. This is independent of the Auto Approve New Namespaces setting under Upload App above — each channel has its own switch. Once a namespace is approved by either one, it stays approved for every channel from then on, so this only matters the first time a package is ever uploaded under this organization."
       }
     }
   },

@@ -18,6 +18,16 @@ export interface OrganizationServiceAccountMoreMenuSignature {
   };
 }
 
+interface MenuItem {
+  label: string;
+  divider?: boolean;
+  link?: boolean;
+  route?: string;
+  query?: Record<string, unknown>;
+  button?: boolean;
+  onClick?: () => void;
+}
+
 export default class OrganizationServiceAccountMoreMenuComponent extends Component<OrganizationServiceAccountMoreMenuSignature> {
   @service declare intl: IntlService;
   @service declare store: Store;
@@ -25,7 +35,7 @@ export default class OrganizationServiceAccountMoreMenuComponent extends Compone
 
   @tracked showDeleteConfirm = false;
 
-  get menuItems() {
+  get menuItems(): MenuItem[] {
     return [
       {
         link: true,
