@@ -1,0 +1,6 @@
+// Styles for the public-api-docs route (swagger-ui + overrides).
+// Compiled as a separate CSS asset (see outputPaths.app.css in ember-cli-build.js)
+// and lazy-loaded by irene/utils/load-public-api-docs-styles so this ~8MB of CSS
+// isn't render-blocking on every page.
+@import 'swagger-ui';
+@import 'public-api';
