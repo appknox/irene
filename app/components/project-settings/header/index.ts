@@ -55,6 +55,12 @@ export default class ProjectSettingsHeaderComponent extends Component<ProjectSet
           route: 'authenticated.dashboard.project.settings.dast-automation',
           label: this.intl.t('dastAutomation.title'),
         },
+      !this.orgIsAnEnterprise &&
+        !this.organization.hideUpsellUIStatus.apiScanAutomation && {
+          id: this.intl.t('apiScanAutomation.title'),
+          route: 'authenticated.dashboard.project.settings.api-scan-automation',
+          label: this.intl.t('apiScanAutomation.title'),
+        },
     ].filter(Boolean) as TabItem[];
   }
 }

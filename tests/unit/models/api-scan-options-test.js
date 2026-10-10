@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier, qunit/require-expect, qunit/no-assert-equal */
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
@@ -9,8 +8,20 @@ module('Unit | Model | api scan options', function (hooks) {
     const store = this.owner.lookup('service:store');
     const apiScanOptions = store.createRecord('api-scan-options');
 
-    apiScanOptions.set('apiUrlFilters', 'test.com');
+    assert.ok(apiScanOptions);
+  });
 
-    assert.equal(apiScanOptions.get('apiUrlFilters'), ['test.com'], 'No role');
+  test('hasApiUrlFilters reflects the capture filters', function (assert) {
+    const store = this.owner.lookup('service:store');
+
+    const apiScanOptions = store.createRecord('api-scan-options', {
+      dsApiCaptureFilters: [],
+    });
+
+    assert.false(apiScanOptions.hasApiUrlFilters);
+
+    apiScanOptions.set('dsApiCaptureFilters', ['example.com']);
+
+    assert.true(apiScanOptions.hasApiUrlFilters);
   });
 });

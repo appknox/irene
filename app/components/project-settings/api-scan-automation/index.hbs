@@ -1,0 +1,24 @@
+<AkStack
+  @direction='column'
+  @spacing='1.5'
+  class='mb-3 py-3'
+  local-class='api-scan-automation-root'
+  data-test-projectSettings-apiScanAutomationSettings-root
+>
+  <AkStack @width='9/12' class='px-3'>
+    {{#if this.apiScanFeatureAvailable}}
+      <ProjectSettings::ApiScanAutomation::Settings
+        @profileId={{this.project.activeProfileId}}
+      />
+    {{else}}
+      {{! The tab and route already gate on this; this is a backstop. }}
+      <AkTypography
+        data-test-projectSettings-apiScanAutomation-unavailable
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'apiScanAutomation.featureUnavailable'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+</AkStack>
