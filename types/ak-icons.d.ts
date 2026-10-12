@@ -9,6 +9,7 @@ import {
   MynauiIconsSet,
   SolarIconsSet,
   IconoirIconsSet,
+  IconParkOutlineIconsSet,
   FluentIconsSet,
   StreamlinePlumpIconsSet,
   IxIconsSet,
@@ -27,6 +28,7 @@ type PhIcon = (typeof PhIconsSet)[number];
 type MynauiIcon = (typeof MynauiIconsSet)[number];
 type SolarIcon = (typeof SolarIconsSet)[number];
 type IconoirIcon = (typeof IconoirIconsSet)[number];
+type IconParkOutlineIcon = (typeof IconParkOutlineIconsSet)[number];
 type FluentIcon = (typeof FluentIconsSet)[number];
 type StreamlinePlumpIcon = (typeof StreamlinePlumpIconsSet)[number];
 type IxIcon = (typeof IxIconsSet)[number];
@@ -45,6 +47,7 @@ export const AkIconsSet = [
   ...MynauiIconsSet,
   ...SolarIconsSet,
   ...IconoirIconsSet,
+  ...IconParkOutlineIconsSet,
   ...FluentIconsSet,
   ...StreamlinePlumpIconsSet,
   ...IxIconsSet,
@@ -63,6 +66,7 @@ export type AkIconVariantType =
   | `mynaui:${MynauiIcon}`
   | `solar:${SolarIcon}`
   | `iconoir:${IconoirIcon}`
+  | `icon-park-outline:${IconParkOutlineIcon}`
   | `fluent:${FluentIcon}`
   | `streamline-plump:${StreamlinePlumpIcon}`
   | `ix:${IxIcon}`
@@ -83,6 +87,7 @@ export type {
   MynauiIcon,
   SolarIcon,
   IconoirIcon,
+  IconParkOutlineIcon,
   FluentIcon,
   StreamlinePlumpIcon,
   IxIcon,
