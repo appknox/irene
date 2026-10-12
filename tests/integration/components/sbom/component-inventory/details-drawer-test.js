@@ -331,6 +331,45 @@ module(
       assert.strictEqual(windowStub.target, '_blank');
     });
 
+    test('the download button passes the history filter to the export', async function (assert) {
+      const exportUrls = [];
+
+      this.server.post('/v2/sb_components/:id/export', (_schema, req) => {
+        exportUrls.push(req.url);
+
+        return {
+          id: 3,
+          status: ENUMS.SBOM_COMPONENT_EXPORT_STATUS.COMPLETED,
+          download_url: 'https://storage.example.test/history.xlsx?sig=abc',
+        };
+      });
+
+      await render(hbs`
+        <Sbom::ComponentInventory::DetailsDrawer
+          @component={{this.component}}
+          @open={{true}}
+          @onClose={{this.onClose}}
+        />
+      `);
+
+      // Latest mode: the export request carries no history flag.
+      await click('[data-test-componentInventory-downloadBtn]');
+
+      assert.notOk(
+        exportUrls[0].includes('history=true'),
+        'latest-mode export has no history flag'
+      );
+
+      // History mode: the export request mirrors the on-screen filter.
+      await click('[data-test-componentInventory-historyToggle]');
+      await click('[data-test-componentInventory-downloadBtn]');
+
+      assert.ok(
+        exportUrls[1].includes('history=true'),
+        'history-mode export includes the history flag'
+      );
+    });
+
     test('a websocket update completes a pending export and opens it', async function (assert) {
       const downloadUrl =
         'https://storage.example.test/sbom_component_inventory_1_7.xlsx?sig=ws';

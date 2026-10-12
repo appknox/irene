@@ -26,9 +26,13 @@ export default class SbomComponentInventoryAdapter extends commondrf {
   }
 
   createExport(
-    componentId: string | number
+    componentId: string | number,
+    history = false
   ): Promise<SbomComponentExportResponse> {
-    return this.ajax(this._exportBaseURL(componentId), 'POST', {
+    const url = this._exportBaseURL(componentId);
+
+    // Same ?history=true convention as the apps drill-down listing.
+    return this.ajax(history ? `${url}?history=true` : url, 'POST', {
       headers: this.headers,
     });
   }

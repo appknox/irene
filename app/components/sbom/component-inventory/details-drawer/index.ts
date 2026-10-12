@@ -218,7 +218,9 @@ export default class SbomComponentInventoryDetailsDrawerComponent extends Compon
     ) as SbomComponentInventoryAdapter;
 
     try {
-      const created = await waitForPromise(adapter.createExport(component.id));
+      const created = await waitForPromise(
+        adapter.createExport(component.id, this.showHistory)
+      );
       const record = this.pushExport(created);
 
       if (this.isExportPending(record)) {
