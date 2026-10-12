@@ -1,0 +1,38 @@
+.drawer-container {
+  width: 420px;
+  max-width: 100%;
+}
+
+.drawer-body {
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+}
+
+.finding-row {
+  background-color: var(
+    --security-analysis-details-original-analysis-drawer-code-background-color
+  );
+  border-radius: var(
+    --security-analysis-details-original-analysis-drawer-code-border-radius
+  );
+}
+
+.finding-description-container {
+  width: 100%;
+  max-height: 300px;
+  overflow: auto;
+  text-overflow: clip;
+
+  .finding-description {
+    background-color: unset;
+    color: var(--security-analysis-details-original-analysis-drawer-code-color);
+    white-space: pre-line;
+    font-size: 0.8125rem;
+    font-weight: var(--font-weight-regular);
+    width: max-content;
+    max-width: 100%;
+    line-height: normal;
+    padding: 0.75em;
+    margin: 0;
+  }
+}

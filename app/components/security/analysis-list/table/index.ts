@@ -1,4 +1,7 @@
 import Component from '@glimmer/component';
+import { service } from '@ember/service';
+
+import type OrganizationService from 'irene/services/organization';
 import type SecurityFileModel from 'irene/models/security/file';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 
@@ -12,8 +15,17 @@ export interface SecurityAnalysisListTableComponentSignature {
 }
 
 export default class SecurityAnalysisListTableComponent extends Component<SecurityAnalysisListTableComponentSignature> {
+  @service declare organization: OrganizationService;
+
   get file() {
     return this.args.file;
+  }
+
+  get hasAtleastOneAnalysisWithExploitability() {
+    return Boolean(
+      this.organization.isKnoxIqEnabled &&
+        this.args.analyses.some((analysis) => analysis.isKnoxIqAnalysis)
+    );
   }
 
   get columns() {
@@ -34,10 +46,20 @@ export default class SecurityAnalysisListTableComponent extends Component<Securi
       },
       {
         name: 'Risk',
-        width: 130,
+        width: 90,
         component: 'security/analysis-list/table/risk',
         textAlign: 'left',
       },
+      ...(this.hasAtleastOneAnalysisWithExploitability
+        ? [
+            {
+              name: 'Exploitability',
+              width: 90,
+              component: 'security/analysis-list/table/exploitability',
+              textAlign: 'left',
+            },
+          ]
+        : []),
       {
         name: 'Scan Type',
         width: 100,
