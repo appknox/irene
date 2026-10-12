@@ -4,6 +4,11 @@ import { isEmpty } from '@ember/utils';
 import { irregular } from '@ember-data/request-utils/string';
 
 import ENUMS from 'irene/enums';
+
+import {
+  SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE,
+  SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS,
+} from 'irene/utils/security-aeis';
 import { riskClass } from 'irene/helpers/risk-class';
 export type { RiskLabelClass as SecurityAnalysisRiskLabelClass } from 'irene/helpers/risk-class';
 
@@ -28,6 +33,23 @@ import type Pcidss4Model from '../pcidss4';
 import type EucraModel from '../eucra';
 
 irregular('asvs', 'asvses');
+
+export type SecurityAnalysisExploitabilitySignal = boolean | 'unknown';
+
+// The AI rollup, with any human override already layered on by the backend.
+export interface SecurityAnalysisExploitability {
+  score: number | null;
+  exploitability_likelihood: string | null;
+  signals: Record<string, SecurityAnalysisExploitabilitySignal>;
+  signal_reasoning?: Record<string, string>;
+  attack_scenario?: string[];
+  references?: string[];
+
+  exploitability_analysis?: {
+    summary?: string;
+    evidence?: string[];
+  } | null;
+}
 
 export interface SecurityAnalysisFinding {
   id?: number;
@@ -105,6 +127,15 @@ export default class SecurityAnalysisModel extends Model {
   @attr('boolean') declare overriddenRiskToProfile: boolean;
   @attr('string') declare computedRisk: string;
 
+  @attr('number')
+  declare exploitabilityScore: number | null;
+
+  @attr('number')
+  declare exploitabilityLikelihood: number | null;
+
+  @attr()
+  declare exploitability: SecurityAnalysisExploitability | null;
+
   @belongsTo('security/file', { async: true, inverse: 'analyses' })
   declare file: AsyncBelongsTo<SecurityFileModel>;
 
@@ -161,6 +192,38 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
+
+  get isKnoxIqAnalysis() {
+    const hasValue = (value: unknown) => value !== null && value !== undefined;
+
+    return (
+      hasValue(this.exploitability) ||
+      hasValue(this.exploitabilityLikelihood) ||
+      hasValue(this.exploitabilityScore)
+    );
+  }
+
+  /**
+   * Whether AEIS already carries the canonical passed override. Anything else
+   * — a different score, likelihood or vector — means the pass is incomplete.
+   */
+  get hasPassedAeisOverride() {
+    const passed = SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE;
+    const exploitability = this.exploitability;
+
+    if (!exploitability) {
+      return false;
+    }
+
+    return (
+      this.exploitabilityScore === passed.score &&
+      exploitability.exploitability_likelihood?.toLowerCase() ===
+        passed.likelihood &&
+      SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS.every(
+        (key) => exploitability.signals?.[key] === passed.signals?.[key]
+      )
+    );
+  }
 
   get isPassed() {
     return this.risk === ENUMS.RISK.NONE;
