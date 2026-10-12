@@ -113,19 +113,29 @@ const assertAnalysisRowDetails = (assert, sa) => {
       .exists()
       .containsText(analysisStatusTextMap[String(analysisStatus)]);
 
-    assert
-      .dom(
-        '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
-        analyisRowElement
-      )
-      .exists();
+    // An already-passed analysis has nothing left to pass.
+    if (sa.isPassed) {
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
+          analyisRowElement
+        )
+        .doesNotExist();
+    } else {
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
+          analyisRowElement
+        )
+        .exists();
 
-    assert
-      .dom(
-        '[data-test-securityAnalysisListTable-markAsPassedIcon]',
-        analyisRowElement
-      )
-      .exists();
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIcon]',
+          analyisRowElement
+        )
+        .exists();
+    }
   }
 };
 
@@ -235,6 +245,8 @@ module('Integration | Component | security/analysis-list', function (hooks) {
             id,
             vulnerability: vulnerabilityModel.id,
             file: secFileModel.id,
+            // The first stays unpassed so the row still offers the action.
+            risk: id === 1 ? ENUMS.RISK.HIGH : ENUMS.RISK.NONE,
           })
         )
       );
@@ -400,7 +412,8 @@ module('Integration | Component | security/analysis-list', function (hooks) {
 
       return schema['security/analyses']
         .find(id)
-        .update({ ...reqBody, overridden_risk: null })
+        // Passing an analysis drops its risk to none on the backend.
+        .update({ ...reqBody, overridden_risk: null, risk: ENUMS.RISK.NONE })
         .toJSON();
     });
 

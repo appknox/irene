@@ -96,6 +96,9 @@ module('Integration | Component | upload-app', function (hooks) {
         // randomizes it between a fake url and '' for other tests' variety
         const submission = server.create('submission', {
           status: ENUMS.SUBMISSION_STATUS.VALIDATING,
+          // The factory picks a random source, but this one is a system upload.
+          source: ENUMS.SUBMISSION_SOURCE.UPLOAD,
+          url: '',
           created_on: dayjs(Date.now()),
           url: '',
         });
@@ -115,6 +118,7 @@ module('Integration | Component | upload-app', function (hooks) {
       // create a new via link submission
       const submission = server.create('submission', {
         status: ENUMS.SUBMISSION_STATUS.VALIDATING,
+        source: ENUMS.SUBMISSION_SOURCE.STORE,
         url: data.url,
         created_on: dayjs(Date.now()),
       });
