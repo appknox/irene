@@ -1,0 +1,31 @@
+.finding-nav {
+  flex-shrink: 0;
+}
+
+.finding-nav-button {
+  padding: 0.2em;
+  border-radius: var(
+    --security-analysis-details-validated-findings-nav-border-radius
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-nav-button-border-color);
+}
+
+.position-select {
+  :global(.ak-select-trigger-root) {
+    width: auto;
+  }
+
+  :global(.ember-basic-dropdown-trigger) {
+    height: 2em;
+    min-width: 3.571em;
+    border-radius: var(
+      --security-analysis-details-validated-findings-nav-border-radius
+    );
+    border-color: var(
+      --security-analysis-details-validated-findings-nav-select-border-color
+    );
+    display: inline-flex;
+    align-items: center;
+  }
+}

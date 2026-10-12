@@ -69,6 +69,7 @@ type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 export interface SecurityAnalysisDetailsRegulatoryCategoriesComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
+    onAnalysisPropsChange?: () => void;
   };
 }
 
@@ -77,6 +78,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @service declare notifications: NotificationService;
   @service declare intl: IntlService;
 
+  @tracked openCategoryKey: string | null = null;
   @tracked owaspsData: RegulatoryDataModel<OwaspModel> = null;
   @tracked owaspmobile2024sData: RegulatoryDataModel<OwaspMobile2024Model> =
     null;
@@ -336,7 +338,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         onChange: this.onCategorySelect('eucra'),
       },
     ] as Array<{
-      key: string;
+      key: RegulatoryCategoryOptionKeys;
       title: string;
       placeholder: string;
       labelKeys: string[];
@@ -349,6 +351,31 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     }>;
   }
 
+  @action isCategoryOpen(key: string) {
+    return this.openCategoryKey === key;
+  }
+
+  @action toggleCategory(key: string) {
+    this.openCategoryKey = this.openCategoryKey === key ? null : key;
+  }
+
+  @action removeCategoryValue(
+    key: RegulatoryCategoryOptionKeys,
+    selected: Array<RegulatoryCategoryModels>,
+    value: RegulatoryCategoryModels
+  ) {
+    const remainingCategories: Array<RegulatoryCategoryModels> = [];
+
+    selected.forEach((item) => {
+      if (item.id !== value.id) {
+        remainingCategories.push(item);
+      }
+    });
+
+    this.analysis?.set(key, remainingCategories);
+    this.args.onAnalysisPropsChange?.();
+  }
+
   @action onCategorySelect(key: RegulatoryCategoryOptionKeys) {
     return (value: SecurityAnalysisModel[RegulatoryCategoryOptionKeys]) =>
       this.handleCategorySelect(key, value);
@@ -359,6 +386,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
     value: SecurityAnalysisModel[typeof key]
   ) {
     this.analysis?.set(key, value);
+
+    // Categories are hasMany relationships, which never set
+    // hasDirtyAttributes, so the page is told about the edit directly.
+    this.args.onAnalysisPropsChange?.();
   }
 
   @action getCategoryOptionLabel<T extends RegulatoryCategoryModels>(
