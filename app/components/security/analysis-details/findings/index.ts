@@ -10,6 +10,7 @@ import type SecurityAnalysisModel from 'irene/models/security/analysis';
 export interface SecurityAnalysisDetailsFindingsComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
+    onAnalysisPropsChange?: () => void;
   };
 }
 
@@ -63,11 +64,17 @@ export default class SecurityAnalysisDetailsFindingsComponent extends Component<
     this.showClearAllFindingsConfirmBox = false;
   }
 
+  @action reportFindingsChanged() {
+    this.args.onAnalysisPropsChange?.();
+  }
+
   @action clearAllFindings() {
     this.analysis?.set('findings', []);
 
     this.newAndOldFindings = [];
     this.showClearAllFindingsConfirmBox = false;
+
+    this.reportFindingsChanged();
   }
 
   @action deleteFinding() {
@@ -81,6 +88,8 @@ export default class SecurityAnalysisDetailsFindingsComponent extends Component<
     this.analysis?.set('findings', [...availableFindings]);
 
     this.showRemoveFindingConfirmBox = false;
+
+    this.reportFindingsChanged();
   }
 
   @action addNewFinding(newFinding: SecurityAnalysisFinding) {
@@ -91,6 +100,8 @@ export default class SecurityAnalysisDetailsFindingsComponent extends Component<
     this.newAndOldFindings = findings;
 
     this.analysis?.set('findings', findings);
+
+    this.reportFindingsChanged();
   }
 }
 
