@@ -215,6 +215,69 @@ module('Integration | Component | security/analysis-details', function (hooks) {
   });
 
   test.each(
+    'it shows the KnoxIQ sections only for an analysis in a KnoxIQ file',
+    [
+      { isKnoxIqFile: true, isKnoxIqEnabled: true, showsKnoxIq: true },
+      { isKnoxIqFile: false, isKnoxIqEnabled: true, showsKnoxIq: false },
+      { isKnoxIqFile: true, isKnoxIqEnabled: false, showsKnoxIq: false },
+    ],
+    async function (assert, { isKnoxIqFile, isKnoxIqEnabled, showsKnoxIq }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = isKnoxIqEnabled;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', isKnoxIqFile);
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert
+        .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      assert
+        .dom(
+          "[data-test-securityAnalysisDetails-sectionCard='validatedFindings']"
+        )
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      // The original findings section is the fallback, so exactly one of the
+      // two is on the page at any time.
+      assert
+        .dom('[data-test-securityAnalysisDetails-findings-root]')
+        .exists({ count: showsKnoxIq ? 0 : 1 });
+    }
+  );
+
+  test('a KnoxIQ analysis with no exploitability yet still shows the sections', async function (assert) {
+    class OrganizationStub extends Service {
+      isKnoxIqEnabled = true;
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.secFileModel.set('isKnoxiqFile', true);
+    this.secAnalysis.set('exploitability', null);
+    this.secAnalysis.set('exploitabilityScore', null);
+    this.secAnalysis.set('exploitabilityLikelihood', null);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+      .exists();
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-findings-root]')
+      .doesNotExist();
+  });
+
+  test.each(
     'it renders analysis details header',
     [{ isPassed: true }, { isPassed: false }],
     async function (assert, { isPassed }) {

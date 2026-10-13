@@ -204,14 +204,12 @@ export default class SecurityAnalysisDetailsAeisComponent extends Component<Secu
   }
 
   @action
-  signalOptionLabel(
-    value: SecurityAnalysisExploitabilitySignal | string | boolean
-  ) {
+  signalOptionLabel(value: string | boolean) {
     return this.intl.t(`securityAnalysisDetails.aeis.signal.${String(value)}`);
   }
 
   @action
-  likelihoodOptionLabel(value: SecurityAnalysisAeisLikelihood | string) {
+  likelihoodOptionLabel(value: string) {
     return this.intl.t(`securityAnalysisDetails.aeis.likelihood.${value}`);
   }
 

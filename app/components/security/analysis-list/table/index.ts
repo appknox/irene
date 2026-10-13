@@ -21,10 +21,9 @@ export default class SecurityAnalysisListTableComponent extends Component<Securi
     return this.args.file;
   }
 
-  get hasAtleastOneAnalysisWithExploitability() {
+  get isKnoxIqFile() {
     return Boolean(
-      this.organization.isKnoxIqEnabled &&
-        this.args.analyses.some((analysis) => analysis.isKnoxIqAnalysis)
+      this.organization.isKnoxIqEnabled && this.args.file?.isKnoxiqFile
     );
   }
 
@@ -50,7 +49,7 @@ export default class SecurityAnalysisListTableComponent extends Component<Securi
         component: 'security/analysis-list/table/risk',
         textAlign: 'left',
       },
-      ...(this.hasAtleastOneAnalysisWithExploitability
+      ...(this.isKnoxIqFile
         ? [
             {
               name: 'Exploitability',

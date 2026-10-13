@@ -193,14 +193,12 @@ export default class SecurityAnalysisModel extends Model {
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
 
+  // KnoxIQ scans a file, not an analysis, and skips analyses it considers not
+  // worth validating. Those still belong to a KnoxIQ file and stay editable,
+  // so the flag comes from the file rather than from this analysis' own
+  // exploitability, which stays null until a validation finishes.
   get isKnoxIqAnalysis() {
-    const hasValue = (value: unknown) => value !== null && value !== undefined;
-
-    return (
-      hasValue(this.exploitability) ||
-      hasValue(this.exploitabilityLikelihood) ||
-      hasValue(this.exploitabilityScore)
-    );
+    return Boolean(this.file.get('isKnoxiqFile'));
   }
 
   /**

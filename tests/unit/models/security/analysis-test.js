@@ -24,6 +24,14 @@ module('Unit | Model | security/analysis', function (hooks) {
       );
     };
 
+    this.pushAnalysisInFile = (fileAttrs = {}, analysisAttrs = {}) => {
+      const file = this.server.create('security/file', fileAttrs);
+
+      this.store.push(this.store.normalize('security/file', file.toJSON()));
+
+      return this.pushAnalysis({ ...analysisAttrs, file: file.id });
+    };
+
     this.pushPassedAnalysis = (overrides = {}) =>
       this.pushAnalysis({
         exploitability_score: PASSED_OVERRIDE.score,
@@ -43,46 +51,32 @@ module('Unit | Model | security/analysis', function (hooks) {
 
   // ─── isKnoxIqAnalysis ──────────────────────────────────────────────────────
 
-  test('it is not a KnoxIQ analysis when all three fields are null', function (assert) {
-    const analysis = this.pushAnalysis({
-      exploitability: null,
-      exploitability_likelihood: null,
-      exploitability_score: null,
-    });
-
-    assert.false(analysis.isKnoxIqAnalysis);
+  test('an analysis in a file KnoxIQ never scanned is not a KnoxIQ analysis', function (assert) {
+    assert.false(
+      this.pushAnalysisInFile({ is_knoxiq_file: false }).isKnoxIqAnalysis
+    );
   });
 
-  test.each(
-    'any one field carrying a value makes it a KnoxIQ analysis',
-    [
-      [{ exploitability: { score: 7.1, signals: {} } }],
-      [{ exploitability_likelihood: ENUMS.KNOXIQ_EXPLOITABILITY.HIGH }],
-      [{ exploitability_score: 7.1 }],
-    ],
-    function (assert, [field]) {
-      const analysis = this.pushAnalysis({
+  test('an analysis in a KnoxIQ-scanned file is a KnoxIQ analysis', function (assert) {
+    assert.true(
+      this.pushAnalysisInFile({ is_knoxiq_file: true }).isKnoxIqAnalysis
+    );
+  });
+
+  test('a KnoxIQ analysis with no exploitability yet still counts', function (assert) {
+    // KnoxIQ skips analyses it considers not worth validating, and leaves
+    // exploitability null until a validation finishes. Neither stops the
+    // analysis belonging to a KnoxIQ file.
+    const analysis = this.pushAnalysisInFile(
+      { is_knoxiq_file: true },
+      {
         exploitability: null,
         exploitability_likelihood: null,
         exploitability_score: null,
-        ...field,
-      });
-
-      assert.true(analysis.isKnoxIqAnalysis);
-    }
-  );
-
-  test('a score of zero still counts as a KnoxIQ analysis', function (assert) {
-    const analysis = this.pushAnalysis({
-      exploitability: null,
-      exploitability_likelihood: null,
-      exploitability_score: 0,
-    });
-
-    assert.true(
-      analysis.isKnoxIqAnalysis,
-      'zero is a real score, not an absent one'
+      }
     );
+
+    assert.true(analysis.isKnoxIqAnalysis);
   });
 
   // ─── hasPassedAeisOverride ─────────────────────────────────────────────────
