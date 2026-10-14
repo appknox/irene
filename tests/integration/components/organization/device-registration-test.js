@@ -38,6 +38,7 @@ const selectors = {
   // real checkbox inside it, so assertions and clicks target the input.
   toggleInput: '[data-test-orgDeviceRegistration-toggle] input',
   goToCyodSettings: '[data-test-orgDeviceRegistration-goToCyodSettings]',
+  accountSettingsLink: '[data-test-orgDeviceRegistration-accountSettingsLink]',
   deviceTable: '[data-test-cyodDeviceTable]',
   deviceTableEmpty: '[data-test-cyodDeviceTable-empty]',
   deviceTableEmptyTitle: '[data-test-cyodDeviceTable-emptyTitle]',
@@ -94,9 +95,21 @@ module(
 
       assert
         .dom(selectors.description)
-        .hasText(t('cyod.registration.description'));
+        .containsText(t('cyod.registration.description'));
 
       assert.dom(selectors.toggleInput).isChecked().isNotDisabled();
+    });
+
+    test('it links to account settings to add a device', async function (assert) {
+      setupOrganization(this, 'withCyodEnabled');
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.description)
+        .containsText(t('cyod.registration.addDeviceHint'));
+
+      assert.dom(selectors.accountSettingsLink).hasText(t('accountSettings'));
     });
 
     test('it hides the device table when the switch is off', async function (assert) {

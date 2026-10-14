@@ -1,0 +1,49 @@
+<div
+  local-class='override-confirm-container'
+  data-test-orgSigningCert-overrideConfirm
+  ...attributes
+>
+  <AkTypography
+    data-test-orgSigningCert-overrideConfirmTitle
+    @variant='h5'
+    @fontWeight='medium'
+    class='p-2'
+  >
+    {{t 'cyod.signingCert.overrideQuestion'}}
+  </AkTypography>
+
+  <AkDivider @color='dark' />
+
+  <div local-class='override-confirm-note'>
+    <AkTypography data-test-orgSigningCert-overrideConfirmInfo @variant='body2'>
+      {{t 'cyod.signingCert.projectCertOverrideWarning'}}
+    </AkTypography>
+  </div>
+
+  <AkDivider @color='dark' />
+
+  <AkStack
+    @alignItems='center'
+    @spacing='1.5'
+    local-class='override-action-container'
+    class='p-2'
+  >
+    <AkButton
+      data-test-orgSigningCert-overrideConfirmBtn
+      @loading={{@isUploading}}
+      {{on 'click' @onConfirm}}
+    >
+      {{t 'saveAndProceed'}}
+    </AkButton>
+
+    <AkButton
+      data-test-orgSigningCert-overrideCancelBtn
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{@isUploading}}
+      {{on 'click' @onCancel}}
+    >
+      {{t 'cancel'}}
+    </AkButton>
+  </AkStack>
+</div>

@@ -218,11 +218,56 @@ function routes() {
   this.get(
     '/organizations/:id/projects/:projectId/signing-certificate/',
     (schema) => {
+      // No scope field on the mirage model, so by convention the first
+      // created certificate stands in for "the project's own cert" and any
+      // others stand in for the org's collection -- matching how the real
+      // endpoint pairs a project's singleton with its org's certificates.
+      // Only the org's active cert is ever relevant here, same as the real
+      // endpoint, which never surfaces a disabled org cert at project scope.
+      const [projectCert, ...orgCerts] =
+        schema.signingCertificates.all().models;
+
+      const activeOrgCert = orgCerts.find((c) => c.is_active);
+
+      return {
+        project_certificate: projectCert ? projectCert.toJSON() : null,
+        organization_certificates: activeOrgCert
+          ? [activeOrgCert.toJSON()]
+          : [],
+      };
+    }
+  );
+
+  this.post(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema, req) => {
+      // A fresh upload replaces whatever the project's own cert was, same as
+      // the real endpoint's update_or_create, and becomes active immediately.
+      const { name } = JSON.parse(req.requestBody);
+      const existing = schema.signingCertificates.first();
+
+      const cert = existing
+        ? existing.update({ name, is_active: true })
+        : schema.signingCertificates.create({ name, is_active: true });
+
+      return cert.toJSON();
+    }
+  );
+
+  this.patch(
+    '/organizations/:id/projects/:projectId/signing-certificate/',
+    (schema, req) => {
       const cert = schema.signingCertificates.first();
 
-      return cert
-        ? cert.toJSON()
-        : new Response(404, {}, { detail: 'Not found.' });
+      if (!cert) {
+        return new Response(404, {}, { detail: 'Not found.' });
+      }
+
+      const { is_active } = JSON.parse(req.requestBody);
+
+      cert.update({ is_active });
+
+      return cert.toJSON();
     }
   );
 
