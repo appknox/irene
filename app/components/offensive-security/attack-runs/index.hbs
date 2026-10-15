@@ -14,6 +14,8 @@
           >
             {{t 'offensiveSecurity.allTargets'}}
           </AkTypography>
+
+          <UploadApp::Status />
         </AkStack>
 
         <AkTypography @variant='body2' @color='textSecondary' class='mt-1'>
@@ -21,19 +23,37 @@
         </AkTypography>
       </AkStack>
 
-      {{! Search Box }}
-      <div local-class='search-input'>
-        <AkTextField
-          @placeholder={{t 'offensiveSecurity.searchByTarget'}}
-          @value={{this.searchQuery}}
-          {{on 'input' this.handleSearchChange}}
-          data-test-offensiveSecurity-attackRuns-search
+      <AkStack @direction='row' @alignItems='center' @spacing='2'>
+        {{! Search Box }}
+        <div local-class='search-input'>
+          <AkTextField
+            @placeholder={{t 'offensiveSecurity.searchByTarget'}}
+            @value={{this.searchQuery}}
+            {{on 'input' this.handleSearchChange}}
+            data-test-offensiveSecurity-attackRuns-search
+          >
+            <:leftAdornment>
+              <AkIcon @iconName='search' @color='textSecondary' />
+            </:leftAdornment>
+          </AkTextField>
+        </div>
+
+        {{! New Assessment Button }}
+        <AkButton
+          @variant='filled'
+          @color='primary'
+          local-class='new-assessment-btn'
+          data-test-offensiveSecurity-attackRuns-newAssessmentBtn
+          {{on 'click' this.navigateToNewAssessment}}
         >
-          <:leftAdornment>
-            <AkIcon @iconName='search' @color='textSecondary' />
-          </:leftAdornment>
-        </AkTextField>
-      </div>
+          <:leftIcon>
+            <AkIcon @iconName='cloud-upload' />
+          </:leftIcon>
+          <:default>
+            {{t 'offensiveSecurity.newAssessment'}}
+          </:default>
+        </AkButton>
+      </AkStack>
     </AkStack>
   </div>
 

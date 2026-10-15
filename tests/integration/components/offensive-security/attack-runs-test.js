@@ -554,4 +554,19 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.dom(SELECTORS.completedCount).hasText('4');
     assert.dom(SELECTORS.failedCount).hasText('5');
   });
+
+  test('clicking New Assessment button transitions to new assessment route', async function (assert) {
+    serveScans(this, [buildScan({ id: 1 })]);
+
+    await render(TEMPLATE);
+    await click('[data-test-offensiveSecurity-attackRuns-newAssessmentBtn]');
+
+    const router = this.owner.lookup('service:router');
+
+    assert.strictEqual(
+      router.lastRoute,
+      'authenticated.offensive-security.new-assessment'
+    );
+  });
 });
+

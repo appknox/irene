@@ -513,6 +513,11 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   @action
+  navigateToNewAssessment(): void {
+    this.router.transitionTo('authenticated.offensive-security.new-assessment');
+  }
+
+  @action
   handleItemPerPageChange({ limit }: { limit: number }): void {
     this.setRouteQueryParams({ scan_limit: limit, scan_offset: 0 });
 

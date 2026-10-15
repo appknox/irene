@@ -11,15 +11,7 @@
     @user={{@user}}
     as |topNav|
   >
-    <AkStack local-class='top-nav-content' @justifyContent='space-between'>
-      <AkStack @alignItems='center' @spacing='1'>
-        <AkTypography data-test-topNav-startScanLabel @color='inherit'>
-          {{t 'startNewScan'}}
-        </AkTypography>
-
-        <UploadApp />
-      </AkStack>
-
+    <AkStack local-class='top-nav-content' @justifyContent='flex-end'>
       <AkStack @alignItems='center' @spacing='0.5'>
         <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
       </AkStack>

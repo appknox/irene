@@ -22,8 +22,8 @@
 }
 
 .divider {
-  border-left: 1px solid;
-  height: 30px;
+  border-left: 1px solid var(--border-color-1, #e0e0e0);
+  height: 24px;
 }
 
 .cursor-pointer {

@@ -1,6 +1,8 @@
 <AkStack @spacing='1.5' @alignItems='center'>
   {{#if this.hasSubmissions}}
-    <div local-class='divider'></div>
+    {{#unless @hideDivider}}
+      <div local-class='divider'></div>
+    {{/unless}}
 
     <AkLoader
       data-test-uploadAppStatus-loader

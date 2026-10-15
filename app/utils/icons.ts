@@ -22,6 +22,7 @@ export const MaterialSymbolsSet = [
   'edit-outline',
   'note-add',
   'refresh',
+  'autorenew',
   'arrow-left',
   'arrow-right',
   'arrow-right-alt',

@@ -13,6 +13,7 @@ import type AnalyticsService from 'irene/services/analytics';
 import type UploadAppService from 'irene/services/upload-app';
 import type UploadAppModel from 'irene/models/upload-app';
 import type RealtimeService from 'irene/services/realtime';
+import type OffsecNewAssessmentService from 'irene/services/offsec-new-assessment';
 
 export default class UploadAppViaSystemComponent extends Component {
   @service declare store: Store;
@@ -23,6 +24,7 @@ export default class UploadAppViaSystemComponent extends Component {
   @service declare analytics: AnalyticsService;
   @service declare router: RouterService;
   @service declare realtime: RealtimeService;
+  @service declare offsecNewAssessment: OffsecNewAssessmentService;
 
   tErrorWhileFetching: string;
   tErrorWhileUploading: string;
@@ -87,6 +89,24 @@ export default class UploadAppViaSystemComponent extends Component {
           withCredentials: false,
         })
       );
+
+      if (isOffsec) {
+        this.offsecNewAssessment.setUploadedApp({
+          uploadItem,
+          file: {
+            name: file.name,
+            size: file.size,
+          },
+        });
+
+        this.uploadApp.updateSystemFileQueue(queue);
+        this.notify.success(this.tFileUploadedSuccessfully);
+        this.router.transitionTo(
+          'authenticated.offensive-security.new-assessment'
+        );
+
+        return;
+      }
 
       await waitForPromise(
         uploadItem.save({ adapterOptions: { offsec: isOffsec } })

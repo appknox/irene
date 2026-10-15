@@ -81,7 +81,7 @@ export default class UploadAppAdapter extends commondrf {
     type: { modelName: string | number },
     snapshot: Snapshot
   ) {
-    const data = {};
+    const data: Record<string, unknown> = {};
 
     const modelName = type.modelName as 'upload-app';
     const serializer = store.serializerFor(modelName);
@@ -91,6 +91,15 @@ export default class UploadAppAdapter extends commondrf {
       type as ModelSchema<keyof ModelRegistry>,
       snapshot
     );
+
+    const adapterOptions = snapshot?.adapterOptions as
+      | Record<string, unknown>
+      | undefined;
+
+    if (adapterOptions) {
+      const { offsec, ...extraData } = adapterOptions;
+      Object.assign(data, extraData);
+    }
 
     const url = this.buildURL(
       type.modelName,

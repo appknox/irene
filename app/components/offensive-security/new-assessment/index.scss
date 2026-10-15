@@ -1,0 +1,409 @@
+.new-assessment-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.header-card {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background-color: var(--offensive-security-scan-results-card-bg-color, #ffffff);
+  border: var(--offensive-security-scan-results-card-border, 1px solid var(--border-color-1));
+  border-radius: var(--offensive-security-scan-results-card-border-radius, 8px);
+  margin-bottom: 24px;
+}
+
+.back-to-runs-btn {
+  white-space: nowrap;
+}
+
+// ─── Phase 1: Dropzone ────────────────────────────────────────────────────────
+
+.dropzone-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 240px;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1.5px dashed var(--gray-300, #d1d5db);
+  border-radius: 12px;
+  padding: 56px 32px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover,
+  &.is-dragover {
+    border-color: var(--primary-color, #e24a2a);
+    background-color: rgba(255, 249, 247, 0.7);
+  }
+
+  &.is-uploading {
+    cursor: wait;
+    pointer-events: none;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dropzone-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: var(--gray-400, #9ca3af);
+}
+
+.dropzone-cloud-icon {
+  font-size: 36px;
+}
+
+.dropzone-main-text {
+  color: var(--gray-900, #111827);
+  margin-bottom: 4px;
+}
+
+.dropzone-notice {
+  color: var(--gray-500, #6b7280);
+  max-width: 580px;
+}
+
+.uploading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-color, #e24a2a);
+  width: 100%;
+  max-width: 380px;
+}
+
+.spinner-icon {
+  animation: spin 1s linear infinite;
+  font-size: 32px;
+}
+
+.progress-container {
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.progress-percentage {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
+  min-width: 38px;
+  text-align: right;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ─── Phase 2: Assessment Form Flow ───────────────────────────────────────────
+
+.assessment-form-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.uploaded-build-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 8px;
+  padding: 14px 20px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.uploaded-build-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: var(--gray-100, #f3f4f6);
+  border-radius: 6px;
+  color: var(--gray-600, #4b5563);
+}
+
+.file-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.file-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+}
+
+.file-size {
+  font-size: 13px;
+  color: var(--gray-500, #6b7280);
+}
+
+.change-build-btn {
+  font-size: 13px;
+}
+
+.section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+// ─── Assessment Cards ────────────────────────────────────────────────────────
+
+.assessment-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.assessment-card {
+  background-color: var(--white, #ffffff);
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  &:hover {
+    border-color: var(--gray-300, #d1d5db);
+  }
+
+  &.is-selected {
+    border-color: var(--primary-color, #e24a2a);
+    background-color: #fff6f3;
+  }
+}
+
+.card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.radio-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-300, #d1d5db);
+  background: var(--white, #ffffff);
+  flex-shrink: 0;
+
+  &.checked {
+    border-color: var(--primary-color, #e24a2a);
+  }
+}
+
+.radio-inner-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--primary-color, #e24a2a);
+}
+
+.card-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: var(--gray-100, #f3f4f6);
+  flex-shrink: 0;
+
+  &.target-icon {
+    color: var(--primary-color, #e24a2a);
+  }
+
+  &.shield-icon {
+    color: var(--gray-600, #4b5563);
+  }
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+}
+
+.coverage-badge {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-600, #4b5563);
+  background-color: var(--gray-100, #f3f4f6);
+  padding: 2px 8px;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.card-description {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--gray-600, #4b5563);
+  margin: 0;
+  padding-left: 28px;
+}
+
+// ─── Test Credentials ────────────────────────────────────────────────────────
+
+.credentials-table-card {
+  background-color: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  padding: 20px 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.hidden-autofill-trap {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.credentials-table-header {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 40px;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.header-col {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+}
+
+.credentials-rows-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.credentials-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr 40px;
+  gap: 16px;
+  align-items: center;
+}
+
+.col-role,
+.col-username,
+.col-password {
+  min-width: 0;
+}
+
+.col-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-show-hide {
+  background: transparent;
+  border: none;
+  color: var(--gray-500, #6b7280);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  &:hover {
+    color: var(--gray-900, #111827);
+  }
+}
+
+.remove-cred-btn {
+  color: var(--gray-400, #9ca3af);
+
+  &:hover {
+    color: var(--error-color, #dc2626);
+  }
+}
+
+.add-role-container {
+  margin-top: 16px;
+}
+
+.add-role-btn {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+// ─── Actions Row ─────────────────────────────────────────────────────────────
+
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.begin-assessment-btn {
+  min-width: 260px;
+  font-weight: 600;
+}
