@@ -27,6 +27,7 @@ import {
 export interface SecurityAnalysisDetailsHeaderComponentSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
+    isKnoxIqEnabled?: boolean;
     currentCVSSMetrics: CvssV4Metrics;
     updateCVSSDetails(analysisCvssDetails: AnalysisCvssUpdateDetails): void;
     updateLegacyCVSSDetails(
@@ -64,6 +65,10 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
     return this.statuses.find((s) => s.value === this.analysis?.status);
   }
 
+  get ireneAnalysisRoute() {
+    return this.args.isKnoxIqEnabled ? 'knox-analysis' : 'analysis';
+  }
+
   get ireneFilePath() {
     if (this.analysis?.file) {
       const fileId = this.analysis.file.get('id');
@@ -73,12 +78,18 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
         ireneHost,
         'dashboard/file',
         fileId,
-        'analysis',
+        this.ireneAnalysisRoute,
         this.analysis?.id,
       ].join('/');
     }
 
     return '';
+  }
+
+  get markPassedConfirmTitle() {
+    return this.args.isKnoxIqEnabled
+      ? this.intl.t('securityAnalysisDetails.header.markAsPassedConfirmKnoxIq')
+      : this.intl.t('securityAnalysisDetails.header.markAsPassedConfirm');
   }
 
   @action selectStatus(param: { value: SecurityAnalysisModel['status'] }) {

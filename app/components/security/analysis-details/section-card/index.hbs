@@ -1,0 +1,55 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  local-class='section-card'
+  ...attributes
+  data-test-securityAnalysisDetails-sectionCard='{{@testId}}'
+>
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='1.5'
+    local-class='section-card-header'
+    data-test-securityAnalysisDetails-sectionCard-header
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography
+        @variant='h6'
+        @fontWeight='bold'
+        data-test-securityAnalysisDetails-sectionCard-title
+      >
+        {{@title}}
+      </AkTypography>
+
+      {{#if @description}}
+        <AkTypography
+          @variant='body2'
+          @color='textSecondary'
+          data-test-securityAnalysisDetails-sectionCard-description
+        >
+          {{@description}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    {{#if (has-block 'actions')}}
+      <AkStack
+        @alignItems='center'
+        @spacing='1'
+        data-test-securityAnalysisDetails-sectionCard-actions
+      >
+        {{yield to='actions'}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <div
+    local-class='section-card-body'
+    data-test-securityAnalysisDetails-sectionCard-body
+  >
+    {{yield to='content'}}
+  </div>
+</AkStack>

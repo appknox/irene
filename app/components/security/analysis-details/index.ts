@@ -23,6 +23,7 @@ import {
 
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
+import type OrganizationService from 'irene/services/organization';
 
 import type {
   CvssV3Metrics,
@@ -57,8 +58,12 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @service declare router: RouterService;
   @service declare notifications: NotificationService;
   @service declare ajax: IreneAjaxService;
+  @service declare organization: OrganizationService;
 
   @tracked isSaveActionOnly = false;
+  @tracked hasUnsavedCvssChanges = false;
+  @tracked hasUnsavedRegulatoryChanges = false;
+  @tracked hasUnsavedFindingsChanges = false;
 
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
 
@@ -74,6 +79,24 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     this.analysisDetails = this.args.analysisDetails;
 
     runTask(this, () => this.setDefaultCVSSDetails());
+  }
+
+  // KnoxIQ is an organization feature, so nothing KnoxIQ-related shows when
+  // the organization does not have it, whatever the analysis carries.
+  get isKnoxIqAnalysis() {
+    return Boolean(
+      this.organization.isKnoxIqEnabled &&
+        this.analysisDetails?.isKnoxIqAnalysis
+    );
+  }
+
+  get analysisHasUnsavedChanges() {
+    return (
+      this.hasUnsavedCvssChanges ||
+      this.hasUnsavedRegulatoryChanges ||
+      this.hasUnsavedFindingsChanges ||
+      Boolean(this.analysisDetails?.hasDirtyAttributes)
+    );
   }
 
   get tPleaseTryAgain() {
@@ -108,11 +131,17 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   }
 
   get analysisLegacyCvssVersion() {
-    return this.hasLegacyCvssData
-      ? this.analysisDetails?.legacyCvssVersion
-      : this.analysisIsV4WithoutLegacyCvss
-        ? ENUMS.SUPPORTED_CVSS_VERSIONS.V3
-        : this.analysisCurrentCvssVersion;
+    if (this.hasLegacyCvssData) {
+      return this.analysisDetails?.legacyCvssVersion;
+    }
+
+    // A v4-only analysis has no legacy vector yet, so the legacy panel opens
+    // on v3 rather than mirroring the current version.
+    if (this.analysisIsV4WithoutLegacyCvss) {
+      return ENUMS.SUPPORTED_CVSS_VERSIONS.V3;
+    }
+
+    return this.analysisCurrentCvssVersion;
   }
 
   get analysisCurrentCvssIsLegacyCvss() {
@@ -137,9 +166,21 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     };
   }
 
+  @action
+  markRegulatoryChanged() {
+    this.hasUnsavedRegulatoryChanges = true;
+  }
+
+  @action
+  markFindingsChanged() {
+    this.hasUnsavedFindingsChanges = true;
+  }
+
   @action triggerUpdateCurrentCVSSDetails(
     details: AnalysisCvssUpdateDetails
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v4State.applyMetrics(details.cvssMetrics);
     this.v4State.base = details.cvssBase;
     this.v4State.risk = details.risk;
@@ -150,6 +191,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @action triggerUpdateLegacyCVSSDetails(
     details: AnalysisCvssUpdateDetailsLegacy
   ): void {
+    this.hasUnsavedCvssChanges = true;
+
     this.v3State.applyMetrics(details.cvssMetrics);
     this.v3State.base = details.cvssBase;
     this.v3State.risk = details.risk;
@@ -397,6 +440,10 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       this.analysisDetails?.set('risk', response['risk']);
 
       this.setDefaultCVSSDetails();
+
+      this.hasUnsavedCvssChanges = false;
+      this.hasUnsavedRegulatoryChanges = false;
+      this.hasUnsavedFindingsChanges = false;
 
       // Return to the file page if requested
       if (backToFilePage) {

@@ -113,19 +113,29 @@ const assertAnalysisRowDetails = (assert, sa) => {
       .exists()
       .containsText(analysisStatusTextMap[String(analysisStatus)]);
 
-    assert
-      .dom(
-        '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
-        analyisRowElement
-      )
-      .exists();
+    // An already-passed analysis has nothing left to pass.
+    if (sa.isPassed) {
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
+          analyisRowElement
+        )
+        .doesNotExist();
+    } else {
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIconBtn]',
+          analyisRowElement
+        )
+        .exists();
 
-    assert
-      .dom(
-        '[data-test-securityAnalysisListTable-markAsPassedIcon]',
-        analyisRowElement
-      )
-      .exists();
+      assert
+        .dom(
+          '[data-test-securityAnalysisListTable-markAsPassedIcon]',
+          analyisRowElement
+        )
+        .exists();
+    }
   }
 };
 
@@ -235,6 +245,8 @@ module('Integration | Component | security/analysis-list', function (hooks) {
             id,
             vulnerability: vulnerabilityModel.id,
             file: secFileModel.id,
+            // The first stays unpassed so the row still offers the action.
+            risk: id === 1 ? ENUMS.RISK.HIGH : ENUMS.RISK.NONE,
           })
         )
       );
@@ -242,6 +254,32 @@ module('Integration | Component | security/analysis-list', function (hooks) {
 
     this.setProperties({ secFileModel, secProj, window, store, secAnalyses });
   });
+
+  test.each(
+    'it shows the exploitability column only for a KnoxIQ file',
+    [
+      { isKnoxIqFile: true, isKnoxIqEnabled: true, showsColumn: true },
+      { isKnoxIqFile: false, isKnoxIqEnabled: true, showsColumn: false },
+      { isKnoxIqFile: true, isKnoxIqEnabled: false, showsColumn: false },
+    ],
+    async function (assert, { isKnoxIqFile, isKnoxIqEnabled, showsColumn }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = isKnoxIqEnabled;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', isKnoxIqFile);
+
+      await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);
+
+      const headers = findAll('[data-test-ak-table] thead th').map((th) =>
+        th.textContent.trim()
+      );
+
+      assert.strictEqual(headers.includes('Exploitability'), showsColumn);
+    }
+  );
 
   test('it renders analysis list', async function (assert) {
     assert.expect();
@@ -398,10 +436,13 @@ module('Integration | Component | security/analysis-list', function (hooks) {
         PASSED_CVSS_V3_METRICS
       );
 
-      return schema['security/analyses']
-        .find(id)
-        .update({ ...reqBody, overridden_risk: null })
-        .toJSON();
+      return (
+        schema['security/analyses']
+          .find(id)
+          // Passing an analysis drops its risk to none on the backend.
+          .update({ ...reqBody, overridden_risk: null, risk: ENUMS.RISK.NONE })
+          .toJSON()
+      );
     });
 
     await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);

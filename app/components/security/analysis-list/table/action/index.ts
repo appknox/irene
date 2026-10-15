@@ -53,6 +53,10 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
     return this.args.analysis;
   }
 
+  get showMarkAsPassedButton() {
+    return !this.analysis.isPassed;
+  }
+
   @action confirmCallback() {
     this.markAsPassed.perform();
 
@@ -116,6 +120,7 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
       });
 
       await this.analysis.reload();
+
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
     } catch (err) {
       this.notify.error(parseError(err, this.tPleaseTryAgain));

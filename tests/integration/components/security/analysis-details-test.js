@@ -180,7 +180,11 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     );
 
     // Creates vulnerabilities and maps them to individual analysis
-    const vulnerability = this.server.create('vulnerability');
+    // Pinned non-manual: a manual test case keeps the plain display, which
+    // would make the KnoxIQ gating tests depend on the factory's random types.
+    const vulnerability = this.server.create('vulnerability', {
+      types: [ENUMS.VULNERABILITY_TYPE.STATIC],
+    });
 
     const vulnerabilityModel = store.push(
       store.normalize(
@@ -198,6 +202,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
             file: secFileModel.id,
             risk: ENUMS.RISK.HIGH,
             status: ENUMS.ANALYSIS_STATUS.COMPLETED,
+            exploitability: null,
           })
           .toJSON()
       )
@@ -211,6 +216,69 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       vulnerabilityModel,
       secAnalysis,
     });
+  });
+
+  test.each(
+    'it shows the KnoxIQ sections only for an analysis in a KnoxIQ file',
+    [
+      { isKnoxIqFile: true, isKnoxIqEnabled: true, showsKnoxIq: true },
+      { isKnoxIqFile: false, isKnoxIqEnabled: true, showsKnoxIq: false },
+      { isKnoxIqFile: true, isKnoxIqEnabled: false, showsKnoxIq: false },
+    ],
+    async function (assert, { isKnoxIqFile, isKnoxIqEnabled, showsKnoxIq }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = isKnoxIqEnabled;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', isKnoxIqFile);
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert
+        .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      assert
+        .dom(
+          "[data-test-securityAnalysisDetails-sectionCard='validatedFindings']"
+        )
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      // The original findings section is the fallback, so exactly one of the
+      // two is on the page at any time.
+      assert
+        .dom('[data-test-securityAnalysisDetails-findings-root]')
+        .exists({ count: showsKnoxIq ? 0 : 1 });
+    }
+  );
+
+  test('a KnoxIQ analysis with no exploitability yet still shows the sections', async function (assert) {
+    class OrganizationStub extends Service {
+      isKnoxIqEnabled = true;
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.secFileModel.set('isKnoxiqFile', true);
+    this.secAnalysis.set('exploitability', null);
+    this.secAnalysis.set('exploitabilityScore', null);
+    this.secAnalysis.set('exploitabilityLikelihood', null);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+      .exists();
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-findings-root]')
+      .doesNotExist();
   });
 
   test.each(
@@ -257,11 +325,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           )
         );
 
+      const analysisStatusCard =
+        "[data-test-securityAnalysisDetails-sectionCard='analysisStatus']";
+
       assert
-        .dom('[data-test-securityAnalysisDetailsHeader-analysisStatusInfoText]')
+        .dom(
+          `${analysisStatusCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+        )
         .exists()
-        .containsText('Analysis Status')
-        .containsText(
+        .hasText('Analysis Status');
+
+      assert
+        .dom(
+          `${analysisStatusCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+        )
+        .exists()
+        .hasText(
           'Changing the status here will change the current status for this analysis in the file page.'
         );
 
@@ -321,7 +400,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       .doesNotExist();
 
     assert
-      .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
+      .dom('[data-test-securityAnalysisDetails-scoreChip-box]')
       .exists()
       .containsText('0')
       .containsText(riskText([ENUMS.RISK.NONE])); // Should be passed risk
@@ -486,7 +565,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         .exists();
 
       assert
-        .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
+        .dom('[data-test-securityAnalysisDetails-scoreChip-box]')
         .exists()
         .containsText(String(this.secAnalysis.cvssBase))
         .containsText(riskText([this.secAnalysis.risk]));
@@ -537,26 +616,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
       if (isInvalidCvssMetric) {
         assert
-          .dom(
-            '[data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBaseIcon]'
-          )
+          .dom('[data-test-securityAnalysisDetails-scoreChip-invalid]')
           .exists();
 
         assert
-          .dom(
-            '[data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBase]'
-          )
+          .dom('[data-test-securityAnalysisDetails-scoreChip-invalidLabel]')
           .exists()
           .containsText('Invalid vector');
       } else {
         // Checks the assigned cvss base and risk from the cvss endpoint ('/cvss')
         assert
-          .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBase]')
+          .dom('[data-test-securityAnalysisDetails-scoreChip-score]')
           .exists()
           .containsText(String(cvssBase));
 
         assert
-          .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]')
+          .dom('[data-test-securityAnalysisDetails-scoreChip-label]')
           .exists()
           .containsText(riskText([cvssRisk]));
       }
@@ -633,7 +708,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     assert.dom('[data-test-securityAnalysisDetails-header-container]').exists();
 
     assert
-      .dom('[data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk]')
+      .dom('[data-test-securityAnalysisDetails-scoreChip-box]')
       .exists()
       .containsText(String(this.secAnalysis.cvssBase))
       .containsText(riskText([this.secAnalysis.risk]));
@@ -756,6 +831,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
               vulnerability: this.vulnerabilityModel.id,
               file: this.secFileModel.id,
               risk: ENUMS.RISK.HIGH,
+              exploitability: null,
             })
             .toJSON()
         )
@@ -766,7 +842,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       );
 
       assert
-        .dom('[data-test-securityAnalysisDetails-regulatoryCategories-header]')
+        .dom(
+          "[data-test-securityAnalysisDetails-sectionCard='regulatoryCategories'] [data-test-securityAnalysisDetails-sectionCard-title]"
+        )
         .exists()
         .containsText('Regulatory Categories');
 
@@ -774,10 +852,15 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
       assert
         .dom(
-          `${reguatorySectionContainer} [data-test-securityAnalysisDetails-regulatorySection-title] `
+          `${reguatorySectionContainer} [data-test-securityAnalysisDetails-regulatoryCategories-title]`
         )
         .exists()
         .hasText(title);
+
+      // The category body only mounts once its accordion is expanded.
+      await click(
+        `${reguatorySectionContainer} [data-test-securityAnalysisDetails-regulatoryCategories-toggle]`
+      );
 
       const regulatorySelectTrigger = `${reguatorySectionContainer} [data-test-securityAnalysisDetails-regulatoryCategories-select] .${AkSelectClasses.trigger}`;
 
@@ -880,11 +963,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
       );
 
+      const attachmentsCard =
+        "[data-test-securityAnalysisDetails-sectionCard='attachments']";
+
       assert
-        .dom('[data-test-securityAnalysisDetails-attachments-header]')
+        .dom(
+          `${attachmentsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+        )
         .exists()
-        .containsText('Attachments')
-        .containsText('Files relevant to this analysis');
+        .hasText('Attachments');
+
+      assert
+        .dom(
+          `${attachmentsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+        )
+        .exists()
+        .hasText('Files relevant to this analysis');
 
       const emptyFileListSelector =
         '[data-test-securityAnalysisDetails-attachments-emptyUploadMessage]';
@@ -895,19 +989,15 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         .containsText('No Files Uploaded');
 
       assert
-        .dom(
-          '[data-test-securityAnalysisDetails-attachments-uploadFileTrigger]'
-        )
+        .dom('[data-test-attachmentDropzone-label]')
         .exists()
-        .containsText('Upload File');
+        .containsText('Upload')
+        .containsText('Choose a file or drag & drop it here');
 
       // Creates a new file with extension
       const file = new File(['Test file'], fileName, { type: ext });
 
-      await selectFiles(
-        '[data-test-securityAnalysisDetails-attachments-uploadFileInput]',
-        file
-      );
+      await selectFiles('[data-test-attachmentDropzone-input]', file);
 
       const notify = this.owner.lookup('service:notifications');
 
@@ -926,22 +1016,18 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         const attachmentSelector = `[data-test-securityAnalysisDetails-attachments-uploadedFile='${newAttachment.id}']`;
 
         assert
-          .dom(
-            `${attachmentSelector} [data-test-securityAnalysisDetails-attachments-uploadedFile-extension]`
-          )
+          .dom(`${attachmentSelector} [data-test-attachmentFileChip-extension]`)
           .exists()
           .hasAttribute('data-type', fileExtension([newAttachment.name]));
 
         assert
-          .dom(
-            `${attachmentSelector} [data-test-securityAnalysisDetails-attachments-uploadedFile-name]`
-          )
+          .dom(`${attachmentSelector} [data-test-attachmentFileChip-name]`)
           .exists()
           .hasText(newAttachment.name);
 
         // DOWNLOAD FILE ACTION
         await click(
-          `${attachmentSelector} [data-test-securityAnalysisDetails-attachments-uploadedFile-downloadBtn]`
+          `${attachmentSelector} [data-test-attachmentFileChip-downloadBtn]`
         );
 
         const window = this.owner.lookup('service:browser/window');
@@ -951,7 +1037,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
         // DELETE FILE ACTION
         await click(
-          `${attachmentSelector} [data-test-securityAnalysisDetails-attachments-uploadedFile-deleteBtn]`
+          `${attachmentSelector} [data-test-attachmentFileChip-removeBtn]`
         );
 
         assert
@@ -1054,13 +1140,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]',
       };
 
+      const findingsCard =
+        "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
       assert
-        .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+        )
         .exists()
-        .containsText('Findings')
-        .containsText(
-          'All discoveries associated with this vulnerability analysis'
-        );
+        .hasText('Findings');
+
+      assert
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+        )
+        .exists()
+        .hasText('All discoveries associated with this vulnerability analysis');
 
       assert
         .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')
@@ -1220,13 +1315,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
+    const findingsCard =
+      "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
     assert
-      .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+      )
       .exists()
-      .containsText('Findings')
-      .containsText(
-        'All discoveries associated with this vulnerability analysis'
-      );
+      .hasText('Findings');
+
+    assert
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+      )
+      .exists()
+      .hasText('All discoveries associated with this vulnerability analysis');
 
     assert
       .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')
@@ -1403,13 +1507,13 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     assert
       .dom(
-        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssBase]`
+        `${legacyAccordion} [data-test-securityAnalysisDetails-scoreChip-score]`
       )
       .hasText(String(legacyCvssBase), 'Legacy base score is displayed');
 
     assert
       .dom(
-        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]`
+        `${legacyAccordion} [data-test-securityAnalysisDetails-scoreChip-label]`
       )
       .containsText(
         riskText([ENUMS.RISK.HIGH]),
@@ -1490,7 +1594,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     // Legacy panel should reflect updated score from /cvss
     assert
       .dom(
-        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssBase]`
+        `${legacyAccordion} [data-test-securityAnalysisDetails-scoreChip-score]`
       )
       .containsText(
         String(updatedCvssBase),
@@ -1499,7 +1603,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     assert
       .dom(
-        `${legacyAccordion} [data-test-securityAnalysisDetails-cvssMetrics-cvssRisk]`
+        `${legacyAccordion} [data-test-securityAnalysisDetails-scoreChip-label]`
       )
       .containsText(
         riskText([updatedCvssRisk]),
