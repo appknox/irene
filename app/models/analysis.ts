@@ -26,9 +26,11 @@ import type SamaModel from './sama';
 import type Pcidss4Model from './pcidss4';
 import type DoraModel from './dora';
 import type EucraModel from './eucra';
+import type PopiaModel from './popia';
 import type { KnoxiqValidatedFindingExploitability } from './knoxiq-validated-finding';
 
 irregular('asvs', 'asvses');
+irregular('popia', 'popias');
 
 export interface CvssMetricHumanized {
   key: string;
@@ -152,6 +154,9 @@ export default class AnalysisModel extends Model {
 
   @hasMany('eucra', { async: true, inverse: null })
   declare eucra: AsyncHasMany<EucraModel>;
+
+  @hasMany('popia', { async: true, inverse: null })
+  declare popia: AsyncHasMany<PopiaModel>;
 
   @belongsTo('vulnerability', { async: true, inverse: null })
   declare vulnerability: AsyncBelongsTo<VulnerabilityModel>;
@@ -312,6 +317,10 @@ export default class AnalysisModel extends Model {
 
   get showEucra() {
     return this.file.get('profile')?.get('reportPreference')?.show_eucra?.value;
+  }
+
+  get showPopia() {
+    return this.file.get('profile')?.get('reportPreference')?.show_popia?.value;
   }
 
   get vulnerabilityTypes() {

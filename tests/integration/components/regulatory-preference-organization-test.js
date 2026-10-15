@@ -94,6 +94,13 @@ module(
           find('[data-test-preference="EU CRA"]')
         )
         .hasText('EU CRA');
+
+      assert
+        .dom(
+          '[data-test-ak-form-label]',
+          find('[data-test-preference="POPIA"]')
+        )
+        .hasText('POPIA');
     });
 
     test('it renders regulatory list tooltip', async function (assert) {
@@ -110,6 +117,7 @@ module(
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
       const eucraContainer = find('[data-test-preference="EU CRA"]');
+      const popiaContainer = find('[data-test-preference="POPIA"]');
 
       // pci-dss
       await triggerEvent(
@@ -217,6 +225,21 @@ module(
       );
 
       assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
+
+      // popia
+      await triggerEvent(
+        `#${popiaContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseenter'
+      );
+
+      assert.dom('[data-test-ak-tooltip-content]').hasText(t('popiaExpansion'));
+
+      await triggerEvent(
+        `#${popiaContainer.id} [data-test-ak-tooltip-root]`,
+        'mouseleave'
+      );
+
+      assert.dom('[data-test-ak-tooltip-content]').doesNotExist();
     });
 
     test('it renders regulatory inclusion status based on organization preference', async function (assert) {
@@ -229,6 +252,7 @@ module(
         json.report_preference.show_sama = true;
         json.report_preference.show_dora = false;
         json.report_preference.show_eucra = false;
+        json.report_preference.show_popia = false;
 
         return json;
       });
@@ -283,6 +307,13 @@ module(
           find('[data-test-preference="EU CRA"]')
         )
         .isNotChecked();
+
+      assert
+        .dom(
+          '[data-test-preference-checkbox]',
+          find('[data-test-preference="POPIA"]')
+        )
+        .isNotChecked();
     });
 
     test('it toggles regulatory preference on label click', async function (assert) {
@@ -295,6 +326,7 @@ module(
         json.report_preference.show_sama = false;
         json.report_preference.show_dora = false;
         json.report_preference.show_eucra = false;
+        json.report_preference.show_popia = false;
 
         return json;
       });
@@ -320,6 +352,7 @@ module(
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
       const eucraContainer = find('[data-test-preference="EU CRA"]');
+      const popiaContainer = find('[data-test-preference="POPIA"]');
 
       assert
         .dom('[data-test-preference-checkbox]', pcidssContainer)
@@ -353,6 +386,11 @@ module(
 
       assert
         .dom('[data-test-preference-checkbox]', eucraContainer)
+        .isNotDisabled()
+        .isNotChecked();
+
+      assert
+        .dom('[data-test-preference-checkbox]', popiaContainer)
         .isNotDisabled()
         .isNotChecked();
 
@@ -386,6 +424,10 @@ module(
 
       assert.dom('[data-test-preference-checkbox]', eucraContainer).isChecked();
 
+      await click(`#${popiaContainer.id} [data-test-ak-form-label]`);
+
+      assert.dom('[data-test-preference-checkbox]', popiaContainer).isChecked();
+
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
       assert
@@ -427,6 +469,12 @@ module(
       assert
         .dom('[data-test-preference-checkbox]', eucraContainer)
         .isNotChecked();
+
+      await click(`#${popiaContainer.id} [data-test-ak-form-label]`);
+
+      assert
+        .dom('[data-test-preference-checkbox]', popiaContainer)
+        .isNotChecked();
     });
 
     test('it does not toggle regulatory preference on error', async function (assert) {
@@ -458,6 +506,7 @@ module(
       const samaContainer = find('[data-test-preference="SAMA"]');
       const doraContainer = find('[data-test-preference="DORA"]');
       const eucraContainer = find('[data-test-preference="EU CRA"]');
+      const popiaContainer = find('[data-test-preference="POPIA"]');
 
       await click(`#${pcidssContainer.id} [data-test-ak-form-label]`);
 
@@ -549,6 +598,20 @@ module(
       assert
         .dom('[data-test-preference-checkbox]', eucraContainer)
         [pref.show_eucra ? 'isChecked' : 'isNotChecked']();
+
+      assert.strictEqual(
+        notify.errorMsg,
+        errorObj.report_preference.non_field_errors[0]
+      );
+
+      notify.errorMsg = null;
+
+      await click(`#${popiaContainer.id} [data-test-ak-form-label]`);
+
+      // no change to state
+      assert
+        .dom('[data-test-preference-checkbox]', popiaContainer)
+        [pref.show_popia ? 'isChecked' : 'isNotChecked']();
 
       assert.strictEqual(
         notify.errorMsg,
