@@ -17,7 +17,7 @@ export default class AuthenticatedDashboardFileAutofixController extends Control
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
-      title: this.intl.t('autofix.historyTitle'),
+      title: this.intl.t('autofix.detailsTitle'),
       route: 'authenticated.dashboard.file.autofix',
       models: [this.model.file.id],
       routeGroup: 'project/files',

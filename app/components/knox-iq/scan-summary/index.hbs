@@ -27,22 +27,47 @@
       </AkTypography>
     </AkStack>
 
-    {{#if this.compareRouteModel}}
-      <AkLink
-        @route='authenticated.dashboard.compare'
-        @model={{this.compareRouteModel}}
-        @color='primary'
-        @underline='always'
-        data-test-knoxiq-scan-summary-key-insights-link
-      >
-        <:default>
-          {{t 'keyInsights'}}
-        </:default>
+    {{#if (or this.autofixProjectId this.compareRouteModel)}}
+      <AkStack @alignItems='center' @spacing='2'>
+        {{#if this.autofixProjectId}}
+          <AkLink
+            @route='authenticated.dashboard.project.autofix'
+            @model={{this.autofixProjectId}}
+            @query={{hash file_id=@file.id}}
+            @color='textPrimary'
+            @underline='always'
+            @fontWeight='medium'
+            @typographyVariant='body2'
+            data-test-knoxiq-scan-summary-autofix-link
+          >
+            <:default>
+              {{t 'autofix.detailsTitle'}}
+            </:default>
 
-        <:rightIcon>
-          <AkIcon @iconName='arrow-outward' />
-        </:rightIcon>
-      </AkLink>
+            <:rightIcon>
+              <AkIcon @iconName='arrow-outward' />
+            </:rightIcon>
+          </AkLink>
+        {{/if}}
+
+        {{#if this.compareRouteModel}}
+          <AkLink
+            @route='authenticated.dashboard.compare'
+            @model={{this.compareRouteModel}}
+            @color='primary'
+            @underline='always'
+            data-test-knoxiq-scan-summary-key-insights-link
+          >
+            <:default>
+              {{t 'keyInsights'}}
+            </:default>
+
+            <:rightIcon>
+              <AkIcon @iconName='arrow-outward' />
+            </:rightIcon>
+          </AkLink>
+        {{/if}}
+      </AkStack>
     {{/if}}
   </AkStack>
 

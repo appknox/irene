@@ -1,0 +1,121 @@
+<AkDrawer
+  @open={{this.isOpen}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  @drawerContainerClass={{this.drawerPanelClass}}
+  data-test-knoxIqAutofixHistory-drawer
+  as |dr|
+>
+  <div
+    local-class='drawer'
+    {{did-insert this.watchDrawerScroll}}
+    {{will-destroy this.unwatchDrawerScroll}}
+  >
+    <div local-class='drawer-top {{if this.drawerBodyScrolled "scrolled"}}'>
+      <div local-class='drawer-header'>
+        <AkTypography @variant='h5' data-test-knoxIqAutofixHistory-drawerTitle>
+          {{t 'autofix.detailsTitle'}}
+        </AkTypography>
+
+        <AkIconButton
+          @size='small'
+          aria-label={{t 'close'}}
+          {{on 'click' dr.closeHandler}}
+          data-test-knoxIqAutofixHistory-drawerClose
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </div>
+
+      {{#if @run}}
+        <div local-class='drawer-summary'>
+          <AkStack @alignItems='center' @spacing='0.5'>
+            <AkSvg::GitBranch local-class='meta-icon meta-icon-strong' />
+            <AkTypography
+              @variant='h5'
+              @tag='h2'
+              data-test-knoxIqAutofixHistory-drawerBaseBranch
+            >
+              {{@run.baseBranch}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack
+            @alignItems='center'
+            @spacing='1'
+            @flexWrap='wrap'
+            local-class='drawer-meta'
+          >
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkSvg::GitBranchSparkle local-class='meta-icon' />
+              <AkTypography
+                @tag='span'
+                @breakWord={{true}}
+                data-test-knoxIqAutofixHistory-drawerBranch
+              >
+                {{@run.branch}}
+              </AkTypography>
+            </AkStack>
+
+            <span local-class='meta-divider' aria-hidden='true'></span>
+
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkSvg::GitCommit local-class='meta-icon' />
+              <a
+                href={{@run.commitUrl}}
+                target='_blank'
+                rel='noopener noreferrer'
+                aria-label={{t 'autofix.openCommit' sha=@run.commitSha}}
+                local-class='commit-link'
+                data-test-knoxIqAutofixHistory-drawerCommitLink
+              >
+                <span local-class='commit-sha'>{{@run.commitSha}}</span>
+                <AkIcon @iconName='open-in-new' @color='primary' />
+              </a>
+            </AkStack>
+          </AkStack>
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if @run}}
+      <div local-class='drawer-body' data-test-knoxIqAutofixHistory-drawerBody>
+        <AkTypography>
+          {{t 'autofix.generatedFromScan'}}
+        </AkTypography>
+
+        <ul local-class='detail-list'>
+          <li local-class='file-id-line'>
+            {{t 'autofix.fileIdThisRun'}}
+            <span
+              local-class='code-pill'
+              data-test-knoxIqAutofixHistory-fileId
+            >
+              {{@run.fileId}}
+            </span>
+          </li>
+
+          <li>
+            {{t 'autofix.patchedFiles'}}
+            <ul local-class='nested-list'>
+              {{#each @run.patchedFiles as |patchedFile|}}
+                <li>
+                  <span
+                    local-class='code-pill'
+                    data-test-knoxIqAutofixHistory-patchedFile
+                  >
+                    {{patchedFile}}
+                  </span>
+                </li>
+              {{else}}
+                <li data-test-knoxIqAutofixHistory-noPatchedFiles>
+                  {{t 'autofix.noPatchedFiles'}}
+                </li>
+              {{/each}}
+            </ul>
+          </li>
+        </ul>
+      </div>
+    {{/if}}
+  </div>
+</AkDrawer>

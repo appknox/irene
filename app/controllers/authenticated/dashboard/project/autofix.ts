@@ -16,19 +16,38 @@ export default class AuthenticatedDashboardProjectAutofixController extends Cont
 
   declare model: ProjectAutofixModel;
 
+  get fileId() {
+    const fileId = this.model?.queryParams?.file_id;
+
+    if (fileId == null || fileId === '') {
+      return null;
+    }
+
+    return String(fileId);
+  }
+
   get breadcrumbs(): AkBreadcrumbsItemProps {
+    const projectId = String(this.model.project.id);
+
     return {
-      title: this.intl.t('autofix.historyTitle'),
+      title: this.intl.t('autofix.detailsTitle'),
       route: 'authenticated.dashboard.project.autofix',
-      models: [this.model.project.id],
+      models: [projectId],
       routeGroup: 'project/files',
 
-      parentCrumb: {
-        title: this.intl.t('allUploads'),
-        route: 'authenticated.dashboard.project.files',
-        models: [this.model.project.id],
-        routeGroup: 'project/files',
-      },
+      parentCrumb: this.fileId
+        ? {
+            title: this.intl.t('scanDetails'),
+            route: 'authenticated.dashboard.file.index',
+            models: [this.fileId],
+            routeGroup: 'project/files',
+          }
+        : {
+            title: this.intl.t('allUploads'),
+            route: 'authenticated.dashboard.project.files',
+            models: [projectId],
+            routeGroup: 'project/files',
+          },
     };
   }
 }
