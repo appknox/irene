@@ -26,8 +26,10 @@ import type Nistsp800171Model from '../nistsp800171';
 import type SamaModel from '../sama';
 import type Pcidss4Model from '../pcidss4';
 import type EucraModel from '../eucra';
+import type PopiaModel from '../popia';
 
 irregular('asvs', 'asvses');
+irregular('popia', 'popias');
 
 export interface SecurityAnalysisFinding {
   id?: number;
@@ -158,6 +160,9 @@ export default class SecurityAnalysisModel extends Model {
 
   @hasMany('eucra', { async: true, inverse: null })
   declare eucra: AsyncHasMany<EucraModel>;
+
+  @hasMany('popia', { async: true, inverse: null })
+  declare popia: AsyncHasMany<PopiaModel>;
 
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
