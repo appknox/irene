@@ -64,11 +64,8 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @tracked hasUnsavedCvssChanges = false;
   @tracked hasUnsavedRegulatoryChanges = false;
   @tracked hasUnsavedFindingsChanges = false;
-  @tracked hasValidatedFindings = false;
 
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
-
-  reloadValidatedFindings: (() => void) | null = null;
 
   readonly v4State = new CvssV4VersionState();
   readonly v3State = new CvssV3VersionState();
@@ -167,21 +164,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       ...this.v3State.details,
       version: Number(this.analysisLegacyCvssVersion),
     };
-  }
-
-  @action
-  registerReloadValidatedFindings(reloadFindings: () => void) {
-    this.reloadValidatedFindings = reloadFindings;
-  }
-
-  @action
-  refreshValidatedFindings() {
-    this.reloadValidatedFindings?.();
-  }
-
-  @action
-  setHasValidatedFindings(count: number) {
-    this.hasValidatedFindings = count > 0;
   }
 
   @action

@@ -41,14 +41,26 @@
         </:default>
       </AkButton>
 
-      <AkButton
-        @variant='filled'
-        @disabled={{this.isWritingFinding}}
-        {{on 'click' this.saveSelectedFinding}}
-        data-test-securityAnalysisDetails-validatedFindings-saveBtn
+      <AkTooltip
+        @title={{if
+          this.isSelectedFindingComplete
+          ''
+          this.missingFieldsMessage
+        }}
+        @arrow={{true}}
       >
-        {{t 'save'}}
-      </AkButton>
+        <AkButton
+          @variant='filled'
+          @disabled={{or
+            this.isWritingFinding
+            (not this.isSelectedFindingComplete)
+          }}
+          {{on 'click' this.saveSelectedFinding}}
+          data-test-securityAnalysisDetails-validatedFindings-saveBtn
+        >
+          {{t 'save'}}
+        </AkButton>
+      </AkTooltip>
 
       <AkIconButton
         @size='small'

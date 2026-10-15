@@ -51,8 +51,6 @@ const selectors = {
 // ─── Template ────────────────────────────────────────────────────────────────
 const TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings
   @analysis={{this.analysis}}
-  @onFindingsChange={{this.onFindingsChange}}
-  @onRegisterReloadFindings={{this.onRegisterReloadFindings}}
 />`;
 
 module(
@@ -92,13 +90,7 @@ module(
         return findings;
       };
 
-      this.setProperties({
-        reportedCount: null,
-        reloadFindings: null,
-        onFindingsChange: (count) => this.set('reportedCount', count),
-        onRegisterReloadFindings: (reload) =>
-          this.set('reloadFindings', reload),
-      });
+      this.setProperties({});
 
       this.analysis = this.pushAnalysis({ risk: ENUMS.RISK.HIGH });
     });
@@ -211,55 +203,28 @@ module(
 
     // ─── Reporting upward ──────────────────────────────────────────────────
 
-    test('it reports the finding count once loaded', async function (assert) {
-      this.stubFindings(3);
-
-      await render(TEMPLATE);
-      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(this.reportedCount, 3);
-    });
-
-    test('it reports zero when there are no findings', async function (assert) {
-      this.stubFindings(0);
-
-      await render(TEMPLATE);
-      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(this.reportedCount, 0);
-    });
-
-    test('it hands the page a way to reload', async function (assert) {
-      this.stubFindings(1);
-
-      await render(TEMPLATE);
-      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(typeof this.reloadFindings, 'function');
-    });
-
     // ─── Adding ────────────────────────────────────────────────────────────
 
-    test('adding a finding notifies and reports the new count', async function (assert) {
+    test('adding a finding opens an editor without sending it', async function (assert) {
       this.stubFindings(1);
 
-      this.server.post('/knoxiq/analyses/:analysisId/findings', () =>
-        this.server.create('security/validated-finding').toJSON()
-      );
+      let posted = false;
+
+      this.server.post('/knoxiq/analyses/:analysisId/findings', () => {
+        posted = true;
+
+        return this.server.create('security/validated-finding').toJSON();
+      });
 
       await render(TEMPLATE);
       await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(this.reportedCount, 1);
 
       await click(selectors.addFindingBtn);
 
-      assert.strictEqual(
-        this.notify.successMsg,
-        t('securityAnalysisDetails.validatedFindings.findingAdded')
-      );
+      assert.false(posted, 'an incomplete finding is not sent');
 
-      assert.strictEqual(this.reportedCount, 2);
+      // Nothing has been filled in, so there is nothing worth saving yet.
+      assert.dom(selectors.saveBtn).isDisabled();
     });
 
     // ─── Deleting ──────────────────────────────────────────────────────────

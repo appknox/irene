@@ -10,6 +10,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type { AkIconVariantType } from 'ak-icons';
 
 import {
+  UNKNOWN_SCALE_VALUE,
   buildPoc,
   buildRemediation,
   type SecurityValidatedFindingStep,
@@ -29,6 +30,20 @@ import {
 import styles from './index.scss';
 
 export const SECURITY_ANALYSIS_FINDINGS_LIMIT = 20;
+
+// The fields a finding must carry before it is worth sending to the API.
+// Score, vectors and the remediation prompt are left out: none is persisted yet.
+export const SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS = [
+  'confidence',
+  'summary',
+  'reasoning',
+  'remediationSteps',
+  'stepsToReproduce',
+  'exploitabilityLikelihood',
+] as const;
+
+export type SecurityValidatedFindingRequiredField =
+  (typeof SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS)[number];
 
 const FINDINGS_QUERY_LIMIT = 50;
 const FINDINGS_QUERY_OFFSET = 0;
@@ -53,8 +68,6 @@ export interface SecurityValidatedFindingPositionOption {
 export interface SecurityAnalysisDetailsValidatedFindingsSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
-    onFindingsChange?: (count: number) => void;
-    onRegisterReloadFindings?: (reloadFindings: () => void) => void;
   };
 }
 
@@ -67,7 +80,10 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   @tracked selectedFinding: SecurityValidatedFindingModel | null = null;
   @tracked remediationSteps: SecurityValidatedFindingStep[] = [];
   @tracked stepsToReproduce: SecurityValidatedFindingStep[] = [];
-  @tracked openPanels: SecurityValidatedFindingPanelId[] = [];
+  // AEIS configuration is the first thing a reviewer sets, so it starts open.
+  @tracked openPanels: SecurityValidatedFindingPanelId[] = [
+    SECURITY_VALIDATED_FINDING_PANEL.AEIS,
+  ];
 
   @tracked showOriginalAnalysis = false;
   @tracked showDeleteFindingConfirm = false;
@@ -83,10 +99,6 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     super(owner, args);
 
     this.fetchFindings.perform();
-
-    // Handed up so the page can refetch after an action it owns, such as
-    // marking the analysis passed, which deletes every finding.
-    this.args.onRegisterReloadFindings?.(() => this.fetchFindings.perform());
   }
 
   get classes() {
@@ -160,10 +172,59 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   }
 
   get isWritingFinding() {
-    return (
-      this.saveFinding.isRunning ||
-      this.createFinding.isRunning ||
-      this.deleteFindings.isRunning
+    return this.saveFinding.isRunning || this.deleteFindings.isRunning;
+  }
+
+  /**
+   * Lists the required fields the selected finding has not filled in yet.
+   * Empty means it is complete enough to send.
+   */
+  get missingFields(): SecurityValidatedFindingRequiredField[] {
+    const content = this.selectedFinding?.content;
+
+    if (!content) {
+      return [];
+    }
+
+    const isFilled: Record<SecurityValidatedFindingRequiredField, boolean> = {
+      confidence: content.confidence !== UNKNOWN_SCALE_VALUE,
+      summary: this.hasText(content.summary),
+      reasoning: this.hasText(content.reasoning),
+      remediationSteps: this.hasCompleteStep(content.remediationSteps),
+      stepsToReproduce: this.hasCompleteStep(content.stepsToReproduce),
+      exploitabilityLikelihood:
+        content.exploitabilityLikelihood !== UNKNOWN_SCALE_VALUE,
+    };
+
+    return SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS.filter(
+      (field) => !isFilled[field]
+    );
+  }
+
+  hasText(value: string) {
+    return value.replace(/<[^>]*>/g, '').trim().length > 0;
+  }
+
+  hasCompleteStep(steps: SecurityValidatedFindingStep[]) {
+    return steps.some(
+      (step) => this.hasText(step.heading) || this.hasText(step.body)
+    );
+  }
+
+  get isSelectedFindingComplete() {
+    return this.missingFields.length === 0;
+  }
+
+  get missingFieldsMessage() {
+    const fields = this.missingFields
+      .map((field) =>
+        this.intl.t(`securityAnalysisDetails.validatedFindings.field.${field}`)
+      )
+      .join(', ');
+
+    return this.intl.t(
+      'securityAnalysisDetails.validatedFindings.missingFields',
+      { fields }
     );
   }
 
@@ -220,10 +281,6 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     this.openPanels = this.areAllPanelsOpen ? [] : [...this.allPanelIds];
   }
 
-  reportFindingCount() {
-    this.args.onFindingsChange?.(this.findings.length);
-  }
-
   selectFinding(finding: SecurityValidatedFindingModel | null) {
     this.selectedFinding = finding;
     this.remediationSteps = finding?.remediationSteps ?? [];
@@ -265,9 +322,19 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     this.selectFinding(option?.finding ?? this.selectedFinding);
   }
 
+  // The row is only sent once every required field is filled, so Add Finding
+  // opens an editor on an unsaved record rather than POSTing an empty one.
   @action
   addFinding() {
-    this.createFinding.perform();
+    if (this.hasReachedFindingsLimit) {
+      return;
+    }
+
+    const finding = this.store.createRecord('security/validated-finding');
+
+    this.findings = [...this.findings, finding];
+
+    this.selectFinding(finding);
   }
 
   @action
@@ -347,49 +414,36 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
 
       this.findings = findings.slice();
 
-      this.reportFindingCount();
-
       this.selectFinding(this.findings[0] ?? null);
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
 
-  // POST creates the row before the editor opens, because the API assigns the
-  // finding_id and the database id the later saves are addressed by.
-  createFinding = task({ drop: true }, async () => {
-    if (this.hasReachedFindingsLimit) {
+  saveFinding = task({ drop: true }, async () => {
+    const finding = this.selectedFinding;
+
+    if (!finding) {
       return;
     }
 
-    const finding = this.store.createRecord('security/validated-finding');
+    if (this.missingFields.length > 0) {
+      this.notify.error(this.missingFieldsMessage);
+
+      return;
+    }
+
+    const isNew = finding.get('isNew');
 
     try {
       await finding.save({ adapterOptions: this.findingRequestOptions });
 
-      this.findings = [...this.findings, finding];
-
-      this.selectFinding(finding);
-      this.reportFindingCount();
-
       this.notify.success(
-        this.intl.t('securityAnalysisDetails.validatedFindings.findingAdded')
-      );
-    } catch (error) {
-      finding.unloadRecord();
-
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-    }
-  });
-
-  saveFinding = task({ drop: true }, async () => {
-    try {
-      await this.selectedFinding?.save({
-        adapterOptions: this.findingRequestOptions,
-      });
-
-      this.notify.success(
-        this.intl.t('securityAnalysisDetails.validatedFindings.findingSaved')
+        this.intl.t(
+          isNew
+            ? 'securityAnalysisDetails.validatedFindings.findingAdded'
+            : 'securityAnalysisDetails.validatedFindings.findingSaved'
+        )
       );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
@@ -401,6 +455,13 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     async (findings: SecurityValidatedFindingModel[]) => {
       try {
         for (const finding of findings) {
+          // An unsaved finding was never sent, so there is nothing to delete.
+          if (finding.get('isNew')) {
+            finding.unloadRecord();
+
+            continue;
+          }
+
           await finding.destroyRecord({
             adapterOptions: this.findingRequestOptions,
           });
@@ -411,7 +472,6 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
         );
 
         this.selectFinding(this.findings[0] ?? null);
-        this.reportFindingCount();
       } catch (error) {
         this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       } finally {

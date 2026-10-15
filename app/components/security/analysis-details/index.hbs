@@ -4,8 +4,6 @@
   <Security::AnalysisDetails::Header
     @analysis={{this.analysisDetails}}
     @isKnoxIqEnabled={{this.isKnoxIqAnalysis}}
-    @hasValidatedFindings={{this.hasValidatedFindings}}
-    @onMarkedAsPassed={{this.refreshValidatedFindings}}
     @currentCVSSMetrics={{this.currentCVSSDetails.metrics}}
     @updateAnalysis={{this.triggerUpdateAnalysis}}
     @updateCVSSDetails={{this.triggerUpdateCurrentCVSSDetails}}
@@ -32,8 +30,6 @@
     {{#if this.isKnoxIqAnalysis}}
       <Security::AnalysisDetails::ValidatedFindings
         @analysis={{this.analysisDetails}}
-        @onFindingsChange={{this.setHasValidatedFindings}}
-        @onRegisterReloadFindings={{this.registerReloadValidatedFindings}}
       />
     {{else}}
       <Security::AnalysisDetails::Findings

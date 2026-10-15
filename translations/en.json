@@ -2491,6 +2491,7 @@
   "securityAnalysisDetails": {
     "aeis": {
       "decreaseScore": "Decrease AEIS score",
+      "description": "Taken from the highest scoring validated finding",
       "increaseScore": "Increase AEIS score",
       "likelihood": {
         "critical": "Critical",
@@ -2502,6 +2503,7 @@
       "likelihoodRequired": "Select a likelihood before changing the AEIS score or vectors",
       "noScoreYet": "No AEIS score available yet",
       "outOfTen": "out of 10",
+      "readOnlyReason": "Set on the validated finding with the highest score. Edit it there to change this.",
       "reset": "Reset",
       "saved": "AEIS updated",
       "scoreField": "AEIS score",
@@ -2531,6 +2533,12 @@
       "setToUntested": "Set to Untested",
       "title": "CVSS Metrics"
     },
+    "findings": {
+      "clearAll": "Clear All Findings",
+      "description": "All discoveries associated with this vulnerability analysis",
+      "noFindings": "No findings added for this vulnerability.",
+      "title": "Findings"
+    },
     "header": {
       "analysisStatus": "Analysis Status",
       "analysisStatusDescription": "Changing the status here will change the current status for this analysis in the file page.",
@@ -2551,6 +2559,8 @@
       "addRemediationStep": "Remediation Steps",
       "addReproductionStep": "Steps to Reproduce",
       "addStepsToReproduce": "Add Steps to Reproduce",
+      "aeisConfiguration": "AEIS Configuration",
+      "aeisScore": "AEIS Score",
       "collapseAll": "Collapse All",
       "confidence": "Confidence",
       "deleteAllFindingsConfirm": "Are you sure you want to delete all findings?",
@@ -2561,12 +2571,22 @@
       "evidence": "Evidence",
       "expandAll": "Expand All",
       "exploitabilityAnalysis": "Exploitability Analysis",
+      "field": {
+        "confidence": "Confidence",
+        "exploitabilityLikelihood": "Exploitability likelihood",
+        "reasoning": "Reasoning",
+        "remediationSteps": "Remediation steps",
+        "stepsToReproduce": "Steps to reproduce",
+        "summary": "Summary"
+      },
       "finding": "Finding",
       "findingAdded": "Finding added",
       "findingOf": "of {total}",
       "findingSaved": "Finding saved",
       "heading": "Heading",
+      "likelihood": "Exploitability Likelihood",
       "limitReached": "Limit of {limit} findings reached",
+      "missingFields": "Fill in {fields} before saving this finding",
       "nextFinding": "Next finding",
       "originalAnalysis": "Original Analysis",
       "originalAnalysisEmpty": "This analysis has no original findings.",
@@ -2574,6 +2594,11 @@
       "previousFinding": "Previous finding",
       "reasoning": "Reasoning",
       "remediation": "Remediation",
+      "remediationPrompt": "Remediation Prompt",
+      "remediationPromptHint": "Instructions a developer can hand to a coding assistant to apply the fix",
+      "remediationPromptPlaceholder": "Describe the fix for a coding assistant",
+      "remediationSteps": "Remediation Steps",
+      "remediationStepsHint": "The fix, broken into steps a developer can follow",
       "scale": {
         "-1": "Unknown",
         "1": "Low",

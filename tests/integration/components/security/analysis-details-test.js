@@ -180,7 +180,11 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     );
 
     // Creates vulnerabilities and maps them to individual analysis
-    const vulnerability = this.server.create('vulnerability');
+    // Pinned non-manual: a manual test case keeps the plain display, which
+    // would make the KnoxIQ gating tests depend on the factory's random types.
+    const vulnerability = this.server.create('vulnerability', {
+      types: [ENUMS.VULNERABILITY_TYPE.STATIC],
+    });
 
     const vulnerabilityModel = store.push(
       store.normalize(
@@ -1136,13 +1140,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]',
       };
 
+      const findingsCard =
+        "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
       assert
-        .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+        )
         .exists()
-        .containsText('Findings')
-        .containsText(
-          'All discoveries associated with this vulnerability analysis'
-        );
+        .hasText('Findings');
+
+      assert
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+        )
+        .exists()
+        .hasText('All discoveries associated with this vulnerability analysis');
 
       assert
         .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')
@@ -1302,13 +1315,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
+    const findingsCard =
+      "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
     assert
-      .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+      )
       .exists()
-      .containsText('Findings')
-      .containsText(
-        'All discoveries associated with this vulnerability analysis'
-      );
+      .hasText('Findings');
+
+    assert
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+      )
+      .exists()
+      .hasText('All discoveries associated with this vulnerability analysis');
 
     assert
       .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')

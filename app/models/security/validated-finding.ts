@@ -50,9 +50,9 @@ export interface SecurityValidatedFindingPoc {
 }
 
 export interface SecurityValidatedFindingExploitability {
-  score: number;
+  score: number | null;
   exploitability_likelihood: string;
-  signals: Record<string, boolean>;
+  signals: Record<string, boolean | 'unknown'>;
   signal_reasoning: Record<string, string>;
   attack_scenario: string[];
   references: string[];
@@ -130,6 +130,10 @@ export default class SecurityValidatedFindingModel extends Model {
 
   get exploitabilityAnalysis() {
     return this.content.exploitabilityAnalysis;
+  }
+
+  get exploitabilityScore() {
+    return this.content.exploitabilityScore;
   }
 }
 

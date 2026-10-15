@@ -5,13 +5,6 @@ import { service } from '@ember/service';
 import { tracked } from 'tracked-built-ins';
 
 import ENV from 'irene/config/environment';
-
-import {
-  SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE,
-  aeisOverrideUrl,
-} from 'irene/utils/security-aeis';
-
-import type SecurityValidatedFindingModel from 'irene/models/security/validated-finding';
 import ENUMS from 'irene/enums';
 
 import {
@@ -24,8 +17,6 @@ import {
 import type IntlService from 'ember-intl/services/intl';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import type IreneAjaxService from 'irene/services/ajax';
-import type OrganizationService from 'irene/services/organization';
-import type Store from 'ember-data/store';
 import parseError from 'irene/utils/parse-error';
 
 export interface SecurityAnalysisListTableActionComponentSignature {
@@ -38,8 +29,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
   @service('notifications') declare notify: NotificationService;
   @service declare intl: IntlService;
   @service declare ajax: IreneAjaxService;
-  @service declare organization: OrganizationService;
-  @service declare store: Store;
 
   @tracked showMarkPassedConfirmBox = false;
 
@@ -65,25 +54,7 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
   }
 
   get showMarkAsPassedButton() {
-    if (!this.analysis.isPassed) {
-      return true;
-    }
-
-    return this.isKnoxIqAnalysis && !this.analysis.hasPassedAeisOverride;
-  }
-
-  get isKnoxIqAnalysis() {
-    return Boolean(
-      this.organization.isKnoxIqEnabled && this.analysis.isKnoxIqAnalysis
-    );
-  }
-
-  get markPassedConfirmDescription() {
-    return this.isKnoxIqAnalysis
-      ? this.intl.t(
-          'securityAnalysisDetails.header.markAsPassedDeletesFindings'
-        )
-      : '';
+    return !this.analysis.isPassed;
   }
 
   @action confirmCallback() {
@@ -98,53 +69,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
 
   @action openMarkPassedConfirmBox() {
     this.showMarkPassedConfirmBox = true;
-  }
-
-  /**
-   * Mirrors the canonical passed CVSS vector onto AEIS. The backend has no
-   * concept of marking an analysis passed, so the dashboard writes it.
-   */
-  async applyPassedAeisOverride() {
-    const analysis = this.analysis;
-
-    if (
-      analysis?.exploitabilityScore === null ||
-      analysis?.exploitabilityScore === undefined
-    ) {
-      return;
-    }
-
-    await this.ajax.put(aeisOverrideUrl(analysis.id), {
-      namespace: ENV.namespace_v2,
-      data: JSON.stringify(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE),
-    });
-
-    await analysis.reload();
-  }
-
-  /**
-   * A passed analysis has nothing left to validate. The deletes run in
-   * sequence so a partial failure surfaces rather than leaving the rest in
-   * flight.
-   */
-  async deleteValidatedFindings() {
-    const analysis = this.analysis;
-
-    if (!analysis?.isKnoxIqAnalysis) {
-      return;
-    }
-
-    const findings = await this.store.query('security/validated-finding', {
-      analysisId: analysis.id,
-    });
-
-    const adapterOptions = { analysisId: String(analysis.id) };
-
-    for (const finding of findings.slice()) {
-      await (finding as SecurityValidatedFindingModel).destroyRecord({
-        adapterOptions,
-      });
-    }
   }
 
   markAsPassed = task(async () => {
@@ -196,9 +120,6 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
       });
 
       await this.analysis.reload();
-
-      await this.applyPassedAeisOverride();
-      await this.deleteValidatedFindings();
 
       this.notify.success(`Analysis ${this.analysis.id} marked as passed`);
     } catch (err) {

@@ -23,6 +23,9 @@ export interface SecurityValidatedFindingContent {
   stepsToReproduce: SecurityValidatedFindingStep[];
   exploitabilityLikelihood: number;
   exploitabilityAnalysis: string;
+  exploitabilityScore: number | null;
+  exploitabilitySignals: Record<string, boolean | 'unknown'>;
+  developerPrompt: string;
 }
 
 // The flat write-only body the API accepts.
@@ -35,14 +38,18 @@ export interface SecurityValidatedFindingPayload {
   steps_to_reproduce: SecurityValidatedFindingStep[];
   exploitability_likelihood: number;
   exploitability_analysis: string;
+  exploitability_score: number | null;
+  exploitability_signals: Record<string, boolean | 'unknown'>;
+  developer_prompt: string;
 }
 
-// Anything carrying the four nested blobs — in practice, the record.
+// Anything carrying the nested blobs — in practice, the record.
 export interface SecurityValidatedFindingContentSource {
   validation?: Partial<SecurityValidatedFindingValidation> | null;
   remediation?: Partial<SecurityValidatedFindingRemediation> | null;
   poc?: Partial<SecurityValidatedFindingPoc> | null;
   exploitability?: Partial<SecurityValidatedFindingExploitability> | null;
+  developerPrompt?: string | null;
 }
 
 export interface SecurityValidatedFindingValidationEdit {
@@ -55,6 +62,8 @@ export interface SecurityValidatedFindingValidationEdit {
 export interface SecurityValidatedFindingExploitabilityEdit {
   likelihood?: number;
   analysis?: string;
+  score?: number | null;
+  signals?: Record<string, boolean | 'unknown'>;
 }
 
 export const UNKNOWN_SCALE_VALUE = -1;
@@ -257,6 +266,11 @@ export function toValidatedFindingContent(
     exploitabilityLikelihood: likelihoodFromLabel(
       exploitability?.exploitability_likelihood
     ),
+
+    exploitabilityScore: exploitability?.score ?? null,
+    exploitabilitySignals: exploitability?.signals ?? {},
+
+    developerPrompt: source.developerPrompt ?? '',
   };
 }
 
@@ -288,6 +302,9 @@ export function toValidatedFindingPayload(
     steps_to_reproduce: content.stepsToReproduce.map(withoutStepId),
     exploitability_likelihood: content.exploitabilityLikelihood,
     exploitability_analysis: content.exploitabilityAnalysis,
+    exploitability_score: content.exploitabilityScore,
+    exploitability_signals: content.exploitabilitySignals,
+    developer_prompt: content.developerPrompt,
   };
 }
 
@@ -380,6 +397,14 @@ export function buildExploitability(
     updated.exploitability_likelihood =
       EXPLOITABILITY_LIKELIHOOD_LABELS[edit.likelihood] ??
       (EXPLOITABILITY_LIKELIHOOD_LABELS[UNKNOWN_SCALE_VALUE] as string);
+  }
+
+  if (edit.score !== undefined) {
+    updated.score = edit.score;
+  }
+
+  if (edit.signals !== undefined) {
+    updated.signals = edit.signals;
   }
 
   if (edit.analysis !== undefined) {

@@ -602,6 +602,13 @@ body {
     --neutral-grey-50
   );
 
+  --security-analysis-details-validated-findings-prompt-background-color: var(
+    --neutral-grey-100
+  );
+  --security-analysis-details-validated-findings-prompt-color: var(
+    --primary-main
+  );
+
   // variables for security/analysis-details/validated-findings/original-analysis-drawer
   --security-analysis-details-original-analysis-drawer-code-background-color: var(
     --neutral-grey-100

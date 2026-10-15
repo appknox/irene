@@ -5,10 +5,6 @@ import { irregular } from '@ember-data/request-utils/string';
 
 import ENUMS from 'irene/enums';
 
-import {
-  SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE,
-  SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS,
-} from 'irene/utils/security-aeis';
 import { riskClass } from 'irene/helpers/risk-class';
 export type { RiskLabelClass as SecurityAnalysisRiskLabelClass } from 'irene/helpers/risk-class';
 
@@ -193,34 +189,19 @@ export default class SecurityAnalysisModel extends Model {
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
 
+  get isManualAnalysis() {
+    return Boolean(
+      this.vulnerability.get('types')?.includes(ENUMS.VULNERABILITY_TYPE.MANUAL)
+    );
+  }
+
   // KnoxIQ scans a file, not an analysis, and skips analyses it considers not
   // worth validating. Those still belong to a KnoxIQ file and stay editable,
   // so the flag comes from the file rather than from this analysis' own
-  // exploitability, which stays null until a validation finishes.
+  // exploitability, which stays null until a validation finishes. Manual test
+  // cases are never validated by KnoxIQ, so they keep the plain display.
   get isKnoxIqAnalysis() {
-    return Boolean(this.file.get('isKnoxiqFile'));
-  }
-
-  /**
-   * Whether AEIS already carries the canonical passed override. Anything else
-   * — a different score, likelihood or vector — means the pass is incomplete.
-   */
-  get hasPassedAeisOverride() {
-    const passed = SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE;
-    const exploitability = this.exploitability;
-
-    if (!exploitability) {
-      return false;
-    }
-
-    return (
-      this.exploitabilityScore === passed.score &&
-      exploitability.exploitability_likelihood?.toLowerCase() ===
-        passed.likelihood &&
-      SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS.every(
-        (key) => exploitability.signals?.[key] === passed.signals?.[key]
-      )
-    );
+    return Boolean(this.file.get('isKnoxiqFile')) && !this.isManualAnalysis;
   }
 
   get isPassed() {
