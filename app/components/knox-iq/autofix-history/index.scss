@@ -1,32 +1,27 @@
-.pr-summary {
-  display: grid;
-  grid-template-columns:
-    minmax(140px, 1.1fr)
-    minmax(120px, 0.8fr)
-    minmax(200px, 1.5fr)
-    minmax(110px, 0.7fr)
-    max-content
-    max-content;
-  gap: 1.5rem;
-  align-items: center;
-  width: 100%;
-  padding: 0.7857em 1.4285em;
-  border: 1px solid var(--knoxiq-autofix-history-summary-border-color);
-  background-color: var(--knoxiq-autofix-history-summary-background-color);
-
-  > * {
-    min-width: 0;
-  }
-
-  p {
-    overflow-wrap: anywhere;
-  }
+.runs-table {
+  background-color: var(--knoxiq-autofix-history-table-background-color);
 }
 
-.expand-icon {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+.run-row {
+  cursor: pointer;
+}
 
-  &.expanded {
-    transform: rotate(-180deg);
+.meta-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--knoxiq-autofix-history-icon-color);
+}
+
+.commit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28571em;
+  color: var(--knoxiq-autofix-history-commit-link-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--knoxiq-autofix-history-commit-link-hover-color);
   }
 }

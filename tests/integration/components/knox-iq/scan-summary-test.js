@@ -1,4 +1,5 @@
 import { find, findAll, render, waitFor } from '@ember/test-helpers';
+import { t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl } from 'ember-intl/test-support';
@@ -226,5 +227,26 @@ module('Integration | Component | knox-iq/scan-summary', function (hooks) {
     assert
       .dom('[data-test-knoxiq-scan-summary-severity-count="critical"]')
       .includesText(criticalCount);
+  });
+
+  test('links to autofix details for this file', async function (assert) {
+    setupFileExploitabilityMirageEndpoint(this.server);
+
+    await render(hbs`
+      <KnoxIq::ScanSummary
+        @file={{this.file}}
+        @hasAnyKnoxiqScanCompleted={{false}}
+      />
+    `);
+
+    const href = find(
+      '[data-test-knoxiq-scan-summary-autofix-link]'
+    )?.getAttribute('href');
+
+    assert
+      .dom('[data-test-knoxiq-scan-summary-autofix-link]')
+      .includesText(t('autofix.detailsTitle'));
+    assert.ok(href?.includes('/dashboard/project/1/autofix'), href);
+    assert.ok(href?.includes(`file_id=${this.file.id}`), href);
   });
 });

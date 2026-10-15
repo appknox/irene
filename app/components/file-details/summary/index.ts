@@ -89,7 +89,7 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
         },
       this.organization.isKnoxIqEnabled && {
         group: this.intl.t('projectLevel'),
-        label: this.intl.t('autofix.historyTitle'),
+        label: this.intl.t('autofix.detailsTitle'),
         iconName: 'history',
         route: 'authenticated.dashboard.project.autofix',
         routeModel: this.args.file.project.get('id'),

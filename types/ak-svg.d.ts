@@ -101,6 +101,9 @@ export enum AkSvgComponentInvocationByNames {
   TpMinimalRisk,
   TpMediumRisk,
   TpHighRisk,
+  GitBranch,
+  GitBranchSparkle,
+  GitCommit,
 }
 
 export enum AkSvgComponentInvocationByPaths {
@@ -148,6 +151,9 @@ export enum AkSvgComponentInvocationByPaths {
   'tp-medium-risk',
   'tp-high-risk',
   'ai-bom-upload',
+  'git-branch',
+  'git-branch-sparkle',
+  'git-commit',
 }
 
 type AkSvgComponent = ComponentLike<{

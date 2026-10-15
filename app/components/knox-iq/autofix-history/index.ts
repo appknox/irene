@@ -12,8 +12,11 @@ import type IntlService from 'ember-intl/services/intl';
 
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type AutofixPRModel from 'irene/models/autofix-pr';
+import type { AutofixPRCommit } from 'irene/models/autofix-pr';
 import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
+
+const COMMIT_SHA_PREVIEW_LENGTH = 7;
 
 interface AutofixHistoryQueryParams {
   autofix_limit: string | number;
@@ -28,6 +31,24 @@ interface KnoxIqAutofixHistorySignature {
   };
 }
 
+interface AutofixRunColumn {
+  name: string;
+  valuePath: 'baseBranch' | 'branch' | 'commitSha' | 'updatedOn';
+  width?: number;
+}
+
+export interface AutofixRun {
+  id: string;
+  baseBranch: string;
+  branch: string;
+  commitSha: string;
+  shortSha: string;
+  commitUrl: string;
+  fileId: number;
+  patchedFiles: string[];
+  updatedOn: string;
+}
+
 type AutofixPRQueryResponse = DS.AdapterPopulatedRecordArray<AutofixPRModel> & {
   meta: { count: number };
 };
@@ -39,6 +60,7 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
   @service('notifications') declare notify: NotificationService;
 
   @tracked autofixPRResponse: AutofixPRQueryResponse | null = null;
+  @tracked selectedRun: AutofixRun | null = null;
 
   constructor(owner: unknown, args: KnoxIqAutofixHistorySignature['Args']) {
     super(owner, args);
@@ -62,16 +84,57 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
     return this.autofixPRResponse?.meta.count ?? 0;
   }
 
-  get hasNoHistory() {
-    return !this.fetchAutofixHistory.isRunning && this.totalAutofixPRs === 0;
+  get runs(): AutofixRun[] {
+    return this.autofixPRs.flatMap((pr) =>
+      (pr.commits ?? []).map((commit) => this.toRun(pr, commit))
+    );
   }
 
-  get pageSubtitle() {
-    return this.args.queryParams.file_id
-      ? this.intl.t('autofix.fileHistoryDescription', {
-          projectId: this.args.project.id,
-        })
-      : this.intl.t('autofix.projectHistoryDescription');
+  get isInitialLoading() {
+    return this.fetchAutofixHistory.isRunning && !this.autofixPRResponse;
+  }
+
+  get hasNoHistory() {
+    return !this.fetchAutofixHistory.isRunning && this.runs.length === 0;
+  }
+
+  get columns(): AutofixRunColumn[] {
+    return [
+      {
+        name: this.intl.t('autofix.baseBranch'),
+        valuePath: 'baseBranch',
+      },
+      {
+        name: this.intl.t('autofix.branch'),
+        valuePath: 'branch',
+      },
+      {
+        name: this.intl.t('autofix.commit'),
+        valuePath: 'commitSha',
+        width: 160,
+      },
+      {
+        name: this.intl.t('autofix.updated'),
+        valuePath: 'updatedOn',
+        width: 160,
+      },
+    ];
+  }
+
+  toRun(pr: AutofixPRModel, commit: AutofixPRCommit): AutofixRun {
+    const commitSha = commit.commit_sha;
+
+    return {
+      id: `${pr.id}-${commit.id}`,
+      baseBranch: pr.baseBranch,
+      branch: pr.branch,
+      commitSha,
+      shortSha: commitSha.slice(0, COMMIT_SHA_PREVIEW_LENGTH),
+      commitUrl: `https://github.com/${pr.repo}/commit/${commitSha}`,
+      fileId: commit.file,
+      patchedFiles: commit.patched_files ?? [],
+      updatedOn: commit.created_on,
+    };
   }
 
   @action
@@ -83,6 +146,27 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
         file_id: this.args.queryParams.file_id,
       },
     });
+  }
+
+  @action
+  refetchHistory() {
+    this.closeRun();
+    this.fetchAutofixHistory.perform();
+  }
+
+  @action
+  openRun({ rowValue }: { rowValue: AutofixRun }) {
+    this.selectedRun = rowValue;
+  }
+
+  @action
+  closeRun() {
+    this.selectedRun = null;
+  }
+
+  @action
+  stopRowNavigation(event: Event) {
+    event.stopPropagation();
   }
 
   fetchAutofixHistory = task(async () => {

@@ -3985,8 +3985,30 @@ body {
   --knoxiq-scan-summary-border-color: var(--border-color-1);
 
   // variables for knox-iq/autofix-history
-  --knoxiq-autofix-history-summary-border-color: var(--border-color-1);
-  --knoxiq-autofix-history-summary-background-color: var(--background-main);
+  --knoxiq-autofix-history-table-background-color: var(--common-white);
+  --knoxiq-autofix-history-icon-color: var(--neutral-grey-500);
+  --knoxiq-autofix-history-commit-link-color: var(--primary-main);
+  --knoxiq-autofix-history-commit-link-hover-color: var(--primary-dark);
+
+  // variables for knox-iq/autofix-history/run-drawer
+  --knoxiq-autofix-history-run-drawer-summary-background-color: var(
+    --common-white
+  );
+  --knoxiq-autofix-history-run-drawer-header-background-color: var(
+    --neutral-grey-50
+  );
+  --knoxiq-autofix-history-run-drawer-divider-color: var(--border-color-1);
+  --knoxiq-autofix-history-run-drawer-icon-color: var(--neutral-grey-500);
+  --knoxiq-autofix-history-run-drawer-icon-strong-color: var(--text-primary);
+  --knoxiq-autofix-history-run-drawer-commit-link-color: var(--primary-main);
+  --knoxiq-autofix-history-run-drawer-commit-link-hover-color: var(
+    --primary-dark
+  );
+  --knoxiq-autofix-history-run-drawer-body-color: var(--text-primary);
+  --knoxiq-autofix-history-run-drawer-pill-background-color: var(
+    --neutral-grey-100
+  );
+  --knoxiq-autofix-history-run-drawer-sticky-shadow: var(--box-shadow-6);
 
   // variables for knox-iq/status-card
   --knoxiq-status-card-border-color: var(--border-color-1);
