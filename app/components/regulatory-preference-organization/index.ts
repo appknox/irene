@@ -66,6 +66,12 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
         task: this.saveEucra,
         title: this.intl.t('eucraExpansion'),
       },
+      {
+        label: this.intl.t('popia'),
+        checked: Boolean(this.orgPreference?.reportPreference?.show_popia),
+        task: this.savePopia,
+        title: this.intl.t('popiaExpansion'),
+      },
     ];
   }
 
@@ -110,6 +116,10 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
     await this.saveReportPreference.perform('show_eucra', event);
   });
 
+  savePopia = task(async (event) => {
+    await this.saveReportPreference.perform('show_popia', event);
+  });
+
   saveReportPreference = task(
     async (
       regulator:
@@ -119,7 +129,8 @@ export default class RegulatoryPreferenceOrganizationComponent extends Component
         | 'show_nist'
         | 'show_sama'
         | 'show_dora'
-        | 'show_eucra',
+        | 'show_eucra'
+        | 'show_popia',
       event
     ) => {
       const preference = this.orgPreference as OrganizationPreferenceModel;
