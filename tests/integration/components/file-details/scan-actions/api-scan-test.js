@@ -77,6 +77,111 @@ module(
         .hasText(t('notStarted'));
     });
 
+    module('KnoxIQ states', function (nestedHooks) {
+      nestedHooks.beforeEach(function () {
+        this.server.get('/manualscans/:id', (schema, req) => {
+          return { id: req.params.id };
+        });
+
+        this.server.get('/v3/projects/:id', (schema, req) => {
+          return schema.projects.find(`${req.params.id}`)?.toJSON();
+        });
+      });
+
+      test('API running: legacy completed chip shown with a pending accent', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+        this.file.isApiDone = true;
+
+        const knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.API]: ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+        };
+
+        this.set('knoxiqStatuses', knoxiqStatuses);
+
+        await render(hbs`
+          <FileDetails::ScanActions::ApiScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        const accentDiv = find(
+          '[data-test-fileDetailScanActions-apiScan-accent]'
+        );
+
+        assert.ok(accentDiv.className.includes('pending'));
+      });
+
+      test('API completed: legacy completed chip shown with a done accent', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+        this.file.isApiDone = true;
+
+        const knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.API]: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        };
+
+        this.set('knoxiqStatuses', knoxiqStatuses);
+
+        await render(hbs`
+          <FileDetails::ScanActions::ApiScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        const accentDiv = find(
+          '[data-test-fileDetailScanActions-apiScan-accent]'
+        );
+
+        assert.ok(accentDiv.className.includes('done'));
+      });
+
+      test('accent is absent when KnoxIQ is disabled', async function (assert) {
+        this.file.isApiDone = true;
+
+        await render(hbs`
+          <FileDetails::ScanActions::ApiScan
+            @file={{this.file}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-apiScan-accent]')
+          .doesNotExist();
+      });
+
+      test('automated: shows KnoxIQ status chip instead of legacy completed chip', async function (assert) {
+        this.file.isKnoxiqAutomated = true;
+        this.file.isApiDone = true;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.API]: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::ApiScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-apiScanCompletedStatus]')
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ status chip is shown'
+          );
+
+        assert.dom().containsText(t('completed'));
+      });
+    });
+
     test.each(
       'test different states of api scan',
       [
