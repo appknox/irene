@@ -15,6 +15,10 @@ export interface OrganizationSigningCertificateUploadFormSignature {
 
   Args: {
     baseUrl: string;
+    hasExistingProjectCert?: boolean;
+    isConfirmingOverride: boolean;
+    onRequestOverrideConfirm: () => void;
+    onCancelOverrideConfirm: () => void;
     onUploaded: () => void;
     onCancel: () => void;
   };
@@ -88,9 +92,26 @@ export default class OrganizationSigningCertificateUploadFormComponent extends C
     this.profileFile = null;
   }
 
-  upload = task({ drop: true }, async (event: Event) => {
+  @action
+  handleSubmit(event: Event) {
     event.preventDefault();
 
+    if (this.args.hasExistingProjectCert) {
+      this.args.onRequestOverrideConfirm();
+
+      return;
+    }
+
+    this.upload.perform();
+  }
+
+  confirmOverride = task(async () => {
+    this.args.onCancelOverrideConfirm();
+
+    await this.upload.perform();
+  });
+
+  upload = task({ drop: true }, async () => {
     if (!this.p12File || !this.profileFile) {
       this.notify.error(this.intl.t('cyod.signingCert.missingFiles'));
 

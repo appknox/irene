@@ -26,6 +26,19 @@ export default class ProjectSigningCertificateAdapter extends commondrf {
   remove(projectId: string | number) {
     return this.ajax(this.urlForRemove(projectId), 'DELETE');
   }
+
+  // The endpoint returns the project's own certificate alongside the org's
+  // active one in a single call, which does not fit store.queryRecord's
+  // single-record normalization -- the component normalizes each half itself.
+  fetchWithOrgCerts(projectId: string | number) {
+    return this.ajax(this.urlForQueryRecord({ projectId }), 'GET');
+  }
+
+  setActive(projectId: string | number, isActive: boolean) {
+    return this.ajax(this.urlForQueryRecord({ projectId }), 'PATCH', {
+      data: { is_active: isActive },
+    });
+  }
 }
 
 declare module 'ember-data/types/registries/adapter' {

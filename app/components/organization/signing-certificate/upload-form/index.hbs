@@ -1,15 +1,22 @@
-<form
-  local-class='cert-form'
-  {{on 'submit' (perform this.upload)}}
-  ...attributes
->
-  <AkStack
-    local-class='drawer-body'
-    @direction='column'
-    @spacing='2.5'
-    @alignItems='stretch'
-    class='py-2 px-4'
+{{#if @isConfirmingOverride}}
+  <Organization::SigningCertificate::UploadForm::OverrideConfirm
+    @isUploading={{this.confirmOverride.isRunning}}
+    @onConfirm={{perform this.confirmOverride}}
+    @onCancel={{@onCancelOverrideConfirm}}
+  />
+{{else}}
+  <form
+    local-class='cert-form'
+    {{on 'submit' this.handleSubmit}}
+    ...attributes
   >
+    <AkStack
+      local-class='drawer-body'
+      @direction='column'
+      @spacing='2.5'
+      @alignItems='stretch'
+      class='py-2 px-4'
+    >
     <AkStack @width='full' @spacing='2' @alignItems='flex-start'>
       <div local-class='form-field'>
         <AkStack @direction='column' @spacing='1'>
@@ -251,4 +258,5 @@
       </AkButton>
     </AkStack>
   </div>
-</form>
+  </form>
+{{/if}}

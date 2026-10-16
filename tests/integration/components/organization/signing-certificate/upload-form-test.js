@@ -42,11 +42,19 @@ const selectors = {
   tip: '[data-test-orgSigningCert-tip]',
   uploadBtn: '[data-test-orgSigningCert-uploadBtn]',
   cancelBtn: '[data-test-orgSigningCert-cancelBtn]',
+  overrideConfirm: '[data-test-orgSigningCert-overrideConfirm]',
+  overrideConfirmInfo: '[data-test-orgSigningCert-overrideConfirmInfo]',
+  overrideConfirmBtn: '[data-test-orgSigningCert-overrideConfirmBtn]',
+  overrideCancelBtn: '[data-test-orgSigningCert-overrideCancelBtn]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
 const TEMPLATE = hbs`<Organization::SigningCertificate::UploadForm
   @baseUrl={{this.baseUrl}}
+  @hasExistingProjectCert={{this.hasExistingProjectCert}}
+  @isConfirmingOverride={{this.isConfirmingOverride}}
+  @onRequestOverrideConfirm={{this.onRequestOverrideConfirm}}
+  @onCancelOverrideConfirm={{this.onCancelOverrideConfirm}}
   @onUploaded={{this.onUploaded}}
   @onCancel={{this.onCancel}}
 />`;
@@ -82,11 +90,92 @@ module(
 
       this.setProperties({
         baseUrl: UPLOAD_URL,
+        hasExistingProjectCert: false,
+        isConfirmingOverride: false,
         uploaded: 0,
         cancelled: 0,
         onUploaded: () => this.set('uploaded', this.uploaded + 1),
         onCancel: () => this.set('cancelled', this.cancelled + 1),
+        onRequestOverrideConfirm: () => this.set('isConfirmingOverride', true),
+        onCancelOverrideConfirm: () => this.set('isConfirmingOverride', false),
       });
+    });
+
+    test('saving with an existing project certificate swaps the form for the override confirmation panel', async function (assert) {
+      this.set('hasExistingProjectCert', true);
+
+      await render(TEMPLATE);
+
+      await chooseP12();
+      await chooseProfile();
+      await fillIn(selectors.password, 'secret');
+
+      assert
+        .dom(selectors.overrideConfirm)
+        .doesNotExist('nothing to confirm until save is attempted');
+
+      await click(selectors.uploadBtn);
+
+      assert
+        .dom(selectors.overrideConfirmInfo)
+        .hasText(t('cyod.signingCert.projectCertOverrideWarning'));
+
+      assert
+        .dom(selectors.uploadBtn)
+        .doesNotExist('the form fields are swapped out, not overlaid');
+
+      assert.strictEqual(this.uploaded, 0, 'the upload waits for confirmation');
+    });
+
+    test('confirming the override proceeds with the upload', async function (assert) {
+      this.server.post('/organizations/:id/signing-certificates/', () => ({}));
+
+      this.set('hasExistingProjectCert', true);
+
+      await render(TEMPLATE);
+
+      await chooseP12();
+      await chooseProfile();
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+      await click(selectors.overrideConfirmBtn);
+
+      assert.strictEqual(this.uploaded, 1);
+      assert
+        .dom(selectors.overrideConfirm)
+        .doesNotExist('the panel closes afterwards');
+    });
+
+    test('cancelling the override confirmation swaps back to the form without uploading', async function (assert) {
+      this.set('hasExistingProjectCert', true);
+
+      await render(TEMPLATE);
+
+      await chooseP12();
+      await chooseProfile();
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+      await click(selectors.overrideCancelBtn);
+
+      assert.dom(selectors.overrideConfirm).doesNotExist();
+      assert
+        .dom(selectors.p12Chip)
+        .containsText('identity.p12', 'the form keeps what was entered');
+      assert.strictEqual(this.uploaded, 0);
+    });
+
+    test('saving with no existing project certificate uploads directly', async function (assert) {
+      this.server.post('/organizations/:id/signing-certificates/', () => ({}));
+
+      await render(TEMPLATE);
+
+      await chooseP12();
+      await chooseProfile();
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert.dom(selectors.overrideConfirm).doesNotExist();
+      assert.strictEqual(this.uploaded, 1);
     });
 
     // ─── Rendering ─────────────────────────────────────────────────────────────

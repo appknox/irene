@@ -61,6 +61,10 @@ const selectors = {
   profile: '[data-test-orgSigningCert-profile]',
   uploadBtn: '[data-test-orgSigningCert-uploadBtn]',
   divider: '[data-test-ak-divider]',
+  overrideConfirm: '[data-test-orgSigningCert-overrideConfirm]',
+  overrideConfirmInfo: '[data-test-orgSigningCert-overrideConfirmInfo]',
+  overrideConfirmBtn: '[data-test-orgSigningCert-overrideConfirmBtn]',
+  overrideCancelBtn: '[data-test-orgSigningCert-overrideCancelBtn]',
 
   info: '[data-test-orgSigningCert-info]',
   cardName: '[data-test-orgSigningCert-cardName]',
@@ -83,7 +87,7 @@ const selectors = {
   deleteConfirmBtn: "[data-test-orgSigningCert-deleteAction='confirm']",
   deleteCancelBtn: "[data-test-orgSigningCert-deleteAction='cancel']",
   deleteActions: '[data-test-orgSigningCert-deleteAction]',
-  deleteBackBtn: '[data-test-orgSigningCert-deleteBackBtn]',
+  confirmationBackBtn: '[data-test-orgSigningCert-confirmationBackBtn]',
   nameLabel: '[data-test-orgSigningCert-nameLabel]',
   bundleIdLabel: '[data-test-orgSigningCert-bundleIdLabel]',
   passwordLabel: '[data-test-orgSigningCert-passwordLabel]',
@@ -676,7 +680,7 @@ module(
 
       assert.dom(selectors.drawerTitle).hasText(t('confirmation'));
 
-      await click(selectors.deleteBackBtn);
+      await click(selectors.confirmationBackBtn);
 
       assert.dom(selectors.deleteConfirm).doesNotExist();
       assert.dom(selectors.tabs).exists();
@@ -823,8 +827,14 @@ module(
     });
 
     // ─── Project scope ───────────────────────────────────────────────────────
-    test('project scope shows its single cert with no activate action', async function (assert) {
-      const cert = this.server.create('signing-certificate');
+    test('project scope shows its single, active cert with no activate action', async function (assert) {
+      // A freshly uploaded project cert is active by default (see
+      // mycroft's ProjectSigningCertificateViewSet.create), so there is
+      // nothing to switch on yet.
+      const cert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
 
       await render(PROJECT_SCOPE);
 
@@ -836,17 +846,78 @@ module(
 
       assert.dom(selectors.info).exists({ count: 1 });
       assert.dom(selectors.cardName).hasText(cert.name);
+      assert.dom(selectors.activeBadge).exists();
 
       assert
         .dom(selectors.activateBtn)
-        .doesNotExist('nothing to switch between in project scope');
+        .doesNotExist('already active, nothing to switch to');
 
       assert.dom(selectors.deleteBtn).exists({ count: 1 });
     });
 
+    test('a disabled project cert offers to reactivate it', async function (assert) {
+      this.server.create('signing-certificate');
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      assert.dom(selectors.activeBadge).doesNotExist();
+
+      assert
+        .dom(selectors.activateBtn)
+        .hasText(t('cyod.signingCert.makeActive'));
+    });
+
+    test('reactivating the project cert PATCHes is_active without deleting it', async function (assert) {
+      // The default mirage PATCH handler (mirage/config.js) toggles the first
+      // created cert's is_active, matching the real singleton endpoint.
+      const cert = this.server.create('signing-certificate');
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      await click(selectors.activateBtn);
+
+      assert.true(cert.reload().is_active);
+      assert.dom(selectors.activeBadge).exists();
+      assert
+        .dom(selectors.info)
+        .exists({ count: 1 }, 'the cert was not deleted');
+    });
+
+    test('deferring to the org cert disables the project cert instead of deleting it', async function (assert) {
+      const projectCert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
+      const orgCert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      await click(selectors.activateBtn);
+
+      assert.false(
+        projectCert.reload().is_active,
+        'the project cert is switched off, not deleted'
+      );
+
+      assert.ok(
+        this.server.schema.signingCertificates.find(projectCert.id),
+        'still exists'
+      );
+
+      const cards = findAll(selectors.info);
+
+      assert.dom(selectors.activeBadge, cards[0]).doesNotExist();
+      assert.dom(selectors.activeBadge, cards[1]).exists();
+      assert.dom(cards[1]).containsText(orgCert.name);
+    });
+
     test('project scope shows the empty state before a cert is uploaded', async function (assert) {
-      // The endpoint answers 404 rather than an empty body when the project has
-      // no override, so absence arrives as a rejection.
       await render(PROJECT_SCOPE);
       await openExistingTab();
 
@@ -854,6 +925,184 @@ module(
       assert.dom(selectors.info).doesNotExist();
 
       assert.dom(selectors.emptyTitle).hasText(t('cyod.signingCert.noneTitle'));
+    });
+
+    test('project scope also lists the org collection’s active certificate', async function (assert) {
+      // The mirage endpoint treats the first created cert as the project's own
+      // and any others as the org's collection, surfacing only the active one
+      // among those (see mirage/config.js) -- a disabled org cert can never
+      // apply to this project either, so it has no place here.
+      const projectCert = this.server.create('signing-certificate');
+      const activeOrgCert = this.server.create(
+        'signing-certificate',
+        'withActiveStatus'
+      );
+      this.server.create('signing-certificate'); // not surfaced: not active
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      assert.dom(selectors.info).exists({ count: 2 });
+
+      const cards = findAll(selectors.info);
+      const names = cards.map((card) => card.textContent);
+
+      assert.ok(names[0].includes(projectCert.name));
+      assert.ok(names[1].includes(activeOrgCert.name));
+
+      assert.dom(selectors.activeBadge, cards[1]).exists();
+    });
+
+    test('the org active badge is hidden when the project has its own cert overriding it', async function (assert) {
+      // The project cert always wins at scan time regardless of which org cert
+      // is active, so showing both as "Active" in the same drawer would be
+      // misleading -- only the project cert's badge should appear here.
+      this.server.create('signing-certificate', 'withActiveStatus');
+      this.server.create('signing-certificate', 'withActiveStatus');
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      assert
+        .dom(selectors.activeBadge)
+        .exists({ count: 1 }, 'only the project cert claims to be active');
+
+      const cards = findAll(selectors.info);
+
+      assert
+        .dom(selectors.activeBadge, cards[0])
+        .exists('the project cert keeps its badge');
+    });
+
+    test('the add tab swaps to the override confirmation panel for an existing project certificate', async function (assert) {
+      this.server.create('signing-certificate');
+
+      await render(PROJECT_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert
+        .dom(selectors.overrideConfirmInfo)
+        .hasText(t('cyod.signingCert.projectCertOverrideWarning'));
+
+      assert
+        .dom(selectors.drawerTitle)
+        .hasText(
+          t('confirmation'),
+          'the drawer header swaps like the delete flow'
+        );
+
+      assert
+        .dom(selectors.tabs)
+        .doesNotExist('the add/existing tabs are hidden');
+    });
+
+    test('the back arrow returns from the override confirmation to the form with its data intact', async function (assert) {
+      this.server.create('signing-certificate');
+
+      await render(PROJECT_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      await click(selectors.confirmationBackBtn);
+
+      assert.dom(selectors.overrideConfirm).doesNotExist();
+      assert.dom(selectors.tabs).exists('the tabs reappear');
+      assert
+        .dom(selectors.p12Chip)
+        .containsText('identity.p12', 'the chosen files were not lost');
+    });
+
+    test('the add tab uploads directly before a project cert exists', async function (assert) {
+      await render(PROJECT_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert.dom(selectors.overrideConfirm).doesNotExist();
+
+      assert.strictEqual(
+        this.notify.successMsg,
+        t('cyod.signingCert.uploadSuccess')
+      );
+    });
+
+    test('the org-scope add tab never confirms a project override', async function (assert) {
+      this.server.create('signing-certificate');
+
+      await render(ORG_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert.dom(selectors.overrideConfirm).doesNotExist();
+
+      assert.strictEqual(
+        this.notify.successMsg,
+        t('cyod.signingCert.uploadSuccess')
+      );
+    });
+
+    test('the org active badge still shows when the project has no override of its own', async function (assert) {
+      // With no project cert, the org's active cert really is the one that
+      // governs this project's scans, so its badge should display normally.
+      // The generic mirage route treats the first created cert as the
+      // project's own (see mirage/config.js), so this overrides it to model
+      // "no project cert" directly rather than relying on creation order.
+      this.server.create('signing-certificate', 'withActiveStatus');
+
+      this.server.get(
+        '/organizations/:id/projects/:projectId/signing-certificate/',
+        (schema) => ({
+          project_certificate: null,
+          organization_certificates: schema.signingCertificates
+            .all()
+            .models.map((c) => c.toJSON()),
+        })
+      );
+
+      await render(PROJECT_SCOPE);
+      await openExistingTab();
+
+      assert.dom(selectors.activeBadge).exists({ count: 1 });
     });
 
     test('it emits no section layout of its own', async function (assert) {

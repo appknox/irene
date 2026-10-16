@@ -12,18 +12,30 @@
       </AkTypography>
     {{/if}}
 
-    <Organization::SettingsPanelHeader
-      @description={{if
-        this.isProjectScope
-        (t 'cyod.signingCert.descProject')
-        (t 'cyod.signingCert.desc')
-      }}
-    >
+    <Organization::SettingsPanelHeader>
       <:title>
         <AkTypography @variant='h6' data-test-orgSigningCert-title>
           {{t 'cyod.signingCert.title'}}
         </AkTypography>
       </:title>
+
+      <:description>
+        {{if this.isProjectScope (t 'cyod.signingCert.descProject') (t 'cyod.signingCert.desc')}}
+        {{t 'cyod.signingCert.existingCertHint'}}
+        <AkButton
+          data-test-orgSigningCert-existingCertLink
+          local-class='existing-cert-link'
+          @variant='text'
+          @color='primary'
+          @underline='none'
+          @typographyFontWeight='bold'
+          @typographyVariant='body2'
+          {{on 'click' this.openExistingTab}}
+        >
+          {{t 'cyod.signingCert.existingTab'}}
+        </AkButton>
+        {{t 'cyod.signingCert.existingCertHintSuffix'}}
+      </:description>
 
       <:action>
         <AkButton
@@ -49,13 +61,13 @@
       data-test-orgSigningCert-drawer
     >
       <AkAppbar @justifyContent='space-between' as |ab|>
-        {{#if this.pendingDelete}}
+        {{#if (or this.pendingDelete this.isConfirmingOverride)}}
           <AkStack @alignItems='center' @spacing='1.5'>
             <AkIconButton
-              data-test-orgSigningCert-deleteBackBtn
+              data-test-orgSigningCert-confirmationBackBtn
               class={{ab.classes.defaultIconBtn}}
               title={{t 'back'}}
-              {{on 'click' this.cancelDelete}}
+              {{on 'click' this.handleConfirmationBack}}
             >
               <AkIcon @iconName='arrow-back' />
             </AkIconButton>
@@ -89,50 +101,60 @@
 
       {{#if this.pendingDelete}}
         <Organization::SigningCertificate::DeleteConfirm
-          @cert={{this.pendingDelete}}
+          @cert={{this.pendingDelete.cert}}
           @isDeleting={{this.confirmDelete.isRunning}}
           @onConfirm={{perform this.confirmDelete}}
           @onCancel={{this.cancelDelete}}
         />
       {{else}}
-        <div class='px-4 pt-2 w-full'>
-          <AkTabs data-test-orgSigningCert-tabs as |Akt|>
-            <Akt.tabItem
-              data-test-orgSigningCert-addTab
-              @id='add'
-              @buttonVariant={{true}}
-              @isActive={{this.isAddTab}}
-              @onTabClick={{fn this.handleTabChange 'add'}}
-            >
-              {{t 'cyod.signingCert.add'}}
-            </Akt.tabItem>
+        {{#unless this.isConfirmingOverride}}
+          <div class='px-4 pt-2 w-full'>
+            <AkTabs data-test-orgSigningCert-tabs as |Akt|>
+              <Akt.tabItem
+                data-test-orgSigningCert-addTab
+                @id='add'
+                @buttonVariant={{true}}
+                @isActive={{this.isAddTab}}
+                @onTabClick={{fn this.handleTabChange 'add'}}
+              >
+                {{t 'cyod.signingCert.add'}}
+              </Akt.tabItem>
 
-            <Akt.tabItem
-              data-test-orgSigningCert-existingTab
-              @id='existing'
-              @buttonVariant={{true}}
-              @isActive={{this.isExistingTab}}
-              @onTabClick={{fn this.handleTabChange 'existing'}}
-            >
-              {{t 'cyod.signingCert.existingTab'}}
-            </Akt.tabItem>
-          </AkTabs>
-        </div>
+              <Akt.tabItem
+                data-test-orgSigningCert-existingTab
+                @id='existing'
+                @buttonVariant={{true}}
+                @isActive={{this.isExistingTab}}
+                @onTabClick={{fn this.handleTabChange 'existing'}}
+              >
+                {{t 'cyod.signingCert.existingTab'}}
+              </Akt.tabItem>
+            </AkTabs>
+          </div>
+        {{/unless}}
 
         {{#if this.isAddTab}}
           <Organization::SigningCertificate::UploadForm
             data-test-orgSigningCert-uploadForm
             @baseUrl={{this.uploadUrl}}
+            @hasExistingProjectCert={{and this.isProjectScope this.cert}}
+            @isConfirmingOverride={{this.isConfirmingOverride}}
+            @onRequestOverrideConfirm={{this.requestOverrideConfirm}}
+            @onCancelOverrideConfirm={{this.cancelOverrideConfirm}}
             @onUploaded={{perform this.fetchCertificates}}
             @onCancel={{this.handleClose}}
           />
         {{else}}
           <Organization::SigningCertificate::CertList
-            @certs={{this.existingCerts}}
+            @projectCerts={{this.projectCertRows}}
+            @orgCerts={{this.orgCertRows}}
             @isLoading={{this.fetchCertificates.isRunning}}
-            @isActivating={{this.activateCert.isRunning}}
+            @isActivating={{or
+              this.activateCert.isRunning
+              this.setProjectCertActive.isRunning
+            }}
             @isProjectScope={{this.isProjectScope}}
-            @onActivate={{perform this.activateCert}}
+            @onActivate={{this.handleActivate}}
             @onDelete={{this.requestDelete}}
           />
         {{/if}}
