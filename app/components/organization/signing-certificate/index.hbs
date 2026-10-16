@@ -22,16 +22,18 @@
       <:description>
         {{if this.isProjectScope (t 'cyod.signingCert.descProject') (t 'cyod.signingCert.desc')}}
         {{t 'cyod.signingCert.existingCertHint'}}
-        <AkLink
+        <AkButton
           data-test-orgSigningCert-existingCertLink
+          local-class='existing-cert-link'
+          @variant='text'
           @color='primary'
           @underline='none'
-          @fontWeight='bold'
+          @typographyFontWeight='bold'
           @typographyVariant='body2'
-          @onClick={{this.openExistingTab}}
+          {{on 'click' this.openExistingTab}}
         >
           {{t 'cyod.signingCert.existingTab'}}
-        </AkLink>
+        </AkButton>
         {{t 'cyod.signingCert.existingCertHintSuffix'}}
       </:description>
 

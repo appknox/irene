@@ -1,5 +1,4 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 import type {
   TypographyFontWeight,
   TypographyVariant,
@@ -34,7 +33,6 @@ export interface AkLinkSignatureArgs {
   linkTextClass?: string;
   query?: Record<string, unknown>;
   replace?: boolean;
-  onClick?: () => void;
 }
 
 export interface AkLinkSignature {
@@ -60,18 +58,6 @@ export default class AkLinkComponent extends Component<AkLinkSignature> {
 
   get query() {
     return this.args.query || {};
-  }
-
-  @action
-  handleKeydown(event: KeyboardEvent) {
-    if (this.args.route || this.args.disabled) {
-      return;
-    }
-
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.args.onClick?.();
-    }
   }
 }
 

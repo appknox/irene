@@ -1,95 +1,43 @@
 {{! @glint-nocheck: or}}
-{{#if @route}}
-  <LinkTo
-    data-test-ak-link
-    ...attributes
-    @disabled={{@disabled}}
-    title='{{@title}}'
-    class={{@class}}
-    local-class='
-      ak-link-root
-      {{if @disabled "ak-link-disabled"}}
-      ak-link-color-{{or @color "textPrimary"}}
-      ak-link-underline-{{or @underline "hover"}}
-      {{if @noWrap "ak-link-noWrap"}}'
-    @route={{@route}}
-    @models={{this.modelOrModels}}
-    @query={{this.query}}
-    @replace={{@replace}}
+<LinkTo
+  data-test-ak-link
+  ...attributes
+  @disabled={{@disabled}}
+  title='{{@title}}'
+  class={{@class}}
+  local-class='
+    ak-link-root 
+    {{if @disabled "ak-link-disabled"}}
+    ak-link-color-{{or @color "textPrimary"}}
+    ak-link-underline-{{or @underline "hover"}}
+    {{if @noWrap "ak-link-noWrap"}}'
+  @route={{@route}}
+  @models={{this.modelOrModels}}
+  @query={{this.query}}
+  @replace={{@replace}}
+>
+  {{#if (has-block 'leftIcon')}}
+    <div data-test-ak-link-left-icon local-class='ak-link-left-icon'>
+      {{yield to='leftIcon'}}
+    </div>
+  {{/if}}
+
+  <AkTypography
+    data-test-ak-link-text
+    @variant={{@typographyVariant}}
+    @color={{if @disabled 'inherit' @color}}
+    @noWrap={{@noWrap}}
+    @tag='span'
+    @fontWeight={{@fontWeight}}
+    class={{@linkTextClass}}
+    local-class='ak-link-text'
   >
-    {{#if (has-block 'leftIcon')}}
-      <div data-test-ak-link-left-icon local-class='ak-link-left-icon'>
-        {{yield to='leftIcon'}}
-      </div>
-    {{/if}}
+    {{yield}}
+  </AkTypography>
 
-    <AkTypography
-      data-test-ak-link-text
-      @variant={{@typographyVariant}}
-      @color={{if @disabled 'inherit' @color}}
-      @noWrap={{@noWrap}}
-      @tag='span'
-      @fontWeight={{@fontWeight}}
-      class={{@linkTextClass}}
-      local-class='ak-link-text'
-    >
-      {{yield}}
-    </AkTypography>
-
-    {{#if (has-block 'rightIcon')}}
-      <div data-test-ak-link-right-icon local-class='ak-link-right-icon'>
-        {{yield to='rightIcon'}}
-      </div>
-    {{/if}}
-  </LinkTo>
-{{else}}
-  {{! No @route: a non-navigating link-styled trigger, e.g. opening a drawer/tab in place.
-      A real <a> keeps default inline flow with surrounding text (unlike the earlier <div>
-      attempt, which rendered as its own line in this component's `has-block 'description'`
-      usage). It has no href since it never navigates, so link-href-attributes and
-      require-presentational-children (role='button' same as the @route branch's semantics)
-      are disabled below. }}
-  {{! template-lint-disable link-href-attributes require-presentational-children }}
-  <a
-    role='button'
-    tabindex={{if @disabled '-1' '0'}}
-    data-test-ak-link
-    ...attributes
-    aria-disabled={{if @disabled 'true'}}
-    title='{{@title}}'
-    class={{@class}}
-    local-class='
-      ak-link-root
-      {{if @disabled "ak-link-disabled"}}
-      ak-link-color-{{or @color "textPrimary"}}
-      ak-link-underline-{{or @underline "hover"}}
-      {{if @noWrap "ak-link-noWrap"}}'
-    {{on 'click' @onClick}}
-    {{on 'keydown' this.handleKeydown}}
-  >
-    {{#if (has-block 'leftIcon')}}
-      <div data-test-ak-link-left-icon local-class='ak-link-left-icon'>
-        {{yield to='leftIcon'}}
-      </div>
-    {{/if}}
-
-    <AkTypography
-      data-test-ak-link-text
-      @variant={{@typographyVariant}}
-      @color={{if @disabled 'inherit' @color}}
-      @noWrap={{@noWrap}}
-      @tag='span'
-      @fontWeight={{@fontWeight}}
-      class={{@linkTextClass}}
-      local-class='ak-link-text'
-    >
-      {{yield}}
-    </AkTypography>
-
-    {{#if (has-block 'rightIcon')}}
-      <div data-test-ak-link-right-icon local-class='ak-link-right-icon'>
-        {{yield to='rightIcon'}}
-      </div>
-    {{/if}}
-  </a>
-{{/if}}
+  {{#if (has-block 'rightIcon')}}
+    <div data-test-ak-link-right-icon local-class='ak-link-right-icon'>
+      {{yield to='rightIcon'}}
+    </div>
+  {{/if}}
+</LinkTo>
