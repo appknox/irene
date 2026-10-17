@@ -53,6 +53,13 @@ export default class AnalysisRiskOverrideEditDrawerContentComponent extends Comp
     );
   }
 
+  get isOverrideFormActive() {
+    return (
+      this.activeComponent ===
+      'analysis-risk/override-edit-drawer/override-form'
+    );
+  }
+
   @action
   handleShowOverrideFormToEdit(value: boolean) {
     this.showOverrideFormToEdit = value;

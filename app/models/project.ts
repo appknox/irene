@@ -91,6 +91,12 @@ export default class ProjectModel extends ModelBaseMixin {
     }
   }
 
+  getOverdueVulnerabilitiesCount() {
+    const adapter = this.store.adapterFor('project');
+
+    return adapter.getOverdueVulnerabilitiesCount(this);
+  }
+
   get isAPIScanEnabled() {
     const platform = this.platform;
 

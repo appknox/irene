@@ -7,6 +7,11 @@ import { OverrideRequestStatus } from './analysis-override-request';
 import type FileModel from './file';
 import type VulnerabilityModel from './vulnerability';
 
+export interface AnalysisOverviewSla {
+  detected_on: string | null;
+  remediation_deadline: string;
+}
+
 export default class AnalysisOverviewModel extends Model {
   @attr('number')
   declare risk: number;
@@ -37,6 +42,10 @@ export default class AnalysisOverviewModel extends Model {
 
   @attr('number', { defaultValue: null })
   declare overrideRequestedRisk: number | null;
+
+  // Open SLA remediation of the vulnerability; null when none applies
+  @attr
+  declare sla?: AnalysisOverviewSla | null;
 
   @attr('date')
   declare updatedOn: Date;

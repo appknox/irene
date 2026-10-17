@@ -1,0 +1,29 @@
+<AkDrawer @open={{@open}} @onClose={{@onClose}} @anchor='right' as |dr|>
+  <div local-class='drawer' data-test-overdueVulnerabilities-slaPolicyDrawer>
+    <AkAppbar
+      @justifyContent='space-between'
+      @position='sticky'
+      class='px-3'
+      as |ab|
+    >
+      <AkTypography
+        @color='inherit'
+        @variant='h5'
+        data-test-overdueVulnerabilities-slaPolicyDrawer-title
+      >
+        {{t 'overdueVulnerabilities.slaPolicy'}}
+      </AkTypography>
+
+      <AkIconButton
+        {{on 'click' dr.closeHandler}}
+        class={{ab.classes.defaultIconBtn}}
+        aria-label={{t 'close'}}
+        data-test-overdueVulnerabilities-slaPolicyDrawer-closeBtn
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </AkAppbar>
+
+    <OverdueVulnerabilities::SlaPolicyDrawer::Policies @file={{@file}} />
+  </div>
+</AkDrawer>

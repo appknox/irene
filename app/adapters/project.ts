@@ -1,5 +1,11 @@
 import CommonDRFAdapter from './commondrf';
 
+import type ProjectModel from 'irene/models/project';
+
+export interface ProjectOverdueVulnerabilitiesCount {
+  count: number;
+}
+
 type ProjectQueryParamOption = Record<string, string | number> & {
   adapterOptions?: {
     baseUrlModel: 'service-account';
@@ -34,6 +40,16 @@ export default class ProjectAdapter extends CommonDRFAdapter {
     }
 
     return this._buildURL(modelName, query['id']);
+  }
+
+  getOverdueVulnerabilitiesCount(
+    modelInstance: ProjectModel
+  ): Promise<ProjectOverdueVulnerabilitiesCount> {
+    const url =
+      this._buildURL('project', modelInstance.id) +
+      '/overdue_vulnerabilities_count';
+
+    return this.ajax(url, 'GET');
   }
 }
 

@@ -1,0 +1,105 @@
+<AkStack @direction='column' @spacing='2' data-test-overdueVulnerabilities-root>
+  <AkBreadcrumbs::AutoTrail data-test-overdueVulnerabilities-breadcrumbs />
+
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    local-class='header'
+  >
+    <AkStack @alignItems='center' @spacing='1.5'>
+      <AkTypography @variant='h5' data-test-overdueVulnerabilities-title>
+        {{t 'overdueVulnerabilities.title'}}
+      </AkTypography>
+
+      {{#if this.response}}
+        <AkStack
+          @alignItems='center'
+          @spacing='0.5'
+          local-class='count-chip'
+          data-test-overdueVulnerabilities-countChip
+        >
+          <AkIcon @iconName='schedule' @size='small' @color='error' />
+
+          <AkTypography
+            @variant='body2'
+            @fontWeight='medium'
+            @color='error'
+            data-test-overdueVulnerabilities-count
+          >
+            {{this.totalCount}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </AkStack>
+
+    <AkButton
+      {{on 'click' this.openSlaPolicy}}
+      data-test-overdueVulnerabilities-slaPolicyBtn
+    >
+      {{t 'overdueVulnerabilities.slaPolicy'}}
+    </AkButton>
+  </AkStack>
+
+  <AkPaginationProvider
+    @results={{this.overdueVulnerabilities}}
+    @totalItems={{this.totalCount}}
+    @onItemPerPageChange={{this.handleItemPerPageChange}}
+    @nextAction={{this.handlePageChange}}
+    @prevAction={{this.handlePageChange}}
+    @itemPerPageOptions={{array 10 25 50}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.fetchOverdueVulnerabilities.isRunning}}
+      <OverdueVulnerabilities::Table @loading={{true}} />
+    {{else if this.hasNoOverdueVulnerabilities}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @spacing='1'
+        local-class='empty'
+        data-test-overdueVulnerabilities-empty
+      >
+        <AkTypography @variant='h6' data-test-overdueVulnerabilities-emptyTitle>
+          {{t 'overdueVulnerabilities.emptyTitle'}}
+        </AkTypography>
+
+        <AkTypography
+          @color='textSecondary'
+          data-test-overdueVulnerabilities-emptyDescription
+        >
+          {{t 'overdueVulnerabilities.emptyDescription'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <OverdueVulnerabilities::Table
+        @rows={{this.overdueVulnerabilities}}
+        @ordering={{this.ordering}}
+        @onOrderingChange={{this.handleOrderingChange}}
+      />
+
+      <AkPagination
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @tableItemLabel={{t 'overdueVulnerabilities.title'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        @totalItems={{pgc.totalItems}}
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>
+
+<OverdueVulnerabilities::SlaPolicyDrawer
+  @open={{this.showSlaPolicy}}
+  @file={{@file}}
+  @onClose={{this.closeSlaPolicy}}
+/>

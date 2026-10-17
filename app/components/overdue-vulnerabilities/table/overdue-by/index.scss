@@ -1,0 +1,8 @@
+.overdue-by-chip {
+  display: inline-flex;
+  padding: 0.125em 0.5em;
+  border-radius: var(--overdue-vulnerabilities-table-overdue-by-border-radius);
+  background-color: var(
+    --overdue-vulnerabilities-table-overdue-by-background-color
+  );
+}

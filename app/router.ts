@@ -233,6 +233,7 @@ Router.map(function () {
           this.route('knox-analysis', { path: '/knox-analysis/:analysis_id' });
 
           this.route('static-scan');
+          this.route('overdue-vulnerabilities');
 
           this.route('dynamic-scan', function () {
             this.route('manual');

@@ -1,0 +1,61 @@
+{{#if @loading}}
+  <div data-test-overdueVulnerabilities-table-loading>
+    <AkTable::Loading @columns={{this.columns}} />
+  </div>
+{{else}}
+  <AkTable
+    @hoverable={{true}}
+    local-class='overdue-table'
+    data-test-overdueVulnerabilities-table
+    as |t|
+  >
+    <t.head
+      @columns={{this.columns}}
+      @sorts={{this.sorts}}
+      @onUpdateSorts={{this.handleSortsUpdate}}
+      as |h|
+    >
+      <h.row as |r|>
+        <r.cell
+          data-test-overdueVulnerabilities-table-headerCell
+          as |column meta|
+        >
+          {{column.name}}
+
+          {{#if meta.isSorted}}
+            <AkIcon
+              {{style verticalAlign='middle'}}
+              @size='small'
+              @iconName={{if meta.isSortedAsc 'arrow-upward' 'arrow-downward'}}
+              data-test-overdueVulnerabilities-table-sortIcon
+            />
+          {{/if}}
+        </r.cell>
+      </h.row>
+    </t.head>
+
+    <t.body @rows={{@rows}} as |b|>
+      <b.row
+        {{style cursor='pointer'}}
+        @onClick={{this.handleRowClick}}
+        data-test-overdueVulnerabilities-table-row='{{b.rowValue.id}}'
+        as |r|
+      >
+        <r.cell data-test-overdueVulnerabilities-table-cell as |value|>
+          {{#if r.columnValue.component}}
+            {{#let (component r.columnValue.component) as |Component|}}
+              <Component @overdueVulnerability={{r.rowValue}} />
+            {{/let}}
+          {{else}}
+            <AkTypography
+              title={{value}}
+              data-test-overdueVulnerabilities-table-name
+            >
+              {{value}}
+            </AkTypography>
+          {{/if}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </AkTable>
+{{/if}}

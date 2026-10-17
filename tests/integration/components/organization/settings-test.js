@@ -9,6 +9,7 @@ import { hbs } from 'ember-cli-htmlbars';
 const selectors = {
   editAnalysisTitle: '[data-test-orgEditAnalysis-title]',
   editAnalysisToggle: '[data-test-orgEditAnalysis-toggle]',
+  vulnerabilitySlaTitle: '[data-test-orgVulnerabilitySla-title]',
   mfaTitle: '[data-test-mfa-title]',
   emailDomain: '[data-test-orgEmailDomain-title]',
 };
@@ -31,6 +32,12 @@ module('Integration | Component | organization/settings', function (hooks) {
 
     this.server.get('/organizations/:id/me', (schema, req) =>
       schema.organizationMes.find(`${req.params.id}`)?.toJSON()
+    );
+
+    this.server.create('organization-vulnerability-sla', { id: '1' });
+
+    this.server.get('/organizations/:id/vulnerability-sla', (schema) =>
+      schema.organizationVulnerabilitySlas.find('1').toJSON()
     );
 
     const organization = this.owner.lookup('service:organization');
@@ -90,6 +97,49 @@ module('Integration | Component | organization/settings', function (hooks) {
           Node.DOCUMENT_POSITION_FOLLOWING
       ),
       'edit analysis is rendered before multi factor auth'
+    );
+  });
+
+  test.each(
+    'the vulnerability SLA section renders only for owners',
+    [
+      [ownerRole, true],
+      [adminRole, false],
+      [memberRole, false],
+    ],
+    async function (assert, [role, visible]) {
+      this.server.db.organizationMes.update('1', role);
+
+      await render(TEMPLATE);
+
+      if (visible) {
+        assert
+          .dom(selectors.vulnerabilitySlaTitle)
+          .hasText(t('vulnerabilitySla.title'));
+      } else {
+        assert.dom(selectors.vulnerabilitySlaTitle).doesNotExist();
+      }
+    }
+  );
+
+  test('the vulnerability SLA section renders above the edit analysis section for owners', async function (assert) {
+    await render(TEMPLATE);
+
+    const vulnerabilitySla = find(selectors.vulnerabilitySlaTitle);
+    const editAnalysis = find(selectors.editAnalysisTitle);
+
+    assert
+      .dom(selectors.vulnerabilitySlaTitle)
+      .hasText(t('vulnerabilitySla.title'));
+
+    assert.dom(selectors.editAnalysisTitle).hasText(t('editAnalysis'));
+
+    assert.true(
+      Boolean(
+        vulnerabilitySla.compareDocumentPosition(editAnalysis) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      ),
+      'vulnerability SLA is rendered before edit analysis'
     );
   });
 });

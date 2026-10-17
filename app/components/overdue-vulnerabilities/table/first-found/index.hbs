@@ -1,0 +1,25 @@
+<AkStack @alignItems='center' @spacing='0.5' @flexWrap='wrap'>
+  <AkTypography
+    @noWrap={{true}}
+    data-test-overdueVulnerabilities-table-firstFoundOn
+  >
+    {{this.firstFoundOn}}
+  </AkTypography>
+
+  <AkTypography @color='textSecondary'>
+    {{t 'overdueVulnerabilities.in'}}
+  </AkTypography>
+
+  <AkLink
+    @route='authenticated.dashboard.file'
+    @model={{this.fileId}}
+    @color='primary'
+    @underline='always'
+    @noWrap={{true}}
+    data-test-overdueVulnerabilities-table-fileLink
+  >
+    {{t 'fileID'}}
+    -
+    {{this.fileId}}
+  </AkLink>
+</AkStack>

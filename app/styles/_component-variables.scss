@@ -1633,6 +1633,53 @@ body {
     --common-white
   );
 
+  // variables for file-details/overdue-vulnerabilities
+  --file-details-overdue-vulnerabilities-border-color: var(--error-main);
+  --file-details-overdue-vulnerabilities-border-radius: var(--border-radius);
+  --file-details-overdue-vulnerabilities-background-color: var(--error-light);
+  --file-details-overdue-vulnerabilities-icon-color: var(--background-light);
+  --file-details-overdue-vulnerabilities-icon-background-color: var(
+    --error-main
+  );
+
+  // variables for file-details/vulnerability-analysis-details/sla-status
+  --file-details-vulnerability-analysis-details-sla-status-border-radius: 1em;
+  --file-details-vulnerability-analysis-details-sla-status-due-color: var(
+    --warn-dark
+  );
+  --file-details-vulnerability-analysis-details-sla-status-due-background-color: var(
+    --warn-light
+  );
+  --file-details-vulnerability-analysis-details-sla-status-overdue-color: var(
+    --error-main
+  );
+  --file-details-vulnerability-analysis-details-sla-status-overdue-background-color: var(
+    --error-light
+  );
+  --file-details-vulnerability-analysis-details-sla-status-resolved-color: var(
+    --text-primary
+  );
+  --file-details-vulnerability-analysis-details-sla-status-resolved-background-color: var(
+    --neutral-grey-100
+  );
+
+  // variables for file-details/vulnerability-analysis/sla-indicator
+  --file-details-vulnerability-analysis-sla-indicator-due-color: var(
+    --warn-dark
+  );
+  --file-details-vulnerability-analysis-sla-indicator-due-background-color: var(
+    --warn-light
+  );
+  --file-details-vulnerability-analysis-sla-indicator-overdue-color: var(
+    --error-main
+  );
+  --file-details-vulnerability-analysis-sla-indicator-overdue-background-color: var(
+    --error-light
+  );
+  --file-details-vulnerability-analysis-sla-indicator-border-color: var(
+    --border-color-1
+  );
+
   // variables for file-details/proxy-settings
   --file-details-proxy-settings-neutral-color: var(--neutral-grey-300);
 
@@ -3325,6 +3372,39 @@ body {
   --organization-service-account-section-select-scope-icon-color: var(
     --neutral-grey-300
   );
+
+  // variables for overdue-vulnerabilities
+  --overdue-vulnerabilities-header-background-color: var(--background-main);
+  --overdue-vulnerabilities-border-color: var(--border-color-1);
+  --overdue-vulnerabilities-count-chip-border-radius: var(--border-radius);
+  --overdue-vulnerabilities-count-chip-background-color: var(--error-main-5);
+
+  // variables for overdue-vulnerabilities/table
+  --overdue-vulnerabilities-table-background-color: var(--background-main);
+
+  // variables for overdue-vulnerabilities/table/overdue-by
+  --overdue-vulnerabilities-table-overdue-by-border-radius: var(--border-radius);
+  --overdue-vulnerabilities-table-overdue-by-background-color: var(
+    --error-main-5
+  );
+
+  // variables for analysis-risk/override-edit-drawer/sla-note
+  --analysis-risk-override-edit-drawer-sla-note-label-color: var(
+    --text-primary
+  );
+
+  // variables for vulnerability-sla/policy-table
+  --vulnerability-sla-policy-table-border-color: var(--border-color-1);
+  --vulnerability-sla-policy-table-header-background-color: var(
+    --background-light
+  );
+
+  // variables for vulnerability-sla/severity-row
+  --vulnerability-sla-severity-row-critical-color: var(--severity-critical);
+  --vulnerability-sla-severity-row-high-color: var(--severity-high);
+  --vulnerability-sla-severity-row-medium-color: var(--severity-medium);
+  --vulnerability-sla-severity-row-low-color: var(--severity-low);
+  --vulnerability-sla-severity-row-overridden-border-color: var(--success-main);
 
   // variables for organization/settings
   --organization-settings-container-background-color: var(--background-main);

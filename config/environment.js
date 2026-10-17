@@ -329,6 +329,7 @@ module.exports = function (environment) {
       vulnerabilityPreferences: 'vulnerability_preferences',
       overrideRequests: 'override_requests',
       memberOverrideRequestFeature: 'member_override_request_feature',
+      vulnerabilitySla: 'vulnerability-sla',
       uploadFile: 'attachments',
       uploadedAttachment: 'attachments/upload_finished',
       deleteAttachment: 'delete_attachment',

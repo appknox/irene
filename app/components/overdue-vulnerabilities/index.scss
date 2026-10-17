@@ -1,0 +1,18 @@
+.header {
+  padding: 1em 1.5em;
+  background-color: var(--overdue-vulnerabilities-header-background-color);
+  border: 1px solid var(--overdue-vulnerabilities-border-color);
+  box-sizing: border-box;
+}
+
+.count-chip {
+  padding: 0.125em 0.5em;
+  border-radius: var(--overdue-vulnerabilities-count-chip-border-radius);
+  background-color: var(--overdue-vulnerabilities-count-chip-background-color);
+}
+
+.empty {
+  padding: 3em 1em;
+  background-color: var(--overdue-vulnerabilities-header-background-color);
+  border: 1px solid var(--overdue-vulnerabilities-border-color);
+}

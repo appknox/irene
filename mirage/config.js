@@ -251,6 +251,22 @@ function routes() {
     return {};
   });
 
+  this.get('/v2/analyses/:id/sla', () => ({
+    enabled: false,
+    remediation_deadline: null,
+  }));
+
+  this.get('/v3/projects/:id/overdue_vulnerabilities_count', () => ({
+    count: 0,
+  }));
+
+  this.get('/organizations/:id/vulnerability-sla', (schema) =>
+    (
+      schema.organizationVulnerabilitySlas.first() ??
+      this.create('organization-vulnerability-sla')
+    ).toJSON()
+  );
+
   this.get('/organizations/:id/sso/saml2', () => {
     return {};
   });

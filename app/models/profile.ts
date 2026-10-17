@@ -1,6 +1,10 @@
 import type { AsyncHasMany } from '@ember-data/model';
 import Model, { attr, hasMany } from '@ember-data/model';
 import type FileModel from './file';
+import type {
+  VulnerabilitySlaSeverity,
+  VulnerabilitySlaWindow,
+} from 'irene/utils/vulnerability-sla';
 
 interface ValueObject {
   value: boolean;
@@ -75,6 +79,27 @@ export default class ProfileModel extends Model {
     const adapter = this.store.adapterFor(this.adapterName);
 
     return adapter.unsetShowPreference(this, preference);
+  }
+
+  getSlaPolicy() {
+    const adapter = this.store.adapterFor(this.adapterName);
+
+    return adapter.getSlaPolicy(this);
+  }
+
+  setSlaPolicySeverity(
+    severity: VulnerabilitySlaSeverity,
+    data: VulnerabilitySlaWindow
+  ) {
+    const adapter = this.store.adapterFor(this.adapterName);
+
+    return adapter.setSlaPolicySeverity(this, severity, data);
+  }
+
+  resetSlaPolicySeverity(severity: VulnerabilitySlaSeverity) {
+    const adapter = this.store.adapterFor(this.adapterName);
+
+    return adapter.resetSlaPolicySeverity(this, severity);
   }
 
   saveKnoxIqAutomatedTrigger(data: SaveKnoxIqAutomatedTriggerData) {
