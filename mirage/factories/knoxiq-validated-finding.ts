@@ -57,6 +57,7 @@ export const KNOXIQ_VALIDATED_FINDING_FACTORY_DEF = {
   // API-scan only; null for SAST/DAST findings. Tests override explicitly
   // when exercising the request/response UI.
   request_response_pairs: null,
+  confirmed_request: null,
 
   exploitability() {
     return {

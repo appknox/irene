@@ -110,6 +110,13 @@ export default class KnoxiqValidatedFindingModel extends Model {
   declare requestResponsePairs:
     | KnoxiqValidatedFindingRequestResponsePair[]
     | null;
+
+  // API-scan findings only: the one complete, directly re-sendable request
+  // for a confirmed TRUE_POSITIVE exploit, picked from requestResponsePairs.
+  // Unredacted, unlike requestResponsePairs — meant to be copied and
+  // re-sent as-is. null unless the finding is a confirmed TRUE_POSITIVE.
+  @attr()
+  declare confirmedRequest: KnoxiqValidatedFindingApiRequest | null;
 }
 
 declare module 'ember-data/types/registries/model' {
