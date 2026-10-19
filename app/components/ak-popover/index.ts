@@ -133,6 +133,12 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
     if (this.anchorRef && this.popperElement) {
       this.popper = createPopper(this.anchorRef, this.popperElement, {
         placement: this.args.placement || this.defaultPlacement,
+        // The popover content is wormholed out to a root-level node, so its
+        // anchor can be nested anywhere -- including inside a `position:
+        // fixed` ancestor like AkDrawer. Popper's default 'absolute' strategy
+        // miscalculates the offset in that case; 'fixed' always measures from
+        // the viewport, which is correct for both fixed and static ancestors.
+        strategy: 'fixed',
         modifiers: [
           ...this.defaultModifiers,
           sameWidth(Boolean(this.args.sameWidthAsRef)),
