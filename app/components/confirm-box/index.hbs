@@ -6,12 +6,7 @@
     @onClose={{perform this.clearModal}}
     @blurOverlay={{@blurOverlay}}
   >
-    <AkStack
-      local-class='confirm-box-content'
-      @direction='column'
-      @alignItems='center'
-      @justifyContent='center'
-    >
+    <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
       {{#if (has-block 'content')}}
         {{yield to='content'}}
       {{else if @description}}

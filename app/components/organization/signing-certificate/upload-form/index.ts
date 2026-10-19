@@ -16,6 +16,7 @@ export interface OrganizationSigningCertificateUploadFormSignature {
   Args: {
     baseUrl: string;
     hasExistingProjectCert?: boolean;
+    isLoadingExistingCert?: boolean;
     isConfirmingOverride: boolean;
     onRequestOverrideConfirm: () => void;
     onCancelOverrideConfirm: () => void;
@@ -44,9 +45,16 @@ export default class OrganizationSigningCertificateUploadFormComponent extends C
   }
 
   // Both files and the p12 password are mandatory. The password is trimmed so
-  // whitespace alone does not unlock save.
+  // whitespace alone does not unlock save. Also locked while the parent is
+  // still finding out whether a project cert already exists, so a save can't
+  // race ahead and skip the override confirmation.
   get canSave() {
-    return !!this.p12File && !!this.profileFile && !!this.password.trim();
+    return (
+      !!this.p12File &&
+      !!this.profileFile &&
+      !!this.password.trim() &&
+      !this.args.isLoadingExistingCert
+    );
   }
 
   resetForm() {
@@ -95,6 +103,10 @@ export default class OrganizationSigningCertificateUploadFormComponent extends C
   @action
   handleSubmit(event: Event) {
     event.preventDefault();
+
+    if (this.args.isLoadingExistingCert) {
+      return;
+    }
 
     if (this.args.hasExistingProjectCert) {
       this.args.onRequestOverrideConfirm();

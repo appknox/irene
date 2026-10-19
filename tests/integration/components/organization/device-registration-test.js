@@ -110,6 +110,9 @@ module(
         .containsText(t('cyod.registration.addDeviceHint'));
 
       assert.dom(selectors.accountSettingsLink).hasText(t('accountSettings'));
+      assert
+        .dom(selectors.accountSettingsLink)
+        .hasAttribute('href', /\/settings\/cyod-settings$/);
     });
 
     test('it hides the device table when the switch is off', async function (assert) {

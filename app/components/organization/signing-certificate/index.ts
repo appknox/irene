@@ -37,11 +37,6 @@ type PendingDelete = {
   scope: CertScope;
 };
 
-interface ProjectCertificateResponse {
-  project_certificate: Record<string, unknown> | null;
-  organization_certificates: Record<string, unknown>[];
-}
-
 export interface OrganizationSigningCertificateSignature {
   Element: HTMLElement;
   Args: { project?: ProjectModel | null };
@@ -62,6 +57,7 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @tracked busyCertId: string | null = null;
   @tracked pendingDelete: PendingDelete | null = null;
   @tracked isConfirmingOverride = false;
+  @tracked certFetchFailed = false;
 
   get uploadUrl() {
     return this.args.project
@@ -71,6 +67,17 @@ export default class OrganizationSigningCertificateComponent extends Component<O
 
   get isProjectScope() {
     return !!this.args.project;
+  }
+
+  // Treat a still-loading or failed fetch as "there might be an existing
+  // cert" rather than "there is none" -- otherwise a save that races ahead of
+  // fetchCertificates would silently overwrite a project cert it never saw.
+  get hasExistingProjectCert() {
+    return this.isProjectScope && (!!this.cert || this.certFetchFailed);
+  }
+
+  get isLoadingExistingCert() {
+    return this.isProjectScope && this.fetchCertificates.isRunning;
   }
 
   get hasManageRole() {
@@ -123,13 +130,9 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     ];
   }
 
-  // Project scope only ever receives the org's currently active cert (the
-  // backend filters out the rest), purely for visibility into what backs this
-  // project by default. A project with its own *active* cert always uses that
-  // one at scan time, so the org row's active badge would be misleading then
-  // -- and its one available action becomes deferring back to it (disabling
-  // the project's own cert) rather than the org-wide activate used at org
-  // scope, where managing the org's full collection still happens.
+  // A project with its own active cert overrides the org's, so its row's
+  // active badge is hidden and its action becomes reverting to the org cert
+  // instead of the org-wide activate used at org scope.
   get orgCertRows(): CertRow[] {
     const overriddenByProjectCert =
       this.isProjectScope && !!this.cert?.isActive;
@@ -244,27 +247,17 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   // `activate()` below) rather than `store.queryRecord`, which only knows how
   // to normalize a single record shape.
   fetchCertificates = task(async () => {
+    this.certFetchFailed = false;
+
     try {
       if (this.args.project) {
-        const response = (await waitForPromise(
-          this.projectCertAdapter.fetchWithOrgCerts(this.args.project.id)
-        )) as ProjectCertificateResponse;
+        const { projectCertificate, organizationCertificates } =
+          await waitForPromise(
+            this.projectCertAdapter.fetchWithOrgCerts(this.args.project.id)
+          );
 
-        this.cert = response.project_certificate
-          ? (this.store.push(
-              this.store.normalize(
-                'project-signing-certificate',
-                response.project_certificate
-              )
-            ) as ProjectSigningCertificateModel)
-          : null;
-
-        this.certs = response.organization_certificates.map(
-          (raw) =>
-            this.store.push(
-              this.store.normalize('organization-signing-certificate', raw)
-            ) as OrganizationSigningCertificateModel
-        );
+        this.cert = projectCertificate;
+        this.certs = organizationCertificates;
       } else {
         const certs = await this.store.query(
           'organization-signing-certificate',
@@ -276,6 +269,7 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     } catch (e) {
       this.cert = null;
       this.certs = [];
+      this.certFetchFailed = true;
 
       this.logger.error('[CYOD] Could not load signing certificates:', e);
     }
@@ -307,13 +301,9 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     }
 
     try {
-      const response = (await waitForPromise(
+      this.cert = await waitForPromise(
         this.projectCertAdapter.setActive(projectId, active)
-      )) as Record<string, unknown>;
-
-      this.cert = this.store.push(
-        this.store.normalize('project-signing-certificate', response)
-      ) as ProjectSigningCertificateModel;
+      );
 
       this.notify.success(
         this.intl.t(

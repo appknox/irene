@@ -52,6 +52,7 @@ const selectors = {
 const TEMPLATE = hbs`<Organization::SigningCertificate::UploadForm
   @baseUrl={{this.baseUrl}}
   @hasExistingProjectCert={{this.hasExistingProjectCert}}
+  @isLoadingExistingCert={{this.isLoadingExistingCert}}
   @isConfirmingOverride={{this.isConfirmingOverride}}
   @onRequestOverrideConfirm={{this.onRequestOverrideConfirm}}
   @onCancelOverrideConfirm={{this.onCancelOverrideConfirm}}
@@ -91,6 +92,7 @@ module(
       this.setProperties({
         baseUrl: UPLOAD_URL,
         hasExistingProjectCert: false,
+        isLoadingExistingCert: false,
         isConfirmingOverride: false,
         uploaded: 0,
         cancelled: 0,
@@ -216,6 +218,24 @@ module(
         .isDisabled('whitespace alone does not unlock save');
 
       await fillIn(selectors.password, 'secret');
+      assert.dom(selectors.uploadBtn).isNotDisabled();
+    });
+
+    test('save stays blocked while the existing project cert is still loading', async function (assert) {
+      this.set('isLoadingExistingCert', true);
+
+      await render(TEMPLATE);
+
+      await chooseP12();
+      await chooseProfile();
+      await fillIn(selectors.password, 'secret');
+
+      assert
+        .dom(selectors.uploadBtn)
+        .isDisabled('still finding out whether a project cert exists');
+
+      this.set('isLoadingExistingCert', false);
+
       assert.dom(selectors.uploadBtn).isNotDisabled();
     });
 

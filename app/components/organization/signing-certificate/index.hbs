@@ -137,7 +137,8 @@
           <Organization::SigningCertificate::UploadForm
             data-test-orgSigningCert-uploadForm
             @baseUrl={{this.uploadUrl}}
-            @hasExistingProjectCert={{and this.isProjectScope this.cert}}
+            @hasExistingProjectCert={{this.hasExistingProjectCert}}
+            @isLoadingExistingCert={{this.isLoadingExistingCert}}
             @isConfirmingOverride={{this.isConfirmingOverride}}
             @onRequestOverrideConfirm={{this.requestOverrideConfirm}}
             @onCancelOverrideConfirm={{this.cancelOverrideConfirm}}

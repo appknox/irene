@@ -39,4 +39,76 @@ module('Unit | Adapter | project-signing-certificate', function (hooks) {
       this.adapter.urlForUpload(7)
     );
   });
+
+  // ─── fetchWithOrgCerts ─────────────────────────────────────────────────────
+
+  test('fetchWithOrgCerts normalizes and pushes both halves of the response', async function (assert) {
+    const projectCert = this.server.create('signing-certificate');
+    const orgCert = this.server.create(
+      'signing-certificate',
+      'withActiveStatus'
+    );
+
+    this.server.get(
+      '/organizations/:id/projects/:projectId/signing-certificate/',
+      () => ({
+        project_certificate: projectCert.toJSON(),
+        organization_certificates: [orgCert.toJSON()],
+      })
+    );
+
+    const result = await this.adapter.fetchWithOrgCerts(7);
+
+    assert.strictEqual(result.projectCertificate?.id, projectCert.id);
+    assert.strictEqual(result.organizationCertificates.length, 1);
+    assert.strictEqual(result.organizationCertificates[0].id, orgCert.id);
+
+    const store = this.owner.lookup('service:store');
+
+    assert.strictEqual(
+      store.peekRecord('project-signing-certificate', projectCert.id),
+      result.projectCertificate,
+      'the project cert lands in the store'
+    );
+  });
+
+  test('fetchWithOrgCerts returns null when the project has no cert of its own', async function (assert) {
+    this.server.get(
+      '/organizations/:id/projects/:projectId/signing-certificate/',
+      () => ({ project_certificate: null, organization_certificates: [] })
+    );
+
+    const result = await this.adapter.fetchWithOrgCerts(7);
+
+    assert.strictEqual(result.projectCertificate, null);
+    assert.strictEqual(result.organizationCertificates.length, 0);
+  });
+
+  // ─── setActive ─────────────────────────────────────────────────────────────
+
+  test('setActive PATCHes is_active and pushes the response', async function (assert) {
+    assert.expect(3);
+
+    const cert = this.server.create('signing-certificate');
+
+    this.server.patch(
+      '/organizations/:id/projects/:projectId/signing-certificate/',
+      (schema, req) => {
+        assert.deepEqual(JSON.parse(req.requestBody), { is_active: true });
+
+        return cert.update({ is_active: true }).toJSON();
+      }
+    );
+
+    const updated = await this.adapter.setActive(7, true);
+
+    assert.true(updated.isActive);
+
+    const store = this.owner.lookup('service:store');
+
+    assert.strictEqual(
+      store.peekRecord('project-signing-certificate', cert.id),
+      updated
+    );
+  });
 });

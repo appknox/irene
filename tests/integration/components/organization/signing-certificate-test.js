@@ -1056,6 +1056,40 @@ module(
       );
     });
 
+    test('a failed project cert lookup still confirms before uploading', async function (assert) {
+      // Whether a project cert exists is genuinely unknown after a failed
+      // fetch -- treat that like "there might be one" rather than risk a
+      // silent overwrite.
+      this.server.get(
+        '/organizations/:id/projects/:projectId/signing-certificate/',
+        () => new Response(500)
+      );
+
+      await render(PROJECT_SCOPE);
+      await click(selectors.openBtn);
+
+      await triggerEvent(selectors.p12, 'change', {
+        files: [new File(['x'], 'identity.p12')],
+      });
+
+      await triggerEvent(selectors.profile, 'change', {
+        files: [new File(['x'], 'team.mobileprovision')],
+      });
+
+      await fillIn(selectors.password, 'secret');
+      await click(selectors.uploadBtn);
+
+      assert
+        .dom(selectors.overrideConfirmInfo)
+        .hasText(t('cyod.signingCert.projectCertOverrideWarning'));
+
+      assert.strictEqual(
+        this.notify.successMsg,
+        null,
+        'the upload waits for confirmation'
+      );
+    });
+
     test('the org-scope add tab never confirms a project override', async function (assert) {
       this.server.create('signing-certificate');
 

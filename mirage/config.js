@@ -219,11 +219,7 @@ function routes() {
     '/organizations/:id/projects/:projectId/signing-certificate/',
     (schema) => {
       // No scope field on the mirage model, so by convention the first
-      // created certificate stands in for "the project's own cert" and any
-      // others stand in for the org's collection -- matching how the real
-      // endpoint pairs a project's singleton with its org's certificates.
-      // Only the org's active cert is ever relevant here, same as the real
-      // endpoint, which never surfaces a disabled org cert at project scope.
+      // certificate stands in for the project's own, the rest for the org's.
       const [projectCert, ...orgCerts] =
         schema.signingCertificates.all().models;
 
