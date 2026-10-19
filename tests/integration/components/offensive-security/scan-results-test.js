@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
-import { render, click, findAll } from '@ember/test-helpers';
+import { render, click, findAll, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { Response } from 'miragejs';
@@ -59,6 +59,11 @@ const SELECTORS = {
   statusRunning: '[data-test-offensiveSecurity-statusChip-running]',
   statusCompleted: '[data-test-offensiveSecurity-statusChip-completed]',
   statusFailed: '[data-test-offensiveSecurity-statusChip-failed]',
+  deviceCard: '[data-test-offensiveSecurity-deviceCard]',
+  devicePlaceholder: '[data-test-offensiveSecurity-devicePlaceholder]',
+  deviceScreen: '[data-test-offensiveSecurity-deviceScreen]',
+  deviceLiveBadge: '[data-test-offensiveSecurity-deviceLiveBadge]',
+  novncContainer: '[data-test-NovncRfb-canvasContainer]',
 };
 
 const TEMPLATE = hbs`<OffensiveSecurity::ScanResults @scanId={{this.scanId}} />`;
@@ -734,5 +739,89 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       router.lastRoute,
       'authenticated.offensive-security.index'
     );
+  });
+
+  test('it renders the device placeholder when there is no device stream', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.COMPLETED,
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.devicePlaceholder).exists();
+    assert.dom(SELECTORS.deviceScreen).doesNotExist();
+    assert.dom(SELECTORS.deviceLiveBadge).doesNotExist();
+  });
+
+  test('it renders the NovncRfb display-only stream when device_serial is present', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: 'emulator-5554',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.deviceScreen).exists();
+    assert.dom(SELECTORS.novncContainer).exists();
+    assert.dom(SELECTORS.novncContainer).hasClass(/no-interaction/);
+    assert
+      .dom(SELECTORS.novncContainer)
+      .hasAttribute('data-contain-canvas', 'true');
+    assert.dom(SELECTORS.deviceLiveBadge).exists();
+    assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
+  });
+
+  test('it renders the device placeholder when scan is running but has no device_serial', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: null,
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.devicePlaceholder).exists();
+    assert.dom(SELECTORS.deviceScreen).doesNotExist();
+    assert.dom(SELECTORS.deviceLiveBadge).doesNotExist();
+  });
+
+  test('it fetches screen stream from /screen/ endpoint and starts stream while running', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: null,
+      screen_url: null,
+    });
+    serveScan(this, scan);
+
+    let screenEndpointHit = false;
+    this.server.get('/v2/offsec/scans/:id/screen/', () => {
+      screenEndpointHit = true;
+
+      return {
+        url: 'ws://nebula-worker:8091/websockify?token=custom-nebula-token',
+        vnc_url: 'ws://nebula-worker:8091/websockify?token=custom-nebula-token',
+        token: 'custom-nebula-token',
+        password: 'test-password',
+      };
+    });
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    await waitUntil(() => this.element.querySelector(SELECTORS.deviceScreen));
+
+    assert.true(screenEndpointHit, 'The /screen/ endpoint was fetched');
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.deviceScreen).exists();
+    assert.dom(SELECTORS.novncContainer).exists();
+    assert.dom(SELECTORS.deviceLiveBadge).exists();
   });
 });

@@ -6,6 +6,14 @@ export interface OffsecDownloadDetails {
   download_url?: string;
 }
 
+export interface OffsecScreenDetails {
+  url?: string;
+  vnc_url?: string;
+  token?: string;
+  vnc_token?: string;
+  password?: string;
+}
+
 export default class OffsecScanAdapter extends CommonDRFAdapter {
   shouldReloadRecord() {
     return false;
@@ -54,6 +62,16 @@ export default class OffsecScanAdapter extends CommonDRFAdapter {
       logs?: string | string[];
       lines?: string | string[];
     }>;
+  }
+
+  /**
+   * Fetch active screen stream details (WebSocket / VNC URL, token, password)
+   * while the scan is running.
+   */
+  fetchScreenStream(modelName: string | number, scanId: string | number) {
+    const url = `${this._buildURL(modelName, scanId)}/screen/`;
+
+    return this.ajax(url, 'GET') as Promise<OffsecScreenDetails>;
   }
 
   /** As above, for one named artifact of the run. */

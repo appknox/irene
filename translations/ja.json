@@ -876,6 +876,8 @@
     "assessmentStarted": "Assessment started successfully",
     "maxFileSizeExceeded": "File size exceeds maximum allowed limit (500 MB)",
     "notAssessedCount": "{count} of {total} not assessed",
+    "waitingForDevice": "デバイスストリーム待機中...",
+    "noActiveDevice": "アクティブなデバイスセッションはありません",
     "objective": "Objective",
     "outcome": {
       "bypassed": "Exploit Successful",

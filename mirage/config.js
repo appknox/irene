@@ -142,6 +142,37 @@ function routes() {
     };
   });
 
+  const handleScreenStream = (schema, request) => {
+    const scan = schema.db.offsecScans.find(Number(request.params.id));
+    if (
+      scan &&
+      (scan.screen_url ||
+        scan.vnc_url ||
+        scan.screen_token ||
+        scan.vnc_token ||
+        scan.device_serial)
+    ) {
+      return {
+        url:
+          scan.screen_url ||
+          scan.vnc_url ||
+          'ws://localhost:8091/websockify?token=mock',
+        vnc_url:
+          scan.vnc_url ||
+          scan.screen_url ||
+          'ws://localhost:8091/websockify?token=mock',
+        token: scan.screen_token || scan.vnc_token || 'mock-token',
+        vnc_token: scan.vnc_token || scan.screen_token || 'mock-token',
+        password: '1234',
+      };
+    }
+
+    return new Response(404, {}, { detail: 'Not Found' });
+  };
+
+  this.get('/api/v2/offsec/scans/:id/screen/', handleScreenStream);
+  this.get('/api/v2/offsec/scans/:id/screen', handleScreenStream);
+
   this.get(
     '/api/v2/offsec/scans/:id/artifacts/:artifactName/download_url',
     (schema, request) => {

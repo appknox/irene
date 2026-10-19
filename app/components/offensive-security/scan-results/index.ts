@@ -7,6 +7,7 @@ import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
+import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
@@ -14,6 +15,7 @@ import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 import type FileAdapter from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
 import type EventBusService from 'irene/services/event-bus';
+import type DevicefarmService from 'irene/services/devicefarm';
 
 const POLL_INTERVAL_MS = 5000;
 
@@ -31,11 +33,14 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @service declare poll: PollService;
   @service declare window: Window;
   @service declare eventBus: EventBusService;
+  @service declare devicefarm: DevicefarmService;
 
   @tracked scan: OffsecScanModel | null = null;
   @tracked logLines: string[] = [];
   @tracked logLoadFailed = false;
   @tracked isFileDetailsExpanded = false;
+  @tracked activeScreenUrl: string | null = null;
+  @tracked activeScreenPassword: string | null = null;
 
   @action
   toggleFileDetails(): void {
@@ -75,11 +80,15 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     if (updatedScan && String(updatedScan.id) === String(this.args.scanId)) {
       this.scan = updatedScan;
       if (updatedScan.isTerminal) {
+        this.activeScreenUrl = null;
+        this.activeScreenPassword = null;
         this.stopPolling?.();
         this.stopPolling = undefined;
         if (!this.hasLog && !this.scan.logAttempted) {
           this.loadLog.perform();
         }
+      } else if (updatedScan.isRunning && !this.activeScreenUrl) {
+        this.loadScreenStream.perform();
       }
     }
   }
@@ -118,6 +127,50 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   get hasLog(): boolean {
     return this.logLines.length > 0;
+  }
+
+  get deviceFarmURL(): string | null {
+    if (this.activeScreenUrl) {
+      return this.activeScreenUrl;
+    }
+
+    const directUrl =
+      this.scan?.screenUrl ||
+      this.scan?.vncUrl ||
+      this.scan?.screen?.url ||
+      this.scan?.screen?.ws_url;
+
+    if (directUrl) {
+      return directUrl;
+    }
+
+    const token =
+      this.scan?.screenToken ||
+      this.scan?.vncToken ||
+      this.scan?.screen?.token ||
+      this.scan?.deviceSerial;
+
+    if (token) {
+      try {
+        return this.devicefarm.getTokenizedWSURL(token);
+      } catch {
+        return null;
+      }
+    }
+
+    return null;
+  }
+
+  get deviceFarmPassword(): string | null {
+    return this.activeScreenPassword || ENV.deviceFarmPassword || null;
+  }
+
+  get hasDeviceStream(): boolean {
+    return Boolean(this.deviceFarmURL);
+  }
+
+  get isDeviceActive(): boolean {
+    return Boolean(this.scan?.isRunning && this.hasDeviceStream);
   }
 
   @action
@@ -299,6 +352,9 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
         if (this.scan.isQueued || this.scan.isRunning) {
           this.loadLogStream.perform();
+          if (this.scan.isRunning && !this.activeScreenUrl) {
+            this.loadScreenStream.perform();
+          }
         } else if (!this.hasLog && !this.scan.logAttempted) {
           this.loadLog.perform();
         }
@@ -309,6 +365,38 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       }
     }
   );
+
+  loadScreenStream = task({ drop: true }, async () => {
+    if (!this.scan?.isRunning) {
+      return;
+    }
+
+    try {
+      const res = await this.adapter.fetchScreenStream(
+        'offsec-scan',
+        this.args.scanId
+      );
+
+      const url = res?.url || res?.vnc_url;
+      const token = res?.token || res?.vnc_token;
+
+      if (url) {
+        this.activeScreenUrl = url;
+      } else if (token) {
+        try {
+          this.activeScreenUrl = this.devicefarm.getTokenizedWSURL(token);
+        } catch {
+          // ignore invalid token error
+        }
+      }
+
+      if (res?.password) {
+        this.activeScreenPassword = res.password;
+      }
+    } catch {
+      // 404/503 when scan has no external ID, is not running, or screen session is not ready yet
+    }
+  });
 
   loadLogStream = task({ drop: true }, async () => {
     try {
@@ -334,6 +422,33 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       }
       this.logLoadFailed = false;
 
+      if (this.scan) {
+        const streamUrl = (res['screen_url'] ??
+          res['vnc_url'] ??
+          res['ws_url']) as string | undefined;
+        if (streamUrl && !this.scan.screenUrl) {
+          this.scan.screenUrl = streamUrl;
+        }
+
+        const screenToken = (res['screen_token'] ?? res['vnc_token']) as
+          | string
+          | undefined;
+        if (screenToken && !this.scan.screenToken) {
+          this.scan.screenToken = screenToken;
+        }
+
+        const deviceSerial = (res['device_serial'] ?? res['deviceSerial']) as
+          | string
+          | undefined;
+        if (deviceSerial && !this.scan.deviceSerial) {
+          this.scan.deviceSerial = deviceSerial;
+        }
+      }
+
+      if (this.scan?.isRunning && !this.activeScreenUrl) {
+        this.loadScreenStream.perform();
+      }
+
       const statusVal = res['status'] ?? res['scan_status'] ?? res['state'];
       const rawStatusStr =
         typeof statusVal === 'string' || typeof statusVal === 'number'
@@ -346,6 +461,8 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
         Boolean(wasTerminal);
 
       if (isNowTerminal) {
+        this.activeScreenUrl = null;
+        this.activeScreenPassword = null;
         this.stopPolling?.();
         this.stopPolling = undefined;
 

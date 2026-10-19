@@ -93,6 +93,27 @@ export default class OffsecScanModel extends Model {
   declare deviceSerial: string;
 
   @attr('string')
+  declare vncUrl: string;
+
+  @attr('string')
+  declare vncToken: string;
+
+  @attr('string')
+  declare screenUrl: string;
+
+  @attr('string')
+  declare screenToken: string;
+
+  @attr()
+  declare screen:
+    | {
+        url?: string;
+        ws_url?: string;
+        token?: string;
+      }
+    | undefined;
+
+  @attr('string')
   declare riskRating: string;
 
   @attr('number')

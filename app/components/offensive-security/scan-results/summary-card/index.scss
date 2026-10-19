@@ -2,6 +2,8 @@
   background-color: var(--offensive-security-scan-results-card-bg-color);
   border: var(--offensive-security-scan-results-card-border);
   border-radius: var(--offensive-security-scan-results-card-border-radius);
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .stats-row {

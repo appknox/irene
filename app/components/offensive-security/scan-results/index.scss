@@ -45,9 +45,102 @@
 .run-split-side {
   flex: 0 0 320px;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-// The log is the wide half; below tablet the two halves stack.
+.device-card {
+  height: 100%;
+  min-height: 380px;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: var(--offensive-security-scan-results-card-border-radius);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-card-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.device-placeholder {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  border-radius: var(--border-radius-6);
+  border: 1px dashed var(--neutral-grey-300);
+  background-color: var(--neutral-grey-50);
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.device-placeholder-icon {
+  font-size: 3rem !important;
+  color: var(--neutral-grey-400);
+}
+
+.device-placeholder-text {
+  max-width: 200px;
+}
+
+.device-screen-wrapper {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000000;
+  border-radius: var(--border-radius-6);
+  overflow: hidden;
+
+  // View-only guarantee: disable mouse & touch events entirely on the screen container
+  pointer-events: none;
+  user-select: none;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.714rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--secondary-color, #4caf50);
+  background-color: rgba(76, 175, 80, 0.12);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--border-radius-12);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--secondary-color, #4caf50);
+  animation: pulse-dot 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+}
+
 @media (max-width: 1024px) {
   .run-split {
     flex-direction: column;
@@ -55,5 +148,32 @@
 
   .run-split-side {
     flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+.summary-artifacts-row {
+  display: flex;
+  width: 100%;
+}
+
+.summary-artifacts-col {
+  flex: 1 1 50%;
+  min-width: 0;
+  display: flex;
+
+  > * {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .summary-artifacts-row {
+    flex-direction: column;
+  }
+
+  .summary-artifacts-col {
+    flex: 1 1 auto;
+    width: 100%;
   }
 }
