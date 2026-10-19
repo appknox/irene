@@ -493,6 +493,119 @@ module(
       );
     });
 
+    test('it keeps failed projects staged and retries only those on update', async function (assert) {
+      this.server.put('/service_accounts/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
+      });
+
+      const newProjects = this.server.createList('project', 2);
+
+      this.server.get('/v3/projects/:id', (schema, req) => {
+        return schema.projects.find(req.params.id).toJSON();
+      });
+
+      this.server.get('/v3/projects', () => ({
+        count: newProjects.length,
+        next: null,
+        previous: null,
+        results: newProjects,
+      }));
+
+      const postedProjectIds = [];
+      let failFirstProject = true;
+
+      this.server.post(
+        '/service_accounts/:id/service_account_projects',
+        (schema, req) => {
+          const data = JSON.parse(req.requestBody);
+
+          postedProjectIds.push(String(data.project_id));
+
+          if (
+            failFirstProject &&
+            String(data.project_id) === newProjects[0].id
+          ) {
+            return new Response(500, {}, { detail: 'failed' });
+          }
+
+          return schema.serviceAccountProjects
+            .create({
+              service_account: req.params.id,
+              project: data.project_id,
+            })
+            .toJSON();
+        }
+      );
+
+      this.server.get(
+        '/service_accounts/:id/service_account_projects',
+        (schema) => {
+          const results = schema.serviceAccountProjects.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectProject
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectProject-actionBtn]');
+
+      await selectChoose(
+        `[data-test-serviceAccountSection-selectProject-projectAccessSelect] .${classes.trigger}`,
+        t('serviceAccountModule.forSpecificProjects')
+      );
+
+      await click(
+        '[data-test-serviceAccountSection-selectProjectList-emptyAddProjectBtn]'
+      );
+
+      for (const row of findAll(
+        '[data-test-serviceAccountAddProjectList-row]'
+      )) {
+        await click(row.querySelector('[data-test-checkbox]'));
+      }
+
+      await click('[data-test-serviceAccountAddProjectList-addBtn]');
+      await click('[data-test-serviceAccountSection-selectProject-updateBtn]');
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(
+        notify.errorMsg,
+        t('serviceAccountModule.addProjectsFailedMsg', { count: 1 })
+      );
+
+      // still in edit view, with only the failed project left staged
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-updateBtn]')
+        .exists();
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProjectList-item]')
+        .exists({ count: 1 });
+
+      failFirstProject = false;
+      postedProjectIds.length = 0;
+
+      await click('[data-test-serviceAccountSection-selectProject-updateBtn]');
+
+      // only the failed project is retried
+      assert.deepEqual(postedProjectIds, [newProjects[0].id]);
+
+      assert.strictEqual(
+        notify.successMsg,
+        t('serviceAccountModule.editSuccessMsg')
+      );
+
+      assert
+        .dom('[data-test-serviceAccountSection-selectProject-updateBtn]')
+        .doesNotExist();
+    });
+
     test.each(
       'it should add project to service account',
       [{ hasProjects: true }, { hasProjects: false }],

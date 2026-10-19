@@ -112,9 +112,16 @@
       <Organization::ServiceAccount::Section::SelectProject::List
         @isEditView={{this.isEditView}}
         @isCreateView={{this.isCreateView}}
-        @isPendingSave={{this.forceUserToUpdate}}
-        @registerRefreshFn={{this.registerListRefresh}}
+        @isPendingSave={{this.isPendingSave}}
         @serviceAccount={{@serviceAccount}}
+        @projects={{this.selectedProjectList}}
+        @totalCount={{this.totalSelectedProjectCount}}
+        @isLoading={{this.fetchSelectedProjects.isRunning}}
+        @limit={{this.limit}}
+        @offset={{this.offset}}
+        @onNextPrev={{this.handleNextPrevAction}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @onRefresh={{this.handleSelectedProjectsRefresh}}
       />
     {{/unless}}
   </:default>

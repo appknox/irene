@@ -2547,6 +2547,7 @@
     "memberLevelLabel": "Member",
     "createSuccessMsg": "Service Account created successfully",
     "editSuccessMsg": "All Edit(s) have been saved successfully",
+    "addProjectsFailedMsg": "{count, plural, one {# project could not be added} other {# projects could not be added}}. Please click Update to retry.",
     "nameOfTheServiceAccount": "Name of the Service Account",
     "refreshAccessToken": "Refresh Access Token",
     "accessTokenEditDescription": "You can regenerate the secret key here. Ensure you copy the token immediately as it will not be visible when you access this page again.",

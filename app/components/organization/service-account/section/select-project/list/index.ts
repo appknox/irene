@@ -3,87 +3,47 @@ import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { debounceTask } from 'ember-lifeline';
-
-// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
-import type DS from 'ember-data';
-import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
+import type ProjectModel from 'irene/models/project';
 import type ServiceAccountProjectModel from 'irene/models/service-account-project';
 import type ServiceAccountModel from 'irene/models/service-account';
-import type ServiceAccountService from 'irene/services/service-account';
 import parseError from 'irene/utils/parse-error';
 
 export interface OrganizationServiceAccountSectionSelectProjectListSignature {
   Args: {
     serviceAccount: ServiceAccountModel;
+    projects: Array<ServiceAccountProjectModel | ProjectModel>;
+    totalCount: number;
+    isLoading: boolean;
+    limit: number;
+    offset: number;
     isEditView: boolean;
     isCreateView: boolean;
     isPendingSave: boolean;
-    registerRefreshFn?: (fn: () => void) => void;
+    onNextPrev: (args: { limit: number; offset: number }) => void;
+    onItemPerPageChange: (args: { limit: number }) => void;
+    onRefresh: () => void;
   };
 }
-
-type ServiceAccountProjectResponse =
-  DS.AdapterPopulatedRecordArray<ServiceAccountProjectModel> & {
-    meta?: { count: number };
-  };
 
 const DEFAULT_LIMIT = 5;
 
 export default class OrganizationServiceAccountSectionSelectProjectListComponent extends Component<OrganizationServiceAccountSectionSelectProjectListSignature> {
-  @service declare store: Store;
   @service declare intl: IntlService;
-  @service declare serviceAccount: ServiceAccountService;
   @service('notifications') declare notify: NotificationService;
-
-  @tracked serviceAccountProjectResponse?: ServiceAccountProjectResponse;
 
   @tracked serviceAccountProjectToDelete: ServiceAccountProjectModel | null =
     null;
 
-  @tracked limit = DEFAULT_LIMIT;
-  @tracked offset = 0;
-  @tracked searchQuery = '';
   @tracked openAddProjectDrawer = false;
 
-  constructor(
-    owner: unknown,
-    args: OrganizationServiceAccountSectionSelectProjectListSignature['Args']
-  ) {
-    super(owner, args);
-
-    this.args.registerRefreshFn?.(this.handleSelectedProjectsRefresh);
-
-    this.fetchSelectedProjects.perform(this.limit, this.offset);
-  }
-
-  get isStaged() {
-    return this.args.isCreateView || this.args.isPendingSave;
-  }
-
-  get selectedProjectList() {
-    return this.isStaged
-      ? Object.values(this.serviceAccount.pendingProjectSelections).slice(
-          this.offset,
-          this.offset + this.limit
-        )
-      : this.serviceAccountProjectResponse?.slice() || [];
-  }
-
-  get totalSelectedProjectCount() {
-    return this.isStaged
-      ? Object.keys(this.serviceAccount.pendingProjectSelections).length
-      : this.serviceAccountProjectResponse?.meta?.count || 0;
-  }
-
   get hasNoproject() {
-    return this.totalSelectedProjectCount === 0;
+    return this.args.totalCount === 0;
   }
 
   get showPagination() {
-    return this.totalSelectedProjectCount > DEFAULT_LIMIT;
+    return this.args.totalCount > DEFAULT_LIMIT;
   }
 
   get showRemoveProjectConfirm() {
@@ -98,53 +58,6 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
   @action
   handleCloseAddProjectDrawer() {
     this.openAddProjectDrawer = false;
-  }
-
-  @action
-  handleNextPrevAction({ limit, offset }: { limit: number; offset: number }) {
-    this.limit = limit;
-    this.offset = offset;
-
-    this.fetchSelectedProjects.perform(limit, offset, this.searchQuery);
-  }
-
-  @action
-  handleItemPerPageChange({ limit }: { limit: number }) {
-    this.limit = limit;
-    this.offset = 0;
-
-    this.fetchSelectedProjects.perform(limit, 0, this.searchQuery);
-  }
-
-  /* Set debounced searchQuery */
-  setSearchQuery(query: string) {
-    this.searchQuery = query;
-
-    this.fetchSelectedProjects.perform(this.limit, 0, query);
-  }
-
-  @action
-  handleSearchQueryChange(event: Event) {
-    debounceTask(
-      this,
-      'setSearchQuery',
-      (event.target as HTMLInputElement).value,
-      500
-    );
-  }
-
-  @action
-  handleSelectedProjectsRefresh() {
-    // `force: true` — called after a real save (project just added, or the
-    // access level just switched away from pending), so the fetch must run
-    // even if `isPendingSave` hasn't been re-derived from the parent's
-    // updated args yet at this exact point in the run loop.
-    this.fetchSelectedProjects.perform(
-      this.limit,
-      this.offset,
-      this.searchQuery,
-      true
-    );
   }
 
   @action
@@ -179,31 +92,11 @@ export default class OrganizationServiceAccountSectionSelectProjectListComponent
           this.intl.t('serviceAccountModule.removeProjectSuccessMsg')
         );
 
-        this.handleSelectedProjectsRefresh();
+        this.args.onRefresh();
 
         closeHandler();
       } catch (error) {
         this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-      }
-    }
-  );
-
-  fetchSelectedProjects = task(
-    async (limit: number, offset: number, query = '', force = false) => {
-      if (!this.isStaged || force) {
-        try {
-          this.serviceAccountProjectResponse = (await this.store.query(
-            'service-account-project',
-            {
-              limit,
-              offset,
-              q: query,
-              serviceAccountId: this.args.serviceAccount.id,
-            }
-          )) as ServiceAccountProjectResponse;
-        } catch (error) {
-          this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-        }
       }
     }
   );
