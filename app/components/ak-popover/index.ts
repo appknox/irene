@@ -129,16 +129,29 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
     this.createPopperInstance();
   }
 
+  // `anchorRef` is an argument driven by the caller's `@tracked` state (see
+  // AkTooltip), not a classic Ember property -- the `addObserver` below can
+  // miss updates to it after the first one. This re-targets (or tears down)
+  // the existing popper on every genuine change, independent of that
+  // observer, so a reused container (e.g. re-hovering the same AkTooltip)
+  // always repositions against the current anchor instead of keeping
+  // whatever position its very first anchor had.
+  @action
+  handleAnchorRefUpdate() {
+    if (this.anchorRef) {
+      this.createPopperInstance();
+    } else {
+      this.popper?.destroy();
+      this.popper = null;
+    }
+  }
+
   @action createPopperInstance() {
     if (this.anchorRef && this.popperElement) {
+      this.popper?.destroy();
+
       this.popper = createPopper(this.anchorRef, this.popperElement, {
         placement: this.args.placement || this.defaultPlacement,
-        // The popover content is wormholed out to a root-level node, so its
-        // anchor can be nested anywhere -- including inside a `position:
-        // fixed` ancestor like AkDrawer. Popper's default 'absolute' strategy
-        // miscalculates the offset in that case; 'fixed' always measures from
-        // the viewport, which is correct for both fixed and static ancestors.
-        strategy: 'fixed',
         modifiers: [
           ...this.defaultModifiers,
           sameWidth(Boolean(this.args.sameWidthAsRef)),
