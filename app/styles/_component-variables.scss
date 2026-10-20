@@ -3390,6 +3390,9 @@ body {
   --organization-signing-certificate-override-confirm-action-box-shadow: var(
     --box-shadow-4
   );
+  --organization-signing-certificate-override-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for organization/ai-powered-features
   --organization-ai-powered-features-bg-color: var(--common-white);
