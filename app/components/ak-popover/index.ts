@@ -152,11 +152,31 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
 
       this.popper = createPopper(this.anchorRef, this.popperElement, {
         placement: this.args.placement || this.defaultPlacement,
+        // AkPopover's own root (.ak-popover-root, further forced to `width: 0`
+        // by AkTooltip's .ak-tooltip-container-root) gives Popper's 'absolute'
+        // strategy a corrupt composite rect to measure against -- it reads the
+        // popper's own pre-positioned box as effectively {x: 0}, so every
+        // computed offset comes out relative to the wrong origin. 'fixed'
+        // strategy measures purely against the viewport instead, sidestepping
+        // that container's layout entirely. Confirmed by direct inspection of
+        // a live popper's `state.rects.popper` under 'absolute': {x: 0, y:
+        // some unrelated value} while `state.rects.reference` was correct.
+        strategy: 'fixed',
         modifiers: [
           ...this.defaultModifiers,
           sameWidth(Boolean(this.args.sameWidthAsRef)),
           ...(this.args.modifiers || []),
         ],
+      });
+
+      // Even with 'fixed' strategy, Popper's very first computation (run
+      // synchronously inside createPopper) can land wrong for a reference
+      // nested this deep -- verified live that the first paint is off, then
+      // forcing any further update (even a bare window resize) immediately
+      // self-corrects it. Scheduling one extra update for the next frame
+      // gets that correction without waiting on an unrelated browser event.
+      requestAnimationFrame(() => {
+        void this.popper?.update();
       });
 
       if (this.args.closeHandler && this.args.clickOutsideToClose) {
