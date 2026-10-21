@@ -79,6 +79,32 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     return this.offsecNewAssessment.credentials;
   }
 
+  get hasValidCredentials(): boolean {
+    return this.credentials.some(
+      (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
+    );
+  }
+
+  get isComprehensiveMissingCredentials(): boolean {
+    return this.isComprehensive && !this.hasValidCredentials;
+  }
+
+  get isBeginDisabled(): boolean {
+    if (this.isStartingAssessment) {
+      return true;
+    }
+
+    if (!this.hasUploadedApp) {
+      return true;
+    }
+
+    if (this.isComprehensive && !this.hasValidCredentials) {
+      return true;
+    }
+
+    return false;
+  }
+
   get beginCtaLabel(): string {
     return this.isComprehensive
       ? this.intl.t('offensiveSecurity.beginAssessmentComprehensive')
@@ -193,15 +219,20 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
       return;
     }
 
+    if (this.isComprehensive && !this.hasValidCredentials) {
+      this.notify.error(
+        this.intl.t('offensiveSecurity.credentialRequiredForComprehensive')
+      );
+
+      return;
+    }
+
     this.isStartingAssessment = true;
 
     try {
       const credentialsPayload = this.credentials
         .filter(
-          (c) =>
-            Boolean(c.role?.trim()) ||
-            Boolean(c.username?.trim()) ||
-            Boolean(c.password?.trim())
+          (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
         )
         .map((c) => ({
           role: c.role.trim(),

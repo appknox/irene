@@ -97,7 +97,8 @@ export default class UploadAppAdapter extends commondrf {
       | undefined;
 
     if (adapterOptions) {
-      const { offsec, ...extraData } = adapterOptions;
+      const extraData = { ...adapterOptions };
+      delete extraData['offsec'];
       Object.assign(data, extraData);
     }
 

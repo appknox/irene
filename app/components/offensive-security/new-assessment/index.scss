@@ -191,6 +191,26 @@
   gap: 2px;
 }
 
+.section-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mandatory-badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary-color, #e24a2a);
+  background-color: #fff1ee;
+  border: 1px solid #ffdcd6;
+  padding: 1px 8px;
+  border-radius: 9999px;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
 // ─── Assessment Cards ────────────────────────────────────────────────────────
 
 .assessment-cards-grid {
@@ -399,8 +419,16 @@
 
 .actions-row {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 16px;
   margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.creds-missing-hint {
+  font-size: 13px;
+  color: var(--gray-600, #4b5563);
 }
 
 .begin-assessment-btn {

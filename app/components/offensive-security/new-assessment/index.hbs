@@ -160,11 +160,22 @@
       {{! Test Credentials Section }}
       <div local-class='section-container'>
         <div local-class='section-header'>
-          <AkTypography @variant='subtitle1' @fontWeight='bold'>
-            {{t 'offensiveSecurity.testCredentials'}}
-          </AkTypography>
+          <div local-class='section-title-row'>
+            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+              {{t 'offensiveSecurity.testCredentials'}}
+            </AkTypography>
+            {{#if this.isComprehensive}}
+              <span local-class='mandatory-badge' data-test-creds-mandatory-badge>
+                {{t 'offensiveSecurity.required'}}
+              </span>
+            {{/if}}
+          </div>
           <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'offensiveSecurity.testCredentialsSubtitle'}}
+            {{if
+              this.isComprehensive
+              (t 'offensiveSecurity.testCredentialsComprehensiveSubtitle')
+              (t 'offensiveSecurity.testCredentialsSubtitle')
+            }}
           </AkTypography>
         </div>
 
@@ -308,11 +319,21 @@
 
       {{! Launch CTA }}
       <div local-class='actions-row'>
+        {{#if this.isComprehensiveMissingCredentials}}
+          <span
+            local-class='creds-missing-hint'
+            data-test-creds-missing-hint
+          >
+            {{t 'offensiveSecurity.credentialRequiredForComprehensive'}}
+          </span>
+        {{/if}}
+
         <AkButton
           @variant='filled'
           @color='primary'
           @type='button'
           @loading={{this.isStartingAssessment}}
+          @disabled={{this.isBeginDisabled}}
           local-class='begin-assessment-btn'
           data-test-begin-assessment-btn
           {{on 'click' this.beginAssessment}}

@@ -167,7 +167,7 @@ module(
       assert.dom('[data-test-new-assessment-dropzone]').exists();
     });
 
-    test('unfilled credential rows are omitted and not sent to backend', async function (assert) {
+    test('unfilled credential rows are omitted and not sent to backend in resilience mode', async function (assert) {
       const offsecService = this.owner.lookup('service:offsec-new-assessment');
       let savedOptions = null;
 
@@ -185,6 +185,9 @@ module(
 
       await render(hbs`<OffensiveSecurity::NewAssessment />`);
 
+      // Switch to resilience where credentials are optional
+      await click('[data-test-card-resilience]');
+
       // 3 empty rows are present on screen
       const rows = findAll('[data-test-credential-row]');
       assert.strictEqual(rows.length, 3);
@@ -198,6 +201,89 @@ module(
         [],
         'credentials array sent to backend is empty since rows were unfilled'
       );
+    });
+
+    test('for comprehensive assessment, credentials are mandatory and begin CTA is disabled until at least one credential is provided', async function (assert) {
+      const offsecService = this.owner.lookup('service:offsec-new-assessment');
+      let savedOptions = null;
+
+      offsecService.setUploadedApp({
+        uploadItem: {
+          url: 'https://test.com',
+          save(opts) {
+            savedOptions = opts;
+
+            return Promise.resolve(this);
+          },
+        },
+        file: { name: 'test.apk', size: 5000 },
+      });
+
+      await render(hbs`<OffensiveSecurity::NewAssessment />`);
+
+      // Default is comprehensive: credentials are mandatory
+      assert.dom('[data-test-creds-mandatory-badge]').exists();
+      assert.dom('[data-test-creds-missing-hint]').exists();
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
+
+      // Filling only username still keeps button disabled
+      await fillIn('[data-test-cred-username="0"]', 'audit@example.com');
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
+
+      // Filling password enables the button and removes missing hint
+      await fillIn('[data-test-cred-password="0"]', 'Secret123!');
+      assert.dom('[data-test-creds-missing-hint]').doesNotExist();
+      assert.dom('[data-test-begin-assessment-btn]').isNotDisabled();
+
+      // Submit comprehensive assessment
+      await click('[data-test-begin-assessment-btn]');
+
+      assert.ok(savedOptions, 'uploadItem.save was called');
+      assert.strictEqual(
+        savedOptions.adapterOptions.assessment_type,
+        'comprehensive'
+      );
+      assert.strictEqual(savedOptions.adapterOptions.credentials.length, 1);
+      assert.strictEqual(
+        savedOptions.adapterOptions.credentials[0].username,
+        'audit@example.com'
+      );
+      assert.strictEqual(
+        savedOptions.adapterOptions.credentials[0].password,
+        'Secret123!'
+      );
+    });
+
+    test('switching between comprehensive and resilience dynamically updates credential requirement', async function (assert) {
+      const offsecService = this.owner.lookup('service:offsec-new-assessment');
+
+      offsecService.setUploadedApp({
+        uploadItem: {
+          url: 'https://test.com',
+          save() {
+            return Promise.resolve(this);
+          },
+        },
+        file: { name: 'test.apk', size: 5000 },
+      });
+
+      await render(hbs`<OffensiveSecurity::NewAssessment />`);
+
+      // In comprehensive, button disabled without creds
+      assert.dom('[data-test-creds-mandatory-badge]').exists();
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
+
+      // Switch to resilience: credentials optional, button enabled
+      await click('[data-test-card-resilience]');
+      assert.dom('[data-test-creds-mandatory-badge]').doesNotExist();
+      assert.dom('[data-test-creds-missing-hint]').doesNotExist();
+      assert.dom('[data-test-begin-assessment-btn]').isNotDisabled();
+
+      // Switch back to comprehensive: button disabled again
+      await click('[data-test-card-comprehensive]');
+      assert.dom('[data-test-creds-mandatory-badge]').exists();
+      assert.dom('[data-test-creds-missing-hint]').exists();
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
     });
 
     test('it renders the dropzone in idle state without progress bar before upload starts', async function (assert) {
