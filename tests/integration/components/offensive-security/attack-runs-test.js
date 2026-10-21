@@ -569,4 +569,3 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     );
   });
 });
-

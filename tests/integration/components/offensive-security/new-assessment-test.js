@@ -7,9 +7,11 @@ import Service from '@ember/service';
 
 class NotificationsStub extends Service {
   messages = [];
+
   success(msg) {
     this.messages.push({ type: 'success', msg });
   }
+
   error(msg) {
     this.messages.push({ type: 'error', msg });
   }
@@ -17,6 +19,7 @@ class NotificationsStub extends Service {
 
 class RouterStub extends Service {
   transitionedTo = null;
+
   transitionTo(route) {
     this.transitionedTo = route;
   }
@@ -24,6 +27,7 @@ class RouterStub extends Service {
 
 class RealtimeStub extends Service {
   submissionCounter = 0;
+
   incrementProperty(prop) {
     if (prop === 'SubmissionCounter') {
       this.submissionCounter++;
@@ -61,7 +65,8 @@ module(
 
       await click('[data-test-back-to-runs-btn]');
       const router = this.owner.lookup('service:router');
-      assert.equal(
+
+      assert.strictEqual(
         router.transitionedTo,
         'authenticated.offensive-security.index'
       );
@@ -75,6 +80,7 @@ module(
         url: 'https://s3.amazonaws.com/test-bucket/app.apk',
         save(opts) {
           savedOptions = opts;
+
           return Promise.resolve(this);
         },
       };
@@ -92,21 +98,23 @@ module(
       assert.dom('[data-test-card-resilience]').exists();
 
       // Default is comprehensive
-      assert.dom('[data-test-begin-assessment-btn]').containsText('Comprehensive');
+      assert
+        .dom('[data-test-begin-assessment-btn]')
+        .containsText('Comprehensive');
 
       // Switch to resilience
       await click('[data-test-card-resilience]');
-      assert.equal(offsecService.assessmentType, 'resilience');
+      assert.strictEqual(offsecService.assessmentType, 'resilience');
       assert.dom('[data-test-begin-assessment-btn]').containsText('Resilience');
 
       // Check credentials rows
       const initialRows = findAll('[data-test-credential-row]');
-      assert.equal(initialRows.length, 3);
+      assert.strictEqual(initialRows.length, 3);
 
       // Add another credential row
       await click('[data-test-add-role-btn]');
       const updatedRows = findAll('[data-test-credential-row]');
-      assert.equal(updatedRows.length, 4);
+      assert.strictEqual(updatedRows.length, 4);
 
       // Fill in credentials
       await fillIn('[data-test-cred-role="0"]', 'Security Auditor');
@@ -117,15 +125,28 @@ module(
       await click('[data-test-begin-assessment-btn]');
 
       assert.ok(savedOptions, 'uploadItem.save was called');
-      assert.equal(savedOptions.adapterOptions.assessment_type, 'resilience');
-      assert.equal(savedOptions.adapterOptions.offsec, true);
-      assert.equal(savedOptions.adapterOptions.credentials.length, 1);
-      assert.equal(savedOptions.adapterOptions.credentials[0].role, 'Security Auditor');
-      assert.equal(savedOptions.adapterOptions.credentials[0].username, 'audit@example.com');
-      assert.equal(savedOptions.adapterOptions.credentials[0].password, 'SuperSecret123');
+      assert.strictEqual(
+        savedOptions.adapterOptions.assessment_type,
+        'resilience'
+      );
+      assert.true(savedOptions.adapterOptions.offsec);
+      assert.strictEqual(savedOptions.adapterOptions.credentials.length, 1);
+      assert.strictEqual(
+        savedOptions.adapterOptions.credentials[0].role,
+        'Security Auditor'
+      );
+      assert.strictEqual(
+        savedOptions.adapterOptions.credentials[0].username,
+        'audit@example.com'
+      );
+      assert.strictEqual(
+        savedOptions.adapterOptions.credentials[0].password,
+        'SuperSecret123'
+      );
 
       const router = this.owner.lookup('service:router');
-      assert.equal(
+
+      assert.strictEqual(
         router.transitionedTo,
         'authenticated.offensive-security.index'
       );
@@ -155,6 +176,7 @@ module(
           url: 'https://test.com',
           save(opts) {
             savedOptions = opts;
+
             return Promise.resolve(this);
           },
         },
@@ -165,7 +187,7 @@ module(
 
       // 3 empty rows are present on screen
       const rows = findAll('[data-test-credential-row]');
-      assert.equal(rows.length, 3);
+      assert.strictEqual(rows.length, 3);
 
       // User submits without filling any of the 3 rows
       await click('[data-test-begin-assessment-btn]');
@@ -189,4 +211,3 @@ module(
     });
   }
 );
-

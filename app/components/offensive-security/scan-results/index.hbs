@@ -204,71 +204,76 @@
         @isLoading={{this.loadLog.isRunning}}
       />
 
-      <div local-class='run-split-side'>
-        <div local-class='device-card' data-test-offensiveSecurity-deviceCard>
-          <AkStack
-            @width='full'
-            @direction='column'
-            @spacing='2'
-            class='p-3'
-            local-class='device-card-inner'
-          >
+      {{#if this.shouldShowDeviceCard}}
+        <div local-class='run-split-side'>
+          <div local-class='device-card' data-test-offensiveSecurity-deviceCard>
             <AkStack
               @width='full'
-              @justifyContent='space-between'
-              @alignItems='center'
+              @direction='column'
+              @spacing='2'
+              class='p-3'
+              local-class='device-card-inner'
             >
-              <AkTypography @variant='body1' @fontWeight='bold'>
-                {{t 'realDevice'}}
-              </AkTypography>
+              <AkStack
+                @width='full'
+                @justifyContent='space-between'
+                @alignItems='center'
+              >
+                <AkTypography @variant='body1' @fontWeight='bold'>
+                  {{t 'realDevice'}}
+                </AkTypography>
+
+                {{#if this.isDeviceActive}}
+                  <span
+                    local-class='live-badge'
+                    data-test-offensiveSecurity-deviceLiveBadge
+                  >
+                    <span local-class='live-dot'></span>
+                    LIVE
+                  </span>
+                {{/if}}
+              </AkStack>
 
               {{#if this.isDeviceActive}}
-                <span
-                  local-class='live-badge'
-                  data-test-offensiveSecurity-deviceLiveBadge
+                <div
+                  local-class='device-screen-wrapper'
+                  data-test-offensiveSecurity-deviceScreen
                 >
-                  <span local-class='live-dot'></span>
-                  LIVE
-                </span>
+                  <NovncRfb
+                    @deviceFarmURL={{this.deviceFarmURL}}
+                    @deviceFarmPassword={{this.deviceFarmPassword}}
+                    @allowInteraction={{false}}
+                    @containCanvas={{true}}
+                  />
+                </div>
+              {{else}}
+                <div
+                  local-class='device-placeholder'
+                  data-test-offensiveSecurity-devicePlaceholder
+                >
+                  <AkIcon
+                    @iconName='mobile'
+                    local-class='device-placeholder-icon'
+                  />
+
+                  <AkTypography
+                    @variant='caption'
+                    @color='textSecondary'
+                    class='mt-2'
+                    local-class='device-placeholder-text'
+                  >
+                    {{if
+                      this.scan.isRunning
+                      (t 'offensiveSecurity.waitingForDevice')
+                      (t 'offensiveSecurity.noActiveDevice')
+                    }}
+                  </AkTypography>
+                </div>
               {{/if}}
             </AkStack>
-
-            {{#if this.isDeviceActive}}
-              <div
-                local-class='device-screen-wrapper'
-                data-test-offensiveSecurity-deviceScreen
-              >
-                <NovncRfb
-                  @deviceFarmURL={{this.deviceFarmURL}}
-                  @deviceFarmPassword={{this.deviceFarmPassword}}
-                  @allowInteraction={{false}}
-                  @containCanvas={{true}}
-                />
-              </div>
-            {{else}}
-              <div
-                local-class='device-placeholder'
-                data-test-offensiveSecurity-devicePlaceholder
-              >
-                <AkIcon @iconName='mobile' local-class='device-placeholder-icon' />
-
-                <AkTypography
-                  @variant='caption'
-                  @color='textSecondary'
-                  class='mt-2'
-                  local-class='device-placeholder-text'
-                >
-                  {{if
-                    this.scan.isRunning
-                    (t 'offensiveSecurity.waitingForDevice')
-                    (t 'offensiveSecurity.noActiveDevice')
-                  }}
-                </AkTypography>
-              </div>
-            {{/if}}
-          </AkStack>
+          </div>
         </div>
-      </div>
+      {{/if}}
     </AkStack>
 
     {{! Summary and Artifacts cards row }}

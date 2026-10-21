@@ -173,6 +173,10 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return Boolean(this.scan?.isRunning && this.hasDeviceStream);
   }
 
+  get shouldShowDeviceCard(): boolean {
+    return Boolean(this.scan && (this.scan.isQueued || this.scan.isRunning));
+  }
+
   @action
   handleFindingClick(findingId: number): void {
     this.router.transitionTo(

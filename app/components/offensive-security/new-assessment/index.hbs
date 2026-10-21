@@ -1,13 +1,13 @@
 <div local-class='new-assessment-container' data-test-offsec-new-assessment>
   {{! Page Header Card }}
   <div local-class='header-card' data-test-new-assessment-header-card>
-    <AkStack
-      @width='full'
-      @justifyContent='space-between'
-      @alignItems='center'
-    >
+    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
       <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography @variant='h4' @fontWeight='bold' data-test-new-assessment-title>
+        <AkTypography
+          @variant='h4'
+          @fontWeight='bold'
+          data-test-new-assessment-title
+        >
           {{t 'offensiveSecurity.startNewAssessment'}}
         </AkTypography>
 
@@ -74,10 +74,14 @@
           </AkTypography>
         </div>
 
+        {{! template-lint-disable require-presentational-children }}
         <div local-class='assessment-cards-grid'>
           {{! Card 1: Comprehensive Offensive PT }}
           <div
-            local-class='assessment-card {{if this.isComprehensive "is-selected"}}'
+            local-class='assessment-card {{if
+              this.isComprehensive
+              "is-selected"
+            }}'
             role='button'
             tabindex='0'
             data-test-card-comprehensive
@@ -85,7 +89,12 @@
           >
             <div local-class='card-top-row'>
               <div local-class='card-title-group'>
-                <div local-class='radio-indicator {{if this.isComprehensive "checked"}}'>
+                <div
+                  local-class='radio-indicator {{if
+                    this.isComprehensive
+                    "checked"
+                  }}'
+                >
                   {{#if this.isComprehensive}}
                     <div local-class='radio-inner-dot'></div>
                   {{/if}}
@@ -118,7 +127,12 @@
           >
             <div local-class='card-top-row'>
               <div local-class='card-title-group'>
-                <div local-class='radio-indicator {{if this.isResilience "checked"}}'>
+                <div
+                  local-class='radio-indicator {{if
+                    this.isResilience
+                    "checked"
+                  }}'
+                >
                   {{#if this.isResilience}}
                     <div local-class='radio-inner-dot'></div>
                   {{/if}}
@@ -165,12 +179,14 @@
             <input
               type='text'
               name='fake_autofill_username'
+              aria-label='Fake Username'
               tabindex='-1'
               autocomplete='off'
             />
             <input
               type='password'
               name='fake_autofill_password'
+              aria-label='Fake Password'
               tabindex='-1'
               autocomplete='new-password'
             />
@@ -178,16 +194,25 @@
 
           {{! Table Headers }}
           <div local-class='credentials-table-header'>
-            <span local-class='header-col'>{{t 'offensiveSecurity.roleLabel'}}</span>
-            <span local-class='header-col'>{{t 'offensiveSecurity.usernameEmail'}}</span>
-            <span local-class='header-col'>{{t 'offensiveSecurity.password'}}</span>
+            <span local-class='header-col'>{{t
+                'offensiveSecurity.roleLabel'
+              }}</span>
+            <span local-class='header-col'>{{t
+                'offensiveSecurity.usernameEmail'
+              }}</span>
+            <span local-class='header-col'>{{t
+                'offensiveSecurity.password'
+              }}</span>
             <span local-class='header-col action-col'></span>
           </div>
 
           {{! Credential Rows }}
           <div local-class='credentials-rows-stack'>
             {{#each this.credentials key='id' as |cred index|}}
-              <div local-class='credentials-row' data-test-credential-row={{index}}>
+              <div
+                local-class='credentials-row'
+                data-test-credential-row={{index}}
+              >
                 <div local-class='col-role'>
                   <AkTextField
                     @id='offsec-cred-role-{{cred.id}}'
@@ -236,7 +261,11 @@
                         data-test-show-hide-btn={{index}}
                         {{on 'click' (fn this.toggleShowPassword index)}}
                       >
-                        {{if cred.showPassword (t 'offensiveSecurity.hide') (t 'offensiveSecurity.show')}}
+                        {{if
+                          cred.showPassword
+                          (t 'offensiveSecurity.hide')
+                          (t 'offensiveSecurity.show')
+                        }}
                       </button>
                     </:rightAdornment>
                   </AkTextField>
@@ -305,7 +334,10 @@
     }}
       <FileDropzone @queue={{queue}} as |dropzone|>
         <label
-          local-class='dropzone-area {{if dropzone.active "is-dragover"}} {{if this.isUploading "is-uploading"}}'
+          local-class='dropzone-area {{if dropzone.active "is-dragover"}} {{if
+            this.isUploading
+            "is-uploading"
+          }}'
           data-test-new-assessment-dropzone
         >
           <input
@@ -318,14 +350,26 @@
 
           {{#if this.isUploading}}
             <div local-class='uploading-state'>
-              <AkIcon @iconName='autorenew' local-class='spinner-icon' @size='medium' />
-              <AkTypography @variant='subtitle1' @fontWeight='medium' class='mt-2'>
+              <AkIcon
+                @iconName='autorenew'
+                local-class='spinner-icon'
+                @size='medium'
+              />
+              <AkTypography
+                @variant='subtitle1'
+                @fontWeight='medium'
+                class='mt-2'
+              >
                 {{t 'uploading'}}...
               </AkTypography>
 
               <div local-class='progress-container'>
                 <AkLoader::Linear
-                  @variant={{if (gt (or queue.progress this.progress 0) 0) 'determinate' 'indeterminate'}}
+                  @variant={{if
+                    (gt (or queue.progress this.progress 0) 0)
+                    'determinate'
+                    'indeterminate'
+                  }}
                   @progress={{or queue.progress this.progress 0}}
                   @color='primary'
                   @height={{6}}
@@ -342,7 +386,10 @@
           {{else}}
             <div local-class='dropzone-content'>
               <div local-class='dropzone-icon-circle'>
-                <AkIcon @iconName='cloud-upload' local-class='dropzone-cloud-icon' />
+                <AkIcon
+                  @iconName='cloud-upload'
+                  local-class='dropzone-cloud-icon'
+                />
               </div>
 
               <AkTypography

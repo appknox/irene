@@ -741,9 +741,31 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     );
   });
 
-  test('it renders the device placeholder when there is no device stream', async function (assert) {
-    const scan = createScan(this, {
+  test('it does not render the real device card when the scan is completed or failed', async function (assert) {
+    const completedScan = createScan(this, {
       status: SCAN_STATUS.COMPLETED,
+    });
+    serveScan(this, completedScan);
+
+    this.set('scanId', String(completedScan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).doesNotExist();
+
+    const failedScan = createScan(this, {
+      status: SCAN_STATUS.FAILED,
+    });
+    serveScan(this, failedScan);
+
+    this.set('scanId', String(failedScan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).doesNotExist();
+  });
+
+  test('it renders the device placeholder when scan is queued with no device stream', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.QUEUED,
     });
     serveScan(this, scan);
 
