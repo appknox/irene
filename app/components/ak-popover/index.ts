@@ -129,13 +129,8 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
     this.createPopperInstance();
   }
 
-  // `anchorRef` is an argument driven by the caller's `@tracked` state (see
-  // AkTooltip), not a classic Ember property -- the `addObserver` below can
-  // miss updates to it after the first one. This re-targets (or tears down)
-  // the existing popper on every genuine change, independent of that
-  // observer, so a reused container (e.g. re-hovering the same AkTooltip)
-  // always repositions against the current anchor instead of keeping
-  // whatever position its very first anchor had.
+  // The addObserver below can miss updates to a @tracked-driven anchorRef
+  // after the first one; this re-targets the popper on every real change.
   @action
   handleAnchorRefUpdate() {
     if (this.anchorRef) {
@@ -152,16 +147,12 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
 
       this.popper = createPopper(this.anchorRef, this.popperElement, {
         placement: this.args.placement || this.defaultPlacement,
-        // AkPopover's own root (.ak-popover-root, further forced to `width: 0`
-        // by AkTooltip's .ak-tooltip-container-root) gives Popper's 'absolute'
-        // strategy a corrupt composite rect to measure against -- it reads the
-        // popper's own pre-positioned box as effectively {x: 0}, so every
-        // computed offset comes out relative to the wrong origin. 'fixed'
-        // strategy measures purely against the viewport instead, sidestepping
-        // that container's layout entirely. Confirmed by direct inspection of
-        // a live popper's `state.rects.popper` under 'absolute': {x: 0, y:
-        // some unrelated value} while `state.rects.reference` was correct.
-        strategy: 'fixed',
+        // Wormholed content needs 'fixed' -- AkPopover's own root forces
+        // `width: 0`, which corrupts 'absolute' strategy's rect. Rendered
+        // in place, the content stays under its local ancestors, so 'fixed'
+        // would measure wrong if one of those is transformed; 'absolute'
+        // is correct there instead.
+        strategy: this.args.renderInPlace ? 'absolute' : 'fixed',
         modifiers: [
           ...this.defaultModifiers,
           sameWidth(Boolean(this.args.sameWidthAsRef)),
@@ -169,12 +160,8 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
         ],
       });
 
-      // Even with 'fixed' strategy, Popper's very first computation (run
-      // synchronously inside createPopper) can land wrong for a reference
-      // nested this deep -- verified live that the first paint is off, then
-      // forcing any further update (even a bare window resize) immediately
-      // self-corrects it. Scheduling one extra update for the next frame
-      // gets that correction without waiting on an unrelated browser event.
+      // First computation after creation can still land wrong; a resize
+      // event self-corrects it immediately, so force one extra update.
       requestAnimationFrame(() => {
         void this.popper?.update();
       });
