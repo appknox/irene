@@ -84,7 +84,7 @@
   >
     <AkTextField
       @value={{@step.identifier}}
-      @placeholder={{t 'dastAutomation.stepPlaceholders.text'}}
+      @placeholder={{t this.identifierPlaceholder}}
       @disabled={{@isReadOnly}}
       @error={{if this.identifierError true false}}
       local-class='compact-field'
@@ -184,6 +184,9 @@
           {{t option.label}}
         </AkSelect>
       </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+    {{else if (eq this.valueKind 'none')}}
+      {{! No value: the instruction lives in the identifier (e.g. Open App). }}
 
     {{else}}
       <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper

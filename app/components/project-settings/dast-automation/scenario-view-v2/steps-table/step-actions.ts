@@ -8,7 +8,8 @@ export type StepValueKind =
   | 'secure-text' // enter_text: value, lockable via is_secure
   | 'boolean' // check: checked
   | 'duration' // wait, long_press: number + unit (ms/s/m)
-  | 'direction'; // swipe, drag: up/down/left/right
+  | 'direction' // swipe, drag: up/down/left/right
+  | 'none'; // open_app: instruction lives in the identifier; no value
 
 export type StepActionLabelKey =
   | 'dastAutomation.stepActions.tap'
@@ -18,13 +19,15 @@ export type StepActionLabelKey =
   | 'dastAutomation.stepActions.wait'
   | 'dastAutomation.stepActions.longPress'
   | 'dastAutomation.stepActions.swipe'
-  | 'dastAutomation.stepActions.drag';
+  | 'dastAutomation.stepActions.drag'
+  | 'dastAutomation.stepActions.openApp';
 
 export type StepPlaceholderKey =
   | 'dastAutomation.stepPlaceholders.count'
   | 'dastAutomation.stepPlaceholders.text'
   | 'dastAutomation.stepPlaceholders.select'
-  | 'dastAutomation.stepPlaceholders.enterValue';
+  | 'dastAutomation.stepPlaceholders.enterValue'
+  | 'dastAutomation.stepPlaceholders.openApp';
 
 export type DirectionLabelKey =
   | 'dastAutomation.directions.up'
@@ -42,6 +45,7 @@ export interface StepActionConfig {
   icon: AkIconVariantType;
   valueKind: StepValueKind;
   valuePlaceholder: StepPlaceholderKey;
+  identifierPlaceholder?: StepPlaceholderKey;
   unitOptions?: string[];
   defaultValue?: string;
 }
@@ -113,6 +117,14 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     valueKind: 'direction',
     valuePlaceholder: 'dastAutomation.stepPlaceholders.select',
     defaultValue: 'up',
+  },
+  {
+    action: ScenarioStepAction.OPEN_APP,
+    label: 'dastAutomation.stepActions.openApp',
+    icon: 'open-in-new',
+    valueKind: 'none',
+    valuePlaceholder: 'dastAutomation.stepPlaceholders.text',
+    identifierPlaceholder: 'dastAutomation.stepPlaceholders.openApp',
   },
   // Temporarily disabled until the drag step value format is finalized.
   // {

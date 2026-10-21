@@ -439,13 +439,15 @@
       "wait": "待機",
       "longPress": "長押し",
       "swipe": "スワイプ",
-      "drag": "ドラッグ"
+      "drag": "ドラッグ",
+      "openApp": "アプリを開く"
     },
     "stepPlaceholders": {
       "count": "回数を選択",
       "text": "テキスト",
       "select": "選択",
-      "enterValue": "値を入力"
+      "enterValue": "値を入力",
+      "openApp": "例: メッセージアプリを開いてOTPを取得"
     },
     "directions": {
       "up": "上",

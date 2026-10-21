@@ -93,6 +93,27 @@ module('Unit | Utility | step-validation', function () {
     }
   );
 
+  // ─── OPEN_APP ────────────────────────────────────────────────────────────
+
+  test('OPEN_APP: instruction is the identifier; value is ignored', function (assert) {
+    const valid = makeStep({
+      action: ScenarioStepAction.OPEN_APP,
+      identifier: 'Open Messages app to get the OTP',
+      value: '',
+    });
+    const missing = makeStep({
+      action: ScenarioStepAction.OPEN_APP,
+      identifier: '  ',
+      value: '',
+    });
+
+    assert.strictEqual(validateStep(valid), null);
+    assert.strictEqual(
+      validateStep(missing)?.identifier,
+      'dastAutomation.validation.identifierRequired'
+    );
+  });
+
   // ─── LONG_PRESS ──────────────────────────────────────────────────────────
 
   test.each(
