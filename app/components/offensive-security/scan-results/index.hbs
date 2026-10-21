@@ -310,45 +310,37 @@
                 {{/if}}
               </div>
 
-              <div local-class='phone-frame-wrapper'>
-                <div local-class='phone-frame'>
-                  <div local-class='phone-speaker-slit'></div>
-
-                  <div local-class='phone-screen'>
-                    {{#if this.isDeviceActive}}
-                      <div
-                        local-class='device-screen-wrapper'
-                        data-test-offensiveSecurity-deviceScreen
-                      >
-                        <NovncRfb
-                          @deviceFarmURL={{this.deviceFarmURL}}
-                          @deviceFarmPassword={{this.deviceFarmPassword}}
-                          @allowInteraction={{false}}
-                          @containCanvas={{true}}
-                        />
-                      </div>
-                    {{else}}
-                      <div
-                        local-class='device-placeholder'
-                        data-test-offensiveSecurity-devicePlaceholder
-                      >
-                        <AkIcon
-                          @iconName='mobile'
-                          local-class='device-placeholder-icon'
-                        />
-
-                        <span local-class='device-placeholder-text'>
-                          {{if
-                            this.scan.isRunning
-                            (t 'offensiveSecurity.waitingForDevice')
-                            'Live device preview'
-                          }}
-                        </span>
-                      </div>
-                    {{/if}}
-                  </div>
+              {{#if this.isDeviceActive}}
+                <div
+                  local-class='device-screen-wrapper'
+                  data-test-offensiveSecurity-deviceScreen
+                >
+                  <NovncRfb
+                    @deviceFarmURL={{this.deviceFarmURL}}
+                    @deviceFarmPassword={{this.deviceFarmPassword}}
+                    @allowInteraction={{false}}
+                    @containCanvas={{true}}
+                  />
                 </div>
-              </div>
+              {{else}}
+                <div
+                  local-class='device-placeholder'
+                  data-test-offensiveSecurity-devicePlaceholder
+                >
+                  <AkIcon
+                    @iconName='mobile'
+                    local-class='device-placeholder-icon'
+                  />
+
+                  <span local-class='device-placeholder-text'>
+                    {{if
+                      this.scan.isRunning
+                      (t 'offensiveSecurity.waitingForDevice')
+                      'Live device preview'
+                    }}
+                  </span>
+                </div>
+              {{/if}}
 
               <button
                 type='button'

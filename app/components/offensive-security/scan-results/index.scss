@@ -142,14 +142,13 @@
   justify-content: space-between;
   height: 100%;
   min-height: 440px;
-  transition: all 0.25s ease-in-out;
 
   &.is-expanded {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(90vw, 380px);
+    width: min(90vw, 420px);
     height: min(92vh, 760px);
     max-height: 92vh;
     z-index: 1300;
@@ -160,24 +159,8 @@
     border-radius: 16px;
     padding: 1.25rem;
 
-    .phone-frame-wrapper {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      min-height: 0;
-    }
-
-    .phone-frame {
-      height: 100%;
-      max-height: 580px;
-      aspect-ratio: 9 / 19.5;
-      width: auto;
-      max-width: 290px;
-      border-width: 8px;
-      border-radius: 32px;
-      margin: 0 auto;
+    .device-screen-wrapper {
+      min-height: 480px;
     }
   }
 }
@@ -246,65 +229,18 @@
   background-color: var(--neutral-grey-400);
 }
 
-.phone-frame-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  flex: 1 1 auto;
-  margin: 0.5rem 0;
-}
-
-.phone-frame {
-  height: 100%;
-  max-height: 380px;
-  min-height: 280px;
-  aspect-ratio: 9 / 19.5;
-  width: auto;
-  max-width: 210px;
-  background-color: #000000;
-  border: 7px solid #1f242d;
-  border-radius: 28px;
-  box-shadow:
-    0 8px 24px -4px rgba(0, 0, 0, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-  margin: 0 auto;
-  transition: all 0.25s ease-in-out;
-}
-
-.phone-speaker-slit {
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: #374151;
-  margin: 4px auto 4px auto;
-  flex-shrink: 0;
-  z-index: 2;
-}
-
-.phone-screen {
-  flex: 1 1 auto;
-  width: 100%;
-  height: 100%;
-  background-color: #000000;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
 .device-screen-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #000000;
+  border-radius: var(--border-radius-8);
+  overflow: hidden;
+  margin: 0.5rem 0;
   pointer-events: none;
   user-select: none;
 }
@@ -315,9 +251,14 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   width: 100%;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 380px;
+  margin: 0.5rem 0;
+  border-radius: var(--border-radius-8);
+  border: 1px dashed var(--neutral-grey-300);
+  background-color: var(--neutral-grey-100);
   gap: 0.5rem;
 }
 
