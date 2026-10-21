@@ -439,13 +439,15 @@
       "wait": "Wait",
       "longPress": "Long Press",
       "swipe": "Swipe",
-      "drag": "Drag"
+      "drag": "Drag",
+      "openApp": "Open App"
     },
     "stepPlaceholders": {
       "count": "Select the count",
       "text": "Text",
       "select": "Select",
-      "enterValue": "Enter value"
+      "enterValue": "Enter value",
+      "openApp": "e.g. Open Messages app to get the OTP"
     },
     "directions": {
       "up": "Up",

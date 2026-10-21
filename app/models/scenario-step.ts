@@ -11,6 +11,7 @@ export enum ScenarioStepAction {
   SWIPE = 5,
   DRAG = 6,
   WAIT = 7,
+  OPEN_APP = 8,
 }
 
 export default class ScenarioStepModel extends Model {

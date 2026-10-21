@@ -72,6 +72,13 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     return this.actionConfig?.valueKind;
   }
 
+  get identifierPlaceholder() {
+    return (
+      this.actionConfig?.identifierPlaceholder ??
+      'dastAutomation.stepPlaceholders.text'
+    );
+  }
+
   get valuePlaceholder() {
     return (
       this.actionConfig?.valuePlaceholder ??
