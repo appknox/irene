@@ -2180,6 +2180,8 @@
     "registration": {
       "title": "CYOD Registration",
       "description": "Allow organization users to register their Choose Your Own Device (CYOD) devices and configure Mercer settings.",
+      "addDeviceHint": "To add a device, go to",
+      "addDeviceHintEnd": ".",
       "saved": "CYOD registration setting updated.",
       "emptyHint": "Devices are registered from the operator's machine using the Mercer app.",
       "goToCyodSettings": "Go to CYOD Settings"
@@ -2216,6 +2218,8 @@
       "title": "iOS Signing Certificate",
       "desc": "Upload your iOS signing certificate (.p12 + provisioning profile) to re-sign apps for dynamic scanning on your own devices. When set, it replaces the built-in wildcard profile.",
       "descProject": "Upload a project-specific iOS signing certificate. It overrides the organization certificate for this project's dynamic scans.",
+      "existingCertHint": "Check out the newly added certificate in the",
+      "existingCertHintSuffix": "section.",
       "none": "Once you have added the certificate you will get to see the details",
       "noneTitle": "No Existing certificates",
       "unnamed": "Unnamed certificate",
@@ -2235,11 +2239,16 @@
       "deleteNo": "Don't Delete",
       "deleteActiveHint": "Activate another certificate before deleting the active one.",
       "activated": "Certificate marked active.",
+      "deactivated": "Certificate switched off for this project.",
       "makeActive": "Make active",
       "add": "Add certificate",
       "existingTab": "Existing certificates",
       "tipLabel": "Tip:",
-      "appId": "ID"
+      "appId": "ID",
+      "projectCertificatesHeading": "Project Certificates",
+      "organizationCertificatesHeading": "Organization Certificate",
+      "projectCertOverrideWarning": "This project already has a signing certificate. Uploading a new one will replace it — a project can only have one certificate at a time.",
+      "overrideQuestion": "Replace the existing certificate for this project?"
     }
   },
   "sama": "SAMA",

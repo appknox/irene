@@ -1,0 +1,28 @@
+.override-confirm-container {
+  border: 1px solid
+    var(--organization-signing-certificate-override-confirm-border-color);
+  border-radius: var(
+    --organization-signing-certificate-override-confirm-border-radius
+  );
+  margin: 1.5em;
+}
+
+.override-confirm-note {
+  padding: 0.75em;
+  margin: 1.25em 1.5em;
+  background-color: var(
+    --organization-signing-certificate-override-confirm-note-background-color
+  );
+  border-radius: var(
+    --organization-signing-certificate-override-confirm-border-radius
+  );
+}
+
+.override-action-container {
+  background-color: var(
+    --organization-signing-certificate-override-confirm-background-main
+  );
+  box-shadow: var(
+    --organization-signing-certificate-override-confirm-action-box-shadow
+  );
+}

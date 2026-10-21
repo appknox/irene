@@ -15,6 +15,11 @@ export interface OrganizationSigningCertificateUploadFormSignature {
 
   Args: {
     baseUrl: string;
+    hasExistingProjectCert?: boolean;
+    isLoadingExistingCert?: boolean;
+    isConfirmingOverride: boolean;
+    onRequestOverrideConfirm: () => void;
+    onCancelOverrideConfirm: () => void;
     onUploaded: () => void;
     onCancel: () => void;
   };
@@ -40,9 +45,16 @@ export default class OrganizationSigningCertificateUploadFormComponent extends C
   }
 
   // Both files and the p12 password are mandatory. The password is trimmed so
-  // whitespace alone does not unlock save.
+  // whitespace alone does not unlock save. Also locked while the parent is
+  // still finding out whether a project cert already exists, so a save can't
+  // race ahead and skip the override confirmation.
   get canSave() {
-    return !!this.p12File && !!this.profileFile && !!this.password.trim();
+    return (
+      !!this.p12File &&
+      !!this.profileFile &&
+      !!this.password.trim() &&
+      !this.args.isLoadingExistingCert
+    );
   }
 
   resetForm() {
@@ -88,9 +100,30 @@ export default class OrganizationSigningCertificateUploadFormComponent extends C
     this.profileFile = null;
   }
 
-  upload = task({ drop: true }, async (event: Event) => {
+  @action
+  handleSubmit(event: Event) {
     event.preventDefault();
 
+    if (this.args.isLoadingExistingCert) {
+      return;
+    }
+
+    if (this.args.hasExistingProjectCert) {
+      this.args.onRequestOverrideConfirm();
+
+      return;
+    }
+
+    this.upload.perform();
+  }
+
+  confirmOverride = task(async () => {
+    this.args.onCancelOverrideConfirm();
+
+    await this.upload.perform();
+  });
+
+  upload = task({ drop: true }, async () => {
     if (!this.p12File || !this.profileFile) {
       this.notify.error(this.intl.t('cyod.signingCert.missingFiles'));
 

@@ -1,4 +1,4 @@
-{{! @glint-nocheck : did-insert, will-destroy, or}}
+{{! @glint-nocheck : did-insert, did-update, will-destroy, or}}
 {{#if this.mountContent}}
   <EmberWormhole @to='ak-component-wormhole' @renderInPlace={{@renderInPlace}}>
     <div
@@ -22,6 +22,7 @@
         class='ak-popover {{@containerClass}}'
         local-class='ak-popover-container'
         {{did-insert this.elementInserted}}
+        {{did-update this.handleAnchorRefUpdate @anchorRef}}
         {{will-destroy this.handleWillDestroyCleanup}}
       >
         {{yield}}

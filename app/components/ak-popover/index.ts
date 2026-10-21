@@ -129,15 +129,41 @@ export default class PopoverComponent extends Component<AkPopoverSignature> {
     this.createPopperInstance();
   }
 
+  // The addObserver below can miss updates to a @tracked-driven anchorRef
+  // after the first one; this re-targets the popper on every real change.
+  @action
+  handleAnchorRefUpdate() {
+    if (this.anchorRef) {
+      this.createPopperInstance();
+    } else {
+      this.popper?.destroy();
+      this.popper = null;
+    }
+  }
+
   @action createPopperInstance() {
     if (this.anchorRef && this.popperElement) {
+      this.popper?.destroy();
+
       this.popper = createPopper(this.anchorRef, this.popperElement, {
         placement: this.args.placement || this.defaultPlacement,
+        // Wormholed content needs 'fixed' -- AkPopover's own root forces
+        // `width: 0`, which corrupts 'absolute' strategy's rect. Rendered
+        // in place, the content stays under its local ancestors, so 'fixed'
+        // would measure wrong if one of those is transformed; 'absolute'
+        // is correct there instead.
+        strategy: this.args.renderInPlace ? 'absolute' : 'fixed',
         modifiers: [
           ...this.defaultModifiers,
           sameWidth(Boolean(this.args.sameWidthAsRef)),
           ...(this.args.modifiers || []),
         ],
+      });
+
+      // First computation after creation can still land wrong; a resize
+      // event self-corrects it immediately, so force one extra update.
+      requestAnimationFrame(() => {
+        void this.popper?.update();
       });
 
       if (this.args.closeHandler && this.args.clickOutsideToClose) {
