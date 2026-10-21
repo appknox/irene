@@ -878,6 +878,12 @@
     "notAssessedCount": "{count} of {total} not assessed",
     "waitingForDevice": "Waiting for device stream...",
     "noActiveDevice": "No active device session",
+    "liveLogs": "Live logs",
+    "expandPreview": "Expand preview",
+    "collapseDevicePanel": "Collapse device panel",
+    "showDevicePreview": "Show device preview",
+    "logsScrollIndependently": "Logs scroll independently",
+    "illustrativeLayout": "Illustrative layout — the phone preview represents the live device stream.",
     "objective": "Objective",
     "outcome": {
       "bypassed": "Exploit Successful",

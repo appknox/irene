@@ -11,7 +11,10 @@
 <AkStack
   @direction='column'
   @spacing='2'
-  local-class='log-card {{if this.isExpanded "is-expanded"}}'
+  local-class='log-card {{if this.isExpanded "is-expanded"}} {{if
+    @isEmbedded
+    "is-embedded"
+  }}'
   class='p-3'
   data-test-offensiveSecurity-agentLog
 >
@@ -22,19 +25,38 @@
     local-class='log-header'
   >
     <AkStack @alignItems='center' @spacing='1.5'>
-      <AkTypography @variant='body1' @fontWeight='medium'>
-        {{t 'offensiveSecurity.attackRun'}}
+      <AkTypography
+        @variant='body1'
+        @fontWeight='medium'
+        local-class='log-title'
+      >
+        {{if
+          @isEmbedded
+          (t 'offensiveSecurity.liveLogs')
+          (t 'offensiveSecurity.attackRun')
+        }}
       </AkTypography>
 
       {{#if (and this.isExpanded (gt this.styledLines.length 0))}}
         <span local-class='line-count-badge'>
-          {{this.styledLines.length}} lines
+          {{this.styledLines.length}}
+          lines
         </span>
       {{/if}}
     </AkStack>
 
     <AkStack @alignItems='center' @spacing='1'>
-      <OffensiveSecurity::StatusChip @scan={{@scan}} />
+      {{#if (and @isEmbedded @scan.isRunning)}}
+        <span
+          local-class='streaming-badge'
+          data-test-offensiveSecurity-streamingBadge
+        >
+          <span local-class='streaming-dot'></span>
+          Streaming
+        </span>
+      {{else if (not @isEmbedded)}}
+        <OffensiveSecurity::StatusChip @scan={{@scan}} />
+      {{/if}}
 
       {{#if (gt this.styledLines.length 15)}}
         <AkIconButton
@@ -56,7 +78,11 @@
       <AkIconButton
         @size='small'
         @variant='default'
-        aria-label={{if this.isExpanded (t 'offensiveSecurity.collapseTerminal') (t 'offensiveSecurity.expandTerminal')}}
+        aria-label={{if
+          this.isExpanded
+          (t 'offensiveSecurity.collapseTerminal')
+          (t 'offensiveSecurity.expandTerminal')
+        }}
         title={{if this.isExpanded 'Collapse terminal (Esc)' 'Expand terminal'}}
         local-class='expand-btn'
         {{on 'click' this.toggleExpand}}
@@ -70,7 +96,9 @@
   <div local-class='log-body-container'>
     {{#if this.showInProgress}}
       <div local-class='log-pane' data-test-offensiveSecurity-agentLog-pane>
-        <div local-class='log-line dim'>{{this.statusMessage}}{{this.dotsText}}</div>
+        <div
+          local-class='log-line dim'
+        >{{this.statusMessage}}{{this.dotsText}}</div>
       </div>
     {{else if @isLoading}}
       <AkSkeleton @width='100%' @height={{if this.isExpanded '100%' '320px'}} />
@@ -108,7 +136,6 @@
           <div local-class='log-line {{line.tone}}'>{{line.text}}</div>
         {{/each}}
       </div>
-
     {{/if}}
   </div>
 </AkStack>

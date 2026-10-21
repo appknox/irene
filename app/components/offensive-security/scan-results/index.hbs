@@ -190,91 +190,186 @@
       </AkStack>
     {{/if}}
 
-    {{! Top row: Agent log + Device card placeholder }}
-    <AkStack
-      @width='full'
-      @spacing='3'
-      @alignItems='stretch'
-      local-class='run-split'
-    >
-      <OffensiveSecurity::ScanResults::AgentLog
-        @scan={{this.scan}}
-        @lines={{this.logLines}}
-        @loadFailed={{this.logLoadFailed}}
-        @isLoading={{this.loadLog.isRunning}}
-      />
+    {{! Unified Offensive Security Run Card }}
+    <div local-class='run-card'>
+      <div local-class='run-card-header'>
+        <AkTypography @variant='body1' @fontWeight='bold'>
+          {{t 'offensiveSecurity.attackRun'}}
+        </AkTypography>
 
-      {{#if this.shouldShowDeviceCard}}
-        <div local-class='run-split-side'>
-          <div local-class='device-card' data-test-offensiveSecurity-deviceCard>
-            <AkStack
-              @width='full'
-              @direction='column'
-              @spacing='2'
-              class='p-3'
-              local-class='device-card-inner'
+        <div local-class='run-card-header-actions'>
+          {{#if (and this.shouldShowDeviceCard this.isDevicePanelCollapsed)}}
+            <button
+              type='button'
+              local-class='show-device-btn'
+              {{on 'click' this.toggleDevicePanel}}
+              data-test-offensiveSecurity-showDeviceBtn
             >
-              <AkStack
-                @width='full'
-                @justifyContent='space-between'
-                @alignItems='center'
-              >
-                <AkTypography @variant='body1' @fontWeight='bold'>
+              <AkIcon @iconName='mobile' @size='small' />
+              <span>{{t 'offensiveSecurity.showDevicePreview'}}</span>
+            </button>
+          {{/if}}
+
+          <OffensiveSecurity::StatusChip @scan={{this.scan}} />
+        </div>
+      </div>
+
+      <div
+        local-class='run-split {{if
+          (or (not this.shouldShowDeviceCard) this.isDevicePanelCollapsed)
+          "is-collapsed"
+        }}'
+      >
+        <div local-class='run-logs-col'>
+          <OffensiveSecurity::ScanResults::AgentLog
+            @scan={{this.scan}}
+            @lines={{this.logLines}}
+            @loadFailed={{this.logLoadFailed}}
+            @isLoading={{this.loadLog.isRunning}}
+            @isEmbedded={{true}}
+          />
+        </div>
+
+        {{#if
+          (and this.shouldShowDeviceCard (not this.isDevicePanelCollapsed))
+        }}
+          <div
+            local-class='run-device-col'
+            data-test-offensiveSecurity-deviceCard
+          >
+            {{#if this.isDeviceExpanded}}
+              <button
+                type='button'
+                local-class='device-modal-backdrop'
+                aria-label='Close device preview'
+                {{on 'click' this.toggleDeviceExpand}}
+                data-test-offensiveSecurity-deviceModal-backdrop
+              />
+            {{/if}}
+
+            <div
+              local-class='device-panel {{if
+                this.isDeviceExpanded
+                "is-expanded"
+              }}'
+            >
+              <div local-class='device-panel-header'>
+                <AkTypography @variant='body2' @fontWeight='bold'>
                   {{t 'realDevice'}}
                 </AkTypography>
 
+                <AkIconButton
+                  @size='small'
+                  @variant='default'
+                  aria-label={{if
+                    this.isDeviceExpanded
+                    'Collapse preview (Esc)'
+                    (t 'offensiveSecurity.collapseDevicePanel')
+                  }}
+                  title={{if
+                    this.isDeviceExpanded
+                    'Collapse preview (Esc)'
+                    (t 'offensiveSecurity.collapseDevicePanel')
+                  }}
+                  local-class='collapse-panel-btn'
+                  {{on
+                    'click'
+                    (if
+                      this.isDeviceExpanded
+                      this.toggleDeviceExpand
+                      this.toggleDevicePanel
+                    )
+                  }}
+                  data-test-offensiveSecurity-collapseDeviceBtn
+                >
+                  <AkIcon
+                    @iconName={{if this.isDeviceExpanded 'close' 'unfold-less'}}
+                    @size='small'
+                  />
+                </AkIconButton>
+              </div>
+
+              <div local-class='device-status-row'>
                 {{#if this.isDeviceActive}}
                   <span
                     local-class='live-badge'
                     data-test-offensiveSecurity-deviceLiveBadge
                   >
                     <span local-class='live-dot'></span>
-                    LIVE
+                    LIVE · Connected
                   </span>
-                {{/if}}
-              </AkStack>
-
-              {{#if this.isDeviceActive}}
-                <div
-                  local-class='device-screen-wrapper'
-                  data-test-offensiveSecurity-deviceScreen
-                >
-                  <NovncRfb
-                    @deviceFarmURL={{this.deviceFarmURL}}
-                    @deviceFarmPassword={{this.deviceFarmPassword}}
-                    @allowInteraction={{false}}
-                    @containCanvas={{true}}
-                  />
-                </div>
-              {{else}}
-                <div
-                  local-class='device-placeholder'
-                  data-test-offensiveSecurity-devicePlaceholder
-                >
-                  <AkIcon
-                    @iconName='mobile'
-                    local-class='device-placeholder-icon'
-                  />
-
-                  <AkTypography
-                    @variant='caption'
-                    @color='textSecondary'
-                    class='mt-2'
-                    local-class='device-placeholder-text'
-                  >
+                {{else}}
+                  <span local-class='device-idle-status'>
+                    <span local-class='idle-dot'></span>
                     {{if
                       this.scan.isRunning
                       (t 'offensiveSecurity.waitingForDevice')
                       (t 'offensiveSecurity.noActiveDevice')
                     }}
-                  </AkTypography>
+                  </span>
+                {{/if}}
+              </div>
+
+              <div local-class='phone-frame-wrapper'>
+                <div local-class='phone-frame'>
+                  <div local-class='phone-speaker-slit'></div>
+
+                  <div local-class='phone-screen'>
+                    {{#if this.isDeviceActive}}
+                      <div
+                        local-class='device-screen-wrapper'
+                        data-test-offensiveSecurity-deviceScreen
+                      >
+                        <NovncRfb
+                          @deviceFarmURL={{this.deviceFarmURL}}
+                          @deviceFarmPassword={{this.deviceFarmPassword}}
+                          @allowInteraction={{false}}
+                          @containCanvas={{true}}
+                        />
+                      </div>
+                    {{else}}
+                      <div
+                        local-class='device-placeholder'
+                        data-test-offensiveSecurity-devicePlaceholder
+                      >
+                        <AkIcon
+                          @iconName='mobile'
+                          local-class='device-placeholder-icon'
+                        />
+
+                        <span local-class='device-placeholder-text'>
+                          {{if
+                            this.scan.isRunning
+                            (t 'offensiveSecurity.waitingForDevice')
+                            'Live device preview'
+                          }}
+                        </span>
+                      </div>
+                    {{/if}}
+                  </div>
                 </div>
-              {{/if}}
-            </AkStack>
+              </div>
+
+              <button
+                type='button'
+                local-class='expand-preview-btn {{if
+                  this.isDeviceExpanded
+                  "is-expanded"
+                }}'
+                {{on 'click' this.toggleDeviceExpand}}
+                data-test-offensiveSecurity-expandPreviewBtn
+              >
+                {{if
+                  this.isDeviceExpanded
+                  'Close preview'
+                  (t 'offensiveSecurity.expandPreview')
+                }}
+              </button>
+            </div>
           </div>
-        </div>
-      {{/if}}
-    </AkStack>
+        {{/if}}
+      </div>
+    </div>
 
     {{! Summary and Artifacts cards row }}
     <AkStack

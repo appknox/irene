@@ -41,10 +41,35 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked isFileDetailsExpanded = false;
   @tracked activeScreenUrl: string | null = null;
   @tracked activeScreenPassword: string | null = null;
+  @tracked isDevicePanelCollapsed = false;
+  @tracked isDeviceExpanded = false;
 
   @action
   toggleFileDetails(): void {
     this.isFileDetailsExpanded = !this.isFileDetailsExpanded;
+  }
+
+  @action
+  toggleDevicePanel(): void {
+    this.isDevicePanelCollapsed = !this.isDevicePanelCollapsed;
+  }
+
+  @action
+  toggleDeviceExpand(): void {
+    this.isDeviceExpanded = !this.isDeviceExpanded;
+    if (this.isDeviceExpanded) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }
+
+  @action
+  handleDocumentKeyDown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && this.isDeviceExpanded) {
+      event.preventDefault();
+      this.toggleDeviceExpand();
+    }
   }
 
   stopPolling?: () => void;
@@ -61,6 +86,8 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.handleWsOffsecScanUpdate
     );
 
+    window.addEventListener('keydown', this.handleDocumentKeyDown);
+
     this.loadScan.perform(args.scanId);
   }
 
@@ -72,6 +99,8 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this,
       this.handleWsOffsecScanUpdate
     );
+    window.removeEventListener('keydown', this.handleDocumentKeyDown);
+    document.body.style.overflow = '';
     this.stopPolling?.();
   }
 

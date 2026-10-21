@@ -64,6 +64,10 @@ const SELECTORS = {
   deviceScreen: '[data-test-offensiveSecurity-deviceScreen]',
   deviceLiveBadge: '[data-test-offensiveSecurity-deviceLiveBadge]',
   novncContainer: '[data-test-NovncRfb-canvasContainer]',
+  deviceCollapseBtn: '[data-test-offensiveSecurity-collapseDeviceBtn]',
+  deviceShowBtn: '[data-test-offensiveSecurity-showDeviceBtn]',
+  deviceExpandBtn: '[data-test-offensiveSecurity-expandPreviewBtn]',
+  deviceBackdrop: '[data-test-offensiveSecurity-deviceModal-backdrop]',
 };
 
 const TEMPLATE = hbs`<OffensiveSecurity::ScanResults @scanId={{this.scanId}} />`;
@@ -845,5 +849,53 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.deviceScreen).exists();
     assert.dom(SELECTORS.novncContainer).exists();
     assert.dom(SELECTORS.deviceLiveBadge).exists();
+  });
+
+  test('it allows collapsing and re-expanding the real device panel', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: 'emulator-5554',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.deviceCollapseBtn).exists();
+
+    // Collapse the device panel
+    await click(SELECTORS.deviceCollapseBtn);
+    assert.dom(SELECTORS.deviceCard).doesNotExist();
+    assert.dom(SELECTORS.deviceShowBtn).exists();
+
+    // Re-expand the device panel
+    await click(SELECTORS.deviceShowBtn);
+    assert.dom(SELECTORS.deviceCard).exists();
+    assert.dom(SELECTORS.deviceShowBtn).doesNotExist();
+  });
+
+  test('it toggles expanded device preview modal mode without disconnecting stream', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: 'emulator-5554',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.deviceExpandBtn).exists();
+    assert.dom(SELECTORS.deviceBackdrop).doesNotExist();
+
+    // Expand preview
+    await click(SELECTORS.deviceExpandBtn);
+    assert.dom(SELECTORS.deviceBackdrop).exists();
+    assert.dom(SELECTORS.novncContainer).exists();
+
+    // Close preview via backdrop
+    await click(SELECTORS.deviceBackdrop);
+    assert.dom(SELECTORS.deviceBackdrop).doesNotExist();
+    assert.dom(SELECTORS.novncContainer).exists();
   });
 });
