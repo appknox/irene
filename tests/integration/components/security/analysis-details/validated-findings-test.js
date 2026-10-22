@@ -2,7 +2,13 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
-import { render, click, find, waitUntil } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  find,
+  triggerEvent,
+  waitUntil,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { Response } from 'miragejs';
 import Service from '@ember/service';
@@ -46,13 +52,23 @@ const selectors = {
   drawer:
     '[data-test-securityAnalysisDetails-validatedFindings-originalAnalysisDrawer]',
   confirmBtn: '[data-test-confirmbox-confirmBtn]',
+  sectionCard: (testId) =>
+    `[data-test-securityAnalysisDetails-sectionCard='${testId}']`,
+  sectionTitle: '[data-test-securityAnalysisDetails-sectionCard-title]',
+  sectionDescription:
+    '[data-test-securityAnalysisDetails-sectionCard-description]',
+  tooltipRoot: '[data-test-ak-tooltip-root]',
+  tooltipContent: '[data-test-ak-tooltip-content]',
 };
 
 // ─── Template ────────────────────────────────────────────────────────────────
 const TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings
   @analysis={{this.analysis}}
-  @onFindingsChange={{this.onFindingsChange}}
-  @onRegisterReloadFindings={{this.onRegisterReloadFindings}}
+/>`;
+
+const FALSE_POSITIVES_TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings
+  @analysis={{this.analysis}}
+  @showsFalsePositives={{true}}
 />`;
 
 module(
@@ -92,13 +108,41 @@ module(
         return findings;
       };
 
-      this.setProperties({
-        reportedCount: null,
-        reloadFindings: null,
-        onFindingsChange: (count) => this.set('reportedCount', count),
-        onRegisterReloadFindings: (reload) =>
-          this.set('reloadFindings', reload),
-      });
+      this.stubFinding = (...traits) => {
+        const finding = this.server.create(
+          'security/validated-finding',
+          ...traits
+        );
+
+        this.server.get('/knoxiq/analyses/:analysisId/findings', () => ({
+          count: 1,
+          next: null,
+          previous: null,
+          results: [finding.toJSON()],
+        }));
+
+        return finding;
+      };
+
+      this.saveTooltipContent = async () => {
+        await triggerEvent(
+          find(selectors.saveBtn).closest(selectors.tooltipRoot),
+          'mouseenter'
+        );
+
+        return find(selectors.tooltipContent);
+      };
+
+      this.missingFieldsMessage = (...fields) =>
+        t('securityAnalysisDetails.validatedFindings.missingFields', {
+          fields: fields
+            .map((field) =>
+              t(`securityAnalysisDetails.validatedFindings.field.${field}`)
+            )
+            .join(', '),
+        });
+
+      this.setProperties({});
 
       this.analysis = this.pushAnalysis({ risk: ENUMS.RISK.HIGH });
     });
@@ -209,57 +253,291 @@ module(
       assert.dom(selectors.menuItemBtn('deleteAllFindings')).isNotDisabled();
     });
 
-    // ─── Reporting upward ──────────────────────────────────────────────────
-
-    test('it reports the finding count once loaded', async function (assert) {
-      this.stubFindings(3);
-
-      await render(TEMPLATE);
-      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(this.reportedCount, 3);
-    });
-
-    test('it reports zero when there are no findings', async function (assert) {
+    test('an analysis with no findings offers nothing to save or delete', async function (assert) {
       this.stubFindings(0);
 
       await render(TEMPLATE);
       await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
 
-      assert.strictEqual(this.reportedCount, 0);
+      assert.dom(selectors.saveBtn).doesNotExist();
+
+      await click(selectors.moreMenuBtn);
+
+      assert.dom(selectors.menuItem('originalAnalysis')).exists();
+      assert.dom(selectors.menuItem('deleteFinding')).doesNotExist();
+      assert.dom(selectors.menuItem('deleteAllFindings')).doesNotExist();
     });
 
-    test('it hands the page a way to reload', async function (assert) {
-      this.stubFindings(1);
-
-      await render(TEMPLATE);
-      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
-
-      assert.strictEqual(typeof this.reloadFindings, 'function');
-    });
+    // ─── Reporting upward ──────────────────────────────────────────────────
 
     // ─── Adding ────────────────────────────────────────────────────────────
 
-    test('adding a finding notifies and reports the new count', async function (assert) {
+    test('adding a finding opens an editor without sending it', async function (assert) {
       this.stubFindings(1);
 
-      this.server.post('/knoxiq/analyses/:analysisId/findings', () =>
-        this.server.create('security/validated-finding').toJSON()
+      let posted = false;
+
+      this.server.post('/knoxiq/analyses/:analysisId/findings', () => {
+        posted = true;
+
+        return this.server.create('security/validated-finding').toJSON();
+      });
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      await click(selectors.addFindingBtn);
+
+      assert.false(posted, 'an incomplete finding is not sent');
+
+      // Nothing has been filled in, so there is nothing worth saving yet.
+      assert.dom(selectors.saveBtn).isDisabled();
+    });
+
+    // ─── False positives ───────────────────────────────────────────────────
+
+    test('the true positive section asks the endpoint for true positives', async function (assert) {
+      const requestedValidity = [];
+
+      this.server.get(
+        '/knoxiq/analyses/:analysisId/findings',
+        (schema, req) => {
+          requestedValidity.push(req.queryParams.is_valid);
+
+          return { count: 0, next: null, previous: null, results: [] };
+        }
       );
 
       await render(TEMPLATE);
       await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
 
-      assert.strictEqual(this.reportedCount, 1);
+      // The endpoint returns true positives when the param is absent.
+      assert.deepEqual(requestedValidity, [undefined]);
+    });
 
-      await click(selectors.addFindingBtn);
+    test('the false positive section asks the endpoint for false positives', async function (assert) {
+      const requestedValidity = [];
 
-      assert.strictEqual(
-        this.notify.successMsg,
-        t('securityAnalysisDetails.validatedFindings.findingAdded')
+      this.server.get(
+        '/knoxiq/analyses/:analysisId/findings',
+        (schema, req) => {
+          requestedValidity.push(req.queryParams.is_valid);
+
+          return { count: 0, next: null, previous: null, results: [] };
+        }
       );
 
-      assert.strictEqual(this.reportedCount, 2);
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.deepEqual(requestedValidity, ['false']);
+    });
+
+    test('the true positive section names itself', async function (assert) {
+      this.stubFindings(0);
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      const card = find(selectors.sectionCard('validatedFindings'));
+
+      assert
+        .dom(selectors.sectionTitle, card)
+        .hasText(t('securityAnalysisDetails.validatedFindings.title'));
+
+      assert
+        .dom(selectors.sectionDescription, card)
+        .hasText(t('securityAnalysisDetails.validatedFindings.description'));
+
+      assert
+        .dom(selectors.emptyState)
+        .hasText(t('securityAnalysisDetails.validatedFindings.emptyState'));
+    });
+
+    test('the false positive section names itself', async function (assert) {
+      this.stubFindings(0);
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      const card = find(selectors.sectionCard('falsePositives'));
+
+      assert
+        .dom(selectors.sectionTitle, card)
+        .hasText(
+          t('securityAnalysisDetails.validatedFindings.falsePositivesTitle')
+        );
+
+      assert
+        .dom(selectors.sectionDescription, card)
+        .hasText(
+          t(
+            'securityAnalysisDetails.validatedFindings.falsePositivesDescription'
+          )
+        );
+
+      assert
+        .dom(selectors.emptyState)
+        .hasText(
+          t('securityAnalysisDetails.validatedFindings.noFalsePositives')
+        );
+    });
+
+    // ─── Required fields ───────────────────────────────────────────────────
+
+    test('a complete finding can be saved', async function (assert) {
+      this.stubFinding();
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isNotDisabled();
+    });
+
+    test('a finding missing its remediation steps cannot be saved', async function (assert) {
+      this.stubFinding('withoutRemediationSteps');
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isDisabled();
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(this.missingFieldsMessage('remediationSteps'));
+    });
+
+    test('a finding missing its reproduction steps cannot be saved', async function (assert) {
+      this.stubFinding('withoutReproductionSteps');
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isDisabled();
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(this.missingFieldsMessage('stepsToReproduce'));
+    });
+
+    test('a finding missing its exploitability analysis cannot be saved', async function (assert) {
+      this.stubFinding('withoutExploitabilityAnalysis');
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isDisabled();
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(this.missingFieldsMessage('exploitabilityAnalysis'));
+    });
+
+    test('the tooltip names every field still to fill in', async function (assert) {
+      this.stubFinding(
+        'withoutRemediationSteps',
+        'withoutReproductionSteps',
+        'withoutExploitabilityAnalysis'
+      );
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(
+          this.missingFieldsMessage(
+            'remediationSteps',
+            'stepsToReproduce',
+            'exploitabilityAnalysis'
+          )
+        );
+    });
+
+    test('blank step rows do not count as filled in', async function (assert) {
+      this.stubFinding('withBlankSteps');
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isDisabled();
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(
+          this.missingFieldsMessage('remediationSteps', 'stepsToReproduce')
+        );
+    });
+
+    test('a step with only a heading counts as filled in', async function (assert) {
+      this.stubFinding('withHeadingOnlyReproductionStep');
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isNotDisabled();
+    });
+
+    // ─── Required fields on an all false positive analysis ─────────────────
+
+    test('an all false positive analysis does not ask for remediation, reproduction or exploitability', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+
+      this.stubFinding(
+        'withoutRemediationSteps',
+        'withoutReproductionSteps',
+        'withoutExploitabilityAnalysis'
+      );
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isNotDisabled();
+    });
+
+    test('an all false positive analysis still asks for the verdict fields', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+
+      this.stubFinding({
+        validation: {
+          verdict: 'valid',
+          is_valid: false,
+          confidence: 0,
+          confidence_label: 'UNKNOWN',
+          finding_summary: '',
+          evidence: [],
+          reasoning: '',
+          false_positive_indicators: [],
+          is_third_party: false,
+          library_origin: null,
+        },
+      });
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isDisabled();
+
+      assert
+        .dom(await this.saveTooltipContent())
+        .hasText(
+          this.missingFieldsMessage('confidence', 'summary', 'reasoning')
+        );
+    });
+
+    test('a true positive on an all false positive analysis is held to the same reduced set', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+
+      this.stubFinding(
+        'withoutRemediationSteps',
+        'withoutReproductionSteps',
+        'withoutExploitabilityAnalysis'
+      );
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isNotDisabled();
     });
 
     // ─── Deleting ──────────────────────────────────────────────────────────
