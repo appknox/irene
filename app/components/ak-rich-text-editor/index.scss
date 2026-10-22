@@ -12,6 +12,10 @@
   &.is-disabled {
     background-color: var(--ak-rich-text-editor-disabled-background-color);
   }
+
+  &.is-error {
+    border-color: var(--ak-rich-text-editor-error-border-color);
+  }
 }
 
 .toolbar {
@@ -25,7 +29,9 @@
 
   &.is-active {
     color: var(--ak-rich-text-editor-toolbar-button-active-color);
-    background-color: var(--ak-rich-text-editor-toolbar-button-active-background);
+    background-color: var(
+      --ak-rich-text-editor-toolbar-button-active-background
+    );
   }
 }
 
