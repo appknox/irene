@@ -10,6 +10,8 @@ import type {
 export interface SecurityValidatedFindingStep {
   heading: string;
   body: string;
+  command?: string;
+  codeExample?: string;
   id?: number;
 }
 
@@ -23,6 +25,14 @@ export interface SecurityValidatedFindingContent {
   stepsToReproduce: SecurityValidatedFindingStep[];
   exploitabilityLikelihood: number;
   exploitabilityAnalysis: string;
+  exploitabilityScore: number | null;
+  exploitabilitySignals: Record<string, boolean | 'unknown'>;
+  exploitabilityEvidence: string[];
+  attackScenario: string[];
+  remediationSummary: string;
+  pocTitle: string;
+  expectedEvidence: string[];
+  developerPrompt: string;
 }
 
 // The flat write-only body the API accepts.
@@ -32,17 +42,27 @@ export interface SecurityValidatedFindingPayload {
   evidence: string[];
   reasoning: string;
   remediation_steps: SecurityValidatedFindingStep[];
+  code_examples: string[];
   steps_to_reproduce: SecurityValidatedFindingStep[];
   exploitability_likelihood: number;
   exploitability_analysis: string;
+  exploitability_score: number | null;
+  exploitability_signals: Record<string, boolean | 'unknown'>;
+  exploitability_evidence: string[];
+  attack_scenario: string[];
+  remediation_summary: string;
+  poc_title: string;
+  expected_evidence: string[];
+  developer_prompt: string;
 }
 
-// Anything carrying the four nested blobs — in practice, the record.
+// Anything carrying the nested blobs — in practice, the record.
 export interface SecurityValidatedFindingContentSource {
   validation?: Partial<SecurityValidatedFindingValidation> | null;
   remediation?: Partial<SecurityValidatedFindingRemediation> | null;
   poc?: Partial<SecurityValidatedFindingPoc> | null;
   exploitability?: Partial<SecurityValidatedFindingExploitability> | null;
+  developerPrompt?: string | null;
 }
 
 export interface SecurityValidatedFindingValidationEdit {
@@ -55,6 +75,10 @@ export interface SecurityValidatedFindingValidationEdit {
 export interface SecurityValidatedFindingExploitabilityEdit {
   likelihood?: number;
   analysis?: string;
+  score?: number | null;
+  signals?: Record<string, boolean | 'unknown'>;
+  analysisEvidence?: string[];
+  attackScenario?: string[];
 }
 
 export const UNKNOWN_SCALE_VALUE = -1;
@@ -76,7 +100,15 @@ export const EXPLOITABILITY_LIKELIHOOD_LABELS: Record<number, string> = {
 };
 
 export const CONFIDENCE_VALUES = [3, 2, 1] as const;
-export const EXPLOITABILITY_LIKELIHOOD_VALUES = [3, 2, 1] as const;
+
+// Unknown is offered here but not for confidence: a finding may genuinely
+// have no likelihood to give, while confidence is required to save.
+export const EXPLOITABILITY_LIKELIHOOD_VALUES = [
+  3,
+  2,
+  1,
+  UNKNOWN_SCALE_VALUE,
+] as const;
 
 let nextStepId = 0;
 
@@ -139,17 +171,22 @@ export function likelihoodFromLabel(label?: string | null) {
  * @returns Editor steps, each with an id.
  */
 export function normalizeRemediationSteps(
-  storedSteps?: (string | SecurityValidatedFindingStep)[] | null
+  storedSteps?: (string | SecurityValidatedFindingStep)[] | null,
+  codeExamples?: string[] | null
 ): SecurityValidatedFindingStep[] {
-  return (storedSteps ?? []).map((storedStep) =>
-    typeof storedStep === 'string'
-      ? { heading: '', body: storedStep, id: buildStepId() }
+  return (storedSteps ?? []).map((storedStep, position) => {
+    const codeExample = codeExamples?.[position] ?? '';
+    const codeIsStringOnly = typeof storedStep === 'string';
+
+    return codeIsStringOnly
+      ? { heading: '', body: storedStep, codeExample, id: buildStepId() }
       : {
           heading: storedStep?.heading ?? '',
           body: storedStep?.body ?? '',
+          codeExample,
           id: storedStep?.id ?? buildStepId(),
-        }
-  );
+        };
+  });
 }
 
 /**
@@ -164,6 +201,7 @@ export function normalizeVerificationSteps(
   return (verificationSteps ?? []).map((verificationStep) => ({
     heading: verificationStep?.title ?? '',
     body: verificationStep?.expected_result ?? '',
+    command: verificationStep?.command ?? '',
     id: verificationStep?.id ?? buildStepId(),
   }));
 }
@@ -248,8 +286,14 @@ export function toValidatedFindingContent(
     evidence: validation?.evidence ?? [],
     reasoning: validation?.reasoning ?? '',
     confidence: confidenceFromLabel(validation?.confidence_label),
-    remediationSteps: normalizeRemediationSteps(remediation?.steps),
     stepsToReproduce: normalizeVerificationSteps(poc?.verification_steps),
+    exploitabilityScore: exploitability?.score ?? null,
+    exploitabilitySignals: exploitability?.signals ?? {},
+    attackScenario: exploitability?.attack_scenario ?? [],
+    remediationSummary: remediation?.remediation ?? '',
+    pocTitle: poc?.poc_title ?? '',
+    expectedEvidence: poc?.expected_evidence ?? [],
+    developerPrompt: source.developerPrompt ?? '',
 
     exploitabilityAnalysis:
       exploitability?.exploitability_analysis?.summary ?? '',
@@ -257,6 +301,14 @@ export function toValidatedFindingContent(
     exploitabilityLikelihood: likelihoodFromLabel(
       exploitability?.exploitability_likelihood
     ),
+
+    remediationSteps: normalizeRemediationSteps(
+      remediation?.steps,
+      remediation?.code_examples
+    ),
+
+    exploitabilityEvidence:
+      exploitability?.exploitability_analysis?.evidence ?? [],
   };
 }
 
@@ -268,6 +320,21 @@ export function toValidatedFindingContent(
  */
 function withoutStepId({ heading, body }: SecurityValidatedFindingStep) {
   return { heading, body };
+}
+
+/**
+ * Drops the client-only identity but keeps the command, which only
+ * reproduction steps carry.
+ *
+ * @param step The editor step to send.
+ * @returns The step without its id, carrying its command.
+ */
+function reproductionStepForApi({
+  heading,
+  body,
+  command,
+}: SecurityValidatedFindingStep) {
+  return { heading, body, command: command ?? '' };
 }
 
 /**
@@ -285,9 +352,23 @@ export function toValidatedFindingPayload(
     evidence: content.evidence,
     reasoning: content.reasoning,
     remediation_steps: content.remediationSteps.map(withoutStepId),
-    steps_to_reproduce: content.stepsToReproduce.map(withoutStepId),
+    steps_to_reproduce: content.stepsToReproduce.map(reproductionStepForApi),
     exploitability_likelihood: content.exploitabilityLikelihood,
     exploitability_analysis: content.exploitabilityAnalysis,
+    exploitability_score: content.exploitabilityScore,
+    exploitability_signals: content.exploitabilitySignals,
+    exploitability_evidence: content.exploitabilityEvidence,
+    attack_scenario: content.attackScenario,
+    remediation_summary: content.remediationSummary,
+    poc_title: content.pocTitle,
+    expected_evidence: content.expectedEvidence,
+    developer_prompt: content.developerPrompt,
+
+    // Two parallel lists on the API; the editor keeps them as one so a
+    // reorder cannot pull an example onto the wrong step.
+    code_examples: content.remediationSteps.map(
+      (step) => step.codeExample ?? ''
+    ),
   };
 }
 
@@ -336,7 +417,61 @@ export function buildRemediation(
   remediation: SecurityValidatedFindingRemediation,
   editorSteps: SecurityValidatedFindingStep[]
 ): SecurityValidatedFindingRemediation {
-  return { ...remediation, steps: editorSteps };
+  return {
+    ...remediation,
+    steps: editorSteps,
+    // code_examples is a list parallel to steps. Rewriting the steps without
+    // it would leave the examples behind at their old positions.
+    code_examples: editorSteps.map((step) => step.codeExample ?? ''),
+  };
+}
+
+/**
+ * Applies an edit to the remediation fields that sit beside its steps.
+ *
+ * @param remediation The blob currently on the record.
+ * @param edit The fields the editor changed.
+ * @returns The replacement blob.
+ */
+export function buildRemediationDetails(
+  remediation: SecurityValidatedFindingRemediation,
+  edit: { summary?: string; codeExamples?: string[] }
+): SecurityValidatedFindingRemediation {
+  const updated = { ...remediation };
+
+  if (edit.summary !== undefined) {
+    updated.remediation = edit.summary;
+  }
+
+  if (edit.codeExamples !== undefined) {
+    updated.code_examples = edit.codeExamples;
+  }
+
+  return updated;
+}
+
+/**
+ * Applies an edit to the poc fields that sit beside its steps.
+ *
+ * @param poc The blob currently on the record.
+ * @param edit The fields the editor changed.
+ * @returns The replacement blob.
+ */
+export function buildPocDetails(
+  poc: SecurityValidatedFindingPoc,
+  edit: { title?: string; expectedEvidence?: string[] }
+): SecurityValidatedFindingPoc {
+  const updated = { ...poc };
+
+  if (edit.title !== undefined) {
+    updated.poc_title = edit.title;
+  }
+
+  if (edit.expectedEvidence !== undefined) {
+    updated.expected_evidence = edit.expectedEvidence;
+  }
+
+  return updated;
 }
 
 /**
@@ -356,8 +491,7 @@ export function buildPoc(
       step_number: position + 1,
       id: editorStep.id,
       title: editorStep.heading,
-      // The API hardcodes command to '' on every write.
-      command: '',
+      command: editorStep.command ?? '',
       expected_result: editorStep.body,
     })),
   };
@@ -380,6 +514,26 @@ export function buildExploitability(
     updated.exploitability_likelihood =
       EXPLOITABILITY_LIKELIHOOD_LABELS[edit.likelihood] ??
       (EXPLOITABILITY_LIKELIHOOD_LABELS[UNKNOWN_SCALE_VALUE] as string);
+  }
+
+  if (edit.score !== undefined) {
+    updated.score = edit.score;
+  }
+
+  if (edit.signals !== undefined) {
+    updated.signals = edit.signals;
+  }
+
+  if (edit.attackScenario !== undefined) {
+    updated.attack_scenario = edit.attackScenario;
+  }
+
+  if (edit.analysisEvidence !== undefined) {
+    updated.exploitability_analysis = {
+      ...exploitability?.exploitability_analysis,
+      summary: exploitability?.exploitability_analysis?.summary ?? '',
+      evidence: edit.analysisEvidence,
+    };
   }
 
   if (edit.analysis !== undefined) {

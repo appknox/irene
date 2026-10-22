@@ -63,8 +63,10 @@ module('Unit | Utility | security-aeis', function (hooks) {
       const signals = buildFullSignals(value);
 
       assert.deepEqual(
-        Object.keys(signals).sort(),
-        [...SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS].sort()
+        Object.keys(signals).sort((a, b) => a.localeCompare(b)),
+        [...SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS].sort((a, b) =>
+          a.localeCompare(b)
+        )
       );
 
       assert.true(
@@ -119,8 +121,10 @@ module('Unit | Utility | security-aeis', function (hooks) {
 
   test('the passed override carries every vector the endpoint expects', function (assert) {
     assert.deepEqual(
-      Object.keys(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.signals).sort(),
-      [...SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS].sort()
+      Object.keys(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.signals).sort((a, b) =>
+        a.localeCompare(b)
+      ),
+      [...SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS].sort((a, b) => a.localeCompare(b))
     );
   });
 
