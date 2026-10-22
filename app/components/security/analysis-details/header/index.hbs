@@ -78,8 +78,7 @@
 
 <ConfirmBox
   @isActive={{this.showMarkPassedConfirmBox}}
-  @title={{this.markPassedConfirmTitle}}
-  @description={{this.markPassedConfirmDescription}}
+  @title={{t 'securityAnalysisDetails.header.markAsPassedConfirm'}}
   @disabled={{this.markAsPassed.isRunning}}
   @confirmAction={{this.triggerMarkAsPassed}}
   @cancelAction={{this.closeMarkPassedConfirmBox}}

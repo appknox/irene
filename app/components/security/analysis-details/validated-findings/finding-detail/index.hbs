@@ -4,6 +4,106 @@
   @spacing='2.5'
   data-test-securityAnalysisDetails-validatedFindings-detail
 >
+  <AkStack
+    @direction='column'
+    @width='full'
+    local-class='panel-group aeis-group'
+  >
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+      @panelId={{this.panel.AEIS}}
+      @title={{t 'securityAnalysisDetails.validatedFindings.aeisConfiguration'}}
+      @iconName='settings'
+      @iconColor='warn'
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.AEIS}}
+      @onToggle={{@onTogglePanel}}
+      @onSave={{@onSavePanel}}
+    >
+      <AkStack
+        @justifyContent='space-between'
+        @alignItems='center'
+        @width='full'
+        @spacing='3.5'
+      >
+        <AkStack
+          @direction='column'
+          @width='6/12'
+          @alignItems='center'
+          @justifyContent='center'
+          @spacing='1.5'
+        >
+          <Security::AnalysisDetails::ScoreChip
+            @score={{this.displayScore}}
+            @label={{this.scoreLabel}}
+            @riskClass={{this.scoreRiskClass}}
+            @testId='validatedFinding'
+          />
+
+          <Security::AnalysisDetails::ValidatedFindings::ScoreField
+            @score={{this.finding.exploitabilityScore}}
+            @disabled={{@disabled}}
+            @onChange={{this.updateScore}}
+          />
+
+          <AkDivider @color='dark' @width='200px' />
+
+          <AkStack @direction='column' @alignItems='center' @spacing='0.5'>
+            <AkTypography @variant='body3' @color='textSecondary'>
+              {{t 'securityAnalysisDetails.validatedFindings.likelihood'}}
+            </AkTypography>
+
+            <AkSelect
+              @selected={{this.finding.exploitabilityLikelihood}}
+              @options={{this.likelihoodOptions}}
+              @onChange={{this.selectLikelihood}}
+              @disabled={{@disabled}}
+              @placeholder={{t
+                'securityAnalysisDetails.validatedFindings.selectLikelihood'
+              }}
+              local-class='signal-select'
+              data-test-securityAnalysisDetails-validatedFindings-likelihoodSelect
+              as |likelihood|
+            >
+              {{this.scaleLabel likelihood}}
+            </AkSelect>
+          </AkStack>
+        </AkStack>
+
+        <AkStack @direction='column' @spacing='2.5' @width='6/12'>
+          {{#each this.signalRows as |row|}}
+            <AkStack
+              @spacing='2.5'
+              @width='full'
+              @justifyContent='space-between'
+              @alignItems='center'
+            >
+              <AkTypography
+                @variant='body2'
+                data-test-securityAnalysisDetails-validatedFindings-signalLabel='{{row.key}}'
+              >
+                {{row.label}}
+              </AkTypography>
+
+              <AkSelect
+                @selected={{row.selected}}
+                @options={{this.signalValues}}
+                @onChange={{fn this.selectSignal row.key}}
+                @disabled={{@disabled}}
+                local-class='signal-select'
+                data-test-securityAnalysisDetails-validatedFindings-signalSelect='{{row.key}}'
+                as |value|
+              >
+                {{this.signalOptionLabel value}}
+              </AkSelect>
+            </AkStack>
+          {{/each}}
+        </AkStack>
+      </AkStack>
+    </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
   <AkStack @direction='column' @width='full' @spacing='1'>
     <AkTypography @variant='body2' @fontWeight='medium'>
       {{t 'securityAnalysisDetails.validatedFindings.confidence'}}
@@ -30,15 +130,18 @@
       {{t 'securityAnalysisDetails.validatedFindings.summary'}}
     </AkTypography>
 
-    <Textarea
-      @value={{this.finding.summary}}
+    <textarea
+      value={{this.finding.summary}}
       disabled={{@disabled}}
       rows='3'
       local-class='summary-input'
       aria-label={{t 'securityAnalysisDetails.validatedFindings.summary'}}
       {{on 'input' this.updateSummary}}
+      placeholder={{t
+        'securityAnalysisDetails.validatedFindings.summaryPlaceholder'
+      }}
       data-test-securityAnalysisDetails-validatedFindings-summaryInput
-    />
+    ></textarea>
   </AkStack>
 
   <AkStack @direction='column' @width='full' @spacing='1'>
@@ -50,8 +153,22 @@
       @value={{this.evidenceHtml}}
       @disabled={{@disabled}}
       @onChange={{this.updateEvidence}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.evidencePlaceholder'
+      }}
+      @error={{this.isListFieldInvalid 'evidence'}}
       data-test-securityAnalysisDetails-validatedFindings-evidenceEditor
     />
+
+    {{#if (this.isListFieldInvalid 'evidence')}}
+      <AkTypography
+        @variant='body3'
+        @color='error'
+        data-test-securityAnalysisDetails-validatedFindings-listFieldError='evidence'
+      >
+        {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+      </AkTypography>
+    {{/if}}
   </AkStack>
 
   <AkStack @direction='column' @width='full' @spacing='1'>
@@ -63,6 +180,9 @@
       @value={{this.reasoningHtml}}
       @disabled={{@disabled}}
       @onChange={{this.updateReasoning}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.reasoningPlaceholder'
+      }}
       data-test-securityAnalysisDetails-validatedFindings-reasoningEditor
     />
   </AkStack>
@@ -78,17 +198,91 @@
       @onToggle={{@onTogglePanel}}
       @onSave={{@onSavePanel}}
     >
-      <Security::AnalysisDetails::ValidatedFindings::StepList
-        @steps={{@remediationSteps}}
-        @disabled={{@disabled}}
-        @onStepsChange={{@onRemediationStepsChange}}
-        @addLabel={{t
-          'securityAnalysisDetails.validatedFindings.addRemediationStep'
-        }}
-        @bodyPlaceholder={{t
-          'securityAnalysisDetails.validatedFindings.addRemediation'
-        }}
-      />
+      <AkStack @direction='column' @width='full' @spacing='2.5'>
+        <AkStack @direction='column' @width='full' @spacing='1'>
+          <AkTypography @variant='body2' @fontWeight='medium'>
+            {{t 'securityAnalysisDetails.validatedFindings.remediationPrompt'}}
+          </AkTypography>
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t
+              'securityAnalysisDetails.validatedFindings.remediationPromptHint'
+            }}
+          </AkTypography>
+
+          <textarea
+            value={{this.remediationPrompt}}
+            disabled={{@disabled}}
+            rows='6'
+            spellcheck='false'
+            local-class='prompt-input'
+            placeholder={{t
+              'securityAnalysisDetails.validatedFindings.remediationPromptPlaceholder'
+            }}
+            aria-label={{t
+              'securityAnalysisDetails.validatedFindings.remediationPrompt'
+            }}
+            {{on 'input' this.updateRemediationPrompt}}
+            data-test-securityAnalysisDetails-validatedFindings-remediationPromptInput
+          ></textarea>
+        </AkStack>
+
+        <AkDivider @color='dark' local-class='panel-section-divider' />
+
+        <AkStack @direction='column' @width='full' @spacing='1'>
+          <AkTypography @variant='body2' @fontWeight='medium'>
+            {{t 'securityAnalysisDetails.validatedFindings.remediationSummary'}}
+          </AkTypography>
+
+          <textarea
+            value={{this.finding.remediationSummary}}
+            disabled={{@disabled}}
+            rows='3'
+            local-class='summary-input'
+            aria-label={{t
+              'securityAnalysisDetails.validatedFindings.remediationSummary'
+            }}
+            {{on 'input' this.updateRemediationSummary}}
+            placeholder={{t
+              'securityAnalysisDetails.validatedFindings.remediationSummaryPlaceholder'
+            }}
+            data-test-securityAnalysisDetails-validatedFindings-remediationSummaryInput
+          ></textarea>
+        </AkStack>
+
+        <AkDivider @color='dark' local-class='panel-section-divider' />
+
+        <AkStack @direction='column' @width='full' @spacing='1'>
+          <AkTypography @variant='body2' @fontWeight='medium'>
+            {{t 'securityAnalysisDetails.validatedFindings.remediationSteps'}}
+          </AkTypography>
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t
+              'securityAnalysisDetails.validatedFindings.remediationStepsHint'
+            }}
+          </AkTypography>
+        </AkStack>
+
+        <Security::AnalysisDetails::ValidatedFindings::StepList
+          @steps={{@remediationSteps}}
+          @disabled={{@disabled}}
+          @codeField='codeExample'
+          @codeFieldLabel={{t
+            'securityAnalysisDetails.validatedFindings.codeExample'
+          }}
+          @codeFieldPlaceholder={{t
+            'securityAnalysisDetails.validatedFindings.codeExamplePlaceholder'
+          }}
+          @onStepsChange={{@onRemediationStepsChange}}
+          @addLabel={{t
+            'securityAnalysisDetails.validatedFindings.addRemediationStep'
+          }}
+          @bodyPlaceholder={{t
+            'securityAnalysisDetails.validatedFindings.addRemediation'
+          }}
+        />
+      </AkStack>
     </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
 
     <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
@@ -101,17 +295,55 @@
       @onToggle={{@onTogglePanel}}
       @onSave={{@onSavePanel}}
     >
-      <Security::AnalysisDetails::ValidatedFindings::StepList
-        @steps={{@stepsToReproduce}}
-        @disabled={{@disabled}}
-        @addLabel={{t
-          'securityAnalysisDetails.validatedFindings.addReproductionStep'
-        }}
-        @bodyPlaceholder={{t
-          'securityAnalysisDetails.validatedFindings.addStepsToReproduce'
-        }}
-        @onStepsChange={{@onReproductionStepsChange}}
-      />
+      <AkStack @direction='column' @width='full' @spacing='2'>
+        <Security::AnalysisDetails::ValidatedFindings::StepList
+          @steps={{@stepsToReproduce}}
+          @disabled={{@disabled}}
+          @codeField='command'
+          @codeFieldLabel={{t
+            'securityAnalysisDetails.validatedFindings.stepCommand'
+          }}
+          @codeFieldPlaceholder={{t
+            'securityAnalysisDetails.validatedFindings.stepCommandPlaceholder'
+          }}
+          @addLabel={{t
+            'securityAnalysisDetails.validatedFindings.addReproductionStep'
+          }}
+          @bodyPlaceholder={{t
+            'securityAnalysisDetails.validatedFindings.addStepsToReproduce'
+          }}
+          @onStepsChange={{@onReproductionStepsChange}}
+        />
+
+        <AkDivider @color='dark' local-class='panel-section-divider' />
+
+        <AkStack @direction='column' @width='full' @spacing='1'>
+          <AkTypography @variant='body2' @fontWeight='medium'>
+            {{t 'securityAnalysisDetails.validatedFindings.expectedEvidence'}}
+          </AkTypography>
+
+          <AkRichTextEditor
+            @value={{this.expectedEvidenceHtml}}
+            @disabled={{@disabled}}
+            @onChange={{this.updateExpectedEvidenceHtml}}
+            @placeholder={{t
+              'securityAnalysisDetails.validatedFindings.expectedEvidencePlaceholder'
+            }}
+            @error={{this.isListFieldInvalid 'expectedEvidence'}}
+            data-test-securityAnalysisDetails-validatedFindings-expectedEvidenceEditor
+          />
+
+          {{#if (this.isListFieldInvalid 'expectedEvidence')}}
+            <AkTypography
+              @variant='body3'
+              @color='error'
+              data-test-securityAnalysisDetails-validatedFindings-listFieldError='expectedEvidence'
+            >
+              {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+      </AkStack>
     </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
 
     <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
@@ -127,31 +359,67 @@
       @onSave={{@onSavePanel}}
     >
       <AkStack @direction='column' @width='full' @spacing='1.5'>
-        <AkTypography @variant='body2' @fontWeight='medium'>
-          {{t 'securityAnalysisDetails.validatedFindings.selectLikelihood'}}
-        </AkTypography>
-
-        <AkSelect
-          @selected={{this.finding.exploitabilityLikelihood}}
-          @options={{this.likelihoodOptions}}
-          @onChange={{this.selectLikelihood}}
-          @disabled={{@disabled}}
-          @placeholder={{t
-            'securityAnalysisDetails.validatedFindings.selectLikelihood'
-          }}
-          class='w-full'
-          data-test-securityAnalysisDetails-validatedFindings-likelihoodSelect
-          as |likelihood|
-        >
-          {{this.scaleLabel likelihood}}
-        </AkSelect>
-
         <AkRichTextEditor
           @value={{this.exploitabilityAnalysisHtml}}
           @disabled={{@disabled}}
           @onChange={{this.updateExploitabilityBody}}
+          @placeholder={{t
+            'securityAnalysisDetails.validatedFindings.exploitabilityPlaceholder'
+          }}
           data-test-securityAnalysisDetails-validatedFindings-exploitabilityEditor
         />
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'securityAnalysisDetails.validatedFindings.analysisEvidence'}}
+        </AkTypography>
+
+        <AkRichTextEditor
+          @value={{this.analysisEvidenceHtml}}
+          @disabled={{@disabled}}
+          @onChange={{this.updateAnalysisEvidenceHtml}}
+          @placeholder={{t
+            'securityAnalysisDetails.validatedFindings.analysisEvidencePlaceholder'
+          }}
+          @error={{this.isListFieldInvalid 'exploitabilityEvidence'}}
+          data-test-securityAnalysisDetails-validatedFindings-analysisEvidenceEditor
+        />
+
+        {{#if (this.isListFieldInvalid 'exploitabilityEvidence')}}
+          <AkTypography
+            @variant='body3'
+            @color='error'
+            data-test-securityAnalysisDetails-validatedFindings-listFieldError='exploitabilityEvidence'
+          >
+            {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+          </AkTypography>
+        {{/if}}
+
+        <AkDivider @color='dark' local-class='panel-section-divider' />
+
+        <AkTypography @variant='body2' @fontWeight='medium'>
+          {{t 'securityAnalysisDetails.validatedFindings.attackScenario'}}
+        </AkTypography>
+
+        <AkRichTextEditor
+          @value={{this.attackScenarioHtml}}
+          @disabled={{@disabled}}
+          @onChange={{this.updateAttackScenarioHtml}}
+          @placeholder={{t
+            'securityAnalysisDetails.validatedFindings.attackScenarioPlaceholder'
+          }}
+          @error={{this.isListFieldInvalid 'attackScenario'}}
+          data-test-securityAnalysisDetails-validatedFindings-attackScenarioEditor
+        />
+
+        {{#if (this.isListFieldInvalid 'attackScenario')}}
+          <AkTypography
+            @variant='body3'
+            @color='error'
+            data-test-securityAnalysisDetails-validatedFindings-listFieldError='attackScenario'
+          >
+            {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+          </AkTypography>
+        {{/if}}
       </AkStack>
     </Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>
 
