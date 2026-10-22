@@ -180,7 +180,11 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     );
 
     // Creates vulnerabilities and maps them to individual analysis
-    const vulnerability = this.server.create('vulnerability');
+    // Pinned non-manual: a manual test case keeps the plain display, which
+    // would make the KnoxIQ gating tests depend on the factory's random types.
+    const vulnerability = this.server.create('vulnerability', {
+      types: [ENUMS.VULNERABILITY_TYPE.STATIC],
+    });
 
     const vulnerabilityModel = store.push(
       store.normalize(
@@ -212,6 +216,143 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       vulnerabilityModel,
       secAnalysis,
     });
+  });
+
+  test.each(
+    'it shows the KnoxIQ sections for any analysis in a KnoxIQ file',
+    [
+      { isKnoxIqFile: true, isKnoxIqEnabled: true, showsKnoxIq: true },
+      { isKnoxIqFile: false, isKnoxIqEnabled: true, showsKnoxIq: false },
+      // Turning the feature off stops new writes, it does not hide the data
+      // a scan already produced.
+      { isKnoxIqFile: true, isKnoxIqEnabled: false, showsKnoxIq: true },
+    ],
+    async function (assert, { isKnoxIqFile, isKnoxIqEnabled, showsKnoxIq }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = isKnoxIqEnabled;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', isKnoxIqFile);
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert
+        .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      assert
+        .dom(
+          "[data-test-securityAnalysisDetails-sectionCard='validatedFindings']"
+        )
+        .exists({ count: showsKnoxIq ? 1 : 0 });
+
+      // The original findings section is the fallback, so exactly one of the
+      // two is on the page at any time.
+      assert
+        .dom('[data-test-securityAnalysisDetails-findings-root]')
+        .exists({ count: showsKnoxIq ? 0 : 1 });
+    }
+  );
+
+  test.each(
+    'the false positives section only appears on an all false positive analysis',
+    [
+      { isKnoxiqAllFp: false, expectedOrder: ['validatedFindings'] },
+      {
+        isKnoxiqAllFp: true,
+        expectedOrder: ['falsePositives', 'validatedFindings'],
+      },
+    ],
+    async function (assert, { isKnoxiqAllFp, expectedOrder }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = true;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', true);
+      this.secAnalysis.set('isKnoxiqAllFp', isKnoxiqAllFp);
+
+      this.server.get('/knoxiq/analyses/:analysisId/findings', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      const sections = findAll(
+        "[data-test-securityAnalysisDetails-sectionCard='validatedFindings'], [data-test-securityAnalysisDetails-sectionCard='falsePositives']"
+      ).map((section) =>
+        section.getAttribute('data-test-securityAnalysisDetails-sectionCard')
+      );
+
+      assert.deepEqual(sections, expectedOrder);
+    }
+  );
+
+  test('the KnoxIQ actions are disabled once the organization turns it off', async function (assert) {
+    class OrganizationStub extends Service {
+      isKnoxIqEnabled = false;
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.secFileModel.set('isKnoxiqFile', true);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom(
+        "[data-test-securityAnalysisDetails-sectionCard='validatedFindings']"
+      )
+      .exists('the findings stay readable');
+
+    // Save belongs to a selected finding, and this analysis has none, so Add
+    // Finding is the action that has to be refused here.
+    assert
+      .dom(
+        '[data-test-securityAnalysisDetails-validatedFindings-addFindingBtn]'
+      )
+      .isDisabled();
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-validatedFindings-saveBtn]')
+      .doesNotExist();
+  });
+
+  test('a KnoxIQ analysis with no exploitability yet still shows the sections', async function (assert) {
+    class OrganizationStub extends Service {
+      isKnoxIqEnabled = true;
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.secFileModel.set('isKnoxiqFile', true);
+    this.secAnalysis.set('exploitability', null);
+    this.secAnalysis.set('exploitabilityScore', null);
+    this.secAnalysis.set('exploitabilityLikelihood', null);
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    assert
+      .dom("[data-test-securityAnalysisDetails-sectionCard='aeis']")
+      .exists();
+
+    assert
+      .dom('[data-test-securityAnalysisDetails-findings-root]')
+      .doesNotExist();
   });
 
   test.each(
@@ -295,6 +436,55 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         .containsText(analysisStatusTextMap[this.secAnalysis.status]);
     }
   );
+
+  test('marking a KnoxIQ analysis passed re-reads the analysis and its findings', async function (assert) {
+    class OrganizationStub extends Service {
+      isKnoxIqEnabled = true;
+    }
+
+    this.owner.register('service:organization', OrganizationStub);
+
+    this.secFileModel.set('isKnoxiqFile', true);
+    this.secAnalysis.set('cvssVersion', 4);
+    this.secAnalysis.set('activeCvssVersion', 4);
+    this.secAnalysis.set('cvssMetrics', PASSED_CVSS_V4_METRICS);
+
+    this.server.get('/cvss', () => ({ cvss_base: 0, risk: ENUMS.RISK.NONE }));
+
+    // The backend empties both once the analysis is passed, so the page has
+    // to re-read rather than patch what it already has.
+    let analysisReads = 0;
+    let findingsReads = 0;
+
+    this.server.get('/hudson-api/analyses/:id', (schema, req) => {
+      analysisReads = analysisReads + 1;
+
+      return schema['security/analyses'].find(`${req.params.id}`)?.toJSON();
+    });
+
+    this.server.get('/knoxiq/analyses/:analysisId/findings', () => {
+      findingsReads = findingsReads + 1;
+
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    const findingsReadsBeforePassing = findingsReads;
+
+    await click('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]');
+    await click('[data-test-confirmbox-confirmBtn]');
+
+    assert.strictEqual(analysisReads, 1, 'the analysis is re-read');
+
+    assert.strictEqual(
+      findingsReads,
+      findingsReadsBeforePassing + 1,
+      'the findings are re-read'
+    );
+  });
 
   test('it marks a test case as passed', async function (assert) {
     this.secAnalysis.set('cvssVersion', 4);
@@ -1073,13 +1263,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
           '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]',
       };
 
+      const findingsCard =
+        "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
       assert
-        .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+        )
         .exists()
-        .containsText('Findings')
-        .containsText(
-          'All discoveries associated with this vulnerability analysis'
-        );
+        .hasText('Findings');
+
+      assert
+        .dom(
+          `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+        )
+        .exists()
+        .hasText('All discoveries associated with this vulnerability analysis');
 
       assert
         .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')
@@ -1239,13 +1438,22 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
     );
 
+    const findingsCard =
+      "[data-test-securityAnalysisDetails-sectionCard='findings']";
+
     assert
-      .dom('[data-test-securityAnalysisDetails-findings-infoTexts]')
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-title]`
+      )
       .exists()
-      .containsText('Findings')
-      .containsText(
-        'All discoveries associated with this vulnerability analysis'
-      );
+      .hasText('Findings');
+
+    assert
+      .dom(
+        `${findingsCard} [data-test-securityAnalysisDetails-sectionCard-description]`
+      )
+      .exists()
+      .hasText('All discoveries associated with this vulnerability analysis');
 
     assert
       .dom('[data-test-securityAnalysisDetails-findings-clearAllFindingsBtn]')
