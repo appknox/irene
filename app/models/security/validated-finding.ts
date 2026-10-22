@@ -28,17 +28,17 @@ export interface SecurityValidatedFindingValidation {
 
 export interface SecurityValidatedFindingRemediation {
   remediation: string;
-  steps: (string | SecurityValidatedFindingStep)[];
-  code_examples: string[];
-  references: string[] | null;
-  source: SecurityValidatedFindingSource | null;
+  steps?: (string | SecurityValidatedFindingStep)[];
+  code_examples?: string[];
+  references?: string[] | null;
+  source?: SecurityValidatedFindingSource | null;
 }
 
 export interface SecurityValidatedFindingVerificationStep {
   step_number: number;
   id?: number;
   title: string;
-  command: string;
+  command?: string;
   expected_result: string;
 }
 
@@ -46,13 +46,13 @@ export interface SecurityValidatedFindingPoc {
   poc_title: string;
   verification_steps: SecurityValidatedFindingVerificationStep[];
   expected_evidence: string[];
-  source: SecurityValidatedFindingSource | null;
+  source?: SecurityValidatedFindingSource | null;
 }
 
 export interface SecurityValidatedFindingExploitability {
-  score: number;
+  score: number | null;
   exploitability_likelihood: string;
-  signals: Record<string, boolean>;
+  signals: Record<string, boolean | 'unknown'>;
   signal_reasoning: Record<string, string>;
   attack_scenario: string[];
   references: string[];
@@ -130,6 +130,26 @@ export default class SecurityValidatedFindingModel extends Model {
 
   get exploitabilityAnalysis() {
     return this.content.exploitabilityAnalysis;
+  }
+
+  get exploitabilityScore() {
+    return this.content.exploitabilityScore;
+  }
+
+  get exploitabilityEvidence() {
+    return this.content.exploitabilityEvidence;
+  }
+
+  get attackScenario() {
+    return this.content.attackScenario;
+  }
+
+  get remediationSummary() {
+    return this.content.remediationSummary;
+  }
+
+  get expectedEvidence() {
+    return this.content.expectedEvidence;
   }
 }
 

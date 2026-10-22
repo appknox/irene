@@ -10,13 +10,6 @@ export type SecurityAnalysisAeisSignals = Record<
 export type SecurityAnalysisAeisLikelihood =
   (typeof SECURITY_ANALYSIS_AEIS_LIKELIHOODS)[number];
 
-// Request body for PUT /api/v2/analyses/:id/aeis-override.
-export interface SecurityAnalysisAeisOverridePayload {
-  score: number;
-  likelihood: SecurityAnalysisAeisLikelihood;
-  signals?: SecurityAnalysisAeisSignals;
-}
-
 export const SECURITY_ANALYSIS_AEIS_LIKELIHOODS = [
   'low',
   'medium',
@@ -38,22 +31,6 @@ export const SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS = [
   'no_authentication_required',
   'obscure_or_environment_specific',
 ] as const;
-
-// The backend has no "mark as passed", so the dashboard mirrors it here.
-export const SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE: SecurityAnalysisAeisOverridePayload =
-  {
-    score: 0,
-    likelihood: 'low',
-    signals: {
-      requires_chaining: true,
-      remote_exploitation: false,
-      public_exploit_exists: false,
-      local_exploitation_only: true,
-      minimal_user_interaction: false,
-      no_authentication_required: false,
-      obscure_or_environment_specific: true,
-    },
-  };
 
 /**
  * Narrows a stored likelihood to one the override endpoint accepts.
@@ -86,16 +63,6 @@ export function buildFullSignals(
 }
 
 /**
- * Builds the override path, which is nested under its analysis.
- *
- * @param analysisId The analysis the override belongs to.
- * @returns The path, relative to the v2 namespace.
- */
-export function aeisOverrideUrl(analysisId: string | number | undefined) {
-  return ['analyses', analysisId, 'aeis-override'].join('/');
-}
-
-/**
  * Maps a stored likelihood onto the risk scale the risk tag and colours use.
  *
  * @param likelihood A likelihood from the record, in any casing.
@@ -113,4 +80,17 @@ export function isAeisLikelihood(
   return SECURITY_ANALYSIS_AEIS_LIKELIHOODS.includes(
     value as SecurityAnalysisAeisLikelihood
   );
+}
+
+/**
+ * Turns a vector key into its display label.
+ *
+ * @param key The snake_case vector key.
+ * @returns The humanized label.
+ */
+export function humanizeAeisSignalKey(key: string) {
+  return key
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }

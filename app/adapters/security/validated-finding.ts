@@ -10,10 +10,12 @@ export type SecurityValidatedFindingQuery = {
   analysisId?: string | number;
   limit?: number;
   offset?: number;
+  is_valid?: boolean;
 };
 
 export type SecurityValidatedFindingAdapterOptions = {
   analysisId: string | number;
+  isValid?: boolean;
 };
 
 export default class SecurityValidatedFindingAdapter extends commondrf {
