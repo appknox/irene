@@ -32,15 +32,30 @@ module('Unit | Serializer | security/validated-finding', function (hooks) {
         evidence: ['A line'],
         reasoning: 'Reasoning',
       },
-      remediation: { steps: ['Fix it'] },
+      remediation: {
+        remediation: 'An overview',
+        steps: ['Fix it', 'Then this'],
+        code_examples: ['npm audit fix'],
+      },
       poc: {
+        poc_title: 'Reproduce it',
+        expected_evidence: ['A crash'],
         verification_steps: [
-          { step_number: 1, title: 'Open', expected_result: 'Launches' },
+          {
+            step_number: 1,
+            title: 'Open',
+            command: 'open app',
+            expected_result: 'Launches',
+          },
         ],
       },
       exploitability: {
         exploitability_likelihood: 'High',
-        exploitability_analysis: { summary: 'Analysis' },
+        exploitability_analysis: {
+          summary: 'Analysis',
+          evidence: ['Analysis evidence'],
+        },
+        attack_scenario: ['Step one'],
       },
     });
 
@@ -50,12 +65,26 @@ module('Unit | Serializer | security/validated-finding', function (hooks) {
     assert.strictEqual(payload.reasoning, 'Reasoning');
     assert.deepEqual(payload.remediation_steps, [
       { heading: '', body: 'Fix it' },
+      { heading: '', body: 'Then this' },
     ]);
+
+    // code_examples is a list parallel to remediation_steps, paired by
+    // position; a step with no example sends an empty string to keep the
+    // two aligned.
+    assert.deepEqual(payload.code_examples, ['npm audit fix', '']);
+    // The API replaces the whole list on save, so the command goes back with
+    // it rather than being dropped.
     assert.deepEqual(payload.steps_to_reproduce, [
-      { heading: 'Open', body: 'Launches' },
+      { heading: 'Open', body: 'Launches', command: 'open app' },
     ]);
+
     assert.strictEqual(payload.exploitability_likelihood, 3);
     assert.strictEqual(payload.exploitability_analysis, 'Analysis');
+    assert.deepEqual(payload.exploitability_evidence, ['Analysis evidence']);
+    assert.deepEqual(payload.attack_scenario, ['Step one']);
+    assert.strictEqual(payload.remediation_summary, 'An overview');
+    assert.strictEqual(payload.poc_title, 'Reproduce it');
+    assert.deepEqual(payload.expected_evidence, ['A crash']);
   });
 
   test('it never sends the nested read shape', function (assert) {
@@ -117,5 +146,50 @@ module('Unit | Serializer | security/validated-finding', function (hooks) {
     assert.deepEqual(payload.steps_to_reproduce, []);
     assert.strictEqual(payload.exploitability_likelihood, UNKNOWN_SCALE_VALUE);
     assert.strictEqual(payload.exploitability_analysis, '');
+    assert.deepEqual(payload.exploitability_evidence, []);
+    assert.deepEqual(payload.attack_scenario, []);
+    assert.strictEqual(payload.remediation_summary, '');
+    assert.deepEqual(payload.code_examples, []);
+    assert.strictEqual(payload.poc_title, '');
+    assert.deepEqual(payload.expected_evidence, []);
+  });
+
+  test('a finding whose blobs are absent entirely still serializes', function (assert) {
+    // A manually added finding has no AI result behind it, so the API omits
+    // validation, remediation, poc and exploitability from the response.
+    const payload = this.serializeFinding({
+      validation: null,
+      remediation: null,
+      poc: null,
+      exploitability: null,
+      developer_prompt: null,
+    });
+
+    assert.strictEqual(payload.summary, '');
+    assert.deepEqual(payload.remediation_steps, []);
+    assert.deepEqual(payload.steps_to_reproduce, []);
+    assert.strictEqual(payload.remediation_summary, '');
+    assert.deepEqual(payload.code_examples, []);
+    assert.strictEqual(payload.poc_title, '');
+    assert.deepEqual(payload.expected_evidence, []);
+    assert.deepEqual(payload.attack_scenario, []);
+    assert.deepEqual(payload.exploitability_evidence, []);
+    assert.strictEqual(payload.developer_prompt, '');
+  });
+
+  test('a reproduction step with no command serializes it as empty', function (assert) {
+    // command is Optional in the AI schema, so an AI step can arrive without
+    // one and must not serialize as undefined.
+    const payload = this.serializeFinding({
+      poc: {
+        verification_steps: [
+          { step_number: 1, title: 'Open', expected_result: 'Launches' },
+        ],
+      },
+    });
+
+    assert.deepEqual(payload.steps_to_reproduce, [
+      { heading: 'Open', body: 'Launches', command: '' },
+    ]);
   });
 });

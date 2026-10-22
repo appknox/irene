@@ -410,7 +410,6 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
 
     assert.deepEqual(next.steps, steps);
     assert.strictEqual(next.remediation, this.remediation.remediation);
-    assert.deepEqual(next.code_examples, this.remediation.code_examples);
 
     assert.notStrictEqual(
       next,
@@ -419,8 +418,22 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
     );
   });
 
+  test('buildRemediation carries each step code example across', function (assert) {
+    // code_examples is a list parallel to steps, so rewriting the steps has
+    // to rewrite it too or an example is left at its old position.
+    const next = buildRemediation(this.remediation, [
+      { heading: 'Fix', body: 'Do it', codeExample: 'npm audit fix', id: 1 },
+      { heading: 'Then', body: 'This', id: 2 },
+    ]);
+
+    assert.deepEqual(next.code_examples, ['npm audit fix', '']);
+  });
+
   test('buildRemediation accepts an empty step list', function (assert) {
-    assert.deepEqual(buildRemediation(this.remediation, []).steps, []);
+    const next = buildRemediation(this.remediation, []);
+
+    assert.deepEqual(next.steps, []);
+    assert.deepEqual(next.code_examples, []);
   });
 
   // ─── Poc builder ───────────────────────────────────────────────────────────

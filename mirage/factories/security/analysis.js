@@ -20,6 +20,8 @@ export default Factory.extend({
   },
   cvss_vector: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H',
 
+  is_knoxiq_all_fp: false,
+
   // Mirrors the hudson analysis serializer: the AI exploitability rollup
   // with any aeis_override already layered on by the backend.
   exploitability() {
