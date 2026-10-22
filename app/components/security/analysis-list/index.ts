@@ -7,6 +7,8 @@ import { service } from '@ember/service';
 import ENUMS from 'irene/enums';
 import styles from 'irene/components/security/analysis-list/index.scss';
 
+import type Store from 'ember-data/store';
+import type IntlService from 'ember-intl/services/intl';
 import type SecurityFileModel from 'irene/models/security/file';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 import parseError from 'irene/utils/parse-error';
@@ -18,13 +20,15 @@ export interface SecurityAnalysisListComponentSignature {
 }
 
 export default class SecurityAnalysisListComponent extends Component<SecurityAnalysisListComponentSignature> {
-  @service declare notify: NotificationService;
+  @service('notifications') declare notify: NotificationService;
+  @service declare store: Store;
+  @service declare intl: IntlService;
 
   @tracked vulnSearchTerm = '';
   @tracked vulnerabilityType: string | number =
     ENUMS.VULNERABILITY_TYPE.UNKNOWN;
 
-  @tracked analyses: SecurityAnalysisModel[] | null = null;
+  @tracked analyses: SecurityAnalysisModel[] = [];
 
   constructor(
     owner: unknown,
@@ -39,8 +43,10 @@ export default class SecurityAnalysisListComponent extends Component<SecurityAna
     return this.args.file;
   }
 
+  // Sorts a copy so the tracked array keeps its arrival order; rows are
+  // ordered by risk from the first one that loads.
   get sortedAnalyses() {
-    return this.analyses?.sort((a, b) => b.risk - a.risk) || [];
+    return [...this.analyses].sort((a, b) => b.risk - a.risk);
   }
 
   get isManualScanEnabled() {
@@ -83,8 +89,10 @@ export default class SecurityAnalysisListComponent extends Component<SecurityAna
     return filteredAnalysis;
   }
 
+  // Only covers the wait for the first analysis; after that the table shows
+  // what has arrived.
   get isFetchingAnalyses() {
-    return this.refreshFileAnalyses.isRunning;
+    return this.refreshFileAnalyses.isRunning && this.analyses.length === 0;
   }
 
   get vulnSearchResultIsEmpty() {
@@ -126,14 +134,43 @@ export default class SecurityAnalysisListComponent extends Component<SecurityAna
     this.refreshFileAnalyses.perform();
   }
 
+  /**
+   * Loads the file's analyses individually so one slow or failed request
+   * neither holds back nor discards the rest.
+   */
   refreshFileAnalyses = task(async () => {
-    try {
-      const file = await this.file.reload();
-      const analyses = await file.get('analyses');
+    this.analyses = [];
 
-      this.analyses = analyses.slice();
+    let file;
+
+    try {
+      file = await this.file.reload();
     } catch (e) {
-      this.notify.error(parseError(e));
+      this.notify.error(parseError(e, this.intl.t('pleaseTryAgain')));
+
+      return;
+    }
+
+    const analysisIds = file.hasMany('analyses').ids();
+
+    const loads = await Promise.allSettled(
+      analysisIds.map(async (id) => {
+        const analysis = await this.store.findRecord('security/analysis', id);
+
+        this.analyses = [...this.analyses, analysis];
+      })
+    );
+
+    const failedCount = loads.filter(
+      (load) => load.status === 'rejected'
+    ).length;
+
+    if (failedCount > 0) {
+      this.notify.error(
+        this.intl.t('securityAnalysisList.someAnalysesFailedToLoad', {
+          count: failedCount,
+        })
+      );
     }
   });
 }
