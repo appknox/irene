@@ -64,11 +64,12 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @tracked hasUnsavedCvssChanges = false;
   @tracked hasUnsavedRegulatoryChanges = false;
   @tracked hasUnsavedFindingsChanges = false;
-  @tracked hasValidatedFindings = false;
 
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
 
-  reloadValidatedFindings: (() => void) | null = null;
+  // Keyed by section id. A section that is no longer rendered keeps its
+  // entry here, so only the ids still in findingSections are called.
+  reloadFindings: Record<string, () => void> = {};
 
   readonly v4State = new CvssV4VersionState();
   readonly v3State = new CvssV3VersionState();
@@ -84,13 +85,13 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     runTask(this, () => this.setDefaultCVSSDetails());
   }
 
-  // KnoxIQ is an organization feature, so nothing KnoxIQ-related shows when
-  // the organization does not have it, whatever the analysis carries.
+  // The org flag gates new writes, not reading what a scan already produced.
   get isKnoxIqAnalysis() {
-    return Boolean(
-      this.organization.isKnoxIqEnabled &&
-        this.analysisDetails?.isKnoxIqAnalysis
-    );
+    return Boolean(this.analysisDetails?.isKnoxIqAnalysis);
+  }
+
+  get canEditKnoxIqData() {
+    return Boolean(this.organization.isKnoxIqEnabled);
   }
 
   get analysisHasUnsavedChanges() {
@@ -169,19 +170,40 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     };
   }
 
-  @action
-  registerReloadValidatedFindings(reloadFindings: () => void) {
-    this.reloadValidatedFindings = reloadFindings;
+  /**
+   * The findings sections. The false positives one only appears on an
+   * analysis whose findings are all false positives, and leads there,
+   * because elsewhere it would only ever be an empty card.
+   */
+  get findingSections() {
+    // The ids key the {{#each}}, so adding the section moves the other one
+    // rather than tearing it down and refetching.
+    const validated = { id: 'validatedFindings', showsFalsePositives: false };
+
+    if (!this.analysisDetails?.isKnoxiqAllFp) {
+      return [validated];
+    }
+
+    return [{ id: 'falsePositives', showsFalsePositives: true }, validated];
   }
 
   @action
-  refreshValidatedFindings() {
-    this.reloadValidatedFindings?.();
+  registerReloadFindings(id: string, reloadFindings: () => void) {
+    this.reloadFindings[id] = reloadFindings;
   }
 
+  // Passing makes the backend report null AEIS and no findings, so both are
+  // re-read rather than patched locally. A failed re-read must not report the
+  // analysis as unsaved, so the caller never sees it throw.
   @action
-  setHasValidatedFindings(count: number) {
-    this.hasValidatedFindings = count > 0;
+  async refreshAfterMarkAsPassed() {
+    try {
+      await this.analysisDetails?.reload();
+    } catch (error) {
+      this.notifications.error(parseError(error, this.tPleaseTryAgain));
+    }
+
+    this.findingSections.forEach(({ id }) => this.reloadFindings[id]?.());
   }
 
   @action

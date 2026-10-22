@@ -1,22 +1,10 @@
-<AkStack
-  @direction='column'
-  @width='full'
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.findings.title'}}
+  @description={{t 'securityAnalysisDetails.findings.description'}}
+  @testId='findings'
   data-test-securityAnalysisDetails-findings-root
 >
-  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
-    <AkStack
-      @direction='column'
-      data-test-securityAnalysisDetails-findings-infoTexts
-    >
-      <AkTypography @variant='h5'>
-        Findings
-      </AkTypography>
-
-      <AkTypography @variant='body2' @color='textSecondary'>
-        All discoveries associated with this vulnerability analysis
-      </AkTypography>
-    </AkStack>
-
+  <:actions>
     {{#if this.allFindings.length}}
       <AkButton
         @variant='outlined'
@@ -28,44 +16,50 @@
         </:leftIcon>
 
         <:default>
-          Clear All Findings
+          {{t 'securityAnalysisDetails.findings.clearAll'}}
         </:default>
       </AkButton>
     {{/if}}
-  </AkStack>
+  </:actions>
 
-  <AkDivider @color='dark' class='my-2' />
+  <:content>
+    <AkStack @direction='column' @width='full' @spacing='2'>
+      {{#if this.allFindings.length}}
+        <Security::AnalysisDetails::Findings::Table
+          @analysis={{this.analysis}}
+          @allFindings={{this.allFindings}}
+          @openRemoveFindingConfirmBox={{this.openRemoveFindingConfirmBox}}
+          @onFindingEdited={{this.reportFindingsChanged}}
+        />
 
-  {{#if this.allFindings.length}}
-    <Security::AnalysisDetails::Findings::Table
-      @analysis={{this.analysis}}
-      @allFindings={{this.allFindings}}
-      @openRemoveFindingConfirmBox={{this.openRemoveFindingConfirmBox}}
-      @onFindingEdited={{this.reportFindingsChanged}}
-    />
+      {{else}}
+        <AkStack
+          @direction='row'
+          @alignItems='center'
+          @spacing='1'
+          data-test-securityAnalysisDetails-findings-noFindingsInfoText
+        >
+          <AkIcon @iconName='info' @size='small' />
 
-  {{else}}
-    <AkStack
-      @direction='row'
-      @alignItems='center'
-      @spacing='1'
-      data-test-securityAnalysisDetails-findings-noFindingsInfoText
-    >
-      <AkIcon @iconName='info' @size='small' />
+          <AkTypography
+            @color='textSecondary'
+            @variant='body2'
+            @fontWeight='light'
+          >
+            {{t 'securityAnalysisDetails.findings.noFindings'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
 
-      <AkTypography @color='textSecondary' @variant='body2' @fontWeight='light'>
-        No findings added for this vulnerability.
-      </AkTypography>
+      <AkDivider @color='dark' class='my-1' />
+
+      <Security::AnalysisDetails::Findings::AddForm
+        @analysis={{this.analysis}}
+        @addNewFinding={{this.addNewFinding}}
+      />
     </AkStack>
-  {{/if}}
-
-  <AkDivider @color='dark' class='my-2' />
-
-  <Security::AnalysisDetails::Findings::AddForm
-    @analysis={{this.analysis}}
-    @addNewFinding={{this.addNewFinding}}
-  />
-</AkStack>
+  </:content>
+</Security::AnalysisDetails::SectionCard>
 
 <ConfirmBox
   @isActive={{this.showClearAllFindingsConfirmBox}}
