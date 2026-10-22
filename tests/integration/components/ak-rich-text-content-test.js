@@ -23,9 +23,7 @@ module('Integration | Component | ak-rich-text-content', function (hooks) {
       await render(TEMPLATE);
 
       // Glimmer leaves a marker comment where empty content would be.
-      return find(selectors.root)
-        .innerHTML.replace(/<!---->/g, '')
-        .trim();
+      return find(selectors.root).innerHTML.replaceAll('<!---->', '').trim();
     };
   });
 

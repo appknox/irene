@@ -1,5 +1,7 @@
 <div
-  local-class='rich-text-editor {{if @disabled "is-disabled"}}'
+  local-class='rich-text-editor
+    {{if @disabled "is-disabled"}}
+    {{if @error "is-error"}}'
   ...attributes
   data-test-akRichTextEditor-root
 >

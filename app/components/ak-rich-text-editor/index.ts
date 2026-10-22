@@ -31,6 +31,7 @@ export interface AkRichTextEditorSignature {
     value?: string;
     placeholder?: string;
     disabled?: boolean;
+    error?: boolean;
     onChange?: (html: string) => void;
   };
 }
