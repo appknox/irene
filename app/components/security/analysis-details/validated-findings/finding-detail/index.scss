@@ -1,0 +1,105 @@
+.text-input {
+  width: 100%;
+  padding: 0.6em 0.75em;
+  font-size: 0.875rem;
+  font-family: var(--security-analysis-details-validated-findings-font-family);
+  color: var(--security-analysis-details-validated-findings-text-color);
+  background-color: var(
+    --security-analysis-details-validated-findings-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  outline: none;
+}
+
+.summary-input {
+  width: 100%;
+  min-height: 5rem;
+  padding: 0.6em 0.75em;
+  font-size: 0.875rem;
+  font-family: var(--security-analysis-details-validated-findings-font-family);
+  color: var(--security-analysis-details-validated-findings-text-color);
+  background-color: var(
+    --security-analysis-details-validated-findings-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  outline: none;
+  resize: vertical;
+}
+
+.panel-group {
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-top: none;
+  border-radius: var(
+      --security-analysis-details-validated-findings-border-radius
+    )
+    var(--security-analysis-details-validated-findings-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius);
+  overflow: hidden;
+}
+
+.expand-all-action {
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+  width: 100%;
+  padding: 0.6em 0.85em;
+  background-color: var(
+    --security-analysis-details-validated-findings-expand-all-background-color
+  );
+  border: none;
+  border-top: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: 0 0
+    var(--security-analysis-details-validated-findings-expand-all-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius);
+  cursor: pointer;
+}
+
+.prompt-input {
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+  background-color: var(
+    --security-analysis-details-validated-findings-prompt-background-color
+  );
+  color: var(--security-analysis-details-validated-findings-prompt-color);
+  font-family: var(
+    --security-analysis-details-validated-findings-code-font-family
+  );
+  font-size: 0.8125rem;
+  min-height: 8rem;
+  line-height: normal;
+  outline: none;
+  resize: vertical;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.panel-section-divider {
+  margin: 0.5rem 0;
+}
+
+.aeis-group {
+  margin-bottom: 0.5rem;
+}
+
+.signal-select {
+  width: 10rem;
+}

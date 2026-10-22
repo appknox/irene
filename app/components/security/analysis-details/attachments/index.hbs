@@ -1,132 +1,81 @@
-<AkStack
-  @width='full'
-  @alignItems='center'
-  @justifyContent='space-between'
-  data-test-securityAnalysisDetails-attachments-root
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.attachments.title'}}
+  @description={{t 'securityAnalysisDetails.attachments.description'}}
+  @testId='attachments'
 >
-  <AkStack
-    @direction='column'
-    data-test-securityAnalysisDetails-attachments-header
-  >
-    <AkTypography @variant='h5'>
-      Attachments
-    </AkTypography>
+  <:content>
+    <AkStack @direction='column' @width='full' @spacing='2'>
+      <Security::AnalysisDetails::Attachments::Dropzone
+        @isUploading={{this.isUploading}}
+        @onFileAdded={{this.triggerFileUpload}}
+      />
 
-    <AkTypography @variant='body2' @color='textSecondary'>
-      Files relevant to this analysis
-    </AkTypography>
-  </AkStack>
-
-  {{#let
-    (file-queue
-      name='analysisAttachmentFileUpload' onFileAdded=this.triggerFileUpload
-    )
-    as |queue|
-  }}
-    <AkButton
-      @tag='label'
-      @variant='outlined'
-      @typographyFontWeight='medium'
-      @disabled={{this.uploadFile.isRunning}}
-      data-test-securityAnalysisDetails-attachments-uploadFileTrigger
-    >
-      <:leftIcon>
-        <AkIcon @iconName='file-upload' />
-      </:leftIcon>
-
-      <:default>
-        {{#if this.uploadFile.isRunning}}
-          {{t 'uploading'}}...
-        {{else}}
-          Upload File
-        {{/if}}
-
-        <input
-          type='file'
-          disabled={{this.uploadFile.isRunning}}
-          id='upload-analysis-details-file-input'
-          {{style display='none'}}
-          {{queue.selectFile}}
-          data-test-securityAnalysisDetails-attachments-uploadFileInput
-        />
-      </:default>
-    </AkButton>
-  {{/let}}
-</AkStack>
-
-<AkDivider @color='dark' class='my-2' />
-
-<AkStack @width='full' @direction='column' @spacing='2'>
-  {{#if this.analysis.attachments}}
-    <AkStack
-      @width='full'
-      @direction='column'
-      local-class='attachment-list-container'
-    >
-      {{#each this.analysis.attachments as |attachment|}}
+      {{#if this.hasAttachments}}
         <AkStack
-          @justifyContent='space-between'
           @alignItems='center'
+          @spacing='1'
+          @flexWrap='wrap'
           @width='full'
-          @spacing='0.5'
-          local-class='attachment-details'
-          class='p-1'
-          data-test-securityAnalysisDetails-attachments-uploadedFile='{{attachment.id}}'
+          data-test-securityAnalysisDetails-attachments-list
         >
-          <AkStack @alignItems='center' @spacing='1'>
-            <div
-              data-type='{{file-extension attachment.name}}'
-              title='{{attachment.name}}'
-              local-class='attachment'
-              data-test-securityAnalysisDetails-attachments-uploadedFile-extension
+          {{#if this.uploadingFile}}
+            <Security::AnalysisDetails::Attachments::FileChip
+              @name={{this.uploadingFile.name}}
+              @extension={{file-extension this.uploadingFile.name}}
+              @isUploading={{true}}
+              @removeDisabled={{true}}
+              @onView={{this.closePreview}}
+              @onRemove={{this.closePreview}}
+              data-test-securityAnalysisDetails-attachments-uploadingFile
             />
+          {{/if}}
 
-            <AkTypography
-              @fontWeight='light'
-              data-test-securityAnalysisDetails-attachments-uploadedFile-name
-            >
-              {{attachment.name}}
-            </AkTypography>
-          </AkStack>
-
-          <AkStack @alignItems='center' @spacing='1'>
-            <AkIconButton
-              {{on 'click' (fn this.triggerDownloadAttachment attachment.id)}}
-              data-test-securityAnalysisDetails-attachments-uploadedFile-downloadBtn
-            >
-              <AkIcon @iconName='download' />
-            </AkIconButton>
-
-            <AkIconButton
-              disabled={{and
+          {{#each this.analysis.attachments as |attachment|}}
+            <Security::AnalysisDetails::Attachments::FileChip
+              @name={{attachment.name}}
+              @extension={{file-extension attachment.name}}
+              @removeDisabled={{and
                 this.deleteFile.isRunning
                 (eq this.fileIDToDelete attachment.id)
               }}
-              {{on 'click' (fn this.openRemoveFileConfirmBox attachment.id)}}
-              data-test-securityAnalysisDetails-attachments-uploadedFile-deleteBtn
-            >
-              <AkIcon @iconName='delete-outline' @color='error' />
-            </AkIconButton>
-          </AkStack>
+              @onView={{fn
+                this.triggerPreviewAttachment
+                attachment.id
+                attachment.name
+              }}
+              @onDownload={{fn this.triggerDownloadAttachment attachment.id}}
+              @onRemove={{fn this.openRemoveFileConfirmBox attachment.id}}
+              data-test-securityAnalysisDetails-attachments-uploadedFile='{{attachment.id}}'
+            />
+          {{/each}}
         </AkStack>
-      {{/each}}
-    </AkStack>
 
-  {{else}}
-    <AkTypography
-      @color='neutral'
-      @variant='h6'
-      @fontWeight='light'
-      data-test-securityAnalysisDetails-attachments-emptyUploadMessage
-    >
-      No Files Uploaded
-    </AkTypography>
-  {{/if}}
-</AkStack>
+      {{else}}
+        <AkTypography
+          @color='textSecondary'
+          @variant='body2'
+          @fontWeight='light'
+          data-test-securityAnalysisDetails-attachments-emptyUploadMessage
+        >
+          {{t 'securityAnalysisDetails.attachments.noFiles'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </:content>
+</Security::AnalysisDetails::SectionCard>
 
 <ConfirmBox
   @isActive={{this.showRemoveFileConfirmBox}}
-  @title='Are you sure you want to remove this file?'
+  @title={{t 'securityAnalysisDetails.attachments.removeFileConfirm'}}
   @confirmAction={{this.confirmFileDeleteAction}}
   @cancelAction={{this.closeRemoveFileConfirmBox}}
 />
+
+{{#if this.previewUrl}}
+  <Security::AnalysisDetails::Attachments::PreviewModal
+    @name={{this.previewName}}
+    @url={{this.previewUrl}}
+    @onClose={{this.closePreview}}
+    @onOpenInNewTab={{this.openPreviewInNewTab}}
+  />
+{{/if}}

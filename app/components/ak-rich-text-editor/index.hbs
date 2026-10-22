@@ -1,0 +1,108 @@
+<div
+  local-class='rich-text-editor
+    {{if @disabled "is-disabled"}}
+    {{if @error "is-error"}}'
+  ...attributes
+  data-test-akRichTextEditor-root
+>
+  <AkStack
+    @alignItems='center'
+    @spacing='0.5'
+    local-class='toolbar'
+    data-test-akRichTextEditor-toolbar
+  >
+    {{#each this.toolbarGroups as |group|}}
+      {{#each group as |button|}}
+        <AkIconButton
+          @size='small'
+          disabled={{@disabled}}
+          aria-label={{t button.labelKey}}
+          local-class='toolbar-button
+            {{if (this.isToolbarButtonActive button.format) "is-active"}}'
+          {{on 'click' (fn this.toggleFormat button.format)}}
+          data-test-akRichTextEditor-formatBtn='{{button.format}}'
+        >
+          <AkIcon @iconName={{button.iconName}} @size='small' />
+        </AkIconButton>
+      {{/each}}
+
+      <AkDivider @direction='vertical' @color='dark' @height='16px' />
+    {{/each}}
+
+    <AkIconButton
+      @size='small'
+      disabled={{@disabled}}
+      aria-label={{t this.linkButtonLabelKey}}
+      local-class='toolbar-button {{if this.isLinkActive "is-active"}}'
+      {{on 'click' this.toggleLink}}
+      data-test-akRichTextEditor-formatBtn='link'
+    >
+      <AkIcon @iconName='link' @size='small' />
+    </AkIconButton>
+  </AkStack>
+
+  {{#if this.isLinkFieldOpen}}
+    <form
+      local-class='link-field'
+      {{on 'submit' this.applyLink}}
+      data-test-akRichTextEditor-linkForm
+    >
+      <input
+        type='url'
+        value={{this.linkUrl}}
+        placeholder={{t 'akRichTextEditor.linkPlaceholder'}}
+        aria-label={{t 'akRichTextEditor.linkPlaceholder'}}
+        local-class='link-input'
+        {{on 'input' this.updateLinkUrl}}
+        {{autofocus}}
+        data-test-akRichTextEditor-linkInput
+      />
+
+      <AkIconButton
+        @type='submit'
+        @size='small'
+        aria-label={{t 'apply'}}
+        local-class='link-action-button'
+        data-test-akRichTextEditor-linkApplyBtn
+      >
+        <AkIcon @iconName='check' @size='small' @color='success' />
+      </AkIconButton>
+
+      <AkIconButton
+        @type='button'
+        @size='small'
+        aria-label={{t 'cancel'}}
+        local-class='link-action-button'
+        {{on 'click' this.closeLinkField}}
+        data-test-akRichTextEditor-linkCancelBtn
+      >
+        <AkIcon @iconName='close' @size='small' @color='error' />
+      </AkIconButton>
+    </form>
+  {{/if}}
+
+  <div local-class='editor-surface'>
+    {{#if this.showPlaceholder}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        local-class='editor-placeholder'
+        data-test-akRichTextEditor-placeholder
+      >
+        {{@placeholder}}
+      </AkTypography>
+    {{/if}}
+
+    <div
+      local-class='editor-content'
+      {{tiptap-editor
+        value=@value
+        editable=this.isEditable
+        onCreate=this.registerEditor
+        onChange=this.handleChange
+        onStateChange=this.readEditorState
+      }}
+      data-test-akRichTextEditor-content
+    ></div>
+  </div>
+</div>

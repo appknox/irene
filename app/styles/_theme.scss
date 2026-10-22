@@ -231,6 +231,10 @@
   --knoxiq-validated-findings-finding-nav-button-border: #f1f1f1;
   --knoxiq-validated-findings-finding-nav-select-border: #dddddd;
 
+  // special case variables for security/analysis-details/validated-findings/finding-nav
+  --security-analysis-details-validated-findings-nav-button-border: #f1f1f1;
+  --security-analysis-details-validated-findings-nav-select-border: #dddddd;
+
   // special case variables for knoxiq/validated-findings/remediation
   --knoxiq-validated-findings-remediation-icon: #06b6d4;
   --knoxiq-validated-findings-remediation-step-badge-background: #06b6d41a;
@@ -285,7 +289,8 @@
   --offensive-security-finding-detail-amber-border: #fde68a;
   --offensive-security-finding-detail-amber-bg: #fef3c7;
   --offensive-security-finding-detail-amber-accent: #d97706;
-  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px
+    rgba(217, 119, 6, 0.2);
   --offensive-security-finding-detail-green-dark: #15803d;
   --offensive-security-finding-detail-green-border: #bbf7d0;
   --offensive-security-finding-detail-green-bg: #f0fdf4;
@@ -316,9 +321,14 @@
   --offensive-security-finding-detail-slate-100: #f1f5f9;
   --offensive-security-finding-detail-slate-50: #f8fafc;
   --offensive-security-finding-detail-term-bg: #0b1120;
-  --offensive-security-finding-detail-score-gradient: linear-gradient(90deg, #d97706, #f59e0b);
+  --offensive-security-finding-detail-score-gradient: linear-gradient(
+    90deg,
+    #d97706,
+    #f59e0b
+  );
   --offensive-security-finding-detail-overlay-bg: rgba(15, 23, 42, 0.45);
-  --offensive-security-finding-detail-drawer-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+  --offensive-security-finding-detail-drawer-shadow: -10px 0 25px
+    rgba(0, 0, 0, 0.1);
 
   //special case variable for health-score
   --low-health-score: #a8d65e;
@@ -326,6 +336,9 @@
   // special case variables for analysis-risk/override-edit-drawer/content
   --analysis-risk-override-edit-drawer-pending-banner-bg-color: #be9a1d1a;
   --analysis-risk-override-edit-drawer-pending-banner-icon-bg-color: #be9a1d;
+
+  // special case variable for ak-rich-text-editor code blocks
+  --ak-rich-text-editor-code-block-content: #f9fafb;
 }
 
 // TODO: need to remove this so do not use it

@@ -4,9 +4,10 @@
   autocorrect='off'
   autocapitalize='off'
   spellcheck='false'
-  rows='4'
-  cols='10'
+  rows='3'
+  placeholder={{t 'title'}}
   local-class='textarea-input'
   aria-label='finding title'
+  {{on 'input' @onFindingEdited}}
   data-test-securityAnalysisDetails-findingTitle
 />

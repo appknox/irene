@@ -8,6 +8,7 @@ export interface SecurityAnalysisDetailsFindingsTableComponentSignature {
     analysis: SecurityAnalysisModel | null;
     allFindings: SecurityAnalysisFinding[] | null;
     openRemoveFindingConfirmBox(findindId?: number): void;
+    onFindingEdited: () => void;
   };
 }
 
