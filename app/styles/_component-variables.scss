@@ -168,6 +168,7 @@ body {
   // variables for ak-rich-text-editor
   --ak-rich-text-editor-font-family: var(--font-family);
   --ak-rich-text-editor-border-color: var(--border-color-1);
+  --ak-rich-text-editor-error-border-color: var(--error-main);
   --ak-rich-text-editor-border-radius: var(--border-radius);
   --ak-rich-text-editor-background-color: var(--common-white);
   --ak-rich-text-editor-toolbar-background-color: var(--neutral-grey-50);
@@ -600,6 +601,19 @@ body {
   );
   --security-analysis-details-aeis-stepper-background-color: var(
     --neutral-grey-50
+  );
+  --security-analysis-details-aeis-banner-background-color: var(--error-bg);
+  --security-analysis-details-aeis-banner-border-color: var(--error-light);
+  --security-analysis-details-aeis-banner-border-radius: var(--border-radius);
+
+  --security-analysis-details-validated-findings-prompt-background-color: var(
+    --neutral-grey-100
+  );
+  --security-analysis-details-validated-findings-prompt-color: var(
+    --primary-main
+  );
+  --security-analysis-details-validated-findings-code-font-family: var(
+    --font-family-mono
   );
 
   // variables for security/analysis-details/validated-findings/original-analysis-drawer
