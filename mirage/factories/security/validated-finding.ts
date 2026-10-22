@@ -1,4 +1,5 @@
-import { Factory } from 'miragejs';
+// @ts-expect-error "trait" prop missing from miragejs
+import { Factory, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 export const SECURITY_VALIDATED_FINDING_FACTORY_DEF = {
@@ -76,4 +77,81 @@ export const SECURITY_VALIDATED_FINDING_FACTORY_DEF = {
   },
 };
 
-export default Factory.extend(SECURITY_VALIDATED_FINDING_FACTORY_DEF);
+export default Factory.extend({
+  ...SECURITY_VALIDATED_FINDING_FACTORY_DEF,
+
+  withoutRemediationSteps: trait({
+    remediation() {
+      return {
+        remediation: faker.lorem.paragraph(),
+        steps: [],
+        code_examples: [],
+        references: null,
+        source: null,
+      };
+    },
+  }),
+
+  withoutReproductionSteps: trait({
+    poc() {
+      return {
+        poc_title: faker.lorem.words(3),
+        verification_steps: [],
+        expected_evidence: [faker.lorem.sentence()],
+        source: null,
+      };
+    },
+  }),
+
+  withoutExploitabilityAnalysis: trait({
+    exploitability() {
+      return {
+        ...SECURITY_VALIDATED_FINDING_FACTORY_DEF.exploitability(),
+        exploitability_analysis: { summary: '', evidence: [] },
+      };
+    },
+  }),
+
+  // What the editor holds after Add Step and nothing typed into it.
+  withBlankSteps: trait({
+    remediation() {
+      return {
+        remediation: faker.lorem.paragraph(),
+        steps: [{ heading: '', body: '' }],
+        code_examples: [''],
+        references: null,
+        source: null,
+      };
+    },
+
+    poc() {
+      return {
+        poc_title: faker.lorem.words(3),
+        verification_steps: [
+          { step_number: 1, title: '', command: '', expected_result: '' },
+        ],
+        expected_evidence: [faker.lorem.sentence()],
+        source: null,
+      };
+    },
+  }),
+
+  // A reproduction step named but not yet described.
+  withHeadingOnlyReproductionStep: trait({
+    poc() {
+      return {
+        poc_title: faker.lorem.words(3),
+        verification_steps: [
+          {
+            step_number: 1,
+            title: faker.lorem.words(2),
+            command: '',
+            expected_result: '',
+          },
+        ],
+        expected_evidence: [faker.lorem.sentence()],
+        source: null,
+      };
+    },
+  }),
+});

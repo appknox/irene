@@ -35,6 +35,11 @@ export default class SecurityFileModel extends Model {
   @attr('number')
   declare manual: number;
 
+  // Set when KnoxIQ has scanned this file. Every analysis in such a file gets
+  // the KnoxIQ treatment, including the ones the scan skipped.
+  @attr('boolean')
+  declare isKnoxiqFile: boolean;
+
   get isApiDone() {
     return this.apiScanStatus === ENUMS.SCAN_STATUS.COMPLETED;
   }
