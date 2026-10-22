@@ -20,6 +20,10 @@ const selectors = {
   deleteBtn: (index) =>
     `[data-test-securityAnalysisDetails-validatedFindings-stepDeleteBtn='${index}']`,
   addBtn: '[data-test-securityAnalysisDetails-validatedFindings-addStepBtn]',
+  dragHandle: (index) =>
+    `[data-test-securityAnalysisDetails-validatedFindings-stepDragHandle='${index}']`,
+  codeInput: (index) =>
+    `[data-test-securityAnalysisDetails-validatedFindings-stepCodeInput='${index}']`,
 };
 
 // ─── Template ────────────────────────────────────────────────────────────────
@@ -28,6 +32,28 @@ const TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings::StepList
   @addLabel={{this.addLabel}}
   @bodyPlaceholder={{this.bodyPlaceholder}}
   @disabled={{this.disabled}}
+  @onStepsChange={{this.onStepsChange}}
+/>`;
+
+const CODE_EXAMPLE_TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings::StepList
+  @steps={{this.steps}}
+  @addLabel={{this.addLabel}}
+  @bodyPlaceholder={{this.bodyPlaceholder}}
+  @disabled={{this.disabled}}
+  @codeField='codeExample'
+  @codeFieldLabel={{this.codeFieldLabel}}
+  @codeFieldPlaceholder={{this.codeFieldPlaceholder}}
+  @onStepsChange={{this.onStepsChange}}
+/>`;
+
+const COMMAND_TEMPLATE = hbs`<Security::AnalysisDetails::ValidatedFindings::StepList
+  @steps={{this.steps}}
+  @addLabel={{this.addLabel}}
+  @bodyPlaceholder={{this.bodyPlaceholder}}
+  @disabled={{this.disabled}}
+  @codeField='command'
+  @codeFieldLabel={{this.codeFieldLabel}}
+  @codeFieldPlaceholder={{this.codeFieldPlaceholder}}
   @onStepsChange={{this.onStepsChange}}
 />`;
 
@@ -42,6 +68,8 @@ module(
         committed: null,
         addLabel: 'Add step',
         bodyPlaceholder: 'Describe the step',
+        codeFieldLabel: 'Code example',
+        codeFieldPlaceholder: 'Paste the snippet',
         disabled: false,
         onStepsChange: (steps) => {
           this.set('committed', steps);
@@ -161,6 +189,74 @@ module(
       await triggerEvent(rows[0], 'drop');
 
       assert.strictEqual(this.committed, null);
+    });
+
+    // ─── Code example per step ───────────────────────────────────────────
+
+    test('a step carries no code field unless asked for', async function (assert) {
+      await render(TEMPLATE);
+
+      assert.dom(selectors.codeInput(0)).doesNotExist();
+    });
+
+    test('each step gets its own code field', async function (assert) {
+      await render(CODE_EXAMPLE_TEMPLATE);
+
+      // The API stores these as a list parallel to the steps, so there is
+      // one per step rather than one for the whole remediation.
+      const codeInputs = findAll(
+        '[data-test-securityAnalysisDetails-validatedFindings-stepCodeInput]'
+      );
+
+      assert.strictEqual(codeInputs.length, this.steps.length);
+
+      codeInputs.forEach((codeInput) => {
+        assert
+          .dom(codeInput)
+          .hasAttribute('placeholder', this.codeFieldPlaceholder);
+        assert.dom(codeInput).hasAttribute('aria-label', this.codeFieldLabel);
+      });
+    });
+
+    test('editing a code example reports it on its own step', async function (assert) {
+      await render(CODE_EXAMPLE_TEMPLATE);
+
+      await fillIn(selectors.codeInput(1), 'npm audit fix');
+
+      assert.strictEqual(this.committed[1].codeExample, 'npm audit fix');
+      assert.notOk(this.committed[0].codeExample);
+      assert.notOk(this.committed[1].command, 'writes only the named field');
+    });
+
+    test('a command field writes the command instead', async function (assert) {
+      await render(COMMAND_TEMPLATE);
+
+      await fillIn(selectors.codeInput(0), 'curl -I https://example.com');
+
+      assert.strictEqual(
+        this.committed[0].command,
+        'curl -I https://example.com'
+      );
+
+      assert.notOk(this.committed[0].codeExample);
+    });
+
+    test('a code field renders what the step already holds', async function (assert) {
+      this.set('steps', [
+        { heading: 'First heading', body: 'First body', id: 1, command: 'ls' },
+      ]);
+
+      await render(COMMAND_TEMPLATE);
+
+      assert.dom(selectors.codeInput(0)).hasValue('ls');
+    });
+
+    test('the code field is disabled when the list is', async function (assert) {
+      this.set('disabled', true);
+
+      await render(CODE_EXAMPLE_TEMPLATE);
+
+      assert.dom(selectors.codeInput(0)).isDisabled();
     });
   }
 );

@@ -98,7 +98,6 @@ module('Integration | Component | upload-app', function (hooks) {
           status: ENUMS.SUBMISSION_STATUS.VALIDATING,
           // The factory picks a random source, but this one is a system upload.
           source: ENUMS.SUBMISSION_SOURCE.UPLOAD,
-          url: '',
           created_on: dayjs(Date.now()),
           url: '',
         });
