@@ -10,8 +10,10 @@ import type IntlService from 'ember-intl/services/intl';
 import type { AkIconVariantType } from 'ak-icons';
 
 import {
+  UNKNOWN_SCALE_VALUE,
   buildPoc,
   buildRemediation,
+  evidenceToHtml,
   type SecurityValidatedFindingStep,
 } from 'irene/utils/knoxiq-validated-findings';
 
@@ -29,6 +31,40 @@ import {
 import styles from './index.scss';
 
 export const SECURITY_ANALYSIS_FINDINGS_LIMIT = 20;
+
+// The fields a finding must carry before it is worth sending to the API.
+// Score, vectors and the remediation prompt are left out: none is persisted yet.
+// What every finding must say, whatever it concludes.
+export const SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS = [
+  'confidence',
+  'summary',
+  'reasoning',
+] as const;
+
+// Required too, except on an analysis whose findings are all false positives:
+// there is nothing to remediate, reproduce or exploit, so demanding these
+// would leave such a finding unsaveable.
+export const SECURITY_VALIDATED_FINDING_TRUE_POSITIVE_REQUIRED_FIELDS = [
+  'remediationSteps',
+  'stepsToReproduce',
+  'exploitabilityAnalysis',
+] as const;
+
+// The fields the API stores as a list of strings. Prose in one of them would
+// be saved as a single entry, which is almost never what was meant.
+export const SECURITY_VALIDATED_FINDING_LIST_FIELDS = [
+  'evidence',
+  'exploitabilityEvidence',
+  'attackScenario',
+  'expectedEvidence',
+] as const;
+
+export type SecurityValidatedFindingListField =
+  (typeof SECURITY_VALIDATED_FINDING_LIST_FIELDS)[number];
+
+export type SecurityValidatedFindingRequiredField =
+  | (typeof SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS)[number]
+  | (typeof SECURITY_VALIDATED_FINDING_TRUE_POSITIVE_REQUIRED_FIELDS)[number];
 
 const FINDINGS_QUERY_LIMIT = 50;
 const FINDINGS_QUERY_OFFSET = 0;
@@ -53,8 +89,11 @@ export interface SecurityValidatedFindingPositionOption {
 export interface SecurityAnalysisDetailsValidatedFindingsSignature {
   Args: {
     analysis: SecurityAnalysisModel | null;
-    onFindingsChange?: (count: number) => void;
-    onRegisterReloadFindings?: (reloadFindings: () => void) => void;
+    // Which class of finding this section shows. The two are separate
+    // sections rather than one toggled list, so both are visible at once.
+    showsFalsePositives?: boolean;
+    readOnly?: boolean;
+    onRegisterReload?: (reloadFindings: () => void) => void;
   };
 }
 
@@ -67,8 +106,12 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   @tracked selectedFinding: SecurityValidatedFindingModel | null = null;
   @tracked remediationSteps: SecurityValidatedFindingStep[] = [];
   @tracked stepsToReproduce: SecurityValidatedFindingStep[] = [];
-  @tracked openPanels: SecurityValidatedFindingPanelId[] = [];
+  // AEIS configuration is the first thing a reviewer sets, so it starts open.
+  @tracked openPanels: SecurityValidatedFindingPanelId[] = [
+    SECURITY_VALIDATED_FINDING_PANEL.AEIS,
+  ];
 
+  @tracked showListFieldErrors = false;
   @tracked showOriginalAnalysis = false;
   @tracked showDeleteFindingConfirm = false;
   @tracked showDeleteAllFindingsConfirm = false;
@@ -84,9 +127,9 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
 
     this.fetchFindings.perform();
 
-    // Handed up so the page can refetch after an action it owns, such as
-    // marking the analysis passed, which deletes every finding.
-    this.args.onRegisterReloadFindings?.(() => this.fetchFindings.perform());
+    // The page refetches through this after an action it owns, such as
+    // marking the analysis passed, which empties the list server-side.
+    this.args.onRegisterReload?.(() => this.fetchFindings.perform());
   }
 
   get classes() {
@@ -143,12 +186,45 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     return this.findings.length >= SECURITY_ANALYSIS_FINDINGS_LIMIT;
   }
 
-  get addFindingTooltip() {
-    return this.hasReachedFindingsLimit
-      ? this.intl.t('securityAnalysisDetails.validatedFindings.limitReached', {
-          limit: SECURITY_ANALYSIS_FINDINGS_LIMIT,
-        })
-      : '';
+  get showsFalsePositives() {
+    return Boolean(this.args.showsFalsePositives);
+  }
+
+  get sectionTitleKey() {
+    return this.showsFalsePositives
+      ? 'securityAnalysisDetails.validatedFindings.falsePositivesTitle'
+      : 'securityAnalysisDetails.validatedFindings.title';
+  }
+
+  get sectionDescriptionKey() {
+    return this.showsFalsePositives
+      ? 'securityAnalysisDetails.validatedFindings.falsePositivesDescription'
+      : 'securityAnalysisDetails.validatedFindings.description';
+  }
+
+  get sectionTestId() {
+    return this.showsFalsePositives ? 'falsePositives' : 'validatedFindings';
+  }
+
+  get addFindingDisabledReason() {
+    if (this.isReadOnly) {
+      return this.intl.t(
+        'securityAnalysisDetails.validatedFindings.readOnlyReason'
+      );
+    }
+
+    if (this.hasReachedFindingsLimit) {
+      return this.intl.t(
+        'securityAnalysisDetails.validatedFindings.limitReached',
+        { limit: SECURITY_ANALYSIS_FINDINGS_LIMIT }
+      );
+    }
+
+    return '';
+  }
+
+  get isAddFindingDisabled() {
+    return this.isWritingFinding || Boolean(this.addFindingDisabledReason);
   }
 
   get areAllPanelsOpen() {
@@ -156,36 +232,160 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   }
 
   get findingRequestOptions() {
-    return { analysisId: String(this.analysis?.id) };
+    // The section decides the class, so a true positive can be recorded on
+    // an analysis whose findings are otherwise all false positives.
+    return {
+      analysisId: String(this.analysis?.id),
+      isValid: !this.showsFalsePositives,
+    };
   }
 
   get isWritingFinding() {
-    return (
-      this.saveFinding.isRunning ||
-      this.createFinding.isRunning ||
-      this.deleteFindings.isRunning
+    return this.saveFinding.isRunning || this.deleteFindings.isRunning;
+  }
+
+  get isReadOnly() {
+    return Boolean(this.args.readOnly);
+  }
+
+  /**
+   * The fields this finding has to fill in. An all-false-positive analysis
+   * asks for less, because remediation and reproduction do not apply to it.
+   */
+  get requiredFields(): readonly SecurityValidatedFindingRequiredField[] {
+    return this.analysis?.isKnoxiqAllFp
+      ? SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS
+      : [
+          ...SECURITY_VALIDATED_FINDING_REQUIRED_FIELDS,
+          ...SECURITY_VALIDATED_FINDING_TRUE_POSITIVE_REQUIRED_FIELDS,
+        ];
+  }
+
+  /** The required fields the selected finding has not filled in yet. */
+  get missingRequiredFields(): SecurityValidatedFindingRequiredField[] {
+    const content = this.selectedFinding?.content;
+
+    if (!content) {
+      return [];
+    }
+
+    const isFilled: Record<SecurityValidatedFindingRequiredField, boolean> = {
+      confidence: content.confidence !== UNKNOWN_SCALE_VALUE,
+      summary: this.hasVisibleText(content.summary),
+      reasoning: this.hasVisibleText(content.reasoning),
+      remediationSteps: this.hasFilledStep(content.remediationSteps),
+      stepsToReproduce: this.hasFilledStep(content.stepsToReproduce),
+      exploitabilityAnalysis: this.hasVisibleText(
+        content.exploitabilityAnalysis
+      ),
+    };
+
+    return this.requiredFields.filter((field) => !isFilled[field]);
+  }
+
+  // [^<>] keeps the match from running past an opening bracket, which is
+  // what makes the tag strip backtrack.
+  hasVisibleText(value: string) {
+    return value.replace(/<[^<>]*>/g, '').trim().length > 0;
+  }
+
+  // An empty row is what the Add button inserts, so the list counts as
+  // filled only once a row carries a heading or a body.
+  hasFilledStep(steps: SecurityValidatedFindingStep[]) {
+    return steps.some(
+      (step) =>
+        this.hasVisibleText(step.heading) || this.hasVisibleText(step.body)
     );
   }
 
+  /**
+   * The list fields holding prose instead of list items. Empty is fine; a
+   * paragraph is not, because it would be stored as one entry.
+   */
+  get invalidListFields(): SecurityValidatedFindingListField[] {
+    const finding = this.selectedFinding;
+
+    if (!finding) {
+      return [];
+    }
+
+    const html: Record<SecurityValidatedFindingListField, string> = {
+      evidence: finding.evidenceHtml,
+      exploitabilityEvidence: evidenceToHtml(finding.exploitabilityEvidence),
+      attackScenario: evidenceToHtml(finding.attackScenario),
+      expectedEvidence: evidenceToHtml(finding.expectedEvidence),
+    };
+
+    return SECURITY_VALIDATED_FINDING_LIST_FIELDS.filter(
+      (field) =>
+        this.hasVisibleText(html[field]) && !html[field].includes('<li')
+    );
+  }
+
+  get isSelectedFindingComplete() {
+    return this.missingRequiredFields.length === 0;
+  }
+
+  /** Why Save is unavailable, or '' when it is available. */
+  // Only the fields that failed the last save attempt are marked, so a
+  // field the reader has since fixed stops being red on the next try.
+  get markedListFields(): SecurityValidatedFindingListField[] {
+    return this.showListFieldErrors ? this.invalidListFields : [];
+  }
+
+  get saveDisabledReason() {
+    if (this.isReadOnly) {
+      return this.intl.t(
+        'securityAnalysisDetails.validatedFindings.readOnlyReason'
+      );
+    }
+
+    return this.isSelectedFindingComplete
+      ? ''
+      : this.missingRequiredFieldsMessage;
+  }
+
+  get isSaveDisabled() {
+    return this.isWritingFinding || Boolean(this.saveDisabledReason);
+  }
+
+  get missingRequiredFieldsMessage() {
+    const fields = this.missingRequiredFields
+      .map((field) =>
+        this.intl.t(`securityAnalysisDetails.validatedFindings.field.${field}`)
+      )
+      .join(', ');
+
+    return this.intl.t(
+      'securityAnalysisDetails.validatedFindings.missingFields',
+      { fields }
+    );
+  }
+
+  get emptyStateMessage() {
+    return this.intl.t(
+      this.showsFalsePositives
+        ? 'securityAnalysisDetails.validatedFindings.noFalsePositives'
+        : 'securityAnalysisDetails.validatedFindings.emptyState'
+    );
+  }
+
+  // The delete entries need something to act on, so an analysis with no
+  // findings only offers the view actions.
   get moreMenuItems(): SecurityValidatedFindingMenuItem[] {
+    if (!this.hasFindings) {
+      return [this.originalAnalysisMenuItem];
+    }
+
     return [
-      {
-        id: 'originalAnalysis',
-        labelKey: 'securityAnalysisDetails.validatedFindings.originalAnalysis',
-        iconName: 'description-outline',
-        iconColor: 'textPrimary',
-        divider: true,
-        disabled: false,
-        title: '',
-        onClick: this.openOriginalAnalysis,
-      },
+      { ...this.originalAnalysisMenuItem, divider: true },
       {
         id: 'deleteFinding',
         labelKey: 'securityAnalysisDetails.validatedFindings.deleteThisFinding',
         iconName: 'delete-outline',
         iconColor: 'textPrimary',
         divider: true,
-        disabled: this.isWritingFinding,
+        disabled: this.isWritingFinding || this.isReadOnly,
         title: '',
         onClick: this.openDeleteFindingConfirm,
       },
@@ -196,11 +396,24 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
         iconName: 'delete-outline',
         iconColor: 'error',
         divider: false,
-        disabled: this.isWritingFinding,
+        disabled: this.isWritingFinding || this.isReadOnly,
         title: '',
         onClick: this.openDeleteAllFindingsConfirm,
       },
     ];
+  }
+
+  get originalAnalysisMenuItem(): SecurityValidatedFindingMenuItem {
+    return {
+      id: 'originalAnalysis',
+      labelKey: 'securityAnalysisDetails.validatedFindings.originalAnalysis',
+      iconName: 'description-outline',
+      iconColor: 'textPrimary',
+      divider: false,
+      disabled: false,
+      title: '',
+      onClick: this.openOriginalAnalysis,
+    };
   }
 
   @action
@@ -218,10 +431,6 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   @action
   toggleExpandAll() {
     this.openPanels = this.areAllPanelsOpen ? [] : [...this.allPanelIds];
-  }
-
-  reportFindingCount() {
-    this.args.onFindingsChange?.(this.findings.length);
   }
 
   selectFinding(finding: SecurityValidatedFindingModel | null) {
@@ -265,9 +474,19 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     this.selectFinding(option?.finding ?? this.selectedFinding);
   }
 
+  // The row is only sent once every required field is filled, so Add Finding
+  // opens an editor on an unsaved record rather than POSTing an empty one.
   @action
   addFinding() {
-    this.createFinding.perform();
+    if (this.isAddFindingDisabled) {
+      return;
+    }
+
+    const finding = this.store.createRecord('security/validated-finding');
+
+    this.findings = [...this.findings, finding];
+
+    this.selectFinding(finding);
   }
 
   @action
@@ -342,12 +561,12 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
           analysisId: this.analysis?.id,
           limit: FINDINGS_QUERY_LIMIT,
           offset: FINDINGS_QUERY_OFFSET,
+          // The endpoint returns true positives unless asked otherwise.
+          ...(this.showsFalsePositives ? { is_valid: false } : {}),
         })
       );
 
       this.findings = findings.slice();
-
-      this.reportFindingCount();
 
       this.selectFinding(this.findings[0] ?? null);
     } catch (error) {
@@ -355,41 +574,50 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     }
   });
 
-  // POST creates the row before the editor opens, because the API assigns the
-  // finding_id and the database id the later saves are addressed by.
-  createFinding = task({ drop: true }, async () => {
-    if (this.hasReachedFindingsLimit) {
+  saveFinding = task({ drop: true }, async () => {
+    const finding = this.selectedFinding;
+
+    if (!finding) {
       return;
     }
 
-    const finding = this.store.createRecord('security/validated-finding');
+    if (this.missingRequiredFields.length > 0) {
+      this.notify.error(this.missingRequiredFieldsMessage);
+
+      return;
+    }
+
+    // Marked on save rather than while typing, so a half-written list does
+    // not turn red under the reader.
+    if (this.invalidListFields.length > 0) {
+      this.showListFieldErrors = true;
+
+      this.notify.error(
+        this.intl.t(
+          'securityAnalysisDetails.validatedFindings.listFieldsNeedItems'
+        )
+      );
+
+      return;
+    }
+
+    this.showListFieldErrors = false;
+
+    const isNew = finding.get('isNew');
 
     try {
       await finding.save({ adapterOptions: this.findingRequestOptions });
 
-      this.findings = [...this.findings, finding];
-
-      this.selectFinding(finding);
-      this.reportFindingCount();
-
-      this.notify.success(
-        this.intl.t('securityAnalysisDetails.validatedFindings.findingAdded')
-      );
-    } catch (error) {
-      finding.unloadRecord();
-
-      this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
-    }
-  });
-
-  saveFinding = task({ drop: true }, async () => {
-    try {
-      await this.selectedFinding?.save({
-        adapterOptions: this.findingRequestOptions,
-      });
+      // The analysis AEIS card is computed from the highest-scoring finding,
+      // so saving one can change it.
+      await this.analysis?.reload();
 
       this.notify.success(
-        this.intl.t('securityAnalysisDetails.validatedFindings.findingSaved')
+        this.intl.t(
+          isNew
+            ? 'securityAnalysisDetails.validatedFindings.findingAdded'
+            : 'securityAnalysisDetails.validatedFindings.findingSaved'
+        )
       );
     } catch (error) {
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
@@ -401,6 +629,13 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     async (findings: SecurityValidatedFindingModel[]) => {
       try {
         for (const finding of findings) {
+          // An unsaved finding was never sent, so there is nothing to delete.
+          if (finding.get('isNew')) {
+            finding.unloadRecord();
+
+            continue;
+          }
+
           await finding.destroyRecord({
             adapterOptions: this.findingRequestOptions,
           });
@@ -411,7 +646,6 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
         );
 
         this.selectFinding(this.findings[0] ?? null);
-        this.reportFindingCount();
       } catch (error) {
         this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       } finally {

@@ -1,24 +1,26 @@
 <Security::AnalysisDetails::SectionCard
   @title={{t 'securityAnalysisDetails.aeis.title'}}
+  @description={{t 'securityAnalysisDetails.aeis.description'}}
   @testId='aeis'
 >
-  <:actions>
-    <AkButton
-      @disabled={{this.isSaving}}
-      {{on 'click' this.resetSignals}}
-      data-test-securityAnalysisDetails-aeis-resetBtn
-    >
-      <:leftIcon>
-        <AkIcon @iconName='close' />
-      </:leftIcon>
-
-      <:default>
-        {{t 'securityAnalysisDetails.aeis.reset'}}
-      </:default>
-    </AkButton>
-  </:actions>
-
   <:content>
+    {{#if this.showAllFalsePositivesBanner}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1.5'
+        class='mb-3'
+        local-class='all-fp-banner'
+        data-test-securityAnalysisDetails-aeis-allFalsePositivesBanner
+      >
+        <AkIcon @iconName='error' @size='small' @color='error' />
+
+        <AkTypography @variant='body2' @color='error'>
+          {{t 'securityAnalysisDetails.aeis.allFalsePositives'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
     <AkStack
       @justifyContent='space-between'
       @alignItems='center'
@@ -32,63 +34,28 @@
         @justifyContent='center'
         @spacing='2'
       >
-        <Security::AnalysisDetails::ScoreChip
-          @score={{this.displayScore}}
-          @label={{this.scoreLabel}}
-          @riskClass={{this.scoreRiskClass}}
-          @isLoading={{this.isSaving}}
-          @testId='aeis'
-        />
-
-        <AkStack
-          @alignItems='center'
-          @spacing='1'
-          local-class='score-stepper'
-          data-test-securityAnalysisDetails-aeis-scoreStepper
+        <AkTooltip
+          @title={{this.readOnlyReason}}
+          @multiline={{true}}
+          @maxWidth='260px'
+          @arrow={{true}}
         >
-          <AkIconButton
-            @size='small'
-            @variant='outlined'
-            disabled={{this.isDecrementDisabled}}
-            aria-label={{t 'securityAnalysisDetails.aeis.decreaseScore'}}
-            {{on 'click' (fn this.stepScore this.scoreStepDown)}}
-            data-test-securityAnalysisDetails-aeis-scoreDecrementBtn
-          >
-            <AkIcon @iconName='remove' @size='small' />
-          </AkIconButton>
-
-          <input
-            type='number'
-            value={{this.scoreFieldValue}}
-            min={{this.scoreMin}}
-            max={{this.scoreMax}}
-            step={{this.scoreStepUp}}
-            local-class='score-input'
-            aria-label={{t 'securityAnalysisDetails.aeis.scoreField'}}
-            {{on 'input' this.updateScore}}
-            {{on 'blur' this.commitScore}}
-            data-test-securityAnalysisDetails-aeis-scoreInput
+          <Security::AnalysisDetails::ScoreChip
+            @score={{this.displayScore}}
+            @label={{this.scoreLabel}}
+            @riskClass={{this.scoreRiskClass}}
+            @testId='aeis'
           />
+        </AkTooltip>
 
-          <AkIconButton
-            @size='small'
-            @variant='outlined'
-            disabled={{this.isIncrementDisabled}}
-            aria-label={{t 'securityAnalysisDetails.aeis.increaseScore'}}
-            {{on 'click' (fn this.stepScore this.scoreStepUp)}}
-            data-test-securityAnalysisDetails-aeis-scoreIncrementBtn
-          >
-            <AkIcon @iconName='add' @size='small' />
-          </AkIconButton>
-        </AkStack>
-
-        {{#if (and this.isUntested (not this.isPassed))}}
+        {{#if this.showNoScoreMessage}}
           <AkTypography
             @variant='body3'
             @color='textSecondary'
+            @align='center'
             data-test-securityAnalysisDetails-aeis-noScore
           >
-            {{t 'securityAnalysisDetails.aeis.noScoreYet'}}
+            {{this.noScoreMessage}}
           </AkTypography>
         {{/if}}
 
@@ -107,17 +74,25 @@
             {{t 'securityAnalysisDetails.aeis.likelihoodLabel'}}
           </AkTypography>
 
-          <AkSelect
-            @selected={{this.selectedLikelihood}}
-            @options={{this.likelihoodOptions}}
-            @onChange={{this.selectLikelihood}}
-            @placeholder={{t 'securityAnalysisDetails.aeis.likelihoodLabel'}}
-            local-class='signal-select'
-            data-test-securityAnalysisDetails-aeis-likelihoodSelect
-            as |value|
+          <AkTooltip
+            @title={{this.readOnlyReason}}
+            @multiline={{true}}
+            @maxWidth='260px'
+            @arrow={{true}}
           >
-            {{this.likelihoodOptionLabel value}}
-          </AkSelect>
+            <AkSelect
+              @selected={{this.selectedLikelihood}}
+              @options={{this.likelihoodOptions}}
+              @onChange={{this.noop}}
+              @disabled={{true}}
+              @placeholder={{t 'securityAnalysisDetails.aeis.likelihoodLabel'}}
+              local-class='signal-select'
+              data-test-securityAnalysisDetails-aeis-likelihoodSelect
+              as |value|
+            >
+              {{this.likelihoodOptionLabel value}}
+            </AkSelect>
+          </AkTooltip>
         </AkStack>
       </AkStack>
 
@@ -136,16 +111,24 @@
               {{row.label}}
             </AkTypography>
 
-            <AkSelect
-              @selected={{row.selected}}
-              @options={{this.signalValues}}
-              @onChange={{fn this.selectSignal row.key}}
-              local-class='signal-select'
-              data-test-securityAnalysisDetails-aeis-signalSelect='{{row.key}}'
-              as |value|
+            <AkTooltip
+              @title={{this.readOnlyReason}}
+              @multiline={{true}}
+              @maxWidth='260px'
+              @arrow={{true}}
             >
-              {{this.signalOptionLabel value}}
-            </AkSelect>
+              <AkSelect
+                @selected={{row.selected}}
+                @options={{this.signalValues}}
+                @onChange={{this.noop}}
+                @disabled={{true}}
+                local-class='signal-select'
+                data-test-securityAnalysisDetails-aeis-signalSelect='{{row.key}}'
+                as |value|
+              >
+                {{this.signalOptionLabel value}}
+              </AkSelect>
+            </AkTooltip>
           </AkStack>
         {{/each}}
       </AkStack>

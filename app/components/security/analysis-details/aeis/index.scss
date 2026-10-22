@@ -46,3 +46,12 @@
     margin: 0;
   }
 }
+
+.all-fp-banner {
+  padding: 0.75em 1em;
+  background-color: var(
+    --security-analysis-details-aeis-banner-background-color
+  );
+  border: 1px solid var(--security-analysis-details-aeis-banner-border-color);
+  border-radius: var(--security-analysis-details-aeis-banner-border-radius);
+}
