@@ -8,9 +8,9 @@
     <AkStack
       @direction='column'
       @width='full'
-      draggable='true'
-      local-class='step-card {{if (this.isDropTarget index) "is-drop-target"}}'
-      {{on 'dragstart' (fn this.handleDragStart index)}}
+      local-class='step-card
+        {{if (this.isDropTarget index) "is-drop-target"}}
+        {{if (this.isDragged index) "is-dragging"}}'
       {{on 'dragover' (fn this.handleDragOver index)}}
       {{on 'dragleave' (fn this.handleDragLeave index)}}
       {{on 'dragend' this.handleDragEnd}}
@@ -24,12 +24,18 @@
         local-class='step-card-header'
       >
         <AkStack @alignItems='center' @spacing='1'>
-          <AkIcon
-            @iconName='drag-indicator'
-            @size='small'
-            @color='textSecondary'
+          <span
+            draggable='true'
+            local-class='drag-handle'
+            {{on 'dragstart' (fn this.handleDragStart index)}}
             data-test-securityAnalysisDetails-validatedFindings-stepDragHandle='{{index}}'
-          />
+          >
+            <AkIcon
+              @iconName='drag-indicator'
+              @size='small'
+              @color='textSecondary'
+            />
+          </span>
 
           <AkTypography
             @fontWeight='bold'
@@ -87,6 +93,24 @@
           @onChange={{fn this.handleBodyChange index}}
           data-test-securityAnalysisDetails-validatedFindings-stepBodyEditor='{{index}}'
         />
+
+        {{#if @codeField}}
+          <AkTypography @variant='body2' @fontWeight='medium'>
+            {{@codeFieldLabel}}
+          </AkTypography>
+
+          <textarea
+            value={{this.codeFieldValue step}}
+            disabled={{@disabled}}
+            rows='3'
+            spellcheck='false'
+            local-class='step-code-input'
+            placeholder={{@codeFieldPlaceholder}}
+            aria-label={{@codeFieldLabel}}
+            {{on 'input' (fn this.handleCodeInput index)}}
+            data-test-securityAnalysisDetails-validatedFindings-stepCodeInput='{{index}}'
+          ></textarea>
+        {{/if}}
       </AkStack>
     </AkStack>
   {{/each}}

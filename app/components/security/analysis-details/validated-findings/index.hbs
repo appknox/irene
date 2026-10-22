@@ -1,6 +1,7 @@
 <Security::AnalysisDetails::SectionCard
-  @title={{t 'securityAnalysisDetails.validatedFindings.title'}}
-  @testId='validatedFindings'
+  @title={{t this.sectionTitleKey}}
+  @description={{t this.sectionDescriptionKey}}
+  @testId={{this.sectionTestId}}
 >
   <:actions>
     <AkStack @alignItems='center' local-class='header-actions'>
@@ -24,31 +25,48 @@
         />
       {{/if}}
 
-      <AkButton
-        @variant='outlined'
-        @disabled={{or this.hasReachedFindingsLimit this.isWritingFinding}}
-        title={{this.addFindingTooltip}}
-        {{on 'click' this.addFinding}}
-        local-class='add-finding-button'
-        data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
+      <AkTooltip
+        @title={{this.addFindingDisabledReason}}
+        @disabled={{not this.addFindingDisabledReason}}
+        @multiline={{true}}
+        @maxWidth='280px'
+        @arrow={{true}}
       >
-        <:leftIcon>
-          <AkIcon @iconName='add' @size='small' />
-        </:leftIcon>
+        <AkButton
+          @variant='outlined'
+          @disabled={{this.isAddFindingDisabled}}
+          {{on 'click' this.addFinding}}
+          local-class='add-finding-button'
+          data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
+        >
+          <:leftIcon>
+            <AkIcon @iconName='add' @size='small' />
+          </:leftIcon>
 
-        <:default>
-          {{t 'securityAnalysisDetails.validatedFindings.addFinding'}}
-        </:default>
-      </AkButton>
+          <:default>
+            {{t 'securityAnalysisDetails.validatedFindings.addFinding'}}
+          </:default>
+        </AkButton>
+      </AkTooltip>
 
-      <AkButton
-        @variant='filled'
-        @disabled={{this.isWritingFinding}}
-        {{on 'click' this.saveSelectedFinding}}
-        data-test-securityAnalysisDetails-validatedFindings-saveBtn
-      >
-        {{t 'save'}}
-      </AkButton>
+      {{#if this.hasFindings}}
+        <AkTooltip
+          @title={{this.saveDisabledReason}}
+          @disabled={{not this.saveDisabledReason}}
+          @multiline={{true}}
+          @maxWidth='320px'
+          @arrow={{true}}
+        >
+          <AkButton
+            @variant='filled'
+            @disabled={{this.isSaveDisabled}}
+            {{on 'click' this.saveSelectedFinding}}
+            data-test-securityAnalysisDetails-validatedFindings-saveBtn
+          >
+            {{t 'save'}}
+          </AkButton>
+        </AkTooltip>
+      {{/if}}
 
       <AkIconButton
         @size='small'
@@ -79,7 +97,8 @@
         @stepsToReproduce={{this.stepsToReproduce}}
         @onRemediationStepsChange={{this.updateRemediationSteps}}
         @onReproductionStepsChange={{this.updateReproductionSteps}}
-        @disabled={{this.isWritingFinding}}
+        @disabled={{or this.isWritingFinding this.isReadOnly}}
+        @invalidListFields={{this.markedListFields}}
         @areAllPanelsOpen={{this.areAllPanelsOpen}}
         @isPanelOpen={{this.isPanelOpen}}
         @onTogglePanel={{this.togglePanel}}
@@ -98,7 +117,7 @@
         <AkIcon @iconName='info' @size='small' />
 
         <AkTypography @variant='body2' @color='textSecondary'>
-          {{t 'securityAnalysisDetails.validatedFindings.emptyState'}}
+          {{this.emptyStateMessage}}
         </AkTypography>
       </AkStack>
     {{/if}}

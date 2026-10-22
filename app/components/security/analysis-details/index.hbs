@@ -4,8 +4,7 @@
   <Security::AnalysisDetails::Header
     @analysis={{this.analysisDetails}}
     @isKnoxIqEnabled={{this.isKnoxIqAnalysis}}
-    @hasValidatedFindings={{this.hasValidatedFindings}}
-    @onMarkedAsPassed={{this.refreshValidatedFindings}}
+    @onMarkedAsPassed={{this.refreshAfterMarkAsPassed}}
     @currentCVSSMetrics={{this.currentCVSSDetails.metrics}}
     @updateAnalysis={{this.triggerUpdateAnalysis}}
     @updateCVSSDetails={{this.triggerUpdateCurrentCVSSDetails}}
@@ -30,11 +29,16 @@
 
   <AkStack @direction='column' @width='full' class='my-2'>
     {{#if this.isKnoxIqAnalysis}}
-      <Security::AnalysisDetails::ValidatedFindings
-        @analysis={{this.analysisDetails}}
-        @onFindingsChange={{this.setHasValidatedFindings}}
-        @onRegisterReloadFindings={{this.registerReloadValidatedFindings}}
-      />
+      {{#each this.findingSections key='id' as |section|}}
+        <AkStack @direction='column' @width='full' class='my-2'>
+          <Security::AnalysisDetails::ValidatedFindings
+            @analysis={{this.analysisDetails}}
+            @showsFalsePositives={{section.showsFalsePositives}}
+            @readOnly={{not this.canEditKnoxIqData}}
+            @onRegisterReload={{fn this.registerReloadFindings section.id}}
+          />
+        </AkStack>
+      {{/each}}
     {{else}}
       <Security::AnalysisDetails::Findings
         @analysis={{this.analysisDetails}}
