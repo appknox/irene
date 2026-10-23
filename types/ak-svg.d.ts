@@ -157,9 +157,13 @@ type AkSvgComponent = ComponentLike<{
 }>;
 
 type AkSvgRegistry = {
-  [k in `AkSvg::${keyof typeof AkSvgComponentInvocationByNames}`]: AkSvgComponent;
+  [
+    k in `AkSvg::${keyof typeof AkSvgComponentInvocationByNames}`
+  ]: AkSvgComponent;
 } & {
-  [k in `ak-svg/${keyof typeof AkSvgComponentInvocationByPaths}`]: AkSvgComponent;
+  [
+    k in `ak-svg/${keyof typeof AkSvgComponentInvocationByPaths}`
+  ]: AkSvgComponent;
 };
 
 export default AkSvgRegistry;

@@ -27,11 +27,7 @@ type ScanResultsDetailsRejectionRisk = {
 };
 
 type SummaryCountsMetricKind =
-  | 'failed'
-  | 'blocker'
-  | 'warning'
-  | 'untested'
-  | 'passed';
+  'failed' | 'blocker' | 'warning' | 'untested' | 'passed';
 
 type SummaryCountsMetricRow = {
   summaryKind: SummaryCountsMetricKind;

@@ -39,8 +39,7 @@ export default class ProjectService extends Service {
     super(properties);
 
     const savedViewType = localStorage.getItem('projectViewType') as
-      | 'card'
-      | 'list';
+      'card' | 'list';
 
     if (savedViewType) {
       this.viewType = savedViewType;

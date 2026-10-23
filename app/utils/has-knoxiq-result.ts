@@ -20,7 +20,7 @@ export default function hasKnoxiqResult(
 
   return Boolean(
     analysis.isKnoxiqAllFp ||
-      (likelihood != null &&
-        likelihood !== ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN)
+    (likelihood != null &&
+      likelihood !== ENUMS.KNOXIQ_EXPLOITABILITY.EXP_UNKNOWN)
   );
 }

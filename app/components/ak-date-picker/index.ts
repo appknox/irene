@@ -45,10 +45,7 @@ export interface CalendarDay {
 }
 
 export type CalendarSelectValue =
-  | CalendarDay
-  | RangeDateObject
-  | MultipleDateObject
-  | null;
+  CalendarDay | RangeDateObject | MultipleDateObject | null;
 
 export type CalendarOnSelectFunc = (
   value: CalendarSelectValue,

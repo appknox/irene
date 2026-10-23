@@ -3,11 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export type KnoxIqStatusCardState =
-  | 'active'
-  | 'inactive'
-  | 'running'
-  | 'completed'
-  | 'failed';
+  'active' | 'inactive' | 'running' | 'completed' | 'failed';
 
 interface KnoxIqStatusCardSignature {
   Element: HTMLDivElement;

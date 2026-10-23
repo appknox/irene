@@ -29,9 +29,7 @@ type FileReportQueryResponse =
   };
 
 type FileReportIconComponent =
-  | 'ak-svg/pdf-report'
-  | 'ak-svg/xlsx-icon'
-  | 'ak-svg/csv-icon';
+  'ak-svg/pdf-report' | 'ak-svg/xlsx-icon' | 'ak-svg/csv-icon';
 
 export interface FileReportDetails {
   fileReport?: FileReportModel | null;
