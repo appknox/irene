@@ -18,6 +18,7 @@ export function setupKnoxiqScanStatusMirage(server, statuses = {}) {
     id: req.params.fileId,
     sast_status: statuses.sast ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
     dast_status: statuses.dast ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+    api_status: statuses.api ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
   }));
 }
 
@@ -118,6 +119,8 @@ export function knoxiqScanStatuses(overrides = {}) {
       overrides.sast ?? ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
     [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
       overrides.dast ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+    [ENUMS.KNOXIQ_SCAN_TYPE.API]:
+      overrides.api ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
   };
 }
 

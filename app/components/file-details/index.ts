@@ -54,6 +54,16 @@ const KNOXIQ_STATUS_CARDS = {
     subtitleKey: 'knoxIq.statusCard.completeDastSubtitle',
     state: 'inactive',
   },
+  'api-ready': {
+    titleKey: 'knoxIq.statusCard.readyTitle',
+    subtitleKey: 'knoxIq.statusCard.apiReadySubtitle',
+    state: 'active',
+  },
+  'api-scan-disabled': {
+    titleKey: 'knoxIq.statusCard.apiScanDisabledTitle',
+    subtitleKey: 'knoxIq.statusCard.apiScanDisabledSubtitle',
+    state: 'inactive',
+  },
   failed: {
     titleKey: 'knoxIq.statusCard.failedTitle',
     subtitleKey: 'knoxIq.statusCard.failedSubtitle',
@@ -149,6 +159,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     return {
       [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: record.sastStatus,
       [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]: record.dastStatus,
+      [ENUMS.KNOXIQ_SCAN_TYPE.API]: record.apiStatus,
     };
   }
 
@@ -199,6 +210,10 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     return this.knoxiqScanRecord?.dastStatus;
   }
 
+  get apiKnoxiqStatus() {
+    return this.knoxiqScanRecord?.apiStatus;
+  }
+
   get knoxiqStatusCardConfig(): KnoxiqStatusCardConfig | null {
     if (
       this.args.file.isKnoxiqAutomated ||
@@ -211,21 +226,41 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     const sastStatus = this.sastKnoxiqStatus;
     const dastStatus = this.dastKnoxiqStatus;
-    const { DISABLED, NOT_TRIGGERED, PENDING, RUNNING, COMPLETED, ERRORED } =
-      ENUMS.KNOXIQ_SCAN_STATUS;
+    const apiStatus = this.apiKnoxiqStatus;
+    const {
+      DISABLED,
+      NOT_TRIGGERED,
+      PENDING,
+      RUNNING,
+      COMPLETED,
+      ERRORED,
+      API_SCAN_DISABLED,
+    } = ENUMS.KNOXIQ_SCAN_STATUS;
 
-    if (sastStatus === ERRORED || dastStatus === ERRORED) {
+    if (
+      sastStatus === ERRORED ||
+      dastStatus === ERRORED ||
+      apiStatus === ERRORED
+    ) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.failed);
     }
 
     const isKnoxiqRunning = (status: number | undefined) =>
       status === RUNNING || status === PENDING;
 
-    if (isKnoxiqRunning(sastStatus) || isKnoxiqRunning(dastStatus)) {
+    if (
+      isKnoxiqRunning(sastStatus) ||
+      isKnoxiqRunning(dastStatus) ||
+      isKnoxiqRunning(apiStatus)
+    ) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.running);
     }
 
-    if (sastStatus === COMPLETED && dastStatus === COMPLETED) {
+    // API is an independent axis (sast/dast are mobile-only) — require it
+    // settled too, when this file ever had one, before showing "completed".
+    const isApiSettled = !this.args.file.isApiDone || apiStatus === COMPLETED;
+
+    if (sastStatus === COMPLETED && dastStatus === COMPLETED && isApiSettled) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.completed);
     }
 
@@ -241,18 +276,50 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.ready);
     }
 
+    const isDastDone =
+      this.args.file.isManualDone || this.args.file.isDynamicDone;
+
+    if (
+      sastStatus === COMPLETED &&
+      isDastDone &&
+      (dastStatus === NOT_TRIGGERED || dastStatus === DISABLED)
+    ) {
+      return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS['dast-ready']);
+    }
+
+    // Distinct from the NOT_TRIGGERED/DISABLED "ready to trigger" branch
+    // below: this file will never be auto-triggered for API scan — the org
+    // turned the sub-feature off — so it must not get the "ready"/actionable
+    // messaging. Same priority as that branch, for the same reason (API is
+    // the most current signal, ahead of the DAST-incomplete fallback).
+    if (this.args.file.isApiDone && apiStatus === API_SCAN_DISABLED) {
+      return this.buildKnoxiqStatusCard(
+        KNOXIQ_STATUS_CARDS['api-scan-disabled']
+      );
+    }
+
+    // Checked ahead of the DAST-incomplete fallback below so a file that's
+    // ready for API validation always gets an actionable (enabled) card,
+    // even while DAST is still the thing nominally "blocking" otherwise.
+    if (
+      this.args.file.isApiDone &&
+      (apiStatus === NOT_TRIGGERED || apiStatus === DISABLED)
+    ) {
+      const hasAnyKnoxiqRunCompleted =
+        sastStatus === COMPLETED || dastStatus === COMPLETED;
+
+      return this.buildKnoxiqStatusCard(
+        hasAnyKnoxiqRunCompleted
+          ? KNOXIQ_STATUS_CARDS['api-ready']
+          : KNOXIQ_STATUS_CARDS.ready
+      );
+    }
+
     if (
       sastStatus === COMPLETED &&
       (dastStatus === NOT_TRIGGERED || dastStatus === DISABLED)
     ) {
-      const isDastDone =
-        this.args.file.isManualDone || this.args.file.isDynamicDone;
-
-      return this.buildKnoxiqStatusCard(
-        isDastDone
-          ? KNOXIQ_STATUS_CARDS['dast-ready']
-          : KNOXIQ_STATUS_CARDS['complete-dast']
-      );
+      return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS['complete-dast']);
     }
 
     return null;
