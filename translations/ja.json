@@ -1125,6 +1125,8 @@
     "confidenceLabel": "{label} Confidence",
     "confidenceLow": "Low Confidence",
     "confidenceMedium": "Medium Confidence",
+    "confirmedRequest": "Confirmed Request",
+    "confirmedResponse": "Confirmed Response",
     "detailRemediation": "Detailed Remediation",
     "evidence": "evidence",
     "expandAll": "Expand All",
@@ -1176,6 +1178,9 @@
       "runningTooltip": "KnoxIQ Analysis in progress"
     },
     "statusCard": {
+      "apiReadySubtitle": "API Scan has found new vulnerabilities and ready for KnoxIQ analysis.",
+      "apiScanDisabledTitle": "KnoxIQ API Scan is disabled",
+      "apiScanDisabledSubtitle": "KnoxIQ is enabled for this organization, but KnoxIQ API Scan has been turned off. Contact your administrator to enable it.",
       "completeDastSubtitle": "Kindly complete the DAST scan, to get started with the KnoxIQ",
       "completeDastTitle": "Complete the DAST Scan",
       "dastReadySubtitle": "DAST Scan has found new vulnerabilities and ready for KnoxIQ analysis.",
@@ -2109,6 +2114,7 @@
   "reportPreferencesChooseTypes": "Choose types of scans to be included in the report",
   "reportSendTo": "and sent to following Email IDS:",
   "reportType": "Report Type",
+  "request": "Request",
   "requestBody": "Request Body",
   "requestCookies": "Request Cookies",
   "requestHeaders": "Request Headers",

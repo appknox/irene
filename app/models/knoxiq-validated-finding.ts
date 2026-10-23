@@ -57,6 +57,34 @@ export interface KnoxiqValidatedFindingExploitability {
   ai_fallback_used: boolean;
 }
 
+export interface KnoxiqValidatedFindingApiResponse {
+  status_code: number | null;
+  headers: Record<string, string> | null;
+  text: string | null;
+  reason: string | null;
+  url: string | null;
+  error: string | null;
+}
+
+export interface KnoxiqValidatedFindingApiRequest {
+  method: string | null;
+  url: string | null;
+  headers: Record<string, string> | null;
+  body: unknown;
+  params: Record<string, unknown> | null;
+  cookies: Record<string, unknown> | null;
+  // Only set on confirmedRequest — the response that request actually got
+  // back, so a reviewer can see what proves the exploit, not just that the
+  // request was sent.
+  response: KnoxiqValidatedFindingApiResponse | null;
+}
+
+export interface KnoxiqValidatedFindingRequestResponsePair {
+  label: string;
+  request: KnoxiqValidatedFindingApiRequest | null;
+  response: KnoxiqValidatedFindingApiResponse | null;
+}
+
 export default class KnoxiqValidatedFindingModel extends Model {
   @attr('string')
   declare title: string;
@@ -78,6 +106,21 @@ export default class KnoxiqValidatedFindingModel extends Model {
 
   @attr()
   declare exploitability: KnoxiqValidatedFindingExploitability;
+
+  // API-scan findings only: every live request/response the validation
+  // agent actually sent while investigating (captured replay, mutation
+  // probes, JWT-none controls, ...). null for SAST/DAST findings.
+  @attr()
+  declare requestResponsePairs:
+    | KnoxiqValidatedFindingRequestResponsePair[]
+    | null;
+
+  // API-scan findings only: the one complete, directly re-sendable request
+  // for a confirmed TRUE_POSITIVE exploit, picked from requestResponsePairs.
+  // Unredacted, unlike requestResponsePairs — meant to be copied and
+  // re-sent as-is. null unless the finding is a confirmed TRUE_POSITIVE.
+  @attr()
+  declare confirmedRequest: KnoxiqValidatedFindingApiRequest | null;
 }
 
 declare module 'ember-data/types/registries/model' {
