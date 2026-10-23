@@ -35,13 +35,7 @@ export type SetProfileRegulatorPrefData = { value: boolean };
 export type SaveKnoxIqAutomatedTriggerData = { status: boolean };
 
 export type ProfileRegulatoryReportPreference =
-  | 'pcidss'
-  | 'hipaa'
-  | 'gdpr'
-  | 'nist'
-  | 'sama'
-  | 'dora'
-  | 'eucra';
+  'pcidss' | 'hipaa' | 'gdpr' | 'nist' | 'sama' | 'dora' | 'eucra';
 
 type ProfileAdapterName = 'profile';
 

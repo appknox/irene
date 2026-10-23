@@ -33,12 +33,7 @@ export type ResilienceFilter =
   | 'very_strong';
 
 export type StatusFilter =
-  | 'all'
-  | 'running'
-  | 'queued'
-  | 'completed'
-  | 'failed'
-  | 'not_started';
+  'all' | 'running' | 'queued' | 'completed' | 'failed' | 'not_started';
 
 export type SortDirection = 'asc' | 'desc';
 

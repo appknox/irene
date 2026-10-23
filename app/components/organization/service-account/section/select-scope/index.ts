@@ -241,8 +241,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
   onCheck(...args: Parameters<AkTreeProviderCheckExpandFuncType>) {
     const [checked, node] = args;
     const dataObject = this.dataObjectForNode[node.key] as
-      | NodeDataObject
-      | undefined;
+      NodeDataObject | undefined;
 
     this.checked = checked;
 

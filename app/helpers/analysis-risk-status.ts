@@ -19,9 +19,7 @@ type RiskClassRecord = {
 
 // Risk icon types
 type RiskIconStatusValues =
-  | 'fa-warning'
-  | 'fa-minus-circle'
-  | 'fa-spinner fa-spin';
+  'fa-warning' | 'fa-minus-circle' | 'fa-spinner fa-spin';
 
 type RiskIconRiskValues = 'fa-close' | 'fa-check' | 'fa-warning';
 
@@ -34,12 +32,7 @@ type RiskIconRecord = {
 type RiskLabelStatusValues = 'Errored' | 'Not started' | 'Scanning';
 
 type RiskLabelRiskValues =
-  | 'Untested'
-  | 'Passed'
-  | 'Low'
-  | 'Medium'
-  | 'High'
-  | 'Critical';
+  'Untested' | 'Passed' | 'Low' | 'Medium' | 'High' | 'Critical';
 
 type RiskLabelRecord = {
   status: Record<number, RiskLabelStatusValues>;

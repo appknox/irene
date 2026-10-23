@@ -7,14 +7,7 @@ export interface AdditionalFilterErroredFieldProp {
 }
 
 export type AdditionalFilterFilterDetailsExpressionValues =
-  | string
-  | number
-  | boolean
-  | number[]
-  | string[]
-  | Date
-  | Date[]
-  | null;
+  string | number | boolean | number[] | string[] | Date | Date[] | null;
 
 export type AdditionalFilterFilterDetailsExpression = {
   operator: string;
