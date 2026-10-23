@@ -1,5 +1,9 @@
 {{page-title (t 'offensiveSecurity.attackRun')}}
 
 <PageWrapper @backgroundColor='dark'>
-  <OffensiveSecurity::ScanResults @scanId={{@model.id}} />
+  <OffensiveSecurity::ScanResults
+    @scanId={{@model.id}}
+    @activeGoalParam={{this.goal}}
+    @onGoalParamChange={{this.handleGoalParamChange}}
+  />
 </PageWrapper>

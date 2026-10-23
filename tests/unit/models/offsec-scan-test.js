@@ -270,4 +270,53 @@ module('Unit | Model | offsec-scan', function (hooks) {
 
     assert.strictEqual(scan.riskClass, 'low');
   });
+
+  // ─── pentestGoals & hasPentestResult ──────────────────────────────────────
+
+  test('hasPentestResult is false when no pentest data exists', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {});
+
+    assert.false(scan.hasPentestResult);
+    assert.deepEqual(scan.pentestGoals, []);
+  });
+
+  test('pentestGoals normalizes a single pentestResult dict into an array', function (assert) {
+    const goalData = {
+      goal_id: 'find-secrets',
+      goal_name: 'Find every secret this app holds or hands out',
+      package: 'owasp.mstg.uncrackable2',
+      status: 'budget_exhausted',
+      findings: [{ pattern: 'credential_assignment', value: 'secret123' }],
+    };
+
+    const scan = this.store.createRecord('offsec-scan', {
+      pentestResult: goalData,
+    });
+
+    assert.true(scan.hasPentestResult);
+    assert.strictEqual(scan.pentestGoals.length, 1);
+    assert.strictEqual(scan.pentestGoals[0].goal_id, 'find-secrets');
+  });
+
+  test('pentestGoals normalizes an array of goals from pentestResults', function (assert) {
+    const goalsData = [
+      {
+        goal_id: 'goal-1',
+        goal_name: 'Goal One',
+      },
+      {
+        goal_id: 'goal-2',
+        goal_name: 'Goal Two',
+      },
+    ];
+
+    const scan = this.store.createRecord('offsec-scan', {
+      pentestResults: goalsData,
+    });
+
+    assert.true(scan.hasPentestResult);
+    assert.strictEqual(scan.pentestGoals.length, 2);
+    assert.strictEqual(scan.pentestGoals[0].goal_id, 'goal-1');
+    assert.strictEqual(scan.pentestGoals[1].goal_id, 'goal-2');
+  });
 });

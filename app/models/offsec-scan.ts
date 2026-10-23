@@ -51,6 +51,73 @@ export interface OffsecScanEmbeddedFinding {
   evidence_ids: string[];
 }
 
+export interface PentestFinding {
+  pattern?: string;
+  kind?: string;
+  value?: string;
+  redacted?: string;
+  verb?: string;
+  where?: string;
+  quote?: string;
+  observation_id?: number;
+  places?: string[];
+  severity?: number;
+  severity_because?: string[];
+  exploitability?: string;
+  exploitability_because?: string;
+  facts?: string[];
+  reached?: string[];
+}
+
+export interface PentestPlan {
+  number: number;
+  status: string;
+  hypothesis: string;
+  steps: string[];
+  reasoning: string;
+  expected: string;
+  rollback?: string;
+  attempt?: number;
+  max_attempts?: number;
+  reason?: string;
+  observations?: number[];
+}
+
+export interface PentestObservation {
+  at?: string;
+  id: number;
+  note: string;
+  step: number;
+  verb: string;
+  state: number;
+  params?: Record<string, unknown>;
+  outcome: string;
+  elapsed_ms: number;
+}
+
+export interface PentestGoalResult {
+  goal_id: string;
+  goal_name: string;
+  package?: string;
+  status?: string;
+  reason?: string;
+  steps?: number;
+  calls?: number;
+  elapsed_seconds?: number;
+  planning?: {
+    asked?: number;
+    opened?: number;
+    single?: number;
+    refused?: number;
+  };
+  findings_count?: number;
+  findings?: PentestFinding[];
+  plans?: PentestPlan[];
+  observations?: PentestObservation[];
+  created_at?: string;
+  updated_at?: string;
+}
+
 export default class OffsecScanModel extends Model {
   @attr('number')
   declare targetId: number | null;
@@ -159,6 +226,38 @@ export default class OffsecScanModel extends Model {
         | OffsecScanEmbeddedFinding[]
         | Record<string, unknown>
       >
+    | undefined;
+
+  @attr()
+  declare pentestResult:
+    | PentestGoalResult
+    | PentestGoalResult[]
+    | Record<string, unknown>
+    | Record<string, unknown>[]
+    | string
+    | undefined;
+
+  @attr()
+  declare pentestResults:
+    | PentestGoalResult[]
+    | Record<string, unknown>[]
+    | string
+    | undefined;
+
+  @attr()
+  declare pentest_result:
+    | PentestGoalResult
+    | PentestGoalResult[]
+    | Record<string, unknown>
+    | Record<string, unknown>[]
+    | string
+    | undefined;
+
+  @attr()
+  declare pentest_results:
+    | PentestGoalResult[]
+    | Record<string, unknown>[]
+    | string
     | undefined;
 
   @attr('string')
@@ -552,6 +651,72 @@ export default class OffsecScanModel extends Model {
     // detected nor attempted (noise). A detected-but-untested protection (a probe the run never
     // reached) still belongs in the list, with its unassessed badge.
     return list.filter(isFindingRelevant);
+  }
+
+  get pentestGoals(): PentestGoalResult[] {
+    let raw: unknown =
+      this.pentestResults ??
+      this.pentestResult ??
+      this.pentest_results ??
+      this.pentest_result ??
+      (this as unknown as Record<string, unknown>)['pentest_results'] ??
+      (this as unknown as Record<string, unknown>)['pentest_result'];
+
+    if (!raw) {
+      let summaryObj: Record<string, unknown> | undefined;
+      if (typeof this.summary === 'string') {
+        try {
+          summaryObj = JSON.parse(this.summary) as Record<string, unknown>;
+        } catch {
+          summaryObj = undefined;
+        }
+      } else if (typeof this.summary === 'object' && this.summary !== null) {
+        summaryObj = this.summary as Record<string, unknown>;
+      }
+
+      raw = summaryObj?.['pentest_results'] ?? summaryObj?.['pentest_result'];
+    }
+
+    if (!raw) {
+      return [];
+    }
+
+    if (typeof raw === 'string') {
+      try {
+        raw = JSON.parse(raw);
+      } catch {
+        return [];
+      }
+    }
+
+    if (Array.isArray(raw)) {
+      return raw.filter(Boolean) as PentestGoalResult[];
+    }
+
+    if (typeof raw === 'object' && raw !== null) {
+      const record = raw as Record<string, unknown>;
+      if (
+        'goal_id' in record ||
+        'goal_name' in record ||
+        'plans' in record ||
+        'findings' in record
+      ) {
+        return [raw as unknown as PentestGoalResult];
+      }
+
+      const values = Object.values(record);
+      if (values.length > 0 && typeof values[0] === 'object') {
+        return values as unknown as PentestGoalResult[];
+      }
+
+      return [raw as unknown as PentestGoalResult];
+    }
+
+    return [];
+  }
+
+  get hasPentestResult(): boolean {
+    return this.pentestGoals.length > 0;
   }
 }
 

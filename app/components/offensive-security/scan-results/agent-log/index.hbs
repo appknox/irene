@@ -88,7 +88,51 @@
         {{on 'click' this.toggleExpand}}
         data-test-offensiveSecurity-agentLog-expandBtn
       >
-        <AkIcon @iconName={{if this.isExpanded 'close' 'open-in-full'}} />
+        {{#if this.isExpanded}}
+          <svg
+            viewBox='0 0 24 24'
+            width='15'
+            height='15'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            aria-hidden='true'
+            local-class='expand-icon-svg'
+          >
+            <polyline points='4 8 8 8 8 4' />
+            <line x1='3' y1='3' x2='8' y2='8' />
+            <polyline points='20 8 16 8 16 4' />
+            <line x1='21' y1='3' x2='16' y2='8' />
+            <polyline points='20 16 16 16 16 20' />
+            <line x1='21' y1='21' x2='16' y2='16' />
+            <polyline points='4 16 8 16 8 20' />
+            <line x1='3' y1='21' x2='8' y2='16' />
+          </svg>
+        {{else}}
+          <svg
+            viewBox='0 0 24 24'
+            width='15'
+            height='15'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            aria-hidden='true'
+            local-class='expand-icon-svg'
+          >
+            <polyline points='15 3 21 3 21 9' />
+            <line x1='21' y1='3' x2='14' y2='10' />
+            <polyline points='9 3 3 3 3 9' />
+            <line x1='3' y1='3' x2='10' y2='10' />
+            <polyline points='15 21 21 21 21 15' />
+            <line x1='21' y1='21' x2='14' y2='14' />
+            <polyline points='9 21 3 21 3 15' />
+            <line x1='3' y1='21' x2='10' y2='14' />
+          </svg>
+        {{/if}}
       </AkIconButton>
     </AkStack>
   </AkStack>

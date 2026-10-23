@@ -9,8 +9,12 @@ import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
+import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 import type OffsecScanModel from 'irene/models/offsec-scan';
-import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
+import type {
+  OffsecScanArtifact,
+  PentestGoalResult,
+} from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 import type FileAdapter from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
@@ -22,6 +26,8 @@ const POLL_INTERVAL_MS = 5000;
 export interface OffensiveSecurityScanResultsSignature {
   Args: {
     scanId: string;
+    activeGoalParam?: string | null;
+    onGoalParamChange?: (goalId: string | null) => void;
   };
 }
 
@@ -43,6 +49,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked activeScreenPassword: string | null = null;
   @tracked isDevicePanelCollapsed = false;
   @tracked isDeviceExpanded = false;
+  @tracked internalActiveGoalIndex: number | null = null;
 
   @action
   toggleFileDetails(): void {
@@ -87,6 +94,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     );
 
     window.addEventListener('keydown', this.handleDocumentKeyDown);
+    window.addEventListener('popstate', this.handlePopState);
 
     this.loadScan.perform(args.scanId);
   }
@@ -100,8 +108,28 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.handleWsOffsecScanUpdate
     );
     window.removeEventListener('keydown', this.handleDocumentKeyDown);
+    window.removeEventListener('popstate', this.handlePopState);
     document.body.style.overflow = '';
     this.stopPolling?.();
+  }
+
+  @action
+  handlePopState(): void {
+    if (
+      this.args.activeGoalParam === undefined &&
+      typeof window !== 'undefined'
+    ) {
+      const url = new URL(window.location.href);
+      const goalParam = url.searchParams.get('goal');
+      if (!goalParam) {
+        this.internalActiveGoalIndex = null;
+      } else {
+        const foundIdx = this.pentestGoals.findIndex(
+          (g, i) => g.goal_id === goalParam || String(i) === goalParam
+        );
+        this.internalActiveGoalIndex = foundIdx !== -1 ? foundIdx : null;
+      }
+    }
   }
 
   @action
@@ -140,6 +168,100 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   get artifacts(): OffsecScanArtifact[] {
     return this.scan?.artifactList ?? [];
+  }
+
+  get pentestGoals() {
+    return this.scan?.pentestGoals ?? [];
+  }
+
+  get hasPentestResult(): boolean {
+    return Boolean(this.scan?.hasPentestResult);
+  }
+
+  get activeGoalIndex(): number | null {
+    const param = this.args.activeGoalParam;
+    if (param !== undefined) {
+      if (!param) {
+        return null;
+      }
+
+      const foundIdx = this.pentestGoals.findIndex(
+        (g, i) => g.goal_id === param || String(i) === param
+      );
+      if (foundIdx !== -1) {
+        return foundIdx;
+      }
+
+      return null;
+    }
+
+    return this.internalActiveGoalIndex;
+  }
+
+  get activeGoal(): PentestGoalResult | null {
+    if (this.activeGoalIndex === null) {
+      return null;
+    }
+
+    return this.pentestGoals[this.activeGoalIndex] ?? null;
+  }
+
+  @action
+  openGoal(index: number): void {
+    this.internalActiveGoalIndex = index;
+    const goal = this.pentestGoals[index];
+    const goalParam = goal?.goal_id || String(index);
+
+    if (this.args.onGoalParamChange) {
+      this.args.onGoalParamChange(goalParam);
+    } else {
+      try {
+        this.router.transitionTo({ queryParams: { goal: goalParam } });
+      } catch {
+        // Fallback for tests
+      }
+    }
+
+    scrollDashboardMainContainerTo({ top: 0, left: 0 });
+    this.window.scrollTo({ top: 0, left: 0 });
+  }
+
+  @action
+  closeGoal(): void {
+    this.internalActiveGoalIndex = null;
+
+    if (this.args.onGoalParamChange) {
+      this.args.onGoalParamChange(null);
+    } else {
+      try {
+        this.router.transitionTo({ queryParams: { goal: null } });
+      } catch {
+        // Fallback for tests
+      }
+    }
+
+    scrollDashboardMainContainerTo({ top: 0, left: 0 });
+    this.window.scrollTo({ top: 0, left: 0 });
+  }
+
+  @action
+  handleGoalChange(index: number): void {
+    this.internalActiveGoalIndex = index;
+    const goal = this.pentestGoals[index];
+    const goalParam = goal?.goal_id || String(index);
+
+    if (this.args.onGoalParamChange) {
+      this.args.onGoalParamChange(goalParam);
+    } else {
+      try {
+        this.router.transitionTo({ queryParams: { goal: goalParam } });
+      } catch {
+        // Fallback for tests
+      }
+    }
+
+    scrollDashboardMainContainerTo({ top: 0, left: 0 });
+    this.window.scrollTo({ top: 0, left: 0 });
   }
 
   get formattedStatusReason(): string {

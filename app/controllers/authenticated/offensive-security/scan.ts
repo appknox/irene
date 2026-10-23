@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type { AkBreadcrumbsItemProps } from 'irene/services/ak-breadcrumbs';
@@ -8,7 +10,16 @@ import type OffsecScanModel from 'irene/models/offsec-scan';
 export default class AuthenticatedOffensiveSecurityScanController extends Controller {
   @service declare intl: IntlService;
 
+  queryParams = ['goal'];
+
+  @tracked goal: string | null = null;
+
   declare model: OffsecScanModel;
+
+  @action
+  handleGoalParamChange(goalId: string | null): void {
+    this.goal = goalId;
+  }
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const scanTitle =

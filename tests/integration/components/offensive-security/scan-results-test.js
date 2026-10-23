@@ -851,7 +851,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.deviceLiveBadge).exists();
   });
 
-  test('it allows collapsing and re-expanding the real device panel', async function (assert) {
+  test('it can expand and collapse the device modal via header button', async function (assert) {
     const scan = createScan(this, {
       status: SCAN_STATUS.RUNNING,
       device_serial: 'emulator-5554',
@@ -862,17 +862,16 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.deviceCard).exists();
-    assert.dom(SELECTORS.deviceCollapseBtn).exists();
+    assert.dom(SELECTORS.deviceExpandBtn).exists();
+    assert.dom(SELECTORS.deviceBackdrop).doesNotExist();
 
-    // Collapse the device panel
-    await click(SELECTORS.deviceCollapseBtn);
-    assert.dom(SELECTORS.deviceCard).doesNotExist();
-    assert.dom(SELECTORS.deviceShowBtn).exists();
+    // Expand device modal
+    await click(SELECTORS.deviceExpandBtn);
+    assert.dom(SELECTORS.deviceBackdrop).exists();
 
-    // Re-expand the device panel
-    await click(SELECTORS.deviceShowBtn);
-    assert.dom(SELECTORS.deviceCard).exists();
-    assert.dom(SELECTORS.deviceShowBtn).doesNotExist();
+    // Close device modal via header close button
+    await click(SELECTORS.deviceExpandBtn);
+    assert.dom(SELECTORS.deviceBackdrop).doesNotExist();
   });
 
   test('it toggles expanded device preview modal mode without disconnecting stream', async function (assert) {
