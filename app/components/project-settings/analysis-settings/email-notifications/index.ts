@@ -21,8 +21,7 @@ type ChangesetBufferProps = BufferedChangeset &
   ProfileVaNotifEmailFields & {
     error: {
       [key in keyof ProfileVaNotifEmailFields]:
-        | boolean
-        | { validation: string };
+        boolean | { validation: string };
     };
   };
 

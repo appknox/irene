@@ -40,8 +40,10 @@ export type AnalysisCvssUpdateDetails = {
   risk: number;
 };
 
-export interface AnalysisCvssUpdateDetailsLegacy
-  extends Omit<AnalysisCvssUpdateDetails, 'cvssMetrics'> {
+export interface AnalysisCvssUpdateDetailsLegacy extends Omit<
+  AnalysisCvssUpdateDetails,
+  'cvssMetrics'
+> {
   cvssMetrics: CvssV3Metrics;
 }
 
