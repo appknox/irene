@@ -183,6 +183,14 @@ export default Factory.extend({
     },
   }),
 
+  withPopia: trait({
+    afterCreate(model: ModelInstance, server: Server) {
+      model.update({
+        popia: server.createList('popia', 2).map((it) => it.id),
+      });
+    },
+  }),
+
   withAllRegulatory: trait({
     afterCreate(model: ModelInstance, server: Server) {
       model.update({
@@ -203,6 +211,7 @@ export default Factory.extend({
         sama: server.createList('sama', 2).map((it) => it.id),
         dora: server.createList('dora', 2).map((it) => it.id),
         eucra: server.createList('eucra', 2).map((it) => it.id),
+        popia: server.createList('popia', 2).map((it) => it.id),
       });
     },
   }),
