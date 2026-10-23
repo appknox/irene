@@ -4,6 +4,7 @@ import type ServiceAccountModel from 'irene/models/service-account';
 export interface OrganizationServiceAccountAddProjectDrawerSignature {
   Args: {
     isCreateView: boolean;
+    isPendingSave: boolean;
     open: boolean;
     onClose: () => void;
     serviceAccount: ServiceAccountModel;
