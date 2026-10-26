@@ -12,50 +12,52 @@
   </AkTypography>
 
   {{#if this.hasArtifacts}}
-    <AkStack @width='full' @direction='column' @spacing='1.5'>
-      {{#each @artifacts as |artifact|}}
-        <div
-          local-class='artifact-box cursor-pointer'
-          {{on 'click' (fn this.handleDownload artifact)}}
-          data-test-offensiveSecurity-artifactsCard-row
-        >
-          <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
-            <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact}}'>
-              <AkIcon @iconName={{this.getArtifactIcon artifact}} @size='small' />
-            </div>
+    <div local-class='artifacts-scroll-container'>
+      <AkStack @width='full' @direction='column' @spacing='1.5'>
+        {{#each @artifacts as |artifact|}}
+          <div
+            local-class='artifact-box cursor-pointer'
+            {{on 'click' (fn this.handleDownload artifact)}}
+            data-test-offensiveSecurity-artifactsCard-row
+          >
+            <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
+              <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact}}'>
+                <AkIcon @iconName={{this.getArtifactIcon artifact}} @size='small' />
+              </div>
 
-            <AkStack @direction='column' local-class='artifact-meta'>
-              <AkTypography
-                @variant='body2'
-                @fontWeight='bold'
-                local-class='artifact-description'
-                title={{this.getArtifactDescription artifact}}
-              >
-                {{this.getArtifactDescription artifact}}
-              </AkTypography>
+              <AkStack @direction='column' local-class='artifact-meta'>
+                <AkTypography
+                  @variant='body2'
+                  @fontWeight='bold'
+                  local-class='artifact-description'
+                  title={{this.getArtifactDescription artifact}}
+                >
+                  {{this.getArtifactDescription artifact}}
+                </AkTypography>
 
-              <AkTypography
-                @variant='caption'
-                @color='textSecondary'
-                class='font-mono'
-              >
-                {{this.sizeLabel artifact.size}}
-              </AkTypography>
+                <AkTypography
+                  @variant='caption'
+                  @color='textSecondary'
+                  class='font-mono'
+                >
+                  {{this.sizeLabel artifact.size}}
+                </AkTypography>
+              </AkStack>
             </AkStack>
-          </AkStack>
 
-          <AkStack @alignItems='center' local-class='artifact-right'>
-            <AkIconButton
-              {{on 'click' (fn this.handleDownload artifact)}}
-              @disabled={{@isDownloading}}
-              data-test-offensiveSecurity-artifactsCard-download
-            >
-              <AkIcon @iconName='download' @size='small' />
-            </AkIconButton>
-          </AkStack>
-        </div>
-      {{/each}}
-    </AkStack>
+            <AkStack @alignItems='center' local-class='artifact-right'>
+              <AkIconButton
+                {{on 'click' (fn this.handleDownload artifact)}}
+                @disabled={{@isDownloading}}
+                data-test-offensiveSecurity-artifactsCard-download
+              >
+                <AkIcon @iconName='download' @size='small' />
+              </AkIconButton>
+            </AkStack>
+          </div>
+        {{/each}}
+      </AkStack>
+    </div>
   {{else}}
     <AkTypography
       @variant='body2'

@@ -6,6 +6,33 @@
   box-sizing: border-box;
 }
 
+.artifacts-scroll-container {
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 138px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--neutral-grey-300, #d1d5db);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--neutral-grey-400, #9ca3af);
+    }
+  }
+}
+
 .artifact-box {
   display: flex;
   align-items: center;
