@@ -164,7 +164,9 @@ module(
 
       const rows = findAll(selectors.step);
 
-      await triggerEvent(rows[1], 'dragstart');
+      // Only the handle starts a drag, so selecting text in a field inside
+      // the row does not move the step.
+      await triggerEvent(selectors.dragHandle(1), 'dragstart');
       await triggerEvent(rows[0], 'dragover');
       await triggerEvent(rows[0], 'drop');
 
@@ -185,7 +187,19 @@ module(
 
       const rows = findAll(selectors.step);
 
-      await triggerEvent(rows[0], 'dragstart');
+      await triggerEvent(selectors.dragHandle(0), 'dragstart');
+      await triggerEvent(rows[0], 'drop');
+
+      assert.strictEqual(this.committed, null);
+    });
+
+    test('dragging the row itself does not reorder', async function (assert) {
+      await render(TEMPLATE);
+
+      const rows = findAll(selectors.step);
+
+      await triggerEvent(rows[1], 'dragstart');
+      await triggerEvent(rows[0], 'dragover');
       await triggerEvent(rows[0], 'drop');
 
       assert.strictEqual(this.committed, null);
