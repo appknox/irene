@@ -72,7 +72,11 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
       [UNKNOWN_SCALE_VALUE]: 'Unknown',
     });
 
-    assert.deepEqual([...EXPLOITABILITY_LIKELIHOOD_VALUES], [3, 2, 1]);
+    // Unknown is selectable here but not for confidence, which is required.
+    assert.deepEqual(
+      [...EXPLOITABILITY_LIKELIHOOD_VALUES],
+      [3, 2, 1, UNKNOWN_SCALE_VALUE]
+    );
   });
 
   test.each(
@@ -301,10 +305,22 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
       summary: 'A summary',
       evidence: ['Evidence line'],
       reasoning: 'Because',
-      remediationSteps: [{ heading: 'Fix', body: 'Do it', id: 1 }],
-      stepsToReproduce: [{ heading: 'Open', body: 'It works', id: 2 }],
+      remediationSteps: [
+        { heading: 'Fix', body: 'Do it', codeExample: 'npm audit fix', id: 1 },
+      ],
+      stepsToReproduce: [
+        { heading: 'Open', body: 'It works', command: 'open app', id: 2 },
+      ],
       exploitabilityLikelihood: 3,
       exploitabilityAnalysis: 'Reachable',
+      exploitabilityScore: 7.4,
+      exploitabilitySignals: { remote_exploitation: true },
+      exploitabilityEvidence: ['Analysis evidence'],
+      attackScenario: ['Step one'],
+      remediationSummary: 'An overview',
+      pocTitle: 'Reproduce it',
+      expectedEvidence: ['A crash'],
+      developerPrompt: 'Fix this',
     });
 
     assert.deepEqual(payload, {
@@ -313,9 +329,21 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
       evidence: ['Evidence line'],
       reasoning: 'Because',
       remediation_steps: [{ heading: 'Fix', body: 'Do it' }],
-      steps_to_reproduce: [{ heading: 'Open', body: 'It works' }],
+      // Parallel to remediation_steps rather than nested in them.
+      code_examples: ['npm audit fix'],
+      steps_to_reproduce: [
+        { heading: 'Open', body: 'It works', command: 'open app' },
+      ],
       exploitability_likelihood: 3,
       exploitability_analysis: 'Reachable',
+      exploitability_score: 7.4,
+      exploitability_signals: { remote_exploitation: true },
+      exploitability_evidence: ['Analysis evidence'],
+      attack_scenario: ['Step one'],
+      remediation_summary: 'An overview',
+      poc_title: 'Reproduce it',
+      expected_evidence: ['A crash'],
+      developer_prompt: 'Fix this',
     });
   });
 

@@ -2,9 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 import {
-  SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE,
   SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS,
-  aeisOverrideUrl,
   buildFullSignals,
   isAeisLikelihood,
 } from 'irene/utils/security-aeis';
@@ -96,48 +94,6 @@ module('Unit | Utility | security-aeis', function (hooks) {
     ],
     function (assert, [value, expected]) {
       assert.strictEqual(isAeisLikelihood(value), expected);
-    }
-  );
-
-  // ─── Passed override ───────────────────────────────────────────────────────
-
-  test('the passed override is the hardest shape to exploit', function (assert) {
-    assert.strictEqual(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.score, 0);
-    assert.strictEqual(
-      SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.likelihood,
-      'low'
-    );
-
-    assert.deepEqual(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.signals, {
-      requires_chaining: true,
-      remote_exploitation: false,
-      public_exploit_exists: false,
-      local_exploitation_only: true,
-      minimal_user_interaction: false,
-      no_authentication_required: false,
-      obscure_or_environment_specific: true,
-    });
-  });
-
-  test('the passed override carries every vector the endpoint expects', function (assert) {
-    assert.deepEqual(
-      Object.keys(SECURITY_ANALYSIS_AEIS_PASSED_OVERRIDE.signals).sort((a, b) =>
-        a.localeCompare(b)
-      ),
-      [...SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS].sort((a, b) => a.localeCompare(b))
-    );
-  });
-
-  // ─── Override url ──────────────────────────────────────────────────────────
-
-  test.each(
-    'aeisOverrideUrl nests the override under its analysis',
-    [
-      ['42', 'analyses/42/aeis-override'],
-      [7, 'analyses/7/aeis-override'],
-    ],
-    function (assert, [analysisId, expected]) {
-      assert.strictEqual(aeisOverrideUrl(analysisId), expected);
     }
   );
 });
