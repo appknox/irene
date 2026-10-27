@@ -2,6 +2,8 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 
+import ENUMS from 'irene/enums';
+
 module('Unit | Model | security/analysis', function (hooks) {
   setupTest(hooks);
   setupMirage(hooks);
@@ -58,6 +60,17 @@ module('Unit | Model | security/analysis', function (hooks) {
     );
 
     assert.true(analysis.isKnoxIqAnalysis);
+  });
+
+  // ─── isUntested ────────────────────────────────────────────────────────────
+
+  test('an analysis is untested until it carries a risk', function (assert) {
+    assert.true(this.pushAnalysis({ risk: ENUMS.RISK.UNKNOWN }).isUntested);
+    assert.false(this.pushAnalysis({ risk: ENUMS.RISK.HIGH }).isUntested);
+    assert.false(
+      this.pushAnalysis({ risk: ENUMS.RISK.NONE }).isUntested,
+      'passed is a verdict, not an absence of one'
+    );
   });
 
   // ─── isKnoxiqAllFp ─────────────────────────────────────────────────────────

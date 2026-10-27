@@ -106,6 +106,7 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   @tracked selectedFinding: SecurityValidatedFindingModel | null = null;
   @tracked remediationSteps: SecurityValidatedFindingStep[] = [];
   @tracked stepsToReproduce: SecurityValidatedFindingStep[] = [];
+
   // AEIS configuration is the first thing a reviewer sets, so it starts open.
   @tracked openPanels: SecurityValidatedFindingPanelId[] = [
     SECURITY_VALIDATED_FINDING_PANEL.AEIS,
@@ -188,6 +189,23 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
 
   get showsFalsePositives() {
     return Boolean(this.args.showsFalsePositives);
+  }
+
+  /**
+   * Whether this section belongs on the page at all.
+   *
+   * A false positives section with nothing in it is noise on the many
+   * analyses that have none, so it only appears once its fetch finds some -
+   * or on an all-false-positive analysis, where it leads and an empty state
+   * is the point. True positives always show, because that is where a
+   * finding is added.
+   */
+  get showsSection() {
+    return (
+      !this.showsFalsePositives ||
+      Boolean(this.analysis?.isKnoxiqAllFp) ||
+      this.hasFindings
+    );
   }
 
   get sectionTitleKey() {
@@ -359,6 +377,14 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
     return this.intl.t(
       'securityAnalysisDetails.validatedFindings.missingFields',
       { fields }
+    );
+  }
+
+  get showsTruePositiveConversionNote() {
+    return Boolean(
+      this.analysis?.isKnoxiqAllFp &&
+        !this.showsFalsePositives &&
+        !this.hasFindings
     );
   }
 
@@ -636,6 +662,9 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
             continue;
           }
 
+          // Sequential on purpose: each delete makes the backend recompute
+          // is_all_findings_fp, and concurrent ones can leave that flag
+          // reading a row another request has not finished deleting.
           await finding.destroyRecord({
             adapterOptions: this.findingRequestOptions,
           });
@@ -646,6 +675,7 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
         );
 
         this.selectFinding(this.findings[0] ?? null);
+        await this.analysis?.reload();
       } catch (error) {
         this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
       } finally {
