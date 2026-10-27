@@ -1,0 +1,90 @@
+<Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+  @panelId={{@panelId}}
+  @title={{t 'securityAnalysisDetails.validatedFindings.remediation'}}
+  @iconName='lightbulb'
+  @iconColor='success'
+  @disabled={{@disabled}}
+  @isExpanded={{@isExpanded}}
+  @onToggle={{@onTogglePanel}}
+  @onSave={{@onSavePanel}}
+>
+  <AkStack @direction='column' @width='full' @spacing='2.5'>
+    <AkStack @direction='column' @width='full' @spacing='1'>
+      <AkTypography @variant='body2' @fontWeight='medium'>
+        {{t 'securityAnalysisDetails.validatedFindings.remediationPrompt'}}
+      </AkTypography>
+
+      <AkTypography @variant='body3' @color='textSecondary'>
+        {{t 'securityAnalysisDetails.validatedFindings.remediationPromptHint'}}
+      </AkTypography>
+
+      <Textarea
+        @value={{this.finding.developerPrompt}}
+        disabled={{@disabled}}
+        rows='6'
+        spellcheck='false'
+        local-class='prompt-input'
+        placeholder={{t
+          'securityAnalysisDetails.validatedFindings.remediationPromptPlaceholder'
+        }}
+        aria-label={{t
+          'securityAnalysisDetails.validatedFindings.remediationPrompt'
+        }}
+        data-test-securityAnalysisDetails-validatedFindings-remediationPromptInput
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' local-class='panel-section-divider' />
+
+    <AkStack @direction='column' @width='full' @spacing='1'>
+      <AkTypography @variant='body2' @fontWeight='medium'>
+        {{t 'securityAnalysisDetails.validatedFindings.remediationSummary'}}
+      </AkTypography>
+
+      <Textarea
+        @value={{this.finding.remediationSummary}}
+        disabled={{@disabled}}
+        rows='3'
+        local-class='summary-input'
+        aria-label={{t
+          'securityAnalysisDetails.validatedFindings.remediationSummary'
+        }}
+        placeholder={{t
+          'securityAnalysisDetails.validatedFindings.remediationSummaryPlaceholder'
+        }}
+        data-test-securityAnalysisDetails-validatedFindings-remediationSummaryInput
+      />
+    </AkStack>
+
+    <AkDivider @color='dark' local-class='panel-section-divider' />
+
+    <AkStack @direction='column' @width='full' @spacing='1'>
+      <AkTypography @variant='body2' @fontWeight='medium'>
+        {{t 'securityAnalysisDetails.validatedFindings.remediationSteps'}}
+      </AkTypography>
+
+      <AkTypography @variant='body3' @color='textSecondary'>
+        {{t 'securityAnalysisDetails.validatedFindings.remediationStepsHint'}}
+      </AkTypography>
+    </AkStack>
+
+    <Security::AnalysisDetails::ValidatedFindings::StepList
+      @steps={{@steps}}
+      @disabled={{@disabled}}
+      @codeField='codeExample'
+      @codeFieldLabel={{t
+        'securityAnalysisDetails.validatedFindings.codeExample'
+      }}
+      @codeFieldPlaceholder={{t
+        'securityAnalysisDetails.validatedFindings.codeExamplePlaceholder'
+      }}
+      @onStepsChange={{@onStepsChange}}
+      @addLabel={{t
+        'securityAnalysisDetails.validatedFindings.addRemediationStep'
+      }}
+      @bodyPlaceholder={{t
+        'securityAnalysisDetails.validatedFindings.addRemediation'
+      }}
+    />
+  </AkStack>
+</Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>

@@ -4,6 +4,7 @@ import { isEmpty } from '@ember/utils';
 import { irregular } from '@ember-data/request-utils/string';
 
 import ENUMS from 'irene/enums';
+
 import { riskClass } from 'irene/helpers/risk-class';
 export type { RiskLabelClass as SecurityAnalysisRiskLabelClass } from 'irene/helpers/risk-class';
 
@@ -28,6 +29,23 @@ import type Pcidss4Model from '../pcidss4';
 import type EucraModel from '../eucra';
 
 irregular('asvs', 'asvses');
+
+export type SecurityAnalysisExploitabilitySignal = boolean | 'unknown';
+
+// The AI rollup, with any human override already layered on by the backend.
+export interface SecurityAnalysisExploitability {
+  score: number | null;
+  exploitability_likelihood: string | null;
+  signals: Record<string, SecurityAnalysisExploitabilitySignal>;
+  signal_reasoning?: Record<string, string>;
+  attack_scenario?: string[];
+  references?: string[];
+
+  exploitability_analysis?: {
+    summary?: string;
+    evidence?: string[];
+  } | null;
+}
 
 export interface SecurityAnalysisFinding {
   id?: number;
@@ -105,6 +123,20 @@ export default class SecurityAnalysisModel extends Model {
   @attr('boolean') declare overriddenRiskToProfile: boolean;
   @attr('string') declare computedRisk: string;
 
+  @attr('number')
+  declare exploitabilityScore: number | null;
+
+  @attr('number')
+  declare exploitabilityLikelihood: number | null;
+
+  @attr()
+  declare exploitability: SecurityAnalysisExploitability | null;
+
+  // Every validated finding on this analysis is a false positive, so the
+  // default findings list comes back empty.
+  @attr('boolean')
+  declare isKnoxiqAllFp: boolean;
+
   @belongsTo('security/file', { async: true, inverse: 'analyses' })
   declare file: AsyncBelongsTo<SecurityFileModel>;
 
@@ -162,8 +194,27 @@ export default class SecurityAnalysisModel extends Model {
   @hasMany('security/attachment', { async: true, inverse: null })
   declare attachments: AsyncHasMany<SecurityAttachmentModel>;
 
+  get isManualAnalysis() {
+    return Boolean(
+      this.vulnerability.get('types')?.includes(ENUMS.VULNERABILITY_TYPE.MANUAL)
+    );
+  }
+
+  // KnoxIQ scans a file, not an analysis, and skips analyses it considers not
+  // worth validating. Those still belong to a KnoxIQ file and stay editable,
+  // so the flag comes from the file rather than from this analysis' own
+  // exploitability, which stays null until a validation finishes. Manual test
+  // cases are never validated by KnoxIQ, so they keep the plain display.
+  get isKnoxIqAnalysis() {
+    return Boolean(this.file.get('isKnoxiqFile')) && !this.isManualAnalysis;
+  }
+
   get isPassed() {
     return this.risk === ENUMS.RISK.NONE;
+  }
+
+  get isUntested() {
+    return this.risk === ENUMS.RISK.UNKNOWN;
   }
 
   get riskLabelClass() {

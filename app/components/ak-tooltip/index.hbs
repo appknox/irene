@@ -27,6 +27,7 @@
           @multiline
           "ak-tooltip-multiline"
         }}'
+        {{style max-width=@maxWidth}}
       >
         {{#if (has-block 'tooltipContent')}}
           {{yield to='tooltipContent'}}

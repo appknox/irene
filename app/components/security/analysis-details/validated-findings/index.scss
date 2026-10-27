@@ -1,0 +1,25 @@
+.header-actions {
+  gap: 0.5714em;
+}
+
+.menu-item-text {
+  font-size: 0.9286rem !important;
+}
+
+.add-finding-button {
+  min-width: 122px;
+  max-height: 2.5em;
+}
+
+.conversion-note {
+  margin-bottom: 0.75em;
+  padding: 0.75em 1em;
+  background-color: var(
+    --security-analysis-details-validated-findings-note-background-color
+  );
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-note-border-color);
+  border-radius: var(
+    --security-analysis-details-validated-findings-border-radius
+  );
+}

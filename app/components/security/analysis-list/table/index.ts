@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+
 import type SecurityFileModel from 'irene/models/security/file';
 import type SecurityAnalysisModel from 'irene/models/security/analysis';
 
@@ -14,6 +15,12 @@ export interface SecurityAnalysisListTableComponentSignature {
 export default class SecurityAnalysisListTableComponent extends Component<SecurityAnalysisListTableComponentSignature> {
   get file() {
     return this.args.file;
+  }
+
+  // Scanned files keep showing their exploitability after the organization
+  // turns KnoxIQ off — the flag gates writing, not reading.
+  get isKnoxIqFile() {
+    return Boolean(this.args.file?.isKnoxiqFile);
   }
 
   get columns() {
@@ -34,10 +41,20 @@ export default class SecurityAnalysisListTableComponent extends Component<Securi
       },
       {
         name: 'Risk',
-        width: 130,
+        width: 90,
         component: 'security/analysis-list/table/risk',
         textAlign: 'left',
       },
+      ...(this.isKnoxIqFile
+        ? [
+            {
+              name: 'Exploitability',
+              width: 90,
+              component: 'security/analysis-list/table/exploitability',
+              textAlign: 'left',
+            },
+          ]
+        : []),
       {
         name: 'Scan Type',
         width: 100,

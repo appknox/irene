@@ -1,10 +1,30 @@
 {{#if @analysis.id}}
-  <AkLink
-    @route='authenticated.security.analysis'
-    @color='primary'
-    @model={{@analysis.id}}
-    data-test-securityAnalysisListTable-analysisName
-  >
-    {{this.vulnerabilityName}}
-  </AkLink>
+  <AkStack @direction='row' @spacing='1' @alignItems='center'>
+    {{#if this.isAllFalsePositive}}
+      <AkTooltip
+        @title={{t 'securityAnalysisList.allFalsePositives'}}
+        @multiline={{true}}
+        @maxWidth='260px'
+        @arrow={{true}}
+        @placement='bottom'
+        data-test-securityAnalysisListTable-falsePositiveTooltip
+      >
+        <AkIcon
+          @iconName='warning'
+          @size='small'
+          @color='error'
+          data-test-securityAnalysisListTable-falsePositiveIcon
+        />
+      </AkTooltip>
+    {{/if}}
+
+    <AkLink
+      @route='authenticated.security.analysis'
+      @color='primary'
+      @model={{@analysis.id}}
+      data-test-securityAnalysisListTable-analysisName
+    >
+      {{this.vulnerabilityName}}
+    </AkLink>
+  </AkStack>
 {{/if}}
