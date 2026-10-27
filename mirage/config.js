@@ -683,9 +683,6 @@ function routes() {
     return {
       id: req.params.id,
       api_scan_automation_enabled: false,
-      api_scan_automation_included_domains: [],
-      api_scan_automation_excluded_domains: [],
-      api_scan_automation_excluded_endpoints: [],
     };
   });
 

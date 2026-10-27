@@ -13,6 +13,10 @@
     );
   }
 
+  .stop-btn {
+    padding: 0.3em 0.6em;
+  }
+
   .status-helper-text strong {
     color: var(--file-details-api-scan-progress-status-text-primary);
     font-weight: var(

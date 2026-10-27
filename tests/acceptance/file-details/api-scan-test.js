@@ -1064,10 +1064,17 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-completedChip]')
           .hasText(t('chipStatus.completed'));
+
+        assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
       } else {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
           .hasText(`${t('scanning')}... ${this.file.api_scan_progress}%`);
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-stopBtn]')
+          .isNotDisabled()
+          .hasText(t('stop'));
       }
 
       assert.strictEqual(
@@ -1083,6 +1090,66 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       );
     }
   );
+
+  test('stop button stops a running api scan', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+      is_api_done: false,
+      api_scan_progress: 40,
+    });
+
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
+      const results = req.queryParams.is_active
+        ? schema.db.capturedapis.where({ is_active: true })
+        : schema.capturedapis.all().models;
+
+      return { count: results.length, previous: null, next: null, results };
+    });
+
+    this.server.get('/v2/files/:id/capturedapis_domains', () => {
+      return {
+        project_profile_api_filters: [],
+        auto_generated_api_filters: [],
+      };
+    });
+
+    this.server.get('/v2/files/:id/toggle_captured_apis', () => {
+      return { is_active: true };
+    });
+
+    this.server.post('/v2/files/:id/start_apiscan_v2/stop', (schema, req) => {
+      const file = schema.files.find(req.params.id);
+
+      if (!file) {
+        return new Response(
+          404,
+          {},
+          { detail: `file ${req.params.id} not found` }
+        );
+      }
+
+      file.update({
+        api_scan_status: ENUMS.SCAN_STATUS.WAITING,
+        is_api_done: false,
+        api_scan_progress: 0,
+      });
+
+      return new Response(204);
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    assert.dom('[data-test-fileDetails-apiScan-stopBtn]').hasText(t('stop'));
+
+    await click('[data-test-fileDetails-apiScan-stopBtn]');
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(notify.errorMsg, null);
+    assert.strictEqual(notify.successMsg, t('apiScanStopped'));
+    assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
+    assert.dom('[data-test-fileDetails-apiScan-capturedApi-title]').exists();
+  });
 
   test('it should navigate to properly on tab click', async function (assert) {
     this.server.get('/v2/files/:id/capturedapis', (schema, req) => {

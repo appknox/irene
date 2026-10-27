@@ -27,47 +27,13 @@
   </AkStack>
 
   {{#if this.enabled}}
-    <AkStack @width='full' @direction='column' @spacing='2'>
-      {{#if this.scansEveryCapturedHost}}
-        <AkTypography
-          data-test-apiScanAutomation-scanAllWarning
-          @variant='body3'
-          @color='warn'
-        >
-          {{t 'apiScanAutomation.scansEveryCapturedHost'}}
-        </AkTypography>
-      {{/if}}
-
-      <ProjectSettings::ApiScanAutomation::Settings::RuleList
-        @testId='includedDomains'
-        @label={{t 'apiScanAutomation.includedDomains'}}
-        @description={{t 'apiScanAutomation.includedDomainsDescription'}}
-        @placeholder={{t 'apiScanAutomation.domainPlaceholder'}}
-        @items={{this.includedDomains}}
-        @validate={{this.validateDomain}}
-        @onChange={{this.updateIncludedDomains}}
-      />
-
-      <ProjectSettings::ApiScanAutomation::Settings::RuleList
-        @testId='excludedDomains'
-        @label={{t 'apiScanAutomation.excludedDomains'}}
-        @description={{t 'apiScanAutomation.excludedDomainsDescription'}}
-        @placeholder={{t 'apiScanAutomation.domainPlaceholder'}}
-        @items={{this.excludedDomains}}
-        @validate={{this.validateDomain}}
-        @onChange={{this.updateExcludedDomains}}
-      />
-
-      <ProjectSettings::ApiScanAutomation::Settings::RuleList
-        @testId='excludedEndpoints'
-        @label={{t 'apiScanAutomation.excludedEndpoints'}}
-        @description={{t 'apiScanAutomation.excludedEndpointsDescription'}}
-        @placeholder={{t 'apiScanAutomation.endpointPlaceholder'}}
-        @items={{this.excludedEndpoints}}
-        @validate={{this.validateEndpoint}}
-        @onChange={{this.updateExcludedEndpoints}}
-      />
-    </AkStack>
+    <AkTypography
+      data-test-apiScanAutomation-scanAllWarning
+      @variant='body3'
+      @color='warn'
+    >
+      {{t 'apiScanAutomation.scansEveryCapturedHost'}}
+    </AkTypography>
   {{/if}}
 
   <AkStack>
