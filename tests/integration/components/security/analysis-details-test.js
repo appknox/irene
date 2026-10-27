@@ -519,11 +519,36 @@ module('Integration | Component | security/analysis-details', function (hooks) {
 
     assert.strictEqual(analysisReads, 1, 'the analysis is re-read');
 
+    // Both sections mount, so both re-read; the false positives one is
+    // rendered or not depending on what its fetch returns.
     assert.strictEqual(
       findingsReads,
-      findingsReadsBeforePassing + 1,
-      'the findings are re-read'
+      findingsReadsBeforePassing + 2,
+      'each findings section is re-read'
     );
+  });
+
+  test('the update sends popia, which the endpoint requires', async function (assert) {
+    // The dashboard does not model popia yet, so it sends an empty list
+    // rather than omitting the key and getting a 400.
+    let body = null;
+
+    this.server.put('/hudson-api/analyses/:id', (schema, req) => {
+      body = JSON.parse(req.requestBody);
+
+      schema.db['security/analyses'].update(req.params.id, body);
+
+      return schema['security/analyses'].find(req.params.id).toJSON();
+    });
+
+    await render(
+      hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+    );
+
+    await click('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]');
+    await click('[data-test-confirmbox-confirmBtn]');
+
+    assert.deepEqual(body.popia, []);
   });
 
   test('it marks a test case as passed', async function (assert) {

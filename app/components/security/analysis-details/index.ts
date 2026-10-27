@@ -431,6 +431,10 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       sama: sama?.map((a) => a.id),
       dora: dora?.map((a) => a.id),
       eucra: eucra?.map((a) => a.id),
+      // TODO: model popia like the other frameworks. The endpoint requires
+      // it, so an empty list keeps the save working - but it also clears
+      // whatever popia values the analysis holds.
+      popia: [],
       overridden_risk: overriddenRisk,
       overridden_risk_comment: details?.overriddenRiskComment,
       overridden_risk_to_profile: details?.overriddenRiskToProfile,
