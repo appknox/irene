@@ -61,6 +61,16 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
     return !isEmpty(this.dataModel.risk) && !isEmpty(this.overriddenRisk);
   }
 
+  get baselineInfo() {
+    return this.dataModel.ignoreIfUnchanged ?? null;
+  }
+
+  get isBaselineReopened() {
+    const info = this.baselineInfo;
+
+    return Boolean(info) && !info?.passed && (info?.new_findings ?? 0) > 0;
+  }
+
   get overridenRiskLabel() {
     return this.intl.t(riskText([String(this.overriddenRisk)]) as string);
   }
@@ -97,6 +107,9 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
 
       case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.ALL_FUTURE_UPLOAD:
         return this.intl.t('allFutureAnalyses');
+
+      case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED:
+        return this.intl.t('allFutureAnalysesReopenIfChanged');
 
       default:
         return '';

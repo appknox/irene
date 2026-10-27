@@ -1593,4 +1593,181 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       }
     }
   );
+
+  module('ignore baseline option', function (hooks) {
+    const root = '[data-test-securityAnalysisDetails-ignoreBaseline-root]';
+    const checkbox =
+      '[data-test-securityAnalysisDetails-ignoreBaseline-checkbox]';
+    const note =
+      '[data-test-securityAnalysisDetails-ignoreBaseline-deviatedNote]';
+    const saveButton =
+      '[data-test-securityAnalysisDetails-footer-saveAndContinueBtn]';
+
+    hooks.beforeEach(function () {
+      this.setBaseline = (value) => {
+        this.server.db['security/analyses'].update(this.secAnalysis.id, {
+          ignore_baseline: value,
+        });
+
+        this.secAnalysis.set('ignoreBaseline', value);
+      };
+
+      this.captureSaves = () => {
+        const bodies = [];
+
+        this.server.put('/hudson-api/analyses/:id', (schema, req) => {
+          const data = JSON.parse(req.requestBody);
+
+          bodies.push(data);
+          schema.db['security/analyses'].update(req.params.id, data);
+
+          return schema['security/analyses'].find(req.params.id).toJSON();
+        });
+
+        return bodies;
+      };
+    });
+
+    test('it is hidden when the file is not a baseline file', async function (assert) {
+      this.setBaseline(null);
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert.dom(root).doesNotExist();
+      assert.dom(checkbox).doesNotExist();
+    });
+
+    test('it shows an unchecked checkbox with the hint when the file is a baseline file', async function (assert) {
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: false,
+      });
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert.dom(root).exists();
+
+      assert
+        .dom('[data-test-securityAnalysisDetails-ignoreBaseline-label]')
+        .hasText('Use these findings as the new baseline for future uploads');
+
+      assert
+        .dom('[data-test-securityAnalysisDetails-ignoreBaseline-hint]')
+        .containsText('baseline for Ignore Vulnerability (Reopen if changed)')
+        .containsText('If checked, uploads after this edit')
+        .containsText('existing uploads keep using the previous baseline')
+        .containsText('If unchecked, the edit is saved on this analysis only');
+
+      assert.dom(checkbox).isNotChecked();
+      assert.dom(note).doesNotExist();
+    });
+
+    test('it shows the deviation note only when findings differ from the baseline', async function (assert) {
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: true,
+      });
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert
+        .dom(note)
+        .exists()
+        .hasText(
+          "This analysis's findings currently differ from the ignore baseline. Future uploads still compare with the baseline."
+        );
+
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: false,
+      });
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert.dom(note).doesNotExist();
+    });
+
+    test('it sends update_ignore_baseline only when the checkbox is checked', async function (assert) {
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: false,
+      });
+
+      const bodies = this.captureSaves();
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      // unchecked: key is absent
+      await click(saveButton);
+
+      assert.strictEqual(bodies.length, 1);
+
+      assert.notOk(
+        Object.prototype.hasOwnProperty.call(
+          bodies[0],
+          'update_ignore_baseline'
+        ),
+        'API CHECK: flag is not sent when unchecked'
+      );
+
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: false,
+      });
+
+      // checked: key is true
+      await click(checkbox);
+
+      assert.dom(checkbox).isChecked();
+
+      await click(saveButton);
+
+      assert.strictEqual(bodies.length, 2);
+
+      assert.true(
+        bodies[1].update_ignore_baseline,
+        'API CHECK: flag is sent as true when checked'
+      );
+    });
+
+    test('it resets the checkbox after a successful save', async function (assert) {
+      this.setBaseline({
+        baseline_file_id: 1,
+        version: 1,
+        is_analysis_findings_deviated_from_baseline: false,
+      });
+
+      this.captureSaves();
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      await click(checkbox);
+
+      assert.dom(checkbox).isChecked();
+
+      await click(saveButton);
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(notify.successMsg, 'Analysis Updated');
+      assert.dom(checkbox).isNotChecked();
+    });
+  });
 });
