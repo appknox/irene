@@ -98,6 +98,15 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
         isSaving: this.onSaveEucra.isRunning,
         isOverriden: !this.profile?.reportPreference.show_eucra?.is_inherited,
       },
+      {
+        label: this.intl.t('popia'),
+        title: this.intl.t('popiaExpansion'),
+        value: this.profile?.reportPreference.show_popia?.value,
+        toggleHandler: this.onSavePopia,
+        resetHandler: this.onResetPopia,
+        isSaving: this.onSavePopia.isRunning,
+        isOverriden: !this.profile?.reportPreference.show_popia?.is_inherited,
+      },
     ];
   }
 
@@ -178,6 +187,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
     await this.savePreference.perform(event, 'eucra');
   });
 
+  onSavePopia = task(async (event: Event) => {
+    await this.savePreference.perform(event, 'popia');
+  });
+
   onResetPcidss = task(async () => {
     await this.resetPreference.perform('pcidss');
   });
@@ -204,6 +217,10 @@ export default class ProjectSettingsAnalysisSettingsRegulatoryPreferenceComponen
 
   onResetEucra = task(async () => {
     await this.resetPreference.perform('eucra');
+  });
+
+  onResetPopia = task(async () => {
+    await this.resetPreference.perform('popia');
   });
 }
 

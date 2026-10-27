@@ -103,6 +103,7 @@ module('Integration | Component | security/analysis-details', function (hooks) {
       ['v2/samas', 'samas', 'sama'],
       ['v2/doras', 'doras', 'dora'],
       ['v2/eucras', 'eucras', 'eucra'],
+      ['v2/popias', 'popias', 'popia'],
     ].forEach(([urlParam, schemaKey, key, isJsonApi]) => {
       this.server.get(`/${urlParam}/:id`, (schema, req) => {
         const json = schema[schemaKey].find(`${req.params.id}`)?.toJSON();
@@ -741,6 +742,12 @@ module('Integration | Component | security/analysis-details', function (hooks) {
         ['code', 'title'],
       ],
       ['withEucra', 'eucra', 'EU Cyber Resilience Act', ['code', 'title']],
+      [
+        'withPopia',
+        'popia',
+        'Protection of Personal Information Act',
+        ['code', 'title'],
+      ],
     ],
     async function (
       assert,
