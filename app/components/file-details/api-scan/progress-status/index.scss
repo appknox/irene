@@ -1,3 +1,12 @@
+.stop-btn-row {
+  padding: 0.5em 1.5em;
+  min-height: 48px;
+}
+
+.stop-btn {
+  padding: 0.3em 0.6em;
+}
+
 .api-scan-status-card {
   width: 360px;
   background-color: var(
@@ -11,10 +20,6 @@
     background-color: var(
       --file-details-api-scan-progress-status-indicator-background
     );
-  }
-
-  .stop-btn {
-    padding: 0.3em 0.6em;
   }
 
   .status-helper-text strong {

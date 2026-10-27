@@ -74,6 +74,7 @@ module(
       assert.dom(selectors.root).exists();
       assert.dom(selectors.title).containsText(t('apiScanAutomation.title'));
       assert.dom(selectors.toggleInput).isNotChecked();
+      assert.dom(selectors.saveBtn).doesNotExist();
       assert.dom(selectors.scanAllWarning).doesNotExist();
     });
 
@@ -90,8 +91,8 @@ module(
 
     // ─── Saving ──────────────────────────────────────────────────────────────
 
-    test('saves the enabled flag', async function (assert) {
-      assert.expect(2);
+    test('saves when the toggle changes', async function (assert) {
+      assert.expect(3);
 
       stubGet(this.server);
 
@@ -106,17 +107,17 @@ module(
       await render(TEMPLATE);
 
       await click(selectors.toggleInput);
-      await click(selectors.saveBtn);
 
       const notify = this.owner.lookup('service:notifications');
 
+      assert.dom(selectors.toggleInput).isChecked();
       assert.strictEqual(
         notify.successMsg,
         t('apiScanAutomation.settingsUpdated')
       );
     });
 
-    test('surfaces a save failure', async function (assert) {
+    test('surfaces a save failure and restores the toggle', async function (assert) {
       stubGet(this.server);
 
       let handlerCalled = false;
@@ -129,11 +130,12 @@ module(
 
       await render(TEMPLATE);
 
-      await click(selectors.saveBtn);
+      await click(selectors.toggleInput);
 
       const notify = this.owner.lookup('service:notifications');
 
       assert.true(handlerCalled, 'the save request reached the server');
+      assert.dom(selectors.toggleInput).isNotChecked();
       assert.strictEqual(
         notify.errorMsg,
         'Could not save settings',
