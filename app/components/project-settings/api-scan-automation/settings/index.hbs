@@ -22,6 +22,7 @@
     <AkToggle
       data-test-apiScanAutomation-toggle
       @checked={{this.enabled}}
+      @disabled={{this.toggleDisabled}}
       @onChange={{this.updateEnabled}}
     />
   </AkStack>
@@ -35,16 +36,4 @@
       {{t 'apiScanAutomation.scansEveryCapturedHost'}}
     </AkTypography>
   {{/if}}
-
-  <AkStack>
-    <AkButton
-      data-test-apiScanAutomation-saveBtn
-      @variant='filled'
-      @loading={{this.save.isRunning}}
-      @disabled={{this.saveDisabled}}
-      {{on 'click' (perform this.save)}}
-    >
-      {{t 'apiScanAutomation.save'}}
-    </AkButton>
-  </AkStack>
 </AkStack>
