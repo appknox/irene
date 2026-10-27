@@ -26,14 +26,4 @@
       @onChange={{this.updateEnabled}}
     />
   </AkStack>
-
-  {{#if this.enabled}}
-    <AkTypography
-      data-test-apiScanAutomation-scanAllWarning
-      @variant='body3'
-      @color='warn'
-    >
-      {{t 'apiScanAutomation.scansEveryCapturedHost'}}
-    </AkTypography>
-  {{/if}}
 </AkStack>
