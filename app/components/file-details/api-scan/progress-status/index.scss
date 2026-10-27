@@ -1,6 +1,13 @@
+.progress-status {
+  position: relative;
+  width: 100%;
+}
+
 .stop-btn-row {
-  padding: 0.5em 1.5em;
-  min-height: 48px;
+  position: absolute;
+  top: 0.5em;
+  right: 1.5em;
+  z-index: 1;
 }
 
 .stop-btn {
