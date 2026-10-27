@@ -257,6 +257,8 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
 
   test('toValidatedFindingContent flattens the nested response', function (assert) {
     const content = toValidatedFindingContent({
+      title: 'AndroidManifest.xml',
+      description: '<uses-permission />',
       validation: {
         confidence_label: 'HIGH',
         finding_summary: 'A summary',
@@ -275,6 +277,8 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
       },
     });
 
+    assert.strictEqual(content.sourceType, 'AndroidManifest.xml');
+    assert.strictEqual(content.sourceSnippet, '<uses-permission />');
     assert.strictEqual(content.confidence, 3);
     assert.strictEqual(content.summary, 'A summary');
     assert.deepEqual(content.evidence, ['Evidence line']);
@@ -289,6 +293,8 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
   test('toValidatedFindingContent falls back for a finding with no AI content', function (assert) {
     const content = toValidatedFindingContent({});
 
+    assert.strictEqual(content.sourceType, '');
+    assert.strictEqual(content.sourceSnippet, '');
     assert.strictEqual(content.confidence, UNKNOWN_SCALE_VALUE);
     assert.strictEqual(content.summary, '');
     assert.deepEqual(content.evidence, []);
@@ -301,6 +307,8 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
 
   test('toValidatedFindingPayload emits the flat write-only body', function (assert) {
     const payload = toValidatedFindingPayload({
+      sourceType: 'AndroidManifest.xml',
+      sourceSnippet: '<uses-permission android:name="INTERNET" />',
       confidence: 2,
       summary: 'A summary',
       evidence: ['Evidence line'],
@@ -324,6 +332,9 @@ module('Unit | Utility | manual-validated-findings', function (hooks) {
     });
 
     assert.deepEqual(payload, {
+      // Written under their own names; read back as title + description.
+      source_type: 'AndroidManifest.xml',
+      source_snippet: '<uses-permission android:name="INTERNET" />',
       confidence: 2,
       summary: 'A summary',
       evidence: ['Evidence line'],

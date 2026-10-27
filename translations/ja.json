@@ -2656,7 +2656,12 @@
       "remediationSummaryPlaceholder": "How to fix it, in a sentence or two",
       "stepCommand": "Command",
       "stepCommandPlaceholder": "The command a tester runs for this step",
+      "sourceSnippet": "Source",
+      "sourceSnippetPlaceholder": "The code or configuration the finding was raised on",
+      "sourceType": "Source Type",
+      "sourceTypePlaceholder": "Where the finding came from, such as the file or rule",
       "summaryPlaceholder": "What the finding is, in a sentence or two",
+      "truePositiveConversionNote": "KnoxIQ ruled every finding on this analysis a false positive. Adding a true positive here reverses that: the analysis becomes a confirmed KnoxIQ vulnerability and starts reporting an exploitability score again.",
       "description": "Confirmed by KnoxIQ as real and exploitable",
       "falsePositivesTitle": "Validated Findings (False Positives)",
       "falsePositivesDescription": "Ruled out by KnoxIQ as not exploitable. Kept for the record and still editable."

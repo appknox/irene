@@ -213,6 +213,10 @@ export default class SecurityAnalysisModel extends Model {
     return this.risk === ENUMS.RISK.NONE;
   }
 
+  get isUntested() {
+    return this.risk === ENUMS.RISK.UNKNOWN;
+  }
+
   get riskLabelClass() {
     return this.labelClass(this.risk);
   }

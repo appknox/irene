@@ -615,6 +615,12 @@ body {
   --security-analysis-details-validated-findings-code-font-family: var(
     --font-family-mono
   );
+  --security-analysis-details-validated-findings-note-background-color: var(
+    --warn-light
+  );
+  --security-analysis-details-validated-findings-note-border-color: var(
+    --warn-main
+  );
 
   // variables for security/analysis-details/validated-findings/original-analysis-drawer
   --security-analysis-details-original-analysis-drawer-code-background-color: var(

@@ -356,6 +356,46 @@ module('Integration | Component | security/analysis-details', function (hooks) {
   });
 
   test.each(
+    'the analysis page link skips the KnoxIQ page when there is nothing to show there',
+    [
+      { risk: ENUMS.RISK.HIGH, route: 'knox-analysis' },
+      // No findings and no AEIS on the KnoxIQ page for either of these.
+      { risk: ENUMS.RISK.NONE, route: 'analysis' },
+      { risk: ENUMS.RISK.UNKNOWN, route: 'analysis' },
+    ],
+    async function (assert, { risk, route }) {
+      class OrganizationStub extends Service {
+        isKnoxIqEnabled = true;
+      }
+
+      this.owner.register('service:organization', OrganizationStub);
+
+      this.secFileModel.set('isKnoxiqFile', true);
+      this.secAnalysis.set('risk', risk);
+
+      this.server.get('/knoxiq/analyses/:analysisId/findings', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      await render(
+        hbs`<Security::AnalysisDetails @analysisDetails={{this.secAnalysis}} />`
+      );
+
+      assert
+        .dom('[data-test-securityAnalysisDetailsHeader-visitDashboardButton]')
+        .hasAttribute(
+          'href',
+          new RegExp(
+            `/dashboard/file/${this.secFileModel.id}/${route}/${this.secAnalysis.id}$`
+          )
+        );
+    }
+  );
+
+  test.each(
     'it renders analysis details header',
     [{ isPassed: true }, { isPassed: false }],
     async function (assert, { isPassed }) {

@@ -17,6 +17,10 @@ export interface SecurityValidatedFindingStep {
 
 // The flat shape the finding editor binds to.
 export interface SecurityValidatedFindingContent {
+  // The dashboard labels these two together as Source: the type above the
+  // snippet. They are `title` and `description` on the API.
+  sourceType: string;
+  sourceSnippet: string;
   confidence: number;
   summary: string;
   evidence: string[];
@@ -37,6 +41,8 @@ export interface SecurityValidatedFindingContent {
 
 // The flat write-only body the API accepts.
 export interface SecurityValidatedFindingPayload {
+  source_type: string;
+  source_snippet: string;
   confidence: number;
   summary: string;
   evidence: string[];
@@ -58,6 +64,8 @@ export interface SecurityValidatedFindingPayload {
 
 // Anything carrying the nested blobs — in practice, the record.
 export interface SecurityValidatedFindingContentSource {
+  title?: string | null;
+  description?: string | null;
   validation?: Partial<SecurityValidatedFindingValidation> | null;
   remediation?: Partial<SecurityValidatedFindingRemediation> | null;
   poc?: Partial<SecurityValidatedFindingPoc> | null;
@@ -282,6 +290,8 @@ export function toValidatedFindingContent(
   const { validation, remediation, poc, exploitability } = source;
 
   return {
+    sourceType: source.title ?? '',
+    sourceSnippet: source.description ?? '',
     summary: validation?.finding_summary ?? '',
     evidence: validation?.evidence ?? [],
     reasoning: validation?.reasoning ?? '',
@@ -347,6 +357,8 @@ export function toValidatedFindingPayload(
   content: SecurityValidatedFindingContent
 ): SecurityValidatedFindingPayload {
   return {
+    source_type: content.sourceType,
+    source_snippet: content.sourceSnippet,
     confidence: content.confidence,
     summary: content.summary,
     evidence: content.evidence,

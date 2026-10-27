@@ -66,8 +66,16 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
     return this.statuses.find((s) => s.value === this.analysis?.status);
   }
 
+  get showsKnoxIqAnalysisPage() {
+    return Boolean(
+      this.args.isKnoxIqEnabled &&
+        !this.analysis?.isUntested &&
+        !this.analysis?.isPassed
+    );
+  }
+
   get ireneAnalysisRoute() {
-    return this.args.isKnoxIqEnabled ? 'knox-analysis' : 'analysis';
+    return this.showsKnoxIqAnalysisPage ? 'knox-analysis' : 'analysis';
   }
 
   get ireneFilePath() {

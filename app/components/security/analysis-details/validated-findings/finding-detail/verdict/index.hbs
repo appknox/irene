@@ -1,0 +1,123 @@
+<AkStack @direction='column' @width='full' @spacing='2.5'>
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.confidence'}}
+    </AkTypography>
+
+    <AkSelect
+      @selected={{this.finding.confidence}}
+      @options={{this.confidenceOptions}}
+      @onChange={{this.selectConfidence}}
+      @disabled={{@disabled}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.selectConfidence'
+      }}
+      class='w-full'
+      data-test-securityAnalysisDetails-validatedFindings-confidenceSelect
+      as |confidence|
+    >
+      {{this.scaleLabel confidence}}
+    </AkSelect>
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @width='full'
+    @spacing='1'
+    local-class='source-type-field'
+  >
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.sourceType'}}
+    </AkTypography>
+
+    <AkTextField
+      @value={{this.finding.title}}
+      @disabled={{@disabled}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.sourceTypePlaceholder'
+      }}
+      aria-label={{t 'securityAnalysisDetails.validatedFindings.sourceType'}}
+      data-test-securityAnalysisDetails-validatedFindings-sourceTypeInput
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.sourceSnippet'}}
+    </AkTypography>
+
+    <Textarea
+      @value={{this.finding.description}}
+      disabled={{@disabled}}
+      rows='4'
+      spellcheck='false'
+      local-class='source-snippet-input'
+      aria-label={{t 'securityAnalysisDetails.validatedFindings.sourceSnippet'}}
+      placeholder={{t
+        'securityAnalysisDetails.validatedFindings.sourceSnippetPlaceholder'
+      }}
+      data-test-securityAnalysisDetails-validatedFindings-sourceSnippetInput
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.summary'}}
+    </AkTypography>
+
+    <Textarea
+      @value={{this.finding.summary}}
+      disabled={{@disabled}}
+      rows='3'
+      local-class='summary-input'
+      aria-label={{t 'securityAnalysisDetails.validatedFindings.summary'}}
+      placeholder={{t
+        'securityAnalysisDetails.validatedFindings.summaryPlaceholder'
+      }}
+      data-test-securityAnalysisDetails-validatedFindings-summaryInput
+    />
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.evidence'}}
+    </AkTypography>
+
+    <AkRichTextEditor
+      @value={{this.evidenceHtml}}
+      @disabled={{@disabled}}
+      @onChange={{this.updateEvidence}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.evidencePlaceholder'
+      }}
+      @error={{this.isListFieldInvalid 'evidence'}}
+      data-test-securityAnalysisDetails-validatedFindings-evidenceEditor
+    />
+
+    {{#if (this.isListFieldInvalid 'evidence')}}
+      <AkTypography
+        @variant='body3'
+        @color='error'
+        data-test-securityAnalysisDetails-validatedFindings-listFieldError='evidence'
+      >
+        {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+
+  <AkStack @direction='column' @width='full' @spacing='1'>
+    <AkTypography @variant='body2' @fontWeight='medium'>
+      {{t 'securityAnalysisDetails.validatedFindings.reasoning'}}
+    </AkTypography>
+
+    <AkRichTextEditor
+      @value={{this.reasoningHtml}}
+      @disabled={{@disabled}}
+      @onChange={{this.updateReasoning}}
+      @placeholder={{t
+        'securityAnalysisDetails.validatedFindings.reasoningPlaceholder'
+      }}
+      data-test-securityAnalysisDetails-validatedFindings-reasoningEditor
+    />
+  </AkStack>
+</AkStack>

@@ -176,15 +176,16 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
    * because elsewhere it would only ever be an empty card.
    */
   get findingSections() {
-    // The ids key the {{#each}}, so adding the section moves the other one
-    // rather than tearing it down and refetching.
+    // The ids key the {{#each}}, so reordering the pair moves the sections
+    // rather than tearing both down and refetching. Both are always
+    // rendered; the false positives one hides itself when it has nothing,
+    // which only it can know once its own fetch returns.
     const validated = { id: 'validatedFindings', showsFalsePositives: false };
+    const falsePositives = { id: 'falsePositives', showsFalsePositives: true };
 
-    if (!this.analysisDetails?.isKnoxiqAllFp) {
-      return [validated];
-    }
-
-    return [{ id: 'falsePositives', showsFalsePositives: true }, validated];
+    return this.analysisDetails?.isKnoxiqAllFp
+      ? [falsePositives, validated]
+      : [validated, falsePositives];
   }
 
   @action
