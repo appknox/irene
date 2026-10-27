@@ -95,7 +95,6 @@
   "apiScanAutomation": {
     "description": "Automatically start an API scan when a DAST run finishes.",
     "featureUnavailable": "API scan is not enabled for your organization.",
-    "save": "Save automation settings",
     "scansEveryCapturedHost": "Every host captured during DAST will be scanned, including third-party services.",
     "settingsUpdated": "API scan automation settings updated",
     "title": "API Scan Automation"

@@ -1,9 +1,39 @@
 <AkStack
   data-test-fileDetails-apiScan-progressStatus-container
-  @justifyContent='center'
-  class='mt-7'
+  @direction='column'
+  @width='full'
 >
-  <div local-class='api-scan-status-card'>
+  {{#if @file.isRunningApiScan}}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @justifyContent='flex-end'
+      local-class='stop-btn-row'
+    >
+      <AkButton
+        data-test-fileDetails-apiScan-stopBtn
+        local-class='stop-btn'
+        {{on 'click' (perform this.stopApiScan)}}
+        @disabled={{or (not @file.isActive) this.stopApiScan.isRunning}}
+        @loading={{this.stopApiScan.isRunning}}
+      >
+        <:leftIcon>
+          {{#if this.stopApiScan.isRunning}}
+            <AkLoader @size={{13}} />
+          {{else}}
+            <AkIcon @iconName='stop-circle' />
+          {{/if}}
+        </:leftIcon>
+
+        <:default>
+          {{t 'stop'}}
+        </:default>
+      </AkButton>
+    </AkStack>
+  {{/if}}
+
+  <AkStack @justifyContent='center' class='mt-7'>
+    <div local-class='api-scan-status-card'>
     <AkStack @direction='column' @alignItems='center' @justifyContent='center'>
       <AkStack
         @direction='column'
@@ -57,30 +87,6 @@
               @progress={{@file.apiScanProgress}}
               @variant='determinate'
             />
-
-            <AkButton
-              data-test-fileDetails-apiScan-stopBtn
-              local-class='stop-btn'
-              class='mt-3'
-              {{on 'click' (perform this.stopApiScan)}}
-              @disabled={{or
-                (not @file.isActive)
-                this.stopApiScan.isRunning
-              }}
-              @loading={{this.stopApiScan.isRunning}}
-            >
-              <:leftIcon>
-                {{#if this.stopApiScan.isRunning}}
-                  <AkLoader @size={{13}} />
-                {{else}}
-                  <AkIcon @iconName='stop-circle' />
-                {{/if}}
-              </:leftIcon>
-
-              <:default>
-                {{t 'stop'}}
-              </:default>
-            </AkButton>
           {{else if @file.isApiDone}}
             <AkChip
               data-test-fileDetails-apiScan-progressStatus-completedChip
@@ -108,5 +114,6 @@
         }}
       </AkTypography>
     </AkStack>
-  </div>
+    </div>
+  </AkStack>
 </AkStack>

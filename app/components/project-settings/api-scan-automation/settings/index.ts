@@ -57,14 +57,15 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
     }
   });
 
-  /** Saving before the current settings have loaded would overwrite them. */
-  get saveDisabled() {
+  /** A toggle before the current value has loaded would overwrite it. */
+  get toggleDisabled() {
     return this.fetchOptions.isRunning || !this.options || this.save.isRunning;
   }
 
   @action
   updateEnabled(_: Event, enabled?: boolean) {
     this.enabled = Boolean(enabled);
+    this.save.perform();
   }
 
   save = task(async () => {
@@ -80,6 +81,7 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
       this.notify.success(this.intl.t('apiScanAutomation.settingsUpdated'));
     } catch (error) {
       this.options?.rollbackAttributes();
+      this.enabled = Boolean(this.options?.apiScanAutomationEnabled);
 
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
