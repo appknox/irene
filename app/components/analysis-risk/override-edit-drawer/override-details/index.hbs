@@ -35,6 +35,27 @@
       <AkStack />
     </AkStack>
 
+    {{#if this.baselineInfo}}
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-baselineStatus
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{#if this.isBaselineReopened}}
+          {{t
+            'ignoreIfUnchangedReopenedNote'
+            count=this.baselineInfo.new_findings
+            fileId=this.baselineInfo.baseline_file
+          }}
+        {{else}}
+          {{t
+            'ignoreIfUnchangedIgnoredHint'
+            fileId=this.baselineInfo.baseline_file
+          }}
+        {{/if}}
+      </AkTypography>
+    {{/if}}
+
     <AkDivider local-class='details-divider' class='my-2' />
 
     <AkStack @direction='column' @spacing='1'>

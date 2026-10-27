@@ -243,6 +243,10 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     this.recalculateCVSSScore.perform(this.v3State);
   }
 
+  @action setUpdateIgnoreBaseline(_: Event, checked: boolean) {
+    this.updateIgnoreBaseline = checked;
+  }
+
   @action triggerSaveAnalysis(backToFilePage: boolean) {
     this.isSaveActionOnly = !backToFilePage;
     this.saveAnalysis.perform(backToFilePage);
@@ -414,7 +418,14 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       overriddenRisk = overriddenRisk.value;
     }
 
+    // only sent when opted in, and only meaningful on a baseline file
+    const ignoreBaselineFlag =
+      this.updateIgnoreBaseline && details?.ignoreBaseline
+        ? { update_ignore_baseline: true }
+        : {};
+
     return {
+      ...ignoreBaselineFlag,
       risk: this.v4State.risk,
       legacy_cvss_risk: this.v3State.risk,
       status,
@@ -486,6 +497,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       this.analysisDetails?.set('risk', response['risk']);
 
       this.setDefaultCVSSDetails();
+      this.updateIgnoreBaseline = false;
 
       this.hasUnsavedCvssChanges = false;
       this.hasUnsavedRegulatoryChanges = false;

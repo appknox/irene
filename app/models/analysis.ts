@@ -45,6 +45,15 @@ export interface LegacyCvss {
   metrics_humanized: CvssMetricHumanized[];
 }
 
+export interface IgnoreIfUnchanged {
+  baseline_file: number | string;
+  new_findings: number;
+  passed: boolean;
+  comment: string | null;
+  created_by: string | null;
+  created_on: string | null;
+}
+
 export interface Finding {
   title: string | null;
   description: string;
@@ -91,6 +100,10 @@ export default class AnalysisModel extends Model {
 
   @attr('string', { defaultValue: null })
   declare overrideCriteria: string | null;
+
+  // set when an "All Future Analyses (Reopen if changed)" baseline applies
+  @attr({ defaultValue: null })
+  declare ignoreIfUnchanged: IgnoreIfUnchanged | null;
 
   @attr('string', { defaultValue: null })
   declare overriddenBy: string | null;
@@ -245,6 +258,30 @@ export default class AnalysisModel extends Model {
     return this.isOverriddenRisk && !this.isRiskPassedBySystem;
   }
 
+  /**
+   * Findings changed after "All Future Analyses (Reopen if changed)" was chosen
+   */
+  get isReopenedIfChanged() {
+    const info = this.ignoreIfUnchanged;
+
+    return Boolean(info) && !info?.passed && (info?.new_findings ?? 0) > 0;
+  }
+
+  /**
+   * Ignored only because findings are unchanged vs the baseline file
+   */
+  get isIgnoredIfUnchanged() {
+    return Boolean(this.ignoreIfUnchanged?.passed);
+  }
+
+  /**
+   * A "Reopen if changed" baseline applies to this analysis, whether it is
+   * still ignored or has reopened because of new findings
+   */
+  get hasIgnoreBaseline() {
+    return Boolean(this.ignoreIfUnchanged);
+  }
+
   get isRiskPassedBySystem() {
     return this.risk === ENUMS.RISK.NONE;
   }
@@ -268,6 +305,15 @@ export default class AnalysisModel extends Model {
     return (
       this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
     );
+  }
+
+  /**
+   * Overridden as Passed, or Passed because an "All Future Analyses (Reopen if
+   * changed)" baseline applies. Only the file-details pages use this; the KnoxIQ
+   * pages keep using isOverriddenAsPassed.
+   */
+  get isOverriddenOrIgnoredAsPassed() {
+    return this.isOverriddenAsPassed || this.isIgnoredIfUnchanged;
   }
 
   /**

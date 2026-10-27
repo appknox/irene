@@ -1,0 +1,43 @@
+{{#if @analysis.ignoreBaseline}}
+  <AkStack
+    @direction='column'
+    @width='full'
+    @spacing='0.5'
+    class='p-2 my-1'
+    data-test-securityAnalysisDetails-ignoreBaseline-root
+  >
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkCheckbox
+        @checked={{@checked}}
+        @disabled={{@disabled}}
+        @onChange={{@onChange}}
+        data-test-securityAnalysisDetails-ignoreBaseline-checkbox
+      />
+
+      <AkTypography
+        @variant='subtitle2'
+        data-test-securityAnalysisDetails-ignoreBaseline-label
+      >
+        {{t 'securityAnalysisIgnoreBaselineLabel'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-securityAnalysisDetails-ignoreBaseline-hint
+    >
+      {{t 'securityAnalysisIgnoreBaselineHint'}}
+    </AkTypography>
+
+    {{#if @analysis.ignoreBaseline.is_analysis_findings_deviated_from_baseline}}
+      <AkTypography
+        @variant='body2'
+        @color='warn'
+        data-test-securityAnalysisDetails-ignoreBaseline-deviatedNote
+      >
+        {{t 'securityAnalysisIgnoreBaselineDeviatedNote'}}
+      </AkTypography>
+    {{/if}}
+  </AkStack>
+{{/if}}
