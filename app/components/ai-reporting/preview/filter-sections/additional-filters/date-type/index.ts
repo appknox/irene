@@ -32,8 +32,7 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersDateTypeCo
 
     if (this.isMultipleDateSelect) {
       return ((value as string[] | null)?.map(this.convertToDate) ?? null) as
-        | Date[]
-        | null;
+        Date[] | null;
     }
 
     if (this.isRangeDate) {

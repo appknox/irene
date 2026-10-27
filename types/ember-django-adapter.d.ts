@@ -53,12 +53,7 @@ declare module 'ember-django-adapter/adapters/drf' {
     buildURL(
       modelName?: keyof ModelRegistry,
       id?:
-        | string
-        | string[]
-        | number
-        | number[]
-        | Record<string, unknown>
-        | null,
+        string | string[] | number | number[] | Record<string, unknown> | null,
       snapshot?: Snapshot | Snapshot[] | null,
       requestType?: string,
       query?: Record<string, unknown>

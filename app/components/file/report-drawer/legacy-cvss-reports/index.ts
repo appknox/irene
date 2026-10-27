@@ -27,9 +27,7 @@ type FileLegacyCvssReportQueryResponse =
   };
 
 type LegacyCvssReportIconComponent =
-  | 'ak-svg/pdf-report'
-  | 'ak-svg/xlsx-icon'
-  | 'ak-svg/csv-icon';
+  'ak-svg/pdf-report' | 'ak-svg/xlsx-icon' | 'ak-svg/csv-icon';
 
 export interface FileLegacyCvssReportDetails {
   fileReport?: FileLegacyCvssReportModel | null;
