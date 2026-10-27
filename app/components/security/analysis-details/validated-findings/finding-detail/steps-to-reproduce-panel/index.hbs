@@ -1,0 +1,60 @@
+<Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel
+  @panelId={{@panelId}}
+  @title={{t 'securityAnalysisDetails.validatedFindings.stepsToReproduce'}}
+  @iconName='experiment'
+  @iconColor='warn'
+  @disabled={{@disabled}}
+  @isExpanded={{@isExpanded}}
+  @onToggle={{@onTogglePanel}}
+  @onSave={{@onSavePanel}}
+>
+  <AkStack @direction='column' @width='full' @spacing='2'>
+    <Security::AnalysisDetails::ValidatedFindings::StepList
+      @steps={{@steps}}
+      @disabled={{@disabled}}
+      @codeField='command'
+      @codeFieldLabel={{t
+        'securityAnalysisDetails.validatedFindings.stepCommand'
+      }}
+      @codeFieldPlaceholder={{t
+        'securityAnalysisDetails.validatedFindings.stepCommandPlaceholder'
+      }}
+      @addLabel={{t
+        'securityAnalysisDetails.validatedFindings.addReproductionStep'
+      }}
+      @bodyPlaceholder={{t
+        'securityAnalysisDetails.validatedFindings.addStepsToReproduce'
+      }}
+      @onStepsChange={{@onStepsChange}}
+    />
+
+    <AkDivider @color='dark' local-class='panel-section-divider' />
+
+    <AkStack @direction='column' @width='full' @spacing='1'>
+      <AkTypography @variant='body2' @fontWeight='medium'>
+        {{t 'securityAnalysisDetails.validatedFindings.expectedEvidence'}}
+      </AkTypography>
+
+      <AkRichTextEditor
+        @value={{this.expectedEvidenceHtml}}
+        @disabled={{@disabled}}
+        @onChange={{this.updateExpectedEvidenceHtml}}
+        @placeholder={{t
+          'securityAnalysisDetails.validatedFindings.expectedEvidencePlaceholder'
+        }}
+        @error={{this.isListFieldInvalid 'expectedEvidence'}}
+        data-test-securityAnalysisDetails-validatedFindings-expectedEvidenceEditor
+      />
+
+      {{#if (this.isListFieldInvalid 'expectedEvidence')}}
+        <AkTypography
+          @variant='body3'
+          @color='error'
+          data-test-securityAnalysisDetails-validatedFindings-listFieldError='expectedEvidence'
+        >
+          {{t 'securityAnalysisDetails.validatedFindings.listFieldError'}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  </AkStack>
+</Security::AnalysisDetails::ValidatedFindings::FindingDetail::Panel>

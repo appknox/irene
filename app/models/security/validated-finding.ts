@@ -1,6 +1,8 @@
 import Model, { attr } from '@ember-data/model';
 
 import {
+  buildRemediationDetails,
+  buildValidation,
   evidenceToHtml,
   toValidatedFindingContent,
   type SecurityValidatedFindingStep,
@@ -104,8 +106,14 @@ export default class SecurityValidatedFindingModel extends Model {
     return this.content.confidence;
   }
 
+  // Settable so the editor can bind <Textarea @value> straight to it; the
+  // stored shape nests it under validation.
   get summary() {
     return this.content.summary;
+  }
+
+  set summary(summary: string) {
+    this.validation = buildValidation(this.validation, { summary });
   }
 
   get evidenceHtml() {
@@ -146,6 +154,10 @@ export default class SecurityValidatedFindingModel extends Model {
 
   get remediationSummary() {
     return this.content.remediationSummary;
+  }
+
+  set remediationSummary(summary: string) {
+    this.remediation = buildRemediationDetails(this.remediation, { summary });
   }
 
   get expectedEvidence() {

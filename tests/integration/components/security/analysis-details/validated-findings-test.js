@@ -5,6 +5,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import {
   render,
   click,
+  fillIn,
   find,
   triggerEvent,
   waitUntil,
@@ -57,6 +58,12 @@ const selectors = {
   sectionTitle: '[data-test-securityAnalysisDetails-sectionCard-title]',
   sectionDescription:
     '[data-test-securityAnalysisDetails-sectionCard-description]',
+  sourceTypeInput:
+    '[data-test-securityAnalysisDetails-validatedFindings-sourceTypeInput]',
+  sourceSnippetInput:
+    '[data-test-securityAnalysisDetails-validatedFindings-sourceSnippetInput]',
+  conversionNote:
+    '[data-test-securityAnalysisDetails-validatedFindings-conversionNote]',
   tooltipRoot: '[data-test-ak-tooltip-root]',
   tooltipContent: '[data-test-ak-tooltip-content]',
 };
@@ -141,6 +148,16 @@ module(
             )
             .join(', '),
         });
+
+      // Saving or deleting a finding re-reads the analysis, because both
+      // move the AEIS rollup.
+      this.analysisReads = 0;
+
+      this.server.get('/hudson-api/analyses/:id', (schema, req) => {
+        this.analysisReads = this.analysisReads + 1;
+
+        return schema['security/analyses'].find(`${req.params.id}`)?.toJSON();
+      });
 
       this.setProperties({});
 
@@ -355,6 +372,8 @@ module(
     });
 
     test('the false positive section names itself', async function (assert) {
+      // Empty, so it only belongs on the page when every finding is one.
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
       this.stubFindings(0);
 
       await render(FALSE_POSITIVES_TEMPLATE);
@@ -381,6 +400,124 @@ module(
         .hasText(
           t('securityAnalysisDetails.validatedFindings.noFalsePositives')
         );
+    });
+
+    test('false positives show on a mixed analysis', async function (assert) {
+      // is_knoxiq_all_fp cannot tell "none" from "some", so the section
+      // decides from its own fetch.
+      this.stubFindings(2);
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.sectionCard('falsePositives')).exists();
+      assert.dom(selectors.detail).exists();
+    });
+
+    test('an analysis with no false positives shows no such section', async function (assert) {
+      this.stubFindings(0);
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+
+      assert
+        .dom(selectors.sectionCard('falsePositives'))
+        .doesNotExist('an empty card would be noise on most analyses');
+    });
+
+    test('the true positive section shows even when empty', async function (assert) {
+      this.stubFindings(0);
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert
+        .dom(selectors.sectionCard('validatedFindings'))
+        .exists('it is where a finding is added');
+    });
+
+    // ─── True positive conversion note ─────────────────────────────────────
+
+    test('an empty true positive section warns that filing reclassifies the analysis', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+      this.stubFindings(0);
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert
+        .dom(selectors.conversionNote)
+        .hasText(
+          t(
+            'securityAnalysisDetails.validatedFindings.truePositiveConversionNote'
+          )
+        );
+    });
+
+    test('the false positive section carries no such warning', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+      this.stubFindings(0);
+
+      await render(FALSE_POSITIVES_TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.conversionNote).doesNotExist();
+    });
+
+    test('an analysis that already has true positives carries no warning', async function (assert) {
+      this.stubFindings(0);
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert
+        .dom(selectors.conversionNote)
+        .doesNotExist(
+          'nothing to reverse when the analysis is not all false positives'
+        );
+    });
+
+    test('the warning goes once a true positive exists', async function (assert) {
+      this.analysis = this.pushAnalysis({ is_knoxiq_all_fp: true });
+      this.stubFindings(1);
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.conversionNote).doesNotExist();
+    });
+
+    // ─── Source ────────────────────────────────────────────────────────────
+
+    test('the source fields show what the finding was raised on', async function (assert) {
+      const finding = this.stubFinding();
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.sourceTypeInput).hasValue(finding.title);
+      assert.dom(selectors.sourceSnippetInput).hasValue(finding.description);
+    });
+
+    test('editing the source is kept on the finding', async function (assert) {
+      this.stubFinding();
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      await fillIn(selectors.sourceTypeInput, 'AndroidManifest.xml');
+      await fillIn(selectors.sourceSnippetInput, '<uses-permission />');
+
+      assert.dom(selectors.sourceTypeInput).hasValue('AndroidManifest.xml');
+      assert.dom(selectors.sourceSnippetInput).hasValue('<uses-permission />');
+    });
+
+    test('a source is never required to save', async function (assert) {
+      this.stubFinding({ title: '', description: '' });
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      assert.dom(selectors.saveBtn).isNotDisabled();
     });
 
     // ─── Required fields ───────────────────────────────────────────────────
@@ -561,6 +698,50 @@ module(
       await click(selectors.confirmBtn);
 
       assert.true(this.deletedId);
+    });
+
+    test('deleting a finding re-reads the analysis', async function (assert) {
+      this.stubFindings(2);
+
+      this.server.delete(
+        '/knoxiq/analyses/:analysisId/findings/:id',
+        () => new Response(204)
+      );
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      const readsBeforeDelete = this.analysisReads;
+
+      await click(selectors.moreMenuBtn);
+      await click(selectors.menuItemBtn('deleteFinding'));
+      await click(selectors.confirmBtn);
+
+      assert.strictEqual(this.analysisReads, readsBeforeDelete + 1);
+    });
+
+    test('deleting every finding re-reads the analysis once', async function (assert) {
+      this.stubFindings(2);
+
+      this.server.delete(
+        '/knoxiq/analyses/:analysisId/findings/:id',
+        () => new Response(204)
+      );
+
+      await render(TEMPLATE);
+      await waitUntil(() => !find(selectors.loader), { timeout: 2000 });
+
+      const readsBeforeDelete = this.analysisReads;
+
+      await click(selectors.moreMenuBtn);
+      await click(selectors.menuItemBtn('deleteAllFindings'));
+      await click(selectors.confirmBtn);
+
+      assert.strictEqual(
+        this.analysisReads,
+        readsBeforeDelete + 1,
+        'the rollup is re-read after the whole batch, not per finding'
+      );
     });
   }
 );

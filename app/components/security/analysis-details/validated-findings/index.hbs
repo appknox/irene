@@ -1,128 +1,148 @@
-<Security::AnalysisDetails::SectionCard
-  @title={{t this.sectionTitleKey}}
-  @description={{t this.sectionDescriptionKey}}
-  @testId={{this.sectionTestId}}
->
-  <:actions>
-    <AkStack @alignItems='center' local-class='header-actions'>
-      {{#if this.hasFindings}}
-        <Security::AnalysisDetails::ValidatedFindings::FindingNav
-          @isFirstFinding={{this.isFirstFinding}}
-          @isLastFinding={{this.isLastFinding}}
-          @positionOptions={{this.findingPositionOptions}}
-          @selectedPositionOption={{this.selectedFindingPositionOption}}
-          @formattedTotalFindings={{this.formattedTotalFindings}}
-          @onPrevious={{this.goToPreviousFinding}}
-          @onNext={{this.goToNextFinding}}
-          @onPositionSelect={{this.selectFindingPosition}}
-        />
+{{#if this.showsSection}}
+  <Security::AnalysisDetails::SectionCard
+    @title={{t this.sectionTitleKey}}
+    @description={{t this.sectionDescriptionKey}}
+    @testId={{this.sectionTestId}}
+  >
+    <:actions>
+      <AkStack @alignItems='center' local-class='header-actions'>
+        {{#if this.hasFindings}}
+          <Security::AnalysisDetails::ValidatedFindings::FindingNav
+            @isFirstFinding={{this.isFirstFinding}}
+            @isLastFinding={{this.isLastFinding}}
+            @positionOptions={{this.findingPositionOptions}}
+            @selectedPositionOption={{this.selectedFindingPositionOption}}
+            @formattedTotalFindings={{this.formattedTotalFindings}}
+            @onPrevious={{this.goToPreviousFinding}}
+            @onNext={{this.goToNextFinding}}
+            @onPositionSelect={{this.selectFindingPosition}}
+          />
 
-        <AkDivider
-          @direction='vertical'
-          @color='dark'
-          @height='2.4286em'
-          data-test-securityAnalysisDetails-validatedFindings-actionsDivider
-        />
-      {{/if}}
+          <AkDivider
+            @direction='vertical'
+            @color='dark'
+            @height='2.4286em'
+            data-test-securityAnalysisDetails-validatedFindings-actionsDivider
+          />
+        {{/if}}
 
-      <AkTooltip
-        @title={{this.addFindingDisabledReason}}
-        @disabled={{not this.addFindingDisabledReason}}
-        @multiline={{true}}
-        @maxWidth='280px'
-        @arrow={{true}}
-      >
-        <AkButton
-          @variant='outlined'
-          @disabled={{this.isAddFindingDisabled}}
-          {{on 'click' this.addFinding}}
-          local-class='add-finding-button'
-          data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
-        >
-          <:leftIcon>
-            <AkIcon @iconName='add' @size='small' />
-          </:leftIcon>
-
-          <:default>
-            {{t 'securityAnalysisDetails.validatedFindings.addFinding'}}
-          </:default>
-        </AkButton>
-      </AkTooltip>
-
-      {{#if this.hasFindings}}
         <AkTooltip
-          @title={{this.saveDisabledReason}}
-          @disabled={{not this.saveDisabledReason}}
+          @title={{this.addFindingDisabledReason}}
+          @disabled={{not this.addFindingDisabledReason}}
           @multiline={{true}}
-          @maxWidth='320px'
+          @maxWidth='280px'
           @arrow={{true}}
         >
           <AkButton
-            @variant='filled'
-            @disabled={{this.isSaveDisabled}}
-            {{on 'click' this.saveSelectedFinding}}
-            data-test-securityAnalysisDetails-validatedFindings-saveBtn
+            @variant='outlined'
+            @disabled={{this.isAddFindingDisabled}}
+            {{on 'click' this.addFinding}}
+            local-class='add-finding-button'
+            data-test-securityAnalysisDetails-validatedFindings-addFindingBtn
           >
-            {{t 'save'}}
+            <:leftIcon>
+              <AkIcon @iconName='add' @size='small' />
+            </:leftIcon>
+
+            <:default>
+              {{t 'securityAnalysisDetails.validatedFindings.addFinding'}}
+            </:default>
           </AkButton>
         </AkTooltip>
+
+        {{#if this.hasFindings}}
+          <AkTooltip
+            @title={{this.saveDisabledReason}}
+            @disabled={{not this.saveDisabledReason}}
+            @multiline={{true}}
+            @maxWidth='320px'
+            @arrow={{true}}
+          >
+            <AkButton
+              @variant='filled'
+              @disabled={{this.isSaveDisabled}}
+              {{on 'click' this.saveSelectedFinding}}
+              data-test-securityAnalysisDetails-validatedFindings-saveBtn
+            >
+              {{t 'save'}}
+            </AkButton>
+          </AkTooltip>
+        {{/if}}
+
+        <AkIconButton
+          @size='small'
+          {{on 'click' this.openMoreMenu}}
+          data-test-securityAnalysisDetails-validatedFindings-moreMenuBtn
+        >
+          <AkIcon @iconName='more-vert' @size='small' />
+        </AkIconButton>
+      </AkStack>
+    </:actions>
+
+    <:content>
+      {{#if this.showsTruePositiveConversionNote}}
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @spacing='1.5'
+          local-class='conversion-note'
+          data-test-securityAnalysisDetails-validatedFindings-conversionNote
+        >
+          <AkIcon @iconName='warning' @size='small' @color='warn' />
+
+          <AkTypography @variant='body2'>
+            {{t
+              'securityAnalysisDetails.validatedFindings.truePositiveConversionNote'
+            }}
+          </AkTypography>
+        </AkStack>
       {{/if}}
 
-      <AkIconButton
-        @size='small'
-        {{on 'click' this.openMoreMenu}}
-        data-test-securityAnalysisDetails-validatedFindings-moreMenuBtn
-      >
-        <AkIcon @iconName='more-vert' @size='small' />
-      </AkIconButton>
-    </AkStack>
-  </:actions>
+      {{#if this.isLoading}}
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @justifyContent='center'
+          class='p-3'
+          data-test-securityAnalysisDetails-validatedFindings-loader
+        >
+          <AkLoader @size={{24}} />
+        </AkStack>
 
-  <:content>
-    {{#if this.isLoading}}
-      <AkStack
-        @width='full'
-        @alignItems='center'
-        @justifyContent='center'
-        class='p-3'
-        data-test-securityAnalysisDetails-validatedFindings-loader
-      >
-        <AkLoader @size={{24}} />
-      </AkStack>
+      {{else if this.selectedFinding}}
+        <Security::AnalysisDetails::ValidatedFindings::FindingDetail
+          @finding={{this.selectedFinding}}
+          @remediationSteps={{this.remediationSteps}}
+          @stepsToReproduce={{this.stepsToReproduce}}
+          @onRemediationStepsChange={{this.updateRemediationSteps}}
+          @onReproductionStepsChange={{this.updateReproductionSteps}}
+          @disabled={{or this.isWritingFinding this.isReadOnly}}
+          @invalidListFields={{this.markedListFields}}
+          @areAllPanelsOpen={{this.areAllPanelsOpen}}
+          @isPanelOpen={{this.isPanelOpen}}
+          @onTogglePanel={{this.togglePanel}}
+          @onToggleExpandAll={{this.toggleExpandAll}}
+          @onSavePanel={{this.savePanel}}
+        />
 
-    {{else if this.selectedFinding}}
-      <Security::AnalysisDetails::ValidatedFindings::FindingDetail
-        @finding={{this.selectedFinding}}
-        @remediationSteps={{this.remediationSteps}}
-        @stepsToReproduce={{this.stepsToReproduce}}
-        @onRemediationStepsChange={{this.updateRemediationSteps}}
-        @onReproductionStepsChange={{this.updateReproductionSteps}}
-        @disabled={{or this.isWritingFinding this.isReadOnly}}
-        @invalidListFields={{this.markedListFields}}
-        @areAllPanelsOpen={{this.areAllPanelsOpen}}
-        @isPanelOpen={{this.isPanelOpen}}
-        @onTogglePanel={{this.togglePanel}}
-        @onToggleExpandAll={{this.toggleExpandAll}}
-        @onSavePanel={{this.savePanel}}
-      />
+      {{else}}
+        <AkStack
+          @width='full'
+          @alignItems='center'
+          @spacing='1'
+          class='p-3'
+          data-test-securityAnalysisDetails-validatedFindings-emptyState
+        >
+          <AkIcon @iconName='info' @size='small' />
 
-    {{else}}
-      <AkStack
-        @width='full'
-        @alignItems='center'
-        @spacing='1'
-        class='p-3'
-        data-test-securityAnalysisDetails-validatedFindings-emptyState
-      >
-        <AkIcon @iconName='info' @size='small' />
-
-        <AkTypography @variant='body2' @color='textSecondary'>
-          {{this.emptyStateMessage}}
-        </AkTypography>
-      </AkStack>
-    {{/if}}
-  </:content>
-</Security::AnalysisDetails::SectionCard>
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{this.emptyStateMessage}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </:content>
+  </Security::AnalysisDetails::SectionCard>
+{{/if}}
 
 <AkMenu
   @anchorRef={{this.moreMenuRef}}
