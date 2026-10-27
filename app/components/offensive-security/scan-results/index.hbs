@@ -359,14 +359,22 @@
               </div>
 
               <div local-class='phone-frame-wrapper'>
-                <div local-class='phone-frame'>
+                <div
+                  local-class='phone-frame'
+                  style={{this.phoneFrameStyle}}
+                >
                   <div local-class='phone-speaker-slit'></div>
 
                   <div local-class='phone-screen'>
                     {{#if this.isDeviceActive}}
                       <div
-                        local-class='device-screen-wrapper'
+                        local-class='device-screen-wrapper {{if
+                          this.deviceAspectRatio
+                          "is-fitted"
+                        }}'
                         data-test-offensiveSecurity-deviceScreen
+                        {{did-insert this.setupDeviceObserver}}
+                        {{will-destroy this.teardownDeviceObserver}}
                       >
                         <NovncRfb
                           @deviceFarmURL={{this.deviceFarmURL}}

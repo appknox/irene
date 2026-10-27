@@ -85,20 +85,12 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     );
   }
 
-  get isComprehensiveMissingCredentials(): boolean {
-    return this.isComprehensive && !this.hasValidCredentials;
-  }
-
   get isBeginDisabled(): boolean {
     if (this.isStartingAssessment) {
       return true;
     }
 
     if (!this.hasUploadedApp) {
-      return true;
-    }
-
-    if (this.isComprehensive && !this.hasValidCredentials) {
       return true;
     }
 
@@ -216,14 +208,6 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
   async beginAssessment() {
     const uploadItem = this.offsecNewAssessment.uploadItem;
     if (!uploadItem) {
-      return;
-    }
-
-    if (this.isComprehensive && !this.hasValidCredentials) {
-      this.notify.error(
-        this.intl.t('offensiveSecurity.credentialRequiredForComprehensive')
-      );
-
       return;
     }
 

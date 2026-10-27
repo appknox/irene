@@ -197,19 +197,6 @@
   gap: 8px;
 }
 
-.mandatory-badge {
-  display: inline-flex;
-  align-items: center;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--primary-color, #e24a2a);
-  background-color: #fff1ee;
-  border: 1px solid #ffdcd6;
-  padding: 1px 8px;
-  border-radius: 9999px;
-  line-height: 1.4;
-  letter-spacing: 0.02em;
-}
 
 // ─── Assessment Cards ────────────────────────────────────────────────────────
 
@@ -332,17 +319,6 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
-.hidden-autofill-trap {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  opacity: 0;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
 .credentials-table-header {
   display: grid;
   grid-template-columns: 1fr 1.2fr 1fr 40px;
@@ -384,17 +360,10 @@
 }
 
 .btn-show-hide {
-  background: transparent;
-  border: none;
-  color: var(--gray-500, #6b7280);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
+  color: var(--gray-500, #6b7280) !important;
 
   &:hover {
-    color: var(--gray-900, #111827);
+    color: var(--gray-900, #111827) !important;
   }
 }
 
@@ -426,10 +395,6 @@
   flex-wrap: wrap;
 }
 
-.creds-missing-hint {
-  font-size: 13px;
-  color: var(--gray-600, #4b5563);
-}
 
 .begin-assessment-btn {
   min-width: 260px;

@@ -6,6 +6,8 @@ import { task } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
+import { htmlSafe } from '@ember/template';
+import type { SafeString } from '@ember/template/-private/handlebars';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
@@ -50,6 +52,155 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked isDevicePanelCollapsed = false;
   @tracked isDeviceExpanded = false;
   @tracked internalActiveGoalIndex: number | null = null;
+  @tracked deviceAspectRatio: number | null = null;
+
+  private deviceObserver: MutationObserver | null = null;
+  private canvasMutationObserver: MutationObserver | null = null;
+  private canvasResizeObserver: ResizeObserver | null = null;
+  private canvasPollTimer: number | null = null;
+
+  @action
+  setupDeviceObserver(wrapperElement: HTMLElement): void {
+    this.teardownDeviceObserver();
+
+    const checkCanvas = () => {
+      const canvas = wrapperElement.querySelector('canvas');
+      if (canvas) {
+        const width = canvas.width;
+        const height = canvas.height;
+        if (width > 0 && height > 0) {
+          const ar = width / height;
+          if (
+            Number.isFinite(ar) &&
+            ar > 0 &&
+            Math.abs((this.deviceAspectRatio ?? 0) - ar) > 0.001
+          ) {
+            this.deviceAspectRatio = ar;
+          }
+        }
+      }
+    };
+
+    checkCanvas();
+
+    if (typeof MutationObserver !== 'undefined') {
+      this.deviceObserver = new MutationObserver(() => {
+        checkCanvas();
+        const canvas = wrapperElement.querySelector('canvas');
+        if (canvas && !this.canvasMutationObserver) {
+          this.canvasMutationObserver = new MutationObserver(checkCanvas);
+          this.canvasMutationObserver.observe(canvas, {
+            attributes: true,
+            attributeFilter: ['width', 'height'],
+          });
+        }
+      });
+
+      this.deviceObserver.observe(wrapperElement, {
+        childList: true,
+        subtree: true,
+      });
+
+      const existingCanvas = wrapperElement.querySelector('canvas');
+      if (existingCanvas) {
+        this.canvasMutationObserver = new MutationObserver(checkCanvas);
+        this.canvasMutationObserver.observe(existingCanvas, {
+          attributes: true,
+          attributeFilter: ['width', 'height'],
+        });
+      }
+    }
+
+    if (typeof ResizeObserver !== 'undefined') {
+      this.canvasResizeObserver = new ResizeObserver(checkCanvas);
+      this.canvasResizeObserver.observe(wrapperElement);
+    }
+
+    let pollCount = 0;
+    this.canvasPollTimer = window.setInterval(() => {
+      checkCanvas();
+      pollCount++;
+      if (this.deviceAspectRatio || pollCount > 30) {
+        if (this.canvasPollTimer !== null) {
+          clearInterval(this.canvasPollTimer);
+          this.canvasPollTimer = null;
+        }
+      }
+    }, 300);
+  }
+
+  @action
+  teardownDeviceObserver(): void {
+    if (this.deviceObserver) {
+      this.deviceObserver.disconnect();
+      this.deviceObserver = null;
+    }
+    if (this.canvasMutationObserver) {
+      this.canvasMutationObserver.disconnect();
+      this.canvasMutationObserver = null;
+    }
+    if (this.canvasResizeObserver) {
+      this.canvasResizeObserver.disconnect();
+      this.canvasResizeObserver = null;
+    }
+    if (this.canvasPollTimer !== null) {
+      clearInterval(this.canvasPollTimer);
+      this.canvasPollTimer = null;
+    }
+    this.deviceAspectRatio = null;
+  }
+
+  get phoneFrameStyle(): SafeString | undefined {
+    if (!this.deviceAspectRatio) {
+      return undefined;
+    }
+
+    const ar = this.deviceAspectRatio;
+
+    if (this.isDeviceExpanded) {
+      // Expanded modal mode:
+      // Outer borders: 7px + 7px = 14px horizontal, 14px vertical
+      // Speaker slit: 13px (4px + 5px top + 4px bottom)
+      // Bottom padding: 2px
+      // Total non-screen vertical space: 14 + 13 + 2 = 29px
+      // Total non-screen horizontal space: 14px
+      const targetInnerHeight = 541; // 570 - 29
+      const maxInnerWidth = 310;
+      let innerWidth = Math.round(targetInnerHeight * ar);
+      let innerHeight = targetInnerHeight;
+
+      if (innerWidth > maxInnerWidth) {
+        innerWidth = maxInnerWidth;
+        innerHeight = Math.round(innerWidth / ar);
+      }
+
+      const frameWidth = innerWidth + 14;
+      const frameHeight = innerHeight + 29;
+
+      return htmlSafe(`width: ${frameWidth}px; height: ${frameHeight}px;`);
+    }
+
+    // Standard preview mode:
+    // Outer borders: 6px + 6px = 12px horizontal, 12px vertical
+    // Speaker slit: 13px (4px + 5px top + 4px bottom)
+    // Bottom padding: 2px
+    // Total non-screen vertical space: 12 + 13 + 2 = 27px
+    // Total non-screen horizontal space: 12px
+    const targetInnerHeight = 448; // 475 - 27
+    const maxInnerWidth = 260;
+    let innerWidth = Math.round(targetInnerHeight * ar);
+    let innerHeight = targetInnerHeight;
+
+    if (innerWidth > maxInnerWidth) {
+      innerWidth = maxInnerWidth;
+      innerHeight = Math.round(innerWidth / ar);
+    }
+
+    const frameWidth = innerWidth + 12;
+    const frameHeight = innerHeight + 27;
+
+    return htmlSafe(`width: ${frameWidth}px; height: ${frameHeight}px;`);
+  }
 
   @action
   toggleFileDetails(): void {
@@ -111,6 +262,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     window.removeEventListener('popstate', this.handlePopState);
     document.body.style.overflow = '';
     this.stopPolling?.();
+    this.teardownDeviceObserver();
   }
 
   @action

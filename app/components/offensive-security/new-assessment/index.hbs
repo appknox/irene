@@ -164,18 +164,9 @@
             <AkTypography @variant='subtitle1' @fontWeight='bold'>
               {{t 'offensiveSecurity.testCredentials'}}
             </AkTypography>
-            {{#if this.isComprehensive}}
-              <span local-class='mandatory-badge' data-test-creds-mandatory-badge>
-                {{t 'offensiveSecurity.required'}}
-              </span>
-            {{/if}}
           </div>
           <AkTypography @variant='body2' @color='textSecondary'>
-            {{if
-              this.isComprehensive
-              (t 'offensiveSecurity.testCredentialsComprehensiveSubtitle')
-              (t 'offensiveSecurity.testCredentialsSubtitle')
-            }}
+            {{t 'offensiveSecurity.testCredentialsSubtitle'}}
           </AkTypography>
         </div>
 
@@ -185,24 +176,6 @@
           autocomplete='off'
           onsubmit='return false;'
         >
-          {{! Hidden dummy inputs to prevent browser autofill from populating the actual credential fields }}
-          <div local-class='hidden-autofill-trap' aria-hidden='true'>
-            <input
-              type='text'
-              name='fake_autofill_username'
-              aria-label='Fake Username'
-              tabindex='-1'
-              autocomplete='off'
-            />
-            <input
-              type='password'
-              name='fake_autofill_password'
-              aria-label='Fake Password'
-              tabindex='-1'
-              autocomplete='new-password'
-            />
-          </div>
-
           {{! Table Headers }}
           <div local-class='credentials-table-header'>
             <span local-class='header-col'>{{t
@@ -227,6 +200,7 @@
                 <div local-class='col-role'>
                   <AkTextField
                     @id='offsec-cred-role-{{cred.id}}'
+                    @type='text'
                     @placeholder={{t 'offensiveSecurity.rolePlaceholder'}}
                     @value={{cred.role}}
                     name='offsec_role_{{cred.id}}'
@@ -239,13 +213,11 @@
                 <div local-class='col-username'>
                   <AkTextField
                     @id='offsec-cred-user-{{cred.id}}'
+                    @type='email'
                     @placeholder={{t 'offensiveSecurity.usernamePlaceholder'}}
                     @value={{cred.username}}
                     name='offsec_user_{{cred.id}}'
                     autocomplete='off'
-                    data-lpignore='true'
-                    data-1p-ignore='true'
-                    data-form-type='other'
                     data-test-cred-username={{index}}
                     {{on 'input' (fn this.updateCredential index 'username')}}
                   />
@@ -259,25 +231,36 @@
                     @value={{cred.password}}
                     name='offsec_password_{{cred.id}}'
                     autocomplete='new-password'
-                    data-lpignore='true'
-                    data-1p-ignore='true'
-                    data-form-type='other'
                     data-test-cred-password={{index}}
                     {{on 'input' (fn this.updateCredential index 'password')}}
                   >
                     <:rightAdornment>
-                      <button
-                        type='button'
+                      <AkIconButton
+                        @type='button'
+                        @size='small'
                         local-class='btn-show-hide'
                         data-test-show-hide-btn={{index}}
-                        {{on 'click' (fn this.toggleShowPassword index)}}
-                      >
-                        {{if
+                        aria-label={{if
                           cred.showPassword
                           (t 'offensiveSecurity.hide')
                           (t 'offensiveSecurity.show')
                         }}
-                      </button>
+                        title={{if
+                          cred.showPassword
+                          (t 'offensiveSecurity.hide')
+                          (t 'offensiveSecurity.show')
+                        }}
+                        {{on 'click' (fn this.toggleShowPassword index)}}
+                      >
+                        <AkIcon
+                          @iconName={{if
+                            cred.showPassword
+                            'visibility-off'
+                            'visibility'
+                          }}
+                          @size='small'
+                        />
+                      </AkIconButton>
                     </:rightAdornment>
                   </AkTextField>
                 </div>
@@ -319,15 +302,6 @@
 
       {{! Launch CTA }}
       <div local-class='actions-row'>
-        {{#if this.isComprehensiveMissingCredentials}}
-          <span
-            local-class='creds-missing-hint'
-            data-test-creds-missing-hint
-          >
-            {{t 'offensiveSecurity.credentialRequiredForComprehensive'}}
-          </span>
-        {{/if}}
-
         <AkButton
           @variant='filled'
           @color='primary'
