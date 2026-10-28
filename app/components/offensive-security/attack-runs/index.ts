@@ -20,6 +20,8 @@ import type RealtimeService from 'irene/services/realtime';
 
 export type PlatformFilter = 'all' | 'android' | 'ios';
 
+export type ScanTypeFilter = 'all' | 'comprehensive' | 'resilience';
+
 export type ResilienceFilter =
   | 'all'
   | 'critical'
@@ -240,6 +242,15 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         isSortable: false,
       },
       {
+        name: this.intl.t('offensiveSecurity.scanType'),
+        component: 'offensive-security/attack-runs/table/scan-type',
+        headerComponent:
+          'offensive-security/attack-runs/table/scan-type-header',
+        textAlign: 'center',
+        width: 165,
+        isSortable: false,
+      },
+      {
         name: this.intl.t('offensiveSecurity.risk'),
         component: 'offensive-security/attack-runs/table/resilience',
         headerComponent:
@@ -317,6 +328,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   @action
   handleStatusFilterChange(value: StatusFilter): void {
     this.selectedStatusFilter = value;
+  }
+
+  @tracked selectedScanTypeFilter: ScanTypeFilter = 'all';
+
+  @action
+  handleScanTypeFilterChange(value: ScanTypeFilter): void {
+    this.selectedScanTypeFilter = value;
   }
 
   @tracked selectedStatusTab: 'all' | 'running' | 'completed' | 'failed' =
@@ -421,12 +439,19 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         (this.selectedStatusFilter === 'failed' && scan.isFailed) ||
         (this.selectedStatusFilter === 'not_started' && scan.isNotStarted);
 
+      const matchesScanType =
+        this.selectedScanTypeFilter === 'all' ||
+        (this.selectedScanTypeFilter === 'comprehensive' &&
+          scan.isComprehensive) ||
+        (this.selectedScanTypeFilter === 'resilience' && scan.isResilienceOnly);
+
       return (
         matchesSearch &&
         matchesPlatform &&
         matchesResilience &&
         matchesStatusTab &&
-        matchesStatusHeader
+        matchesStatusHeader &&
+        matchesScanType
       );
     });
 

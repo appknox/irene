@@ -1,0 +1,34 @@
+.scan-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  min-width: 130px;
+  border-radius: var(--offensive-security-status-chip-border-radius, 8px);
+  padding: 0.464em 0.714em;
+  line-height: 1.25;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.scan-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.scan-type-comprehensive {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+  border-color: #ddd6fe;
+}
+
+.scan-type-resilience {
+  background-color: #f0f9ff;
+  color: #0284c7;
+  border-color: #bae6fd;
+}

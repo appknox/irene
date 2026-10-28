@@ -1,17 +1,10 @@
 <AkStack @direction='column' @spacing='3' class='p-3'>
   {{! Page Header }}
   <div local-class='header-card'>
-    <AkStack
-      @width='full'
-      @justifyContent='space-between'
-      @alignItems='center'
-    >
+    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
       <AkStack @direction='column' @spacing='0.5'>
         <AkStack @alignItems='center' @spacing='1.5'>
-          <AkTypography
-            @variant='h4'
-            @fontWeight='bold'
-          >
+          <AkTypography @variant='h4' @fontWeight='bold'>
             {{t 'offensiveSecurity.allTargets'}}
           </AkTypography>
 
@@ -65,29 +58,40 @@
         <AkIcon @iconName='trending-up' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>{{t 'offensiveSecurity.totalRuns'}}</span>
+        <span local-class='stat-label'>{{t
+            'offensiveSecurity.totalRuns'
+          }}</span>
         <span
           local-class='stat-number'
           data-test-offensiveSecurity-attackRuns-totalRuns
         >{{this.totalRunsDisplay}}</span>
-        <span local-class='stat-subtext'>{{t 'offensiveSecurity.allTime'}}</span>
+        <span local-class='stat-subtext'>{{t
+            'offensiveSecurity.allTime'
+          }}</span>
       </div>
     </div>
 
     {{! Card 2: Running }}
     <div local-class='metric-card'>
       <div
-        local-class='stat-icon-box stat-icon-blue {{unless this.hasRunningScans "paused"}}'
+        local-class='stat-icon-box stat-icon-blue {{unless
+          this.hasRunningScans
+          "paused"
+        }}'
       >
         <AkLoader @size={{14}} />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>{{t 'offensiveSecurity.status.running'}}</span>
+        <span local-class='stat-label'>{{t
+            'offensiveSecurity.status.running'
+          }}</span>
         <span
           local-class='stat-number'
           data-test-offensiveSecurity-attackRuns-runningCount
         >{{this.runningCount}}</span>
-        <span local-class='stat-subtext'>{{t 'offensiveSecurity.inProgress'}}</span>
+        <span local-class='stat-subtext'>{{t
+            'offensiveSecurity.inProgress'
+          }}</span>
       </div>
     </div>
 
@@ -97,12 +101,16 @@
         <AkIcon @iconName='check-circle-outline' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>{{t 'offensiveSecurity.status.completed'}}</span>
+        <span local-class='stat-label'>{{t
+            'offensiveSecurity.status.completed'
+          }}</span>
         <span
           local-class='stat-number'
           data-test-offensiveSecurity-attackRuns-completedCount
         >{{this.completedCount}}</span>
-        <span local-class='stat-subtext'>{{t 'offensiveSecurity.successfullyFinished'}}</span>
+        <span local-class='stat-subtext'>{{t
+            'offensiveSecurity.successfullyFinished'
+          }}</span>
       </div>
     </div>
 
@@ -112,12 +120,16 @@
         <AkIcon @iconName='cancel' @size='small' />
       </div>
       <div local-class='stat-details'>
-        <span local-class='stat-label'>{{t 'offensiveSecurity.status.failed'}}</span>
+        <span local-class='stat-label'>{{t
+            'offensiveSecurity.status.failed'
+          }}</span>
         <span
           local-class='stat-number'
           data-test-offensiveSecurity-attackRuns-failedCount
         >{{this.failedCount}}</span>
-        <span local-class='stat-subtext'>{{t 'offensiveSecurity.withErrors'}}</span>
+        <span local-class='stat-subtext'>{{t
+            'offensiveSecurity.withErrors'
+          }}</span>
       </div>
     </div>
   </div>
@@ -179,24 +191,32 @@
                       @onResilienceChange={{this.handleResilienceFilterChange}}
                       @selectedStatus={{this.selectedStatusFilter}}
                       @onStatusChange={{this.handleStatusFilterChange}}
+                      @selectedScanType={{this.selectedScanTypeFilter}}
+                      @onScanTypeChange={{this.handleScanTypeFilterChange}}
                     />
                   {{/let}}
                 {{else}}
-                  {{column.name}}
+                  <AkTypography
+                    @variant='subtitle2'
+                    @align={{or column.textAlign 'inherit'}}
+                    @noWrap={{true}}
+                  >
+                    {{column.name}}
 
-                  {{#if (this.isSortableColumn column.valuePath)}}
-                    <AkIcon
-                      {{style verticalAlign='middle'}}
-                      @iconName='arrow-upward'
-                      @size='small'
-                      local-class='sort-icon {{unless
-                        (this.isColumnSortedAsc column.valuePath)
-                        "sort-icon-desc"
-                      }}'
-                      data-test-offensiveSecurity-attackRuns-dateHeader-sortToggle
-                      data-test-offensiveSecurity-attackRuns-dateHeader-sortIcon
-                    />
-                  {{/if}}
+                    {{#if (this.isSortableColumn column.valuePath)}}
+                      <AkIcon
+                        {{style verticalAlign='middle'}}
+                        @iconName='arrow-upward'
+                        @size='small'
+                        local-class='sort-icon {{unless
+                          (this.isColumnSortedAsc column.valuePath)
+                          "sort-icon-desc"
+                        }}'
+                        data-test-offensiveSecurity-attackRuns-dateHeader-sortToggle
+                        data-test-offensiveSecurity-attackRuns-dateHeader-sortIcon
+                      />
+                    {{/if}}
+                  </AkTypography>
                 {{/if}}
               </r.cell>
             </h.row>

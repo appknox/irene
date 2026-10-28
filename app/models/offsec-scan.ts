@@ -269,6 +269,12 @@ export default class OffsecScanModel extends Model {
   @attr('string')
   declare versionCode: string;
 
+  @attr('string')
+  declare assessmentType: string;
+
+  @attr('string')
+  declare assessment_type: string;
+
   @attr('number')
   declare devFramework: number;
 
@@ -611,6 +617,38 @@ export default class OffsecScanModel extends Model {
       this.overallResilience !== null &&
       this.overallResilience !== undefined
     );
+  }
+
+  get isComprehensive(): boolean {
+    const rawVal =
+      this.assessmentType ||
+      this.assessment_type ||
+      (this as unknown as Record<string, unknown>)?.['assessment_type'];
+    const raw = String(rawVal || '').toLowerCase();
+
+    if (raw) {
+      return raw.includes('comprehensive');
+    }
+
+    return Boolean(this.hasPentestResult);
+  }
+
+  get isResilienceOnly(): boolean {
+    const rawVal =
+      this.assessmentType ||
+      this.assessment_type ||
+      (this as unknown as Record<string, unknown>)?.['assessment_type'];
+    const raw = String(rawVal || '').toLowerCase();
+
+    if (raw) {
+      return raw.includes('resilience');
+    }
+
+    return !this.isComprehensive;
+  }
+
+  get assessmentTypeLabel(): string {
+    return this.isComprehensive ? 'Comprehensive' : 'Resilience Only';
   }
 
   /** Single source for the date the list both shows and sorts on. */

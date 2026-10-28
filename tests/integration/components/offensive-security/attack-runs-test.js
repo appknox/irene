@@ -95,6 +95,13 @@ const SELECTORS = {
   runningCount: '[data-test-offensiveSecurity-attackRuns-runningCount]',
   completedCount: '[data-test-offensiveSecurity-attackRuns-completedCount]',
   failedCount: '[data-test-offensiveSecurity-attackRuns-failedCount]',
+  scanType: '[data-test-offensiveSecurity-attackRuns-scanType]',
+  scanTypeFilterIcon:
+    '[data-test-offensiveSecurity-attackRuns-scanTypeHeader-icon]',
+  scanTypeOption: (value) =>
+    `[data-test-offensiveSecurity-attackRuns-scanTypeHeader-option='${value}']`,
+  scanTypeClearFilter:
+    '[data-test-offensiveSecurity-attackRuns-scanTypeHeader-clearFilter]',
 };
 
 const TEMPLATE = hbs`<OffensiveSecurity::AttackRuns
@@ -567,5 +574,54 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
       router.lastRoute,
       'authenticated.offensive-security.new-assessment'
     );
+  });
+
+  test('it renders the scan type column badge matching assessment_type', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 1, assessment_type: 'comprehensive' }),
+      buildScan({ id: 2, assessment_type: 'resilience' }),
+    ]);
+
+    await render(TEMPLATE);
+
+    const badges = findAll(SELECTORS.scanType);
+    assert.strictEqual(badges.length, 2);
+    assert.dom(badges[0]).hasText('Comprehensive');
+    assert
+      .dom(badges[0])
+      .hasAttribute(
+        'data-test-offensiveSecurity-attackRuns-scanType',
+        'comprehensive'
+      );
+    assert.dom(badges[1]).hasText('Resilience Only');
+    assert
+      .dom(badges[1])
+      .hasAttribute(
+        'data-test-offensiveSecurity-attackRuns-scanType',
+        'resilience'
+      );
+  });
+
+  test('it filters runs by scan type header dropdown', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 1, assessment_type: 'comprehensive' }),
+      buildScan({ id: 2, assessment_type: 'resilience' }),
+    ]);
+
+    await render(TEMPLATE);
+
+    assert.strictEqual(findAll(SELECTORS.scanType).length, 2);
+
+    await click(SELECTORS.scanTypeFilterIcon);
+    await click(SELECTORS.scanTypeOption('comprehensive'));
+
+    const badges = findAll(SELECTORS.scanType);
+    assert.strictEqual(badges.length, 1);
+    assert.dom(badges[0]).hasText('Comprehensive');
+
+    await click(SELECTORS.scanTypeFilterIcon);
+    await click(SELECTORS.scanTypeClearFilter);
+
+    assert.strictEqual(findAll(SELECTORS.scanType).length, 2);
   });
 });

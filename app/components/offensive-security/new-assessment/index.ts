@@ -6,7 +6,6 @@ import { waitForPromise } from '@ember/test-waiters';
 import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
-import type NotificationService from 'irene/services/notifications';
 import type RealtimeService from 'irene/services/realtime';
 import type FileQueueService from 'ember-file-upload/services/file-queue';
 import type { UploadFile } from 'ember-file-upload';

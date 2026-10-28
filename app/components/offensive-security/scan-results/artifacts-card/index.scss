@@ -9,7 +9,7 @@
 .artifacts-scroll-container {
   width: 100%;
   box-sizing: border-box;
-  max-height: 138px;
+  max-height: 54px;
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
@@ -37,7 +37,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid var(--file-details-summary-border-color);
   border-radius: 6px;
   background-color: var(--offensive-security-scan-results-card-bg-color);
@@ -55,9 +55,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
   flex-shrink: 0;
 
   &.icon-blue {
