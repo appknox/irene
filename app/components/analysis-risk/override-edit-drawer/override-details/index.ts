@@ -58,7 +58,11 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
   }
 
   get showOriginalAndOverriddenSeverity() {
-    return !isEmpty(this.dataModel.risk) && !isEmpty(this.overriddenRisk);
+    return (
+      !isEmpty(this.dataModel.risk) &&
+      !isEmpty(this.overriddenRisk) &&
+      !this.isBaselineReopened
+    );
   }
 
   get baselineInfo() {
