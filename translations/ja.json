@@ -396,6 +396,8 @@
     "inputValue": "Input Value",
     "inputType": "Input Type",
     "enterInputTypeInfo": "入力タイプはテキスト、OTP、パスワードが使用できます",
+    "enterOtpInfo": "アプリから取得: ログイン中にエージェントがそのアプリを開き、最新のコードを読み取って確認コード欄に入力します。コードを見つけやすくするための指示を任意で追加できます（例: AuthLab の項目を開く）。認証キー: コードは入力する時点でキーから生成されます。キーは常にマスクされます。",
+    "otpCodeFrom": "コードの取得元を選択",
     "enterType": "Enter Type",
     "noScenariosFound": "No scenarios found.",
     "statusColumnToggleInfo": "Use this toggle to Activate/Deactivate a scenario. Only Active scenarios will be used for executing DAST automation.",
@@ -429,7 +431,11 @@
       "selectTooLong": "オプションラベルは32文字以内にしてください。",
       "checkValueInvalid": "値は「チェック済み」または「未チェック」を指定してください。",
       "swipeValueInvalid": "方向は「上」「下」「左」「右」のいずれかを指定してください。",
-      "waitValueRange": "待機時間は1〜60秒の整数で指定してください。"
+      "waitValueRange": "待機時間は1〜60秒の整数で指定してください。",
+      "authenticatorKeyInvalid": "有効な認証キー（base32）または otpauth://totp リンクを入力してください。",
+      "otpAppIdInvalid": "有効なバンドルIDまたはパッケージIDを入力してください（例: com.example.app）。",
+      "otpAppBlocked": "このアプリはコードの読み取りに使用できません。",
+      "otpNoteTooLong": "指示は256文字以内にしてください。"
     },
     "stepActions": {
       "tap": "タップ",
@@ -440,14 +446,22 @@
       "longPress": "長押し",
       "swipe": "スワイプ",
       "drag": "ドラッグ",
-      "openApp": "アプリを開く"
+      "enterOtp": "OTPを取得"
     },
     "stepPlaceholders": {
       "count": "回数を選択",
       "text": "テキスト",
       "select": "選択",
       "enterValue": "値を入力",
-      "openApp": "例: メッセージアプリを開いてOTPを取得"
+      "otpAppId": "バンドルIDまたはパッケージID",
+      "otpNote": "エージェントへの指示（任意）",
+      "authenticatorKey": "シークレットキーまたは otpauth:// リンク"
+    },
+    "otpSources": {
+      "authenticatorKey": "認証キー"
+    },
+    "otpApps": {
+      "other": "その他のアプリ…"
     },
     "directions": {
       "up": "上",

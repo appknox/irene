@@ -93,26 +93,142 @@ module('Unit | Utility | step-validation', function () {
     }
   );
 
-  // ─── OPEN_APP ────────────────────────────────────────────────────────────
+  // ─── ENTER_OTP ───────────────────────────────────────────────────────────
 
-  test('OPEN_APP: instruction is the identifier; value is ignored', function (assert) {
-    const valid = makeStep({
-      action: ScenarioStepAction.OPEN_APP,
-      identifier: 'Open Messages app to get the OTP',
-      value: '',
-    });
-    const missing = makeStep({
-      action: ScenarioStepAction.OPEN_APP,
-      identifier: '  ',
-      value: '',
-    });
+  test.each(
+    'ENTER_OTP (from an app): requires a well-formed, allowed app id',
+    [
+      ['com.apple.MobileSMS', null],
+      ['com.google.android.apps.messaging', null],
+      ['com.example.mail_app-2', null],
+      ['', 'dastAutomation.validation.valueRequired'],
+      ['messages', 'dastAutomation.validation.otpAppIdInvalid'],
+      ['com.example.', 'dastAutomation.validation.otpAppIdInvalid'],
+      ['com.exa mple', 'dastAutomation.validation.otpAppIdInvalid'],
+      [`com.${'a'.repeat(252)}`, 'dastAutomation.validation.otpAppIdInvalid'],
+      ['com.apple.Preferences', 'dastAutomation.validation.otpAppBlocked'],
+      ['com.android.settings', 'dastAutomation.validation.otpAppBlocked'],
+      ['com.appknox.agent', 'dastAutomation.validation.otpAppBlocked'],
+    ],
+    function (assert, [value, expectedError]) {
+      const result = validateStep(
+        makeStep({
+          action: ScenarioStepAction.ENTER_OTP,
+          identifier: 'Verification code',
+          value,
+          metadata: { source: 'app' },
+        })
+      );
 
-    assert.strictEqual(validateStep(valid), null);
+      assert.strictEqual(result?.value ?? null, expectedError);
+    }
+  );
+
+  test.each(
+    'ENTER_OTP (from an app): optional instructions (metadata.note) up to 256 chars',
+    [
+      [undefined, null],
+      ['Open the AuthLab entry', null],
+      ['n'.repeat(256), null],
+      ['n'.repeat(257), 'dastAutomation.validation.otpNoteTooLong'],
+    ],
+    function (assert, [note, expectedError]) {
+      const metadata =
+        note === undefined ? { source: 'app' } : { source: 'app', note };
+
+      const result = validateStep(
+        makeStep({
+          action: ScenarioStepAction.ENTER_OTP,
+          identifier: 'Verification code',
+          value: 'com.apple.MobileSMS',
+          metadata,
+        })
+      );
+
+      assert.strictEqual(result?.value ?? null, expectedError);
+    }
+  );
+
+  test('ENTER_OTP: missing source is treated as from an app', function (assert) {
+    const result = validateStep(
+      makeStep({
+        action: ScenarioStepAction.ENTER_OTP,
+        identifier: 'Verification code',
+        value: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
+        metadata: {},
+      })
+    );
+
     assert.strictEqual(
-      validateStep(missing)?.identifier,
-      'dastAutomation.validation.identifierRequired'
+      result?.value,
+      'dastAutomation.validation.otpAppIdInvalid'
     );
   });
+
+  test.each(
+    'ENTER_OTP (authenticator key): requires a base32 key or otpauth://totp link',
+    [
+      ['', 'dastAutomation.validation.valueRequired'],
+      ['GEZD GNBV GY3T QOJQ GEZD GNBV GY3T QOJQ', null],
+      ['gezdgnbvgy3tqojqgezdgnbvgy3tqojq', null],
+      ['otpauth://totp/App:qa?secret=GEZDGNBVGY3TQOJQ&digits=6', null],
+      [
+        'otpauth://hotp/App:qa?secret=GEZDGNBVGY3TQOJQ',
+        'dastAutomation.validation.authenticatorKeyInvalid',
+      ],
+      ['not base32 !!', 'dastAutomation.validation.authenticatorKeyInvalid'],
+      ['JBSW', 'dastAutomation.validation.authenticatorKeyInvalid'],
+      [
+        'com.apple.MobileSMS',
+        'dastAutomation.validation.authenticatorKeyInvalid',
+      ],
+    ],
+    function (assert, [value, expectedError]) {
+      const result = validateStep(
+        makeStep({
+          action: ScenarioStepAction.ENTER_OTP,
+          identifier: 'Verification code',
+          value,
+          isSecure: true,
+          metadata: { source: 'authenticator_key' },
+        })
+      );
+
+      assert.strictEqual(result?.value ?? null, expectedError);
+    }
+  );
+
+  test('ENTER_OTP (authenticator key): secure mask passes', function (assert) {
+    const step = makeStep({
+      action: ScenarioStepAction.ENTER_OTP,
+      identifier: 'Verification code',
+      value: '************',
+      isSecure: true,
+      metadata: { source: 'authenticator_key' },
+    });
+
+    assert.strictEqual(validateStep(step), null);
+  });
+
+  test.each(
+    'ENTER_OTP: the identifier is set automatically, so it is never reported',
+    [
+      [{ source: 'app' }, 'com.apple.MobileSMS'],
+      [{ source: 'authenticator_key' }, 'GEZDGNBVGY3TQOJQ'],
+    ],
+    function (assert, [metadata, value]) {
+      const result = validateStep(
+        makeStep({
+          action: ScenarioStepAction.ENTER_OTP,
+          identifier: '',
+          value,
+          metadata,
+        })
+      );
+
+      assert.strictEqual(result, null);
+    }
+  );
 
   // ─── LONG_PRESS ──────────────────────────────────────────────────────────
 

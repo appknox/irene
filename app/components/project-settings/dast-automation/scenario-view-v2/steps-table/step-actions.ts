@@ -1,5 +1,10 @@
 import type { AkIconVariantType } from 'ak-icons';
-import { ScenarioStepAction } from 'irene/models/scenario-step';
+import ENUMS from 'irene/enums';
+
+import {
+  ScenarioStepAction,
+  type ScenarioStepMetadata,
+} from 'irene/models/scenario-step';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 export type StepValueKind =
@@ -9,7 +14,7 @@ export type StepValueKind =
   | 'boolean' // check: checked
   | 'duration' // wait, long_press: number + unit (ms/s/m)
   | 'direction' // swipe, drag: up/down/left/right
-  | 'none'; // open_app: instruction lives in the identifier; no value
+  | 'otp'; // enter_otp: app id or authenticator key, by metadata.source
 
 export type StepActionLabelKey =
   | 'dastAutomation.stepActions.tap'
@@ -20,14 +25,17 @@ export type StepActionLabelKey =
   | 'dastAutomation.stepActions.longPress'
   | 'dastAutomation.stepActions.swipe'
   | 'dastAutomation.stepActions.drag'
-  | 'dastAutomation.stepActions.openApp';
+  | 'dastAutomation.stepActions.enterOtp';
 
 export type StepPlaceholderKey =
   | 'dastAutomation.stepPlaceholders.count'
   | 'dastAutomation.stepPlaceholders.text'
   | 'dastAutomation.stepPlaceholders.select'
   | 'dastAutomation.stepPlaceholders.enterValue'
-  | 'dastAutomation.stepPlaceholders.openApp';
+  | 'dastAutomation.stepPlaceholders.otpAppId'
+  | 'dastAutomation.stepPlaceholders.otpNote'
+  | 'dastAutomation.stepPlaceholders.authenticatorKey'
+  | 'dastAutomation.otpCodeFrom';
 
 export type DirectionLabelKey =
   | 'dastAutomation.directions.up'
@@ -48,6 +56,7 @@ export interface StepActionConfig {
   identifierPlaceholder?: StepPlaceholderKey;
   unitOptions?: string[];
   defaultValue?: string;
+  defaultMetadata?: ScenarioStepMetadata;
 }
 
 export interface DirectionOption {
@@ -57,6 +66,12 @@ export interface DirectionOption {
 
 export interface CheckOption {
   label: CheckLabelKey;
+  value: string;
+}
+
+/** A known app the OTP is read from; `label` is a brand name (not translated). */
+export interface OtpAppOption {
+  label: string;
   value: string;
 }
 
@@ -119,12 +134,12 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     defaultValue: 'up',
   },
   {
-    action: ScenarioStepAction.OPEN_APP,
-    label: 'dastAutomation.stepActions.openApp',
-    icon: 'open-in-new',
-    valueKind: 'none',
-    valuePlaceholder: 'dastAutomation.stepPlaceholders.text',
-    identifierPlaceholder: 'dastAutomation.stepPlaceholders.openApp',
+    action: ScenarioStepAction.ENTER_OTP,
+    label: 'dastAutomation.stepActions.enterOtp',
+    icon: 'key',
+    valueKind: 'otp',
+    valuePlaceholder: 'dastAutomation.otpCodeFrom',
+    defaultMetadata: { source: 'app' },
   },
   // Temporarily disabled until the drag step value format is finalized.
   // {
@@ -150,10 +165,85 @@ export const CHECK_OPTIONS: CheckOption[] = [
   { label: 'dastAutomation.checkOptions.unchecked', value: 'false' },
 ];
 
+// Enter OTP has no identifier input; the code field gets this name instead,
+// numbered when the same steps list already has an Enter OTP step using it.
+export const OTP_IDENTIFIER_BASE = 'Verification code';
+const OTP_IDENTIFIER_PATTERN = /^Verification code( \d+)?$/;
+
+export const IOS_OTP_APPS: OtpAppOption[] = [
+  { label: 'Messages', value: 'com.apple.MobileSMS' },
+  { label: 'Mail', value: 'com.apple.mobilemail' },
+  { label: 'Gmail', value: 'com.google.Gmail' },
+  { label: 'Outlook', value: 'com.microsoft.Office.Outlook' },
+  { label: 'Google Authenticator', value: 'com.google.Authenticator' },
+  {
+    label: 'Microsoft Authenticator',
+    value: 'com.microsoft.azureauthenticator',
+  },
+  { label: '2FAS', value: 'com.twofas.org' },
+  { label: 'Authy', value: 'com.authy' },
+  { label: 'Bitwarden Authenticator', value: 'com.bitwarden.authenticator' },
+];
+
+export const ANDROID_OTP_APPS: OtpAppOption[] = [
+  { label: 'Messages', value: 'com.google.android.apps.messaging' },
+  { label: 'Samsung Messages', value: 'com.samsung.android.messaging' },
+  { label: 'Gmail', value: 'com.google.android.gm' },
+  { label: 'Outlook', value: 'com.microsoft.office.outlook' },
+  {
+    label: 'Google Authenticator',
+    value: 'com.google.android.apps.authenticator2',
+  },
+  { label: 'Microsoft Authenticator', value: 'com.azure.authenticator' },
+  { label: '2FAS', value: 'com.twofasapp' },
+  { label: 'Authy', value: 'com.authy.authy' },
+  { label: 'Bitwarden Authenticator', value: 'com.bitwarden.authenticator' },
+];
+
 // ─── Utility Functions ────────────────────────────────────────────────────────
 
 export function configForAction(
   action: ScenarioStepAction | null
 ): StepActionConfig | undefined {
   return STEP_ACTION_CONFIGS.find((config) => config.action === action);
+}
+
+/**
+ * Known OTP apps for a project platform. When the platform is unknown, both
+ * lists are offered with a platform suffix so same-named apps stay distinct.
+ */
+export function otpAppsForPlatform(platform?: number | null): OtpAppOption[] {
+  if (platform === ENUMS.PLATFORM.IOS) {
+    return IOS_OTP_APPS;
+  }
+
+  if (platform === ENUMS.PLATFORM.ANDROID) {
+    return ANDROID_OTP_APPS;
+  }
+
+  const withSuffix = (apps: OtpAppOption[], suffix: string) =>
+    apps.map((app) => ({ ...app, label: `${app.label} (${suffix})` }));
+
+  return [
+    ...withSuffix(IOS_OTP_APPS, 'iOS'),
+    ...withSuffix(ANDROID_OTP_APPS, 'Android'),
+  ];
+}
+
+/** True when the identifier is one `otpIdentifierFor` would generate. */
+export function isAutoOtpIdentifier(identifier?: string | null) {
+  return OTP_IDENTIFIER_PATTERN.test(identifier ?? '');
+}
+
+/** First of "Verification code", "Verification code 2", … not in `taken`. */
+export function otpIdentifierFor(taken: string[]) {
+  const used = new Set(taken);
+
+  let identifier = OTP_IDENTIFIER_BASE;
+
+  for (let n = 2; used.has(identifier); n++) {
+    identifier = `${OTP_IDENTIFIER_BASE} ${n}`;
+  }
+
+  return identifier;
 }

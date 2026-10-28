@@ -7,8 +7,14 @@ import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import { MAX_LOGIN_ROLES } from '../index';
-import { type StepActionConfig } from './step-actions';
+import {
+  isAutoOtpIdentifier,
+  otpIdentifierFor,
+  type StepActionConfig,
+} from './step-actions';
 import type { StepValidationError } from './step-validation';
+
+import { ScenarioStepAction } from 'irene/models/scenario-step';
 
 import type ScenarioUserRoleModel from 'irene/models/scenario-user-role';
 import type ScenarioStepModel from 'irene/models/scenario-step';
@@ -136,14 +142,26 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
     this.addStepsAnchorRef = null;
   }
 
+  /** Identifier for an Enter OTP step, unique among this list's other Enter OTP steps. */
+  otpIdentifier(step?: ScenarioStepModel) {
+    const taken = this.steps
+      .filter((s) => s !== step && s.action === ScenarioStepAction.ENTER_OTP)
+      .map((s) => s.identifier);
+
+    return otpIdentifierFor(taken);
+  }
+
   @action
   addStep(config: StepActionConfig) {
+    const isOtp = config.action === ScenarioStepAction.ENTER_OTP;
+
     const step = this.store.createRecord('scenario-step', {
       order: this.steps.length + 1,
       action: config.action,
-      identifier: '',
+      identifier: isOtp ? this.otpIdentifier() : '',
       value: config.defaultValue ?? '',
       isSecure: false,
+      metadata: { ...config.defaultMetadata },
       role: this.args.userRole ?? null,
       scenario: this.args.scenarioDetail,
     });
@@ -177,10 +195,21 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
       return;
     }
 
+    const wasOtp = step.action === ScenarioStepAction.ENTER_OTP;
+
     step.action = config.action;
-    step.identifier = '';
+
+    // Enter OTP names its code field itself; leaving it drops only that auto
+    // name, so a saved custom identifier (e.g. "Authenticator code") is kept.
+    if (config.action === ScenarioStepAction.ENTER_OTP) {
+      step.identifier = this.otpIdentifier(step);
+    } else if (!wasOtp || isAutoOtpIdentifier(step.identifier)) {
+      step.identifier = '';
+    }
+
     step.value = config.defaultValue ?? '';
     step.isSecure = false;
+    step.metadata = { ...config.defaultMetadata };
 
     this.args.clearStepError?.(step);
   }

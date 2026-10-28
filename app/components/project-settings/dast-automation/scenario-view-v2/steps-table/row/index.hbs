@@ -39,7 +39,7 @@
       @onChange={{this.handleActionSelect}}
       @disabled={{@isReadOnly}}
       @triggerClass='{{if
-        this.isEnterTextAction
+        this.actionInfo
         (concat this.classes.compactTrigger " " this.classes.enterInputTrigger)
         this.classes.compactTrigger
       }}'
@@ -56,13 +56,13 @@
       </AkStack>
     </AkSelect>
 
-    {{#if this.isEnterTextAction}}
+    {{#if this.actionInfo}}
       <AkStack
         @alignItems='center'
         local-class='enter-input-info-icon-container'
       >
         <AkTooltip
-          @title={{t 'dastAutomation.enterInputTypeInfo'}}
+          @title={{t this.actionInfo}}
           @placement='top'
           @arrow={{true}}
           @renderInPlace={{true}}
@@ -78,20 +78,42 @@
     {{/if}}
   </div>
 
-  {{! Identifier cell }}
-  <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
-    @errorMessage={{this.identifierErrorMessage}}
-  >
-    <AkTextField
-      @value={{@step.identifier}}
-      @placeholder={{t this.identifierPlaceholder}}
-      @disabled={{@isReadOnly}}
-      @error={{if this.identifierError true false}}
-      local-class='compact-field'
-      {{on 'input' this.handleIdentifierInput}}
-      data-test-dastAutomationScenario-stepsTable-rowIdentifier
-    />
-  </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+  {{! Identifier cell (Enter OTP: "Code from"; its identifier is set automatically) }}
+  {{#if this.isEnterOtp}}
+    <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+      @errorMessage={{this.otpCodeFromErrorMessage}}
+    >
+      <AkSelect
+        @options={{this.otpCodeFromOptions}}
+        @selected={{this.selectedOtpCodeFrom}}
+        @onChange={{this.handleOtpCodeFromSelect}}
+        @placeholder={{t this.valuePlaceholder}}
+        @disabled={{@isReadOnly}}
+        @error={{if this.otpCodeFromError true false}}
+        @triggerClass={{this.classes.compactTrigger}}
+        @dropdownClass={{this.classes.otpCodeFromDropdown}}
+        local-class='value-select'
+        data-test-dastAutomationScenario-stepsTable-rowOtpCodeFrom
+        as |option|
+      >
+        {{if (eq option.kind 'app') option.label (t option.label)}}
+      </AkSelect>
+    </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+  {{else}}
+    <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+      @errorMessage={{this.identifierErrorMessage}}
+    >
+      <AkTextField
+        @value={{@step.identifier}}
+        @placeholder={{t this.identifierPlaceholder}}
+        @disabled={{@isReadOnly}}
+        @error={{if this.identifierError true false}}
+        local-class='compact-field'
+        {{on 'input' this.handleIdentifierInput}}
+        data-test-dastAutomationScenario-stepsTable-rowIdentifier
+      />
+    </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+  {{/if}}
 
   {{! Value cell }}
   <div local-class='value-cell'>
@@ -185,8 +207,61 @@
         </AkSelect>
       </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
 
-    {{else if (eq this.valueKind 'none')}}
-      {{! No value: the instruction lives in the identifier (e.g. Open App). }}
+    {{else if (eq this.valueKind 'otp')}}
+      {{#if this.isOtpFromKey}}
+        <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+          @errorMessage={{this.otpInputErrorMessage}}
+        >
+          <AkTextField
+            @type='password'
+            @value={{@step.value}}
+            @placeholder={{t
+              'dastAutomation.stepPlaceholders.authenticatorKey'
+            }}
+            @disabled={{@isReadOnly}}
+            @error={{if this.otpInputError true false}}
+            local-class='compact-field'
+            autocomplete='off'
+            {{on 'input' this.handleValueInput}}
+            {{on 'focus' this.handleOtpKeyFocus}}
+            {{on 'blur' this.handleOtpKeyBlur}}
+            data-test-dastAutomationScenario-stepsTable-rowValue
+          />
+        </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+      {{else if this.isOtpAppCustom}}
+        <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+          @errorMessage={{this.otpInputErrorMessage}}
+        >
+          <AkTextField
+            @type='text'
+            @value={{@step.value}}
+            @placeholder={{t 'dastAutomation.stepPlaceholders.otpAppId'}}
+            @disabled={{@isReadOnly}}
+            @error={{if this.otpInputError true false}}
+            local-class='compact-field'
+            {{on 'input' this.handleValueInput}}
+            data-test-dastAutomationScenario-stepsTable-rowOtpAppCustom
+          />
+        </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+
+      {{else if this.selectedOtpCodeFrom}}
+        {{! A known app: optional instructions for the agent (metadata.note). }}
+        <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
+          @errorMessage={{this.otpInputErrorMessage}}
+        >
+          <AkTextField
+            @type='text'
+            @value={{this.otpNote}}
+            @placeholder={{t 'dastAutomation.stepPlaceholders.otpNote'}}
+            @disabled={{@isReadOnly}}
+            @error={{if this.otpInputError true false}}
+            local-class='compact-field'
+            {{on 'input' this.handleOtpNoteInput}}
+            data-test-dastAutomationScenario-stepsTable-rowOtpNote
+          />
+        </ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper>
+      {{/if}}
 
     {{else}}
       <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper

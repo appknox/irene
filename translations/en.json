@@ -396,6 +396,8 @@
     "inputValue": "Input Value",
     "inputType": "Input Type",
     "enterInputTypeInfo": "Type of input can be Text, OTP & Password",
+    "enterOtpInfo": "Code from an app: during login the agent opens that app, reads the newest code and types it into the verification code field. Add optional instructions to help it find the code (e.g. Open the AuthLab entry). Authenticator key: the code is generated from the key at the moment it is typed; the key is always masked.",
+    "otpCodeFrom": "Choose where the code comes from",
     "enterType": "Enter Type",
     "noScenariosFound": "No scenarios found.",
     "statusColumnToggleInfo": "Use this toggle to Activate/Deactivate a scenario. Only Active scenarios will be used for executing DAST automation.",
@@ -429,7 +431,11 @@
       "selectTooLong": "Option label must be 32 characters or fewer.",
       "checkValueInvalid": "Value must be Checked or Unchecked.",
       "swipeValueInvalid": "Direction must be Up, Down, Left, or Right.",
-      "waitValueRange": "Wait must be an integer between 1 and 60 seconds."
+      "waitValueRange": "Wait must be an integer between 1 and 60 seconds.",
+      "authenticatorKeyInvalid": "Enter a valid authenticator key (base32) or otpauth://totp link.",
+      "otpAppIdInvalid": "Enter a valid bundle or package ID (e.g. com.example.app).",
+      "otpAppBlocked": "This app can't be used to read a code.",
+      "otpNoteTooLong": "Instructions must be 256 characters or fewer."
     },
     "stepActions": {
       "tap": "Tap",
@@ -440,14 +446,22 @@
       "longPress": "Long Press",
       "swipe": "Swipe",
       "drag": "Drag",
-      "openApp": "Open App"
+      "enterOtp": "Fetch OTP"
     },
     "stepPlaceholders": {
       "count": "Select the count",
       "text": "Text",
       "select": "Select",
       "enterValue": "Enter value",
-      "openApp": "e.g. Open Messages app to get the OTP"
+      "otpAppId": "Bundle or package ID",
+      "otpNote": "Instructions for the agent (optional)",
+      "authenticatorKey": "Secret key or otpauth:// link"
+    },
+    "otpSources": {
+      "authenticatorKey": "Authenticator key"
+    },
+    "otpApps": {
+      "other": "Other app…"
     },
     "directions": {
       "up": "Up",

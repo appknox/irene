@@ -281,6 +281,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
       identifier: step.identifier,
       value: step.value,
       is_secure: step.isSecure,
+      metadata: step.metadata ?? {},
     };
   }
 
