@@ -848,6 +848,78 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     }
   );
 
+  test('it searches captured apis by host or path', async function (assert) {
+    let lastQuery = null;
+
+    const matches = (capi, q) =>
+      capi.request.host.toLowerCase().includes(q) ||
+      capi.request.path.toLowerCase().includes(q);
+
+    this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
+      const q = (req.queryParams.q || '').toLowerCase();
+
+      if (!req.queryParams.is_active) {
+        lastQuery = req.queryParams.q;
+      }
+
+      const results = schema.capturedapis
+        .all()
+        .models.filter(
+          (capi) =>
+            matches(capi, q) && (!req.queryParams.is_active || capi.is_active)
+        );
+
+      return { count: results.length, previous: null, next: null, results };
+    });
+
+    this.server.get('/v2/files/:id/capturedapis_domains', () => ({
+      project_profile_api_filters: [],
+      auto_generated_api_filters: [],
+    }));
+
+    this.server.get('/v2/files/:id/toggle_captured_apis', () => ({
+      is_active: false,
+    }));
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    const endpoints =
+      '[data-test-fileDetails-apiScan-capturedApi-endpointContainer]';
+    const searchInput =
+      '[data-test-fileDetails-apiScan-capturedApi-searchInput]';
+
+    assert.dom(searchInput).exists();
+    assert.strictEqual(findAll(endpoints).length, 10);
+
+    const term = this.capturedApis[4].request.path.toLowerCase();
+    const expected = this.capturedApis.filter((capi) => matches(capi, term));
+
+    await fillIn(searchInput, term);
+    await triggerKeyEvent(searchInput, 'keyup', 'A');
+
+    assert.strictEqual(lastQuery, term);
+    assert.strictEqual(findAll(endpoints).length, expected.length);
+
+    // The header, and so the search box, stays visible when nothing matches
+    await fillIn(searchInput, 'no-such-endpoint-anywhere');
+    await triggerKeyEvent(searchInput, 'keyup', 'A');
+
+    assert.strictEqual(findAll(endpoints).length, 0);
+    assert.dom(searchInput).exists();
+
+    assert
+      .dom(
+        '[data-test-fileDetails-apiScan-capturedApisDomainFilter-emptyTitle]'
+      )
+      .hasText(t('apiScanModule.noApiFound'));
+
+    assert
+      .dom(
+        '[data-test-fileDetails-apiScan-capturedApisDomainFilter-emptyDescription]'
+      )
+      .hasText(t('apiScanModule.noApiFoundDesc'));
+  });
+
   test('test toggle api endpoint selection', async function (assert) {
     this.server.get('/v2/files/:id/capturedapis', (schema, req) => {
       const results = req.queryParams.is_active

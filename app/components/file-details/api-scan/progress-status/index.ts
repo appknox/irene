@@ -10,6 +10,7 @@ import type IntlService from 'ember-intl/services/intl';
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import { DsStatusGroup } from 'irene/utils/ds-status-group';
+import apiMethodChipColor from 'irene/utils/api-method-chip-color';
 import type { AkChipColor } from 'irene/components/ak-chip';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type FileModel from 'irene/models/file';
@@ -50,14 +51,6 @@ interface ApiScanUrlsResponse {
   scanned_count: number;
 }
 
-const METHOD_CHIP_COLORS: Record<string, AkChipColor> = {
-  GET: 'info',
-  POST: 'success',
-  PUT: 'warn',
-  PATCH: 'secondary',
-  DELETE: 'error',
-};
-
 export default class FileDetailsApiScanProgressStatusComponent extends Component<FileDetailsApiScanProgressStatusSignature> {
   @service declare apiScan: ApiScanService;
   @service declare ajax: IreneAjaxService;
@@ -95,7 +88,8 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
       {
         id: 'scannedOn',
         name: this.intl.t('apiScanModule.scannedAt'),
-        width: 110,
+        width: 140,
+        minWidth: 140,
       },
     ];
   }
@@ -136,7 +130,7 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
 
   @action
   methodChipColor(method: string): AkChipColor {
-    return METHOD_CHIP_COLORS[method.toUpperCase()] ?? 'default';
+    return apiMethodChipColor(method);
   }
 
   @action

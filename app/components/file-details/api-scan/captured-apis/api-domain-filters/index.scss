@@ -25,7 +25,12 @@
 }
 
 .filter-trigger {
-  height: 40px !important;
+  // Same height as AkTextField (input line height + vertical padding), so
+  // the filter lines up with the search box next to it
+  height: calc(1.4375em + 2 * 0.54em) !important;
+  // power-select sets overflow-x: hidden on the trigger, which turns the
+  // y axis into auto and shows a scrollbar; the content fits on one line
+  overflow: hidden !important;
 
   :global(.ember-power-select-status-icon) {
     right: 12px;
