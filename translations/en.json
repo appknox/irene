@@ -106,6 +106,13 @@
   "apiScanInProgress": "API Scan in progress",
   "apiScanStopped": "API scan stopped",
   "apiScanModule": {
+    "scannedApis": "Scanned APIs",
+    "endpointsScannedCount": "{scanned} of {total} endpoints scanned",
+    "searchEndpoints": "Search endpoints",
+    "endpoint": "Endpoint",
+    "scannedAt": "Scanned At",
+    "scanned": "Scanned",
+    "queued": "Queued",
     "noApisCaptured": "No APIs have been captured!",
     "cumulativeDataOfDASTScan": "The data in the file contains cumulative data of all the DAST scan done so far.",
     "performDASTScanByEnablingAPI": "Perform DAST scan by enabling API Capture to get the data.",
