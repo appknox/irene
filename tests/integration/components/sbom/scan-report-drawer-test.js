@@ -1,4 +1,11 @@
-import { find, findAll, render, click, waitFor } from '@ember/test-helpers';
+import {
+  find,
+  findAll,
+  render,
+  click,
+  waitFor,
+  waitUntil,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -189,6 +196,8 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
       )
     );
 
+    await waitFor('[data-test-sbomReportList-reportGeneratingText]');
+
     // refresh dom reference
     reportList = findAll('[data-test-sbomReportList-reportlistItem]');
 
@@ -239,9 +248,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
 
     // wait for api
-    await waitFor('[data-test-sbomReportList-reportlist]', {
-      timeout: 200,
-    });
+    await waitFor('[data-test-sbomReportList-reportlist]');
 
     // refresh dom reference
     reportList = findAll('[data-test-sbomReportList-reportlistItem]');
@@ -284,6 +291,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     );
 
     const window = this.owner.lookup('service:browser/window');
+    await waitUntil(() => window.url !== null);
 
     assert.strictEqual(window.url, 'some_pdf_download_url.com');
     assert.strictEqual(window.target, '_blank');
@@ -379,9 +387,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     realtime.incrementProperty('SbomReportCounter');
 
     // wait for api
-    await waitFor('[data-test-sbomReportList-reportCopyBtn]', {
-      timeout: 200,
-    });
+    await waitFor('[data-test-sbomReportList-reportCopyBtn]');
 
     // refresh dom reference
     reportList = findAll('[data-test-sbomReportList-reportlistItem]');
@@ -468,6 +474,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     );
 
     const window = this.owner.lookup('service:browser/window');
+    await waitUntil(() => window.url !== null);
 
     assert.strictEqual(window.url, 'some_pdf_download_url.com');
     assert.strictEqual(window.target, '_blank');
@@ -557,6 +564,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     );
 
     const window = this.owner.lookup('service:browser/window');
+    await waitUntil(() => window.url !== null);
 
     assert.strictEqual(window.url, 'some_download_url.com');
     assert.strictEqual(window.target, '_blank');
@@ -609,6 +617,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
     );
 
     const window = this.owner.lookup('service:browser/window');
+    await waitUntil(() => window.url !== null);
 
     assert.strictEqual(window.url, 'download-url-for-ai_bom');
   });

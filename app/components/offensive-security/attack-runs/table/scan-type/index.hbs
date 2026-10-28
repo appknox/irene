@@ -5,14 +5,7 @@
       data-test-offensiveSecurity-attackRuns-scanType='comprehensive'
     >
       <AkIcon @iconName='target' @size='small' local-class='scan-type-icon' />
-      <AkTypography
-        @variant='body2'
-        @color='inherit'
-        @fontWeight='medium'
-        @noWrap={{true}}
-      >
-        {{t 'offensiveSecurity.comprehensive'}}
-      </AkTypography>
+      <span>{{t 'offensiveSecurity.comprehensive'}}</span>
     </span>
   {{else}}
     <span
@@ -20,14 +13,7 @@
       data-test-offensiveSecurity-attackRuns-scanType='resilience'
     >
       <AkIcon @iconName='shield' @size='small' local-class='scan-type-icon' />
-      <AkTypography
-        @variant='body2'
-        @color='inherit'
-        @fontWeight='medium'
-        @noWrap={{true}}
-      >
-        {{t 'offensiveSecurity.resilienceOnly'}}
-      </AkTypography>
+      <span>{{t 'offensiveSecurity.resilienceOnly'}}</span>
     </span>
   {{/if}}
 </div>

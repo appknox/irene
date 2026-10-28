@@ -4,19 +4,22 @@
   justify-content: center;
   width: 96px;
   box-sizing: border-box;
-  padding: 0.25em 0.5em;
+  height: 24px;
+  padding: 0 0.5em;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
+  line-height: 1;
   border: 1px solid currentColor;
   white-space: nowrap;
   text-align: center;
 }
 
 .risk-critical {
-  background-color: var(--offensive-security-attack-runs-risk-critical-bg-color);
+  background-color: var(
+    --offensive-security-attack-runs-risk-critical-bg-color
+  );
   color: var(--offensive-security-attack-runs-risk-critical-color);
 }
 
@@ -41,4 +44,3 @@
   background-color: var(--offensive-security-attack-runs-risk-unknown-bg-color);
   color: var(--offensive-security-attack-runs-risk-unknown-color);
 }
-
