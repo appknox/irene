@@ -87,6 +87,9 @@ export default class FileModel extends ModelBaseMixin {
   declare isApiDone: boolean;
 
   @attr('boolean')
+  declare isApiScanStopRequested: boolean;
+
+  @attr('boolean')
   declare isStaticDone: boolean;
 
   @attr('boolean')

@@ -1244,17 +1244,18 @@ body {
 
   // variables for file-details/api-scan/progress-status
   --file-details-api-scan-progress-status-border-radius: var(--border-radius);
-  --file-details-api-scan-progress-status-card-box-shadow: var(--box-shadow-3);
   --file-details-api-scan-progress-status-card-background: var(
     --background-main
   );
   --file-details-api-scan-progress-status-indicator-background: var(
     --success-main
   );
-  --file-details-api-scan-progress-status-text-primary: var(--text-primary);
-  --file-details-api-scan-progress-status-font-weight-medium: var(
-    --font-weight-medium
-  );
+  --file-details-api-scan-progress-status-border-color: var(--border-color-1);
+  --file-details-api-scan-progress-status-dot-default: var(--neutral-grey-400);
+  --file-details-api-scan-progress-status-success: var(--success-main);
+  --file-details-api-scan-progress-status-warn: var(--warn-main);
+  --file-details-api-scan-progress-status-warn-text: var(--warn-dark);
+  --file-details-api-scan-progress-status-error: var(--error-main);
 
   // variables for file-details/api-scan/results
   --file-details-api-scan-results-tabs-container-background: var(
