@@ -4,6 +4,8 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import type RouterService from '@ember/routing/router-service';
+
 import ENV from 'irene/config/environment';
 import type UserModel from 'irene/models/user';
 import type ConfigurationService from 'irene/services/configuration';
@@ -22,6 +24,7 @@ export default class OffensiveSecurityWrapperComponent extends Component<Offensi
   @service('browser/window') declare window: Window;
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
+  @service declare router: RouterService;
 
   @tracked isSidebarCollapsed: boolean;
 
@@ -55,6 +58,11 @@ export default class OffensiveSecurityWrapperComponent extends Component<Offensi
       'sidebarState',
       this.isSidebarCollapsed ? 'collapsed' : 'expanded'
     );
+  }
+
+  @action
+  navigateToNewAssessment() {
+    this.router.transitionTo('authenticated.offensive-security.new-assessment');
   }
 }
 

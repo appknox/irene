@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { service } from '@ember/service';
-import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -15,11 +14,6 @@ export default class AuthenticatedOffensiveSecurityScanController extends Contro
   @tracked goal: string | null = null;
 
   declare model: OffsecScanModel;
-
-  @action
-  handleGoalParamChange(goalId: string | null): void {
-    this.goal = goalId;
-  }
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const scanTitle =

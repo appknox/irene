@@ -1,0 +1,30 @@
+<AkStack
+  @direction='column'
+  @spacing='3'
+  class='p-3'
+  data-test-offensiveSecurity-runResults
+>
+  {{#if this.activeGoal}}
+    <OffensiveSecurity::ScanResults::PentestResults
+      @scan={{@scan}}
+      @goals={{this.pentestGoals}}
+      @initialGoalIndex={{this.activeGoalIndex}}
+      @onBack={{this.closeGoal}}
+      @onGoalChange={{this.openGoal}}
+    />
+  {{else}}
+    <AkBreadcrumbs::AutoTrail class='mb-1' />
+
+    <OffensiveSecurity::ScanResults::PentestGoalsCard
+      @scan={{@scan}}
+      @goals={{this.pentestGoals}}
+      @onGoalClick={{this.openGoal}}
+    />
+
+    <OffensiveSecurity::ScanResults::FindingsList
+      @scan={{@scan}}
+      @findings={{this.findings}}
+      @onFindingClick={{this.handleFindingClick}}
+    />
+  {{/if}}
+</AkStack>

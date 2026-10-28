@@ -361,6 +361,7 @@ Router.map(function () {
           this.route('index', { path: '/' });
           this.route('new-assessment');
           this.route('scan', { path: '/scans/:scan_id' });
+          this.route('results', { path: '/scans/:scan_id/results' });
           this.route('finding', {
             path: '/scans/:scan_id/findings/:finding_id',
           });

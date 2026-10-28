@@ -1,0 +1,81 @@
+<section local-class='card' data-test-assessment-type-card>
+  <div local-class='card-header'>
+    <AkTypography @variant='subtitle1' @fontWeight='bold'>
+      {{t 'offensiveSecurity.assessmentType'}}
+    </AkTypography>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{t 'offensiveSecurity.assessmentTypeSubtitle'}}
+    </AkTypography>
+  </div>
+
+  <div local-class='assessment-options' role='radiogroup'>
+    <label
+      local-class='assessment-option {{if this.isComprehensive "is-selected"}}'
+      data-test-card-comprehensive
+    >
+      <input
+        type='radio'
+        name='offsec-assessment-type'
+        value='comprehensive'
+        checked={{this.isComprehensive}}
+        local-class='hidden-radio'
+        {{on 'change' (fn this.selectAssessmentType 'comprehensive')}}
+      />
+
+      <span local-class='option-top-row'>
+        <span local-class='radio-indicator'></span>
+
+        <AkTypography @fontWeight='bold' local-class='option-title'>
+          {{t 'offensiveSecurity.comprehensiveTitle'}}
+        </AkTypography>
+
+        <span local-class='option-tag tag-success'>
+          {{t 'offensiveSecurity.fullCoverage'}}
+        </span>
+      </span>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        local-class='option-description'
+      >
+        {{t 'offensiveSecurity.comprehensiveDesc'}}
+      </AkTypography>
+    </label>
+
+    <label
+      local-class='assessment-option {{if this.isResilience "is-selected"}}'
+      data-test-card-resilience
+    >
+      <input
+        type='radio'
+        name='offsec-assessment-type'
+        value='resilience'
+        checked={{this.isResilience}}
+        local-class='hidden-radio'
+        {{on 'change' (fn this.selectAssessmentType 'resilience')}}
+      />
+
+      <span local-class='option-top-row'>
+        <span local-class='radio-indicator'></span>
+
+        <AkTypography @fontWeight='bold' local-class='option-title'>
+          {{t 'offensiveSecurity.resilienceTitle'}}
+        </AkTypography>
+
+        <span local-class='option-tag tag-info'>
+          {{t 'offensiveSecurity.focused'}}
+        </span>
+      </span>
+
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        local-class='option-description'
+      >
+        {{t 'offensiveSecurity.resilienceDesc'}}
+      </AkTypography>
+    </label>
+  </div>
+</section>

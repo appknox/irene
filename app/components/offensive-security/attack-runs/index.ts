@@ -17,6 +17,7 @@ import type OffsecScanModel from 'irene/models/offsec-scan';
 import type PollService from 'irene/services/poll';
 import type EventBusService from 'irene/services/event-bus';
 import type RealtimeService from 'irene/services/realtime';
+import type OffsecNewAssessmentService from 'irene/services/offsec-new-assessment';
 
 export type PlatformFilter = 'all' | 'android' | 'ios';
 
@@ -88,6 +89,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   @service declare poll: PollService;
   @service declare eventBus: EventBusService;
   @service declare realtime: RealtimeService;
+  @service declare offsecNewAssessment: OffsecNewAssessmentService;
 
   @tracked scans: OffsecScanModel[] = [];
   @tracked totalCount = 0;
@@ -226,7 +228,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
       {
         name: this.intl.t('offensiveSecurity.application'),
         component: 'offensive-security/attack-runs/table/target',
-        minWidth: 160,
+        minWidth: 220,
         isSortable: false,
       },
       {
@@ -538,11 +540,6 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   @action
-  navigateToNewAssessment(): void {
-    this.router.transitionTo('authenticated.offensive-security.new-assessment');
-  }
-
-  @action
   handleItemPerPageChange({ limit }: { limit: number }): void {
     this.setRouteQueryParams({ scan_limit: limit, scan_offset: 0 });
 
@@ -627,6 +624,10 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
         const recordList = scans.slice();
 
+        if (this.redirectToStartedScan(recordList)) {
+          return;
+        }
+
         this.scans = recordList;
         this.totalCount = scans.meta?.count ?? this.scans.length;
         const subLen = submissions?.length;
@@ -657,6 +658,23 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
       }
     }
   );
+
+  /** Opens the scan for an assessment begun from the new-assessment page once it lands in the list. */
+  redirectToStartedScan(scans: OffsecScanModel[]): boolean {
+    const startedScan = this.offsecNewAssessment.findStartedScan(scans);
+
+    if (!startedScan) {
+      return false;
+    }
+
+    this.offsecNewAssessment.clearAssessmentStarted();
+    this.router.transitionTo(
+      'authenticated.offensive-security.scan',
+      startedScan.id
+    );
+
+    return true;
+  }
 
   private updateCountsFromStatusCounts(
     statusCounts: OffsecStatusCounts,

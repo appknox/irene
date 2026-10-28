@@ -651,9 +651,9 @@ export default class OffsecScanModel extends Model {
     return this.isComprehensive ? 'Comprehensive' : 'Resilience Only';
   }
 
-  /** Single source for the date the list both shows and sorts on. */
+  /** Single source for the date the list both shows and sorts on: when the run started, so a late finish or failure doesn't reorder it. */
   get scannedOn(): Date | null {
-    return this.completedAt ?? this.createdAt;
+    return this.createdAt;
   }
 
   get scannedOnLabel(): string {

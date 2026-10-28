@@ -43,29 +43,27 @@ const SELECTORS = {
   failureBanner: '[data-test-offensiveSecurity-scanResults-failureBanner]',
   summaryCard: '[data-test-offensiveSecurity-summaryCard]',
   summaryStat: '[data-test-offensiveSecurity-summaryCard-stat]',
-  summaryRisk: '[data-test-offensiveSecurity-summaryCard-risk]',
-  summaryUnassessed: '[data-test-offensiveSecurity-summaryCard-unassessed]',
   artifactsCard: '[data-test-offensiveSecurity-artifactsCard]',
   artifactRow: '[data-test-offensiveSecurity-artifactsCard-row]',
   artifactEmpty: '[data-test-offensiveSecurity-artifactsCard-empty]',
-  findingsList: '[data-test-offensiveSecurity-findingsList]',
-  findingRow: '[data-test-offensiveSecurity-findingsList-row]',
-  findingsEmpty: '[data-test-offensiveSecurity-findingsList-empty]',
-  groupTitle: '[data-test-offensiveSecurity-findingsList-groupTitle]',
-  groupHeader: '[data-test-offensiveSecurity-findingsList-groupHeader]',
-  agentLog: '[data-test-offensiveSecurity-agentLog]',
-  agentLogInProgress: '[data-test-offensiveSecurity-agentLog-inProgress]',
-  agentLogPane: '[data-test-offensiveSecurity-agentLog-pane]',
   statusRunning: '[data-test-offensiveSecurity-statusChip-running]',
   statusCompleted: '[data-test-offensiveSecurity-statusChip-completed]',
   statusFailed: '[data-test-offensiveSecurity-statusChip-failed]',
   deviceCard: '[data-test-offensiveSecurity-deviceCard]',
   devicePlaceholder: '[data-test-offensiveSecurity-devicePlaceholder]',
   deviceScreen: '[data-test-offensiveSecurity-deviceScreen]',
-  deviceLiveBadge: '[data-test-offensiveSecurity-deviceLiveBadge]',
+  deviceLiveBadge: '[data-test-offensiveSecurity-deviceLiveBadge="live"]',
+  deviceStatusPill: '[data-test-offensiveSecurity-deviceLiveBadge]',
+  deviceCaption: '[data-test-offensiveSecurity-deviceCaption]',
+  phoneFrame: '[data-test-offensiveSecurity-phoneFrame]',
+  artifactsBtn: '[data-test-offensiveSecurity-summaryCard-artifactsBtn]',
+  artifactsDrawer: '[data-test-offensiveSecurity-summaryCard-artifactsDrawer]',
+  artifactsClose: '[data-test-offensiveSecurity-summaryCard-artifactsClose]',
+  runSubtitle: '[data-test-offensiveSecurity-scanResults-runSubtitle]',
+  viewResultsBtn: '[data-test-offensiveSecurity-scanResults-viewResultsBtn]',
+  platform: '[data-test-offensiveSecurity-scanResults-platform]',
+  logStatusBadge: '[data-test-offensiveSecurity-streamingBadge]',
   novncContainer: '[data-test-NovncRfb-canvasContainer]',
-  deviceCollapseBtn: '[data-test-offensiveSecurity-collapseDeviceBtn]',
-  deviceShowBtn: '[data-test-offensiveSecurity-showDeviceBtn]',
   deviceExpandBtn: '[data-test-offensiveSecurity-expandPreviewBtn]',
   deviceBackdrop: '[data-test-offensiveSecurity-deviceModal-backdrop]',
 };
@@ -181,6 +179,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
+    await click(SELECTORS.artifactsBtn);
 
     assert.dom(SELECTORS.artifactRow).exists({ count: 1 });
     assert.dom(SELECTORS.artifactsCard).exists();
@@ -194,6 +193,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
+    await click(SELECTORS.artifactsBtn);
 
     assert
       .dom(SELECTORS.artifactEmpty)
@@ -216,6 +216,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
+    await click(SELECTORS.artifactsBtn);
 
     assert
       .dom(SELECTORS.artifactRow)
@@ -241,6 +242,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
+    await click(SELECTORS.artifactsBtn);
 
     assert.dom(SELECTORS.artifactRow).exists({ count: 2 });
     assert
@@ -253,346 +255,115 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.artifactsCard).containsText('20.0 MB');
   });
 
-  test('it lists findings for the scan', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        {
-          id: 1,
-          signature_id: 'root-01',
-          name: 'Root detection',
-          category: 'root_detection',
-          outcome: 'bypassed',
-          order: 0,
-          evidence_ids: [],
-        },
-        {
-          id: 2,
-          signature_id: 'ssl-01',
-          name: 'SSL pinning',
-          category: 'ssl_pinning',
-          outcome: 'resisted',
-          order: 1,
-          evidence_ids: [],
-        },
+  // ─── Live run ──────────────────────────────────────────────────────────────
+
+  test.each(
+    'the run card explains what the agent is doing for each status',
+    [
+      [SCAN_STATUS.QUEUED, 'offensiveSecurity.runSubtitleQueued'],
+      [SCAN_STATUS.RUNNING, 'offensiveSecurity.runSubtitleRunning'],
+      [SCAN_STATUS.COMPLETED, 'offensiveSecurity.runSubtitleCompleted'],
+      [SCAN_STATUS.FAILED, 'offensiveSecurity.runSubtitleFailed'],
+    ],
+    async function (assert, [status, subtitleKey]) {
+      const scan = createScan(this, { status });
+      serveScan(this, scan);
+
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
+
+      assert.dom(SELECTORS.runSubtitle).hasText(t(subtitleKey));
+    }
+  );
+
+  test.each(
+    'the log badge reflects the run state',
+    [
+      [SCAN_STATUS.QUEUED, 'waiting', 'offensiveSecurity.logStatusWaiting'],
+      [
+        SCAN_STATUS.RUNNING,
+        'streaming',
+        'offensiveSecurity.logStatusStreaming',
       ],
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    assert.dom(SELECTORS.findingsList).exists();
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 2);
-    assert.dom(headers[0]).includesText('Root 01');
-    assert.dom(headers[1]).includesText('SSL 01');
-  });
-
-  test('it lists a detected but untriggered finding with an untriggered badge', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        {
-          id: 1,
-          signature_id: 'root-file-probe',
-          name: 'Root artifact file probe',
-          category: 'root_detection',
-          outcome: 'bypassed',
-          detected: true,
-          order: 0,
-          evidence_ids: [],
-        },
-        // Detected statically but never triggered at runtime — must still appear.
-        {
-          id: 2,
-          signature_id: 'frida-port-scan',
-          name: 'Frida port scan',
-          category: 'frida_detection',
-          outcome: 'not_attempted',
-          detected: true,
-          triggered: false,
-          order: 1,
-          evidence_ids: [],
-        },
+      [
+        SCAN_STATUS.COMPLETED,
+        'finished',
+        'offensiveSecurity.logStatusFinished',
       ],
-    });
+      [SCAN_STATUS.FAILED, 'failed', 'offensiveSecurity.logStatusFailed'],
+    ],
+    async function (assert, [status, state, labelKey]) {
+      const scan = createScan(this, { status });
+      serveScan(this, scan);
+
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
+
+      assert
+        .dom(SELECTORS.logStatusBadge)
+        .hasAttribute('data-test-offensiveSecurity-streamingBadge', state);
+      assert.dom(SELECTORS.logStatusBadge).hasText(t(labelKey));
+    }
+  );
+
+  test.each(
+    'View results is offered once the agent has started',
+    [
+      [SCAN_STATUS.QUEUED, false],
+      [SCAN_STATUS.RUNNING, true],
+      [SCAN_STATUS.COMPLETED, true],
+      [SCAN_STATUS.FAILED, false],
+    ],
+    async function (assert, [status, visible]) {
+      const scan = createScan(this, { status });
+      serveScan(this, scan);
+
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
+
+      assert
+        .dom(SELECTORS.viewResultsBtn)
+        [visible ? 'exists' : 'doesNotExist']();
+    }
+  );
+
+  test('clicking View results opens the results page for the scan', async function (assert) {
+    const scan = createScan(this, { status: SCAN_STATUS.COMPLETED });
     serveScan(this, scan);
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 2);
-    assert.dom(headers[0]).includesText('Root File Probe');
-    assert.dom(headers[1]).includesText('Frida Port Scan');
-  });
+    const router = this.owner.lookup('service:router');
 
-  test('a finding whose check fired reads Triggered, not Untriggered', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        // outcome not_attempted (no bypass tried) but it fired at runtime — triggered.
-        {
-          id: 1,
-          signature_id: 'root-package-query',
-          name: 'Superuser package-manager query',
-          category: 'root_detection',
-          outcome: 'not_attempted',
-          detected: true,
-          triggered: true,
-          order: 0,
-          evidence_ids: [],
-        },
-      ],
-    });
-    serveScan(this, scan);
+    assert.strictEqual(router.lastRoute, null);
+    assert
+      .dom(SELECTORS.viewResultsBtn)
+      .hasText(t('offensiveSecurity.viewResults'));
 
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
+    await click(SELECTORS.viewResultsBtn);
 
-    assert.dom(SELECTORS.findingsList).includesText('Root Package Query');
-    assert.strictEqual(findAll(SELECTORS.groupHeader).length, 1);
-  });
-
-  test('it groups findings by dictionary key and formats the group header in title case', async function (assert) {
-    const scan = createScan(this, {
-      findings: {
-        'anti-debug-ptrace': {
-          id: 1,
-          signature_id: 'anti-debug-ptrace',
-          name: 'ptrace PTRACE_TRACEME check',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 0,
-        },
-        'debug-settings-probe': {
-          id: 2,
-          signature_id: 'debug-settings-probe',
-          name: 'Developer-options / USB-debugging settings probe',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 1,
-        },
-        'frida-port-scan': {
-          id: 3,
-          signature_id: 'frida-port-scan',
-          name: 'Frida server port scan (27042)',
-          category: 'resilience',
-          outcome: 'not_attempted',
-          order: 2,
-        },
-      },
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    assert.dom(SELECTORS.findingsList).exists();
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 2);
-
-    const groupTitles = new Set(
-      findAll(SELECTORS.groupTitle).map((el) => el.textContent.trim())
+    assert.strictEqual(
+      router.lastRoute,
+      'authenticated.offensive-security.results'
     );
-    assert.true(groupTitles.has('Anti Debug Ptrace'));
-    assert.true(groupTitles.has('Debug Settings Probe'));
-    assert.false(groupTitles.has('Frida Port Scan'));
-
-    assert.dom(SELECTORS.findingsList).containsText('Anti Debug Ptrace');
-    assert.dom(SELECTORS.findingsList).containsText('Debug Settings Probe');
+    assert.deepEqual(router.lastModels, [String(scan.id)]);
   });
 
-  test('findings groups have accordions for all and format keys with slashes', async function (assert) {
-    const scan = createScan(this, {
-      findings: {
-        'anti-debug-ptrace': {
-          id: 1,
-          signature_id: 'anti-debug-ptrace',
-          name: 'ptrace PTRACE_TRACEME check',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 0,
-        },
-        'dev-options/usb-debugging': {
-          id: 2,
-          signature_id: 'dev-options/usb-debugging',
-          name: 'Developer-options detection',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 1,
-        },
-      },
-    });
+  test('the scan summary is only shown once the run has completed', async function (assert) {
+    const scan = createScan(this, { status: SCAN_STATUS.RUNNING });
     serveScan(this, scan);
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 2, 'Two group headers rendered');
-
-    // Key with slash formatted to Title Case
-    assert.dom(headers[1]).includesText('Dev Options USB Debugging');
+    assert.dom(SELECTORS.summaryCard).doesNotExist();
   });
 
-  test('findings are rendered as clickable group rows without child rows', async function (assert) {
+  test('the artifacts drawer opens from the summary and closes again', async function (assert) {
     const scan = createScan(this, {
-      findings: {
-        'debug-settings-probe': {
-          id: 1,
-          signature_id: 'debug-settings-probe',
-          name: 'Developer-options / USB-debugging settings probe',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 0,
-        },
-        'freerasp-talsec': {
-          id: 2,
-          signature_id: 'freerasp-talsec',
-          name: 'FreeRASP / Talsec SDK',
-          category: 'resilience',
-          outcome: 'bypassed',
-          order: 1,
-        },
-      },
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 2, 'Two group rows rendered');
-
-    assert.dom(headers[0]).includesText('Debug Settings Probe');
-    assert.dom(headers[0]).includesText('(1)');
-    assert.dom(headers[1]).includesText('Freerasp Talsec');
-    assert.dom(headers[1]).includesText('(1)');
-  });
-
-  test('it groups findings when API findings object contains arrays of findings under category keys', async function (assert) {
-    const scan = createScan(this, {
-      findings: {
-        root_detection: [
-          {
-            id: 8,
-            signature_id: 'root-aggregate-guard',
-            name: 'Obfuscated aggregate root verdict method',
-            category: 'resilience',
-            outcome: 'bypassed',
-          },
-          {
-            id: 9,
-            signature_id: 'root-build-props',
-            name: 'Build tags and system properties',
-            category: 'resilience',
-            outcome: 'bypassed',
-          },
-        ],
-        debugger_detection: [
-          {
-            id: 1,
-            signature_id: 'anti-debug-ptrace',
-            name: 'ptrace check',
-            category: 'resilience',
-            outcome: 'bypassed',
-          },
-          {
-            id: 2,
-            signature_id: 'debug-settings-probe',
-            name: 'Developer-options / USB-debugging settings probe',
-            category: 'resilience',
-            outcome: 'bypassed',
-          },
-        ],
-        ssl_pinning: [
-          {
-            id: 6,
-            signature_id: 'okhttp-pinning',
-            name: 'OkHttp Certificate Pinner',
-            category: 'resilience',
-            outcome: 'bypassed',
-          },
-        ],
-      },
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 3, 'Three group headers rendered');
-
-    // Title formatting and acronym handling
-    assert.dom(headers[0]).includesText('Root Detection');
-    assert.dom(headers[0]).includesText('(2)');
-
-    assert.dom(headers[1]).includesText('Debugger Detection');
-    assert.dom(headers[1]).includesText('(2)');
-
-    assert.dom(headers[2]).includesText('SSL Pinning');
-    assert.dom(headers[2]).includesText('(1)');
-  });
-
-  test('it shows an empty state when there are no findings', async function (assert) {
-    const scan = createScan(this, { findings: [] });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    assert
-      .dom(SELECTORS.findingsEmpty)
-      .hasText(t('offensiveSecurity.noFindings'));
-  });
-
-  test('it filters out unassessed findings from the findings list', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        {
-          id: 1,
-          signature_id: 'root-01',
-          name: 'Root detection',
-          category: 'root_detection',
-          outcome: 'bypassed',
-          order: 0,
-          evidence_ids: [],
-        },
-        {
-          id: 2,
-          signature_id: 'usb-01',
-          name: 'USB debugging probe',
-          category: 'resilience',
-          outcome: 'not_attempted',
-          order: 1,
-          evidence_ids: [],
-        },
-      ],
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    assert.dom(SELECTORS.findingsList).exists();
-    const headers = findAll(SELECTORS.groupHeader);
-    assert.strictEqual(headers.length, 1);
-    assert.dom(headers[0]).containsText('Root 01');
-    assert.dom(SELECTORS.findingsList).doesNotContainText('Resilience');
-  });
-
-  test('it shows an empty state when all findings are unassessed', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        {
-          id: 1,
-          signature_id: 'usb-01',
-          name: 'USB debugging probe',
-          category: 'resilience',
-          outcome: 'not_attempted',
-          order: 0,
-          evidence_ids: [],
-        },
+      artifacts: [
+        { name: 'report.json', size: 2048, content_type: 'application/json' },
       ],
     });
     serveScan(this, scan);
@@ -601,9 +372,65 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     await render(TEMPLATE);
 
     assert
-      .dom(SELECTORS.findingsEmpty)
-      .hasText(t('offensiveSecurity.noFindings'));
+      .dom(SELECTORS.artifactsBtn)
+      .hasText(t('offensiveSecurity.artifactsCount', { count: 1 }));
+    assert.dom(SELECTORS.artifactsDrawer).doesNotExist();
+
+    await click(SELECTORS.artifactsBtn);
+
+    assert.dom(SELECTORS.artifactsDrawer).exists();
+    assert.dom(SELECTORS.artifactRow).exists({ count: 1 });
+
+    await click(SELECTORS.artifactsClose);
+
+    assert.dom(SELECTORS.artifactsDrawer).doesNotExist();
   });
+
+  test('the target row names the platform', async function (assert) {
+    const scan = createScan(this, { platform: 'ios' });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.platform).hasText(t('ios'));
+  });
+
+  test('the device panel reads Connecting until the stream is live', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.QUEUED,
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert
+      .dom(SELECTORS.deviceStatusPill)
+      .hasText(t('offensiveSecurity.deviceConnecting'));
+    assert
+      .dom(SELECTORS.deviceCaption)
+      .hasText(t('offensiveSecurity.deviceCaptionWaiting'));
+  });
+
+  test.each(
+    'the device preview uses the frame for the scan platform',
+    [
+      ['ios', 'ios'],
+      ['android', 'android'],
+    ],
+    async function (assert, [platform, frame]) {
+      const scan = createScan(this, { status: SCAN_STATUS.QUEUED, platform });
+      serveScan(this, scan);
+
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
+
+      assert
+        .dom(SELECTORS.phoneFrame)
+        .hasAttribute('data-test-offensiveSecurity-phoneFrame', frame);
+    }
+  );
 
   // ─── Status ────────────────────────────────────────────────────────────────
 
@@ -690,6 +517,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
+    await click(SELECTORS.artifactsBtn);
 
     assert.dom(SELECTORS.artifactRow).exists({ count: 1 });
     await click('[data-test-offensiveSecurity-artifactsCard-download]');
@@ -698,36 +526,6 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
   });
 
   // ─── Interaction ───────────────────────────────────────────────────────────
-
-  test('clicking a finding transitions to its detail route', async function (assert) {
-    const scan = createScan(this, {
-      findings: [
-        {
-          id: 42,
-          signature_id: 'root-01',
-          name: 'Root detection',
-          category: 'root_detection',
-          outcome: 'bypassed',
-          order: 0,
-          evidence_ids: [],
-        },
-      ],
-    });
-    serveScan(this, scan);
-
-    this.set('scanId', String(scan.id));
-    await render(TEMPLATE);
-
-    await click(SELECTORS.groupHeader);
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.lastRoute,
-      'authenticated.offensive-security.finding'
-    );
-    assert.deepEqual(router.lastModels, [String(scan.id), '42']);
-  });
 
   test('it notifies and redirects when the scan cannot be loaded', async function (assert) {
     this.server.get('/v2/offsec/scans/:id', () => new Response(404, {}, {}));
@@ -745,27 +543,29 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     );
   });
 
-  test('it does not render the real device card when the scan is completed or failed', async function (assert) {
-    const completedScan = createScan(this, {
-      status: SCAN_STATUS.COMPLETED,
-    });
-    serveScan(this, completedScan);
+  test.each(
+    'the device card stays after the run ends with the stream marked ended',
+    [
+      [SCAN_STATUS.COMPLETED, 'offensiveSecurity.deviceCaptionEnded'],
+      [SCAN_STATUS.FAILED, 'offensiveSecurity.deviceCaptionFailed'],
+    ],
+    async function (assert, [status, captionKey]) {
+      const scan = createScan(this, { status });
+      serveScan(this, scan);
 
-    this.set('scanId', String(completedScan.id));
-    await render(TEMPLATE);
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
 
-    assert.dom(SELECTORS.deviceCard).doesNotExist();
-
-    const failedScan = createScan(this, {
-      status: SCAN_STATUS.FAILED,
-    });
-    serveScan(this, failedScan);
-
-    this.set('scanId', String(failedScan.id));
-    await render(TEMPLATE);
-
-    assert.dom(SELECTORS.deviceCard).doesNotExist();
-  });
+      assert.dom(SELECTORS.deviceCard).exists();
+      assert
+        .dom(SELECTORS.deviceStatusPill)
+        .hasAttribute('data-test-offensiveSecurity-deviceLiveBadge', 'ended')
+        .hasText(t('offensiveSecurity.deviceStreamEnded'));
+      assert.dom(SELECTORS.deviceCaption).hasText(t(captionKey));
+      assert.dom(SELECTORS.deviceScreen).doesNotExist();
+      assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
+    }
+  );
 
   test('it renders the device placeholder when scan is queued with no device stream', async function (assert) {
     const scan = createScan(this, {
@@ -799,7 +599,12 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert
       .dom(SELECTORS.novncContainer)
       .hasAttribute('data-contain-canvas', 'true');
-    assert.dom(SELECTORS.deviceLiveBadge).exists();
+    assert
+      .dom(SELECTORS.deviceLiveBadge)
+      .hasText(t('offensiveSecurity.deviceLive'));
+    assert
+      .dom(SELECTORS.deviceCaption)
+      .hasText(t('offensiveSecurity.deviceCaptionLive'));
     assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
   });
 

@@ -1,0 +1,58 @@
+.step-root {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 1em;
+}
+
+.marker-column {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-top: 8px;
+  border-radius: 50%;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--offensive-security-new-assessment-step-upcoming-color);
+  background-color: var(
+    --offensive-security-new-assessment-step-upcoming-bg-color
+  );
+
+  &.marker-current {
+    color: var(--offensive-security-new-assessment-step-active-color);
+    background-color: var(--offensive-security-new-assessment-selected-color);
+  }
+
+  &.marker-done {
+    color: var(--offensive-security-new-assessment-step-active-color);
+    background-color: var(--offensive-security-new-assessment-step-done-color);
+  }
+}
+
+.connector {
+  position: absolute;
+  top: 48px;
+  bottom: -24px;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background-color: var(
+    --offensive-security-new-assessment-step-connector-color
+  );
+
+  &.connector-done {
+    background-color: var(--offensive-security-new-assessment-step-done-color);
+  }
+}
+
+.step-content {
+  min-width: 0;
+}

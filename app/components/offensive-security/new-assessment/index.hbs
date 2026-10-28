@@ -1,411 +1,214 @@
 <div local-class='new-assessment-container' data-test-offsec-new-assessment>
-  {{! Page Header Card }}
+  <AkBreadcrumbs::AutoTrail class='mb-2' />
+
   <div local-class='header-card' data-test-new-assessment-header-card>
-    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
-      <AkStack @direction='column' @spacing='0.5'>
-        <AkTypography
-          @variant='h4'
-          @fontWeight='bold'
-          data-test-new-assessment-title
-        >
-          {{t 'offensiveSecurity.startNewAssessment'}}
-        </AkTypography>
+    <AkTypography
+      @variant='h5'
+      @fontWeight='bold'
+      data-test-new-assessment-title
+    >
+      {{t 'offensiveSecurity.startNewAssessment'}}
+    </AkTypography>
 
-        <AkTypography @variant='body2' @color='textSecondary' class='mt-1'>
-          {{t 'offensiveSecurity.startNewAssessmentSubtitle'}}
-        </AkTypography>
-      </AkStack>
-
-      <AkButton
-        @variant='outlined'
-        @type='button'
-        local-class='back-to-runs-btn'
-        data-test-back-to-runs-btn
-        {{on 'click' this.navigateToAttackRuns}}
-      >
-        <:leftIcon>
-          <AkIcon @iconName='arrow-back' />
-        </:leftIcon>
-        <:default>
-          {{t 'offensiveSecurity.allTargets'}}
-        </:default>
-      </AkButton>
-    </AkStack>
+    <AkTypography @variant='body2' data-test-new-assessment-subtitle>
+      {{#if this.hasUploadedApp}}
+        {{t 'offensiveSecurity.startNewAssessmentReadySubtitle'}}
+      {{else}}
+        {{t 'offensiveSecurity.startNewAssessmentSubtitle'}}
+      {{/if}}
+    </AkTypography>
   </div>
 
-  {{#if this.hasUploadedApp}}
-    {{! Phase 2: Uploaded build + Assessment Type + Credentials + Launch CTA }}
-    <div local-class='assessment-form-flow'>
-      {{! Uploaded Build Card }}
-      <div local-class='uploaded-build-card' data-test-uploaded-build-card>
-        <div local-class='uploaded-build-info'>
-          <div local-class='file-icon-box'>
-            <AkIcon @iconName='android' @size='medium' />
-          </div>
-          <div local-class='file-meta'>
-            <span local-class='file-name' data-test-uploaded-filename>
-              {{this.uploadedFile.name}}
-            </span>
-            <span local-class='file-size'>
-              ({{this.formattedFileSize}})
-            </span>
-          </div>
-        </div>
-
-        <AkButton
-          @variant='outlined'
-          @type='button'
-          local-class='change-build-btn'
-          data-test-change-build-btn
-          {{on 'click' this.changeBuild}}
-        >
-          {{t 'offensiveSecurity.changeBuild'}}
-        </AkButton>
-      </div>
-
-      {{! Assessment Type Section }}
-      <div local-class='section-container'>
-        <div local-class='section-header'>
-          <AkTypography @variant='subtitle1' @fontWeight='bold'>
-            {{t 'offensiveSecurity.assessmentType'}}
-          </AkTypography>
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'offensiveSecurity.assessmentTypeSubtitle'}}
-          </AkTypography>
-        </div>
-
-        {{! template-lint-disable require-presentational-children }}
-        <div local-class='assessment-cards-grid'>
-          {{! Card 1: Comprehensive Offensive PT }}
-          <div
-            local-class='assessment-card {{if
-              this.isComprehensive
-              "is-selected"
-            }}'
-            role='button'
-            tabindex='0'
-            data-test-card-comprehensive
-            {{on 'click' (fn this.selectAssessmentType 'comprehensive')}}
-          >
-            <div local-class='card-top-row'>
-              <div local-class='card-title-group'>
-                <div
-                  local-class='radio-indicator {{if
-                    this.isComprehensive
-                    "checked"
-                  }}'
-                >
-                  {{#if this.isComprehensive}}
-                    <div local-class='radio-inner-dot'></div>
-                  {{/if}}
-                </div>
-                <div local-class='card-icon-box target-icon'>
-                  <AkIcon @iconName='target' @size='small' />
-                </div>
-                <span local-class='card-title'>
-                  {{t 'offensiveSecurity.comprehensiveTitle'}}
-                </span>
-              </div>
-
-              <span local-class='coverage-badge'>
-                {{t 'offensiveSecurity.fullCoverage'}}
-              </span>
+  <div local-class='layout-grid'>
+    <ol local-class='steps-list' data-test-new-assessment-steps>
+      <OffensiveSecurity::NewAssessment::Step
+        @number={{1}}
+        @state={{this.uploadStepState}}
+      >
+        {{#if this.hasUploadedApp}}
+          <div local-class='card build-card' data-test-uploaded-build-card>
+            <div local-class='platform-icon-box'>
+              <AkIcon @iconName={{if this.isIosBuild 'ios' 'android'}} />
             </div>
 
-            <p local-class='card-description'>
-              {{t 'offensiveSecurity.comprehensiveDesc'}}
-            </p>
-          </div>
+            <div local-class='build-meta'>
+              <AkTypography @variant='body3' @color='textSecondary'>
+                {{t 'offensiveSecurity.uploadBuild'}}
+              </AkTypography>
 
-          {{! Card 2: Only Resilience Assessment }}
-          <div
-            local-class='assessment-card {{if this.isResilience "is-selected"}}'
-            role='button'
-            tabindex='0'
-            data-test-card-resilience
-            {{on 'click' (fn this.selectAssessmentType 'resilience')}}
-          >
-            <div local-class='card-top-row'>
-              <div local-class='card-title-group'>
-                <div
-                  local-class='radio-indicator {{if
-                    this.isResilience
-                    "checked"
-                  }}'
+              <AkStack @alignItems='center' @spacing='1.5'>
+                <AkTypography
+                  @fontWeight='bold'
+                  @noWrap={{true}}
+                  title={{this.uploadedFile.name}}
+                  data-test-uploaded-filename
                 >
-                  {{#if this.isResilience}}
-                    <div local-class='radio-inner-dot'></div>
-                  {{/if}}
-                </div>
-                <div local-class='card-icon-box shield-icon'>
-                  <AkIcon @iconName='shield' @size='small' />
-                </div>
-                <span local-class='card-title'>
-                  {{t 'offensiveSecurity.resilienceTitle'}}
-                </span>
-              </div>
+                  {{this.uploadedFile.name}}
+                </AkTypography>
 
-              <span local-class='coverage-badge'>
-                {{t 'offensiveSecurity.focused'}}
-              </span>
+                <AkTypography @color='textSecondary' @noWrap={{true}}>
+                  {{this.formattedFileSize}}
+                </AkTypography>
+              </AkStack>
             </div>
 
-            <p local-class='card-description'>
-              {{t 'offensiveSecurity.resilienceDesc'}}
-            </p>
-          </div>
-        </div>
-      </div>
+            <AkButton
+              @variant='outlined'
+              @color='neutral'
+              @type='button'
+              data-test-change-build-btn
+              {{on 'click' this.changeBuild}}
+            >
+              <:leftIcon>
+                <AkIcon @iconName='swap-horiz' />
+              </:leftIcon>
 
-      {{! Test Credentials Section }}
-      <div local-class='section-container'>
-        <div local-class='section-header'>
-          <div local-class='section-title-row'>
+              <:default>{{t 'offensiveSecurity.changeBuild'}}</:default>
+            </AkButton>
+          </div>
+        {{else}}
+          <section>
+            <div local-class='step-heading'>
+              <AkTypography @variant='subtitle1' @fontWeight='bold'>
+                {{t 'offensiveSecurity.uploadBuild'}}
+              </AkTypography>
+
+              <AkTypography @variant='body2' @color='textSecondary'>
+                {{t 'offensiveSecurity.uploadBuildSubtitle'}}
+              </AkTypography>
+            </div>
+
+            {{#let
+              (file-queue name=this.fileQueueName onFileAdded=this.onFileAdded)
+              as |queue|
+            }}
+              <FileDropzone @queue={{queue}} as |dropzone|>
+                <label
+                  local-class='dropzone-area {{if
+                    dropzone.active
+                    "is-dragover"
+                  }} {{if this.isUploading "is-uploading"}}'
+                  data-test-new-assessment-dropzone
+                >
+                  <input
+                    type='file'
+                    accept='.apk,.ipa,.aab'
+                    local-class='hidden-file-input'
+                    data-test-file-input
+                    {{queue.selectFile}}
+                  />
+
+                  <span local-class='dropzone-icon-circle'>
+                    <AkIcon
+                      @iconName={{if
+                        this.isUploading
+                        'autorenew'
+                        'cloud-upload'
+                      }}
+                      local-class={{if this.isUploading 'spinner-icon'}}
+                    />
+                  </span>
+
+                  {{#if this.isUploading}}
+                    <AkTypography @variant='h6' @fontWeight='bold'>
+                      {{t 'uploading'}}
+                      {{this.currentFile.name}}
+                    </AkTypography>
+
+                    <div local-class='progress-container'>
+                      <AkLoader::Linear
+                        @variant={{if
+                          (gt this.progress 0)
+                          'determinate'
+                          'indeterminate'
+                        }}
+                        @progress={{this.progress}}
+                        @color='success'
+                        @height={{8}}
+                        data-test-upload-progress-bar
+                      >
+                        <:label>
+                          <span local-class='progress-percentage'>
+                            {{this.progress}}%
+                          </span>
+                        </:label>
+                      </AkLoader::Linear>
+                    </div>
+                  {{else}}
+                    <AkTypography @variant='h6' @fontWeight='bold'>
+                      {{t 'offensiveSecurity.dropAppToBrowse'}}
+                    </AkTypography>
+
+                    <AkTypography
+                      @variant='body2'
+                      @color='textSecondary'
+                      local-class='dropzone-notice'
+                    >
+                      {{t 'offensiveSecurity.dropAppNotice'}}
+                    </AkTypography>
+                  {{/if}}
+                </label>
+              </FileDropzone>
+            {{/let}}
+          </section>
+        {{/if}}
+      </OffensiveSecurity::NewAssessment::Step>
+
+      <OffensiveSecurity::NewAssessment::Step
+        @number={{2}}
+        @state={{this.typeStepState}}
+      >
+        {{#if this.hasUploadedApp}}
+          <OffensiveSecurity::NewAssessment::AssessmentType />
+        {{else}}
+          <section
+            local-class='card locked-card'
+            data-test-assessment-type-locked
+          >
+            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+              {{t 'offensiveSecurity.assessmentType'}}
+            </AkTypography>
+
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'offensiveSecurity.assessmentTypeLockedNote'}}
+            </AkTypography>
+          </section>
+        {{/if}}
+      </OffensiveSecurity::NewAssessment::Step>
+
+      <OffensiveSecurity::NewAssessment::Step
+        @number={{3}}
+        @state={{this.credentialsStepState}}
+        @isLast={{true}}
+      >
+        {{#if this.hasUploadedApp}}
+          <OffensiveSecurity::NewAssessment::Credentials />
+        {{else}}
+          <section local-class='card locked-card' data-test-credentials-locked>
             <AkTypography @variant='subtitle1' @fontWeight='bold'>
               {{t 'offensiveSecurity.testCredentials'}}
             </AkTypography>
-          </div>
-          <AkTypography @variant='body2' @color='textSecondary'>
-            {{t 'offensiveSecurity.testCredentialsSubtitle'}}
-          </AkTypography>
-        </div>
 
-        <form
-          local-class='credentials-table-card'
-          data-test-credentials-card
-          autocomplete='off'
-          onsubmit='return false;'
-        >
-          {{! Table Headers }}
-          <div local-class='credentials-table-header'>
-            <span local-class='header-col'>{{t
-                'offensiveSecurity.roleLabel'
-              }}</span>
-            <span local-class='header-col'>{{t
-                'offensiveSecurity.usernameEmail'
-              }}</span>
-            <span local-class='header-col'>{{t
-                'offensiveSecurity.password'
-              }}</span>
-            <span local-class='header-col action-col'></span>
-          </div>
+            <AkTypography @variant='body2' @color='textSecondary'>
+              {{t 'offensiveSecurity.testCredentialsLockedNote'}}
+            </AkTypography>
+          </section>
+        {{/if}}
+      </OffensiveSecurity::NewAssessment::Step>
+    </ol>
 
-          {{! Credential Rows }}
-          <div local-class='credentials-rows-stack'>
-            {{#each this.credentials key='id' as |cred index|}}
-              <div
-                local-class='credentials-row'
-                data-test-credential-row={{index}}
-              >
-                <div local-class='col-role'>
-                  <AkTextField
-                    @id='offsec-cred-role-{{cred.id}}'
-                    @type='text'
-                    @placeholder={{t 'offensiveSecurity.rolePlaceholder'}}
-                    @value={{cred.role}}
-                    name='offsec_role_{{cred.id}}'
-                    autocomplete='off'
-                    data-test-cred-role={{index}}
-                    {{on 'input' (fn this.updateCredential index 'role')}}
-                  />
-                </div>
-
-                <div local-class='col-username'>
-                  <AkTextField
-                    @id='offsec-cred-user-{{cred.id}}'
-                    @type='email'
-                    @placeholder={{t 'offensiveSecurity.usernamePlaceholder'}}
-                    @value={{cred.username}}
-                    name='offsec_user_{{cred.id}}'
-                    autocomplete='off'
-                    data-test-cred-username={{index}}
-                    {{on 'input' (fn this.updateCredential index 'username')}}
-                  />
-                </div>
-
-                <div local-class='col-password'>
-                  <AkTextField
-                    @id='offsec-cred-pwd-{{cred.id}}'
-                    @type={{if cred.showPassword 'text' 'password'}}
-                    @placeholder={{t 'offensiveSecurity.passwordPlaceholder'}}
-                    @value={{cred.password}}
-                    name='offsec_password_{{cred.id}}'
-                    autocomplete='new-password'
-                    data-test-cred-password={{index}}
-                    {{on 'input' (fn this.updateCredential index 'password')}}
-                  >
-                    <:rightAdornment>
-                      <AkIconButton
-                        @type='button'
-                        @size='small'
-                        local-class='btn-show-hide'
-                        data-test-show-hide-btn={{index}}
-                        aria-label={{if
-                          cred.showPassword
-                          (t 'offensiveSecurity.hide')
-                          (t 'offensiveSecurity.show')
-                        }}
-                        title={{if
-                          cred.showPassword
-                          (t 'offensiveSecurity.hide')
-                          (t 'offensiveSecurity.show')
-                        }}
-                        {{on 'click' (fn this.toggleShowPassword index)}}
-                      >
-                        <AkIcon
-                          @iconName={{if
-                            cred.showPassword
-                            'visibility-off'
-                            'visibility'
-                          }}
-                          @size='small'
-                        />
-                      </AkIconButton>
-                    </:rightAdornment>
-                  </AkTextField>
-                </div>
-
-                <div local-class='col-action'>
-                  <AkIconButton
-                    @type='button'
-                    @size='small'
-                    local-class='remove-cred-btn'
-                    data-test-remove-cred-btn={{index}}
-                    {{on 'click' (fn this.removeCredential index)}}
-                  >
-                    <AkIcon @iconName='close' @size='small' />
-                  </AkIconButton>
-                </div>
-              </div>
-            {{/each}}
-          </div>
-
-          {{! Add Role Button }}
-          <div local-class='add-role-container'>
-            <AkButton
-              @variant='text'
-              @type='button'
-              local-class='add-role-btn'
-              data-test-add-role-btn
-              {{on 'click' this.addCredential}}
-            >
-              <:leftIcon>
-                <AkIcon @iconName='add' @size='small' />
-              </:leftIcon>
-              <:default>
-                {{t 'offensiveSecurity.addAnotherCredential'}}
-              </:default>
-            </AkButton>
-          </div>
-        </form>
-      </div>
-
-      {{! Launch CTA }}
-      <div local-class='actions-row'>
-        <AkButton
-          @variant='filled'
-          @color='primary'
-          @type='button'
-          @loading={{this.isStartingAssessment}}
-          @disabled={{this.isBeginDisabled}}
-          local-class='begin-assessment-btn'
-          data-test-begin-assessment-btn
-          {{on 'click' this.beginAssessment}}
-        >
-          <:leftIcon>
-            <AkIcon @iconName='play-arrow' />
-          </:leftIcon>
-          <:default>
-            {{this.beginCtaLabel}}
-          </:default>
-        </AkButton>
-      </div>
-    </div>
-  {{else}}
-    {{! Phase 1: Upload Dropzone Area }}
-    {{#let
-      (file-queue name=this.fileQueueName onFileAdded=this.onFileAdded)
-      as |queue|
-    }}
-      <FileDropzone @queue={{queue}} as |dropzone|>
-        <label
-          local-class='dropzone-area {{if dropzone.active "is-dragover"}} {{if
-            this.isUploading
-            "is-uploading"
-          }}'
-          data-test-new-assessment-dropzone
-        >
-          <input
-            type='file'
-            accept='.apk,.ipa,.aab'
-            local-class='hidden-file-input'
-            data-test-file-input
-            {{queue.selectFile}}
-          />
-
-          {{#if this.isUploading}}
-            <div local-class='uploading-state'>
-              <AkIcon
-                @iconName='autorenew'
-                local-class='spinner-icon'
-                @size='medium'
-              />
-              <AkTypography
-                @variant='subtitle1'
-                @fontWeight='medium'
-                class='mt-2'
-              >
-                {{t 'uploading'}}...
-              </AkTypography>
-
-              <div local-class='progress-container'>
-                <AkLoader::Linear
-                  @variant={{if
-                    (gt (or queue.progress this.progress 0) 0)
-                    'determinate'
-                    'indeterminate'
-                  }}
-                  @progress={{or queue.progress this.progress 0}}
-                  @color='primary'
-                  @height={{6}}
-                  data-test-upload-progress-bar
-                >
-                  <:label>
-                    <span local-class='progress-percentage'>
-                      {{or queue.progress this.progress 0}}%
-                    </span>
-                  </:label>
-                </AkLoader::Linear>
-              </div>
-            </div>
-          {{else}}
-            <div local-class='dropzone-content'>
-              <div local-class='dropzone-icon-circle'>
-                <AkIcon
-                  @iconName='cloud-upload'
-                  local-class='dropzone-cloud-icon'
-                />
-              </div>
-
-              <AkTypography
-                @variant='subtitle1'
-                @fontWeight='medium'
-                local-class='dropzone-main-text'
-              >
-                {{t 'offensiveSecurity.dropAppToBrowse'}}
-              </AkTypography>
-
-              <AkTypography
-                @variant='caption'
-                @color='textSecondary'
-                local-class='dropzone-notice'
-              >
-                {{t 'offensiveSecurity.dropAppNotice'}}
-              </AkTypography>
-            </div>
-          {{/if}}
-        </label>
-      </FileDropzone>
-    {{/let}}
-  {{/if}}
+    <aside local-class='summary-column'>
+      <OffensiveSecurity::NewAssessment::Summary
+        @isUploading={{this.isUploading}}
+        @uploadProgress={{this.progress}}
+        @uploadingFileName={{this.currentFile.name}}
+        @isIosBuild={{this.isIosBuild}}
+        @formattedFileSize={{this.formattedFileSize}}
+        @isStartingAssessment={{this.isStartingAssessment}}
+        @isBeginDisabled={{this.isBeginDisabled}}
+        @beginLabel={{this.beginCtaLabel}}
+        @onBegin={{this.beginAssessment}}
+      />
+    </aside>
+  </div>
 </div>

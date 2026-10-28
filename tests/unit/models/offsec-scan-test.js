@@ -151,17 +151,17 @@ module('Unit | Model | offsec-scan', function (hooks) {
 
   // ─── Date ──────────────────────────────────────────────────────────────────
 
-  test('scannedOn prefers completedAt and drives the label', function (assert) {
+  test('scannedOn is when the run started, even after it completes', function (assert) {
     const scan = this.store.createRecord('offsec-scan', {
       createdAt: new Date('2026-06-18T09:00:00Z'),
       completedAt: new Date('2026-07-02T10:00:00Z'),
     });
 
-    assert.strictEqual(scan.scannedOn.getTime(), scan.completedAt.getTime());
-    assert.strictEqual(scan.scannedOnLabel, '02-07-2026');
+    assert.strictEqual(scan.scannedOn.getTime(), scan.createdAt.getTime());
+    assert.strictEqual(scan.scannedOnLabel, '18-06-2026');
   });
 
-  test('scannedOn falls back to createdAt', function (assert) {
+  test('scannedOn uses createdAt while the run has not completed', function (assert) {
     const scan = this.store.createRecord('offsec-scan', {
       createdAt: new Date('2026-06-18T09:00:00Z'),
       completedAt: null,

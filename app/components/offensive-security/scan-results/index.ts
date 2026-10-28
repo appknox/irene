@@ -11,12 +11,8 @@ import type { SafeString } from '@ember/template/-private/handlebars';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
-import { scrollDashboardMainContainerTo } from 'irene/utils/scroll-to-top';
 import type OffsecScanModel from 'irene/models/offsec-scan';
-import type {
-  OffsecScanArtifact,
-  PentestGoalResult,
-} from 'irene/models/offsec-scan';
+import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 import type FileAdapter from 'irene/adapters/file';
 import type PollService from 'irene/services/poll';
@@ -28,8 +24,6 @@ const POLL_INTERVAL_MS = 5000;
 export interface OffensiveSecurityScanResultsSignature {
   Args: {
     scanId: string;
-    activeGoalParam?: string | null;
-    onGoalParamChange?: (goalId: string | null) => void;
   };
 }
 
@@ -39,7 +33,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
   @service declare poll: PollService;
-  @service declare window: Window;
   @service declare eventBus: EventBusService;
   @service declare devicefarm: DevicefarmService;
 
@@ -49,9 +42,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked isFileDetailsExpanded = false;
   @tracked activeScreenUrl: string | null = null;
   @tracked activeScreenPassword: string | null = null;
-  @tracked isDevicePanelCollapsed = false;
   @tracked isDeviceExpanded = false;
-  @tracked internalActiveGoalIndex: number | null = null;
   @tracked deviceAspectRatio: number | null = null;
 
   private deviceObserver: MutationObserver | null = null;
@@ -150,66 +141,69 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     this.deviceAspectRatio = null;
   }
 
+  get isIosDevice(): boolean {
+    return this.scan?.platform === 'ios';
+  }
+
   get phoneFrameStyle(): SafeString | undefined {
     if (!this.deviceAspectRatio) {
       return undefined;
     }
 
     const ar = this.deviceAspectRatio;
+    const bezel = this.phoneBezel;
+    let innerHeight = bezel.targetInnerHeight;
+    let innerWidth = Math.round(innerHeight * ar);
 
-    if (this.isDeviceExpanded) {
-      // Expanded modal mode:
-      // Outer borders: 7px + 7px = 14px horizontal, 14px vertical
-      // Speaker slit: 13px (4px + 5px top + 4px bottom)
-      // Bottom padding: 2px
-      // Total non-screen vertical space: 14 + 13 + 2 = 29px
-      // Total non-screen horizontal space: 14px
-      const targetInnerHeight = 541; // 570 - 29
-      const maxInnerWidth = 310;
-      let innerWidth = Math.round(targetInnerHeight * ar);
-      let innerHeight = targetInnerHeight;
-
-      if (innerWidth > maxInnerWidth) {
-        innerWidth = maxInnerWidth;
-        innerHeight = Math.round(innerWidth / ar);
-      }
-
-      const frameWidth = innerWidth + 14;
-      const frameHeight = innerHeight + 29;
-
-      return htmlSafe(`width: ${frameWidth}px; height: ${frameHeight}px;`);
-    }
-
-    // Standard preview mode:
-    // Outer borders: 6px + 6px = 12px horizontal, 12px vertical
-    // Speaker slit: 13px (4px + 5px top + 4px bottom)
-    // Bottom padding: 2px
-    // Total non-screen vertical space: 12 + 13 + 2 = 27px
-    // Total non-screen horizontal space: 12px
-    const targetInnerHeight = 448; // 475 - 27
-    const maxInnerWidth = 260;
-    let innerWidth = Math.round(targetInnerHeight * ar);
-    let innerHeight = targetInnerHeight;
-
-    if (innerWidth > maxInnerWidth) {
-      innerWidth = maxInnerWidth;
+    if (innerWidth > bezel.maxInnerWidth) {
+      innerWidth = bezel.maxInnerWidth;
       innerHeight = Math.round(innerWidth / ar);
     }
 
-    const frameWidth = innerWidth + 12;
-    const frameHeight = innerHeight + 27;
+    const frameWidth = innerWidth + bezel.horizontal;
+    const frameHeight = innerHeight + bezel.vertical;
 
     return htmlSafe(`width: ${frameWidth}px; height: ${frameHeight}px;`);
+  }
+
+  // Space the frame adds around the stream; mirrors the bezel sizes in index.scss
+  get phoneBezel() {
+    if (this.isIosDevice) {
+      // 5px (6px expanded) metal padding on every side; the island overlays the screen
+      return this.isDeviceExpanded
+        ? {
+            horizontal: 12,
+            vertical: 12,
+            targetInnerHeight: 558,
+            maxInnerWidth: 310,
+          }
+        : {
+            horizontal: 10,
+            vertical: 10,
+            targetInnerHeight: 470,
+            maxInnerWidth: 260,
+          };
+    }
+
+    // 6px (7px expanded) border plus a 13px speaker slit and 2px bottom padding
+    return this.isDeviceExpanded
+      ? {
+          horizontal: 14,
+          vertical: 29,
+          targetInnerHeight: 541,
+          maxInnerWidth: 310,
+        }
+      : {
+          horizontal: 12,
+          vertical: 27,
+          targetInnerHeight: 448,
+          maxInnerWidth: 260,
+        };
   }
 
   @action
   toggleFileDetails(): void {
     this.isFileDetailsExpanded = !this.isFileDetailsExpanded;
-  }
-
-  @action
-  toggleDevicePanel(): void {
-    this.isDevicePanelCollapsed = !this.isDevicePanelCollapsed;
   }
 
   @action
@@ -245,7 +239,6 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     );
 
     window.addEventListener('keydown', this.handleDocumentKeyDown);
-    window.addEventListener('popstate', this.handlePopState);
 
     this.loadScan.perform(args.scanId);
   }
@@ -259,29 +252,9 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.handleWsOffsecScanUpdate
     );
     window.removeEventListener('keydown', this.handleDocumentKeyDown);
-    window.removeEventListener('popstate', this.handlePopState);
     document.body.style.overflow = '';
     this.stopPolling?.();
     this.teardownDeviceObserver();
-  }
-
-  @action
-  handlePopState(): void {
-    if (
-      this.args.activeGoalParam === undefined &&
-      typeof window !== 'undefined'
-    ) {
-      const url = new URL(window.location.href);
-      const goalParam = url.searchParams.get('goal');
-      if (!goalParam) {
-        this.internalActiveGoalIndex = null;
-      } else {
-        const foundIdx = this.pentestGoals.findIndex(
-          (g, i) => g.goal_id === goalParam || String(i) === goalParam
-        );
-        this.internalActiveGoalIndex = foundIdx !== -1 ? foundIdx : null;
-      }
-    }
   }
 
   @action
@@ -314,106 +287,34 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return this.scan?.displayTargetId ?? this.args.scanId;
   }
 
-  get findings() {
-    return this.scan?.findingList ?? [];
-  }
-
   get artifacts(): OffsecScanArtifact[] {
     return this.scan?.artifactList ?? [];
   }
 
-  get pentestGoals() {
-    return this.scan?.pentestGoals ?? [];
-  }
+  get runSubtitle(): string {
+    const scan = this.scan;
 
-  get hasPentestResult(): boolean {
-    return Boolean(this.scan?.hasPentestResult);
-  }
-
-  get activeGoalIndex(): number | null {
-    const param = this.args.activeGoalParam;
-    if (param !== undefined) {
-      if (!param) {
-        return null;
-      }
-
-      const foundIdx = this.pentestGoals.findIndex(
-        (g, i) => g.goal_id === param || String(i) === param
-      );
-      if (foundIdx !== -1) {
-        return foundIdx;
-      }
-
-      return null;
+    if (scan?.isFailed) {
+      return this.intl.t('offensiveSecurity.runSubtitleFailed');
     }
 
-    return this.internalActiveGoalIndex;
-  }
-
-  get activeGoal(): PentestGoalResult | null {
-    if (this.activeGoalIndex === null) {
-      return null;
+    if (scan?.isCompleted) {
+      return this.intl.t('offensiveSecurity.runSubtitleCompleted');
     }
 
-    return this.pentestGoals[this.activeGoalIndex] ?? null;
+    return this.intl.t(
+      scan?.isRunning
+        ? 'offensiveSecurity.runSubtitleRunning'
+        : 'offensiveSecurity.runSubtitleQueued'
+    );
   }
 
-  @action
-  openGoal(index: number): void {
-    this.internalActiveGoalIndex = index;
-    const goal = this.pentestGoals[index];
-    const goalParam = goal?.goal_id || String(index);
-
-    if (this.args.onGoalParamChange) {
-      this.args.onGoalParamChange(goalParam);
-    } else {
-      try {
-        this.router.transitionTo({ queryParams: { goal: goalParam } });
-      } catch {
-        // Fallback for tests
-      }
-    }
-
-    scrollDashboardMainContainerTo({ top: 0, left: 0 });
-    this.window.scrollTo({ top: 0, left: 0 });
+  get canViewResults(): boolean {
+    return Boolean(this.scan && (this.scan.isRunning || this.scan.isCompleted));
   }
 
-  @action
-  closeGoal(): void {
-    this.internalActiveGoalIndex = null;
-
-    if (this.args.onGoalParamChange) {
-      this.args.onGoalParamChange(null);
-    } else {
-      try {
-        this.router.transitionTo({ queryParams: { goal: null } });
-      } catch {
-        // Fallback for tests
-      }
-    }
-
-    scrollDashboardMainContainerTo({ top: 0, left: 0 });
-    this.window.scrollTo({ top: 0, left: 0 });
-  }
-
-  @action
-  handleGoalChange(index: number): void {
-    this.internalActiveGoalIndex = index;
-    const goal = this.pentestGoals[index];
-    const goalParam = goal?.goal_id || String(index);
-
-    if (this.args.onGoalParamChange) {
-      this.args.onGoalParamChange(goalParam);
-    } else {
-      try {
-        this.router.transitionTo({ queryParams: { goal: goalParam } });
-      } catch {
-        // Fallback for tests
-      }
-    }
-
-    scrollDashboardMainContainerTo({ top: 0, left: 0 });
-    this.window.scrollTo({ top: 0, left: 0 });
+  get platformLabel(): string {
+    return this.intl.t(this.scan?.platform === 'ios' ? 'ios' : 'android');
   }
 
   get formattedStatusReason(): string {
@@ -476,16 +377,43 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return Boolean(this.scan?.isRunning && this.hasDeviceStream);
   }
 
-  get shouldShowDeviceCard(): boolean {
-    return Boolean(this.scan && (this.scan.isQueued || this.scan.isRunning));
+  get deviceStatus(): 'live' | 'waiting' | 'ended' {
+    if (this.scan?.isTerminal) {
+      return 'ended';
+    }
+
+    return this.isDeviceActive ? 'live' : 'waiting';
+  }
+
+  get deviceStatusLabel(): string {
+    return this.intl.t(
+      {
+        live: 'offensiveSecurity.deviceLive',
+        waiting: 'offensiveSecurity.deviceConnecting',
+        ended: 'offensiveSecurity.deviceStreamEnded',
+      }[this.deviceStatus]
+    );
+  }
+
+  get deviceCaption(): string {
+    if (this.scan?.isFailed) {
+      return this.intl.t('offensiveSecurity.deviceCaptionFailed');
+    }
+
+    return this.intl.t(
+      {
+        live: 'offensiveSecurity.deviceCaptionLive',
+        waiting: 'offensiveSecurity.deviceCaptionWaiting',
+        ended: 'offensiveSecurity.deviceCaptionEnded',
+      }[this.deviceStatus]
+    );
   }
 
   @action
-  handleFindingClick(findingId: number): void {
+  viewResults(): void {
     this.router.transitionTo(
-      'authenticated.offensive-security.finding',
-      this.args.scanId,
-      String(findingId)
+      'authenticated.offensive-security.results',
+      this.args.scanId
     );
   }
 

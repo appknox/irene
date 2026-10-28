@@ -71,8 +71,10 @@ const SELECTORS = {
   // AkTextField splats ...attributes onto the <Input> itself.
   search: 'input[data-test-offensiveSecurity-attackRuns-search]',
   targetCell: '[data-test-offensiveSecurity-attackRuns-targetCell]',
+  targetIcon: '[data-test-offensiveSecurity-attackRuns-targetIcon]',
+  targetIconImg:
+    '[data-test-offensiveSecurity-attackRuns-targetIcon] [data-test-appLogo-img]',
   riskBadge: '[data-test-offensiveSecurity-attackRuns-riskBadge]',
-  resilienceBadge: '[data-test-offensiveSecurity-attackRuns-resilienceBadge]',
   resilienceEmpty: '[data-test-offensiveSecurity-attackRuns-resilienceEmpty]',
   emptyState: '[data-test-offensiveSecurity-attackRuns-emptyState]',
   noMatches: '[data-test-offensiveSecurity-attackRuns-noMatches]',
@@ -87,10 +89,6 @@ const SELECTORS = {
     `[data-test-offensiveSecurity-attackRuns-resilienceHeader-option='${value}']`,
   resilienceClearFilter:
     '[data-test-offensiveSecurity-attackRuns-resilienceHeader-clearFilter]',
-  actionBtn: (id) =>
-    `[data-test-offensiveSecurity-attackRuns-actionBtn='${id}']`,
-  // AkList::Item splats attributes onto the <li>; the handler sits on its <button>.
-  viewResults: '[data-test-offensiveSecurity-attackRuns-viewResults] button',
   totalRuns: '[data-test-offensiveSecurity-attackRuns-totalRuns]',
   runningCount: '[data-test-offensiveSecurity-attackRuns-runningCount]',
   completedCount: '[data-test-offensiveSecurity-attackRuns-completedCount]',
@@ -210,6 +208,31 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.targetCell).hasText('Consumer Banking App');
+  });
+
+  test('the target column shows the app icon when the API sends icon_url', async function (assert) {
+    serveScans(this, [
+      buildScan({
+        app_name: 'Best Buy',
+        icon_url: 'https://cdn.example.com/icons/bestbuy.png',
+      }),
+    ]);
+
+    await render(TEMPLATE);
+
+    assert
+      .dom(SELECTORS.targetIconImg)
+      .hasAttribute('src', 'https://cdn.example.com/icons/bestbuy.png');
+    assert.dom(SELECTORS.targetCell).hasText('Best Buy');
+  });
+
+  test('the target column shows only the name when icon_url is missing', async function (assert) {
+    serveScans(this, [buildScan({ app_name: 'Best Buy', icon_url: null })]);
+
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.targetIcon).doesNotExist();
+    assert.dom(SELECTORS.targetCell).hasText('Best Buy');
   });
 
   test('the target column falls back to the package name', async function (assert) {
@@ -524,6 +547,32 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
   // ─── Interaction ───────────────────────────────────────────────────────────
 
+  test('newest runs come first by start time, even if an older run finished later', async function (assert) {
+    serveScans(this, [
+      buildScan({
+        id: 1,
+        app_name: 'Started first, failed late',
+        status: SCAN_STATUS.FAILED,
+        created_at: '2026-08-01T09:00:00Z',
+        completed_at: '2026-08-01T12:00:00Z',
+      }),
+      buildScan({
+        id: 2,
+        app_name: 'Started second',
+        created_at: '2026-08-01T10:00:00Z',
+        completed_at: '2026-08-01T10:30:00Z',
+      }),
+    ]);
+
+    await render(TEMPLATE);
+
+    const names = findAll(SELECTORS.targetCell).map((el) =>
+      el.textContent.trim()
+    );
+
+    assert.deepEqual(names, ['Started second', 'Started first, failed late']);
+  });
+
   test('clicking a row transitions to that scan', async function (assert) {
     serveScans(this, [buildScan({ id: 7 })]);
 
@@ -538,6 +587,56 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     );
 
     assert.deepEqual(router.lastModels, ['7']);
+  });
+
+  test('it opens the scan for an assessment just begun once it appears in the list', async function (assert) {
+    const startedAt = Date.parse('2026-08-01T10:00:00Z');
+
+    serveScans(this, [
+      buildScan({ id: 12, created_at: '2026-08-01T10:03:00Z' }),
+      buildScan({ id: 11, created_at: '2026-08-01T10:01:00Z' }),
+      buildScan({ id: 3, created_at: '2026-07-30T09:00:00Z' }),
+    ]);
+
+    const offsecNewAssessment = this.owner.lookup(
+      'service:offsec-new-assessment'
+    );
+
+    offsecNewAssessment.assessmentStartedAt = startedAt;
+
+    await render(TEMPLATE);
+
+    const router = this.owner.lookup('service:router');
+
+    assert.strictEqual(
+      router.lastRoute,
+      'authenticated.offensive-security.scan'
+    );
+
+    assert.deepEqual(router.lastModels, ['11']);
+    assert.strictEqual(offsecNewAssessment.assessmentStartedAt, null);
+  });
+
+  test('it stays on the list while the begun assessment has not produced a scan yet', async function (assert) {
+    serveScans(this, [
+      buildScan({ id: 3, created_at: '2026-07-30T09:00:00Z' }),
+    ]);
+
+    const offsecNewAssessment = this.owner.lookup(
+      'service:offsec-new-assessment'
+    );
+
+    offsecNewAssessment.assessmentStartedAt = Date.parse(
+      '2026-08-01T10:00:00Z'
+    );
+
+    await render(TEMPLATE);
+
+    const router = this.owner.lookup('service:router');
+
+    assert.strictEqual(router.lastRoute, null);
+    assert.strictEqual(findAll(SELECTORS.row).length, 1);
+    assert.notStrictEqual(offsecNewAssessment.assessmentStartedAt, null);
   });
 
   test('it uses status_counts from the API for the summary metric cards', async function (assert) {
@@ -560,20 +659,6 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.dom(SELECTORS.runningCount).hasText('0');
     assert.dom(SELECTORS.completedCount).hasText('4');
     assert.dom(SELECTORS.failedCount).hasText('5');
-  });
-
-  test('clicking New Assessment button transitions to new assessment route', async function (assert) {
-    serveScans(this, [buildScan({ id: 1 })]);
-
-    await render(TEMPLATE);
-    await click('[data-test-offensiveSecurity-attackRuns-newAssessmentBtn]');
-
-    const router = this.owner.lookup('service:router');
-
-    assert.strictEqual(
-      router.lastRoute,
-      'authenticated.offensive-security.new-assessment'
-    );
   });
 
   test('it renders the scan type column badge matching assessment_type', async function (assert) {

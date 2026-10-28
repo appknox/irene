@@ -11,7 +11,37 @@
     @user={{@user}}
     as |topNav|
   >
-    <AkStack local-class='top-nav-content' @justifyContent='flex-end'>
+    <AkStack local-class='top-nav-content' @justifyContent='space-between'>
+      <AkStack @alignItems='center' @spacing='2'>
+        <AkTypography
+          @variant='subtitle2'
+          @fontWeight='bold'
+          @noWrap={{true}}
+          data-test-offensiveSecurity-topNav-uploadLead
+        >
+          {{t 'uploadAnApp'}}
+        </AkTypography>
+
+        <AkButton
+          @variant='filled'
+          @color='primary'
+          local-class='new-assessment-btn'
+          data-test-topNav-newAssessmentBtn
+          data-test-offensiveSecurity-topNav-newAssessmentBtn
+          {{on 'click' this.navigateToNewAssessment}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='target' />
+          </:leftIcon>
+
+          <:default>
+            {{t 'offensiveSecurity.newAssessment'}}
+          </:default>
+        </AkButton>
+
+        <UploadApp::Status />
+      </AkStack>
+
       <AkStack @alignItems='center' @spacing='0.5'>
         <TopNav::KnowledgeBase @triggerBtnClass={{topNav.classes.navbarBtn}} />
       </AkStack>
@@ -30,7 +60,10 @@
   />
 
   {{! #id is required for scroll-to-top util }}
-  <main id='ak-dashboard-main-scroll-container' local-class='offsec-wrapper-main'>
+  <main
+    id='ak-dashboard-main-scroll-container'
+    local-class='offsec-wrapper-main'
+  >
     {{yield}}
   </main>
 </div>

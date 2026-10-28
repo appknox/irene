@@ -48,7 +48,7 @@ module(
       this.owner.register('service:realtime', RealtimeStub);
     });
 
-    test('it renders Step 1 dropzone when no file has been uploaded', async function (assert) {
+    test('it renders Step 1 dropzone with locked steps and summary when no file has been uploaded', async function (assert) {
       const offsecService = this.owner.lookup('service:offsec-new-assessment');
       offsecService.reset();
 
@@ -58,18 +58,111 @@ module(
         .dom('[data-test-new-assessment-title]')
         .hasText('Start a new assessment');
       assert.dom('[data-test-new-assessment-header-card]').exists();
-      assert.dom('[data-test-back-to-runs-btn]').exists();
       assert.dom('[data-test-new-assessment-dropzone]').exists();
       assert.dom('[data-test-file-input]').exists();
       assert.dom('[data-test-uploaded-build-card]').doesNotExist();
 
-      await click('[data-test-back-to-runs-btn]');
-      const router = this.owner.lookup('service:router');
+      assert
+        .dom(
+          '[data-test-new-assessment-step="1"] [data-test-new-assessment-step-marker]'
+        )
+        .hasAttribute('data-test-new-assessment-step-marker', 'current');
+      assert
+        .dom(
+          '[data-test-new-assessment-step="2"] [data-test-new-assessment-step-marker]'
+        )
+        .hasAttribute('data-test-new-assessment-step-marker', 'upcoming');
 
-      assert.strictEqual(
-        router.transitionedTo,
-        'authenticated.offensive-security.index'
-      );
+      assert.dom('[data-test-assessment-type-locked]').exists();
+      assert.dom('[data-test-credentials-locked]').exists();
+      assert.dom('[data-test-card-comprehensive]').doesNotExist();
+      assert.dom('[data-test-credentials-card]').doesNotExist();
+
+      assert
+        .dom('[data-test-new-assessment-summary-build]')
+        .hasAttribute('data-test-new-assessment-summary-item', 'locked');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-build] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('No build yet');
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
+      assert
+        .dom('[data-test-begin-assessment-help]')
+        .hasText('Upload a build to continue.');
+    });
+
+    test('summary reflects uploaded build, assessment type and added credentials', async function (assert) {
+      const offsecService = this.owner.lookup('service:offsec-new-assessment');
+      offsecService.reset();
+      offsecService.setUploadedApp({
+        uploadItem: { url: 'https://test.com' },
+        file: { name: 'bank.ipa', size: 10485760 },
+      });
+
+      await render(hbs`<OffensiveSecurity::NewAssessment />`);
+
+      assert
+        .dom(
+          '[data-test-new-assessment-step="1"] [data-test-new-assessment-step-marker]'
+        )
+        .hasAttribute('data-test-new-assessment-step-marker', 'done');
+
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-build] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('bank.ipa');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-build] [data-test-new-assessment-summary-item-sub]'
+        )
+        .hasText('Uploaded · 10.0 MB · iOS');
+
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-type] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('Comprehensive Offensive PT');
+
+      await click('[data-test-card-resilience]');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-type] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('Only Resilience Assessment');
+
+      assert
+        .dom('[data-test-new-assessment-summary-credentials]')
+        .hasAttribute('data-test-new-assessment-summary-item', 'optional');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-credentials] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('None added');
+
+      await fillIn('[data-test-cred-role="0"]', 'Admin');
+      await fillIn('[data-test-cred-username="0"]', 'admin@example.com');
+      await fillIn('[data-test-cred-password="0"]', 'Secret123!');
+
+      assert
+        .dom('[data-test-new-assessment-summary-credentials]')
+        .hasAttribute('data-test-new-assessment-summary-item', 'done');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-credentials] [data-test-new-assessment-summary-item-value]'
+        )
+        .hasText('1 credential added');
+      assert
+        .dom(
+          '[data-test-new-assessment-summary-credentials] [data-test-new-assessment-summary-item-sub]'
+        )
+        .hasText('Admin');
+      assert
+        .dom(
+          '[data-test-new-assessment-step="3"] [data-test-new-assessment-step-marker]'
+        )
+        .hasAttribute('data-test-new-assessment-step-marker', 'done');
     });
 
     test('it renders Step 2 when an uploaded file is in state, and allows switching type & credentials', async function (assert) {
@@ -160,6 +253,10 @@ module(
       assert.strictEqual(
         router.transitionedTo,
         'authenticated.offensive-security.index'
+      );
+      assert.ok(
+        offsecService.assessmentStartedAt,
+        'the runs page is told to open the new scan once it appears'
       );
     });
 

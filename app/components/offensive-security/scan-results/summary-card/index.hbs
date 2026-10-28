@@ -1,72 +1,106 @@
-<AkStack
-  @width='full'
-  @direction='column'
-  @spacing='2'
-  local-class='summary-card'
-  class='p-3'
-  data-test-offensiveSecurity-summaryCard
->
-  <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
-    <AkTypography @variant='body1' @fontWeight='bold'>
-      {{t 'offensiveSecurity.summary'}}
+<section local-class='summary-card' data-test-offensiveSecurity-summaryCard>
+  <div local-class='summary-header'>
+    <AkTypography
+      @variant='subtitle2'
+      @fontWeight='bold'
+      data-test-offensiveSecurity-summaryCard-title
+    >
+      {{t 'offensiveSecurity.scanSummary'}}
     </AkTypography>
 
-    <AkStack @alignItems='center' @spacing='1'>
-      <AkTypography @variant='body1' @color='textSecondary'>
-        {{t 'offensiveSecurity.riskRating'}}
-      </AkTypography>
-
-      <span
-        local-class='risk-badge risk-{{@scan.riskClass}}'
-        data-test-offensiveSecurity-summaryCard-risk
-      >
-        {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
+    <button
+      type='button'
+      local-class='artifacts-link'
+      {{on 'click' this.openArtifacts}}
+      data-test-offensiveSecurity-summaryCard-artifactsBtn
+    >
+      <AkIcon @iconName='description' @size='small' />
+      <span>
+        {{t 'offensiveSecurity.artifactsCount' count=this.artifactsCount}}
       </span>
-    </AkStack>
-  </AkStack>
+      <AkIcon @iconName='chevron-right' @size='small' />
+    </button>
+  </div>
 
-  <AkStack
-    @width='full'
-    @spacing='1.5'
-    @justifyContent='space-between'
-    @alignItems='stretch'
-    local-class='stats-row'
-  >
+  <dl local-class='stats-grid'>
+    <div local-class='stat-tile'>
+      <dt local-class='stat-label'>{{t 'offensiveSecurity.riskRating'}}</dt>
+      <dd local-class='stat-value'>
+        <span
+          local-class='risk-badge risk-{{@scan.riskClass}}'
+          data-test-offensiveSecurity-summaryCard-risk
+        >
+          {{t (concat 'offensiveSecurity.riskLevel.' @scan.riskClass)}}
+        </span>
+      </dd>
+    </div>
+
     {{#each this.stats as |stat|}}
       <div
-        local-class='stat-box {{stat.tone}}'
+        local-class='stat-tile {{stat.tone}}'
         data-test-offensiveSecurity-summaryCard-stat
       >
-        <AkTypography @variant='h4' @fontWeight='bold' local-class='stat-number'>
-          {{stat.value}}
-        </AkTypography>
-
-        <AkTypography @variant='caption' @color='textSecondary' local-class='stat-label'>
-          {{stat.label}}
-        </AkTypography>
+        <dt local-class='stat-label'>{{stat.label}}</dt>
+        <dd local-class='stat-value stat-number'>{{stat.value}}</dd>
       </div>
     {{/each}}
-  </AkStack>
 
-  {{#if this.showResilience}}
-    <AkDivider />
+    {{#if this.showResilience}}
+      <div
+        local-class='stat-tile'
+        data-test-offensiveSecurity-summaryCard-resilience
+      >
+        <dt local-class='stat-label'>
+          {{t 'offensiveSecurity.overallResilience'}}
+        </dt>
+        <dd local-class='stat-value stat-number'>
+          {{this.effectiveResilience}}
 
-    <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
-      <AkTypography @variant='body2' @color='textSecondary'>
-        {{t 'offensiveSecurity.overallResilience'}}
+          {{#if this.resilienceBandLabel}}
+            <span local-class='stat-suffix'>({{this.resilienceBandLabel}})</span>
+          {{/if}}
+        </dd>
+      </div>
+    {{/if}}
+  </dl>
+</section>
+
+<AkDrawer
+  @open={{this.isArtifactsOpen}}
+  @onClose={{this.closeArtifacts}}
+  @anchor='right'
+>
+  <div
+    local-class='artifacts-drawer'
+    data-test-offensiveSecurity-summaryCard-artifactsDrawer
+  >
+    <div local-class='drawer-header'>
+      <AkTypography @variant='h5' @fontWeight='bold'>
+        {{t 'offensiveSecurity.artifacts'}}
       </AkTypography>
 
-      <AkStack @alignItems='center' @spacing='1'>
-        <AkTypography @variant='body2' @fontWeight='medium'>
-          {{this.effectiveResilience}}
-        </AkTypography>
+      <AkIconButton
+        aria-label={{t 'close'}}
+        {{on 'click' this.closeArtifacts}}
+        data-test-offensiveSecurity-summaryCard-artifactsClose
+      >
+        <AkIcon @iconName='close' />
+      </AkIconButton>
+    </div>
 
-        {{#if this.resilienceBandLabel}}
-          <AkTypography @variant='body3' @color='textSecondary'>
-            ({{this.resilienceBandLabel}})
-          </AkTypography>
-        {{/if}}
-      </AkStack>
-    </AkStack>
-  {{/if}}
-</AkStack>
+    <AkTypography @variant='body2' @color='textSecondary' class='px-3 pt-2'>
+      {{t
+        'offensiveSecurity.artifactsDrawerSubtitle'
+        app=@scan.displayName
+      }}
+    </AkTypography>
+
+    <OffensiveSecurity::ScanResults::ArtifactsCard
+      @scan={{@scan}}
+      @artifacts={{@artifacts}}
+      @onDownload={{@onDownload}}
+      @isDownloading={{@isDownloading}}
+      @isInDrawer={{true}}
+    />
+  </div>
+</AkDrawer>

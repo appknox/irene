@@ -1,0 +1,48 @@
+.summary-card {
+  overflow: hidden;
+  background-color: var(--offensive-security-new-assessment-card-bg-color);
+  border: var(--offensive-security-new-assessment-card-border);
+  border-radius: var(--offensive-security-new-assessment-card-border-radius);
+}
+
+.summary-header {
+  padding: 1em 1.25em;
+  border-bottom: var(--offensive-security-new-assessment-card-border);
+}
+
+.summary-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.summary-footer {
+  padding: 1.25em;
+  border-top: var(--offensive-security-new-assessment-card-border);
+  background-color: var(--offensive-security-new-assessment-footer-bg-color);
+}
+
+.begin-btn {
+  width: 100%;
+  font-weight: 600;
+}
+
+.optional-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--offensive-security-new-assessment-step-upcoming-color);
+  background-color: var(
+    --offensive-security-new-assessment-platform-icon-bg-color
+  );
+}
+
+.begin-help {
+  margin-top: 0.75em;
+  line-height: 1.5;
+}

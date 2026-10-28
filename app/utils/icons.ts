@@ -204,6 +204,8 @@ export const MaterialSymbolsSet = [
   'cloud-outline',
   'key-outline',
   'token-outline',
+  'target',
+  'swap-horiz',
 ] as const;
 
 export const MdiIconsSet = [

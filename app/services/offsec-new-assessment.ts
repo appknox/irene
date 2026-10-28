@@ -2,6 +2,7 @@ import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import type UploadAppModel from 'irene/models/upload-app';
+import type OffsecScanModel from 'irene/models/offsec-scan';
 
 export type AssessmentType = 'comprehensive' | 'resilience';
 
@@ -27,6 +28,9 @@ export class CredentialRow {
   }
 }
 
+// Server and client clocks drift; a scan created slightly "before" Begin is still ours
+const STARTED_SCAN_CLOCK_SKEW_MS = 2 * 60 * 1000;
+
 export interface UploadedAppMeta {
   name: string;
   size: number;
@@ -42,6 +46,37 @@ export default class OffsecNewAssessmentService extends Service {
     new CredentialRow('2'),
     new CredentialRow('3'),
   ];
+
+  @tracked assessmentStartedAt: number | null = null;
+
+  /** Returns the scan created for the assessment begun on this page, if it has appeared yet. */
+  findStartedScan(scans: OffsecScanModel[]): OffsecScanModel | null {
+    if (this.assessmentStartedAt === null) {
+      return null;
+    }
+
+    const threshold = this.assessmentStartedAt - STARTED_SCAN_CLOCK_SKEW_MS;
+
+    const candidates = scans.filter(
+      (scan) => scan.createdAt && scan.createdAt.getTime() >= threshold
+    );
+
+    candidates.sort(
+      (a, b) => (a.createdAt?.getTime() ?? 0) - (b.createdAt?.getTime() ?? 0)
+    );
+
+    return candidates[0] ?? null;
+  }
+
+  @action
+  markAssessmentStarted() {
+    this.assessmentStartedAt = Date.now();
+  }
+
+  @action
+  clearAssessmentStarted() {
+    this.assessmentStartedAt = null;
+  }
 
   @action
   setUploadedApp({

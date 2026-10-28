@@ -1,8 +1,11 @@
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type OffsecScanModel from 'irene/models/offsec-scan';
+import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 
 export interface SummaryStat {
   label: string;
@@ -13,11 +16,20 @@ export interface SummaryStat {
 export interface OffensiveSecurityScanResultsSummaryCardSignature {
   Args: {
     scan: OffsecScanModel;
+    artifacts: OffsecScanArtifact[];
+    onDownload: (artifact: OffsecScanArtifact | string) => void;
+    isDownloading?: boolean;
   };
 }
 
 export default class OffensiveSecurityScanResultsSummaryCardComponent extends Component<OffensiveSecurityScanResultsSummaryCardSignature> {
   @service declare intl: IntlService;
+
+  @tracked isArtifactsOpen = false;
+
+  get artifactsCount(): number {
+    return this.args.artifacts?.length ?? 0;
+  }
 
   get stats(): SummaryStat[] {
     const { scan } = this.args;
@@ -51,6 +63,16 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
 
   get resilienceBandLabel() {
     return (this.args.scan.resilienceBand || '').replaceAll('_', ' ');
+  }
+
+  @action
+  openArtifacts(): void {
+    this.isArtifactsOpen = true;
+  }
+
+  @action
+  closeArtifacts(): void {
+    this.isArtifactsOpen = false;
   }
 }
 

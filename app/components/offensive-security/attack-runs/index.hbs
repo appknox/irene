@@ -3,13 +3,9 @@
   <div local-class='header-card'>
     <AkStack @width='full' @justifyContent='space-between' @alignItems='center'>
       <AkStack @direction='column' @spacing='0.5'>
-        <AkStack @alignItems='center' @spacing='1.5'>
-          <AkTypography @variant='h4' @fontWeight='bold'>
-            {{t 'offensiveSecurity.allTargets'}}
-          </AkTypography>
-
-          <UploadApp::Status />
-        </AkStack>
+        <AkTypography @variant='h4' @fontWeight='bold'>
+          {{t 'offensiveSecurity.allTargets'}}
+        </AkTypography>
 
         <AkTypography @variant='body2' @color='textSecondary' class='mt-1'>
           {{t 'offensiveSecurity.allTargetsSubtitle'}}
@@ -30,22 +26,6 @@
             </:leftAdornment>
           </AkTextField>
         </div>
-
-        {{! New Assessment Button }}
-        <AkButton
-          @variant='filled'
-          @color='primary'
-          local-class='new-assessment-btn'
-          data-test-offensiveSecurity-attackRuns-newAssessmentBtn
-          {{on 'click' this.navigateToNewAssessment}}
-        >
-          <:leftIcon>
-            <AkIcon @iconName='cloud-upload' />
-          </:leftIcon>
-          <:default>
-            {{t 'offensiveSecurity.newAssessment'}}
-          </:default>
-        </AkButton>
       </AkStack>
     </AkStack>
   </div>

@@ -1,0 +1,72 @@
+.item-root {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75em;
+  padding: 1.125em 1.25em;
+
+  & + & {
+    border-top: var(--offensive-security-new-assessment-card-border);
+  }
+}
+
+.state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 50%;
+  color: var(--offensive-security-new-assessment-step-upcoming-color);
+  background-color: var(
+    --offensive-security-new-assessment-step-upcoming-bg-color
+  );
+
+  &.state-done {
+    color: var(--offensive-security-new-assessment-step-active-color);
+    background-color: var(--offensive-security-new-assessment-step-done-color);
+  }
+
+  &.state-active {
+    color: var(--offensive-security-new-assessment-step-done-color);
+    background-color: var(
+      --offensive-security-new-assessment-step-done-bg-color
+    );
+  }
+}
+
+.state-glyph {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+
+  .state-optional & {
+    width: 8px;
+    height: 2px;
+    border-radius: 1px;
+  }
+}
+
+.spinner {
+  animation: summary-item-spin 1s linear infinite;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+@keyframes summary-item-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

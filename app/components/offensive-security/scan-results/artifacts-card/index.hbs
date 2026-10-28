@@ -3,13 +3,15 @@
   @width='full'
   @direction='column'
   @spacing='2'
-  local-class='artifacts-card'
+  local-class='artifacts-card {{if @isInDrawer "is-in-drawer"}}'
   class='p-3'
   data-test-offensiveSecurity-artifactsCard
 >
-  <AkTypography @variant='body1' @fontWeight='bold'>
-    {{t 'offensiveSecurity.artifacts'}}
-  </AkTypography>
+  {{#unless @isInDrawer}}
+    <AkTypography @variant='body1' @fontWeight='bold'>
+      {{t 'offensiveSecurity.artifacts'}}
+    </AkTypography>
+  {{/unless}}
 
   {{#if this.hasArtifacts}}
     <div local-class='artifacts-scroll-container'>

@@ -1,58 +1,111 @@
-<div local-class='findings-card' data-test-offensiveSecurity-findingsList>
+<section local-class='findings-card' data-test-offensiveSecurity-findingsList>
   <div local-class='findings-header'>
-    <AkTypography @variant='body1' @fontWeight='bold' local-class='findings-title'>
-      {{t 'offensiveSecurity.findings'}}
-    </AkTypography>
+    <div>
+      <AkTypography
+        @variant='subtitle1'
+        @fontWeight='bold'
+        data-test-offensiveSecurity-findingsList-title
+      >
+        {{t 'offensiveSecurity.findings'}}
+      </AkTypography>
 
-    <AkTypography @variant='body2' @color='textSecondary' local-class='findings-subtitle'>
-      {{t 'offensiveSecurity.findingsSubtitle'}}
-    </AkTypography>
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'offensiveSecurity.findingsSubtitle'}}
+      </AkTypography>
+    </div>
+
+    {{#if @scan.isInProgress}}
+      <span
+        local-class='updating-live'
+        data-test-offensiveSecurity-findingsList-updatingLive
+      >
+        <AkIcon @iconName='autorenew' @size='small' local-class='spinner' />
+        {{t 'offensiveSecurity.updatingLive'}}
+      </span>
+    {{/if}}
+  </div>
+
+  <div local-class='findings-grid findings-column-header'>
+    <span>{{t 'offensiveSecurity.defensesAssessed'}}</span>
+    <span>{{t 'offensiveSecurity.checksCount'}}</span>
+    <span>{{t 'offensiveSecurity.outcomeHeader'}}</span>
+    <span></span>
   </div>
 
   {{#if this.hasFindings}}
-    <AkStack @direction='column' @spacing='2' local-class='groups-list'>
+    <ul local-class='groups-list'>
       {{#each this.groupedFindings as |group|}}
-        {{! template-lint-disable require-presentational-children }}
-        <AkStack
-          @alignItems='center'
-          @justifyContent='space-between'
-          @width='full'
-          local-class='group-card group-header'
-          role='button'
-          tabindex='0'
-          {{on 'click' (fn this.handleCategoryClick group)}}
-          {{on 'keydown' (fn this.handleCategoryKeydown group)}}
-          data-test-offensiveSecurity-findingsList-group={{group.key}}
-          data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
-        >
-          <AkStack @alignItems='center' @spacing='0.5'>
-            <AkTypography
-              @variant='subtitle2'
-              @fontWeight='bold'
-              local-class='group-title'
-              data-test-offensiveSecurity-findingsList-groupTitle
-            >
-              {{group.title}}
-            </AkTypography>
-            <span local-class='group-count'>({{group.findings.length}})</span>
-          </AkStack>
+        <li>
+          <button
+            type='button'
+            local-class='findings-grid group-row'
+            {{on 'click' (fn this.handleCategoryClick group)}}
+            data-test-offensiveSecurity-findingsList-group={{group.key}}
+            data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
+          >
+            <span local-class='group-title-cell'>
+              <span local-class='group-icon-box'>
+                <AkIcon @iconName='shield' @size='small' />
+              </span>
 
-          <AkIcon
-            @iconName='chevron-right'
-            @color='textSecondary'
-            local-class='group-nav-icon'
-            data-test-offensiveSecurity-findingsList-expandIcon
-          />
-        </AkStack>
+              <span local-class='group-text'>
+                <AkTypography
+                  @fontWeight='bold'
+                  data-test-offensiveSecurity-findingsList-groupTitle
+                >
+                  {{group.title}}
+                </AkTypography>
+
+                {{#if group.summary}}
+                  <AkTypography
+                    @variant='body3'
+                    @color='textSecondary'
+                    @noWrap={{true}}
+                    title={{group.summary}}
+                    data-test-offensiveSecurity-findingsList-groupSummary
+                  >
+                    {{group.summary}}
+                  </AkTypography>
+                {{/if}}
+              </span>
+            </span>
+
+            <AkTypography
+              @fontWeight='bold'
+              data-test-offensiveSecurity-findingsList-groupCount
+            >
+              {{group.findings.length}}
+            </AkTypography>
+
+            <span
+              local-class='outcome-badge {{this.outcomeClass group.status}}'
+              data-test-offensiveSecurity-findingsList-groupOutcome={{group.status}}
+            >
+              {{t (concat 'offensiveSecurity.outcome.' group.status)}}
+            </span>
+
+            <AkIcon
+              @iconName='chevron-right'
+              @color='textSecondary'
+              local-class='row-chevron'
+              data-test-offensiveSecurity-findingsList-expandIcon
+            />
+          </button>
+        </li>
       {{/each}}
-    </AkStack>
+    </ul>
   {{else}}
-  <AkTypography @variant='body2' @color='textSecondary' data-test-offensiveSecurity-findingsList-empty>
-    {{if
-    @scan.isInProgress
-    (t 'offensiveSecurity.findingsRecording')
-    (t 'offensiveSecurity.noFindings')
-    }}
-  </AkTypography>
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      local-class='findings-empty'
+      data-test-offensiveSecurity-findingsList-empty
+    >
+      {{if
+        @scan.isInProgress
+        (t 'offensiveSecurity.findingsRecording')
+        (t 'offensiveSecurity.noFindings')
+      }}
+    </AkTypography>
   {{/if}}
-</div>
+</section>

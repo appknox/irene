@@ -46,13 +46,13 @@
     </AkStack>
 
     <AkStack @alignItems='center' @spacing='1'>
-      {{#if (and @isEmbedded @scan.isRunning)}}
+      {{#if @isEmbedded}}
         <span
           local-class='streaming-badge'
-          data-test-offensiveSecurity-streamingBadge
+          data-test-offensiveSecurity-streamingBadge={{this.logStatus}}
         >
-          <span local-class='streaming-dot'></span>
-          Streaming
+          <span local-class='streaming-dot dot-{{this.logStatus}}'></span>
+          {{this.logStatusLabel}}
         </span>
       {{else if (not @isEmbedded)}}
         <OffensiveSecurity::StatusChip @scan={{@scan}} />

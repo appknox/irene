@@ -11,7 +11,7 @@ import type FileQueueService from 'ember-file-upload/services/file-queue';
 import type { UploadFile } from 'ember-file-upload';
 import type UploadAppModel from 'irene/models/upload-app';
 import type OffsecNewAssessmentService from 'irene/services/offsec-new-assessment';
-import type { AssessmentType } from 'irene/services/offsec-new-assessment';
+import type { NewAssessmentStepState } from './step';
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
 const ALLOWED_EXTENSIONS = ['apk', 'ipa', 'aab'];
@@ -70,10 +70,6 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     return this.offsecNewAssessment.assessmentType === 'comprehensive';
   }
 
-  get isResilience(): boolean {
-    return this.offsecNewAssessment.assessmentType === 'resilience';
-  }
-
   get credentials() {
     return this.offsecNewAssessment.credentials;
   }
@@ -82,6 +78,24 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     return this.credentials.some(
       (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
     );
+  }
+
+  get isIosBuild(): boolean {
+    return /\.ipa$/i.test(this.uploadedFile?.name ?? '');
+  }
+
+  get uploadStepState(): NewAssessmentStepState {
+    return this.hasUploadedApp ? 'done' : 'current';
+  }
+
+  get typeStepState(): NewAssessmentStepState {
+    return this.hasUploadedApp ? 'done' : 'upcoming';
+  }
+
+  get credentialsStepState(): NewAssessmentStepState {
+    return this.hasUploadedApp && this.hasValidCredentials
+      ? 'done'
+      : 'upcoming';
   }
 
   get isBeginDisabled(): boolean {
@@ -103,18 +117,8 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
   }
 
   @action
-  selectAssessmentType(type: AssessmentType) {
-    this.offsecNewAssessment.setAssessmentType(type);
-  }
-
-  @action
   changeBuild() {
     this.offsecNewAssessment.clearUploadedApp();
-  }
-
-  @action
-  navigateToAttackRuns() {
-    this.router.transitionTo('authenticated.offensive-security.index');
   }
 
   @action
@@ -179,31 +183,6 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
   }
 
   @action
-  updateCredential(
-    index: number,
-    field: 'role' | 'username' | 'password',
-    event: Event
-  ) {
-    const target = event.target as HTMLInputElement;
-    this.offsecNewAssessment.updateCredential(index, field, target.value);
-  }
-
-  @action
-  toggleShowPassword(index: number) {
-    this.offsecNewAssessment.toggleShowPassword(index);
-  }
-
-  @action
-  addCredential() {
-    this.offsecNewAssessment.addCredential();
-  }
-
-  @action
-  removeCredential(index: number) {
-    this.offsecNewAssessment.removeCredential(index);
-  }
-
-  @action
   async beginAssessment() {
     const uploadItem = this.offsecNewAssessment.uploadItem;
     if (!uploadItem) {
@@ -238,6 +217,7 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
       this.realtime.incrementProperty('SubmissionCounter');
       this.notify.success(this.intl.t('offensiveSecurity.assessmentStarted'));
       this.offsecNewAssessment.reset();
+      this.offsecNewAssessment.markAssessmentStarted();
       this.router.transitionTo('authenticated.offensive-security.index');
     } catch (error) {
       this.notify.error(this.intl.t('errorWhileUploading'));

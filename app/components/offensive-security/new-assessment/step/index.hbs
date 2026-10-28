@@ -1,0 +1,22 @@
+<li local-class='step-root' data-test-new-assessment-step={{@number}}>
+  <div local-class='marker-column'>
+    <span
+      local-class='marker marker-{{@state}}'
+      data-test-new-assessment-step-marker={{@state}}
+    >
+      {{#if this.isDone}}
+        <AkIcon @iconName='check' @size='small' />
+      {{else}}
+        {{@number}}
+      {{/if}}
+    </span>
+
+    {{#unless @isLast}}
+      <span local-class='connector {{if this.isDone "connector-done"}}'></span>
+    {{/unless}}
+  </div>
+
+  <div local-class='step-content'>
+    {{yield}}
+  </div>
+</li>

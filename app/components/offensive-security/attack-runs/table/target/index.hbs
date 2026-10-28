@@ -1,9 +1,23 @@
-<AkTypography
-  @variant='body2'
-  @fontWeight='bold'
-  @noWrap={{true}}
-  title={{@scan.displayName}}
-  data-test-offensiveSecurity-attackRuns-targetCell
->
-  {{@scan.displayName}}
-</AkTypography>
+<AkStack @alignItems='center' @spacing='1.5' local-class='target-cell'>
+  {{#if @scan.appIconUrl}}
+    <AppLogo
+      @src={{@scan.appIconUrl}}
+      @size='small'
+      @padding={{false}}
+      @alt={{@scan.displayName}}
+      @fallbackName={{@scan.displayName}}
+      local-class='target-icon'
+      data-test-offensiveSecurity-attackRuns-targetIcon
+    />
+  {{/if}}
+
+  <AkTypography
+    @variant='body2'
+    @fontWeight='bold'
+    @noWrap={{true}}
+    title={{@scan.displayName}}
+    data-test-offensiveSecurity-attackRuns-targetCell
+  >
+    {{@scan.displayName}}
+  </AkTypography>
+</AkStack>

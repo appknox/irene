@@ -27,9 +27,9 @@ export default class AuthenticatedOffensiveSecurityFindingController extends Con
       routeGroup: 'offensive-security',
 
       parentCrumb: {
-        title: scanTitle,
+        title: this.intl.t('offensiveSecurity.results'),
         routeGroup: 'offensive-security',
-        route: 'authenticated.offensive-security.scan',
+        route: 'authenticated.offensive-security.results',
         models: [scanId],
       },
 
@@ -42,6 +42,12 @@ export default class AuthenticatedOffensiveSecurityFindingController extends Con
         {
           title: scanTitle,
           route: 'authenticated.offensive-security.scan',
+          models: [scanId],
+          routeGroup: 'offensive-security',
+        },
+        {
+          title: this.intl.t('offensiveSecurity.results'),
+          route: 'authenticated.offensive-security.results',
           models: [scanId],
           routeGroup: 'offensive-security',
         },

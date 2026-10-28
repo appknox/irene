@@ -1,0 +1,48 @@
+<li
+  local-class='item-root'
+  data-test-new-assessment-summary-item={{@state}}
+  ...attributes
+>
+  <span local-class='state-icon state-{{@state}}'>
+    {{#if (eq @state 'done')}}
+      <AkIcon @iconName='check' @size='small' />
+    {{else if (eq @state 'active')}}
+      <AkIcon @iconName='autorenew' @size='small' local-class='spinner' />
+    {{else}}
+      <span local-class='state-glyph'></span>
+    {{/if}}
+  </span>
+
+  <div local-class='item-content'>
+    <AkStack @alignItems='center' @spacing='1'>
+      <AkTypography
+        @variant='body3'
+        @fontWeight='bold'
+        @color='textSecondary'
+        data-test-new-assessment-summary-item-label
+      >
+        {{@label}}
+      </AkTypography>
+
+      {{yield to='chip'}}
+    </AkStack>
+
+    <AkTypography
+      @fontWeight='bold'
+      @noWrap={{true}}
+      @color={{if (eq @state 'locked') 'textSecondary' 'textPrimary'}}
+      title={{@value}}
+      data-test-new-assessment-summary-item-value
+    >
+      {{@value}}
+    </AkTypography>
+
+    <AkTypography
+      @variant='body3'
+      @color='textSecondary'
+      data-test-new-assessment-summary-item-sub
+    >
+      {{@sub}}
+    </AkTypography>
+  </div>
+</li>

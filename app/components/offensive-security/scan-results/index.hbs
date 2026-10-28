@@ -4,16 +4,6 @@
     <AkSkeleton @width='100%' @height='120px' />
     <AkSkeleton @width='100%' @height='320px' />
 
-  {{else if this.activeGoal}}
-    {{! Penetration Test Goal Detail Page }}
-    <OffensiveSecurity::ScanResults::PentestResults
-      @scan={{this.scan}}
-      @goals={{this.pentestGoals}}
-      @initialGoalIndex={{this.activeGoalIndex}}
-      @onBack={{this.closeGoal}}
-      @onGoalChange={{this.handleGoalChange}}
-    />
-
   {{else if this.scan}}
     <AkBreadcrumbs::AutoTrail class='mb-1' />
 
@@ -95,7 +85,18 @@
             </AkTypography>
           </AkStack>
 
-          <AppPlatformIcon @platform={{this.scan.platformIcon}} />
+          <AkStack @alignItems='center' @spacing='1'>
+            <AppPlatformIcon @platform={{this.scan.platformIcon}} />
+
+            <AkTypography
+              @variant='body2'
+              @fontWeight='bold'
+              @color='textSecondary'
+              data-test-offensiveSecurity-scanResults-platform
+            >
+              {{this.platformLabel}}
+            </AkTypography>
+          </AkStack>
         </AkStack>
 
         {{#if this.isFileDetailsExpanded}}
@@ -204,33 +205,61 @@
     {{! Unified Offensive Security Run Card }}
     <div local-class='run-card'>
       <div local-class='run-card-header'>
-        <AkTypography @variant='body1' @fontWeight='bold'>
-          {{t 'offensiveSecurity.attackRun'}}
-        </AkTypography>
+        <div local-class='run-title-group'>
+          <AkTypography
+            @variant='body1'
+            @fontWeight='bold'
+            local-class='run-title'
+          >
+            {{t 'offensiveSecurity.attackRun'}}
+          </AkTypography>
+
+          <span local-class='title-divider run-title-divider'>|</span>
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            local-class='run-subtitle'
+            title={{this.runSubtitle}}
+            data-test-offensiveSecurity-scanResults-runSubtitle
+          >
+            {{this.runSubtitle}}
+          </AkTypography>
+        </div>
 
         <div local-class='run-card-header-actions'>
-          {{#if (and this.shouldShowDeviceCard this.isDevicePanelCollapsed)}}
-            <button
-              type='button'
-              local-class='show-device-btn'
-              {{on 'click' this.toggleDevicePanel}}
-              data-test-offensiveSecurity-showDeviceBtn
-            >
-              <AkIcon @iconName='mobile' @size='small' />
-              <span>{{t 'offensiveSecurity.showDevicePreview'}}</span>
-            </button>
-          {{/if}}
-
           <OffensiveSecurity::StatusChip @scan={{this.scan}} />
+
+          {{#if this.canViewResults}}
+            <span local-class='header-divider'></span>
+
+            <AkButton
+              @variant='filled'
+              @color='primary'
+              local-class='view-results-btn'
+              {{on 'click' this.viewResults}}
+              data-test-offensiveSecurity-scanResults-viewResultsBtn
+            >
+              <:default>{{t 'offensiveSecurity.viewResults'}}</:default>
+
+              <:rightIcon>
+                <AkIcon @iconName='arrow-forward' @size='small' />
+              </:rightIcon>
+            </AkButton>
+          {{/if}}
         </div>
       </div>
 
-      <div
-        local-class='run-split {{if
-          (or (not this.shouldShowDeviceCard) this.isDevicePanelCollapsed)
-          "is-collapsed"
-        }}'
-      >
+      {{#if this.scan.isCompleted}}
+        <OffensiveSecurity::ScanResults::SummaryCard
+          @scan={{this.scan}}
+          @artifacts={{this.artifacts}}
+          @onDownload={{perform this.downloadArtifact}}
+          @isDownloading={{this.downloadArtifact.isRunning}}
+        />
+      {{/if}}
+
+      <div local-class='run-split'>
         <div local-class='run-logs-col'>
           <OffensiveSecurity::ScanResults::AgentLog
             @scan={{this.scan}}
@@ -241,9 +270,6 @@
           />
         </div>
 
-        {{#if
-          (and this.shouldShowDeviceCard (not this.isDevicePanelCollapsed))
-        }}
           <div
             local-class='run-device-col'
             data-test-offensiveSecurity-deviceCard
@@ -272,24 +298,17 @@
 
                   <span local-class='title-divider'>|</span>
 
-                  {{#if this.isDeviceActive}}
-                    <span
-                      local-class='live-badge'
-                      data-test-offensiveSecurity-deviceLiveBadge
-                    >
-                      <span local-class='live-dot'></span>
-                      LIVE · Connected
-                    </span>
-                  {{else}}
-                    <span local-class='device-idle-status'>
-                      <span local-class='idle-dot'></span>
-                      {{if
-                        this.scan.isRunning
-                        (t 'offensiveSecurity.waitingForDevice')
-                        (t 'offensiveSecurity.noActiveDevice')
-                      }}
-                    </span>
-                  {{/if}}
+                  <span
+                    local-class='device-status-pill {{if
+                      this.isDeviceActive
+                      "is-live"
+                    }}'
+                    role='status'
+                    data-test-offensiveSecurity-deviceLiveBadge={{this.deviceStatus}}
+                  >
+                    <span local-class='device-status-dot'></span>
+                    {{this.deviceStatusLabel}}
+                  </span>
                 </div>
 
                 <AkIconButton
@@ -307,7 +326,6 @@
                   }}
                   local-class='collapse-panel-btn'
                   {{on 'click' this.toggleDeviceExpand}}
-                  data-test-offensiveSecurity-collapseDeviceBtn
                   data-test-offensiveSecurity-expandPreviewBtn
                 >
                   {{#if this.isDeviceExpanded}}
@@ -359,93 +377,106 @@
               </div>
 
               <div local-class='phone-frame-wrapper'>
-                <div
-                  local-class='phone-frame'
-                  style={{this.phoneFrameStyle}}
-                >
-                  <div local-class='phone-speaker-slit'></div>
+                <div local-class='phone-device'>
+                  {{#if this.isIosDevice}}
+                    <span
+                      local-class='side-button volume-up'
+                      aria-hidden='true'
+                    ></span>
+                    <span
+                      local-class='side-button volume-down'
+                      aria-hidden='true'
+                    ></span>
+                    <span
+                      local-class='side-button power'
+                      aria-hidden='true'
+                    ></span>
+                  {{/if}}
 
-                  <div local-class='phone-screen'>
-                    {{#if this.isDeviceActive}}
-                      <div
-                        local-class='device-screen-wrapper {{if
-                          this.deviceAspectRatio
-                          "is-fitted"
-                        }}'
-                        data-test-offensiveSecurity-deviceScreen
-                        {{did-insert this.setupDeviceObserver}}
-                        {{will-destroy this.teardownDeviceObserver}}
-                      >
-                        <NovncRfb
-                          @deviceFarmURL={{this.deviceFarmURL}}
-                          @deviceFarmPassword={{this.deviceFarmPassword}}
-                          @allowInteraction={{false}}
-                          @containCanvas={{true}}
-                        />
-                      </div>
-                    {{else}}
-                      <div
-                        local-class='device-placeholder'
-                        data-test-offensiveSecurity-devicePlaceholder
-                      >
-                        <AkIcon
-                          @iconName='mobile'
-                          local-class='device-placeholder-icon'
-                        />
+                  <div
+                    local-class='phone-frame {{if this.isIosDevice "is-ios"}}'
+                    style={{this.phoneFrameStyle}}
+                    data-test-offensiveSecurity-phoneFrame={{if
+                      this.isIosDevice
+                      'ios'
+                      'android'
+                    }}
+                  >
+                    {{#unless this.isIosDevice}}
+                      <div local-class='phone-speaker-slit'></div>
+                    {{/unless}}
 
-                        <span local-class='device-placeholder-text'>
-                          {{if
-                            this.scan.isRunning
-                            (t 'offensiveSecurity.waitingForDevice')
-                            'Live device preview'
-                          }}
-                        </span>
-                      </div>
-                    {{/if}}
+                    <div local-class='phone-screen'>
+                      {{#if this.isIosDevice}}
+                        <span
+                          local-class='dynamic-island'
+                          aria-hidden='true'
+                        ></span>
+                      {{/if}}
+
+                      {{#if this.isDeviceActive}}
+                        <div
+                          local-class='device-screen-wrapper {{if
+                            this.deviceAspectRatio
+                            "is-fitted"
+                          }}'
+                          data-test-offensiveSecurity-deviceScreen
+                          {{did-insert this.setupDeviceObserver}}
+                          {{will-destroy this.teardownDeviceObserver}}
+                        >
+                          <NovncRfb
+                            @deviceFarmURL={{this.deviceFarmURL}}
+                            @deviceFarmPassword={{this.deviceFarmPassword}}
+                            @allowInteraction={{false}}
+                            @containCanvas={{true}}
+                          />
+                        </div>
+                      {{else}}{{#unless this.scan.isTerminal}}
+                          <div
+                            local-class='device-placeholder'
+                            data-test-offensiveSecurity-devicePlaceholder
+                          >
+                            <AkIcon
+                              @iconName='mobile'
+                              local-class='device-placeholder-icon'
+                            />
+
+                            <span local-class='device-placeholder-text'>
+                              {{if
+                                this.scan.isRunning
+                                (t 'offensiveSecurity.waitingForDevice')
+                                'Live device preview'
+                              }}
+                            </span>
+                          </div>
+                        {{/unless}}{{/if}}
+
+                      {{#if this.isIosDevice}}
+                        <span
+                          local-class='home-indicator'
+                          aria-hidden='true'
+                        ></span>
+                        <span
+                          local-class='screen-glare'
+                          aria-hidden='true'
+                        ></span>
+                      {{/if}}
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <AkTypography
+                @variant='body3'
+                @color='textSecondary'
+                local-class='device-caption'
+                data-test-offensiveSecurity-deviceCaption
+              >
+                {{this.deviceCaption}}
+              </AkTypography>
             </div>
           </div>
-        {{/if}}
       </div>
     </div>
-
-    {{! Summary and Artifacts cards row }}
-    <AkStack
-      @width='full'
-      @spacing='3'
-      @alignItems='stretch'
-      local-class='summary-artifacts-row'
-    >
-      <div local-class='summary-artifacts-col'>
-        <OffensiveSecurity::ScanResults::SummaryCard @scan={{this.scan}} />
-      </div>
-
-      <div local-class='summary-artifacts-col'>
-        <OffensiveSecurity::ScanResults::ArtifactsCard
-          @scan={{this.scan}}
-          @artifacts={{this.artifacts}}
-          @onDownload={{perform this.downloadArtifact}}
-          @isDownloading={{this.downloadArtifact.isRunning}}
-        />
-      </div>
-    </AkStack>
-
-    {{! Penetration Test Goals (shown on main page if pentest_result is present) }}
-    {{#if this.hasPentestResult}}
-      <OffensiveSecurity::ScanResults::PentestGoalsCard
-        @scan={{this.scan}}
-        @goals={{this.pentestGoals}}
-        @onGoalClick={{this.openGoal}}
-      />
-    {{/if}}
-
-    {{! Findings }}
-    <OffensiveSecurity::ScanResults::FindingsList
-      @scan={{this.scan}}
-      @findings={{this.findings}}
-      @onFindingClick={{this.handleFindingClick}}
-    />
   {{/if}}
 </AkStack>

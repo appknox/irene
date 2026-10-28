@@ -1,0 +1,122 @@
+.card {
+  background-color: var(--offensive-security-new-assessment-card-bg-color);
+  border: var(--offensive-security-new-assessment-card-border);
+  border-radius: var(--offensive-security-new-assessment-card-border-radius);
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 1em 1.5em;
+  border-bottom: var(--offensive-security-new-assessment-card-border);
+}
+
+.assessment-options {
+  display: grid;
+  gap: 0.75em;
+  padding: 1.5em;
+}
+
+.assessment-option {
+  display: block;
+  padding: 1.25em;
+  cursor: pointer;
+  border: var(--offensive-security-new-assessment-card-border);
+  border-radius: var(--offensive-security-new-assessment-card-border-radius);
+  background-color: var(--offensive-security-new-assessment-card-bg-color);
+  transition:
+    border-color 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+
+  &:hover {
+    border-color: var(
+      --offensive-security-new-assessment-option-hover-border-color
+    );
+  }
+
+  &:focus-within {
+    outline: 2px solid var(--offensive-security-new-assessment-selected-color);
+    outline-offset: 2px;
+  }
+
+  &.is-selected {
+    border-color: var(--offensive-security-new-assessment-selected-color);
+    background-color: var(
+      --offensive-security-new-assessment-selected-bg-color
+    );
+    box-shadow: 0 0 0 1px
+      var(--offensive-security-new-assessment-selected-color);
+  }
+}
+
+.hidden-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.option-top-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.radio-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--offensive-security-new-assessment-radio-border-color);
+
+  .is-selected & {
+    border-color: var(--offensive-security-new-assessment-selected-color);
+
+    &::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--offensive-security-new-assessment-selected-color);
+    }
+  }
+}
+
+.option-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.option-tag {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+
+  &.tag-success {
+    color: var(--offensive-security-new-assessment-tag-success-color);
+    background-color: var(
+      --offensive-security-new-assessment-tag-success-bg-color
+    );
+  }
+
+  &.tag-info {
+    color: var(--offensive-security-new-assessment-tag-info-color);
+    background-color: var(
+      --offensive-security-new-assessment-tag-info-bg-color
+    );
+  }
+}
+
+.option-description {
+  margin-top: 4px;
+  padding-left: 30px;
+}

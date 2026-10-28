@@ -12,6 +12,7 @@ export interface OffensiveSecurityScanResultsArtifactsCardSignature {
     artifacts: OffsecScanArtifact[];
     onDownload: (artifact: OffsecScanArtifact | string) => void;
     isDownloading?: boolean;
+    isInDrawer?: boolean;
   };
 }
 

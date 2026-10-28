@@ -6,24 +6,6 @@
   border-radius: 8px;
 }
 
-.new-assessment-btn {
-  white-space: nowrap;
-}
-
-.header-shield-box {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  background-color: var(--offensive-security-attack-runs-header-shield-bg);
-
-  .shield-icon {
-    color: var(--offensive-security-attack-runs-header-shield-color);
-  }
-}
-
 .metric-cards-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -115,11 +97,6 @@
 .stat-subtext {
   font-size: 0.75rem;
   color: var(--text-secondary);
-}
-
-.controls-bar {
-  gap: 1rem;
-  margin-top: 0.5rem;
 }
 
 .search-input {

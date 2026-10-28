@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
@@ -8,6 +7,8 @@ import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
 export interface FindingGroup {
   key: string;
   title: string;
+  summary: string;
+  status: string;
   findings: OffsecScanEmbeddedFinding[];
 }
 
@@ -20,15 +21,8 @@ export interface OffensiveSecurityScanResultsFindingsListSignature {
 }
 
 export default class OffensiveSecurityScanResultsFindingsListComponent extends Component<OffensiveSecurityScanResultsFindingsListSignature> {
-  @tracked expandedGroups: Record<string, boolean> = {};
-
   get hasFindings() {
     return this.groupedFindings.length > 0;
-  }
-
-  @action
-  isGroupExpanded(key: string) {
-    return Boolean(this.expandedGroups[key]);
   }
 
   formatGroupTitle(key: string) {
@@ -111,6 +105,12 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
       groups.push({
         key,
         title: this.formatGroupTitle(key),
+        summary: list
+          .map((finding) => finding.name)
+          .filter(Boolean)
+          .join(', '),
+        // Sorted worst-first, so the lead finding carries the group's outcome
+        status: this.statusKey(list[0] as OffsecScanEmbeddedFinding),
         findings: list,
       });
     }
@@ -118,45 +118,12 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
     return groups;
   }
 
-  get sortedFindings(): OffsecScanEmbeddedFinding[] {
-    return this.groupedFindings.flatMap((group) => group.findings);
-  }
-
   @action
   handleCategoryClick(group: FindingGroup): void {
     const firstFinding = group.findings[0];
     if (firstFinding?.id) {
-      this.handleClick(firstFinding.id);
+      this.args.onFindingClick(firstFinding.id);
     }
-  }
-
-  @action
-  handleCategoryKeydown(group: FindingGroup, event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    this.handleCategoryClick(group);
-  }
-
-  @action
-  toggleGroup(key: string): void {
-    const isExpanded = this.isGroupExpanded(key);
-    this.expandedGroups = {
-      ...this.expandedGroups,
-      [key]: !isExpanded,
-    };
-  }
-
-  @action
-  handleGroupKeydown(key: string, event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    this.toggleGroup(key);
   }
 
   /**
@@ -198,22 +165,6 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
       default:
         return 'neutral';
     }
-  }
-
-  @action
-  handleClick(findingId: number): void {
-    this.args.onFindingClick(findingId);
-  }
-
-  /** Keyboard equivalent of clicking a row — the row is not a real button. */
-  @action
-  handleKeydown(findingId: number, event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    this.handleClick(findingId);
   }
 }
 

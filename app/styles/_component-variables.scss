@@ -932,7 +932,9 @@ body {
   --sbom-scan-details-component-list-ai-type-header-background-color: var(
     --background-main
   );
-  --sbom-scan-details-component-list-ai-type-header-box-shadow: var(--box-shadow-7);
+  --sbom-scan-details-component-list-ai-type-header-box-shadow: var(
+    --box-shadow-7
+  );
   --sbom-scan-details-component-list-ai-type-header-filter-option-hover-background-color: var(
     --neutral-grey-200
   );
@@ -1098,14 +1100,20 @@ body {
   );
 
   // variables for sbom/scan-details/summary-bar
-  --sbom-scan-details-summary-bar-container-background-color: var(--background-main);
+  --sbom-scan-details-summary-bar-container-background-color: var(
+    --background-main
+  );
   --sbom-scan-details-summary-bar-container-border-color: var(--border-color-1);
   --sbom-scan-details-summary-bar-container-border-radius: var(--border-radius);
   --sbom-scan-details-summary-bar-new-feature-container-background-color: var(
     --new-feature-ai-bg-color
   );
-  --sbom-scan-details-summary-bar-new-feature-container-border-radius: var(--border-radius);
-  --sbom-scan-details-summary-bar-new-feature-icon-color: var(--new-feature-ai-color);
+  --sbom-scan-details-summary-bar-new-feature-container-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-summary-bar-new-feature-icon-color: var(
+    --new-feature-ai-color
+  );
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text
@@ -4419,12 +4427,6 @@ body {
   --offensive-security-attack-runs-row-hover-bg-color: var(--background-light);
   --offensive-security-attack-runs-empty-color: var(--text-secondary);
   --offensive-security-attack-runs-overline-color: var(--text-secondary);
-  --offensive-security-attack-runs-header-shield-bg: var(
-    --offensive-security-header-shield-bg
-  );
-  --offensive-security-attack-runs-header-shield-color: var(
-    --offensive-security-header-shield-color
-  );
   --offensive-security-attack-runs-stat-icon-neutral-bg: var(
     --neutral-grey-100
   );
@@ -4500,6 +4502,51 @@ body {
     --background-light
   );
 
+  // variables for offensive-security/new-assessment
+  --offensive-security-new-assessment-card-bg-color: var(--common-white);
+  --offensive-security-new-assessment-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-new-assessment-card-border-radius: var(
+    --border-radius-6
+  );
+  --offensive-security-new-assessment-locked-bg-color: var(--neutral-grey-50);
+  --offensive-security-new-assessment-footer-bg-color: var(--background-light);
+  --offensive-security-new-assessment-selected-color: var(--primary-main);
+  --offensive-security-new-assessment-selected-bg-color: var(--primary-main-5);
+  --offensive-security-new-assessment-option-hover-border-color: var(
+    --neutral-grey-400
+  );
+  --offensive-security-new-assessment-radio-border-color: var(
+    --neutral-grey-400
+  );
+  --offensive-security-new-assessment-dropzone-border-color: var(
+    --neutral-grey-400
+  );
+  --offensive-security-new-assessment-platform-icon-color: var(--text-primary);
+  --offensive-security-new-assessment-platform-icon-bg-color: var(
+    --neutral-grey-100
+  );
+  --offensive-security-new-assessment-tag-success-color: var(--success-main);
+  --offensive-security-new-assessment-tag-success-bg-color: var(
+    --success-light
+  );
+  --offensive-security-new-assessment-tag-info-color: var(--info-main);
+  --offensive-security-new-assessment-tag-info-bg-color: var(--info-light);
+  --offensive-security-new-assessment-step-active-color: var(--common-white);
+  --offensive-security-new-assessment-step-done-color: var(--success-main);
+  --offensive-security-new-assessment-step-done-bg-color: var(--success-light);
+  --offensive-security-new-assessment-step-upcoming-color: var(
+    --text-secondary
+  );
+  --offensive-security-new-assessment-step-upcoming-bg-color: var(
+    --neutral-grey-200
+  );
+  --offensive-security-new-assessment-step-connector-color: var(
+    --neutral-grey-300
+  );
+  --offensive-security-new-assessment-muted-icon-color: var(--text-secondary);
+  --offensive-security-new-assessment-remove-hover-color: var(--error-main);
+
   // variables for offensive-security/scan-results
   --offensive-security-scan-results-card-bg-color: var(--common-white);
   --offensive-security-scan-results-card-border: 1px solid var(--border-color-1);
@@ -4507,6 +4554,31 @@ body {
   --offensive-security-scan-results-label-color: var(--text-secondary);
   --offensive-security-scan-results-value-color: var(--text-primary);
   --offensive-security-scan-results-divider-color: var(--border-color-1);
+  --offensive-security-scan-results-header-bg-color: var(--background-light);
+  --offensive-security-scan-results-icon-bg-color: var(--neutral-grey-100);
+  --offensive-security-scan-results-focus-color: var(--primary-main);
+  --offensive-security-scan-results-in-progress-color: var(--info-main);
+  --offensive-security-scan-results-live-bg-color: var(--success-light);
+  --offensive-security-scan-results-iphone-bezel: linear-gradient(
+    145deg,
+    #6b6f78 0%,
+    #2a2c31 45%,
+    #141518 100%
+  );
+  --offensive-security-scan-results-iphone-shadow: 0 18px 30px -12px
+      rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.25);
+  --offensive-security-scan-results-iphone-button-color: var(
+    --neutral-grey-800
+  );
+  --offensive-security-scan-results-iphone-indicator-color: var(
+    --neutral-grey-600
+  );
+  --offensive-security-scan-results-iphone-glare: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 38%
+  );
   --offensive-security-scan-results-stat-exploited-color: var(--error-main);
   --offensive-security-scan-results-stat-defended-color: var(--success-main);
   --offensive-security-scan-results-artifact-hover-border: var(

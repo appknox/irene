@@ -1,0 +1,74 @@
+<section local-class='summary-card' data-test-new-assessment-summary>
+  <div local-class='summary-header'>
+    <AkTypography @variant='subtitle1' @fontWeight='bold'>
+      {{t 'offensiveSecurity.readyToBegin'}}
+    </AkTypography>
+  </div>
+
+  <ul local-class='summary-list'>
+    <OffensiveSecurity::NewAssessment::Summary::Item
+      @state={{this.buildState}}
+      @label={{t 'offensiveSecurity.uploadBuild'}}
+      @value={{this.buildValue}}
+      @sub={{this.buildSub}}
+      data-test-new-assessment-summary-build
+    />
+
+    <OffensiveSecurity::NewAssessment::Summary::Item
+      @state={{this.typeState}}
+      @label={{t 'offensiveSecurity.assessmentType'}}
+      @value={{this.typeValue}}
+      @sub={{this.typeSub}}
+      data-test-new-assessment-summary-type
+    />
+
+    <OffensiveSecurity::NewAssessment::Summary::Item
+      @state={{this.credentialsState}}
+      @label={{t 'offensiveSecurity.testCredentials'}}
+      @value={{this.credentialsValue}}
+      @sub={{this.credentialsSub}}
+      data-test-new-assessment-summary-credentials
+    >
+      <:chip>
+        <span
+          local-class='optional-tag'
+          data-test-new-assessment-summary-optional
+        >
+          {{t 'optional'}}
+        </span>
+      </:chip>
+    </OffensiveSecurity::NewAssessment::Summary::Item>
+  </ul>
+
+  <div local-class='summary-footer'>
+    <AkButton
+      @variant='filled'
+      @color='primary'
+      @type='button'
+      @loading={{@isStartingAssessment}}
+      @disabled={{@isBeginDisabled}}
+      local-class='begin-btn'
+      data-test-begin-assessment-btn
+      {{on 'click' @onBegin}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='play-arrow' />
+      </:leftIcon>
+
+      <:default>{{@beginLabel}}</:default>
+    </AkButton>
+
+    <AkTypography
+      @variant='body3'
+      @color='textSecondary'
+      local-class='begin-help'
+      data-test-begin-assessment-help
+    >
+      {{#if this.hasUploadedApp}}
+        {{t 'offensiveSecurity.beginAssessmentHelp'}}
+      {{else}}
+        {{t 'offensiveSecurity.uploadBuildToContinue'}}
+      {{/if}}
+    </AkTypography>
+  </div>
+</section>

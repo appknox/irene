@@ -1,12 +1,16 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import type IntlService from 'ember-intl/services/intl';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 
 export interface AgentLogLine {
   text: string;
   tone: 'accent' | 'error' | 'success' | 'dim' | '';
 }
+
+export type AgentLogStatus = 'waiting' | 'streaming' | 'finished' | 'failed';
 
 export interface OffensiveSecurityScanResultsAgentLogSignature {
   Args: {
@@ -19,6 +23,8 @@ export interface OffensiveSecurityScanResultsAgentLogSignature {
 }
 
 export default class OffensiveSecurityScanResultsAgentLogComponent extends Component<OffensiveSecurityScanResultsAgentLogSignature> {
+  @service declare intl: IntlService;
+
   @tracked dotCount = 1;
   @tracked isExpanded = false;
   @tracked isScrolledUp = false;
@@ -133,6 +139,29 @@ export default class OffensiveSecurityScanResultsAgentLogComponent extends Compo
     const lines = this.args.lines ?? [];
 
     return lines.map((text) => ({ text, tone: toneFor(text) }));
+  }
+
+  get logStatus(): AgentLogStatus {
+    const scan = this.args.scan;
+
+    if (scan?.isFailed) {
+      return 'failed';
+    }
+
+    if (scan?.isCompleted) {
+      return 'finished';
+    }
+
+    return scan?.isRunning ? 'streaming' : 'waiting';
+  }
+
+  get logStatusLabel(): string {
+    return {
+      waiting: this.intl.t('offensiveSecurity.logStatusWaiting'),
+      streaming: this.intl.t('offensiveSecurity.logStatusStreaming'),
+      finished: this.intl.t('offensiveSecurity.logStatusFinished'),
+      failed: this.intl.t('offensiveSecurity.logStatusFailed'),
+    }[this.logStatus];
   }
 
   get statusMessage() {
