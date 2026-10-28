@@ -75,41 +75,61 @@ const API_SCAN_URL_STATUS = {
 const API_SCAN_URLS = [
   {
     id: 1,
-    method: 'GET',
-    host: 'api.example.com',
-    path: '/api/v1/auth/session',
+    request: {
+      method: 'GET',
+      scheme: 'https',
+      host: 'api.example.com',
+      port: '443',
+      path: '/api/v1/auth/session',
+    },
     status: API_SCAN_URL_STATUS.COMPLETED,
     scanned_on: '2026-10-28T10:42:08Z',
   },
   {
     id: 2,
-    method: 'POST',
-    host: 'api.example.com',
-    path: '/api/v1/auth/login',
+    request: {
+      method: 'POST',
+      scheme: 'https',
+      host: 'api.example.com',
+      port: '443',
+      path: '/api/v1/auth/login',
+    },
     status: API_SCAN_URL_STATUS.COMPLETED,
     scanned_on: '2026-10-28T10:42:31Z',
   },
   {
     id: 3,
-    method: 'POST',
-    host: 'api.example.com',
-    path: '/api/v1/transfers',
+    request: {
+      method: 'POST',
+      scheme: 'https',
+      host: 'api.example.com',
+      port: '443',
+      path: '/api/v1/transfers',
+    },
     status: API_SCAN_URL_STATUS.IN_PROGRESS,
     scanned_on: null,
   },
   {
     id: 4,
-    method: 'DELETE',
-    host: 'api.example.com',
-    path: '/api/v1/payees/{id}',
+    request: {
+      method: 'DELETE',
+      scheme: 'https',
+      host: 'api.example.com',
+      port: '443',
+      path: '/api/v1/payees/{id}',
+    },
     status: API_SCAN_URL_STATUS.PENDING,
     scanned_on: null,
   },
   {
     id: 5,
-    method: 'GET',
-    host: 'api.example.com',
-    path: '/api/v1/notifications',
+    request: {
+      method: 'GET',
+      scheme: 'https',
+      host: 'api.example.com',
+      port: '443',
+      path: '/api/v1/notifications',
+    },
     status: API_SCAN_URL_STATUS.FAILED,
     scanned_on: null,
   },
@@ -127,8 +147,10 @@ function setupApiScanUrlsEndpoint(server, onRequest = () => {}) {
     onRequest(req);
 
     const q = (req.queryParams.q || '').toLowerCase();
-    const results = API_SCAN_URLS.filter((u) =>
-      u.path.toLowerCase().includes(q)
+    const results = API_SCAN_URLS.filter(
+      (u) =>
+        u.request.host.toLowerCase().includes(q) ||
+        u.request.path.toLowerCase().includes(q)
     );
 
     return {
@@ -1180,12 +1202,12 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-method]', row)
-          .hasText(url.method);
+          .hasText(url.request.method);
 
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-endpoint]', row)
-          .hasText(url.path)
-          .hasAttribute('title', `${url.host}${url.path}`);
+          .hasText(`https://api.example.com${url.request.path}`)
+          .hasAttribute('title', `https://api.example.com${url.request.path}`);
 
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-status]', row)
@@ -1243,7 +1265,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     assert
       .dom('[data-test-fileDetails-apiScan-progressStatus-endpoint]', rows[0])
-      .hasText('/api/v1/auth/session');
+      .hasText('https://api.example.com/api/v1/auth/session');
 
     // Counts describe the whole scan, not the search results
     assert

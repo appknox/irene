@@ -146,16 +146,16 @@
                   @variant='semi-filled'
                   @size='small'
                   @fontWeight='bold'
-                  @label={{r.rowValue.method}}
-                  @color={{this.methodChipColor r.rowValue.method}}
+                  @label={{r.rowValue.request.method}}
+                  @color={{this.methodChipColor r.rowValue.request.method}}
                 />
               {{else if (eq r.columnValue.id 'endpoint')}}
                 <AkTypography
                   data-test-fileDetails-apiScan-progressStatus-endpoint
-                  title='{{r.rowValue.host}}{{r.rowValue.path}}'
+                  title={{request-to-url r.rowValue.request}}
                   @noWrap={{true}}
                 >
-                  {{r.rowValue.path}}
+                  {{request-to-url r.rowValue.request}}
                 </AkTypography>
               {{else if (eq r.columnValue.id 'status')}}
                 {{#let (this.statusDetails r.rowValue.status) as |status|}}

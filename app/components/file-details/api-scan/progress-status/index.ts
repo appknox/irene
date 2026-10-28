@@ -13,6 +13,7 @@ import { DsStatusGroup } from 'irene/utils/ds-status-group';
 import type { AkChipColor } from 'irene/components/ak-chip';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type FileModel from 'irene/models/file';
+import type { Request } from 'irene/models/capturedapi';
 import type ApiScanService from 'irene/services/api-scan';
 import type IreneAjaxService from 'irene/services/ajax';
 
@@ -32,11 +33,10 @@ export enum ApiScanUrlStatus {
   CANCELLED = 4,
 }
 
+// `request` has the same schema as the captured APIs list
 export interface ApiScanUrl {
   id: number;
-  method: string;
-  host: string;
-  path: string;
+  request: Request;
   status: ApiScanUrlStatus;
   scanned_on: string | null;
 }
