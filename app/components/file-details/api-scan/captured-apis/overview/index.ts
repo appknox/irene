@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { task } from 'ember-concurrency';
 
+import apiMethodChipColor from 'irene/utils/api-method-chip-color';
 import type CapturedApiModel from 'irene/models/capturedapi';
 
 export interface FileDetailsApiScanCapturedApiOverviewSignature {
@@ -12,6 +13,10 @@ export interface FileDetailsApiScanCapturedApiOverviewSignature {
 }
 
 export default class FileDetailsApiScanCapturedApiOverviewComponent extends Component<FileDetailsApiScanCapturedApiOverviewSignature> {
+  get methodChipColor() {
+    return apiMethodChipColor(this.args.capturedApi.request?.method);
+  }
+
   get disableToggleApi() {
     return this.args.disableToggleApi || this.handleToggleApi.isRunning;
   }

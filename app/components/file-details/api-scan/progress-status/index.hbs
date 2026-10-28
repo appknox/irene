@@ -50,13 +50,6 @@
             {{@file.apiScanProgress}}%
           </AkTypography>
         </AkStack>
-      {{else if @file.isApiDone}}
-        <AkChip
-          data-test-fileDetails-apiScan-progressStatus-completedChip
-          @variant='semi-filled'
-          @label={{t 'chipStatus.completed'}}
-          @color='success'
-        />
       {{/if}}
 
       <div local-class='search-input'>
@@ -95,6 +88,13 @@
             {{t 'stop'}}
           </:default>
         </AkButton>
+      {{else if @file.isApiDone}}
+        <AkChip
+          data-test-fileDetails-apiScan-progressStatus-completedChip
+          @variant='semi-filled'
+          @label={{t 'chipStatus.completed'}}
+          @color='success'
+        />
       {{/if}}
     </AkStack>
   </AkStack>
@@ -145,7 +145,6 @@
                   data-test-fileDetails-apiScan-progressStatus-method
                   @variant='semi-filled'
                   @size='small'
-                  @fontWeight='bold'
                   @label={{r.rowValue.request.method}}
                   @color={{this.methodChipColor r.rowValue.request.method}}
                 />
