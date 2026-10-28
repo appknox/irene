@@ -1,39 +1,76 @@
 .progress-status {
-  position: relative;
-  display: flow-root;
   width: 100%;
-}
-
-.stop-btn-row {
-  position: absolute;
-  top: 0.5em;
-  right: 1.5em;
-  z-index: 1;
-}
-
-.stop-btn {
-  padding: 0.3em 0.6em;
-}
-
-.api-scan-status-card {
-  width: 360px;
   background-color: var(
     --file-details-api-scan-progress-status-card-background
   );
-  box-shadow: var(--file-details-api-scan-progress-status-card-box-shadow);
   border-radius: var(--file-details-api-scan-progress-status-border-radius);
   box-sizing: border-box;
+}
+
+.scanned-apis-header {
+  border-bottom: 1px solid
+    var(--file-details-api-scan-progress-status-border-color);
+}
+
+.progress-bar {
+  width: 260px;
+
+  .progress-bar-indicator {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .progress-percent {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
 
   :global(.ak-loader-linear-indicator) {
     background-color: var(
       --file-details-api-scan-progress-status-indicator-background
     );
   }
+}
 
-  .status-helper-text strong {
-    color: var(--file-details-api-scan-progress-status-text-primary);
-    font-weight: var(
-      --file-details-api-scan-progress-status-font-weight-medium
-    );
-  }
+.search-input {
+  width: 260px;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(--file-details-api-scan-progress-status-dot-default);
+}
+
+.status-dot-success {
+  background-color: var(--file-details-api-scan-progress-status-success);
+}
+
+.status-dot-warn {
+  background-color: var(--file-details-api-scan-progress-status-warn);
+}
+
+.status-dot-error {
+  background-color: var(--file-details-api-scan-progress-status-error);
+}
+
+.status-text-success {
+  color: var(--file-details-api-scan-progress-status-success) !important;
+}
+
+.status-text-warn {
+  color: var(--file-details-api-scan-progress-status-warn-text) !important;
+}
+
+.status-text-error {
+  color: var(--file-details-api-scan-progress-status-error) !important;
+}
+
+// The table is locked to the container width (eq-container), but ember-table
+// can still overshoot by a pixel or two from borders, which shows a useless
+// horizontal scrollbar. Endpoint truncates with an ellipsis, so nothing is lost.
+.scanned-apis-table :global(.ember-table-overflow) {
+  overflow-x: hidden;
 }

@@ -2,8 +2,10 @@ import {
   click,
   currentURL,
   find,
+  fillIn,
   findAll,
   triggerEvent,
+  triggerKeyEvent,
   visit,
 } from '@ember/test-helpers';
 
@@ -60,6 +62,86 @@ class NotificationsStub extends Service {
   }
 
   setDefaultAutoClear() {}
+}
+
+// Mirrors APIScanStatusEnum in mycroft
+const API_SCAN_URL_STATUS = {
+  PENDING: 0,
+  IN_PROGRESS: 1,
+  COMPLETED: 2,
+  FAILED: 3,
+};
+
+const API_SCAN_URLS = [
+  {
+    id: 1,
+    method: 'GET',
+    host: 'api.example.com',
+    path: '/api/v1/auth/session',
+    status: API_SCAN_URL_STATUS.COMPLETED,
+    scanned_on: '2026-10-28T10:42:08Z',
+  },
+  {
+    id: 2,
+    method: 'POST',
+    host: 'api.example.com',
+    path: '/api/v1/auth/login',
+    status: API_SCAN_URL_STATUS.COMPLETED,
+    scanned_on: '2026-10-28T10:42:31Z',
+  },
+  {
+    id: 3,
+    method: 'POST',
+    host: 'api.example.com',
+    path: '/api/v1/transfers',
+    status: API_SCAN_URL_STATUS.IN_PROGRESS,
+    scanned_on: null,
+  },
+  {
+    id: 4,
+    method: 'DELETE',
+    host: 'api.example.com',
+    path: '/api/v1/payees/{id}',
+    status: API_SCAN_URL_STATUS.PENDING,
+    scanned_on: null,
+  },
+  {
+    id: 5,
+    method: 'GET',
+    host: 'api.example.com',
+    path: '/api/v1/notifications',
+    status: API_SCAN_URL_STATUS.FAILED,
+    scanned_on: null,
+  },
+];
+
+const API_SCAN_URL_STATUS_LABEL = {
+  [API_SCAN_URL_STATUS.PENDING]: () => t('apiScanModule.queued'),
+  [API_SCAN_URL_STATUS.IN_PROGRESS]: () => t('scanning'),
+  [API_SCAN_URL_STATUS.COMPLETED]: () => t('apiScanModule.scanned'),
+  [API_SCAN_URL_STATUS.FAILED]: () => t('failed'),
+};
+
+function setupApiScanUrlsEndpoint(server, onRequest = () => {}) {
+  server.get('/v2/files/:id/api_scan_urls', (_, req) => {
+    onRequest(req);
+
+    const q = (req.queryParams.q || '').toLowerCase();
+    const results = API_SCAN_URLS.filter((u) =>
+      u.path.toLowerCase().includes(q)
+    );
+
+    return {
+      count: results.length,
+      next: null,
+      previous: null,
+      results,
+      total_count: API_SCAN_URLS.length,
+      scanned_count: API_SCAN_URLS.filter(
+        (u) => u.status === API_SCAN_URL_STATUS.COMPLETED
+      ).length,
+    };
+  });
 }
 
 module('Acceptance | file-details/api-scan', function (hooks) {
@@ -1034,6 +1116,8 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         is_api_done: status === ENUMS.SCAN_STATUS.COMPLETED,
       });
 
+      setupApiScanUrlsEndpoint(this.server);
+
       await visit(`/dashboard/file/${this.file.id}/api-scan`);
 
       assert
@@ -1051,25 +1135,33 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         .exists();
 
       assert
-        .dom(
-          `[data-test-fileDetails-apiScan-progressStatus-svg="${this.file.is_api_done ? 'completed' : 'in-progress'}"]`
-        )
-        .exists();
+        .dom('[data-test-fileDetails-apiScan-progressStatus-title]')
+        .hasText(t('apiScanModule.scannedApis'));
 
       assert
-        .dom('[data-test-fileDetails-apiScan-progressStatus-title]')
-        .hasText(this.file.is_api_done ? t('apiScan') : t('apiScanInProgress'));
+        .dom('[data-test-fileDetails-apiScan-progressStatus-scannedCount]')
+        .hasText(
+          t('apiScanModule.endpointsScannedCount', { scanned: 2, total: 5 })
+        );
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-progressStatus-searchInput]')
+        .exists();
 
       if (this.file.is_api_done) {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-completedChip]')
           .hasText(t('chipStatus.completed'));
 
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
+          .doesNotExist();
+
         assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
       } else {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
-          .hasText(`${t('scanning')}... ${this.file.api_scan_progress}%`);
+          .hasText(`${this.file.api_scan_progress}%`);
 
         assert
           .dom('[data-test-fileDetails-apiScan-stopBtn]')
@@ -1077,19 +1169,96 @@ module('Acceptance | file-details/api-scan', function (hooks) {
           .hasText(t('stop'));
       }
 
-      assert.strictEqual(
-        find(
-          '[data-test-fileDetails-apiScan-progressStatus-helperText]'
-        ).innerHTML.trim(),
-        t('apiScanProgressStatusHelper', {
-          status: this.file.is_api_done ? 'completed' : 'running',
-          htmlSafe: true,
-        })
-          .toString()
-          .trim()
+      const rows = findAll(
+        '[data-test-fileDetails-apiScan-progressStatus-row]'
       );
+
+      assert.strictEqual(rows.length, API_SCAN_URLS.length);
+
+      rows.forEach((row, idx) => {
+        const url = API_SCAN_URLS[idx];
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-method]', row)
+          .hasText(url.method);
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-endpoint]', row)
+          .hasText(url.path)
+          .hasAttribute('title', `${url.host}${url.path}`);
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-status]', row)
+          .hasText(API_SCAN_URL_STATUS_LABEL[url.status]());
+
+        if (url.scanned_on) {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-scannedOn]',
+              row
+            )
+            .doesNotHaveTextContaining('—');
+        } else {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-scannedOn]',
+              row
+            )
+            .hasText('—');
+        }
+      });
     }
   );
+
+  test('it filters scanned apis by endpoint search', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+      is_api_done: false,
+    });
+
+    let lastQuery = null;
+
+    setupApiScanUrlsEndpoint(this.server, (req) => {
+      lastQuery = req.queryParams.q;
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    assert.strictEqual(
+      findAll('[data-test-fileDetails-apiScan-progressStatus-row]').length,
+      API_SCAN_URLS.length
+    );
+
+    const searchInput =
+      '[data-test-fileDetails-apiScan-progressStatus-searchInput]';
+
+    await fillIn(searchInput, 'auth');
+    await triggerKeyEvent(searchInput, 'keyup', 'H');
+
+    assert.strictEqual(lastQuery, 'auth');
+
+    const rows = findAll('[data-test-fileDetails-apiScan-progressStatus-row]');
+
+    assert.strictEqual(rows.length, 2);
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-endpoint]', rows[0])
+      .hasText('/api/v1/auth/session');
+
+    // Counts describe the whole scan, not the search results
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-scannedCount]')
+      .hasText(
+        t('apiScanModule.endpointsScannedCount', { scanned: 2, total: 5 })
+      );
+
+    await fillIn(searchInput, 'does-not-exist');
+    await triggerKeyEvent(searchInput, 'keyup', 'T');
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-empty]')
+      .hasText(t('apiScanModule.noApiFound'));
+  });
 
   test('stop button stops a running api scan', async function (assert) {
     this.file.update({
@@ -1128,18 +1297,19 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         );
       }
 
-      file.update({
-        api_scan_status: ENUMS.SCAN_STATUS.WAITING,
-        is_api_done: false,
-        api_scan_progress: 0,
-      });
+      file.update({ is_api_scan_stop_requested: true });
 
       return new Response(204);
     });
 
+    setupApiScanUrlsEndpoint(this.server);
+
     await visit(`/dashboard/file/${this.file.id}/api-scan`);
 
-    assert.dom('[data-test-fileDetails-apiScan-stopBtn]').hasText(t('stop'));
+    assert
+      .dom('[data-test-fileDetails-apiScan-stopBtn]')
+      .isNotDisabled()
+      .hasText(t('stop'));
 
     await click('[data-test-fileDetails-apiScan-stopBtn]');
 
@@ -1147,8 +1317,20 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
     assert.strictEqual(notify.errorMsg, null);
     assert.strictEqual(notify.successMsg, t('apiScanStopped'));
+
     assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
-    assert.dom('[data-test-fileDetails-apiScan-capturedApi-title]').exists();
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-stoppingChip]')
+      .hasText(t('stopping'));
+
+    assert
+      .dom('[data-test-fileDetails-dynamicScan-statusChip-loader]')
+      .exists();
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
+      .hasText('40%');
   });
 
   test('it should navigate to properly on tab click', async function (assert) {
