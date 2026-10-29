@@ -38,11 +38,18 @@
           @spacing='1'
         >
           <AkTypography
+            data-test-analysisRisk-ignoreIfUnchangedNote-heading
+            @variant='subtitle2'
+          >
+            {{card.heading}}
+          </AkTypography>
+
+          <AkTypography
             data-test-analysisRisk-ignoreIfUnchangedNote-baseline
             @variant='body2'
           >
             {{t
-              this.baselineTitleKey
+              'ignoreIfUnchangedBaselineFile'
               fileId=card.fileId
               version=card.version
             }}
@@ -77,6 +84,7 @@
 
           <ul
             data-test-analysisRisk-ignoreIfUnchangedNote-baselineFindings
+            local-class='findings-list'
             class='pl-3'
           >
             {{#each card.findings as |finding|}}
@@ -91,6 +99,7 @@
 
             <ul
               data-test-analysisRisk-ignoreIfUnchangedNote-newFindings
+              local-class='findings-list'
               class='pl-3'
             >
               {{#each card.newFindings as |finding|}}

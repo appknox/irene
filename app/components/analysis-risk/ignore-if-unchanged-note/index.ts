@@ -62,10 +62,14 @@ export default class AnalysisRiskIgnoreIfUnchangedNoteComponent extends Componen
     return date ? dayjs(date).format('MMM DD, YYYY') : null;
   }
 
-  get baselineTitleKey() {
-    return this.info.pending
-      ? 'ignoreIfUnchangedWillCompareWith'
-      : 'ignoreIfUnchangedBaselineFile';
+  // tells the reader what a card is: the same layout is used on the baseline file and
+  // on the files compared with it
+  get comparedHeading() {
+    return this.intl.t(
+      this.info.pending
+        ? 'ignoreIfUnchangedHeadingWillCompare'
+        : 'ignoreIfUnchangedHeadingCompared'
+    );
   }
 
   // the file where the option was selected: one card per baseline version, newest
@@ -75,6 +79,7 @@ export default class AnalysisRiskIgnoreIfUnchangedNoteComponent extends Componen
 
     if (info.is_baseline_file && info.baseline_versions.length > 0) {
       return info.baseline_versions.map((it) => ({
+        heading: this.intl.t('ignoreIfUnchangedHeadingBaselineFile'),
         fileId: it.baseline_file,
         version: it.version,
         createdBy: it.created_by,
@@ -89,6 +94,7 @@ export default class AnalysisRiskIgnoreIfUnchangedNoteComponent extends Componen
 
     return [
       {
+        heading: this.comparedHeading,
         fileId: info.baseline_file,
         version: info.version,
         createdBy: info.created_by,
