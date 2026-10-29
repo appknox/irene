@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { waitForPromise } from '@ember/test-waiters';
+import { task, timeout } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
@@ -15,6 +16,8 @@ import type { NewAssessmentStepState } from './step';
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
 const ALLOWED_EXTENSIONS = ['apk', 'ipa', 'aab'];
+const STARTED_SCAN_POLL_INTERVAL_MS = 3000;
+const STARTED_SCAN_POLL_MAX_ATTEMPTS = 100;
 
 export function formatFileSize(bytes?: number): string {
   if (!bytes || bytes <= 0) {
@@ -218,13 +221,43 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
       this.notify.success(this.intl.t('offensiveSecurity.assessmentStarted'));
       this.offsecNewAssessment.reset();
       this.offsecNewAssessment.markAssessmentStarted();
-      this.router.transitionTo('authenticated.offensive-security.index');
+      this.waitForStartedScan.perform();
     } catch (error) {
       this.notify.error(this.intl.t('errorWhileUploading'));
     } finally {
       this.isStartingAssessment = false;
     }
   }
+
+  /** Polls until the scan for the begun assessment exists, then opens it. */
+  waitForStartedScan = task({ restartable: true }, async () => {
+    for (let i = 0; i < STARTED_SCAN_POLL_MAX_ATTEMPTS; i++) {
+      try {
+        const scans = await waitForPromise(
+          this.store.query('offsec-scan', { limit: 50, offset: 0 })
+        );
+
+        const startedScan = this.offsecNewAssessment.findStartedScan(
+          scans.slice()
+        );
+
+        if (startedScan) {
+          this.offsecNewAssessment.clearAssessmentStarted();
+
+          this.router.transitionTo(
+            'authenticated.offensive-security.scan',
+            startedScan.id
+          );
+
+          return;
+        }
+      } catch (error) {
+        // transient failure, keep polling
+      }
+
+      await timeout(STARTED_SCAN_POLL_INTERVAL_MS);
+    }
+  });
 }
 
 declare module '@glint/environment-ember-loose/registry' {

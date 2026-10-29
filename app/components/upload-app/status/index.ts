@@ -41,7 +41,17 @@ const failedSubmissionStatus = [
   ENUMS.SUBMISSION_STATUS.STORE_UPLOAD_FAILED,
 ];
 
-export default class UploadAppStatusComponent extends Component {
+export interface UploadAppStatusSignature {
+  Args: {
+    hideDivider?: boolean;
+    inline?: boolean;
+  };
+  Blocks: {
+    default: [{ isActive: boolean }];
+  };
+}
+
+export default class UploadAppStatusComponent extends Component<UploadAppStatusSignature> {
   @service declare store: Store;
   @service declare realtime: RealtimeService;
   @service declare uploadApp: UploadAppService;
@@ -51,7 +61,7 @@ export default class UploadAppStatusComponent extends Component {
 
   @tracked submissions: SubmissionModel[] | null = null;
 
-  constructor(owner: unknown, args: object) {
+  constructor(owner: unknown, args: UploadAppStatusSignature['Args']) {
     super(owner, args);
 
     this.initialize();
@@ -166,6 +176,26 @@ export default class UploadAppStatusComponent extends Component {
     ] as SubmissionModelWithSystemFileData[];
   }
 
+  // Inline mode skips finished uploads; the new-assessment page redirects once the scan exists
+  get inlineSubmissionList() {
+    return this.computedSubmissionList.filter(
+      (s) => s.status !== ENUMS.SUBMISSION_STATUS.ANALYZING
+    );
+  }
+
+  get inlineProgressSegments() {
+    const failed = this.submissionNumbers.failed > 0;
+
+    return [
+      {
+        key: 'progress',
+        share: 100,
+        striped: !failed,
+        background: failed ? 'var(--error-main)' : undefined,
+      },
+    ];
+  }
+
   get hasSubmissions() {
     return this.computedSubmissionList.length > 0;
   }
@@ -176,6 +206,11 @@ export default class UploadAppStatusComponent extends Component {
 
   get loaderColorClass() {
     return this.submissionNumbers.failed > 0 ? '' : 'green-loader';
+  }
+
+  @action
+  scrollIntoView(element: HTMLElement) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
 
   @action

@@ -41,34 +41,40 @@
   </ul>
 
   <div local-class='summary-footer'>
-    <AkButton
-      @variant='filled'
-      @color='primary'
-      @type='button'
-      @loading={{@isStartingAssessment}}
-      @disabled={{@isBeginDisabled}}
-      local-class='begin-btn'
-      data-test-begin-assessment-btn
-      {{on 'click' @onBegin}}
-    >
-      <:leftIcon>
-        <AkIcon @iconName='play-arrow' />
-      </:leftIcon>
+    <AkStack @width='full' @alignItems='center'>
+      <AkButton
+        @variant='filled'
+        @color='primary'
+        @type='button'
+        @loading={{@isStartingAssessment}}
+        @disabled={{@isBeginDisabled}}
+        local-class='begin-btn'
+        data-test-begin-assessment-btn
+        {{on 'click' @onBegin}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='play-arrow' />
+        </:leftIcon>
 
-      <:default>{{@beginLabel}}</:default>
-    </AkButton>
+        <:default>{{@beginLabel}}</:default>
+      </AkButton>
+    </AkStack>
 
-    <AkTypography
-      @variant='body3'
-      @color='textSecondary'
-      local-class='begin-help'
-      data-test-begin-assessment-help
-    >
-      {{#if this.hasUploadedApp}}
-        {{t 'offensiveSecurity.beginAssessmentHelp'}}
-      {{else}}
-        {{t 'offensiveSecurity.uploadBuildToContinue'}}
-      {{/if}}
-    </AkTypography>
+    <UploadApp::Status @inline={{true}} as |status|>
+      {{#unless status.isActive}}
+        <AkTypography
+          @variant='body3'
+          @color='textSecondary'
+          local-class='begin-help'
+          data-test-begin-assessment-help
+        >
+          {{#if this.hasUploadedApp}}
+            {{t 'offensiveSecurity.beginAssessmentHelp'}}
+          {{else}}
+            {{t 'offensiveSecurity.uploadBuildToContinue'}}
+          {{/if}}
+        </AkTypography>
+      {{/unless}}
+    </UploadApp::Status>
   </div>
 </section>
