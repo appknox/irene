@@ -17,6 +17,7 @@
       @variant='text'
       @color='primary'
       @underline='always'
+      {{style padding='0' minWidth='0'}}
       {{on 'click' this.toggleShowMore}}
     >
       {{if this.showMore (t 'showLess') (t 'knowMore')}}
@@ -27,107 +28,102 @@
     <AkStack
       data-test-analysisRisk-ignoreIfUnchangedNote-details
       @direction='column'
-      @spacing='1'
+      @spacing='1.5'
     >
-      <AkTypography @variant='body2'>
-        {{t 'ignoreIfUnchangedDecidedNote'}}
-      </AkTypography>
-
-      <AkTypography
-        data-test-analysisRisk-ignoreIfUnchangedNote-baseline
-        @variant='body2'
-      >
-        {{t
-          'ignoreIfUnchangedBaselineFile'
-          fileId=this.info.baseline_file
-          version=this.info.version
-        }}
-      </AkTypography>
-
-      {{#if this.info.created_by}}
-        <AkTypography
-          data-test-analysisRisk-ignoreIfUnchangedNote-createdBy
-          @variant='body2'
+      {{#each this.cards as |card|}}
+        <AkStack
+          local-class='baseline-card'
+          data-test-analysisRisk-ignoreIfUnchangedNote-card
+          @direction='column'
+          @spacing='1'
         >
-          {{t
-            'ignoreIfUnchangedCreatedBy'
-            user=this.info.created_by
-            date=this.createdOn
-          }}
-        </AkTypography>
-      {{/if}}
-
-      {{#if this.info.comment}}
-        <AkTypography
-          data-test-analysisRisk-ignoreIfUnchangedNote-comment
-          @variant='body2'
-        >
-          {{t 'reason'}}:
-          {{this.info.comment}}
-        </AkTypography>
-      {{/if}}
-
-      <AkTypography @variant='subtitle2'>
-        {{t 'ignoreIfUnchangedBaselineFindings'}}
-      </AkTypography>
-
-      <ul
-        data-test-analysisRisk-ignoreIfUnchangedNote-baselineFindings
-        class='pl-3'
-      >
-        {{#each this.info.baseline_findings as |finding|}}
-          <li><AkTypography @variant='body2'>{{finding}}</AkTypography></li>
-        {{/each}}
-      </ul>
-
-      {{#if this.isReopened}}
-        <AkTypography @variant='subtitle2'>
-          {{t 'ignoreIfUnchangedNewFindings'}}
-        </AkTypography>
-
-        <ul
-          data-test-analysisRisk-ignoreIfUnchangedNote-newFindings
-          class='pl-3'
-        >
-          {{#each this.info.new_finding_labels as |finding|}}
-            <li><AkTypography @variant='body2'>{{finding}}</AkTypography></li>
-          {{/each}}
-        </ul>
-      {{/if}}
-
-      <AkStack @spacing='1' @alignItems='center' class='flex-wrap'>
-        {{#if this.info.is_latest}}
-          <AkChip
-            data-test-analysisRisk-ignoreIfUnchangedNote-latestChip
-            @size='small'
-            @color='success'
-            @variant='semi-filled'
-            @label={{t 'ignoreIfUnchangedLatestBaseline'}}
-          />
-        {{/if}}
-
-        {{#if this.info.superseded_by_file}}
-          <AkChip
-            data-test-analysisRisk-ignoreIfUnchangedNote-supersededChip
-            @size='small'
-            @variant='semi-filled'
-            @label={{t
-              'ignoreIfUnchangedSupersededBy'
-              fileId=this.info.superseded_by_file
+          <AkTypography
+            data-test-analysisRisk-ignoreIfUnchangedNote-baseline
+            @variant='body2'
+          >
+            {{t
+              this.baselineTitleKey
+              fileId=card.fileId
+              version=card.version
             }}
-          />
-        {{/if}}
+          </AkTypography>
 
-        {{#if this.info.ended}}
-          <AkChip
-            data-test-analysisRisk-ignoreIfUnchangedNote-endedChip
-            @size='small'
-            @color='warn'
-            @variant='semi-filled'
-            @label={{t 'ignoreIfUnchangedEnded'}}
-          />
-        {{/if}}
-      </AkStack>
+          {{#if card.createdBy}}
+            <AkTypography
+              data-test-analysisRisk-ignoreIfUnchangedNote-createdBy
+              @variant='body2'
+            >
+              {{t
+                'ignoreIfUnchangedCreatedBy'
+                user=card.createdBy
+                date=card.createdOn
+              }}
+            </AkTypography>
+          {{/if}}
+
+          {{#if card.comment}}
+            <AkTypography
+              data-test-analysisRisk-ignoreIfUnchangedNote-comment
+              @variant='body2'
+            >
+              {{t 'reason'}}:
+              {{card.comment}}
+            </AkTypography>
+          {{/if}}
+
+          <AkTypography @variant='subtitle2'>
+            {{t 'ignoreIfUnchangedBaselineFindings'}}
+          </AkTypography>
+
+          <ul
+            data-test-analysisRisk-ignoreIfUnchangedNote-baselineFindings
+            class='pl-3'
+          >
+            {{#each card.findings as |finding|}}
+              <li><AkTypography @variant='body2'>{{finding}}</AkTypography></li>
+            {{/each}}
+          </ul>
+
+          {{#if card.newFindings.length}}
+            <AkTypography @variant='subtitle2'>
+              {{t 'ignoreIfUnchangedNewFindings'}}
+            </AkTypography>
+
+            <ul
+              data-test-analysisRisk-ignoreIfUnchangedNote-newFindings
+              class='pl-3'
+            >
+              {{#each card.newFindings as |finding|}}
+                <li><AkTypography
+                    @variant='body2'
+                  >{{finding}}</AkTypography></li>
+              {{/each}}
+            </ul>
+          {{/if}}
+
+          {{#if card.showChip}}
+            <div>
+              {{#if card.isLatest}}
+                <AkChip
+                  data-test-analysisRisk-ignoreIfUnchangedNote-latestChip
+                  @size='small'
+                  @color='success'
+                  @variant='semi-filled'
+                  @label={{t 'ignoreIfUnchangedLatestBaseline'}}
+                />
+              {{else}}
+                <AkChip
+                  data-test-analysisRisk-ignoreIfUnchangedNote-pastChip
+                  @size='small'
+                  @color='error'
+                  @variant='semi-filled'
+                  @label={{t 'ignoreIfUnchangedPastBaseline'}}
+                />
+              {{/if}}
+            </div>
+          {{/if}}
+        </AkStack>
+      {{/each}}
     </AkStack>
   {{/if}}
 </AkStack>

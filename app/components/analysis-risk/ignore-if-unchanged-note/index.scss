@@ -1,0 +1,9 @@
+.baseline-card {
+  padding: 0.75em 1em;
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-override-details-border-color);
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-override-details-border-radius
+  );
+  box-sizing: border-box;
+}
