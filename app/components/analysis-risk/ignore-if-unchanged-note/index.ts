@@ -58,10 +58,48 @@ export default class AnalysisRiskIgnoreIfUnchangedNoteComponent extends Componen
     );
   }
 
-  get createdOn() {
-    return this.info.created_on
-      ? dayjs(this.info.created_on).format('MMM DD, YYYY')
-      : null;
+  formatDate(date: string | null) {
+    return date ? dayjs(date).format('MMM DD, YYYY') : null;
+  }
+
+  get baselineTitleKey() {
+    return this.info.pending
+      ? 'ignoreIfUnchangedWillCompareWith'
+      : 'ignoreIfUnchangedBaselineFile';
+  }
+
+  // the file where the option was selected: one card per baseline version, newest
+  // first. Any other file was compared once with one version: a single card.
+  get cards() {
+    const info = this.info;
+
+    if (info.is_baseline_file && info.baseline_versions.length > 0) {
+      return info.baseline_versions.map((it) => ({
+        fileId: it.baseline_file,
+        version: it.version,
+        createdBy: it.created_by,
+        createdOn: this.formatDate(it.created_on),
+        comment: it.comment,
+        findings: it.findings,
+        newFindings: [] as string[],
+        showChip: true,
+        isLatest: it.is_latest,
+      }));
+    }
+
+    return [
+      {
+        fileId: info.baseline_file,
+        version: info.version,
+        createdBy: info.created_by,
+        createdOn: this.formatDate(info.created_on),
+        comment: info.comment,
+        findings: info.baseline_findings,
+        newFindings: this.isReopened ? info.new_finding_labels : [],
+        showChip: false,
+        isLatest: false,
+      },
+    ];
   }
 
   @action

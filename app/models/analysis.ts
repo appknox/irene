@@ -45,6 +45,16 @@ export interface LegacyCvss {
   metrics_humanized: CvssMetricHumanized[];
 }
 
+export interface IgnoreIfUnchangedVersion {
+  version: number;
+  baseline_file: number | string;
+  created_by: string | null;
+  created_on: string | null;
+  comment: string | null;
+  findings: string[];
+  is_latest: boolean;
+}
+
 export interface IgnoreIfUnchanged {
   baseline_file: number | string;
   version: number;
@@ -53,9 +63,7 @@ export interface IgnoreIfUnchanged {
   pending: boolean;
   waiting_for: ('static' | 'dynamic')[];
   is_baseline_file: boolean;
-  is_latest: boolean;
-  superseded_by_file: number | string | null;
-  ended: boolean;
+  baseline_versions: IgnoreIfUnchangedVersion[];
   baseline_findings: string[];
   new_finding_labels: string[];
   comment: string | null;
