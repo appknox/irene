@@ -25,6 +25,7 @@ export const ANALYSIS_FACTORY_DEF = {
   isIgnored: faker.datatype.boolean(),
   overridden_risk: faker.helpers.arrayElement([null, 1, 2, 3, 4]),
   ignore_if_unchanged: null,
+  ignore_if_unchanged_waiting_for: [],
   status: faker.helpers.arrayElement(ENUMS.ANALYSIS.VALUES),
   created_on: faker.date.past(),
   updated_on: faker.date.past(),

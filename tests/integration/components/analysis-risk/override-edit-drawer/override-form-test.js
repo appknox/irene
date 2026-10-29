@@ -370,6 +370,7 @@ module(
           ENUMS.RISK.LOW,
           'Accepted risk',
           expectedAll,
+          false,
         ]);
       }
     );
@@ -415,6 +416,7 @@ module(
       assert.deepEqual(this.saveCalledWith, [
         ENUMS.RISK.LOW,
         'Still an accepted risk',
+        false,
         false,
       ]);
 

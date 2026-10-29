@@ -47,8 +47,17 @@ export interface LegacyCvss {
 
 export interface IgnoreIfUnchanged {
   baseline_file: number | string;
+  version: number;
   new_findings: number;
   passed: boolean;
+  pending: boolean;
+  waiting_for: ('static' | 'dynamic')[];
+  is_baseline_file: boolean;
+  is_latest: boolean;
+  superseded_by_file: number | string | null;
+  ended: boolean;
+  baseline_findings: string[];
+  new_finding_labels: string[];
   comment: string | null;
   created_by: string | null;
   created_on: string | null;
@@ -104,6 +113,11 @@ export default class AnalysisModel extends Model {
   // set when an "All Future Analyses (Reopen if changed)" baseline applies
   @attr({ defaultValue: null })
   declare ignoreIfUnchanged: IgnoreIfUnchanged | null;
+
+  // scans (static/dynamic) still running for a vulnerability checked by both,
+  // "Reopen if changed" cannot be chosen until they complete
+  @attr({ defaultValue: () => [] })
+  declare ignoreIfUnchangedWaitingFor: string[];
 
   @attr('string', { defaultValue: null })
   declare overriddenBy: string | null;
@@ -256,15 +270,6 @@ export default class AnalysisModel extends Model {
    */
   get isNonPassedRiskOverridden() {
     return this.isOverriddenRisk && !this.isRiskPassedBySystem;
-  }
-
-  /**
-   * Findings changed after "All Future Analyses (Reopen if changed)" was chosen
-   */
-  get isReopenedIfChanged() {
-    const info = this.ignoreIfUnchanged;
-
-    return Boolean(info) && !info?.passed && (info?.new_findings ?? 0) > 0;
   }
 
   /**
