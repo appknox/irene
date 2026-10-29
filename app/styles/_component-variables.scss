@@ -1242,6 +1242,9 @@ body {
     --background-main
   );
 
+  // variables shared by the file-details/api-scan screens
+  --file-details-api-scan-search-input-width: 260px;
+
   // variables for file-details/api-scan/progress-status
   --file-details-api-scan-progress-status-border-radius: var(--border-radius);
   --file-details-api-scan-progress-status-card-background: var(

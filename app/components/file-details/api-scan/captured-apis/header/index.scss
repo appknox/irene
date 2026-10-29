@@ -5,5 +5,8 @@
 }
 
 .search-input {
-  width: 260px;
+  width: var(--file-details-api-scan-search-input-width);
+  // Keep the same width on both API scan screens, even when the header row
+  // is tight
+  flex-shrink: 0;
 }
