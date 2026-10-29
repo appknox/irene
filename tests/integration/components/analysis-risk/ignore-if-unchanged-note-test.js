@@ -139,10 +139,41 @@ module(
       await click(sel('knowMoreBtn'));
 
       assert
+        .dom(sel('heading'))
+        .hasText(t('ignoreIfUnchangedHeadingWillCompare'));
+
+      assert
         .dom(sel('baseline'))
-        .hasText(
-          t('ignoreIfUnchangedWillCompareWith', { fileId: 5, version: 2 })
-        );
+        .hasText(t('ignoreIfUnchangedBaselineFile', { fileId: 5, version: 2 }));
+    });
+
+    test('every card has a heading saying what it is', async function (assert) {
+      await render(TEMPLATE);
+      await click(sel('knowMoreBtn'));
+
+      assert.dom(sel('heading')).hasText(t('ignoreIfUnchangedHeadingCompared'));
+    });
+
+    test('long findings wrap inside the card instead of overflowing', async function (assert) {
+      const long = `GET https://api.example.com/v1/users?token=${'a'.repeat(600)}`;
+
+      this.info = { ...this.info, baseline_findings: [long] };
+
+      await render(TEMPLATE);
+      await click(sel('knowMoreBtn'));
+
+      const card = document.querySelector(sel('card'));
+      const item = document.querySelector(`${sel('baselineFindings')} li`);
+
+      assert.ok(
+        item.getBoundingClientRect().right <=
+          card.getBoundingClientRect().right + 1,
+        'the finding stays inside the card'
+      );
+      assert.ok(
+        card.scrollWidth <= card.clientWidth + 1,
+        'no horizontal scroll'
+      );
     });
 
     test('the baseline file shows one card per version with latest and past chips', async function (assert) {
@@ -171,6 +202,16 @@ module(
       await click(sel('knowMoreBtn'));
 
       assert.dom(sel('card')).exists({ count: 2 });
+
+      assert.deepEqual(
+        [...document.querySelectorAll(sel('heading'))].map((el) =>
+          el.textContent.trim()
+        ),
+        [
+          t('ignoreIfUnchangedHeadingBaselineFile'),
+          t('ignoreIfUnchangedHeadingBaselineFile'),
+        ]
+      );
 
       const titles = [...document.querySelectorAll(sel('baseline'))].map((el) =>
         el.textContent.trim()
