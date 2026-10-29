@@ -39,6 +39,8 @@ export interface AnalysisRiskDataModel {
   overriddenOn: Date | null;
   // set while a "Reopen if changed" baseline decides the analysis
   ignoreIfUnchanged?: IgnoreIfUnchanged | null;
+  // shown instead of the "Reopen if changed" option while scans are running
+  ignoreIfUnchangedWaitingNote?: string | null;
   overrideSuccessMessage: string;
   showOverrideSuccessOriginalToOverriddenRisk?: boolean;
   ignoreVulnerabilityHelperText: string;

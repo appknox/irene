@@ -56,13 +56,6 @@
     />
   </AkStack>
 
-  <Security::AnalysisDetails::IgnoreBaselineOption
-    @analysis={{this.analysisDetails}}
-    @checked={{this.updateIgnoreBaseline}}
-    @onChange={{this.setUpdateIgnoreBaseline}}
-    @disabled={{this.saveAnalysis.isRunning}}
-  />
-
   <Security::AnalysisDetails::Footer
     @analysis={{this.analysisDetails}}
     @saveAnalysis={{this.triggerSaveAnalysis}}

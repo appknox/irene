@@ -61,18 +61,12 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
     return (
       !isEmpty(this.dataModel.risk) &&
       !isEmpty(this.overriddenRisk) &&
-      !this.isBaselineReopened
+      !this.baselineInfo
     );
   }
 
   get baselineInfo() {
     return this.dataModel.ignoreIfUnchanged ?? null;
-  }
-
-  get isBaselineReopened() {
-    const info = this.baselineInfo;
-
-    return Boolean(info) && !info?.passed && (info?.new_findings ?? 0) > 0;
   }
 
   get overridenRiskLabel() {

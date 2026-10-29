@@ -36,24 +36,11 @@
     </AkStack>
 
     {{#if this.baselineInfo}}
-      <AkTypography
+      <div
         data-test-analysisRisk-overrideEditDrawer-overrideDetails-baselineStatus
-        @variant='body2'
-        @color='textSecondary'
       >
-        {{#if this.isBaselineReopened}}
-          {{t
-            'ignoreIfUnchangedReopenedNote'
-            count=this.baselineInfo.new_findings
-            fileId=this.baselineInfo.baseline_file
-          }}
-        {{else}}
-          {{t
-            'ignoreIfUnchangedIgnoredHint'
-            fileId=this.baselineInfo.baseline_file
-          }}
-        {{/if}}
-      </AkTypography>
+        <AnalysisRisk::IgnoreIfUnchangedNote @info={{this.baselineInfo}} />
+      </div>
     {{/if}}
 
     <AkDivider local-class='details-divider' class='my-2' />

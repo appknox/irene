@@ -61,7 +61,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   @service declare ajax: IreneAjaxService;
 
   @tracked isSaveActionOnly = false;
-  @tracked updateIgnoreBaseline = false;
 
   @tracked analysisDetails: SecurityAnalysisModel | null = null;
 
@@ -158,10 +157,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
     this.v3State.risk = details.risk;
 
     this.recalculateCVSSScore.perform(this.v3State);
-  }
-
-  @action setUpdateIgnoreBaseline(_: Event, checked: boolean) {
-    this.updateIgnoreBaseline = checked;
   }
 
   @action triggerSaveAnalysis(backToFilePage: boolean) {
@@ -335,14 +330,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       overriddenRisk = overriddenRisk.value;
     }
 
-    // only sent when opted in, and only meaningful on a baseline file
-    const ignoreBaselineFlag =
-      this.updateIgnoreBaseline && details?.ignoreBaseline
-        ? { update_ignore_baseline: true }
-        : {};
-
     return {
-      ...ignoreBaselineFlag,
       risk: this.v4State.risk,
       legacy_cvss_risk: this.v3State.risk,
       status,
@@ -414,7 +402,6 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       this.analysisDetails?.set('risk', response['risk']);
 
       this.setDefaultCVSSDetails();
-      this.updateIgnoreBaseline = false;
 
       // Return to the file page if requested
       if (backToFilePage) {

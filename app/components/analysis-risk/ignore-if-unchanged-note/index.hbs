@@ -1,0 +1,133 @@
+<AkStack
+  @direction='column'
+  @spacing='1'
+  data-test-analysisRisk-ignoreIfUnchangedNote
+>
+  <AkTypography
+    data-test-analysisRisk-ignoreIfUnchangedNote-summary
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{this.summary}}
+  </AkTypography>
+
+  <div>
+    <AkButton
+      data-test-analysisRisk-ignoreIfUnchangedNote-knowMoreBtn
+      @variant='text'
+      @color='primary'
+      @underline='always'
+      {{on 'click' this.toggleShowMore}}
+    >
+      {{if this.showMore (t 'showLess') (t 'knowMore')}}
+    </AkButton>
+  </div>
+
+  {{#if this.showMore}}
+    <AkStack
+      data-test-analysisRisk-ignoreIfUnchangedNote-details
+      @direction='column'
+      @spacing='1'
+    >
+      <AkTypography @variant='body2'>
+        {{t 'ignoreIfUnchangedDecidedNote'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-analysisRisk-ignoreIfUnchangedNote-baseline
+        @variant='body2'
+      >
+        {{t
+          'ignoreIfUnchangedBaselineFile'
+          fileId=this.info.baseline_file
+          version=this.info.version
+        }}
+      </AkTypography>
+
+      {{#if this.info.created_by}}
+        <AkTypography
+          data-test-analysisRisk-ignoreIfUnchangedNote-createdBy
+          @variant='body2'
+        >
+          {{t
+            'ignoreIfUnchangedCreatedBy'
+            user=this.info.created_by
+            date=this.createdOn
+          }}
+        </AkTypography>
+      {{/if}}
+
+      {{#if this.info.comment}}
+        <AkTypography
+          data-test-analysisRisk-ignoreIfUnchangedNote-comment
+          @variant='body2'
+        >
+          {{t 'reason'}}:
+          {{this.info.comment}}
+        </AkTypography>
+      {{/if}}
+
+      <AkTypography @variant='subtitle2'>
+        {{t 'ignoreIfUnchangedBaselineFindings'}}
+      </AkTypography>
+
+      <ul
+        data-test-analysisRisk-ignoreIfUnchangedNote-baselineFindings
+        class='pl-3'
+      >
+        {{#each this.info.baseline_findings as |finding|}}
+          <li><AkTypography @variant='body2'>{{finding}}</AkTypography></li>
+        {{/each}}
+      </ul>
+
+      {{#if this.isReopened}}
+        <AkTypography @variant='subtitle2'>
+          {{t 'ignoreIfUnchangedNewFindings'}}
+        </AkTypography>
+
+        <ul
+          data-test-analysisRisk-ignoreIfUnchangedNote-newFindings
+          class='pl-3'
+        >
+          {{#each this.info.new_finding_labels as |finding|}}
+            <li><AkTypography @variant='body2'>{{finding}}</AkTypography></li>
+          {{/each}}
+        </ul>
+      {{/if}}
+
+      <AkStack @spacing='1' @alignItems='center' class='flex-wrap'>
+        {{#if this.info.is_latest}}
+          <AkChip
+            data-test-analysisRisk-ignoreIfUnchangedNote-latestChip
+            @size='small'
+            @color='success'
+            @variant='semi-filled'
+            @label={{t 'ignoreIfUnchangedLatestBaseline'}}
+          />
+        {{/if}}
+
+        {{#if this.info.superseded_by_file}}
+          <AkChip
+            data-test-analysisRisk-ignoreIfUnchangedNote-supersededChip
+            @size='small'
+            @variant='semi-filled'
+            @label={{t
+              'ignoreIfUnchangedSupersededBy'
+              fileId=this.info.superseded_by_file
+            }}
+          />
+        {{/if}}
+
+        {{#if this.info.ended}}
+          <AkChip
+            data-test-analysisRisk-ignoreIfUnchangedNote-endedChip
+            @size='small'
+            @color='warn'
+            @variant='semi-filled'
+            @label={{t 'ignoreIfUnchangedEnded'}}
+          />
+        {{/if}}
+      </AkStack>
+    </AkStack>
+  {{/if}}
+</AkStack>

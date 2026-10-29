@@ -37,13 +37,6 @@ export interface SecurityAnalysisFinding {
   description: string;
 }
 
-// Nested keys stay snake_case: the DRF serializer only camelizes top level attributes.
-export interface SecurityAnalysisIgnoreBaseline {
-  baseline_file_id: number;
-  version: number;
-  is_analysis_findings_deviated_from_baseline: boolean;
-}
-
 export interface CvssV3Metrics {
   attack_vector: string | number;
   attack_complexity: string | number;
@@ -109,9 +102,6 @@ export default class SecurityAnalysisModel extends Model {
   @attr('number') declare analiserVersion: number;
 
   @attr('number', { defaultValue: null }) declare overriddenRisk: number;
-
-  // null unless this analysis's file is an Ignore Vulnerability (Reopen if changed) baseline
-  @attr() declare ignoreBaseline: SecurityAnalysisIgnoreBaseline | null;
 
   @attr('string') declare overriddenRiskComment: string;
   @attr('boolean') declare overriddenRiskToProfile: boolean;
