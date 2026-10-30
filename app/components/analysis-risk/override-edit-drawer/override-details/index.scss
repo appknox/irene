@@ -21,3 +21,9 @@
     --analysis-risk-override-edit-drawer-override-details-border-color
   ) !important;
 }
+
+// flex item that is not stretched: pin it to the drawer width to the drawer so long findings scroll inside the note
+.baseline-status {
+  width: 100%;
+  min-width: 0;
+}
