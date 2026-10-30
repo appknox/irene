@@ -1,12 +1,6 @@
 .select-all-captured-api-cta {
+  min-height: var(--file-details-api-scan-captured-apis-select-all-height);
   background-color: var(
     --file-details-api-scan-captured-apis-select-all-background
   );
-}
-
-.search-input {
-  width: var(--file-details-api-scan-search-input-width);
-  // Keep the same width on both API scan screens, even when the header row
-  // is tight
-  flex-shrink: 0;
 }

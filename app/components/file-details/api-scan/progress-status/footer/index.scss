@@ -1,0 +1,16 @@
+.progress-container {
+  width: 360px;
+  max-width: 100%;
+}
+
+.progress-bar {
+  .progress-bar-indicator {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .progress-percent {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+}

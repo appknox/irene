@@ -12,68 +12,16 @@
     var(--file-details-api-scan-progress-status-border-color);
 }
 
-.progress-bar {
-  width: 260px;
+.endpoint-cell {
+  min-width: 0;
 
-  .progress-bar-indicator {
-    flex: 1 1 auto;
+  .endpoint-url {
     min-width: 0;
   }
-
-  .progress-percent {
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
-
-  :global(.ak-loader-linear-indicator) {
-    background-color: var(
-      --file-details-api-scan-progress-status-indicator-background
-    );
-  }
 }
 
-.search-input {
-  width: var(--file-details-api-scan-search-input-width);
-  // Keep the same width on both API scan screens, even when the header row
-  // is tight
-  flex-shrink: 0;
-}
-
-.status-dot {
-  display: inline-block;
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background-color: var(--file-details-api-scan-progress-status-dot-default);
-}
-
-.status-dot-success {
-  background-color: var(--file-details-api-scan-progress-status-success);
-}
-
-.status-dot-warn {
-  background-color: var(--file-details-api-scan-progress-status-warn);
-}
-
-.status-dot-error {
-  background-color: var(--file-details-api-scan-progress-status-error);
-}
-
-.status-text-success {
-  color: var(--file-details-api-scan-progress-status-success) !important;
-}
-
-.status-text-warn {
-  color: var(--file-details-api-scan-progress-status-warn-text) !important;
-}
-
-.status-text-error {
-  color: var(--file-details-api-scan-progress-status-error) !important;
-}
-
-// The table is locked to the container width (eq-container), but ember-table
-// can still overshoot by a pixel or two from borders, which shows a useless
-// horizontal scrollbar. Endpoint truncates with an ellipsis, so nothing is lost.
+// ember-table overshoots eq-container by a pixel or two of border, which
+// shows a scrollbar; Endpoint truncates, so nothing is hidden
 .scanned-apis-table :global(.ember-table-overflow) {
   overflow-x: hidden;
 }

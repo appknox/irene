@@ -32,17 +32,29 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
     this.fetchOptions.perform();
   }
 
-  /**
-   * The preference endpoint is nested under the profile and the adapter resets
-   * its namespace after every response, so this runs before each request.
-   */
-  private setPreferenceNamespace() {
+  // A toggle before the current value has loaded would overwrite it
+  get toggleDisabled() {
+    return this.fetchOptions.isRunning || !this.options || this.save.isRunning;
+  }
+
+  // The nested adapter resets its namespace after every response
+  setPreferenceNamespace() {
     this.store
       .adapterFor('apiscan-automation-preference')
       .setNestedUrlNamespace(String(this.args.profileId));
   }
 
+  @action
+  handleToggleChange(_: Event, enabled?: boolean) {
+    this.enabled = Boolean(enabled);
+    this.save.perform();
+  }
+
   fetchOptions = task(async () => {
+    if (!this.args.profileId) {
+      return;
+    }
+
     try {
       this.setPreferenceNamespace();
 
@@ -56,17 +68,6 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
       this.notify.error(parseError(error, this.intl.t('pleaseTryAgain')));
     }
   });
-
-  /** A toggle before the current value has loaded would overwrite it. */
-  get toggleDisabled() {
-    return this.fetchOptions.isRunning || !this.options || this.save.isRunning;
-  }
-
-  @action
-  updateEnabled(_: Event, enabled?: boolean) {
-    this.enabled = Boolean(enabled);
-    this.save.perform();
-  }
 
   save = task(async () => {
     try {
