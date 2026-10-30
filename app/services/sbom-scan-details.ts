@@ -29,6 +29,7 @@ export default class SbomScanDetailsService extends Service {
   @tracked searchQuery: string = '';
   @tracked selectedDependencyType: boolean | null = null;
   @tracked selectedComponentType = -1;
+  @tracked selectedReachability: string | null = null;
   @tracked sbomComponentsCount = 0;
   @tracked sbomFile: SbomFileModel | null = null;
 
@@ -52,12 +53,14 @@ export default class SbomScanDetailsService extends Service {
     dependency_type,
     view_type,
     sbomFile,
+    reachability,
   }: Partial<{
     sbomFile: SbomFileModel | null;
     component_query: string;
     component_type: number;
     dependency_type: string | null;
     view_type: 'tree' | 'list';
+    reachability: string | null;
   }>) {
     this.sbomFile = sbomFile ?? this.sbomFile;
     this.viewType = view_type ?? this.viewType;
@@ -70,6 +73,9 @@ export default class SbomScanDetailsService extends Service {
         : dependency_type === null
           ? null
           : dependency_type === 'true';
+
+    this.selectedReachability =
+      reachability === undefined ? this.selectedReachability : reachability;
 
     return this;
   }
@@ -96,6 +102,10 @@ export default class SbomScanDetailsService extends Service {
                 this.selectedComponentType
               ],
           }
+        : {}),
+
+      ...(this.selectedReachability
+        ? { reachability: this.selectedReachability }
         : {}),
     };
 

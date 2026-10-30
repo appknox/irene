@@ -172,6 +172,47 @@
           {{this.scanStatusText.description}}
         </AkTypography>
       </AkStack>
+
+      <AkStack
+        @spacing='1'
+        @alignItems='center'
+        class='mt-4'
+        data-test-sbomScanDetails-scanStages
+      >
+        {{#each this.scanStages as |stage|}}
+          {{#if stage.error}}
+            <AkTooltip
+              @arrow={{true}}
+              @placement='top'
+              data-test-sbomScanDetails-scanStageErrorTooltip
+            >
+              <:default>
+                <AkChip
+                  @variant='semi-filled'
+                  @size='small'
+                  @color={{stage.color}}
+                  @label='{{stage.label}}: {{stage.statusText}}'
+                  data-test-sbomScanDetails-scanStageChip
+                />
+              </:default>
+
+              <:tooltipContent>
+                <div
+                  {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}
+                >{{stage.error}}</div>
+              </:tooltipContent>
+            </AkTooltip>
+          {{else}}
+            <AkChip
+              @variant='semi-filled'
+              @size='small'
+              @color={{stage.color}}
+              @label='{{stage.label}}: {{stage.statusText}}'
+              data-test-sbomScanDetails-scanStageChip
+            />
+          {{/if}}
+        {{/each}}
+      </AkStack>
     </AkStack>
   {{/if}}
 </div>
