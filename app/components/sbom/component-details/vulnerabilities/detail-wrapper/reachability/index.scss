@@ -19,6 +19,11 @@
   );
 }
 
+.explanation-text {
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+
 .signature {
   font-family: var(
     --sbom-component-details-vulnerabilities-detail-wrapper-reachability-font-family-mono
