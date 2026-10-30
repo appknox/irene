@@ -6,6 +6,9 @@ export default class KnoxiqScanModel extends Model {
 
   @attr('number')
   declare dastStatus: number;
+
+  @attr('number')
+  declare apiStatus: number;
 }
 
 declare module 'ember-data/types/registries/model' {

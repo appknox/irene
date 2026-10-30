@@ -4,7 +4,6 @@ import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
-import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
@@ -15,6 +14,7 @@ import type MeService from 'irene/services/me';
 import type FileModel from 'irene/models/file';
 import type { FileDetailsAnalysesProviderContext } from './analyses-provider';
 import type KnoxiqScanModel from 'irene/models/knoxiq-scan';
+import type KnoxiqScanService from 'irene/services/knoxiq-scan';
 
 export type KnoxiqScanStatusByType = Record<number, number>;
 
@@ -49,9 +49,29 @@ const KNOXIQ_STATUS_CARDS = {
     subtitleKey: 'knoxIq.statusCard.dastReadySubtitle',
     state: 'active',
   },
+  'dast-and-api-ready': {
+    titleKey: 'knoxIq.statusCard.readyTitle',
+    subtitleKey: 'knoxIq.statusCard.dastAndApiReadySubtitle',
+    state: 'active',
+  },
   'complete-dast': {
     titleKey: 'knoxIq.statusCard.completeDastTitle',
     subtitleKey: 'knoxIq.statusCard.completeDastSubtitle',
+    state: 'inactive',
+  },
+  'complete-api': {
+    titleKey: 'knoxIq.statusCard.completeApiTitle',
+    subtitleKey: 'knoxIq.statusCard.completeApiSubtitle',
+    state: 'inactive',
+  },
+  'api-ready': {
+    titleKey: 'knoxIq.statusCard.readyTitle',
+    subtitleKey: 'knoxIq.statusCard.apiReadySubtitle',
+    state: 'active',
+  },
+  'api-scan-disabled': {
+    titleKey: 'knoxIq.statusCard.apiScanDisabledTitle',
+    subtitleKey: 'knoxIq.statusCard.apiScanDisabledSubtitle',
     state: 'inactive',
   },
   failed: {
@@ -69,10 +89,10 @@ export interface FileDetailsSignature {
 }
 
 export default class FileDetailsComponent extends Component<FileDetailsSignature> {
-  @service declare store: Store;
   @service declare logger: LoggerService;
   @service declare me: MeService;
   @service declare intl: IntlService;
+  @service('knoxiq-scan') declare knoxiqScanService: KnoxiqScanService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked knoxiqScan: KnoxiqScanModel | null = null;
@@ -86,19 +106,8 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   }
 
   /**
-   * The file's own org's KnoxIQ setting — resolved from the file itself,
-   * not the viewing user's org, since a superuser's own org has nothing
-   * to do with whether this file's org has KnoxIQ on. Trigger-related UI
-   * stays gated on this strict flag even for superusers; only viewing
-   * already-produced results is bypassable (see `canFetchKnoxiqData`).
-   *
-   * Known limitation: for a file in an org the viewer doesn't belong to,
-   * `project.organization` may not resolve (fetching another org's record
-   * is scoped to the requester's own orgs), so this can read `false` even
-   * when that org's flag is genuinely on. That only suppresses the
-   * trigger-prompt UI for a not-yet-triggered cross-org file — a missing
-   * affordance, not a security issue — and is out of scope for the
-   * viewing-existing-results problem this fix targets.
+   * The file's own org's KnoxIQ flag, not the viewer's. Superusers bypass
+   * this only for viewing results (see `canFetchKnoxiqData`), not triggers.
    */
   get isKnoxiqEnabled() {
     if (this.args.file.isLegacyKnoxIQScan) {
@@ -110,16 +119,19 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     );
   }
 
+  /** Independent sub-toggle of isKnoxiqEnabled (mirrors mycroft's _trigger_scan gate). */
+  get isKnoxiqApiScanEnabled() {
+    return Boolean(
+      this.args.file.project?.get('organization')?.get('aiFeatures')
+        ?.knoxiq_api_scan
+    );
+  }
+
   get isSuperuser() {
     return Boolean(this.me.org?.is_superuser);
   }
 
-  /**
-   * A superuser never gets KnoxIQ enabled for their own org, but may still
-   * view KnoxIQ results on a client file. For them, rely on the file's own
-   * backend-resolved is_knoxiq_enabled so we only hit the KnoxIQ endpoints
-   * for files that actually have KnoxIQ on.
-   */
+  /** Lets a superuser fetch KnoxIQ results for a client file even though their own org has it off. */
   get canFetchKnoxiqData() {
     return (
       this.isKnoxiqEnabled ||
@@ -127,10 +139,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     );
   }
 
-  /**
-   * Display-only KnoxIQ UI (scan card chips/accents). Unlike trigger UI,
-   * this also shows for a superuser once the file's KnoxIQ status loads.
-   */
+  /** Display-only KnoxIQ UI; unlike trigger UI, shows for superusers too once status loads. */
   get showKnoxiqScanStatus() {
     return this.isKnoxiqEnabled || this.hasKnoxiqScanStatusLoaded;
   }
@@ -149,6 +158,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     return {
       [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: record.sastStatus,
       [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]: record.dastStatus,
+      [ENUMS.KNOXIQ_SCAN_TYPE.API]: record.apiStatus,
     };
   }
 
@@ -178,10 +188,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     );
   }
 
-  /**
-   * KnoxIQ being underway is enough to switch the table over. Rows it has not
-   * scored yet show the untested flames and fill in as verdicts arrive.
-   */
+  /** Underway is enough to switch tables; unscored rows fill in as verdicts arrive. */
   get hasAnyKnoxiqScanStarted() {
     const { PENDING, RUNNING, COMPLETED } = ENUMS.KNOXIQ_SCAN_STATUS;
 
@@ -192,11 +199,23 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
   }
 
   get sastKnoxiqStatus() {
-    return this.knoxiqScanRecord?.sastStatus;
+    return (
+      this.knoxiqScanRecord?.sastStatus ??
+      ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED
+    );
   }
 
   get dastKnoxiqStatus() {
-    return this.knoxiqScanRecord?.dastStatus;
+    return (
+      this.knoxiqScanRecord?.dastStatus ??
+      ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED
+    );
+  }
+
+  get apiKnoxiqStatus() {
+    return (
+      this.knoxiqScanRecord?.apiStatus ?? ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED
+    );
   }
 
   get knoxiqStatusCardConfig(): KnoxiqStatusCardConfig | null {
@@ -211,48 +230,166 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     const sastStatus = this.sastKnoxiqStatus;
     const dastStatus = this.dastKnoxiqStatus;
-    const { DISABLED, NOT_TRIGGERED, PENDING, RUNNING, COMPLETED, ERRORED } =
-      ENUMS.KNOXIQ_SCAN_STATUS;
+    const apiStatus = this.apiKnoxiqStatus;
 
-    if (sastStatus === ERRORED || dastStatus === ERRORED) {
+    return (
+      this.knoxiqProgressCard(sastStatus, dastStatus, apiStatus) ??
+      this.knoxiqReadyCard(sastStatus, dastStatus, apiStatus)
+    );
+  }
+
+  /** Failed / running / completed — states independent of the trigger gate below. */
+  private knoxiqProgressCard(
+    sastStatus: number,
+    dastStatus: number,
+    apiStatus: number
+  ): KnoxiqStatusCardConfig | null {
+    const { RUNNING, PENDING, ERRORED } = ENUMS.KNOXIQ_SCAN_STATUS;
+
+    if (
+      sastStatus === ERRORED ||
+      dastStatus === ERRORED ||
+      apiStatus === ERRORED
+    ) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.failed);
     }
 
-    const isKnoxiqRunning = (status: number | undefined) =>
+    const isKnoxiqRunning = (status: number) =>
       status === RUNNING || status === PENDING;
 
-    if (isKnoxiqRunning(sastStatus) || isKnoxiqRunning(dastStatus)) {
+    if (
+      isKnoxiqRunning(sastStatus) ||
+      isKnoxiqRunning(dastStatus) ||
+      isKnoxiqRunning(apiStatus)
+    ) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.running);
     }
 
-    if (sastStatus === COMPLETED && dastStatus === COMPLETED) {
+    if (this.isKnoxiqFullyCompleted(sastStatus, dastStatus, apiStatus)) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.completed);
     }
 
-    // Everything below here prompts the viewer to trigger a scan, which
-    // stays gated by the org's real flag -- a superuser viewing another
-    // org's already-produced results must never see a "run KnoxIQ" CTA
-    // the backend would reject.
+    return null;
+  }
+
+  // API_SCAN_DISABLED is excluded from isApiSettled on purpose — it has its
+  // own dedicated card in knoxiqReadyCard, checked regardless of sast/dast.
+  private isKnoxiqFullyCompleted(
+    sastStatus: number,
+    dastStatus: number,
+    apiStatus: number
+  ): boolean {
+    const { DISABLED, COMPLETED } = ENUMS.KNOXIQ_SCAN_STATUS;
+
+    const isApiSettled = this.isKnoxiqApiScanEnabled
+      ? apiStatus === COMPLETED
+      : !this.args.file.isApiDone || apiStatus === COMPLETED;
+    const isSastSettled = sastStatus === COMPLETED || sastStatus === DISABLED;
+    const isDastSettled = dastStatus === COMPLETED || dastStatus === DISABLED;
+    const hasCompletedScan =
+      sastStatus === COMPLETED ||
+      dastStatus === COMPLETED ||
+      apiStatus === COMPLETED;
+
+    return isSastSettled && isDastSettled && isApiSettled && hasCompletedScan;
+  }
+
+  // Ready/nudge states — gated on the real org flag so a superuser never
+  // sees a "run KnoxIQ" CTA the backend would reject.
+  private knoxiqReadyCard(
+    sastStatus: number,
+    dastStatus: number,
+    apiStatus: number
+  ): KnoxiqStatusCardConfig | null {
     if (!this.isKnoxiqEnabled) {
       return null;
     }
+
+    return (
+      this.knoxiqFirstRunReadyCard(sastStatus, dastStatus, apiStatus) ??
+      this.knoxiqNudgeCard(sastStatus, dastStatus, apiStatus)
+    );
+  }
+
+  // "Nothing run yet, here's what to trigger" states.
+  private knoxiqFirstRunReadyCard(
+    sastStatus: number,
+    dastStatus: number,
+    apiStatus: number
+  ): KnoxiqStatusCardConfig | null {
+    const { NOT_TRIGGERED, DISABLED, COMPLETED } = ENUMS.KNOXIQ_SCAN_STATUS;
 
     if (this.args.file.isStaticDone && sastStatus === NOT_TRIGGERED) {
       return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS.ready);
     }
 
-    if (
-      sastStatus === COMPLETED &&
-      (dastStatus === NOT_TRIGGERED || dastStatus === DISABLED)
-    ) {
-      const isDastDone =
-        this.args.file.isManualDone || this.args.file.isDynamicDone;
+    const isDastDone =
+      this.args.file.isManualDone || this.args.file.isDynamicDone;
+    const isDastNotRun =
+      dastStatus === NOT_TRIGGERED || dastStatus === DISABLED;
+    const isDastKnoxiqReady =
+      sastStatus === COMPLETED && isDastDone && isDastNotRun;
+    const isApiKnoxiqReady =
+      this.args.file.isApiDone && apiStatus === NOT_TRIGGERED;
+
+    // Checked first: triggerKnoxiqScan() runs both types together, so the
+    // card must say so when both are waiting, not just name DAST.
+    if (isDastKnoxiqReady && isApiKnoxiqReady) {
+      return this.buildKnoxiqStatusCard(
+        KNOXIQ_STATUS_CARDS['dast-and-api-ready']
+      );
+    }
+
+    if (isDastKnoxiqReady) {
+      return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS['dast-ready']);
+    }
+
+    if (isApiKnoxiqReady) {
+      const hasAnyKnoxiqRunCompleted =
+        sastStatus === COMPLETED || dastStatus === COMPLETED;
 
       return this.buildKnoxiqStatusCard(
-        isDastDone
-          ? KNOXIQ_STATUS_CARDS['dast-ready']
-          : KNOXIQ_STATUS_CARDS['complete-dast']
+        hasAnyKnoxiqRunCompleted
+          ? KNOXIQ_STATUS_CARDS['api-ready']
+          : KNOXIQ_STATUS_CARDS.ready
       );
+    }
+
+    return null;
+  }
+
+  // "Something already ran, here's what's left" states — checked only once
+  // no first-run card above matched, so an API-ready file still wins there first.
+  private knoxiqNudgeCard(
+    sastStatus: number,
+    dastStatus: number,
+    apiStatus: number
+  ): KnoxiqStatusCardConfig | null {
+    const { NOT_TRIGGERED, DISABLED, COMPLETED, API_SCAN_DISABLED } =
+      ENUMS.KNOXIQ_SCAN_STATUS;
+
+    // Sub-feature is off for this org — not "ready to trigger".
+    if (this.args.file.isApiDone && apiStatus === API_SCAN_DISABLED) {
+      return this.buildKnoxiqStatusCard(
+        KNOXIQ_STATUS_CARDS['api-scan-disabled']
+      );
+    }
+
+    const isDastNotRun =
+      dastStatus === NOT_TRIGGERED || dastStatus === DISABLED;
+
+    if (sastStatus === COMPLETED && isDastNotRun) {
+      return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS['complete-dast']);
+    }
+
+    // Mirrors complete-dast; gated on the API sub-toggle since API scan can
+    // be off independently of KnoxIQ (doesn't yet track per-scan re-runs).
+    if (
+      sastStatus === COMPLETED &&
+      this.isKnoxiqApiScanEnabled &&
+      !this.args.file.isApiDone
+    ) {
+      return this.buildKnoxiqStatusCard(KNOXIQ_STATUS_CARDS['complete-api']);
     }
 
     return null;
@@ -290,15 +427,10 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     try {
       this.knoxiqScan = await waitForPromise(
-        this.store.queryRecord('knoxiq-scan', {
-          id: this.args.file.id,
-          fileId: this.args.file.id,
-        })
+        this.knoxiqScanService.fetch(this.args.file.id)
       );
     } catch (error) {
-      // A superuser probing another org's file that has no KnoxIQ history
-      // yet is expected to be denied here -- fail quietly instead of
-      // toasting an error for what is really just "nothing to show".
+      // Superuser probing a file with no KnoxIQ history yet — fail quietly.
       const isExpectedDenial =
         this.isSuperuser &&
         !this.isKnoxiqEnabled &&
