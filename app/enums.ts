@@ -497,6 +497,14 @@ const ENUMS = {
     FAILED: 5,
   },
 
+  API_SCAN_URL_STATUS: {
+    PENDING: 0,
+    IN_PROGRESS: 1,
+    COMPLETED: 2,
+    FAILED: 3,
+    CANCELLED: 4,
+  },
+
   SCAN_COVERAGE_STATUS: {
     NOT_STARTED: 0,
     PROCESSING_DS_EVENTS: 1,

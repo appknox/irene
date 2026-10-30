@@ -1,0 +1,29 @@
+<AkStack
+  @width='full'
+  @direction='column'
+  @spacing='1.5'
+  data-test-projectSettings-apiScanAutomation-root
+>
+  <AkStack @width='full' @alignItems='center' @justifyContent='space-between'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography data-test-apiScanAutomation-title @variant='h5'>
+        {{t 'apiScanAutomation.title'}}
+      </AkTypography>
+
+      <AkTypography
+        data-test-apiScanAutomation-description
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'apiScanAutomation.description'}}
+      </AkTypography>
+    </AkStack>
+
+    <AkToggle
+      data-test-apiScanAutomation-toggle
+      @checked={{this.enabled}}
+      @disabled={{this.toggleDisabled}}
+      @onChange={{this.handleToggleChange}}
+    />
+  </AkStack>
+</AkStack>

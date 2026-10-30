@@ -1,0 +1,12 @@
+.search-input {
+  width: var(--file-details-api-scan-search-input-width);
+  flex-shrink: 0;
+
+  // Same height as the medium AkChip next to it
+  :global(.ak-text-input) {
+    box-sizing: border-box;
+    height: var(--file-details-api-scan-search-input-height);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

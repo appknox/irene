@@ -1,5 +1,8 @@
 <AkStack
-  @spacing='1'
+  local-class='api-endpoint-root'
+  @width='full'
+  @alignItems='center'
+  @spacing='2'
   @tag='label'
   data-test-fileDetails-apiScan-capturedApi-endpointContainer
   data-test-fileDetails-apiScan-capturedApi-endpointContainer-item='{{@capturedApi.id}}'
@@ -11,22 +14,30 @@
     data-test-fileDetails-apiScan-capturedApi-endpointSelectCheckbox
   />
 
-  <AkStack local-class='api-endpoint-container' @spacing='1.5'>
+  <AkStack
+    local-class='api-endpoint-container'
+    @alignItems='center'
+    @spacing='2'
+  >
     <AkChip
       data-test-fileDetails-apiScan-capturedApi-endpointMethodChip
       @label={{@capturedApi.request.method}}
+      @variant='semi-filled'
+      @color={{this.methodChipColor}}
       @size='small'
     />
 
     <AkTypography
       local-class='api-endpoint'
+      title={{request-to-url @capturedApi.request}}
+      @noWrap={{true}}
       data-test-fileDetails-apiScan-capturedApi-endpointUrl
     >
       {{request-to-url @capturedApi.request}}
-
-      {{#if this.handleToggleApi.isRunning}}
-        <AkLoader class='mx-1' @size={{13}} />
-      {{/if}}
     </AkTypography>
+
+    {{#if this.handleToggleApi.isRunning}}
+      <AkLoader @size={{13}} />
+    {{/if}}
   </AkStack>
 </AkStack>
