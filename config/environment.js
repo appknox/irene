@@ -347,6 +347,7 @@ module.exports = function (environment) {
       tags: 'tags',
       capturedApiScanStart: 'start_apiscan_v2',
       capturedApiScanStop: 'start_apiscan_v2/stop',
+      capturedApiScanRestartRemaining: 'start_apiscan_v2/restart_remaining',
       apiScanUrls: 'api_scan_urls',
       amAppVersions: 'v2/am_app_versions',
       userVaNotificationPref: 'nf_email_notification_preference',

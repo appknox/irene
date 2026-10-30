@@ -5,6 +5,14 @@
   );
 }
 
+.captured-api-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--file-details-api-scan-captured-apis-row-height);
+  border-bottom: 1px solid
+    var(--file-details-api-scan-captured-apis-row-border-color);
+}
+
 .captured-api-status-card {
   width: 360px;
   background-color: var(--file-details-api-scan-captured-apis-card-background);

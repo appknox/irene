@@ -924,7 +924,9 @@ body {
   --sbom-scan-details-component-list-ai-type-header-background-color: var(
     --background-main
   );
-  --sbom-scan-details-component-list-ai-type-header-box-shadow: var(--box-shadow-7);
+  --sbom-scan-details-component-list-ai-type-header-box-shadow: var(
+    --box-shadow-7
+  );
   --sbom-scan-details-component-list-ai-type-header-filter-option-hover-background-color: var(
     --neutral-grey-200
   );
@@ -1087,14 +1089,20 @@ body {
   );
 
   // variables for sbom/scan-details/summary-bar
-  --sbom-scan-details-summary-bar-container-background-color: var(--background-main);
+  --sbom-scan-details-summary-bar-container-background-color: var(
+    --background-main
+  );
   --sbom-scan-details-summary-bar-container-border-color: var(--border-color-1);
   --sbom-scan-details-summary-bar-container-border-radius: var(--border-radius);
   --sbom-scan-details-summary-bar-new-feature-container-background-color: var(
     --new-feature-ai-bg-color
   );
-  --sbom-scan-details-summary-bar-new-feature-container-border-radius: var(--border-radius);
-  --sbom-scan-details-summary-bar-new-feature-icon-color: var(--new-feature-ai-color);
+  --sbom-scan-details-summary-bar-new-feature-container-border-radius: var(
+    --border-radius
+  );
+  --sbom-scan-details-summary-bar-new-feature-icon-color: var(
+    --new-feature-ai-color
+  );
 
   // variables for analysis-risk/tag
   // variables for analysis-risk/text
@@ -1241,24 +1249,34 @@ body {
   --file-details-api-scan-captured-apis-container-background: var(
     --background-main
   );
+  --file-details-api-scan-captured-apis-select-all-height: 52px;
+  --file-details-api-scan-captured-apis-row-height: 58px;
+  --file-details-api-scan-captured-apis-row-border-color: var(--border-color-1);
 
-  // variables shared by the file-details/api-scan screens
+  // variables for file-details/api-scan/search-input
   --file-details-api-scan-search-input-width: 260px;
+  --file-details-api-scan-search-input-height: 32px;
 
   // variables for file-details/api-scan/progress-status
   --file-details-api-scan-progress-status-border-radius: var(--border-radius);
   --file-details-api-scan-progress-status-card-background: var(
     --background-main
   );
-  --file-details-api-scan-progress-status-indicator-background: var(
+  --file-details-api-scan-progress-status-border-color: var(--border-color-1);
+
+  // variables for file-details/api-scan/progress-status/url-status
+  --file-details-api-scan-progress-status-url-status-dot-color: var(
+    --neutral-grey-400
+  );
+  --file-details-api-scan-progress-status-url-status-success-color: var(
     --success-main
   );
-  --file-details-api-scan-progress-status-border-color: var(--border-color-1);
-  --file-details-api-scan-progress-status-dot-default: var(--neutral-grey-400);
-  --file-details-api-scan-progress-status-success: var(--success-main);
-  --file-details-api-scan-progress-status-warn: var(--warn-main);
-  --file-details-api-scan-progress-status-warn-text: var(--warn-dark);
-  --file-details-api-scan-progress-status-error: var(--error-main);
+  --file-details-api-scan-progress-status-url-status-error-color: var(
+    --error-main
+  );
+  --file-details-api-scan-progress-status-url-status-info-color: var(
+    --info-dark
+  );
 
   // variables for file-details/api-scan/results
   --file-details-api-scan-results-tabs-container-background: var(
@@ -1313,6 +1331,7 @@ body {
   --file-details-api-scan-captured-apis-domain-filters-select-option-hover-background: var(
     --hover-light-background
   );
+  --file-details-api-scan-captured-apis-domain-filters-trigger-height: 32px;
 
   // variables for file-details/insights-wrapper
   --file-details-insights-wrapper-border-color: var(--border-color-1);

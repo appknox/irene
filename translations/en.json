@@ -94,7 +94,6 @@
   "apiDocumentation": "API Documentation",
   "apiScanAutomation": {
     "description": "Automatically start an API scan when a DAST run finishes.",
-    "featureUnavailable": "API scan is not enabled for your organization.",
     "settingsUpdated": "API scan automation settings updated",
     "title": "API Scan Automation"
   },
@@ -103,16 +102,18 @@
   "apiScan": "API Scan",
   "apiScanResults": "API Scan Results",
   "apiScanResultsDesc": "Here are the data from this particular API scan.",
-  "apiScanInProgress": "API Scan in progress",
-  "apiScanStopped": "API scan stopped",
   "apiScanModule": {
-    "scannedApis": "Scanned APIs",
     "endpointsScannedCount": "{scanned} of {total} endpoints scanned",
     "searchEndpoints": "Search endpoints",
     "endpoint": "Endpoint",
     "scannedAt": "Scanned At",
     "scanned": "Scanned",
     "queued": "Queued",
+    "stopScan": "Stop Scan",
+    "stoppingScan": "Stopping...",
+    "restartRemaining": "Restart Remaining",
+    "rescan": "Rescan",
+    "scanStopped": "API scan stopped",
     "noApisCaptured": "No APIs have been captured!",
     "cumulativeDataOfDASTScan": "The data in the file contains cumulative data of all the DAST scan done so far.",
     "performDASTScanByEnablingAPI": "Perform DAST scan by enabling API Capture to get the data.",
@@ -143,7 +144,6 @@
     "optionsSelected": "Options selected",
     "noApiFoundDesc": "No Captured APIs matched your search or selected domain filters. Please try a different search or domain filters."
   },
-  "apiScanProgressStatusHelper": "{status, select, completed {} other {Once the scan is completed.}} View the results in <strong>API Scan Results Tab</strong>",
   "apiURLFilter": "API URL Filter",
   "app": "app",
   "appBinary": "APP BINARY",
