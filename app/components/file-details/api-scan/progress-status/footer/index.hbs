@@ -1,0 +1,93 @@
+<AkStack
+  @alignItems='center'
+  @justifyContent='space-between'
+  @spacing='2'
+  data-test-fileDetails-apiScan-progressStatus-footer
+>
+  <AkStack @direction='column' @spacing='1' local-class='progress-container'>
+    <AkStack
+      data-test-fileDetails-apiScan-progressStatus-progressText
+      @alignItems='center'
+      @spacing='1.5'
+      local-class='progress-bar'
+    >
+      <AkLoader::Linear
+        local-class='progress-bar-indicator'
+        @progress={{this.progress}}
+        @color={{this.progressColor}}
+        @variant='determinate'
+      />
+
+      <AkTypography local-class='progress-percent' @variant='h6'>
+        {{this.progress}}%
+      </AkTypography>
+    </AkStack>
+
+    <AkTypography
+      data-test-fileDetails-apiScan-progressStatus-scannedCount
+      @variant='h6'
+    >
+      {{t
+        'apiScanModule.endpointsScannedCount'
+        scanned=this.data.scannedCount
+        total=this.data.totalCount
+      }}
+    </AkTypography>
+  </AkStack>
+
+  {{#if @file.isApiScanStopRequested}}
+    <AkButton
+      data-test-fileDetails-apiScan-stoppingBtn
+      @variant='outlined'
+      @color='neutral'
+      @disabled={{true}}
+    >
+      {{t 'apiScanModule.stoppingScan'}}
+    </AkButton>
+  {{else if this.showStopButton}}
+    <AkButton
+      data-test-fileDetails-apiScan-stopBtn
+      @variant='outlined'
+      @disabled={{this.disableStopButton}}
+      @loading={{this.stopApiScan.isRunning}}
+      {{on 'click' (perform this.stopApiScan)}}
+    >
+      <:leftIcon>
+        <AkIcon @iconName='stop-circle' />
+      </:leftIcon>
+
+      <:default>{{t 'apiScanModule.stopScan'}}</:default>
+    </AkButton>
+  {{else if this.isApiDone}}
+    <AkStack @alignItems='center' @spacing='1.5'>
+      {{#if this.showRestartRemainingButton}}
+        <AkButton
+          data-test-fileDetails-apiScan-restartRemainingBtn
+          @variant='outlined'
+          @disabled={{this.disableRestartActions}}
+          @loading={{this.restartRemainingApiScan.isRunning}}
+          {{on 'click' (perform this.restartRemainingApiScan)}}
+        >
+          <:leftIcon>
+            <AkIcon @iconName='play-arrow' />
+          </:leftIcon>
+
+          <:default>{{t 'apiScanModule.restartRemaining'}}</:default>
+        </AkButton>
+      {{/if}}
+
+      <AkButton
+        data-test-fileDetails-apiScan-rescanBtn
+        @disabled={{this.disableRestartActions}}
+        @loading={{this.rescanApiScan.isRunning}}
+        {{on 'click' (perform this.rescanApiScan)}}
+      >
+        <:leftIcon>
+          <AkIcon @iconName='refresh' />
+        </:leftIcon>
+
+        <:default>{{t 'apiScanModule.rescan'}}</:default>
+      </AkButton>
+    </AkStack>
+  {{/if}}
+</AkStack>

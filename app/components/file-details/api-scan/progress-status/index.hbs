@@ -8,95 +8,39 @@
     local-class='scanned-apis-header'
     @alignItems='center'
     @justifyContent='space-between'
-    @spacing='2'
-    class='px-3 py-2'
+    @spacing='1.5'
+    class='p-2'
   >
-    <div>
+    <AkStack @alignItems='center' @spacing='1.5'>
       <AkTypography
         data-test-fileDetails-apiScan-progressStatus-title
-        @variant='h5'
-      >
-        {{t 'apiScanModule.scannedApis'}}
-      </AkTypography>
-
-      <AkTypography
-        data-test-fileDetails-apiScan-progressStatus-scannedCount
-        @variant='body2'
         @color='textSecondary'
       >
-        {{t
-          'apiScanModule.endpointsScannedCount'
-          scanned=this.scannedCount
-          total=this.totalCount
-        }}
+        {{t 'capturedApiListTitle'}}
       </AkTypography>
-    </div>
-
-    <AkStack @alignItems='center' @spacing='2'>
-      {{#if @file.isRunningApiScan}}
-        <AkStack
-          data-test-fileDetails-apiScan-progressStatus-progressText
-          local-class='progress-bar'
-          @alignItems='center'
-          @spacing='2'
-        >
-          <AkLoader::Linear
-            local-class='progress-bar-indicator'
-            @progress={{@file.apiScanProgress}}
-            @variant='determinate'
-          />
-
-          <AkTypography local-class='progress-percent' @variant='h6'>
-            {{@file.apiScanProgress}}%
-          </AkTypography>
-        </AkStack>
-      {{/if}}
-
-      <div local-class='search-input'>
-        <AkTextField
-          data-test-fileDetails-apiScan-progressStatus-searchInput
-          @placeholder={{t 'apiScanModule.searchEndpoints'}}
-          {{on 'keyup' this.handleSearchInput}}
-        >
-          <:leftAdornment>
-            <AkIcon @iconName='search' @color='textSecondary' />
-          </:leftAdornment>
-        </AkTextField>
-      </div>
 
       {{#if @file.isApiScanStopRequested}}
         <FileDetails::DynamicScan::StatusChip
           data-test-fileDetails-apiScan-stoppingChip
           @status={{this.stoppingStatus}}
         />
-      {{else if @file.isRunningApiScan}}
-        <AkButton
-          data-test-fileDetails-apiScan-stopBtn
-          {{on 'click' (perform this.stopApiScan)}}
-          @disabled={{or (not @file.isActive) this.stopApiScan.isRunning}}
-          @loading={{this.stopApiScan.isRunning}}
-        >
-          <:leftIcon>
-            {{#if this.stopApiScan.isRunning}}
-              <AkLoader @size={{13}} />
-            {{else}}
-              <AkIcon @iconName='stop-circle' />
-            {{/if}}
-          </:leftIcon>
-
-          <:default>
-            {{t 'stop'}}
-          </:default>
-        </AkButton>
       {{else if @file.isApiDone}}
-        <AkChip
+        <FileDetails::DynamicScan::StatusChip
           data-test-fileDetails-apiScan-progressStatus-completedChip
-          @variant='semi-filled'
-          @label={{t 'chipStatus.completed'}}
-          @color='success'
+          @status={{this.completedStatus}}
+        />
+      {{else if @file.isRunningApiScan}}
+        <FileDetails::DynamicScan::StatusChip
+          data-test-fileDetails-apiScan-progressStatus-runningChip
+          @status={{this.runningStatus}}
         />
       {{/if}}
     </AkStack>
+
+    <FileDetails::ApiScan::SearchInput
+      data-test-fileDetails-apiScan-progressStatus-searchInput
+      @onSearch={{this.handleSearch}}
+    />
   </AkStack>
 
   {{#if this.showListLoading}}
@@ -130,50 +74,42 @@
         local-class='scanned-apis-table'
         as |t|
       >
-        {{! Lock the table to the container width and let Endpoint absorb the difference, so Method stays narrow and Scanned At sits at the right edge without a horizontal scroll }}
+        {{! Endpoint absorbs the spare width so Status and Scanned At stay right-aligned }}
         <t.head
           @columns={{this.columns}}
           @widthConstraint='eq-container'
-          @fillMode='nth-column'
-          @fillColumnIndex={{1}}
+          @fillMode='first-column'
         />
         <t.body @rows={{pgc.currentPageResults}} as |b|>
           <b.row data-test-fileDetails-apiScan-progressStatus-row as |r|>
             <r.cell>
-              {{#if (eq r.columnValue.id 'method')}}
-                <AkChip
-                  data-test-fileDetails-apiScan-progressStatus-method
-                  @variant='semi-filled'
-                  @size='small'
-                  @label={{r.rowValue.request.method}}
-                  @color={{this.methodChipColor r.rowValue.request.method}}
-                />
-              {{else if (eq r.columnValue.id 'endpoint')}}
-                <AkTypography
-                  data-test-fileDetails-apiScan-progressStatus-endpoint
-                  title={{request-to-url r.rowValue.request}}
-                  @noWrap={{true}}
+              {{#if (eq r.columnValue.id 'endpoint')}}
+                <AkStack
+                  local-class='endpoint-cell'
+                  @alignItems='center'
+                  @spacing='2'
                 >
-                  {{request-to-url r.rowValue.request}}
-                </AkTypography>
-              {{else if (eq r.columnValue.id 'status')}}
-                {{#let (this.statusDetails r.rowValue.status) as |status|}}
-                  <AkStack
-                    data-test-fileDetails-apiScan-progressStatus-status
-                    @alignItems='center'
-                    @spacing='1'
-                  >
-                    <span
-                      local-class='status-dot status-dot-{{status.color}}'
-                    ></span>
+                  <AkChip
+                    data-test-fileDetails-apiScan-progressStatus-method
+                    @variant='semi-filled'
+                    @size='small'
+                    @label={{r.rowValue.request.method}}
+                    @color={{this.methodChipColor r.rowValue.request.method}}
+                  />
 
-                    <AkTypography
-                      local-class='status-text status-text-{{status.color}}'
-                    >
-                      {{status.label}}
-                    </AkTypography>
-                  </AkStack>
-                {{/let}}
+                  <AkTypography
+                    data-test-fileDetails-apiScan-progressStatus-endpoint
+                    local-class='endpoint-url'
+                    title={{request-to-url r.rowValue.request}}
+                    @noWrap={{true}}
+                  >
+                    {{request-to-url r.rowValue.request}}
+                  </AkTypography>
+                </AkStack>
+              {{else if (eq r.columnValue.id 'status')}}
+                <FileDetails::ApiScan::ProgressStatus::UrlStatus
+                  @status={{r.rowValue.status}}
+                />
               {{else}}
                 <AkTypography
                   data-test-fileDetails-apiScan-progressStatus-scannedOn

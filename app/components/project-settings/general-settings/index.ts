@@ -45,10 +45,7 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
-  /**
-   * Same visibility the API Scan Automation tab used: hidden for enterprise,
-   * and hidden when the org has neither the feature nor the upsell.
-   */
+  // Hidden for enterprise, and when the org has neither the feature nor the upsell
   get showApiScanAutomation() {
     return (
       !this.configuration.serverData.enterprise &&

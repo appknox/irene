@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { debounceTask, runTask } from 'ember-lifeline';
+import { runTask } from 'ember-lifeline';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -104,8 +104,6 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
     );
   }
 
-  // Empty because of the domain filter or the search, not because nothing
-  // was captured
   get noDomainFilterResults() {
     return this.hasNoCapturedApi && this.hasActiveFilters;
   }
@@ -186,17 +184,8 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   }
 
   @action
-  handleSearchInput(event: Event) {
-    debounceTask(
-      this,
-      'setSearchQuery',
-      (event.target as HTMLInputElement).value,
-      500
-    );
-  }
-
-  setSearchQuery(query: string) {
-    this.searchQuery = query.trim();
+  handleSearch(query: string) {
+    this.searchQuery = query;
     this.offset = 0;
 
     this.fetchCapturedApis.perform(this.limit, this.offset);

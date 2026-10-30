@@ -14,17 +14,10 @@
     </AkTypography>
 
     <AkStack @alignItems='center' @spacing='1.5'>
-      <div local-class='search-input'>
-        <AkTextField
-          data-test-fileDetails-apiScan-capturedApi-searchInput
-          @placeholder={{t 'apiScanModule.searchEndpoints'}}
-          {{on 'keyup' @onSearchInput}}
-        >
-          <:leftAdornment>
-            <AkIcon @iconName='search' @color='textSecondary' />
-          </:leftAdornment>
-        </AkTextField>
-      </div>
+      <FileDetails::ApiScan::SearchInput
+        data-test-fileDetails-apiScan-capturedApi-searchInput
+        @onSearch={{@onSearch}}
+      />
 
       <FileDetails::ApiScan::CapturedApis::ApiDomainFilters
         @file={{@file}}
@@ -41,7 +34,7 @@
     @alignItems='center'
     @spacing='1'
     local-class='select-all-captured-api-cta'
-    class='w-full px-2 py-1'
+    class='w-full px-3'
   >
     <AkCheckbox
       @disabled={{this.disableSelectAllCapturedApis}}

@@ -65,6 +65,23 @@ module(
 
     // ─── Render ──────────────────────────────────────────────────────────────
 
+    test('it does not request preferences without a profile id', async function (assert) {
+      let requestCount = 0;
+
+      this.server.get(PREFERENCE_URL, () => {
+        requestCount += 1;
+
+        return DEFAULT_OPTIONS;
+      });
+
+      this.set('profileId', undefined);
+
+      await render(TEMPLATE);
+
+      assert.strictEqual(requestCount, 0);
+      assert.dom(selectors.toggleInput).isNotChecked().isDisabled();
+    });
+
     test('renders the panel with automation disabled by default', async function (assert) {
       stubGet(this.server);
 
@@ -74,9 +91,7 @@ module(
       assert.dom(selectors.title).containsText(t('apiScanAutomation.title'));
       assert.dom(selectors.toggleInput).isNotChecked();
       assert.dom(selectors.saveBtn).doesNotExist();
-      assert
-        .dom('[data-test-apiScanAutomation-scanAllWarning]')
-        .doesNotExist();
+      assert.dom('[data-test-apiScanAutomation-scanAllWarning]').doesNotExist();
     });
 
     test('shows the enabled toggle without a scan-all warning', async function (assert) {
@@ -85,9 +100,7 @@ module(
       await render(TEMPLATE);
 
       assert.dom(selectors.toggleInput).isChecked();
-      assert
-        .dom('[data-test-apiScanAutomation-scanAllWarning]')
-        .doesNotExist();
+      assert.dom('[data-test-apiScanAutomation-scanAllWarning]').doesNotExist();
     });
 
     // ─── Saving ──────────────────────────────────────────────────────────────

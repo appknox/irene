@@ -65,12 +65,7 @@ class NotificationsStub extends Service {
 }
 
 // Mirrors APIScanStatusEnum in mycroft
-const API_SCAN_URL_STATUS = {
-  PENDING: 0,
-  IN_PROGRESS: 1,
-  COMPLETED: 2,
-  FAILED: 3,
-};
+const API_SCAN_URL_STATUS = ENUMS.API_SCAN_URL_STATUS;
 
 const API_SCAN_URLS = [
   {
@@ -142,12 +137,23 @@ const API_SCAN_URL_STATUS_LABEL = {
   [API_SCAN_URL_STATUS.FAILED]: () => t('failed'),
 };
 
-function setupApiScanUrlsEndpoint(server, onRequest = () => {}) {
+// The same scan after a stop, which cancelled the endpoint it never reached
+const STOPPED_API_SCAN_URLS = API_SCAN_URLS.map((url) =>
+  url.status === API_SCAN_URL_STATUS.PENDING
+    ? { ...url, status: API_SCAN_URL_STATUS.CANCELLED }
+    : url
+);
+
+function setupApiScanUrlsEndpoint(
+  server,
+  onRequest = () => {},
+  scanUrls = API_SCAN_URLS
+) {
   server.get('/v2/files/:id/api_scan_urls', (_, req) => {
     onRequest(req);
 
     const q = (req.queryParams.q || '').toLowerCase();
-    const results = API_SCAN_URLS.filter(
+    const results = scanUrls.filter(
       (u) =>
         u.request.host.toLowerCase().includes(q) ||
         u.request.path.toLowerCase().includes(q)
@@ -158,9 +164,12 @@ function setupApiScanUrlsEndpoint(server, onRequest = () => {}) {
       next: null,
       previous: null,
       results,
-      total_count: API_SCAN_URLS.length,
-      scanned_count: API_SCAN_URLS.filter(
+      total_count: scanUrls.length,
+      scanned_count: scanUrls.filter(
         (u) => u.status === API_SCAN_URL_STATUS.COMPLETED
+      ).length,
+      cancelled_count: scanUrls.filter(
+        (u) => u.status === API_SCAN_URL_STATUS.CANCELLED
       ).length,
     };
   });
@@ -1230,7 +1239,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
 
       assert
         .dom('[data-test-fileDetails-apiScan-progressStatus-title]')
-        .hasText(t('apiScanModule.scannedApis'));
+        .hasText(t('capturedApiListTitle'));
 
       assert
         .dom('[data-test-fileDetails-apiScan-progressStatus-scannedCount]')
@@ -1242,17 +1251,48 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         .dom('[data-test-fileDetails-apiScan-progressStatus-searchInput]')
         .exists();
 
+      assert.dom('[data-test-fileDetails-apiScan-footerContainer]').exists();
+
       if (this.file.is_api_done) {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-completedChip]')
-          .hasText(t('chipStatus.completed'));
+          .hasText(t('completed'));
 
         assert
-          .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
+          .dom('[data-test-fileDetails-apiScan-progressStatus-runningChip]')
           .doesNotExist();
 
+        // A finished scan always reads as fully scanned
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
+          .hasText('100%');
+
         assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
+
+        // Nothing was cancelled by a stop, so there is nothing to restart
+        assert
+          .dom('[data-test-fileDetails-apiScan-restartRemainingBtn]')
+          .doesNotExist();
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-rescanBtn]')
+          .isNotDisabled()
+          .hasText(t('apiScanModule.rescan'));
       } else {
+        assert
+          .dom('[data-test-fileDetails-apiScan-restartRemainingBtn]')
+          .doesNotExist();
+
+        assert.dom('[data-test-fileDetails-apiScan-rescanBtn]').doesNotExist();
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-runningChip]')
+          .hasText(t('running'));
+
+        assert
+          .dom('[data-test-fileDetails-apiScan-progressStatus-completedChip]')
+          .doesNotExist();
+
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
           .hasText(`${this.file.api_scan_progress}%`);
@@ -1260,7 +1300,7 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         assert
           .dom('[data-test-fileDetails-apiScan-stopBtn]')
           .isNotDisabled()
-          .hasText(t('stop'));
+          .hasText(t('apiScanModule.stopScan'));
       }
 
       const rows = findAll(
@@ -1284,6 +1324,23 @@ module('Acceptance | file-details/api-scan', function (hooks) {
         assert
           .dom('[data-test-fileDetails-apiScan-progressStatus-status]', row)
           .hasText(API_SCAN_URL_STATUS_LABEL[url.status]());
+
+        // Only the endpoint being scanned shows a spinner
+        if (url.status === API_SCAN_URL_STATUS.IN_PROGRESS) {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-statusLoader]',
+              row
+            )
+            .exists();
+        } else {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-statusLoader]',
+              row
+            )
+            .doesNotExist();
+        }
 
         if (url.scanned_on) {
           assert
@@ -1403,16 +1460,27 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-apiScan-stopBtn]')
       .isNotDisabled()
-      .hasText(t('stop'));
+      .hasText(t('apiScanModule.stopScan'));
+
+    assert.dom('[data-test-fileDetails-apiScan-stoppingBtn]').doesNotExist();
 
     await click('[data-test-fileDetails-apiScan-stopBtn]');
 
     const notify = this.owner.lookup('service:notifications');
 
     assert.strictEqual(notify.errorMsg, null);
-    assert.strictEqual(notify.successMsg, t('apiScanStopped'));
+    assert.strictEqual(notify.successMsg, t('apiScanModule.scanStopped'));
 
     assert.dom('[data-test-fileDetails-apiScan-stopBtn]').doesNotExist();
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-stoppingBtn]')
+      .isDisabled()
+      .hasText(t('apiScanModule.stoppingScan'));
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-runningChip]')
+      .doesNotExist();
 
     assert
       .dom('[data-test-fileDetails-apiScan-stoppingChip]')
@@ -1425,6 +1493,137 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     assert
       .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
       .hasText('40%');
+  });
+
+  test.each(
+    'it restarts a completed api scan',
+    [
+      {
+        btn: '[data-test-fileDetails-apiScan-rescanBtn]',
+        endpoint: '/v2/files/:id/start_apiscan_v2',
+      },
+      {
+        btn: '[data-test-fileDetails-apiScan-restartRemainingBtn]',
+        endpoint: '/v2/files/:id/start_apiscan_v2/restart_remaining',
+      },
+    ],
+    async function (assert, { btn, endpoint }) {
+      this.file.update({
+        api_scan_status: ENUMS.SCAN_STATUS.COMPLETED,
+        is_api_done: true,
+        api_scan_progress: 100,
+      });
+
+      setupApiScanUrlsEndpoint(this.server, undefined, STOPPED_API_SCAN_URLS);
+
+      let requested = false;
+
+      this.server.post(endpoint, (schema, req) => {
+        requested = true;
+
+        schema.files.find(req.params.id).update({
+          api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+          is_api_done: false,
+          api_scan_progress: 40,
+        });
+
+        return new Response(204);
+      });
+
+      await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+      await click(btn);
+
+      assert.true(requested);
+
+      const notify = this.owner.lookup('service:notifications');
+
+      assert.strictEqual(notify.errorMsg, null);
+
+      // The reloaded file is running again, so the screen offers Stop
+      assert
+        .dom('[data-test-fileDetails-apiScan-progressStatus-runningChip]')
+        .hasText(t('running'));
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-stopBtn]')
+        .hasText(t('apiScanModule.stopScan'));
+
+      assert.dom('[data-test-fileDetails-apiScan-rescanBtn]').doesNotExist();
+
+      assert
+        .dom('[data-test-fileDetails-apiScan-progressStatus-progressText]')
+        .hasText('40%');
+    }
+  );
+
+  test('it shows the error when a restart fails', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.COMPLETED,
+      is_api_done: true,
+    });
+
+    setupApiScanUrlsEndpoint(this.server, undefined, STOPPED_API_SCAN_URLS);
+
+    this.server.post(
+      '/v2/files/:id/start_apiscan_v2/restart_remaining',
+      () => new Response(400, {}, { detail: 'Restart failed' })
+    );
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    await click('[data-test-fileDetails-apiScan-restartRemainingBtn]');
+
+    const notify = this.owner.lookup('service:notifications');
+
+    assert.strictEqual(notify.errorMsg, 'Restart failed');
+
+    // Still completed, so both actions stay available to retry
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-completedChip]')
+      .exists();
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-restartRemainingBtn]')
+      .isNotDisabled();
+
+    assert.dom('[data-test-fileDetails-apiScan-rescanBtn]').isNotDisabled();
+  });
+
+  test('it hides restart remaining when no endpoint is cancelled', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.COMPLETED,
+      is_api_done: true,
+    });
+
+    // Some endpoints failed or never ran, but a stop cancelled none of them
+    setupApiScanUrlsEndpoint(this.server);
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-restartRemainingBtn]')
+      .doesNotExist();
+
+    assert.dom('[data-test-fileDetails-apiScan-rescanBtn]').exists();
+  });
+
+  test('it disables restart actions for inactive files', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.COMPLETED,
+      is_api_done: true,
+      is_active: false,
+    });
+
+    setupApiScanUrlsEndpoint(this.server, undefined, STOPPED_API_SCAN_URLS);
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-restartRemainingBtn]')
+      .isDisabled();
+
+    assert.dom('[data-test-fileDetails-apiScan-rescanBtn]').isDisabled();
   });
 
   test('it should navigate to properly on tab click', async function (assert) {
