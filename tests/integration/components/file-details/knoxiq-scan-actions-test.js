@@ -87,6 +87,7 @@ module(
       this.knoxiqStatuses = knoxiqScanStatuses({
         sast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
         dast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
+        api: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
       });
 
       await render(hbs`
