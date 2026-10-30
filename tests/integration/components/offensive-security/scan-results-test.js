@@ -408,9 +408,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert
       .dom(SELECTORS.deviceStatusPill)
       .hasText(t('offensiveSecurity.deviceConnecting'));
-    assert
-      .dom(SELECTORS.deviceCaption)
-      .hasText(t('offensiveSecurity.deviceCaptionWaiting'));
+    assert.dom(SELECTORS.deviceCaption).doesNotExist();
   });
 
   test.each(
@@ -602,9 +600,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert
       .dom(SELECTORS.deviceLiveBadge)
       .hasText(t('offensiveSecurity.deviceLive'));
-    assert
-      .dom(SELECTORS.deviceCaption)
-      .hasText(t('offensiveSecurity.deviceCaptionLive'));
+    assert.dom(SELECTORS.deviceCaption).doesNotExist();
     assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
   });
 

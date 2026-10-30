@@ -15,7 +15,7 @@
   {{else}}
     <AkBreadcrumbs::AutoTrail class='mb-1' />
 
-    {{#unless @scan.isResilienceOnly}}
+    {{#unless @scan.isExplicitlyResilienceOnly}}
       <OffensiveSecurity::ScanResults::PentestGoalsCard
         @scan={{@scan}}
         @goals={{this.pentestGoals}}

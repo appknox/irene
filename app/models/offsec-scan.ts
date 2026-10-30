@@ -647,6 +647,13 @@ export default class OffsecScanModel extends Model {
     return !this.isComprehensive;
   }
 
+  /** True only when the payload says so; unlike `isResilienceOnly` it never guesses from missing data. */
+  get isExplicitlyResilienceOnly(): boolean {
+    const raw = String(this.assessmentType || this.assessment_type || '');
+
+    return raw.toLowerCase().includes('resilience');
+  }
+
   get assessmentTypeLabel(): string {
     return this.isComprehensive ? 'Comprehensive' : 'Resilience Only';
   }

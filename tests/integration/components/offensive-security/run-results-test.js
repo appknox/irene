@@ -170,6 +170,19 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       .hasText(t('offensiveSecurity.noBusinessRisks'));
   });
 
+  test('it hides the business risks card for a resilience assessment', async function (assert) {
+    const scan = createScan(this, {
+      assessment_type: 'resilience',
+      pentest_results: GOALS,
+    });
+
+    this.set('scan', pushScan(this, scan));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.risksCard).doesNotExist();
+    assert.dom(SELECTORS.findingsList).exists();
+  });
+
   test('it marks the risks as updating while the run is in progress', async function (assert) {
     const scan = createScan(this, {
       status: SCAN_STATUS.RUNNING,
