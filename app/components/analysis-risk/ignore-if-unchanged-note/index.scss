@@ -11,10 +11,31 @@
   overflow-wrap: anywhere;
 }
 
-// API findings can be long URLs or response bodies: wrap them and scroll long lists
+// the note sits in flex columns: let it shrink to the drawer so long findings scroll instead of widening it
+.note-root {
+  min-width: 0;
+  max-width: 100%;
+}
+
+// API findings can be long URLs or response bodies: show each as a scrollable code block
 .findings-list {
+  min-width: 0;
+  max-width: 100%;
   max-height: 16em;
   overflow-y: auto;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  list-style: none;
+  padding-left: 0;
+}
+
+.finding {
+  display: block;
+  max-width: 100%;
+  margin-bottom: 0.25em;
+  padding: 0.25em 0.5em;
+  overflow-x: auto;
+  white-space: pre;
+  font-family: monospace;
+  font-size: 0.875em;
+  background-color: var(--analysis-risk-override-edit-drawer-override-details-background-color, #f5f5f5);
+  border-radius: 4px;
 }
