@@ -199,6 +199,26 @@ function toneFor(line: string): AgentLogLine['tone'] {
     return 'accent';
   }
 
+  // Phase banners from the worker: the rule lines and the "Starting pentest goal" line
+  if (
+    /^={10,}$/.test(line) ||
+    /^\[worker\] (?:Resilience done\. )?Starting pentest goal/.test(line)
+  ) {
+    return 'success';
+  }
+
+  if (/^\[worker\] Goal:/.test(line)) {
+    return 'accent';
+  }
+
+  if (/^\[worker\] frida bypass script .* prepared/.test(line)) {
+    return 'success';
+  }
+
+  if (/^\[worker\] warning:/.test(line)) {
+    return 'error';
+  }
+
   if (/^✗\s/.test(line)) {
     return 'dim';
   }

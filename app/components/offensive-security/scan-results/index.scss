@@ -269,10 +269,19 @@
   }
 }
 
-.device-caption {
-  margin-top: 0.75em;
-  padding-top: 0.75em;
-  border-top: 1px solid var(--offensive-security-scan-results-divider-color);
+.device-ended-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 200px;
+  padding: 0 1rem;
+  text-align: center;
+  color: #e2e8f0;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.4;
 }
 
 .phone-frame-wrapper {

@@ -166,21 +166,23 @@
 
           <AkDivider />
 
-          <AkStack local-class='file-summary-padding' @alignItems='center'>
-            <AkTypography {{style width='190px'}} @color='textSecondary'>
-              Development framework
-            </AkTypography>
-
-            <AkStack @alignItems='center' @spacing='1'>
-              <PlatformIcon @code={{this.scan.devFrameworkCode}} @size='18px' />
-
-              <AkTypography @variant='h6'>
-                {{this.scan.devFrameworkLabel}}
+          {{#unless this.isIosDevice}}
+            <AkStack local-class='file-summary-padding' @alignItems='center'>
+              <AkTypography {{style width='190px'}} @color='textSecondary'>
+                Development framework
               </AkTypography>
-            </AkStack>
-          </AkStack>
 
-          <AkDivider />
+              <AkStack @alignItems='center' @spacing='1'>
+                <PlatformIcon @code={{this.scan.devFrameworkCode}} @size='18px' />
+
+                <AkTypography @variant='h6'>
+                  {{this.scan.devFrameworkLabel}}
+                </AkTypography>
+              </AkStack>
+            </AkStack>
+
+            <AkDivider />
+          {{/unless}}
         {{/if}}
       </div>
     </div>
@@ -451,6 +453,15 @@
                           </div>
                         {{/unless}}{{/if}}
 
+                      {{#unless this.isDeviceActive}}{{#if this.scan.isTerminal}}
+                          <div
+                            local-class='device-ended-message'
+                            data-test-offensiveSecurity-deviceCaption
+                          >
+                            {{this.deviceCaption}}
+                          </div>
+                        {{/if}}{{/unless}}
+
                       {{#if this.isIosDevice}}
                         <span
                           local-class='home-indicator'
@@ -465,15 +476,6 @@
                   </div>
                 </div>
               </div>
-
-              <AkTypography
-                @variant='body3'
-                @color='textSecondary'
-                local-class='device-caption'
-                data-test-offensiveSecurity-deviceCaption
-              >
-                {{this.deviceCaption}}
-              </AkTypography>
             </div>
           </div>
       </div>

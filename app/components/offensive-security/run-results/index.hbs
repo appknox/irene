@@ -15,11 +15,13 @@
   {{else}}
     <AkBreadcrumbs::AutoTrail class='mb-1' />
 
-    <OffensiveSecurity::ScanResults::PentestGoalsCard
-      @scan={{@scan}}
-      @goals={{this.pentestGoals}}
-      @onGoalClick={{this.openGoal}}
-    />
+    {{#unless @scan.isResilienceOnly}}
+      <OffensiveSecurity::ScanResults::PentestGoalsCard
+        @scan={{@scan}}
+        @goals={{this.pentestGoals}}
+        @onGoalClick={{this.openGoal}}
+      />
+    {{/unless}}
 
     <OffensiveSecurity::ScanResults::FindingsList
       @scan={{@scan}}
