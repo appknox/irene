@@ -64,6 +64,8 @@
                       @selectedDependencyType={{this.selectedDependencyType}}
                       @onComponentTypeChange={{this.onComponentTypeChange}}
                       @selectedComponentType={{this.selectedComponentType}}
+                      @onReachabilityChange={{this.onReachabilityChange}}
+                      @selectedReachability={{this.selectedReachability}}
                     />
                   {{/let}}
                 {{else}}
@@ -83,7 +85,10 @@
               <r.cell data-test-sbomComponent-cell as |value|>
                 {{#if r.columnValue.component}}
                   {{#let (component r.columnValue.component) as |Component|}}
-                    <Component @sbomComponent={{r.rowValue}} />
+                    <Component
+                      @sbomComponent={{r.rowValue}}
+                      @sbomFile={{@sbomFile}}
+                    />
                   {{/let}}
                 {{else}}
                   <AkTypography title={{value}} @noWrap={{true}}>

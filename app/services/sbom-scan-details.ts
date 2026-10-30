@@ -33,6 +33,7 @@ export default class SbomScanDetailsService extends Service {
   @tracked selectedAiArtifactClass: string | null = null;
   @tracked selectedAiConfidence: string | null = null;
   @tracked ordering: string | null = null;
+  @tracked selectedReachability: string | null = null;
   @tracked sbomComponentsCount = 0;
   @tracked sbomFile: SbomFileModel | null = null;
 
@@ -60,6 +61,7 @@ export default class SbomScanDetailsService extends Service {
     ai_artifact_class,
     ai_confidence,
     ordering,
+    reachability,
   }: Partial<{
     sbomFile: SbomFileModel | null;
     component_query: string;
@@ -70,6 +72,7 @@ export default class SbomScanDetailsService extends Service {
     ai_artifact_class: string | null;
     ai_confidence: string | null;
     ordering: string | null;
+    reachability: string | null;
   }>) {
     // Skip omitted keys to avoid same-value tracked-property writes and Ember's render-time autotracking assertion.
     if (sbomFile !== undefined) {
@@ -109,6 +112,9 @@ export default class SbomScanDetailsService extends Service {
     if (ordering !== undefined) {
       this.ordering = ordering;
     }
+
+    this.selectedReachability =
+      reachability === undefined ? this.selectedReachability : reachability;
 
     return this;
   }
@@ -150,6 +156,10 @@ export default class SbomScanDetailsService extends Service {
         : {}),
 
       ...(this.ordering ? { ordering: this.ordering } : {}),
+
+      ...(this.selectedReachability
+        ? { reachability: this.selectedReachability }
+        : {}),
     };
 
     // Query Params

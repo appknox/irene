@@ -15,6 +15,7 @@ export interface SbomComponentQueryParam {
   ai_artifact_class: string | null;
   ai_confidence: string | null;
   ordering: string | null;
+  reachability: string | null;
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -56,6 +57,9 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
       refreshModel: false,
     },
     ordering: {
+      refreshModel: false,
+    },
+    reachability: {
       refreshModel: false,
     },
   };

@@ -72,6 +72,10 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return this.sbomScanDetailsService.selectedComponentType;
   }
 
+  get selectedReachability() {
+    return this.sbomScanDetailsService.selectedReachability;
+  }
+
   get sbomComponentList() {
     return this.sbomScanDetailsService.sbomComponentList;
   }
@@ -88,7 +92,8 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return (
       this.searchQuery?.trim() !== '' ||
       this.selectedDependencyType !== null ||
-      this.selectedComponentType > -1
+      this.selectedComponentType > -1 ||
+      this.selectedReachability !== null
     );
   }
 
@@ -125,6 +130,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       {
         name: this.intl.t('sbomModule.reachability.title'),
         component: 'sbom/scan-details/component-list/reachability',
+        headerComponent: 'sbom/scan-details/component-list/reachability-header',
       },
     ];
   }
@@ -151,6 +157,21 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
 
     this.sbomScanDetailsService
       .setQueryData({ dependency_type: type === null ? null : String(type) })
+      .setLimitOffset({ offset: 0 })
+      .reload();
+  }
+
+  @action
+  onReachabilityChange(exposure: string | null) {
+    this.router.transitionTo({
+      queryParams: {
+        reachability: exposure,
+        component_offset: 0,
+      },
+    });
+
+    this.sbomScanDetailsService
+      .setQueryData({ reachability: exposure })
       .setLimitOffset({ offset: 0 })
       .reload();
   }

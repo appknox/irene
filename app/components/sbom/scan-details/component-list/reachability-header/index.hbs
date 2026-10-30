@@ -1,0 +1,87 @@
+<AkStack @width='full' @alignItems='center' @justifyContent='flex-start'>
+  <AkStack
+    @width='full'
+    @spacing='0.5'
+    @alignItems='center'
+    data-test-sbom-scanDetails-reachabilityHeader-container
+  >
+    <AkIcon
+      @iconName='filter-list'
+      @color={{if this.filterApplied 'primary' 'inherit'}}
+      local-class='cursor-pointer'
+      {{on 'click' this.handleClick}}
+      data-test-sbom-scanDetails-reachabilityHeader-icon
+    />
+
+    <AkTypography
+      @variant='subtitle2'
+      data-test-sbom-scanDetails-reachabilityHeader-text
+    >
+      {{t 'sbomModule.reachability.title'}}
+    </AkTypography>
+  </AkStack>
+</AkStack>
+
+<AkPopover
+  @anchorRef={{this.anchorRef}}
+  @placement='bottom'
+  @arrow={{false}}
+  @closeHandler={{this.handleOptionsClose}}
+  @clickOutsideToClose={{true}}
+  data-test-sbom-scanDetails-reachabilityHeader-popover
+>
+  <AkStack @direction='column' local-class='status-filter'>
+    <AkStack @width='full' local-class='filter-header'>
+      <AkTypography
+        @variant='subtitle2'
+        local-class='filter-header-text'
+        data-test-sbom-scanDetails-reachabilityHeader-popover-headerText
+      >
+        {{t 'sbomModule.reachability.title'}}
+      </AkTypography>
+    </AkStack>
+
+    {{#each this.reachabilityOptions as |option|}}
+      <AkStack
+        @spacing='1'
+        @width='full'
+        local-class='filter-option cursor-pointer'
+        class='py-1 pl-2'
+        {{on 'click' (fn this.selectReachability option.value)}}
+        data-test-sbom-scanDetails-reachabilityHeader-option
+      >
+        <AkStack @alignItems='center' @spacing='1'>
+          <AkRadio
+            @checked={{eq this.selectedReachability option.value}}
+            data-test-sbom-scanDetails-reachabilityHeader-radio={{option.key}}
+          />
+
+          <AkTypography
+            data-test-sbom-scanDetails-reachabilityHeader-option-text
+          >
+            {{option.key}}
+          </AkTypography>
+        </AkStack>
+      </AkStack>
+    {{/each}}
+
+    {{#if this.filterApplied}}
+      <AkStack
+        class='py-1 pl-2'
+        local-class='clear-filter-section'
+        @width='full'
+        data-test-sbom-scanDetails-reachabilityHeader-clearFilter
+      >
+        <AkTypography
+          @underline='always'
+          @color='primary'
+          local-class='cursor-pointer'
+          {{on 'click' this.clearFilter}}
+          data-test-sbom-scanDetails-reachabilityHeader-clearFilter-text
+        >
+          {{t 'clearFilter'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+</AkPopover>
