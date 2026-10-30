@@ -6,34 +6,85 @@
     @width='full'
     data-test-sbomComponentVulnerabilities-detailReachability
   >
-  <AkTypography
-    data-test-sbomComponentVulnerabilities-detailReachabilityTitle
-    @variant='subtitle1'
-  >
-    {{t 'sbomModule.reachability.title'}}
-  </AkTypography>
-
   <AkStack @direction='column' @spacing='0.5' @width='full'>
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityTitle
+        @variant='subtitle1'
+      >
+        {{t 'sbomModule.reachability.title'}}
+      </AkTypography>
+
+      <AkTooltip
+        @arrow={{true}}
+        @placement='top'
+        data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks
+      >
+        <:default>
+          <AkIcon
+            @iconName='info'
+            @size='small'
+            @color='textSecondary'
+            data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorksIcon
+          />
+        </:default>
+
+        <:tooltipContent>
+          <div
+            {{style width='320px' white-space='pre-line' overflow-wrap='break-word'}}
+          >{{t 'sbomModule.reachability.howItWorks'}}</div>
+        </:tooltipContent>
+      </AkTooltip>
+    </AkStack>
+
     <AkTypography
-      data-test-sbomComponentVulnerabilities-detailReachabilityTargetLabel
+      data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
       @variant='body2'
       @color='textSecondary'
     >
-      {{t 'sbomModule.reachability.target'}}
+      {{this.explanation}}
     </AkTypography>
+  </AkStack>
+
+  {{#unless this.onlyTargetDataMissing}}
+    <AkStack @direction='column' @spacing='0.5' @width='full'>
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityTargetLabel
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'sbomModule.reachability.vulnerableFunction'}}
+      </AkTypography>
 
     <div
       local-class='panel-box'
       data-test-sbomComponentVulnerabilities-detailReachabilityTarget
     >
       {{#if this.target}}
-        <AkTypography
-          data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
-          local-class='signature'
-          title={{this.target}}
-        >
-          {{this.target}}
-        </AkTypography>
+        <AkTooltip @arrow={{true}} @placement='top'>
+          <:default>
+            <AkTypography
+              data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
+              local-class='signature'
+            >
+              {{this.targetDisplay}}
+            </AkTypography>
+          </:default>
+
+          <:tooltipContent>
+            <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.target}}</div>
+          </:tooltipContent>
+        </AkTooltip>
+
+        {{#if this.presenceLabel}}
+          <AkTypography
+            data-test-sbomComponentVulnerabilities-detailReachabilityPresence
+            @variant='body2'
+            @color='textSecondary'
+          >
+            {{this.presenceLabel}}
+          </AkTypography>
+        {{/if}}
       {{else}}
         <AkTypography
           data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
@@ -42,8 +93,27 @@
           {{t 'sbomModule.reachability.noReviewedTarget'}}
         </AkTypography>
       {{/if}}
+
+      {{#if this.extraTargets.length}}
+        <AkTooltip @arrow={{true}} @placement='top'>
+          <:default>
+            <AkTypography
+              data-test-sbomComponentVulnerabilities-detailReachabilityMoreTargets
+              @variant='body2'
+              @color='textSecondary'
+            >
+              {{t 'sbomModule.reachability.moreTargets' count=this.extraTargets.length}}
+            </AkTypography>
+          </:default>
+
+          <:tooltipContent>
+            <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.extraTargetsList}}</div>
+          </:tooltipContent>
+        </AkTooltip>
+      {{/if}}
     </div>
-  </AkStack>
+    </AkStack>
+  {{/unless}}
 
   {{#if this.hasWitnessPath}}
     <AkStack @direction='column' @spacing='0.5' @width='full'>
@@ -52,7 +122,7 @@
         @variant='body2'
         @color='textSecondary'
       >
-        {{t 'sbomModule.reachability.witnessPath'}}
+        {{t 'sbomModule.reachability.callPath'}}
       </AkTypography>
 
       <div
@@ -75,15 +145,73 @@
               </span>
             {{/if}}
 
-            <AkTypography
-              local-class='signature'
-              @variant='body2'
-              title={{item.step}}
-            >
-              {{item.step}}
-            </AkTypography>
+            <AkTooltip @arrow={{true}} @placement='top'>
+              <:default>
+                <AkTypography
+                  local-class='signature'
+                  @variant='body2'
+                >
+                  {{item.display}}
+                </AkTypography>
+              </:default>
+
+              <:tooltipContent>
+                <div
+                  {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}
+                >{{item.signature}}</div>
+              </:tooltipContent>
+            </AkTooltip>
+
+            {{#if item.edgeLabel}}
+              <AkChip
+                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessEdge
+                @variant='semi-filled'
+                @size='small'
+                @color='default'
+                @label={{item.edgeLabel}}
+              />
+            {{/if}}
+
+            {{#if item.isEntryPoint}}
+              <AkChip
+                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessEntry
+                @variant='semi-filled'
+                @size='small'
+                @color='primary'
+                @label={{t 'sbomModule.reachability.entryPoint'}}
+              />
+            {{/if}}
+
+            {{#if item.isTarget}}
+              <AkChip
+                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessTarget
+                @variant='semi-filled'
+                @size='small'
+                @color='error'
+                @label={{t 'sbomModule.reachability.vulnerableFunction'}}
+              />
+            {{/if}}
           </div>
         {{/each}}
+      </div>
+    </AkStack>
+  {{/if}}
+
+  {{#if this.pathExplanation}}
+    <AkStack @direction='column' @spacing='0.5' @width='full'>
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanationLabel
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{t 'sbomModule.reachability.pathExplanation'}}
+      </AkTypography>
+
+      <div
+        local-class='panel-box explanation-text'
+        data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanation
+      >
+        {{this.pathExplanation}}
       </div>
     </AkStack>
   {{/if}}
@@ -100,7 +228,7 @@
         @variant='body2'
         @color='textSecondary'
       >
-        {{t 'sbomModule.reachability.blockers'}}
+        {{t 'sbomModule.reachability.whyInconclusive'}}
       </AkTypography>
 
       <AkStack @spacing='0.5' @flexWrap='wrap'>

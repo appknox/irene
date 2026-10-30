@@ -11,6 +11,14 @@ export default class SbomComponentDetailsVulnerabilitiesReachabilityComponent ex
   get verdict() {
     return this.args.sbomVulnerabilityAudit?.reachability?.verdict ?? null;
   }
+
+  /**
+   * Server-computed explanation: for inconclusive verdicts this names the
+   * actual reason (from the blocker taxonomy) instead of a generic line.
+   */
+  get tooltip() {
+    return this.args.sbomVulnerabilityAudit?.reachability?.summary ?? null;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -1,12 +1,24 @@
 {{#if this.showChip}}
-  <AkChip
-    local-class='reachability-chip'
-    data-test-sbomReachability-status
-    @variant='semi-filled'
-    @size='small'
-    @color={{this.color}}
-    @label={{this.label}}
-  />
+  <AkTooltip
+    @arrow={{true}}
+    @placement='top'
+    data-test-sbomReachability-tooltip
+  >
+    <:default>
+      <AkChip
+        local-class='reachability-chip'
+        data-test-sbomReachability-status
+        @variant='semi-filled'
+        @size='small'
+        @color={{this.color}}
+        @label={{this.label}}
+      />
+    </:default>
+
+    <:tooltipContent>
+      <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.explanation}}</div>
+    </:tooltipContent>
+  </AkTooltip>
 {{else}}
   <AkTypography data-test-sbomReachability-empty @fontWeight='bold'>
     -
