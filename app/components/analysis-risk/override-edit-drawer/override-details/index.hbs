@@ -37,6 +37,7 @@
 
     {{#if this.baselineInfo}}
       <div
+        local-class='baseline-status'
         data-test-analysisRisk-overrideEditDrawer-overrideDetails-baselineStatus
       >
         <AnalysisRisk::IgnoreIfUnchangedNote @info={{this.baselineInfo}} />
