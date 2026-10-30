@@ -1,0 +1,40 @@
+.drawer-content {
+  width: 450px;
+  box-sizing: border-box;
+}
+
+.form {
+  margin-top: 1em;
+  border: 1px solid var(--organization-integrations-jira-security-border-color);
+  border-radius: var(--organization-integrations-jira-security-border-radius);
+}
+
+.status-band {
+  padding: 1.25em;
+  border-bottom: 1px solid
+    var(--organization-integrations-jira-security-border-color);
+  box-sizing: border-box;
+}
+
+.steps {
+  padding: 1.25em;
+  box-sizing: border-box;
+}
+
+.step-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  background-color: var(
+    --organization-integrations-jira-security-step-badge-background
+  );
+}
+
+.full-width-btn {
+  width: 100%;
+  justify-content: center;
+}
