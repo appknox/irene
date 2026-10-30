@@ -71,6 +71,9 @@ export default class AnalysisRiskOverrideEditDrawerPendingRequestDetailsComponen
       case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.ALL_FUTURE_UPLOAD:
         return this.intl.t('allFutureAnalyses');
 
+      case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED:
+        return this.intl.t('allFutureAnalysesReopenIfChanged');
+
       default:
         return '';
     }

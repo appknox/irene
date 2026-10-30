@@ -58,7 +58,15 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
   }
 
   get showOriginalAndOverriddenSeverity() {
-    return !isEmpty(this.dataModel.risk) && !isEmpty(this.overriddenRisk);
+    return (
+      !isEmpty(this.dataModel.risk) &&
+      !isEmpty(this.overriddenRisk) &&
+      !this.baselineInfo
+    );
+  }
+
+  get baselineInfo() {
+    return this.dataModel.ignoreIfUnchanged ?? null;
   }
 
   get overridenRiskLabel() {
@@ -97,6 +105,9 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
 
       case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.ALL_FUTURE_UPLOAD:
         return this.intl.t('allFutureAnalyses');
+
+      case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED:
+        return this.intl.t('allFutureAnalysesReopenIfChanged');
 
       default:
         return '';

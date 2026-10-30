@@ -1,0 +1,138 @@
+<AkStack
+  local-class='note-root'
+  @direction='column'
+  @spacing='1'
+  data-test-analysisRisk-ignoreIfUnchangedNote
+>
+  <AkTypography
+    data-test-analysisRisk-ignoreIfUnchangedNote-summary
+    @variant='body2'
+    @color='textSecondary'
+  >
+    {{this.summary}}
+  </AkTypography>
+
+  <div>
+    <AkButton
+      data-test-analysisRisk-ignoreIfUnchangedNote-knowMoreBtn
+      @variant='text'
+      @color='primary'
+      @underline='always'
+      {{style padding='0' minWidth='0'}}
+      {{on 'click' this.toggleShowMore}}
+    >
+      {{if this.showMore (t 'showLess') (t 'knowMore')}}
+    </AkButton>
+  </div>
+
+  {{#if this.showMore}}
+    <AkStack
+      local-class='note-root'
+      data-test-analysisRisk-ignoreIfUnchangedNote-details
+      @direction='column'
+      @spacing='1.5'
+    >
+      {{#each this.cards as |card|}}
+        <AkStack
+          local-class='baseline-card'
+          data-test-analysisRisk-ignoreIfUnchangedNote-card
+          @direction='column'
+          @spacing='1'
+        >
+          <AkTypography
+            data-test-analysisRisk-ignoreIfUnchangedNote-heading
+            @variant='subtitle2'
+          >
+            {{card.heading}}
+          </AkTypography>
+
+          <AkTypography
+            data-test-analysisRisk-ignoreIfUnchangedNote-baseline
+            @variant='body2'
+          >
+            {{t
+              'ignoreIfUnchangedBaselineFile'
+              fileId=card.fileId
+              version=card.version
+            }}
+          </AkTypography>
+
+          {{#if card.createdBy}}
+            <AkTypography
+              data-test-analysisRisk-ignoreIfUnchangedNote-createdBy
+              @variant='body2'
+            >
+              {{t
+                'ignoreIfUnchangedCreatedBy'
+                user=card.createdBy
+                date=card.createdOn
+              }}
+            </AkTypography>
+          {{/if}}
+
+          {{#if card.comment}}
+            <AkTypography
+              data-test-analysisRisk-ignoreIfUnchangedNote-comment
+              @variant='body2'
+            >
+              {{t 'reason'}}:
+              {{card.comment}}
+            </AkTypography>
+          {{/if}}
+
+          <AkTypography @variant='subtitle2'>
+            {{t 'ignoreIfUnchangedBaselineFindings'}}
+          </AkTypography>
+
+          <ul
+            data-test-analysisRisk-ignoreIfUnchangedNote-baselineFindings
+            local-class='findings-list'
+            class='pl-3'
+          >
+            {{#each card.findings as |finding|}}
+              <li><code local-class='finding'>{{finding}}</code></li>
+            {{/each}}
+          </ul>
+
+          {{#if card.newFindings.length}}
+            <AkTypography @variant='subtitle2'>
+              {{t 'ignoreIfUnchangedNewFindings'}}
+            </AkTypography>
+
+            <ul
+              data-test-analysisRisk-ignoreIfUnchangedNote-newFindings
+              local-class='findings-list'
+              class='pl-3'
+            >
+              {{#each card.newFindings as |finding|}}
+                <li><code local-class='finding'>{{finding}}</code></li>
+              {{/each}}
+            </ul>
+          {{/if}}
+
+          {{#if card.showChip}}
+            <div>
+              {{#if card.isLatest}}
+                <AkChip
+                  data-test-analysisRisk-ignoreIfUnchangedNote-latestChip
+                  @size='small'
+                  @color='success'
+                  @variant='semi-filled'
+                  @label={{t 'ignoreIfUnchangedLatestBaseline'}}
+                />
+              {{else}}
+                <AkChip
+                  data-test-analysisRisk-ignoreIfUnchangedNote-pastChip
+                  @size='small'
+                  @color='error'
+                  @variant='semi-filled'
+                  @label={{t 'ignoreIfUnchangedPastBaseline'}}
+                />
+              {{/if}}
+            </div>
+          {{/if}}
+        </AkStack>
+      {{/each}}
+    </AkStack>
+  {{/if}}
+</AkStack>

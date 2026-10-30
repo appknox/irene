@@ -1,0 +1,44 @@
+.baseline-card {
+  padding: 0.75em 1em;
+  border: 1px solid
+    var(--analysis-risk-override-edit-drawer-override-details-border-color);
+  border-radius: var(
+    --analysis-risk-override-edit-drawer-override-details-border-radius
+  );
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+// the note sits in flex columns: let it shrink to the drawer so long findings scroll instead of widening it
+.note-root {
+  min-width: 0;
+  max-width: 100%;
+}
+
+// API findings can be long URLs or response bodies: show each as a scrollable code block
+.findings-list {
+  min-width: 0;
+  max-width: 100%;
+  max-height: 16em;
+  overflow-y: auto;
+  list-style: none;
+  padding-left: 0;
+}
+
+.finding {
+  display: block;
+  max-width: 100%;
+  margin-bottom: 0.25em;
+  padding: 0.5em 0.75em 0.9em; // extra bottom space keeps the scrollbar off the text
+  overflow-x: auto;
+  white-space: pre;
+  font-family: monospace;
+  font-size: 0.875em;
+  color: var(--analysis-risk-ignore-if-unchanged-note-finding-text-color);
+  background-color: var(
+    --analysis-risk-ignore-if-unchanged-note-finding-background-color
+  );
+  border-radius: 4px;
+}

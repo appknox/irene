@@ -45,6 +45,32 @@ export interface LegacyCvss {
   metrics_humanized: CvssMetricHumanized[];
 }
 
+export interface IgnoreIfUnchangedVersion {
+  version: number;
+  baseline_file: number | string;
+  created_by: string | null;
+  created_on: string | null;
+  comment: string | null;
+  findings: string[];
+  is_latest: boolean;
+}
+
+export interface IgnoreIfUnchanged {
+  baseline_file: number | string;
+  version: number;
+  new_findings: number;
+  passed: boolean;
+  pending: boolean;
+  waiting_for: ('static' | 'dynamic')[];
+  is_baseline_file: boolean;
+  baseline_versions: IgnoreIfUnchangedVersion[];
+  baseline_findings: string[];
+  new_finding_labels: string[];
+  comment: string | null;
+  created_by: string | null;
+  created_on: string | null;
+}
+
 export interface Finding {
   title: string | null;
   description: string;
@@ -91,6 +117,15 @@ export default class AnalysisModel extends Model {
 
   @attr('string', { defaultValue: null })
   declare overrideCriteria: string | null;
+
+  // set when an "All Future Analyses (Reopen if changed)" baseline applies
+  @attr({ defaultValue: null })
+  declare ignoreIfUnchanged: IgnoreIfUnchanged | null;
+
+  // scans (static/dynamic) still running for a vulnerability checked by both,
+  // "Reopen if changed" cannot be chosen until they complete
+  @attr({ defaultValue: () => [] })
+  declare ignoreIfUnchangedWaitingFor: string[];
 
   @attr('string', { defaultValue: null })
   declare overriddenBy: string | null;
@@ -245,6 +280,21 @@ export default class AnalysisModel extends Model {
     return this.isOverriddenRisk && !this.isRiskPassedBySystem;
   }
 
+  /**
+   * Ignored only because findings are unchanged vs the baseline file
+   */
+  get isIgnoredIfUnchanged() {
+    return Boolean(this.ignoreIfUnchanged?.passed);
+  }
+
+  /**
+   * A "Reopen if changed" baseline applies to this analysis, whether it is
+   * still ignored or has reopened because of new findings
+   */
+  get hasIgnoreBaseline() {
+    return Boolean(this.ignoreIfUnchanged);
+  }
+
   get isRiskPassedBySystem() {
     return this.risk === ENUMS.RISK.NONE;
   }
@@ -268,6 +318,15 @@ export default class AnalysisModel extends Model {
     return (
       this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
     );
+  }
+
+  /**
+   * Overridden as Passed, or Passed because an "All Future Analyses (Reopen if
+   * changed)" baseline applies. Only the file-details pages use this; the KnoxIQ
+   * pages keep using isOverriddenAsPassed.
+   */
+  get isOverriddenOrIgnoredAsPassed() {
+    return this.isOverriddenAsPassed || this.isIgnoredIfUnchanged;
   }
 
   /**
