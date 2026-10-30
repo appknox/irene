@@ -28,6 +28,7 @@ export interface AiFeatures {
   pii: boolean;
   knoxiq: boolean;
   ai_dast: boolean;
+  knoxiq_api_scan: boolean;
 }
 
 export default class OrganizationModel extends Model {
