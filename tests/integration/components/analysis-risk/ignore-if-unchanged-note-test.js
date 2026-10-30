@@ -154,25 +154,31 @@ module(
       assert.dom(sel('heading')).hasText(t('ignoreIfUnchangedHeadingCompared'));
     });
 
-    test('long findings wrap inside the card instead of overflowing', async function (assert) {
+    test('long findings scroll inside the card instead of widening it', async function (assert) {
       const long = `GET https://api.example.com/v1/users?token=${'a'.repeat(600)}`;
 
       this.info = { ...this.info, baseline_findings: [long] };
 
-      await render(TEMPLATE);
+      // narrow flex column, like the override drawer
+      await render(
+        hbs`<div style='width: 300px; display: flex; flex-direction: column;' data-test-box><AnalysisRisk::IgnoreIfUnchangedNote @info={{this.info}} /></div>`
+      );
+
       await click(sel('knowMoreBtn'));
 
+      const box = document.querySelector('[data-test-box]');
       const card = document.querySelector(sel('card'));
-      const item = document.querySelector(`${sel('baselineFindings')} li`);
+      const finding = document.querySelector(`${sel('baselineFindings')} code`);
 
       assert.ok(
-        item.getBoundingClientRect().right <=
-          card.getBoundingClientRect().right + 1,
-        'the finding stays inside the card'
+        card.getBoundingClientRect().right <=
+          box.getBoundingClientRect().right + 1,
+        'the card stays inside the drawer width'
       );
+
       assert.ok(
-        card.scrollWidth <= card.clientWidth + 1,
-        'no horizontal scroll'
+        finding.scrollWidth > finding.clientWidth,
+        'the long finding scrolls inside its own block'
       );
     });
 
