@@ -269,6 +269,12 @@ export default class AkTreeProviderComponent<
           (cFNode) => cFNode.checked
         );
       }
+
+      if (nodeValue?.isParent) {
+        nodeValue.indeterminate =
+          this.isAnyChildChecked(nodeValue) &&
+          !this.isEveryChildChecked(nodeValue);
+      }
     });
   }
 
@@ -384,6 +390,20 @@ export default class AkTreeProviderComponent<
   @action isEveryChildChecked(node: AkTreeNodeProps | undefined): boolean {
     return (
       node?.children?.every((child) => this.getFlatNode(child.key)?.checked) ||
+      false
+    );
+  }
+
+  /**
+   * Checks if at least one child of a node is checked.
+   *
+   * @param {AkTreeNodeProps | undefined} node - The node whose children's checked status needs to be verified.
+   * @return {boolean} Whether any child of the node is checked.
+   * @memberof AkTreeProviderComponent
+   */
+  @action isAnyChildChecked(node: AkTreeNodeProps | undefined): boolean {
+    return (
+      node?.children?.some((child) => this.getFlatNode(child.key)?.checked) ||
       false
     );
   }

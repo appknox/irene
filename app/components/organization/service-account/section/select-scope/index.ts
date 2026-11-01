@@ -58,7 +58,38 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
 
   @tracked isEditView = false;
   @tracked expanded: string[] = [ScopeNodeKey.PUBLIC_API];
-  @tracked checked: string[] = [];
+  // AkTree::Provider only re-derives its internal checked state from
+  // @treeData on mount (its change observer doesn't reliably refire for
+  // these autotracked args), so a cascaded update — e.g. unchecking a
+  // parent — can leave children showing a stale checked state even
+  // though the underlying scope fields are correct. Bumping this forces
+  // the tree to remount (see select-scope.hbs) and re-derive fresh.
+  @tracked treeVersion = 0;
+
+  // Derived straight from treeData/the model on every access, rather than
+  // kept as separately-mutated state — see the treeVersion comment above
+  // for why hand-syncing this against the tree's own bookkeeping is unsafe.
+  get checked(): string[] {
+    const keys: string[] = [];
+
+    const collect = (
+      nodes: { key: string; checked?: boolean; children?: unknown[] }[]
+    ) => {
+      nodes.forEach((node) => {
+        if (node.checked) {
+          keys.push(node.key);
+        }
+
+        if (Array.isArray(node.children)) {
+          collect(node.children as typeof nodes);
+        }
+      });
+    };
+
+    collect(this.treeData);
+
+    return keys;
+  }
 
   get renderType() {
     return this.args.renderType || 'view';
@@ -78,6 +109,15 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
         key: ScopeNodeKey.PUBLIC_API,
         label: this.intl.t('serviceAccountModule.scopes.public-api.label'),
         showCheckbox: this.isEditOrCreateView,
+        checked: Boolean(
+          this.args.serviceAccount?.scopePublicApiProjectRead &&
+          this.args.serviceAccount?.scopePublicApiScanResultVa &&
+          this.args.serviceAccount?.scopePublicApiUserRead &&
+          this.args.serviceAccount?.scopePublicApiUserWrite &&
+          this.args.serviceAccount?.scopePublicApiUploadApp &&
+          this.args.serviceAccount?.scopeAutoApproveNewNameSpaces &&
+          this.args.serviceAccount?.scopePublicApiTeamOperations
+        ),
         children: [
           {
             key: ScopeNodeKey.PROJECTS_READ,
@@ -93,6 +133,10 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
             key: ScopeNodeKey.USER,
             label: this.intl.t('serviceAccountModule.scopes.user.label'),
             showCheckbox: this.isEditOrCreateView,
+            checked: Boolean(
+              this.args.serviceAccount?.scopePublicApiUserRead &&
+              this.args.serviceAccount?.scopePublicApiUserWrite
+            ),
             children: [
               {
                 key: ScopeNodeKey.USER_READ,
@@ -110,6 +154,10 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
             key: ScopeNodeKey.UPLOAD,
             label: this.intl.t('serviceAccountModule.scopes.upload-app.label'),
             showCheckbox: this.isEditOrCreateView,
+            checked: Boolean(
+              this.args.serviceAccount?.scopePublicApiUploadApp &&
+              this.args.serviceAccount?.scopeAutoApproveNewNameSpaces
+            ),
             children: [
               {
                 key: ScopeNodeKey.UPLOAD_APP,
@@ -251,6 +299,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
   @action
   handleShowEditView() {
     this.isEditView = true;
+    this.treeVersion++;
   }
 
   @action
@@ -258,6 +307,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
     this.isEditView = false;
 
     this.args.serviceAccount.rollbackAttributes();
+    this.treeVersion++;
   }
 
   @action
@@ -299,46 +349,28 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
 
     if (node.key === parentKey) {
       [primaryChildKey, autoApproveKey].forEach((childKey) => {
-        const childObj = this.dataObjectForNode[childKey];
-        this.updateScopes(childObj, Boolean(node.checked));
-
-        if (node.checked) {
-          if (!this.checked.includes(childKey)) {
-            this.checked = [...this.checked, childKey];
-          }
-        } else {
-          this.checked = this.checked.filter((k) => k !== childKey);
-        }
+        this.updateScopes(
+          this.dataObjectForNode[childKey],
+          Boolean(node.checked)
+        );
       });
     }
 
     if (node.key === primaryChildKey && !node.checked) {
-      const autoApproveObj = this.dataObjectForNode[autoApproveKey];
-      this.updateScopes(autoApproveObj, false);
-
-      this.checked = this.checked.filter((k) => k !== autoApproveKey);
+      this.updateScopes(this.dataObjectForNode[autoApproveKey], false);
     }
 
     if (node.key === autoApproveKey && node.checked) {
-      const primaryObj = this.dataObjectForNode[primaryChildKey];
-      this.updateScopes(primaryObj, true);
-
-      [parentKey, primaryChildKey].forEach((requiredKey) => {
-        if (!this.checked.includes(requiredKey)) {
-          this.checked = [...this.checked, requiredKey];
-        }
-      });
+      this.updateScopes(this.dataObjectForNode[primaryChildKey], true);
     }
   }
 
   // CLI's own row doubles as its "access" leaf (no separate access child —
   // see select-scope for why: one row, expandable to reveal Auto Approve).
-  // Unlike the Upload group, checking CLI does NOT cascade auto-approve on
-  // — the team explicitly wants CLI access and CLI auto-approve to be
-  // independent settings, not implicitly linked. Only the safety direction
-  // applies: turning CLI off also turns its auto-approve off (meaningless
-  // without access), and turning auto-approve on forces CLI on (can't
-  // auto-approve without access).
+  // Checking/unchecking CLI cascades to its one child, same as the Upload
+  // group's parent-check cascade; unchecking the child alone leaves CLI
+  // untouched (independently toggleable), and checking the child alone
+  // forces CLI on (can't auto-approve without access).
   @action
   applyCliAutoApproveCascade(node: AkTreeNodeFlattenedProps) {
     if (
@@ -348,13 +380,10 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
       return;
     }
 
-    if (node.key === ScopeNodeKey.CLI && !node.checked) {
-      const autoApproveObj =
-        this.dataObjectForNode[ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES];
-      this.updateScopes(autoApproveObj, false);
-
-      this.checked = this.checked.filter(
-        (k) => k !== ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES
+    if (node.key === ScopeNodeKey.CLI) {
+      this.updateScopes(
+        this.dataObjectForNode[ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES],
+        Boolean(node.checked)
       );
     }
 
@@ -362,22 +391,15 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
       node.key === ScopeNodeKey.CLI_AUTO_APPROVE_NEW_NAME_SPACES &&
       node.checked
     ) {
-      const cliObj = this.dataObjectForNode[ScopeNodeKey.CLI];
-      this.updateScopes(cliObj, true);
-
-      if (!this.checked.includes(ScopeNodeKey.CLI)) {
-        this.checked = [...this.checked, ScopeNodeKey.CLI];
-      }
+      this.updateScopes(this.dataObjectForNode[ScopeNodeKey.CLI], true);
     }
   }
 
   @action
   onCheck(...args: Parameters<AkTreeProviderCheckExpandFuncType>) {
-    const [checked, node] = args;
+    const [, node] = args;
     const dataObject = this.dataObjectForNode[node.key] as
       NodeDataObject | undefined;
-
-    this.checked = checked;
 
     // Update the node itself
     this.updateScopes(dataObject, Boolean(node.checked));
@@ -390,6 +412,8 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
     );
 
     this.applyCliAutoApproveCascade(node);
+
+    this.treeVersion++;
   }
 
   @action
@@ -402,6 +426,7 @@ export default class OrganizationServiceAccountSectionSelectScopeComponent exten
       await this.args.serviceAccount.save();
 
       this.isEditView = false;
+      this.treeVersion++;
 
       this.notify.success(this.intl.t('serviceAccountModule.editSuccessMsg'));
     } catch (error) {
