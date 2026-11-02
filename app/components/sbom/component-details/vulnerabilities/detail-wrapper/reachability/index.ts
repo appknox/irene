@@ -3,9 +3,9 @@ import Component from '@glimmer/component';
 import type IntlService from 'ember-intl/services/intl';
 import type SbomVulnerabilityAuditModel from 'irene/models/sbom-vulnerability-audit';
 import {
+  ReachabilityVerdict,
   blockerCategoryKey,
   formatDexSignature,
-  isInconclusiveVerdict,
   presenceLabelKey,
   reachabilityExplanationKey,
   reachabilityWitnessItems,
@@ -93,11 +93,17 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
   }
 
   /**
-   * Optional AI-assisted prose for the headline target's witness path. The
-   * call graph stays authoritative — this is an annotation, not a verdict.
+   * Optional AI-assisted prose for the displayed witness path. The backend
+   * promotes the first witness-bearing target's path, and only targets with a
+   * witness carry explanations — so the first present explanation belongs to
+   * the same target as the shown path. The call graph stays authoritative —
+   * this is an annotation, not a verdict.
    */
   get pathExplanation() {
-    return this.reachability?.targets?.[0]?.explanation || null;
+    return (
+      this.reachability?.targets?.find((target) => target.explanation)
+        ?.explanation || null
+    );
   }
 
   get blockers(): ReachabilityBlocker[] {
@@ -130,11 +136,12 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
 
   get hasBlockers() {
     // "Why this is inconclusive" only makes sense while the verdict itself is
-    // inconclusive; conclusive findings keep their blockers for support only.
+    // inconclusive. Decided verdicts — including Potential, whose story is
+    // told by the call path's edge chips — keep blockers for support only.
     return (
       this.blockers.length > 0 &&
       !this.onlyTargetDataMissing &&
-      isInconclusiveVerdict(this.reachability?.verdict)
+      this.reachability?.verdict === ReachabilityVerdict.UNKNOWN
     );
   }
 }
