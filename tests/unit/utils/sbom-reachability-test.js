@@ -3,7 +3,6 @@ import {
   ReachabilityVerdict,
   blockerCategoryKey,
   formatDexSignature,
-  isInconclusiveVerdict,
   isQuietReachabilityVerdict,
   presenceLabelKey,
   reachabilityChipColor,
@@ -53,29 +52,6 @@ module('Unit | Utility | sbom-reachability', function () {
         reachabilityExplanationKey(verdict),
         'sbomModule.reachability.explanation.potential'
       );
-    }
-  });
-
-  test('inconclusive verdicts owe the customer a reason', function (assert) {
-    assert.expect(9);
-
-    for (const verdict of [
-      ReachabilityVerdict.POTENTIALLY_REACHABLE,
-      ReachabilityVerdict.CONDITION_POSSIBLY_MET,
-      ReachabilityVerdict.UNKNOWN,
-    ]) {
-      assert.true(isInconclusiveVerdict(verdict));
-    }
-
-    for (const verdict of [
-      ReachabilityVerdict.REACHABLE,
-      ReachabilityVerdict.CONFIRMED_REACHABLE,
-      ReachabilityVerdict.CONDITION_MET,
-      ReachabilityVerdict.NO_PATH_FOUND,
-      ReachabilityVerdict.CONDITION_NOT_MET,
-      ReachabilityVerdict.UNSUPPORTED,
-    ]) {
-      assert.false(isInconclusiveVerdict(verdict));
     }
   });
 

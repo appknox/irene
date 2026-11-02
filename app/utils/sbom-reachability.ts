@@ -105,18 +105,6 @@ export function isPathFoundVerdict(verdict?: string | null): boolean {
   return PATH_FOUND_VERDICTS.has(verdict ?? '');
 }
 
-/**
- * Verdicts that owe the customer an explanation: a likely path exists, or no
- * reliable conclusion could be reached. Conclusive verdicts (reachable, not
- * reachable) and unsupported do not show inconclusive reasons.
- */
-export function isInconclusiveVerdict(verdict?: string | null): boolean {
-  return (
-    POTENTIAL_VERDICTS.has(verdict ?? '') ||
-    verdict === ReachabilityVerdict.UNKNOWN
-  );
-}
-
 export function isQuietReachabilityVerdict(verdict?: string | null): boolean {
   return !verdict || QUIET_VERDICTS.has(verdict);
 }
