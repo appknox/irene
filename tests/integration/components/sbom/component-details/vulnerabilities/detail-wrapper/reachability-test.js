@@ -148,6 +148,42 @@ module(
       assert.dom(selectors.pathExplanation).includesText(explanation);
     });
 
+    test('it renders the explanation of the witness-bearing target, not only the first', async function (assert) {
+      const store = this.owner.lookup('service:store');
+      const explanation =
+        'App behavior: The confirmed prefix starts in onCreate. ' +
+        'Analyst assessment: The receiver type was inferred but not proven.';
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.POTENTIALLY_REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+            blockers: [],
+            witness_path: [
+              { caller: 'MainActivity.onCreate', callee: 'Parser.parse' },
+            ],
+            targets: [
+              {
+                label: 'Lcom/example/Headline;->notWitness()V',
+                explanation: null,
+              },
+              {
+                label: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+                explanation,
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.pathExplanation).includesText(explanation);
+    });
+
     test('it hides the witness explanation when the target has none', async function (assert) {
       const store = this.owner.lookup('service:store');
 
@@ -210,7 +246,7 @@ module(
     });
 
     // ─── Unknown ──────────────────────────────────────────────────────────────
-    test('it shows the section with blocker reason for unknown target-data-missing', async function (assert) {
+    test('it shows the panel but not the chip for unknown target-data-missing', async function (assert) {
       const store = this.owner.lookup('service:store');
 
       this.sbomVulnerabilityAudit = pushAudit(
@@ -228,8 +264,11 @@ module(
 
       await render(TEMPLATE);
 
+      // The explanation line already carries the whole story, so the empty
+      // target box and the redundant blocker chip stay hidden.
       assert.dom(selectors.root).exists();
-      assert.dom(selectors.blocker('TARGET_DATA_MISSING')).exists();
+      assert.dom(selectors.blockers).doesNotExist();
+      assert.dom(selectors.blocker('TARGET_DATA_MISSING')).doesNotExist();
     });
 
     // ─── No path found ────────────────────────────────────────────────────────
@@ -336,6 +375,36 @@ module(
 
       assert.dom(selectors.blockers).doesNotExist();
       assert.dom(selectors.blocker('TARGET_NOT_OBSERVED')).doesNotExist();
+    });
+
+    // ─── Potential verdict ───────────────────────────────────────────────────
+    test('it hides inconclusive reasons for potential verdicts', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.POTENTIALLY_REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+            blockers: ['TARGET_NOT_OBSERVED', 'TARGET_CAPABILITY_X'],
+            witness_path: [
+              {
+                caller: 'MainActivity.onCreate',
+                callee: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+                edge_type: 'REFLECTION',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      // The call path still renders — only the inconclusive blockers hide.
+      assert.dom(selectors.witnessPath).exists();
+      assert.dom(selectors.blockers).doesNotExist();
     });
 
     // ─── Server summary ─────────────────────────────────────────────────────
