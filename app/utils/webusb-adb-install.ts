@@ -30,6 +30,12 @@ export async function installApkViaWebUsb(
 
   onProgress?.({ stage: 'downloading', percent: 0 });
 
+  // Require HTTPS so the APK bytes can't be swapped in transit by a
+  // network-level attacker before we push them to the device for install.
+  if (new URL(apkUrl).protocol !== 'https:') {
+    throw new Error('Refusing to install APK from a non-HTTPS URL');
+  }
+
   const response = await fetch(apkUrl);
   if (!response.ok) {
     throw new Error(
