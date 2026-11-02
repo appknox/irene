@@ -45,7 +45,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.42857em 1.42857em;
+  padding: 1.42857em;
   background-color: var(
     --knoxiq-autofix-history-run-drawer-header-background-color
   );
@@ -106,7 +106,7 @@
   padding-left: 1.71429em;
 }
 
-.nested-list li {
+.nested-list-item {
   padding: 0.21429em 0;
 }
 

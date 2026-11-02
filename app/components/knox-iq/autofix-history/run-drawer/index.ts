@@ -6,7 +6,7 @@ import type { AutofixRun } from 'irene/components/knox-iq/autofix-history';
 import styles from './index.scss';
 
 export interface KnoxIqAutofixHistoryRunDrawerSignature {
-  Element: HTMLDivElement;
+  Element: HTMLElement;
   Args: {
     run: AutofixRun | null;
     onClose: () => void;

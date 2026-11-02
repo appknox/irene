@@ -3,7 +3,7 @@
   @onClose={{@onClose}}
   @anchor='right'
   @drawerContainerClass={{this.drawerPanelClass}}
-  data-test-knoxIqAutofixHistory-drawer
+  data-test-knoxIqAutofixHistoryRunDrawer-root
   as |dr|
 >
   <div
@@ -16,7 +16,7 @@
         <AkStack @direction='column' @spacing='0.5'>
           <AkTypography
             @variant='h5'
-            data-test-knoxIqAutofixHistory-drawerTitle
+            data-test-knoxIqAutofixHistoryRunDrawer-title
           >
             {{t 'autofix.detailsTitle'}}
           </AkTypography>
@@ -24,7 +24,7 @@
           <AkTypography
             @variant='body2'
             @color='textSecondary'
-            data-test-knoxIqAutofixHistory-drawerSubtitle
+            data-test-knoxIqAutofixHistoryRunDrawer-subtitle
           >
             {{t 'autofix.generatedFromScan'}}
           </AkTypography>
@@ -34,7 +34,7 @@
           @size='small'
           aria-label={{t 'close'}}
           {{on 'click' dr.closeHandler}}
-          data-test-knoxIqAutofixHistory-drawerClose
+          data-test-knoxIqAutofixHistoryRunDrawer-close
         >
           <AkIcon @iconName='close' />
         </AkIconButton>
@@ -47,7 +47,7 @@
             <AkTypography
               @variant='h5'
               @tag='h2'
-              data-test-knoxIqAutofixHistory-drawerBaseBranch
+              data-test-knoxIqAutofixHistoryRunDrawer-baseBranch
             >
               {{@run.baseBranch}}
             </AkTypography>
@@ -64,7 +64,7 @@
               <AkTypography
                 @tag='span'
                 @breakWord={{true}}
-                data-test-knoxIqAutofixHistory-drawerBranch
+                data-test-knoxIqAutofixHistoryRunDrawer-branch
               >
                 {{@run.branch}}
               </AkTypography>
@@ -75,12 +75,12 @@
     </div>
 
     {{#if @run}}
-      <div local-class='drawer-body' data-test-knoxIqAutofixHistory-drawerBody>
+      <div local-class='drawer-body' data-test-knoxIqAutofixHistoryRunDrawer-body>
         <ul local-class='commit-list'>
           {{#each @run.commits as |commit|}}
             <li
               local-class='commit-item'
-              data-test-knoxIqAutofixHistory-commit='{{commit.id}}'
+              data-test-knoxIqAutofixHistoryRunDrawer-commit='{{commit.id}}'
             >
               <AkStack @alignItems='center' @spacing='0.5'>
                 <AkSvg::GitCommit local-class='meta-icon' />
@@ -96,7 +96,7 @@
                     rel='noopener noreferrer'
                     aria-label={{t 'autofix.openCommit' sha=commit.sha}}
                     local-class='commit-link'
-                    data-test-knoxIqAutofixHistory-commitLink
+                    data-test-knoxIqAutofixHistoryRunDrawer-commitLink
                   >
                     <span local-class='commit-sha'>{{commit.shortSha}}</span>
                     <AkIcon @iconName='open-in-new' @color='primary' />
@@ -107,26 +107,32 @@
                   @tag='span'
                   @variant='body2'
                   @color='textSecondary'
-                  data-test-knoxIqAutofixHistory-commitCreatedOn
+                  data-test-knoxIqAutofixHistoryRunDrawer-commitCreatedOn
                 >
                   {{dayjs-from-now commit.createdOn}}
                 </AkTypography>
               </AkStack>
 
-              <div local-class='patched-files'>
+              <div
+                local-class='patched-files'
+                data-test-knoxIqAutofixHistoryRunDrawer-patchedFilesLabel
+              >
                 {{t 'autofix.patchedFiles'}}
                 <ul local-class='nested-list'>
                   {{#each commit.patchedFiles as |patchedFile|}}
-                    <li>
+                    <li local-class='nested-list-item'>
                       <span
                         local-class='code-pill'
-                        data-test-knoxIqAutofixHistory-patchedFile
+                        data-test-knoxIqAutofixHistoryRunDrawer-patchedFile
                       >
                         {{patchedFile}}
                       </span>
                     </li>
                   {{else}}
-                    <li data-test-knoxIqAutofixHistory-noPatchedFiles>
+                    <li
+                      local-class='nested-list-item'
+                      data-test-knoxIqAutofixHistoryRunDrawer-noPatchedFiles
+                    >
                       {{t 'autofix.noPatchedFiles'}}
                     </li>
                   {{/each}}

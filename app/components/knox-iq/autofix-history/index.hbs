@@ -7,10 +7,10 @@
 
   <AkPaginationProvider
     @results={{this.runs}}
-    @onItemPerPageChange={{this.updatePagination}}
+    @onItemPerPageChange={{this.handleNextPrevAction}}
     @totalItems={{this.totalAutofixPRs}}
-    @nextAction={{this.updatePagination}}
-    @prevAction={{this.updatePagination}}
+    @nextAction={{this.handleNextPrevAction}}
+    @prevAction={{this.handleNextPrevAction}}
     @itemPerPageOptions={{array 10 20 30}}
     @defaultLimit={{this.limit}}
     @offset={{this.offset}}
@@ -35,10 +35,14 @@
         data-test-knoxIqAutofixHistory-empty
       >
         <AkIcon @iconName='history' @size='medium' @color='textSecondary' />
-        <AkTypography @variant='h5'>
+        <AkTypography @variant='h5' data-test-knoxIqAutofixHistory-emptyTitle>
           {{t 'autofix.emptyTitle'}}
         </AkTypography>
-        <AkTypography @color='textSecondary' @align='center'>
+        <AkTypography
+          @color='textSecondary'
+          @align='center'
+          data-test-knoxIqAutofixHistory-emptyDescription
+        >
           {{t 'autofix.emptyDescription'}}
         </AkTypography>
       </AkStack>
@@ -102,7 +106,7 @@
                     rel='noopener noreferrer'
                     aria-label={{t 'autofix.openPullRequest'}}
                     local-class='commit-link'
-                    {{on 'click' this.stopRowNavigation}}
+                    {{on 'click' this.handlePRLinkClick}}
                     data-test-knoxIqAutofixHistory-prLink
                   >
                     <span>{{r.rowValue.prLabel}}</span>

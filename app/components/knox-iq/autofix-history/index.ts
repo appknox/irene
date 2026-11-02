@@ -1,35 +1,25 @@
-import { action } from '@ember/object';
-import type RouterService from '@ember/routing/router-service';
-import { service } from '@ember/service';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import { service } from '@ember/service';
+import { action } from '@ember/object';
 import { waitForPromise } from '@ember/test-waiters';
 import { task } from 'ember-concurrency';
+import type RouterService from '@ember/routing/router-service';
 // eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import type { DS } from 'ember-data';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
+import parseError from 'irene/utils/parse-error';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type AutofixPRModel from 'irene/models/autofix-pr';
 import type { AutofixPRCommit } from 'irene/models/autofix-pr';
 import type ProjectModel from 'irene/models/project';
-import parseError from 'irene/utils/parse-error';
-
-const PR_NUMBER_PATTERN = /\/pull\/(\d+)/;
-const COMMIT_SHA_PREVIEW_LENGTH = 7;
 
 interface AutofixHistoryQueryParams {
   autofix_limit: string | number;
   autofix_offset: string | number;
   file_id?: string | number;
-}
-
-interface KnoxIqAutofixHistorySignature {
-  Args: {
-    project: ProjectModel;
-    queryParams: AutofixHistoryQueryParams;
-  };
 }
 
 interface AutofixRunColumn {
@@ -60,6 +50,17 @@ export interface AutofixRun {
 type AutofixPRQueryResponse = DS.AdapterPopulatedRecordArray<AutofixPRModel> & {
   meta: { count: number };
 };
+
+export interface KnoxIqAutofixHistorySignature {
+  Element: HTMLElement;
+  Args: {
+    project: ProjectModel;
+    queryParams: AutofixHistoryQueryParams;
+  };
+}
+
+const PR_NUMBER_PATTERN = /\/pull\/(\d+)/;
+const COMMIT_SHA_PREVIEW_LENGTH = 7;
 
 export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutofixHistorySignature> {
   @service declare intl: IntlService;
@@ -161,7 +162,7 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
   }
 
   @action
-  updatePagination({ limit, offset }: PaginationProviderActionsArgs) {
+  handleNextPrevAction({ limit, offset }: PaginationProviderActionsArgs) {
     this.router.transitionTo({
       queryParams: {
         autofix_limit: limit,
@@ -188,7 +189,7 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
   }
 
   @action
-  stopRowNavigation(event: Event) {
+  handlePRLinkClick(event: Event) {
     event.stopPropagation();
   }
 
