@@ -23,12 +23,14 @@
   </:headerAction>
 
   <:default>
+    {{#each (array this.treeVersion)}}
     <AkCheckboxTree
       @treeData={{this.treeData}}
       @expanded={{this.expanded}}
       @checked={{this.checked}}
       @onCheck={{this.onCheck}}
       @onExpand={{this.onExpand}}
+      @cascade={{false}}
     >
       <:label as |node|>
         <AkStack @alignItems='center' @spacing='1'>
@@ -103,6 +105,7 @@
         </AkStack>
       </:label>
     </AkCheckboxTree>
+    {{/each}}
   </:default>
 
   <:footerAction>

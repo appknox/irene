@@ -527,7 +527,40 @@ module(
       }
     );
 
-    test('checking CLI alone saves scope_cli, leaves auto-approve and expiry untouched', async function (assert) {
+    test('unchecking the APIs parent after checking it clears every API sub-scope (regression)', async function (assert) {
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      const apiCheckbox = () =>
+        find('[data-test-ak-checkbox-tree-nodeKey="public-api"]').querySelector(
+          '[data-test-ak-checkbox-tree-nodeCheckbox]'
+        );
+
+      await click(apiCheckbox());
+
+      assert.true(this.serviceAccount.scopePublicApiProjectRead);
+      assert.true(this.serviceAccount.scopePublicApiScanResultVa);
+      assert.true(this.serviceAccount.scopePublicApiUserRead);
+      assert.true(this.serviceAccount.scopePublicApiUserWrite);
+      assert.true(this.serviceAccount.scopePublicApiUploadApp);
+      assert.true(this.serviceAccount.scopeAutoApproveNewNameSpaces);
+      assert.true(this.serviceAccount.scopePublicApiTeamOperations);
+
+      await click(apiCheckbox());
+
+      assert.false(this.serviceAccount.scopePublicApiProjectRead);
+      assert.false(this.serviceAccount.scopePublicApiScanResultVa);
+      assert.false(this.serviceAccount.scopePublicApiUserRead);
+      assert.false(this.serviceAccount.scopePublicApiUserWrite);
+      assert.false(this.serviceAccount.scopePublicApiUploadApp);
+      assert.false(this.serviceAccount.scopeAutoApproveNewNameSpaces);
+      assert.false(this.serviceAccount.scopePublicApiTeamOperations);
+    });
+
+    test('checking CLI cascades auto-approve on and leaves expiry untouched', async function (assert) {
       assert.expect(3);
 
       const originalExpiry = new Date();
@@ -537,7 +570,7 @@ module(
         const data = JSON.parse(req.requestBody);
 
         assert.true(data.scope_cli);
-        assert.false(data.cli_scope_auto_approve_new_name_spaces);
+        assert.true(data.cli_scope_auto_approve_new_name_spaces);
 
         return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
       });
@@ -559,10 +592,7 @@ module(
       await click('[data-test-serviceAccountSection-selectScope-updateBtn]');
     });
 
-    test('checking CLI does NOT cascade auto-approve on (flags are independent)', async function (assert) {
-      // Unlike the public API's Upload group, CLI access and CLI
-      // auto-approve are deliberately independent settings — enabling one
-      // must not silently enable the other.
+    test('checking CLI cascades auto-approve on, same as the Upload group', async function (assert) {
       await render(hbs`<Organization::ServiceAccount::Section::SelectScope
         @serviceAccount={{this.serviceAccount}}
       />`);
@@ -576,7 +606,7 @@ module(
       );
 
       assert.true(this.serviceAccount.scopeCli);
-      assert.false(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+      assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
     });
 
     test('unchecking CLI also turns off CLI auto-approve', async function (assert) {
@@ -633,6 +663,51 @@ module(
 
       assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
       assert.true(this.serviceAccount.scopeCli);
+    });
+
+    test('unchecking CLI auto-approve after enabling CLI via its parent checkbox leaves CLI checked (regression)', async function (assert) {
+      this.serviceAccount.updateValues({
+        scope_cli: false,
+        cli_scope_auto_approve_new_name_spaces: false,
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      let cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      // Check CLI via its own (parent) checkbox first — this now cascades
+      // auto-approve on too, same as the Upload group.
+      await click(
+        cliContainer.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.true(this.serviceAccount.scopeCli);
+      assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+
+      cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        cliContainer.querySelector(
+          '[data-test-ak-checkbox-tree-nodeExpandIcon]'
+        )
+      );
+
+      const autoApproveSelector =
+        '[data-test-ak-checkbox-tree-nodeKey="cli-auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]';
+
+      // Toggling the already-cascaded-on child off directly must not drag
+      // CLI's own checked state along with it.
+      await click(autoApproveSelector);
+
+      assert.false(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+      assert.true(
+        this.serviceAccount.scopeCli,
+        'CLI stays checked after independently toggling auto-approve off'
+      );
     });
   }
 );
