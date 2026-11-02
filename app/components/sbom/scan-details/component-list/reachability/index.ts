@@ -31,7 +31,12 @@ export default class SbomScanDetailsComponentListReachabilityComponent extends C
   }
 
   private get sbFile(): SbomFileModel | null {
-    return this.args.sbomFile ?? null;
+    return (
+      this.args.sbomFile ??
+      (this.args.sbomComponent
+        ?.belongsTo('sbFile')
+        .value() as SbomFileModel | null)
+    );
   }
 
   get scanStatus() {
