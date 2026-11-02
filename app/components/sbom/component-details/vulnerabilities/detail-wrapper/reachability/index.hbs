@@ -61,11 +61,12 @@
       data-test-sbomComponentVulnerabilities-detailReachabilityTarget
     >
       {{#if this.target}}
-        <AkTooltip @arrow={{true}} @placement='top'>
+        <AkTooltip @arrow={{true}} @placement='top' local-class='signature-tooltip'>
           <:default>
             <AkTypography
               data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
               local-class='signature'
+              @breakWord={{true}}
             >
               {{this.targetDisplay}}
             </AkTypography>
@@ -145,11 +146,16 @@
               </span>
             {{/if}}
 
-            <AkTooltip @arrow={{true}} @placement='top'>
+            <AkTooltip
+              @arrow={{true}}
+              @placement='top'
+              local-class='signature-tooltip'
+            >
               <:default>
                 <AkTypography
                   local-class='signature'
                   @variant='body2'
+                  @breakWord={{true}}
                 >
                   {{item.display}}
                 </AkTypography>

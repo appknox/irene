@@ -5,7 +5,7 @@
 .panel-box {
   width: 100%;
   min-width: 0;
-  max-height: 200px;
+  max-height: 14.28571em;
   margin-top: 0.5em;
   padding: 0.5em 1.5em;
   box-sizing: border-box;
@@ -24,18 +24,23 @@
   overflow-wrap: break-word;
 }
 
+.signature-tooltip {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .signature {
   font-family: var(
     --sbom-component-details-vulnerabilities-detail-wrapper-reachability-font-family-mono
   );
   font-variant-ligatures: none;
   font-feature-settings: 'liga' 0, 'calt' 0;
-  white-space: nowrap;
 }
 
 .witness-step {
   display: flex;
   align-items: center;
+  gap: 0.35em;
   min-width: 0;
   line-height: 1.4;
 }
@@ -43,7 +48,6 @@
 .witness-step-indented {
   margin-top: 0.5em;
   padding-left: 1.5em;
-  gap: 0.35em;
 }
 
 .witness-arrow {
