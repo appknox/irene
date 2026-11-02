@@ -26,6 +26,7 @@ interface AutofixRunColumn {
   name: string;
   valuePath: 'baseBranch' | 'branch' | 'prUrl' | 'updatedOn';
   width?: number;
+  textAlign?: 'left' | 'center' | 'right';
 }
 
 export interface AutofixRunCommit {
@@ -110,20 +111,23 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
       {
         name: this.intl.t('autofix.baseBranch'),
         valuePath: 'baseBranch',
+        width: 200,
       },
       {
         name: this.intl.t('autofix.branch'),
         valuePath: 'branch',
+        width: 300,
       },
       {
         name: this.intl.t('autofix.pullRequest'),
         valuePath: 'prUrl',
-        width: 160,
+        width: 100,
       },
       {
         name: this.intl.t('autofix.updated'),
         valuePath: 'updatedOn',
-        width: 160,
+        width: 100,
+        textAlign: 'right',
       },
     ];
   }
