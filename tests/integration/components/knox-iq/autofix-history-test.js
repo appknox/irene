@@ -22,14 +22,16 @@ const selectors = {
   row: '[data-test-knoxIqAutofixHistory-row]',
   branch: '[data-test-knoxIqAutofixHistory-branch]',
   baseBranch: '[data-test-knoxIqAutofixHistory-baseBranch]',
-  commitLink: '[data-test-knoxIqAutofixHistory-commitLink]',
+  prLink: '[data-test-knoxIqAutofixHistory-prLink]',
   drawer: '[data-test-knoxIqAutofixHistory-drawer]',
   drawerTitle: '[data-test-knoxIqAutofixHistory-drawerTitle]',
   drawerBaseBranch: '[data-test-knoxIqAutofixHistory-drawerBaseBranch]',
   drawerBranch: '[data-test-knoxIqAutofixHistory-drawerBranch]',
-  drawerCommitLink: '[data-test-knoxIqAutofixHistory-drawerCommitLink]',
-  fileId: '[data-test-knoxIqAutofixHistory-fileId]',
+  drawerSubtitle: '[data-test-knoxIqAutofixHistory-drawerSubtitle]',
+  commit: (id) => `[data-test-knoxIqAutofixHistory-commit='${id}']`,
+  commitLink: '[data-test-knoxIqAutofixHistory-commitLink]',
   patchedFile: '[data-test-knoxIqAutofixHistory-patchedFile]',
+  noPatchedFiles: '[data-test-knoxIqAutofixHistory-noPatchedFiles]',
   drawerClose: '[data-test-knoxIqAutofixHistory-drawerClose]',
 };
 
@@ -72,22 +74,30 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
     assert.dom(selectors.loading).doesNotExist();
   });
 
-  test('renders pull request and commit details', async function (assert) {
-    const commitSha = 'a1b2c3d4e5f6789012345678901234567890abcd';
-    const patchedFile = 'app/src/Main.java';
+  test('renders one row per pull request with its commits in the drawer', async function (assert) {
+    const prUrl = 'https://github.com/appknox/example/pull/16';
+    const firstSha = 'a1b2c3d4e5f6789012345678901234567890abcd';
+    const secondSha = 'f9e8d7c6b5a4321098765432109876543210fedc';
 
     this.server.create('autofix-pr', {
       project: 1,
       repo: 'appknox/example',
       base_branch: 'main',
       branch: 'appknox-autofix/analysis-1',
-      pr_url: 'https://github.com/appknox/example/pull/16',
+      pr_url: prUrl,
       commits: [
         {
           id: 10,
           file: 20,
-          commit_sha: commitSha,
-          patched_files: [patchedFile],
+          commit_sha: firstSha,
+          patched_files: ['app/src/Main.java', 'app/src/Util.java'],
+          created_on: new Date().toISOString(),
+        },
+        {
+          id: 11,
+          file: 20,
+          commit_sha: secondSha,
+          patched_files: [],
           created_on: new Date().toISOString(),
         },
       ],
@@ -96,33 +106,46 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
     await render(TEMPLATE);
     await waitFor(selectors.row);
 
-    assert.dom(selectors.row).exists({ count: 1 });
+    assert.dom(selectors.row).exists({ count: 1 }, 'one row per pull request');
     assert.dom(selectors.baseBranch).hasText('main');
     assert.dom(selectors.branch).hasText('appknox-autofix/analysis-1');
-    assert.dom(selectors.commitLink).hasText('a1b2c3d');
     assert
-      .dom(selectors.commitLink)
-      .hasAttribute(
-        'href',
-        `https://github.com/appknox/example/commit/${commitSha}`
-      );
-    assert.dom(selectors.commitLink).hasAttribute('target', '_blank');
+      .dom(selectors.prLink)
+      .hasText('#16')
+      .hasAttribute('href', prUrl)
+      .hasAttribute('target', '_blank');
 
     await click(selectors.baseBranch);
 
     assert.dom(selectors.drawer).exists();
     assert.dom(selectors.drawerTitle).hasText(t('autofix.detailsTitle'));
+    assert
+      .dom(selectors.drawerSubtitle)
+      .hasText(t('autofix.generatedFromScan'));
     assert.dom(selectors.drawerBaseBranch).hasText('main');
     assert.dom(selectors.drawerBranch).hasText('appknox-autofix/analysis-1');
+    assert.dom(selectors.commitLink).exists({ count: 2 });
+
+    const firstCommit = selectors.commit(10);
+    const secondCommit = selectors.commit(11);
+
     assert
-      .dom(selectors.drawerCommitLink)
-      .hasAttribute(
-        'href',
-        `https://github.com/appknox/example/commit/${commitSha}`
-      )
-      .includesText(commitSha);
-    assert.dom(selectors.fileId).hasText('20');
-    assert.dom(selectors.patchedFile).hasText(patchedFile);
+      .dom(`${firstCommit} ${selectors.commitLink}`)
+      .hasText('a1b2c3d')
+      .hasAttribute('href', `${prUrl}/commits/${firstSha}`);
+    assert.dom(`${firstCommit} ${selectors.patchedFile}`).exists({ count: 2 });
+    assert
+      .dom(`${firstCommit} ${selectors.patchedFile}`)
+      .hasText('app/src/Main.java');
+
+    assert
+      .dom(`${secondCommit} ${selectors.commitLink}`)
+      .hasText('f9e8d7c')
+      .hasAttribute('href', `${prUrl}/commits/${secondSha}`);
+    assert.dom(`${secondCommit} ${selectors.patchedFile}`).doesNotExist();
+    assert
+      .dom(`${secondCommit} ${selectors.noPatchedFiles}`)
+      .hasText(t('autofix.noPatchedFiles'));
 
     await click(selectors.drawerClose);
     await waitUntil(() => !document.querySelector(selectors.drawer));
@@ -132,7 +155,7 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
 
   test('reports an API failure', async function (assert) {
     this.server.get(
-      '/knoxiq/project/:projectId/autofix_prs/',
+      '/knoxiq/project/:projectId/knoxfixer_prs/',
       () => new Response(500)
     );
 

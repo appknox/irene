@@ -1,12 +1,7 @@
 <AkStack
   @direction='column'
   @spacing='2.5'
-  {{did-update
-    this.refetchHistory
-    this.limit
-    this.offset
-    @queryParams.file_id
-  }}
+  {{did-update this.refetchHistory this.limit this.offset @queryParams.file_id}}
 >
   <AkBreadcrumbs::AutoTrail data-test-knoxIqAutofixHistory-breadcrumbs />
 
@@ -99,28 +94,21 @@
                 </AkStack>
               {{/if}}
 
-              {{#if (eq r.columnValue.valuePath 'commitSha')}}
-                <AkStack @alignItems='center' @spacing='0.5'>
-                  <AkSvg::GitCommit local-class='meta-icon' />
-
-                  <AkTooltip @title={{r.rowValue.commitSha}} @placement='top'>
-                    <a
-                      href={{r.rowValue.commitUrl}}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      aria-label={{t
-                        'autofix.openCommit'
-                        sha=r.rowValue.commitSha
-                      }}
-                      local-class='commit-link'
-                      {{on 'click' this.stopRowNavigation}}
-                      data-test-knoxIqAutofixHistory-commitLink
-                    >
-                      <span>{{r.rowValue.shortSha}}</span>
-                      <AkIcon @iconName='open-in-new' @color='primary' />
-                    </a>
-                  </AkTooltip>
-                </AkStack>
+              {{#if (eq r.columnValue.valuePath 'prUrl')}}
+                <AkTooltip @title={{r.rowValue.prUrl}} @placement='top'>
+                  <a
+                    href={{r.rowValue.prUrl}}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={{t 'autofix.openPullRequest'}}
+                    local-class='commit-link'
+                    {{on 'click' this.stopRowNavigation}}
+                    data-test-knoxIqAutofixHistory-prLink
+                  >
+                    <span>{{r.rowValue.prLabel}}</span>
+                    <AkIcon @iconName='open-in-new' @color='primary' />
+                  </a>
+                </AkTooltip>
               {{/if}}
 
               {{#if (eq r.columnValue.valuePath 'updatedOn')}}

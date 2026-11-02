@@ -10,13 +10,10 @@ import type { FileDetailsAnalysesProviderContext } from '../analyses-provider';
 interface FileDetailsInsightsTab {
   id: string;
   label: string;
-  component?:
+  component:
     | 'file-details/scan-summary'
     | 'file-details/compliance-insights'
     | 'knox-iq/scan-summary';
-  route?: string;
-  model?: string;
-  query?: Record<string, unknown>;
 }
 
 export interface FileDetailsInsightsWrapperSignature {
@@ -46,13 +43,6 @@ export default class FileDetailsInsightsWrapperComponent extends Component<FileD
         id: 'compliance_insights',
         label: this.intl.t('owaspDetails'),
         component: 'file-details/compliance-insights',
-      },
-      {
-        id: 'autofix',
-        label: this.intl.t('autofix.fileLevel'),
-        route: 'authenticated.dashboard.project.autofix',
-        model: this.args.file.project.get('id'),
-        query: { file_id: this.args.file.id },
       },
     ];
   }

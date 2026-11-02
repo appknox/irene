@@ -176,7 +176,7 @@ function routes() {
 
   this.namespace = config.namespace;
 
-  this.get('/knoxiq/project/:projectId/autofix_prs/', (schema, request) => {
+  this.get('/knoxiq/project/:projectId/knoxfixer_prs/', (schema, request) => {
     const { file_id: fileId, limit = 10, offset = 0 } = request.queryParams;
     const projectId = Number(request.params.projectId);
     const records = schema.autofixPrs.all().models.filter((record) => {

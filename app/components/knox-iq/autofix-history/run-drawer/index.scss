@@ -69,12 +69,6 @@
   min-height: 2em;
 }
 
-.meta-divider {
-  width: 1px;
-  height: 1.28571em;
-  background-color: var(--knoxiq-autofix-history-run-drawer-divider-color);
-}
-
 .drawer-body {
   padding: 1.42857em;
   color: var(--knoxiq-autofix-history-run-drawer-body-color);
@@ -82,9 +76,29 @@
   line-height: 1.57143em;
 }
 
-.detail-list {
-  margin: 1.14286em 0 0;
-  padding-left: 1.57143em;
+.commit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.14286em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.commit-item {
+  padding-bottom: 1.14286em;
+  border-bottom: 1px solid
+    var(--knoxiq-autofix-history-run-drawer-divider-color);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.patched-files {
+  margin-top: 0.57143em;
+  padding-left: 1.42857em;
 }
 
 .nested-list {
@@ -92,7 +106,6 @@
   padding-left: 1.71429em;
 }
 
-.detail-list li,
 .nested-list li {
   padding: 0.21429em 0;
 }
@@ -110,8 +123,4 @@
   font-size: 0.92857rem;
   line-height: 1.42857em;
   vertical-align: baseline;
-}
-
-.file-id-line .code-pill {
-  margin-left: 0.28571em;
 }

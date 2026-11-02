@@ -3,12 +3,9 @@
     {{#each this.tabItems as |item|}}
       <akt.tabItem
         @id={{item.id}}
-        @buttonVariant={{not item.route}}
+        @buttonVariant={{true}}
         @onTabClick={{this.handleTabClick}}
         @isActive={{eq item.id this.selectedTab}}
-        @route={{item.route}}
-        @model={{item.model}}
-        @query={{item.query}}
         data-test-fileDetailsInsightsWrapper-tab={{item.id}}
       >
         {{item.label}}

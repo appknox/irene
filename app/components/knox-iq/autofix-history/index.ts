@@ -16,6 +16,7 @@ import type { AutofixPRCommit } from 'irene/models/autofix-pr';
 import type ProjectModel from 'irene/models/project';
 import parseError from 'irene/utils/parse-error';
 
+const PR_NUMBER_PATTERN = /\/pull\/(\d+)/;
 const COMMIT_SHA_PREVIEW_LENGTH = 7;
 
 interface AutofixHistoryQueryParams {
@@ -33,20 +34,27 @@ interface KnoxIqAutofixHistorySignature {
 
 interface AutofixRunColumn {
   name: string;
-  valuePath: 'baseBranch' | 'branch' | 'commitSha' | 'updatedOn';
+  valuePath: 'baseBranch' | 'branch' | 'prUrl' | 'updatedOn';
   width?: number;
+}
+
+export interface AutofixRunCommit {
+  id: number;
+  sha: string;
+  shortSha: string;
+  url: string;
+  patchedFiles: string[];
+  createdOn: string;
 }
 
 export interface AutofixRun {
   id: string;
   baseBranch: string;
   branch: string;
-  commitSha: string;
-  shortSha: string;
-  commitUrl: string;
-  fileId: number;
-  patchedFiles: string[];
-  updatedOn: string;
+  prUrl: string;
+  prLabel: string;
+  commits: AutofixRunCommit[];
+  updatedOn: Date;
 }
 
 type AutofixPRQueryResponse = DS.AdapterPopulatedRecordArray<AutofixPRModel> & {
@@ -85,9 +93,7 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
   }
 
   get runs(): AutofixRun[] {
-    return this.autofixPRs.flatMap((pr) =>
-      (pr.commits ?? []).map((commit) => this.toRun(pr, commit))
-    );
+    return this.autofixPRs.map((pr) => this.toRun(pr));
   }
 
   get isInitialLoading() {
@@ -109,8 +115,8 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
         valuePath: 'branch',
       },
       {
-        name: this.intl.t('autofix.commit'),
-        valuePath: 'commitSha',
+        name: this.intl.t('autofix.pullRequest'),
+        valuePath: 'prUrl',
         width: 160,
       },
       {
@@ -121,20 +127,37 @@ export default class KnoxIqAutofixHistoryComponent extends Component<KnoxIqAutof
     ];
   }
 
-  toRun(pr: AutofixPRModel, commit: AutofixPRCommit): AutofixRun {
-    const commitSha = commit.commit_sha;
-
+  toRun(pr: AutofixPRModel): AutofixRun {
     return {
-      id: `${pr.id}-${commit.id}`,
+      id: pr.id,
       baseBranch: pr.baseBranch,
       branch: pr.branch,
-      commitSha,
-      shortSha: commitSha.slice(0, COMMIT_SHA_PREVIEW_LENGTH),
-      commitUrl: `https://github.com/${pr.repo}/commit/${commitSha}`,
-      fileId: commit.file,
-      patchedFiles: commit.patched_files ?? [],
-      updatedOn: commit.created_on,
+      prUrl: pr.prUrl,
+      prLabel: this.getPRLabel(pr.prUrl),
+      commits: (pr.commits ?? []).map((commit) => this.toCommit(pr, commit)),
+      updatedOn: pr.updatedOn,
     };
+  }
+
+  toCommit(pr: AutofixPRModel, commit: AutofixPRCommit): AutofixRunCommit {
+    const sha = commit.commit_sha;
+
+    return {
+      id: commit.id,
+      sha,
+      shortSha: sha.slice(0, COMMIT_SHA_PREVIEW_LENGTH),
+      url: pr.prUrl
+        ? `${pr.prUrl}/commits/${sha}`
+        : `https://github.com/${pr.repo}/commit/${sha}`,
+      patchedFiles: commit.patched_files ?? [],
+      createdOn: commit.created_on,
+    };
+  }
+
+  getPRLabel(prUrl: string) {
+    const prNumber = prUrl?.match(PR_NUMBER_PATTERN)?.[1];
+
+    return prNumber ? `#${prNumber}` : prUrl;
   }
 
   @action
