@@ -62,11 +62,19 @@ export default class SbomScanDetailsComponentListReachabilityComponent extends C
     return this.sbFile?.reachabilityError || null;
   }
 
-  /** Declared in the SBOM but the engine didn't find its code in the binary. */
+  /**
+   * Declared in the SBOM but the engine didn't find its code in the binary.
+   * Suppressed once any advisory found a path — a witness through the
+   * component's code proves presence even when ownership evidence is missing.
+   */
   get notInBinary() {
+    const summary = this.summary;
+
     return (
-      this.summary?.code_presence === TargetPresence.NOT_OBSERVED &&
-      !this.scanning
+      summary?.code_presence === TargetPresence.NOT_OBSERVED &&
+      !this.scanning &&
+      !summary.path_found_count &&
+      !(summary.potential_count ?? 0)
     );
   }
 

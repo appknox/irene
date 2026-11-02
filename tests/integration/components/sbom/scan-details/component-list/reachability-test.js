@@ -223,5 +223,27 @@ module(
         .dom(selectors.notInBinary)
         .hasText(t('sbomModule.reachability.notInBinary'));
     });
+
+    test('it hides the not-in-binary badge when a path proves presence', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomComponent = setupCell(store, {
+        scanStatus: ReachabilityScanStatus.COMPLETED,
+        reachability: {
+          verdict: 'POTENTIALLY_REACHABLE',
+          exposure: 'POTENTIAL_EXPOSURE',
+          code_presence: 'NOT_OBSERVED',
+          path_found_count: 0,
+          potential_count: 1,
+          no_path_found_count: 0,
+          unknown_count: 0,
+          advisory_count: 1,
+        },
+      });
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.notInBinary).doesNotExist();
+    });
   }
 );
