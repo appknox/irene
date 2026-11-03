@@ -2103,7 +2103,17 @@
         "artifact": "Package not fully analyzed",
         "resourceLimit": "Analysis limit reached",
         "other": "Analysis limitation"
-      }
+      },
+      "howYourAppReachesIt": "How your app reaches it",
+      "shortNames": "Short names",
+      "fullSignatures": "Full signatures",
+      "yourCode": "Your code",
+      "entersComponent": "Enters {component}",
+      "platformCode": "Platform code",
+      "fixHere": "Fix here",
+      "calledByYourApp": "Called by your app",
+      "alsoAffectedNotCalled": "Also affected, not called ({count})",
+      "analysisDetail": "Analysis detail"
     },
     "sbomAppTitle": "Software Bill of Materials (SBOM)",
     "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it.",
@@ -2128,7 +2138,17 @@
       "title": "No SBOM Report Found",
       "description": "We could not locate any report associated with this SBOM analysis."
     },
-    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter."
+    "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "reachabilityInsights": {
+      "title": "Reachability Insights",
+      "backLink": "← Back to Reachability Insights"
+    },
+    "originalAnalysis": {
+      "title": "Original Analysis",
+      "link": "See original analysis ↗",
+      "subtitle": "All {count} components from the SBOM scan, before reachability filtering"
+    },
+    "searchComponents": "Search components"
   },
   "scan": "scan(s)",
   "scanned": "scanned",

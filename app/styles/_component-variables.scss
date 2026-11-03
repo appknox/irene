@@ -974,6 +974,70 @@ body {
     --text-primary
   );
 
+  // variables for sbom/scan-details/component-list/reachability-counts
+  --sbom-reachability-counts-reachable-background: var(--error-bg);
+  --sbom-reachability-counts-reachable-color: var(--error-main);
+  --sbom-reachability-counts-potential-background: var(--warn-light);
+  --sbom-reachability-counts-potential-color: var(--warn-dark);
+  --sbom-reachability-counts-inconclusive-background: var(--neutral-grey-100);
+  --sbom-reachability-counts-inconclusive-color: var(--text-secondary);
+  --sbom-reachability-counts-empty-color: var(--text-disabled);
+
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper/reachability/call-path
+  --sbom-component-details-vulnerabilities-reachability-call-path-font-family-mono: var(
+    --font-family-mono
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-border-color: var(
+    --border-color-1
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-border-radius: var(
+    --border-radius-6
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-toggle-color: var(
+    --text-secondary
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-background: var(
+    --text-primary
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-color: var(
+    --common-white
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-narrative-border-color: var(
+    --text-primary
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-library-background: var(
+    --neutral-grey-100
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-connector-color: var(
+    --border-color-2
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-marker-color: var(
+    --text-primary
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-marker-hollow-background: var(
+    --background-main
+  );
+
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper/reachability/targets
+  --sbom-component-details-vulnerabilities-reachability-targets-font-family-mono: var(
+    --font-family-mono
+  );
+  --sbom-component-details-vulnerabilities-reachability-targets-border-radius: var(
+    --border-radius-6
+  );
+  --sbom-component-details-vulnerabilities-reachability-targets-called-border-color: var(
+    --error-light
+  );
+  --sbom-component-details-vulnerabilities-reachability-targets-called-background: var(
+    --error-bg
+  );
+  --sbom-component-details-vulnerabilities-reachability-targets-called-color: var(
+    --error-main
+  );
+  --sbom-component-details-vulnerabilities-reachability-targets-uncalled-background: var(
+    --neutral-grey-100
+  );
+
   // variables for sbom/component-details/vulnerabilities/severity
   --sbom-component-details-vulnerabilities-severity-critical: var(
     --severity-critical
