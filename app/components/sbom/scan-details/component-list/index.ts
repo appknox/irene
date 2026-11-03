@@ -13,6 +13,7 @@ import type SbomFileModel from 'irene/models/sbom-file';
 import type SbomComponentModel from 'irene/models/sbom-component';
 import type SbomScanSummaryModel from 'irene/models/sbom-scan-summary';
 import type SbomScanDetailsService from 'irene/services/sbom-scan-details';
+import type { SbomScanDetailsView } from 'irene/components/sbom/scan-details';
 
 export interface SbomScanDetailsComponentListSignature {
   Element: HTMLDivElement;
@@ -20,6 +21,7 @@ export interface SbomScanDetailsComponentListSignature {
     sbomProject: SbomProjectModel;
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
+    view?: SbomScanDetailsView;
   };
 }
 
@@ -128,11 +130,23 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         component: 'sbom/component-status',
       },
       {
-        name: this.intl.t('sbomModule.reachability.title'),
-        component: 'sbom/scan-details/component-list/reachability',
+        name: this.intl.t(
+          this.isOriginalAnalysis
+            ? 'sbomModule.reachability.title'
+            : 'sbomModule.reachabilityInsights.title'
+        ),
+        // The insights view breaks the verdict out into per-advisory counts;
+        // the original list stays a single rolled-up chip.
+        component: this.isOriginalAnalysis
+          ? 'sbom/scan-details/component-list/reachability'
+          : 'sbom/scan-details/component-list/reachability-counts',
         headerComponent: 'sbom/scan-details/component-list/reachability-header',
       },
     ];
+  }
+
+  get isOriginalAnalysis() {
+    return this.args.view === 'original';
   }
 
   @action

@@ -1,0 +1,70 @@
+<div data-test-sbomComponent-reachabilityCounts>
+  {{#if this.scanning}}
+    <AkChip
+      data-test-sbomComponent-reachabilityCountsAnalyzing
+      @variant='semi-filled'
+      @size='small'
+      @color='default'
+      @label={{t 'sbomModule.reachability.analyzing'}}
+    />
+  {{else if this.scanNotRun}}
+    <AkTooltip
+      @arrow={{true}}
+      @placement='top'
+      data-test-sbomComponent-reachabilityCountsNotRunTooltip
+    >
+      <:default>
+        <AkTypography
+          data-test-sbomComponent-reachabilityCountsNotRun
+          @fontWeight='bold'
+        >
+          -
+        </AkTypography>
+      </:default>
+
+      <:tooltipContent>
+        <div
+          {{style
+            width='360px'
+            white-space='pre-line'
+            overflow-wrap='break-word'
+          }}
+        >{{this.scanStatusReason}}</div>
+      </:tooltipContent>
+    </AkTooltip>
+  {{else if this.hasSummary}}
+    <AkStack @spacing='0.5' @flexWrap='wrap' @alignItems='center'>
+      {{#each this.counts as |item|}}
+        <div
+          local-class='count-chip count-chip-{{item.key}}
+            {{unless item.count "count-chip-empty"}}'
+          data-test-sbomComponent-reachabilityCount='{{item.key}}'
+        >
+          <span local-class='count-dot count-dot-{{item.key}}'></span>
+
+          <AkTypography @variant='body3' @color='inherit'>
+            {{item.label}}
+          </AkTypography>
+
+          <AkTypography
+            local-class='count-value'
+            @variant='body3'
+            @color='inherit'
+            @fontWeight='bold'
+            data-test-sbomComponent-reachabilityCountValue='{{item.key}}'
+          >
+            {{item.count}}
+          </AkTypography>
+        </div>
+      {{/each}}
+    </AkStack>
+  {{else}}
+    <AkTypography
+      data-test-sbomComponent-reachabilityCountsEmpty
+      @fontWeight='bold'
+      @color='textSecondary'
+    >
+      -
+    </AkTypography>
+  {{/if}}
+</div>
