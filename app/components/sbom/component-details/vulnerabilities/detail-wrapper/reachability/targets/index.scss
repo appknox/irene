@@ -1,0 +1,49 @@
+.target-row {
+  width: 100%;
+  min-width: 0;
+  padding: 0.6em 1em;
+  box-sizing: border-box;
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-reachability-targets-border-radius
+  );
+}
+
+.target-row-called {
+  border: 1px solid
+    var(
+      --sbom-component-details-vulnerabilities-reachability-targets-called-border-color
+    );
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-targets-called-background
+  );
+  color: var(
+    --sbom-component-details-vulnerabilities-reachability-targets-called-color
+  );
+}
+
+.target-row-uncalled {
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-targets-uncalled-background
+  );
+}
+
+.also-affected-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.signature {
+  font-family: var(
+    --sbom-component-details-vulnerabilities-reachability-targets-font-family-mono
+  );
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  color: inherit;
+}

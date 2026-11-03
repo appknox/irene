@@ -1,0 +1,186 @@
+.signature-toggle {
+  display: inline-flex;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid
+    var(--sbom-component-details-vulnerabilities-reachability-call-path-border-color);
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+  );
+}
+
+.toggle-option {
+  padding: 0.35em 0.85em;
+  border: none;
+  background: transparent;
+  color: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-color
+  );
+  font-family: inherit;
+  font-size: 0.85em;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.toggle-option-active {
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-background
+  );
+  color: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-color
+  );
+}
+
+.narrative {
+  padding-left: 1em;
+  border-left: 3px solid
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-narrative-border-color
+    );
+}
+
+// Three lines is enough to carry the opening of the narrative; the rest is
+// behind "Show more" so the path itself stays above the fold.
+.narrative-clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.text-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.analysis-detail {
+  padding: 0.75em 1em;
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-library-background
+  );
+  overflow-wrap: break-word;
+}
+
+.path-box {
+  width: 100%;
+  min-width: 0;
+  padding: 1em 1.25em;
+  box-sizing: border-box;
+  border: 1px solid
+    var(--sbom-component-details-vulnerabilities-reachability-call-path-border-color);
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+  );
+}
+
+.group-header {
+  margin-bottom: 0.75em;
+}
+
+// The boundary header doubles as the rule separating the app's frames from
+// the library's, so it needs the line and the breathing room above it.
+.group-header-boundary {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin-top: 1em;
+
+  &::after {
+    flex: 1;
+    height: 1px;
+    background: var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+    );
+    content: '';
+  }
+}
+
+.group-header-text {
+  flex-shrink: 0;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.group-steps-library {
+  padding: 0.75em 1em;
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-library-background
+  );
+}
+
+.step {
+  display: flex;
+  gap: 0.75em;
+  min-width: 0;
+  padding-bottom: 0.9em;
+
+  // The connector runs down the marker column and stops at the last frame.
+  &:not(:last-child) .step-marker::after {
+    position: absolute;
+    top: 0.75em;
+    left: 50%;
+    width: 1px;
+    height: calc(100% + 0.9em);
+    background: var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-connector-color
+    );
+    transform: translateX(-50%);
+    content: '';
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.step-marker {
+  position: relative;
+  flex-shrink: 0;
+  width: 0.7em;
+  height: 0.7em;
+  margin-top: 0.4em;
+  box-sizing: border-box;
+  border: 2px solid
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-marker-color
+    );
+  border-radius: 50%;
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-marker-hollow-background
+  );
+}
+
+.step-marker-milestone {
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-marker-color
+  );
+}
+
+.step-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  min-width: 0;
+}
+
+.signature {
+  font-family: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-font-family-mono
+  );
+  font-variant-ligatures: none;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+}
+
+.package-name {
+  opacity: 0.9;
+}

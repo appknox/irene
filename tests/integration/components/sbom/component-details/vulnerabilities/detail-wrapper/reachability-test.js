@@ -11,30 +11,21 @@ import { ReachabilityVerdict } from 'irene/utils/sbom-reachability';
 const selectors = {
   root: '[data-test-sbomComponentVulnerabilities-detailReachability]',
   title: '[data-test-sbomComponentVulnerabilities-detailReachabilityTitle]',
-  targetLabel:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityTargetLabel]',
-  targetValue:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue]',
-  presence:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityPresence]',
-  witnessPath:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityWitnessLabel]',
-  witnessEdge:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityWitnessEdge]',
-  witnessStep: (index) =>
-    `[data-test-sbomComponentVulnerabilities-detailReachabilityWitnessStep="${index}"]`,
-  witnessArrow:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityWitnessArrow]',
+  callPath: '[data-test-sbomComponentVulnerabilities-reachabilityCallPath]',
+  callPathEdge:
+    '[data-test-sbomComponentVulnerabilities-reachabilityCallPathEdge]',
+  callPathStep: (index) =>
+    `[data-test-sbomComponentVulnerabilities-reachabilityCallPathStep="${index}"]`,
+  calledTarget: (index) =>
+    `[data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled="${index}"]`,
   blocker: (code) =>
     `[data-test-sbomComponentVulnerabilities-detailReachabilityBlocker="${code}"]`,
   blockers:
     '[data-test-sbomComponentVulnerabilities-detailReachabilityBlockers]',
   howItWorks:
     '[data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks]',
-  pathExplanationLabel:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanationLabel]',
-  pathExplanation:
-    '[data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanation]',
+  narrative:
+    '[data-test-sbomComponentVulnerabilities-reachabilityCallPathNarrative]',
 };
 
 // ─── Template ───
@@ -62,7 +53,7 @@ module(
     setupIntl(hooks, 'en');
 
     // ─── Path found ───────────────────────────────────────────────────────────
-    test('it renders target and an indented witness path', async function (assert) {
+    test('it renders the called target and the call path', async function (assert) {
       const store = this.owner.lookup('service:store');
 
       this.sbomVulnerabilityAudit = pushAudit(
@@ -73,8 +64,17 @@ module(
             target_presence: 'PRESENT',
             target: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
             blockers: [],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+                has_witness: true,
+              },
+            ],
             witness_path: [
-              { caller: 'MainActivity.onCreate', callee: 'Parser.parse' },
+              {
+                caller: 'MainActivity.onCreate',
+                callee: 'Lcom/example/Parser;->parse(Ljava/lang/String;)V',
+              },
             ],
           },
         })
@@ -83,41 +83,32 @@ module(
       await render(TEMPLATE);
 
       assert.dom(selectors.title).hasText(t('sbomModule.reachability.title'));
+      assert.dom(selectors.callPath).exists();
       assert
-        .dom(selectors.targetLabel)
-        .hasText(t('sbomModule.reachability.vulnerableFunction'));
-      assert
-        .dom(selectors.targetValue)
-        .hasText('com.example.Parser.parse(java.lang.String)');
-      assert
-        .dom(selectors.presence)
-        .hasText(t('sbomModule.reachability.presentInVersion'));
-      assert.dom(selectors.witnessPath).exists();
-      assert
-        .dom(selectors.witnessStep(0))
+        .dom(selectors.callPathStep(0))
         .includesText('MainActivity.onCreate');
       assert
-        .dom(selectors.witnessStep(0))
+        .dom(selectors.callPathStep(0))
         .includesText(t('sbomModule.reachability.entryPoint'));
+      assert.dom(selectors.callPathStep(1)).includesText('Parser.parse()');
       assert
-        .dom(`${selectors.witnessStep(0)} ${selectors.witnessArrow}`)
-        .doesNotExist();
-      assert.dom(selectors.witnessStep(1)).includesText('Parser.parse');
-      assert
-        .dom(selectors.witnessStep(1))
+        .dom(selectors.callPathStep(1))
         .includesText(t('sbomModule.reachability.vulnerableFunction'));
       assert
-        .dom(`${selectors.witnessStep(1)} ${selectors.witnessArrow}`)
-        .exists();
+        .dom(selectors.calledTarget(0))
+        .hasText('com.example.Parser.parse(java.lang.String)');
       assert.dom(selectors.blockers).doesNotExist();
     });
 
     // ─── Target explanation ──────────────────────────────────────────────────
-    test('it renders the witness explanation under the call path', async function (assert) {
+    test('it renders the witness explanation above the call path', async function (assert) {
       const store = this.owner.lookup('service:store');
+      // The engine emits the two parts separated by a blank line; the panel
+      // reads the behavior half inline and tucks the analyst half away.
       const explanation =
-        'App behavior: The confirmed prefix starts in onCreate. ' +
+        'App behavior: The confirmed prefix starts in onCreate.\n\n' +
         'Analyst assessment: The receiver type was inferred but not proven.';
+      const behavior = 'The confirmed prefix starts in onCreate.';
 
       this.sbomVulnerabilityAudit = pushAudit(
         store,
@@ -142,17 +133,17 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(selectors.pathExplanationLabel)
-        .hasText(t('sbomModule.reachability.pathExplanation'));
-      assert.dom(selectors.pathExplanation).includesText(explanation);
+      assert.dom(selectors.narrative).includesText(behavior);
     });
 
     test('it renders the explanation of the witness-bearing target, not only the first', async function (assert) {
       const store = this.owner.lookup('service:store');
+      // The engine emits the two parts separated by a blank line; the panel
+      // reads the behavior half inline and tucks the analyst half away.
       const explanation =
-        'App behavior: The confirmed prefix starts in onCreate. ' +
+        'App behavior: The confirmed prefix starts in onCreate.\n\n' +
         'Analyst assessment: The receiver type was inferred but not proven.';
+      const behavior = 'The confirmed prefix starts in onCreate.';
 
       this.sbomVulnerabilityAudit = pushAudit(
         store,
@@ -181,7 +172,7 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.pathExplanation).includesText(explanation);
+      assert.dom(selectors.narrative).includesText(behavior);
     });
 
     test('it hides the witness explanation when the target has none', async function (assert) {
@@ -210,8 +201,7 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.pathExplanation).doesNotExist();
-      assert.dom(selectors.pathExplanationLabel).doesNotExist();
+      assert.dom(selectors.narrative).doesNotExist();
     });
 
     // ─── Non-direct witness edge ─────────────────────────────────────────────
@@ -239,10 +229,8 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.witnessEdge).exists().hasText('xml callback');
-      assert
-        .dom(selectors.witnessStep(1))
-        .includesText('com.example.Parser.parse(java.lang.String)');
+      assert.dom(selectors.callPathEdge).exists().hasText('xml callback');
+      assert.dom(selectors.callPathStep(1)).includesText('Parser.parse()');
     });
 
     // ─── Unknown ──────────────────────────────────────────────────────────────
@@ -290,11 +278,8 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.witnessPath).doesNotExist();
+      assert.dom(selectors.callPath).doesNotExist();
       assert.dom(selectors.blockers).doesNotExist();
-      assert
-        .dom(selectors.targetValue)
-        .hasText('com.example.Parser.parse(java.lang.String)');
     });
 
     // ─── Uncategorised blocker ────────────────────────────────────────────────
@@ -403,7 +388,7 @@ module(
       await render(TEMPLATE);
 
       // The call path still renders — only the inconclusive blockers hide.
-      assert.dom(selectors.witnessPath).exists();
+      assert.dom(selectors.callPath).exists();
       assert.dom(selectors.blockers).doesNotExist();
     });
 
