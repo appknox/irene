@@ -41,6 +41,13 @@ module(
 
       this.owner.register('service:me', OrganizationMeStub);
       this.owner.register('service:notifications', NotificationsStub);
+
+      // The card also reflects Jira Cloud Security, which shares this drawer.
+      this.server.get('/organizations/:id/jira_security', () => ({
+        status: 'not_connected',
+        connected_on: null,
+        configure_path: '/jira/settings/apps/configure/app-uuid/env-uuid',
+      }));
     });
 
     test('it renders jira-account not integrated', async function (assert) {
@@ -149,7 +156,10 @@ module(
 
       await click('[data-test-org-integration-card-manageBtn]');
 
-      assert.dom('[data-test-jiraAccount-jiraType-cloud]').doesNotExist();
+      // The type radios stay: they are how an admin with Jira already connected
+      // reaches the Jira Cloud Security setup in the same drawer.
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').exists();
+      assert.dom('[data-test-jiraAccount-jiraType-cloudSecurity]').exists();
       assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-usernameInput]').doesNotExist();
       assert.dom('[data-test-jiraAccount-apiKeyInput]').doesNotExist();
@@ -586,6 +596,162 @@ module(
         notify.errorMsg,
         `${t('accessToken')} ${t('canNotBeEmpty')}`
       );
+    });
+    test('it offers Jira Cloud Security as a third Jira type', async function (assert) {
+      // One product, one card: the security integration is a tab in the same
+      // drawer rather than a card of its own.
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert.dom('[data-test-jiraAccount-hostInput]').exists();
+
+      await click('[data-test-jiraAccount-jiraType-cloudSecurity]');
+
+      assert
+        .dom('[data-test-orgIntegrations-jiraSecurity-status]')
+        .hasText(t('jiraSecurity.notConnected'));
+
+      // The credential form belongs to the other Jira types.
+      assert.dom('[data-test-jiraAccount-hostInput]').doesNotExist();
+
+      // The security panel carries its own buttons, so the shared footer would
+      // only offer actions that do not apply to it.
+      assert
+        .dom('[data-test-orgIntegrations-configDrawer-integrateBtn]')
+        .doesNotExist();
+    });
+
+    test('it opens on the Jira type that is already connected', async function (assert) {
+      // An admin reopening the drawer wants to manage what they set up, not to
+      // re-pick it from the top of the list.
+      this.server.get('/organizations/:id/integrate_jira', () => ({
+        host: 'https://appknox.example.com/',
+        username: 'appknox',
+        is_data_center: true,
+      }));
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-manageBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-dataCenter]').isChecked();
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isNotChecked();
+    });
+
+    test('it opens on Jira Cloud Security when that is the live connection', async function (assert) {
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      this.server.get('/organizations/:id/jira_security', () => ({
+        status: 'connected',
+        connected_on: '2026-09-22T10:00:00Z',
+        configure_path: '/jira/settings/apps/configure/app-uuid/env-uuid',
+      }));
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-manageBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-cloudSecurity]').isChecked();
+
+      assert
+        .dom('[data-test-orgIntegrations-jiraSecurity-status]')
+        .hasText(t('jiraSecurity.connected'));
+    });
+
+    test('it falls back to Jira Cloud when nothing is connected', async function (assert) {
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isChecked();
+    });
+
+    test('it locks out Jira Cloud Security while Jira is integrated', async function (assert) {
+      // An organization runs one Jira integration at a time; the API refuses
+      // the combination, so the drawer must not offer it.
+      this.server.get('/organizations/:id/integrate_jira', () => ({
+        host: 'https://appknox.atlassian.net/',
+        username: 'appknox',
+      }));
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-manageBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-cloudSecurity]').isDisabled();
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isNotDisabled();
+
+      assert
+        .dom('[data-test-jiraAccount-oneAtATimeNote]')
+        .hasText(t('jiraOneIntegrationAtATime'));
+    });
+
+    test('it locks out Jira once Jira Cloud Security setup has begun', async function (assert) {
+      // From the moment a secret exists, not just once Jira confirms: that is
+      // when the API starts refusing the other integration.
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      this.server.get('/organizations/:id/jira_security', () => ({
+        status: 'awaiting_jira',
+        connected_on: null,
+        configure_path: '/jira/settings/apps/configure/app-uuid/env-uuid',
+      }));
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isDisabled();
+      assert.dom('[data-test-jiraAccount-jiraType-dataCenter]').isDisabled();
+
+      assert
+        .dom('[data-test-jiraAccount-jiraType-cloudSecurity]')
+        .isNotDisabled()
+        .isChecked();
+    });
+
+    test('it leaves every Jira type open when nothing is connected', async function (assert) {
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+      await click('[data-test-org-integration-card-connectBtn]');
+
+      assert.dom('[data-test-jiraAccount-jiraType-cloud]').isNotDisabled();
+      assert.dom('[data-test-jiraAccount-jiraType-dataCenter]').isNotDisabled();
+
+      assert
+        .dom('[data-test-jiraAccount-jiraType-cloudSecurity]')
+        .isNotDisabled();
+
+      assert.dom('[data-test-jiraAccount-oneAtATimeNote]').doesNotExist();
+    });
+
+    test('it marks the card integrated when only Jira Cloud Security is connected', async function (assert) {
+      this.server.get('/organizations/:id/integrate_jira', () => {
+        return new Response(404);
+      });
+
+      this.server.get('/organizations/:id/jira_security', () => ({
+        status: 'connected',
+        connected_on: '2026-09-22T10:00:00Z',
+        configure_path: '/jira/settings/apps/configure/app-uuid/env-uuid',
+      }));
+
+      await render(hbs`<Organization::Integrations::JiraAccount />`);
+
+      assert
+        .dom('[data-test-org-integration-card-manageBtn]')
+        .exists()
+        .hasText(t('manage'));
     });
   }
 );

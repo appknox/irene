@@ -14,6 +14,7 @@ import type IreneAjaxService from 'irene/services/ajax';
 import type OrganizationService from 'irene/services/organization';
 import type AnalyticsService from 'irene/services/analytics';
 import type UserModel from 'irene/models/user';
+import type { ConnectionStatus } from 'irene/components/organization/integrations/jira-security';
 import type { AjaxError } from 'irene/services/ajax';
 
 type JIRAIntegrationFields = {
@@ -30,6 +31,7 @@ type ChangesetBufferProps = BufferedChangeset &
 interface JiraCheckResponse {
   host: string;
   username: string;
+  is_data_center?: boolean;
 }
 
 export interface OrganizationIntegrationsJiraAccountSignature {
@@ -67,8 +69,10 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   @tracked showRevokeJIRAConfirmBox = false;
   @tracked integrationDrawerIsOpen = false;
 
-  @tracked jiraType: 'cloud' | 'dataCenter' = 'cloud';
+  @tracked jiraType: 'cloud' | 'dataCenter' | 'cloudSecurity' = 'cloud';
   @tracked isJiraDataCenter = false;
+  @tracked jiraSecurityStatus: ConnectionStatus = 'not_connected';
+  @tracked connectedIsDataCenter = false;
 
   constructor(
     owner: unknown,
@@ -91,6 +95,7 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
     ) as ChangesetBufferProps;
 
     this.checkJIRA.perform();
+    this.checkJiraSecurity.perform();
   }
 
   get data() {
@@ -99,8 +104,44 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
       title: this.intl.t('jira'),
       description: this.intl.t('jiraIntegrationDesc'),
       logo: '../../../images/jira-icon.png',
-      isIntegrated: this.isJIRAConnected,
+      isIntegrated: this.isJIRAConnected || this.isJiraSecurityConnected,
     };
+  }
+
+  get jiraSecurityURL() {
+    return [
+      '/api/organizations',
+      this.organization.selected?.id,
+      ENV.endpoints['integrateJiraSecurity'],
+    ].join('/');
+  }
+
+  get isJiraCloudSecurity() {
+    return this.jiraType === 'cloudSecurity';
+  }
+
+  get isJiraSecurityConnected() {
+    return this.jiraSecurityStatus === 'connected';
+  }
+
+  get hasJiraSecuritySetup() {
+    return this.jiraSecurityStatus !== 'not_connected';
+  }
+
+  get isOtherJiraIntegrationInUse() {
+    return this.isJIRAConnected || this.hasJiraSecuritySetup;
+  }
+
+  get defaultJiraType(): typeof this.jiraType {
+    if (this.isJIRAConnected) {
+      return this.connectedIsDataCenter ? 'dataCenter' : 'cloud';
+    }
+
+    if (this.hasJiraSecuritySetup) {
+      return 'cloudSecurity';
+    }
+
+    return 'cloud';
   }
 
   get baseURL() {
@@ -127,6 +168,8 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
 
   @action
   openDrawer() {
+    this.setJiraType(this.defaultJiraType);
+
     this.integrationDrawerIsOpen = true;
   }
 
@@ -139,18 +182,36 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
   handleJiraTypeChange(event: Event) {
     const target = event.target as HTMLInputElement;
 
-    this.jiraType = target.value as typeof this.jiraType;
+    this.setJiraType(target.value as typeof this.jiraType);
+  }
 
-    if (this.jiraType === 'dataCenter') {
-      this.isJiraDataCenter = true;
-    } else {
-      this.isJiraDataCenter = false;
-    }
+  setJiraType(jiraType: typeof this.jiraType) {
+    this.jiraType = jiraType;
+
+    // Drives which credential the form asks for, so it has to move in step.
+    this.isJiraDataCenter = jiraType === 'dataCenter';
+  }
+
+  @action
+  handleJiraSecurityStatusChange(status: ConnectionStatus) {
+    this.jiraSecurityStatus = status;
   }
 
   confirmCallback() {
     this.revokeJIRA.perform();
   }
+
+  checkJiraSecurity = task(async () => {
+    try {
+      const data = await this.ajax.request<{ status: ConnectionStatus }>(
+        this.jiraSecurityURL
+      );
+
+      this.jiraSecurityStatus = data.status;
+    } catch {
+      this.jiraSecurityStatus = 'not_connected';
+    }
+  });
 
   checkJIRA = task(async () => {
     try {
@@ -159,6 +220,7 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
       this.isJIRAConnected = true;
       this.connectedHost = data.host;
       this.connectedUsername = data.username;
+      this.connectedIsDataCenter = Boolean(data.is_data_center);
     } catch (err) {
       const error = err as AjaxError;
 
@@ -227,6 +289,8 @@ export default class OrganizationIntegrationsJiraAccountComponent extends Compon
       if (error.payload) {
         if (error.payload.host) {
           this.notify.error(error.payload.host[0], ENV.notifications);
+        } else if (error.payload.detail) {
+          this.notify.error(error.payload.detail as string, ENV.notifications);
         } else if (error.payload.username || error.payload.password) {
           this.notify.error(this.tInValidCredentials);
         } else {
