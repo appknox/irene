@@ -1,0 +1,110 @@
+{{#if this.shouldShow}}
+  <AkStack
+    @direction='column'
+    @spacing='1'
+    @width='full'
+    data-test-sbomComponentVulnerabilities-reachabilityTargets
+  >
+    {{#if this.calledTargets.length}}
+      <AkStack @direction='column' @spacing='0.5' @width='full'>
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledLabel
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{t 'sbomModule.reachability.calledByYourApp'}}
+        </AkTypography>
+
+        {{#each this.calledTargets as |target|}}
+          <AkTooltip @arrow={{true}} @placement='top'>
+            <:default>
+              <div
+                local-class='target-row target-row-called'
+                data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled='{{target.testIndex}}'
+              >
+                <AkTypography
+                  local-class='signature'
+                  @variant='body2'
+                  @fontWeight='bold'
+                  @breakWord={{true}}
+                >
+                  {{target.display}}
+                </AkTypography>
+              </div>
+            </:default>
+
+            <:tooltipContent>
+              <div
+                {{style
+                  width='360px'
+                  white-space='pre-line'
+                  overflow-wrap='break-word'
+                }}
+              >{{target.signature}}</div>
+            </:tooltipContent>
+          </AkTooltip>
+        {{/each}}
+      </AkStack>
+    {{/if}}
+
+    {{#if this.hasAlsoAffected}}
+      <AkStack @direction='column' @spacing='0.5' @width='full'>
+        <button
+          type='button'
+          local-class='also-affected-toggle'
+          data-test-sbomComponentVulnerabilities-reachabilityTargetsAlsoAffectedToggle
+          aria-expanded='{{if this.showAlsoAffected "true" "false"}}'
+          {{on 'click' this.toggleAlsoAffected}}
+        >
+          <AkIcon
+            @iconName={{if
+              this.showAlsoAffected
+              'keyboard-arrow-down'
+              'keyboard-arrow-right'
+            }}
+            @size='small'
+            @color='textSecondary'
+          />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t
+              'sbomModule.reachability.alsoAffectedNotCalled'
+              count=this.alsoAffectedTargets.length
+            }}
+          </AkTypography>
+        </button>
+
+        {{#if this.showAlsoAffected}}
+          {{#each this.alsoAffectedTargets as |target|}}
+            <AkTooltip @arrow={{true}} @placement='top'>
+              <:default>
+                <div
+                  local-class='target-row target-row-uncalled'
+                  data-test-sbomComponentVulnerabilities-reachabilityTargetsAlsoAffected='{{target.testIndex}}'
+                >
+                  <AkTypography
+                    local-class='signature'
+                    @variant='body2'
+                    @breakWord={{true}}
+                  >
+                    {{target.display}}
+                  </AkTypography>
+                </div>
+              </:default>
+
+              <:tooltipContent>
+                <div
+                  {{style
+                    width='360px'
+                    white-space='pre-line'
+                    overflow-wrap='break-word'
+                  }}
+                >{{target.signature}}</div>
+              </:tooltipContent>
+            </AkTooltip>
+          {{/each}}
+        {{/if}}
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{/if}}

@@ -6,249 +6,86 @@
     @width='full'
     data-test-sbomComponentVulnerabilities-detailReachability
   >
-  <AkStack @direction='column' @spacing='0.5' @width='full'>
-    <AkStack @alignItems='center' @spacing='0.5'>
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityTitle
-        @variant='subtitle1'
-      >
-        {{t 'sbomModule.reachability.title'}}
-      </AkTypography>
-
-      <AkTooltip
-        @arrow={{true}}
-        @placement='top'
-        data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks
-      >
-        <:default>
-          <AkIcon
-            @iconName='info'
-            @size='small'
-            @color='textSecondary'
-            data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorksIcon
-          />
-        </:default>
-
-        <:tooltipContent>
-          <div
-            {{style width='320px' white-space='pre-line' overflow-wrap='break-word'}}
-          >{{t 'sbomModule.reachability.howItWorks'}}</div>
-        </:tooltipContent>
-      </AkTooltip>
-    </AkStack>
-
-    <AkTypography
-      data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
-      @variant='body2'
-      @color='textSecondary'
-    >
-      {{this.explanation}}
-    </AkTypography>
-  </AkStack>
-
-  {{#unless this.onlyTargetDataMissing}}
     <AkStack @direction='column' @spacing='0.5' @width='full'>
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityTargetLabel
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{t 'sbomModule.reachability.vulnerableFunction'}}
-      </AkTypography>
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityTitle
+          @variant='subtitle1'
+        >
+          {{t 'sbomModule.reachability.title'}}
+        </AkTypography>
 
-    <div
-      local-class='panel-box'
-      data-test-sbomComponentVulnerabilities-detailReachabilityTarget
-    >
-      {{#if this.target}}
-        <AkTooltip @arrow={{true}} @placement='top' local-class='signature-tooltip'>
+        <AkTooltip
+          @arrow={{true}}
+          @placement='top'
+          data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks
+        >
           <:default>
-            <AkTypography
-              data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
-              local-class='signature'
-              @breakWord={{true}}
-            >
-              {{this.targetDisplay}}
-            </AkTypography>
+            <AkIcon
+              @iconName='info'
+              @size='small'
+              @color='textSecondary'
+              data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorksIcon
+            />
           </:default>
 
           <:tooltipContent>
-            <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.target}}</div>
+            <div
+              {{style
+                width='320px'
+                white-space='pre-line'
+                overflow-wrap='break-word'
+              }}
+            >{{t 'sbomModule.reachability.howItWorks'}}</div>
           </:tooltipContent>
         </AkTooltip>
+      </AkStack>
 
-        {{#if this.presenceLabel}}
-          <AkTypography
-            data-test-sbomComponentVulnerabilities-detailReachabilityPresence
-            @variant='body2'
-            @color='textSecondary'
-          >
-            {{this.presenceLabel}}
-          </AkTypography>
-        {{/if}}
-      {{else}}
+      <AkTypography
+        data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{this.explanation}}
+      </AkTypography>
+    </AkStack>
+
+    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::CallPath
+      @finding={{this.reachability}}
+      @narrative={{this.pathExplanation}}
+    />
+
+    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::Targets
+      @finding={{this.reachability}}
+    />
+
+    {{#if this.hasBlockers}}
+      <AkStack
+        @direction='column'
+        @spacing='0.5'
+        @width='full'
+        data-test-sbomComponentVulnerabilities-detailReachabilityBlockers
+      >
         <AkTypography
-          data-test-sbomComponentVulnerabilities-detailReachabilityTargetValue
+          data-test-sbomComponentVulnerabilities-detailReachabilityBlockersLabel
+          @variant='body2'
           @color='textSecondary'
         >
-          {{t 'sbomModule.reachability.noReviewedTarget'}}
+          {{t 'sbomModule.reachability.whyInconclusive'}}
         </AkTypography>
-      {{/if}}
 
-      {{#if this.extraTargets.length}}
-        <AkTooltip @arrow={{true}} @placement='top'>
-          <:default>
-            <AkTypography
-              data-test-sbomComponentVulnerabilities-detailReachabilityMoreTargets
-              @variant='body2'
-              @color='textSecondary'
-            >
-              {{t 'sbomModule.reachability.moreTargets' count=this.extraTargets.length}}
-            </AkTypography>
-          </:default>
-
-          <:tooltipContent>
-            <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.extraTargetsList}}</div>
-          </:tooltipContent>
-        </AkTooltip>
-      {{/if}}
-    </div>
-    </AkStack>
-  {{/unless}}
-
-  {{#if this.hasWitnessPath}}
-    <AkStack @direction='column' @spacing='0.5' @width='full'>
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityWitnessLabel
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{t 'sbomModule.reachability.callPath'}}
-      </AkTypography>
-
-      <div
-        local-class='panel-box'
-        data-test-sbomComponentVulnerabilities-detailReachabilityWitness
-      >
-        {{#each this.witnessPathItems as |item|}}
-          <div
-            local-class='witness-step {{if item.showArrow "witness-step-indented"}}'
-            data-test-sbomComponentVulnerabilities-detailReachabilityWitnessStep='{{item.testIndex}}'
-          >
-            {{#if item.showArrow}}
-              <span local-class='witness-arrow'>
-                <AkIcon
-                  data-test-sbomComponentVulnerabilities-detailReachabilityWitnessArrow
-                  @iconName='codicon:arrow-small-right'
-                  @size='small'
-                  @color='textPrimary'
-                />
-              </span>
-            {{/if}}
-
-            <AkTooltip
-              @arrow={{true}}
-              @placement='top'
-              local-class='signature-tooltip'
-            >
-              <:default>
-                <AkTypography
-                  local-class='signature'
-                  @variant='body2'
-                  @breakWord={{true}}
-                >
-                  {{item.display}}
-                </AkTypography>
-              </:default>
-
-              <:tooltipContent>
-                <div
-                  {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}
-                >{{item.signature}}</div>
-              </:tooltipContent>
-            </AkTooltip>
-
-            {{#if item.edgeLabel}}
-              <AkChip
-                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessEdge
-                @variant='semi-filled'
-                @size='small'
-                @color='default'
-                @label={{item.edgeLabel}}
-              />
-            {{/if}}
-
-            {{#if item.isEntryPoint}}
-              <AkChip
-                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessEntry
-                @variant='semi-filled'
-                @size='small'
-                @color='primary'
-                @label={{t 'sbomModule.reachability.entryPoint'}}
-              />
-            {{/if}}
-
-            {{#if item.isTarget}}
-              <AkChip
-                data-test-sbomComponentVulnerabilities-detailReachabilityWitnessTarget
-                @variant='semi-filled'
-                @size='small'
-                @color='error'
-                @label={{t 'sbomModule.reachability.vulnerableFunction'}}
-              />
-            {{/if}}
-          </div>
-        {{/each}}
-      </div>
-    </AkStack>
-  {{/if}}
-
-  {{#if this.pathExplanation}}
-    <AkStack @direction='column' @spacing='0.5' @width='full'>
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanationLabel
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{t 'sbomModule.reachability.pathExplanation'}}
-      </AkTypography>
-
-      <div
-        local-class='panel-box explanation-text'
-        data-test-sbomComponentVulnerabilities-detailReachabilityPathExplanation
-      >
-        {{this.pathExplanation}}
-      </div>
-    </AkStack>
-  {{/if}}
-
-  {{#if this.hasBlockers}}
-    <AkStack
-      @direction='column'
-      @spacing='0.5'
-      @width='full'
-      data-test-sbomComponentVulnerabilities-detailReachabilityBlockers
-    >
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityBlockersLabel
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{t 'sbomModule.reachability.whyInconclusive'}}
-      </AkTypography>
-
-      <AkStack @spacing='0.5' @flexWrap='wrap'>
-        {{#each this.blockers as |blocker|}}
-          <AkChip
-            data-test-sbomComponentVulnerabilities-detailReachabilityBlocker='{{blocker.code}}'
-            @variant='semi-filled'
-            @size='small'
-            @color='warn'
-            @label={{blocker.label}}
-          />
-        {{/each}}
+        <AkStack @spacing='0.5' @flexWrap='wrap'>
+          {{#each this.blockers as |blocker|}}
+            <AkChip
+              data-test-sbomComponentVulnerabilities-detailReachabilityBlocker='{{blocker.code}}'
+              @variant='semi-filled'
+              @size='small'
+              @color='warn'
+              @label={{blocker.label}}
+            />
+          {{/each}}
+        </AkStack>
       </AkStack>
-    </AkStack>
-  {{/if}}
-</AkStack>
+    {{/if}}
+  </AkStack>
 {{/if}}
