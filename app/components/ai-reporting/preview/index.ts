@@ -14,11 +14,19 @@ import type {
 } from 'irene/models/ai-reporting/report-request';
 
 import type IreneAjaxService from 'irene/services/ajax';
+import type { ReportChartKind } from 'irene/utils/ai-reporting/report-chart';
+
+import {
+  defaultChartSettings,
+  type ReportChartSettings,
+} from 'irene/utils/ai-reporting/report-chart-settings';
 
 import type {
   ReportRequestPreview,
   PreviewFilterDetails,
 } from 'irene/models/ai-reporting/report-request';
+
+type PreviewViewTab = 'visualization' | 'table';
 
 interface AiReportingPreviewSignature {
   Args: { reportRequest: ReportRequestModel };
@@ -41,6 +49,12 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
   @tracked additionalFilters: AdditionalFilter[] = [];
   @tracked errorScreenHeader: string = '';
   @tracked errorScreenDesc: string = '';
+
+  // every report opens on the table; the viewer switches to Visualization
+  @tracked selectedTab: PreviewViewTab = 'table';
+  @tracked chartKind: ReportChartKind | null = null;
+  // the viewer's chart customisations: kept while on this page, not saved
+  @tracked chartSettings: ReportChartSettings = this.freshChartSettings();
 
   constructor(owner: unknown, args: AiReportingPreviewSignature['Args']) {
     super(owner, args);
@@ -92,12 +106,91 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
     );
   }
 
+  get chart() {
+    return this.reportPreview?.chart ?? null;
+  }
+
+  get chartColumns() {
+    return this.reportPreview?.columns ?? [];
+  }
+
+  get chartRows() {
+    return this.reportPreview?.chart_data ?? [];
+  }
+
+  get showChart() {
+    return !!this.chart && this.chartRows.length > 0;
+  }
+
+  get viewTabs() {
+    return [
+      {
+        id: 'table',
+        icon: 'table-chart' as const,
+        label: this.intl.t('reportModule.table'),
+      },
+      {
+        id: 'visualization',
+        icon: 'bar-chart' as const,
+        label: this.intl.t('reportModule.visualization'),
+      },
+    ];
+  }
+
+  get isVisualizationTab() {
+    return this.selectedTab === 'visualization';
+  }
+
+  /** Without rows the reason is the table's (no results, failed); with rows the report is a plain list. */
+  get hasNoRows() {
+    return !this.reportPreview || this.reportPreview.data.length === 0;
+  }
+
+  get noChartHeader() {
+    return this.hasNoRows
+      ? this.errorScreenHeader
+      : this.intl.t('reportModule.noChartHeader');
+  }
+
+  get noChartDesc() {
+    return this.hasNoRows
+      ? this.errorScreenDesc
+      : this.intl.t('reportModule.noChartDesc');
+  }
+
   get hasAdvancedFilters() {
     return this.filterDetails.length > 0;
   }
 
   get showAdvanceFilterDrawer() {
     return this.hasAdvancedFilters && this.advanceFilterDrawerOpen;
+  }
+
+  @action
+  handleViewTabClick(id: number | string) {
+    this.selectedTab = id as PreviewViewTab;
+  }
+
+  @action
+  handleChartKindChange(kind: ReportChartKind) {
+    this.chartKind = kind;
+  }
+
+  @action
+  handleChartSettingsChange(settings: ReportChartSettings) {
+    this.chartSettings = settings;
+  }
+
+  @action
+  handleChartSettingsReset() {
+    this.chartSettings = this.freshChartSettings();
+  }
+
+  freshChartSettings() {
+    return defaultChartSettings({
+      other: this.intl.t('reportModule.chartSettings.other'),
+      trend: this.intl.t('reportModule.chartSettings.trend'),
+    });
   }
 
   @action

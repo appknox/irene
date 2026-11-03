@@ -1,0 +1,25 @@
+<AkStack @spacing='2' @flexWrap='wrap'>
+  {{#each @tiles as |tile|}}
+    <AkStack
+      @direction='column'
+      @alignItems='center'
+      @spacing='0.5'
+      local-class='number-tile'
+      data-test-aiReporting-preview-chart-tile='{{tile.field}}'
+    >
+      <AkTypography
+        local-class='number-tile-value'
+        data-test-aiReporting-preview-chart-tileValue
+      >
+        {{tile.value}}
+      </AkTypography>
+
+      <AkTypography
+        @color='textSecondary'
+        data-test-aiReporting-preview-chart-tileLabel
+      >
+        {{tile.label}}
+      </AkTypography>
+    </AkStack>
+  {{/each}}
+</AkStack>

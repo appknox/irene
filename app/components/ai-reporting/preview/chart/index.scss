@@ -1,0 +1,28 @@
+.kind-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.35em 0.75em;
+  font: inherit;
+  font-size: 0.928em;
+  color: var(--ai-reporting-preview-chart-kind-color);
+  background-color: var(--ai-reporting-preview-chart-kind-bg-color);
+  border: 1px solid var(--ai-reporting-preview-chart-kind-border-color);
+  border-radius: var(--ai-reporting-preview-chart-tile-border-radius);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--ai-reporting-preview-chart-kind-active-color);
+  }
+}
+
+.kind-button-active {
+  color: var(--ai-reporting-preview-chart-kind-active-color);
+  background-color: var(--ai-reporting-preview-chart-kind-active-bg-color);
+  border-color: var(--ai-reporting-preview-chart-kind-active-color);
+}
+
+.chart-area {
+  flex: 1;
+  min-width: 0;
+}

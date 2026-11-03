@@ -203,6 +203,15 @@ export const MaterialSymbolsSet = [
   'cloud-outline',
   'key-outline',
   'token-outline',
+  'numbers',
+  'bar-chart',
+  'align-horizontal-left',
+  'area-chart',
+  'donut-large',
+  'stacked-bar-chart',
+  'bar-chart-4-bars',
+  'table-chart',
+  'tune',
 ] as const;
 
 export const MdiIconsSet = [

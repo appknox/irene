@@ -1,0 +1,22 @@
+<div ...attributes>
+  {{#if @label}}
+    <AkTypography @variant='subtitle2' class='mb-1'>{{@label}}</AkTypography>
+  {{/if}}
+
+  <div local-class='segmented' role='group' aria-label={{@label}}>
+    {{#each @options as |option|}}
+      <button
+        type='button'
+        local-class='segment {{if
+          (eq option.value @selected)
+          "segment-active"
+        }}'
+        aria-pressed={{if (eq option.value @selected) 'true' 'false'}}
+        {{on 'click' (fn @onSelect option.value)}}
+        data-test-aiReporting-chartCustomize-segment={{option.value}}
+      >
+        {{option.label}}
+      </button>
+    {{/each}}
+  </div>
+</div>

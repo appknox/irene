@@ -1,0 +1,73 @@
+<div local-class='panel' data-test-aiReporting-chartCustomize>
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    local-class='header'
+  >
+    <AkTypography @variant='h6'>
+      {{t 'reportModule.chartSettings.customize'}}
+    </AkTypography>
+
+    <AkStack @alignItems='center' @spacing='0.5'>
+      <AkButton
+        @variant='text'
+        @color='primary'
+        {{on 'click' @onReset}}
+        data-test-aiReporting-chartCustomize-reset
+      >
+        <:leftIcon>
+          <AkIcon @iconName='refresh' @size='small' />
+        </:leftIcon>
+
+        <:default>{{t 'reportModule.chartSettings.reset'}}</:default>
+      </AkButton>
+
+      <AkIconButton
+        @size='small'
+        aria-label={{t 'close'}}
+        {{on 'click' @onClose}}
+        data-test-aiReporting-chartCustomize-close
+      >
+        <AkIcon @iconName='close' @size='small' />
+      </AkIconButton>
+    </AkStack>
+  </AkStack>
+
+  <AkTabs class='px-2' as |akt|>
+    {{#each this.tabs as |tab|}}
+      <akt.tabItem
+        @id={{tab.id}}
+        @buttonVariant={{true}}
+        @isActive={{eq tab.id this.activeTab}}
+        @onTabClick={{this.selectTab}}
+        data-test-aiReporting-chartCustomize-tab={{tab.id}}
+      >
+        {{tab.label}}
+      </akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  {{! Field and toggle values are passed as (concat ...) / (if ... true false) or helper results, so the built-in <Input> cannot write them back into the settings: every change goes through onChange. }}
+  <div local-class='body'>
+    {{#if (eq this.activeTab 'data')}}
+      <AiReporting::Preview::Chart::Customize::DataTab
+        @items={{@items}}
+        @controls={{@controls}}
+        @settings={{@settings}}
+        @onChange={{@onChange}}
+      />
+    {{else if (eq this.activeTab 'display')}}
+      <AiReporting::Preview::Chart::Customize::DisplayTab
+        @controls={{@controls}}
+        @settings={{@settings}}
+        @onChange={{@onChange}}
+      />
+    {{else}}
+      <AiReporting::Preview::Chart::Customize::AxesTab
+        @settings={{@settings}}
+        @defaultTitles={{@defaultTitles}}
+        @onChange={{@onChange}}
+      />
+    {{/if}}
+  </div>
+</div>

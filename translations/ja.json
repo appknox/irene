@@ -2016,6 +2016,120 @@
       }
     },
     "characterLimit": "400 characters",
+    "chartType": "Chart type",
+    "chartSettings": {
+      "customize": "Customize",
+      "reset": "Reset",
+      "tabs": {
+        "data": "Data",
+        "display": "Display",
+        "axes": "Axes"
+      },
+      "items": {
+        "series": "Series",
+        "categories": "Slices",
+        "tiles": "Numbers"
+      },
+      "name": "Name",
+      "color": "Color",
+      "customColor": "Custom color",
+      "displayAs": "Display as",
+      "display": {
+        "default": "Chart",
+        "bar": "Bar",
+        "line": "Line",
+        "area": "Area"
+      },
+      "rightAxis": "Use the right axis",
+      "valuesLabel": "Values on data points",
+      "values": {
+        "auto": "Auto",
+        "all": "All",
+        "off": "Off"
+      },
+      "legendLabel": "Legend",
+      "legend": {
+        "auto": "Auto",
+        "on": "On",
+        "off": "Off"
+      },
+      "sortLabel": "Sort",
+      "sort": {
+        "default": "As in report",
+        "desc": "Largest first",
+        "asc": "Smallest first"
+      },
+      "stackPercent": "Stack to 100%",
+      "trendLine": "Trend line",
+      "goalLine": "Goal line",
+      "goalValue": "Goal value",
+      "goalLabel": "Goal label",
+      "lineSection": "Lines",
+      "lineShapeLabel": "Line shape",
+      "lineShape": {
+        "straight": "Straight",
+        "curved": "Curved",
+        "step": "Step"
+      },
+      "lineStyleLabel": "Line style",
+      "lineStyle": {
+        "solid": "Solid",
+        "dashed": "Dashed",
+        "dotted": "Dotted"
+      },
+      "lineWidthLabel": "Line size",
+      "lineWidth": {
+        "small": "S",
+        "medium": "M",
+        "large": "L"
+      },
+      "dotsLabel": "Dots on lines",
+      "dots": {
+        "auto": "Auto",
+        "on": "On",
+        "off": "Off"
+      },
+      "pieSection": "Pie",
+      "showTotal": "Show total",
+      "showLabels": "Show labels",
+      "percentagesLabel": "Show percentages",
+      "percentages": {
+        "off": "Off",
+        "legend": "In legend",
+        "chart": "On chart",
+        "both": "Both"
+      },
+      "minSlicePercent": "Minimum slice percentage",
+      "numberSection": "Numbers",
+      "decimals": "Decimal places",
+      "auto": "Auto",
+      "separators": "Thousands separators",
+      "compact": "Compact numbers (1.2K)",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "multiplyBy": "Multiply by",
+      "xAxis": "X-axis",
+      "yAxis": "Y-axis",
+      "showAxis": "Show axis",
+      "axisTitle": "Title",
+      "showAxisLabels": "Show labels",
+      "gridLines": "Grid lines",
+      "logScale": "Log scale",
+      "min": "Minimum",
+      "max": "Maximum",
+      "other": "Other",
+      "trend": "trend"
+    },
+    "chartKinds": {
+      "area": "Area",
+      "bar": "Bar",
+      "grouped_bar": "Grouped bar",
+      "line": "Line",
+      "number": "Number",
+      "pie": "Pie",
+      "row": "Horizontal bar",
+      "stacked_bar": "Stacked bar"
+    },
     "clickPrompt": "Click a prompt to paste it in the text area and use as a starting point for your report",
     "customReportsDescription": "Generate custom reports based on your specific needs",
     "defaultFilter": "The following results have been filtered by default.",
@@ -2040,7 +2154,11 @@
     "recentReports": "Recent Reports",
     "reportGenerated": "Report Generated",
     "reportGeneratedCheckDownload": "Report has been generated. Please check your downloads or wait for download to start.",
+    "noChartHeader": "No chart for this report",
+    "noChartDesc": "This report lists individual records. Ask for counts, totals or trends, for example \"How many open findings by severity for each app\", to see a chart.",
     "reportQuery": "Report Query",
+    "table": "Table",
+    "visualization": "Visualization",
     "rephrasingErrorHeader": "Try rephrasing query",
     "rephrasingErrorDesc": "Try rephrasing it with more details or specifics",
     "scanReportsDescription": "Generate reports related to scan activities",

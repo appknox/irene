@@ -1,0 +1,83 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  data-test-aiReporting-chartCustomize-dataTab
+>
+  <AkTypography @variant='subtitle1'>{{this.heading}}</AkTypography>
+
+  {{#each @items as |item|}}
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      local-class='item'
+      data-test-aiReporting-chartCustomize-item={{item.key}}
+    >
+      <AkTextField
+        @label={{t 'reportModule.chartSettings.name'}}
+        @value={{this.nameOf item}}
+        @placeholder={{item.label}}
+        {{on 'input' (fn this.rename item)}}
+        data-test-aiReporting-chartCustomize-itemName
+      />
+
+      {{#if @controls.colors}}
+        <div>
+          <AkTypography @variant='subtitle2' class='mb-1'>
+            {{t 'reportModule.chartSettings.color'}}
+          </AkTypography>
+
+          <AkStack @spacing='0.75' @alignItems='center' @flexWrap='wrap'>
+            {{#each this.palette as |color|}}
+              <button
+                type='button'
+                local-class='swatch {{if
+                  (eq color (this.colorOf item))
+                  "swatch-active"
+                }}'
+                aria-label={{color}}
+                aria-pressed={{if
+                  (eq color (this.colorOf item))
+                  'true'
+                  'false'
+                }}
+                {{style backgroundColor=color}}
+                {{on 'click' (fn this.pickColor item color)}}
+                data-test-aiReporting-chartCustomize-swatch={{color}}
+              />
+            {{/each}}
+
+            <input
+              type='color'
+              local-class='custom-color'
+              value={{or (this.colorOf item) '#509EE3'}}
+              aria-label={{t 'reportModule.chartSettings.customColor'}}
+              {{on 'change' (fn this.pickCustomColor item)}}
+              data-test-aiReporting-chartCustomize-customColor
+            />
+          </AkStack>
+        </div>
+      {{/if}}
+
+      {{#if @controls.seriesDisplay}}
+        <AiReporting::Preview::Chart::Customize::Segmented
+          @label={{t 'reportModule.chartSettings.displayAs'}}
+          @options={{this.displayOptions}}
+          @selected={{this.displayOf item}}
+          @onSelect={{fn this.pickDisplay item}}
+          data-test-aiReporting-chartCustomize-itemDisplay
+        />
+      {{/if}}
+
+      {{#if @controls.rightAxis}}
+        <AkFormControlLabel @label={{t 'reportModule.chartSettings.rightAxis'}}>
+          <AkToggle
+            @size='small'
+            @checked={{this.onRightAxis item}}
+            @onChange={{fn this.toggleRightAxis item}}
+            data-test-aiReporting-chartCustomize-itemRightAxis
+          />
+        </AkFormControlLabel>
+      {{/if}}
+    </AkStack>
+  {{/each}}
+</AkStack>

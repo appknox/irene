@@ -20,6 +20,7 @@ import type {
   GridComponentOption,
   DatasetComponentOption,
   LegendComponentOption,
+  MarkLineComponentOption,
 } from 'echarts/components';
 import {
   TitleComponent,
@@ -28,6 +29,7 @@ import {
   DatasetComponent,
   TransformComponent,
   LegendComponent,
+  MarkLineComponent,
 } from 'echarts/components';
 
 // Features like Universal Transition and Label Layout
@@ -50,6 +52,7 @@ echarts.use([
   DatasetComponent,
   TransformComponent,
   LegendComponent,
+  MarkLineComponent,
   LabelLayout,
   UniversalTransition,
   CanvasRenderer,
@@ -65,6 +68,7 @@ export type ECOption = echarts.ComposeOption<
   | GridComponentOption
   | DatasetComponentOption
   | LegendComponentOption
+  | MarkLineComponentOption
 >;
 
 export type ECInstance = echarts.ECharts;
@@ -75,6 +79,8 @@ interface AkChartSignature {
     width?: string;
     height?: string;
     option: ECOption;
+    // replace the drawn chart instead of merging into it, for charts that change shape
+    notMerge?: boolean;
     onInit?: (instance: ECInstance) => void;
   };
 }
@@ -96,7 +102,9 @@ export default class AkChartComponent extends Component<AkChartSignature> {
 
   @action
   handleOptionChange() {
-    this.echartInstance?.setOption(this.args.option);
+    this.echartInstance?.setOption(this.args.option, {
+      notMerge: !!this.args.notMerge,
+    });
   }
 
   @action

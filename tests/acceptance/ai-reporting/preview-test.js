@@ -445,6 +445,112 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
     });
   });
 
+  test('tabs: every report opens on Table, the chart is one click away', async function (assert) {
+    const testData = AI_REPORT_UTILS.generateTestData(3);
+
+    const reportRequest = this.server.create('ai-reporting/report-request', {
+      is_relevant: true,
+    });
+
+    this.server.post('/ai_reporting/report_request/:id/preview', () => {
+      return {
+        ...testData,
+        title: 'Totals Report',
+        chart: { type: 'number', x: null, y: ['findings'], series: null },
+        chart_data: [{ findings: 42 }],
+      };
+    });
+
+    await visit(`/dashboard/reports/preview/${reportRequest.id}`);
+
+    await waitFor('[data-test-aiReporting-preview-table-container]', {
+      timeout: 300,
+    });
+
+    const tabs = findAll('[data-test-aiReporting-preview-viewTab]');
+
+    assert.deepEqual(
+      tabs.map((tab) =>
+        tab.getAttribute('data-test-aiReporting-preview-viewTab')
+      ),
+      ['table', 'visualization'],
+      'Table comes first'
+    );
+
+    assert
+      .dom('[data-test-aiReporting-preview-viewTab="table"]')
+      .containsText(t('reportModule.table'));
+
+    assert
+      .dom('[data-test-aiReporting-preview-viewTab="visualization"]')
+      .containsText(t('reportModule.visualization'));
+
+    assert.dom('[data-test-aiReporting-preview-chart]').doesNotExist();
+
+    await click(
+      '[data-test-aiReporting-preview-viewTab="visualization"] button'
+    );
+
+    assert
+      .dom('[data-test-aiReporting-preview-chart-tile="findings"]')
+      .containsText('42');
+
+    assert
+      .dom('[data-test-aiReporting-preview-table-container]')
+      .doesNotExist();
+
+    await click('[data-test-aiReporting-preview-viewTab="table"] button');
+
+    assert.dom('[data-test-aiReporting-preview-table-container]').exists();
+  });
+
+  test.each(
+    'tabs: a report without a chart explains why on Visualization',
+    [
+      { chart: null, chartData: [] },
+      {
+        chart: { type: 'bar', x: 'risk', y: ['findings'], series: null },
+        chartData: [],
+      },
+    ],
+    async function (assert, { chart, chartData }) {
+      const testData = AI_REPORT_UTILS.generateTestData(3);
+
+      const reportRequest = this.server.create('ai-reporting/report-request', {
+        is_relevant: true,
+      });
+
+      this.server.post('/ai_reporting/report_request/:id/preview', () => {
+        return {
+          ...testData,
+          title: 'List Report',
+          chart,
+          chart_data: chartData,
+        };
+      });
+
+      await visit(`/dashboard/reports/preview/${reportRequest.id}`);
+
+      await waitFor('[data-test-aiReporting-preview-table-container]', {
+        timeout: 300,
+      });
+
+      assert.dom('[data-test-aiReporting-preview-chart]').doesNotExist();
+
+      await click(
+        '[data-test-aiReporting-preview-viewTab="visualization"] button'
+      );
+
+      assert
+        .dom('[data-test-aiReporting-preview-noChartHeader]')
+        .hasText(t('reportModule.noChartHeader'));
+
+      assert
+        .dom('[data-test-aiReporting-preview-noChartDesc]')
+        .hasText(t('reportModule.noChartDesc'));
+    }
+  );
+
   /**
    * ================================
    * TEST: SELECT/DESELECT COLUMNS

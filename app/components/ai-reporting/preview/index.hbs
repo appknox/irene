@@ -118,16 +118,91 @@
 
   <AkDivider @color='dark' />
 
-  <AiReporting::Preview::Table
-    @isFetchingReportPreview={{this.previewReportRequest.isRunning}}
-    @reportPreview={{this.reportPreview}}
-    @selectedColumns={{this.selectedColumns}}
-    @errorScreenHeader={{this.errorScreenHeader}}
-    @errorScreenDesc={{this.errorScreenDesc}}
-    @refetchPreviewRequest={{this.handleRefetchPreviewRequest}}
-    @limit={{this.limit}}
-    @offset={{this.offset}}
-  />
+  <AkTabs
+    class='px-2'
+    local-class='view-tabs'
+    data-test-aiReporting-preview-viewTabs
+    as |akt|
+  >
+    {{#each this.viewTabs as |tab|}}
+      <akt.tabItem
+        @id={{tab.id}}
+        @buttonVariant={{true}}
+        @isActive={{eq tab.id this.selectedTab}}
+        @onTabClick={{this.handleViewTabClick}}
+        data-test-aiReporting-preview-viewTab='{{tab.id}}'
+      >
+        <:tabIcon>
+          <AkIcon @iconName={{tab.icon}} @size='small' />
+        </:tabIcon>
+
+        <:default>{{tab.label}}</:default>
+      </akt.tabItem>
+    {{/each}}
+  </AkTabs>
+
+  {{#if this.isVisualizationTab}}
+    {{#if this.previewReportRequest.isRunning}}
+      <AkStack
+        @alignItems='center'
+        @justifyContent='center'
+        local-class='visualization-placeholder'
+        data-test-aiReporting-preview-chart-loading
+      >
+        <AkLoader />
+      </AkStack>
+    {{else if this.showChart}}
+      {{#let this.chart as |chart|}}
+        {{#if chart}}
+          <AiReporting::Preview::Chart
+            @chart={{chart}}
+            @rows={{this.chartRows}}
+            @columns={{this.chartColumns}}
+            @kind={{this.chartKind}}
+            @onKindChange={{this.handleChartKindChange}}
+            @settings={{this.chartSettings}}
+            @onSettingsChange={{this.handleChartSettingsChange}}
+            @onSettingsReset={{this.handleChartSettingsReset}}
+          />
+        {{/if}}
+      {{/let}}
+    {{else}}
+      <AkStack
+        @direction='column'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='1'
+        local-class='visualization-placeholder'
+        data-test-aiReporting-preview-noChart
+      >
+        <AkIcon @iconName='bar-chart' @color='textSecondary' />
+
+        <AkTypography @variant='h5' data-test-aiReporting-preview-noChartHeader>
+          {{this.noChartHeader}}
+        </AkTypography>
+
+        <AkTypography
+          @align='center'
+          @color='textSecondary'
+          {{style maxWidth='480px'}}
+          data-test-aiReporting-preview-noChartDesc
+        >
+          {{this.noChartDesc}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+  {{else}}
+    <AiReporting::Preview::Table
+      @isFetchingReportPreview={{this.previewReportRequest.isRunning}}
+      @reportPreview={{this.reportPreview}}
+      @selectedColumns={{this.selectedColumns}}
+      @errorScreenHeader={{this.errorScreenHeader}}
+      @errorScreenDesc={{this.errorScreenDesc}}
+      @refetchPreviewRequest={{this.handleRefetchPreviewRequest}}
+      @limit={{this.limit}}
+      @offset={{this.offset}}
+    />
+  {{/if}}
 </div>
 
 <AiReporting::Preview::FilterByColumnDrawer

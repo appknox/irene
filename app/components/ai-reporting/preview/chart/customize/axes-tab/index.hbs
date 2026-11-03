@@ -1,0 +1,117 @@
+<AkStack
+  @direction='column'
+  @spacing='2.5'
+  data-test-aiReporting-chartCustomize-axesTab
+>
+  <AkStack
+    @direction='column'
+    @spacing='1.5'
+    data-test-aiReporting-chartCustomize-xAxis
+  >
+    <AkTypography @variant='subtitle1'>
+      {{t 'reportModule.chartSettings.xAxis'}}
+    </AkTypography>
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.showAxis'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.xAxis.show true false}}
+        @onChange={{fn this.toggle 'xAxis' 'show'}}
+        data-test-aiReporting-chartCustomize-xAxisShow
+      />
+    </AkFormControlLabel>
+
+    <AkTextField
+      @label={{t 'reportModule.chartSettings.axisTitle'}}
+      @value={{concat this.xTitle}}
+      {{on 'input' (fn this.title 'xAxis')}}
+      data-test-aiReporting-chartCustomize-xAxisTitle
+    />
+
+    <AkFormControlLabel
+      @label={{t 'reportModule.chartSettings.showAxisLabels'}}
+    >
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.xAxis.labels true false}}
+        @onChange={{fn this.toggle 'xAxis' 'labels'}}
+        data-test-aiReporting-chartCustomize-xAxisLabels
+      />
+    </AkFormControlLabel>
+  </AkStack>
+
+  <AkStack
+    @direction='column'
+    @spacing='1.5'
+    data-test-aiReporting-chartCustomize-yAxis
+  >
+    <AkTypography @variant='subtitle1'>
+      {{t 'reportModule.chartSettings.yAxis'}}
+    </AkTypography>
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.showAxis'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.yAxis.show true false}}
+        @onChange={{fn this.toggle 'yAxis' 'show'}}
+        data-test-aiReporting-chartCustomize-yAxisShow
+      />
+    </AkFormControlLabel>
+
+    <AkTextField
+      @label={{t 'reportModule.chartSettings.axisTitle'}}
+      @value={{concat this.yTitle}}
+      {{on 'input' (fn this.title 'yAxis')}}
+      data-test-aiReporting-chartCustomize-yAxisTitle
+    />
+
+    <AkFormControlLabel
+      @label={{t 'reportModule.chartSettings.showAxisLabels'}}
+    >
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.yAxis.labels true false}}
+        @onChange={{fn this.toggle 'yAxis' 'labels'}}
+        data-test-aiReporting-chartCustomize-yAxisLabels
+      />
+    </AkFormControlLabel>
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.gridLines'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.yAxis.gridLines true false}}
+        @onChange={{fn this.toggle 'yAxis' 'gridLines'}}
+        data-test-aiReporting-chartCustomize-gridLines
+      />
+    </AkFormControlLabel>
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.logScale'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.yAxis.log true false}}
+        @onChange={{fn this.toggle 'yAxis' 'log'}}
+        data-test-aiReporting-chartCustomize-logScale
+      />
+    </AkFormControlLabel>
+
+    <AkStack @spacing='1'>
+      <AkTextField
+        @type='number'
+        @label={{t 'reportModule.chartSettings.min'}}
+        @value={{concat this.yMin}}
+        @placeholder={{t 'reportModule.chartSettings.auto'}}
+        {{on 'change' (fn this.bound 'min')}}
+        data-test-aiReporting-chartCustomize-yAxisMin
+      />
+
+      <AkTextField
+        @type='number'
+        @label={{t 'reportModule.chartSettings.max'}}
+        @value={{concat this.yMax}}
+        @placeholder={{t 'reportModule.chartSettings.auto'}}
+        {{on 'change' (fn this.bound 'max')}}
+        data-test-aiReporting-chartCustomize-yAxisMax
+      />
+    </AkStack>
+  </AkStack>
+</AkStack>

@@ -1,0 +1,91 @@
+<div class='p-2' data-test-aiReporting-preview-chart>
+  <AkStack
+    @justifyContent='space-between'
+    @alignItems='center'
+    @spacing='1'
+    class='mb-2'
+  >
+    {{#if this.hasKindChoices}}
+      <AkStack
+        @spacing='1'
+        @flexWrap='wrap'
+        @alignItems='center'
+        data-test-aiReporting-preview-chart-kinds
+      >
+        <AkTypography @color='textSecondary' class='mr-1'>
+          {{t 'reportModule.chartType'}}
+        </AkTypography>
+
+        {{#each this.kinds as |kind|}}
+          <button
+            type='button'
+            local-class='kind-button {{if
+              (eq kind.id this.activeKind)
+              "kind-button-active"
+            }}'
+            aria-pressed={{if (eq kind.id this.activeKind) 'true' 'false'}}
+            {{on 'click' (fn this.selectKind kind.id)}}
+            data-test-aiReporting-preview-chart-kind='{{kind.id}}'
+          >
+            <AkIcon @iconName={{kind.icon}} @size='small' />
+            <span>{{kind.label}}</span>
+          </button>
+        {{/each}}
+      </AkStack>
+    {{else}}
+      <span />
+    {{/if}}
+
+    {{#if this.canCustomize}}
+      <button
+        type='button'
+        local-class='kind-button {{if this.customizeOpen "kind-button-active"}}'
+        aria-pressed={{if this.customizeOpen 'true' 'false'}}
+        {{on 'click' this.toggleCustomize}}
+        data-test-aiReporting-preview-chart-customizeBtn
+      >
+        <AkIcon @iconName='tune' @size='small' />
+        <span>{{t 'reportModule.chartSettings.customize'}}</span>
+      </button>
+    {{/if}}
+  </AkStack>
+
+  {{! The chart is drawn in its own branch per layout so it is re-created at the new width. }}
+  {{#if this.customizeOpen}}
+    <AkStack @spacing='2' @alignItems='flex-start' @width='full'>
+      <AiReporting::Preview::Chart::Customize
+        @items={{this.items}}
+        @controls={{this.controls}}
+        @settings={{this.settings}}
+        @defaultTitles={{this.defaultTitles}}
+        @onChange={{this.changeSettings}}
+        @onReset={{this.resetSettings}}
+        @onClose={{this.closeCustomize}}
+      />
+
+      <div local-class='chart-area'>
+        {{#if this.isNumber}}
+          <AiReporting::Preview::Chart::Tiles @tiles={{this.tiles}} />
+        {{else if this.option}}
+          <AkChart
+            @width='100%'
+            @height='520px'
+            @option={{this.option}}
+            @notMerge={{true}}
+            data-test-aiReporting-preview-chart-canvas
+          />
+        {{/if}}
+      </div>
+    </AkStack>
+  {{else if this.isNumber}}
+    <AiReporting::Preview::Chart::Tiles @tiles={{this.tiles}} />
+  {{else if this.option}}
+    <AkChart
+      @width='100%'
+      @height='420px'
+      @option={{this.option}}
+      @notMerge={{true}}
+      data-test-aiReporting-preview-chart-canvas
+    />
+  {{/if}}
+</div>

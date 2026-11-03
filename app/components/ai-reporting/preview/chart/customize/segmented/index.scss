@@ -1,0 +1,27 @@
+.segmented {
+  display: flex;
+  border: 1px solid var(--ai-reporting-preview-chart-kind-active-color);
+  border-radius: var(--ai-reporting-preview-chart-tile-border-radius);
+  overflow: hidden;
+}
+
+.segment {
+  flex: 1;
+  padding: 0.4em 0.5em;
+  font: inherit;
+  font-size: 0.857em;
+  color: var(--ai-reporting-preview-chart-kind-active-color);
+  background-color: var(--ai-reporting-preview-chart-kind-bg-color);
+  border: none;
+  border-left: 1px solid var(--ai-reporting-preview-chart-kind-active-color);
+  cursor: pointer;
+
+  &:first-child {
+    border-left: none;
+  }
+}
+
+.segment-active {
+  color: var(--ai-reporting-preview-chart-kind-bg-color);
+  background-color: var(--ai-reporting-preview-chart-kind-active-color);
+}

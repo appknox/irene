@@ -1,0 +1,228 @@
+<AkStack
+  @direction='column'
+  @spacing='2.5'
+  data-test-aiReporting-chartCustomize-displayTab
+>
+  {{#if @controls.values}}
+    <AiReporting::Preview::Chart::Customize::Segmented
+      @label={{t 'reportModule.chartSettings.valuesLabel'}}
+      @options={{this.valuesOptions}}
+      @selected={{@settings.values}}
+      @onSelect={{fn this.chooseTop 'values'}}
+      data-test-aiReporting-chartCustomize-values
+    />
+  {{/if}}
+
+  {{#if @controls.legend}}
+    <AiReporting::Preview::Chart::Customize::Segmented
+      @label={{t 'reportModule.chartSettings.legendLabel'}}
+      @options={{this.legendOptions}}
+      @selected={{@settings.legend}}
+      @onSelect={{fn this.chooseTop 'legend'}}
+      data-test-aiReporting-chartCustomize-legend
+    />
+  {{/if}}
+
+  {{#if @controls.sort}}
+    <AiReporting::Preview::Chart::Customize::Segmented
+      @label={{t 'reportModule.chartSettings.sortLabel'}}
+      @options={{this.sortOptions}}
+      @selected={{@settings.sort}}
+      @onSelect={{fn this.chooseTop 'sort'}}
+      data-test-aiReporting-chartCustomize-sort
+    />
+  {{/if}}
+
+  {{#if @controls.stackPercent}}
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.stackPercent'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.stackPercent true false}}
+        @onChange={{fn this.toggleTop 'stackPercent'}}
+        data-test-aiReporting-chartCustomize-stackPercent
+      />
+    </AkFormControlLabel>
+  {{/if}}
+
+  {{#if @controls.trend}}
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.trendLine'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.trendLine true false}}
+        @onChange={{fn this.toggleTop 'trendLine'}}
+        data-test-aiReporting-chartCustomize-trendLine
+      />
+    </AkFormControlLabel>
+  {{/if}}
+
+  {{#if @controls.goal}}
+    <AkStack @direction='column' @spacing='1'>
+      <AkFormControlLabel @label={{t 'reportModule.chartSettings.goalLine'}}>
+        <AkToggle
+          @size='small'
+          @checked={{if @settings.goal.show true false}}
+          @onChange={{fn this.toggle 'goal' 'show'}}
+          data-test-aiReporting-chartCustomize-goal
+        />
+      </AkFormControlLabel>
+
+      {{#if @settings.goal.show}}
+        <AkTextField
+          @type='number'
+          @label={{t 'reportModule.chartSettings.goalValue'}}
+          @value={{concat this.goalValue}}
+          {{on 'change' (fn this.number 'goal' 'value' null)}}
+          data-test-aiReporting-chartCustomize-goalValue
+        />
+
+        <AkTextField
+          @label={{t 'reportModule.chartSettings.goalLabel'}}
+          @value={{concat @settings.goal.label}}
+          {{on 'input' (fn this.text 'goal' 'label')}}
+          data-test-aiReporting-chartCustomize-goalLabel
+        />
+      {{/if}}
+    </AkStack>
+  {{/if}}
+
+  {{#if @controls.line}}
+    <AkStack @direction='column' @spacing='1.5'>
+      <AkTypography @variant='subtitle1'>
+        {{t 'reportModule.chartSettings.lineSection'}}
+      </AkTypography>
+
+      <AiReporting::Preview::Chart::Customize::Segmented
+        @label={{t 'reportModule.chartSettings.lineShapeLabel'}}
+        @options={{this.shapeOptions}}
+        @selected={{@settings.line.shape}}
+        @onSelect={{fn this.choose 'line' 'shape'}}
+        data-test-aiReporting-chartCustomize-lineShape
+      />
+
+      <AiReporting::Preview::Chart::Customize::Segmented
+        @label={{t 'reportModule.chartSettings.lineStyleLabel'}}
+        @options={{this.lineStyleOptions}}
+        @selected={{@settings.line.style}}
+        @onSelect={{fn this.choose 'line' 'style'}}
+        data-test-aiReporting-chartCustomize-lineStyle
+      />
+
+      <AiReporting::Preview::Chart::Customize::Segmented
+        @label={{t 'reportModule.chartSettings.lineWidthLabel'}}
+        @options={{this.widthOptions}}
+        @selected={{@settings.line.width}}
+        @onSelect={{fn this.choose 'line' 'width'}}
+        data-test-aiReporting-chartCustomize-lineWidth
+      />
+
+      <AiReporting::Preview::Chart::Customize::Segmented
+        @label={{t 'reportModule.chartSettings.dotsLabel'}}
+        @options={{this.dotsOptions}}
+        @selected={{@settings.line.dots}}
+        @onSelect={{fn this.choose 'line' 'dots'}}
+        data-test-aiReporting-chartCustomize-dots
+      />
+    </AkStack>
+  {{/if}}
+
+  {{#if @controls.pie}}
+    <AkStack @direction='column' @spacing='1.5'>
+      <AkTypography @variant='subtitle1'>
+        {{t 'reportModule.chartSettings.pieSection'}}
+      </AkTypography>
+
+      <AkFormControlLabel @label={{t 'reportModule.chartSettings.showTotal'}}>
+        <AkToggle
+          @size='small'
+          @checked={{if @settings.pie.total true false}}
+          @onChange={{fn this.toggle 'pie' 'total'}}
+          data-test-aiReporting-chartCustomize-pieTotal
+        />
+      </AkFormControlLabel>
+
+      <AkFormControlLabel @label={{t 'reportModule.chartSettings.showLabels'}}>
+        <AkToggle
+          @size='small'
+          @checked={{if @settings.pie.labels true false}}
+          @onChange={{fn this.toggle 'pie' 'labels'}}
+          data-test-aiReporting-chartCustomize-pieLabels
+        />
+      </AkFormControlLabel>
+
+      <AiReporting::Preview::Chart::Customize::Segmented
+        @label={{t 'reportModule.chartSettings.percentagesLabel'}}
+        @options={{this.percentagesOptions}}
+        @selected={{@settings.pie.percentages}}
+        @onSelect={{fn this.choose 'pie' 'percentages'}}
+        data-test-aiReporting-chartCustomize-piePercentages
+      />
+
+      <AkTextField
+        @type='number'
+        @label={{t 'reportModule.chartSettings.minSlicePercent'}}
+        @value={{concat this.minSlicePercent}}
+        @placeholder='0'
+        {{on 'change' (fn this.number 'pie' 'minSlicePercent' 0)}}
+        data-test-aiReporting-chartCustomize-pieMinSlice
+      />
+    </AkStack>
+  {{/if}}
+
+  <AkStack @direction='column' @spacing='1.5'>
+    <AkTypography @variant='subtitle1'>
+      {{t 'reportModule.chartSettings.numberSection'}}
+    </AkTypography>
+
+    <AiReporting::Preview::Chart::Customize::Segmented
+      @label={{t 'reportModule.chartSettings.decimals'}}
+      @options={{this.decimalsOptions}}
+      @selected={{this.selectedDecimals}}
+      @onSelect={{this.chooseDecimals}}
+      data-test-aiReporting-chartCustomize-decimals
+    />
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.separators'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.number.separators true false}}
+        @onChange={{fn this.toggle 'number' 'separators'}}
+        data-test-aiReporting-chartCustomize-separators
+      />
+    </AkFormControlLabel>
+
+    <AkFormControlLabel @label={{t 'reportModule.chartSettings.compact'}}>
+      <AkToggle
+        @size='small'
+        @checked={{if @settings.number.compact true false}}
+        @onChange={{fn this.toggle 'number' 'compact'}}
+        data-test-aiReporting-chartCustomize-compact
+      />
+    </AkFormControlLabel>
+
+    <AkStack @spacing='1'>
+      <AkTextField
+        @label={{t 'reportModule.chartSettings.prefix'}}
+        @value={{concat @settings.number.prefix}}
+        @placeholder='$'
+        {{on 'input' (fn this.text 'number' 'prefix')}}
+        data-test-aiReporting-chartCustomize-prefix
+      />
+
+      <AkTextField
+        @label={{t 'reportModule.chartSettings.suffix'}}
+        @value={{concat @settings.number.suffix}}
+        @placeholder='%'
+        {{on 'input' (fn this.text 'number' 'suffix')}}
+        data-test-aiReporting-chartCustomize-suffix
+      />
+    </AkStack>
+
+    <AkTextField
+      @type='number'
+      @label={{t 'reportModule.chartSettings.multiplyBy'}}
+      @value={{concat this.multiplyBy}}
+      {{on 'change' (fn this.number 'number' 'multiplyBy' 1)}}
+      data-test-aiReporting-chartCustomize-multiplyBy
+    />
+  </AkStack>
+</AkStack>

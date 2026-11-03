@@ -1,0 +1,12 @@
+.number-tile {
+  min-width: 220px;
+  padding: 2em 2.5em;
+  border: 1px solid var(--ai-reporting-preview-chart-tile-border-color);
+  border-radius: var(--ai-reporting-preview-chart-tile-border-radius);
+}
+
+.number-tile-value {
+  font-size: 3em !important;
+  font-weight: 700 !important;
+  line-height: 1.1 !important;
+}

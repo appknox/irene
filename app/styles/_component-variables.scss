@@ -3793,6 +3793,16 @@ body {
   --ai-reporting-preview-custom-button-color: var(--text-primary);
   --ai-reporting-preview-note-border-color: var(--neutral-grey-200);
   --ai-reporting-preview-note-bg-color: var(--neutral-grey-100);
+  --ai-reporting-preview-tabs-border-color: var(--neutral-grey-200);
+
+  // variables for ai-reporting/preview/chart
+  --ai-reporting-preview-chart-tile-border-color: var(--neutral-grey-200);
+  --ai-reporting-preview-chart-tile-border-radius: var(--border-radius);
+  --ai-reporting-preview-chart-kind-color: var(--text-primary);
+  --ai-reporting-preview-chart-kind-bg-color: var(--background-main);
+  --ai-reporting-preview-chart-kind-border-color: var(--neutral-grey-200);
+  --ai-reporting-preview-chart-kind-active-color: var(--primary-main);
+  --ai-reporting-preview-chart-kind-active-bg-color: var(--primary-main-10);
 
   // variables for ai-reporting/preview/filter-sections/columns
   --ai-reporting-preview-filter-sections-columns-header-border-color: var(

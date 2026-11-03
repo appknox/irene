@@ -37,3 +37,12 @@
     width: 3em;
   }
 }
+
+.view-tabs {
+  border-bottom: 1px solid var(--ai-reporting-preview-tabs-border-color);
+}
+
+.visualization-placeholder {
+  min-height: 420px;
+  padding: 2em;
+}

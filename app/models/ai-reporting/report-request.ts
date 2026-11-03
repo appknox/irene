@@ -64,12 +64,28 @@ export interface PreviewFilterDetails {
   fields: PreviewFilterField[];
 }
 
+export type ReportChartType = 'number' | 'bar' | 'line' | 'stacked_bar';
+
+/**
+ * How to draw a totals report. Fields name report columns:
+ * x is the category or period column (null for number tiles),
+ * y the total columns, series the column that splits a stacked bar.
+ */
+export interface ReportChart {
+  type: ReportChartType;
+  x: string | null;
+  y: string[];
+  series: string | null;
+}
+
 export interface ReportRequestPreview {
   title: string;
   columns: ReportPreviewColumn[];
   data: ReportPreviewData[];
   pagination: ReportPreviewPagination;
   filter_details: PreviewFilterDetails[];
+  chart?: ReportChart | null;
+  chart_data?: ReportPreviewData[];
 }
 
 export enum ReportRequestStatus {

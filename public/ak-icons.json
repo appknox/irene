@@ -591,6 +591,33 @@
       },
       "token-outline": {
         "body": "<path fill=\"currentColor\" d=\"m12 22l-9-5V7l9-5l9 5v10zM9.1 9.25q.575-.6 1.325-.925T12 8t1.575.325t1.325.925l3-1.675L12 4.3L6.1 7.575zm1.9 9.9v-3.275q-1.35-.35-2.175-1.425T8 12q0-.275.025-.513t.1-.487L5 9.25v6.575zm2.413-5.738Q14 12.825 14 12t-.587-1.412T12 10t-1.412.588T10 12t.588 1.413T12 14t1.413-.587M13 19.15l6-3.325V9.25L15.875 11q.075.25.1.488T16 12q0 1.375-.825 2.45T13 15.875z\"/>"
+      },
+      "numbers": {
+        "body": "<path fill=\"currentColor\" d=\"m6 20l1-4H3l.5-2h4l1-4h-4L5 8h4l1-4h2l-1 4h4l1-4h2l-1 4h4l-.5 2h-4l-1 4h4l-.5 2h-4l-1 4h-2l1-4H9l-1 4zm3.5-6h4l1-4h-4z\"/>"
+      },
+      "bar-chart": {
+        "body": "<path fill=\"currentColor\" d=\"M16 20v-7h4v7zm-6 0V4h4v16zm-6 0V9h4v11z\"/>"
+      },
+      "align-horizontal-left": {
+        "body": "<path fill=\"currentColor\" d=\"M2 22V2h2v20zm4-5v-3h10v3zm0-7V7h16v3z\"/>"
+      },
+      "area-chart": {
+        "body": "<path fill=\"currentColor\" d=\"m21 16l-9.4-7.35l-3.975 5.475L3 10.5V7l4 3l5-7l5 4h4zM3 20v-7l5 4l4-5.5l9 7.025V20z\"/>"
+      },
+      "donut-large": {
+        "body": "<path fill=\"currentColor\" d=\"M11.025 21.95q-3.85-.375-6.425-3.225T2.025 12T4.6 5.275t6.425-3.225v3q-2.6.35-4.3 2.325T5.025 12t1.7 4.625t4.3 2.325zm2 0v-3q2.35-.3 3.975-1.95t1.975-4h3q-.35 3.575-2.863 6.088t-6.087 2.862M18.975 11Q18.625 8.65 17 7t-3.975-1.95v-3q3.575.35 6.088 2.863T21.975 11z\"/>"
+      },
+      "stacked-bar-chart": {
+        "body": "<path fill=\"currentColor\" d=\"M4 20V9h4v11zM4 8V4h4v4zm6 12v-8h4v8zm0-9V7h4v4zm6 9v-5h4v5zm0-6v-4h4v4z\"/>"
+      },
+      "bar-chart-4-bars": {
+        "body": "<path fill=\"currentColor\" d=\"M2 21v-2h20v2zm1-3v-7h3v7zm5 0V6h3v12zm5 0V9h3v9zm5 0V3h3v15z\"/>"
+      },
+      "table-chart": {
+        "body": "<path fill=\"currentColor\" d=\"M3 8V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v3zm2 13q-.825 0-1.412-.587T3 19v-9h4.5v11zm11.5 0V10H21v9q0 .825-.587 1.413T19 21zm-7 0V10h5v11z\"/>"
+      },
+      "tune": {
+        "body": "<path fill=\"currentColor\" d=\"M11 21v-6h2v2h8v2h-8v2zm-8-2v-2h6v2zm4-4v-2H3v-2h4V9h2v6zm4-2v-2h10v2zm4-4V3h2v2h4v2h-4v2zM3 7V5h10v2z\"/>"
       }
     },
     "lastModified": 1790080274,
