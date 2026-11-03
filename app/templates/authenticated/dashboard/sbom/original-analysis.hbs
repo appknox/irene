@@ -1,0 +1,11 @@
+{{page-title (t 'sbomModule.originalAnalysis.title')}}
+
+<AkBreadcrumbs::AutoTrail class='pt-2 pb-3' />
+
+<Sbom::ScanDetails
+  @sbomProject={{@model.sbomProject}}
+  @sbomFile={{@model.sbomFile}}
+  @sbomScanSummary={{@model.sbomScanSummary}}
+  @queryParams={{@model.queryParams}}
+  @view='original'
+/>

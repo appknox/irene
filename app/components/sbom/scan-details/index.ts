@@ -43,12 +43,22 @@ export type AkTreeNodeProps = {
   children: AkTreeNodeProps[];
 };
 
+/**
+ * Which of the two component views this instance renders.
+ *
+ * `insights` is the landing view: reachability-relevant components only, as a
+ * flat list. `original` is the unfiltered list behind "See original analysis",
+ * where the tree still lives.
+ */
+export type SbomScanDetailsView = 'insights' | 'original';
+
 export interface SbomScanDetailsSignature {
   Args: {
     sbomProject: SbomProjectModel;
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
     queryParams: SbomScanDetailParam;
+    view?: SbomScanDetailsView;
   };
 }
 
@@ -89,13 +99,20 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
 
     this.activeTab = resolvedIsAiComponent === 'true' ? 'aibom' : 'sbom';
 
-    // Force list mode for AI-BOM and outdated files to preserve filters and avoid the tree-mode default.
+    // Force list mode for the insights view, AI-BOM and outdated files to preserve filters and avoid the tree-mode default.
     const resolvedViewType =
-      resolvedIsAiComponent === 'true' || this.args.sbomFile.isOutdated
+      args.view !== 'original' ||
+      resolvedIsAiComponent === 'true' ||
+      this.args.sbomFile.isOutdated
         ? 'list'
         : view_type;
 
     this.sbomViewType = this.isNotOutdated ? (view_type ?? 'tree') : 'list';
+
+    // The insights view lists only components with reachability findings;
+    // original-analysis lists everything. Set before the first fetch so the
+    // filter is part of the initial query, not a second round trip.
+    this.sbomScanDetailsService.onlyReachable = args.view !== 'original';
 
     // Fetch with default queries from the route
     this.sbomScanDetailsService
@@ -279,8 +296,26 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return !this.args.sbomFile.isOutdated;
   }
 
+  get isOriginalAnalysis() {
+    return this.args.view === 'original';
+  }
+
+  get scanRouteModels() {
+    return [this.args.sbomProject.id, this.args.sbomFile.id];
+  }
+
+  get totalComponentCount() {
+    return this.args.sbomScanSummary?.componentCount ?? 0;
+  }
+
+  /**
+   * The tree only exists on the original-analysis view; the insights list is
+   * flat so the per-component reachability counts line up in columns.
+   */
   get isTreeView() {
-    return this.sbomScanDetailsService.viewType !== 'list';
+    return (
+      this.isOriginalAnalysis && this.sbomScanDetailsService.viewType !== 'list'
+    );
   }
 
   @action
