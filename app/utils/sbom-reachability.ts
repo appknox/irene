@@ -46,6 +46,41 @@ export interface SbomReachabilityWitnessEdge {
   edge_type?: string;
 }
 
+/**
+ * Who owns one frame of a call path. The engine resolves this — package
+ * prefixes cannot, because shaded dependencies and multi-module apps both
+ * break the naive mapping.
+ */
+export const WitnessOwnerKind = {
+  APP: 'APP',
+  COMPONENT: 'COMPONENT',
+  PLATFORM: 'PLATFORM',
+} as const;
+
+export type WitnessOwnerKindValue =
+  (typeof WitnessOwnerKind)[keyof typeof WitnessOwnerKind];
+
+export interface SbomReachabilityWitnessOwner {
+  kind: WitnessOwnerKindValue;
+  component_ref?: string | null;
+  /** Display name, e.g. "LeafPic" or "jackson-databind 2.9.8". */
+  label?: string | null;
+}
+
+/**
+ * One frame of a call path. Carried alongside `witness_path` rather than on
+ * its edges: the annotations describe nodes, and the entry point has no
+ * incoming edge to hang them on.
+ */
+export interface SbomReachabilityWitnessNode {
+  signature: string;
+  /** Plain-English description of what happens at this frame. */
+  note?: string | null;
+  owner?: SbomReachabilityWitnessOwner | null;
+  /** Edge type arriving at this node; absent for the entry point. */
+  edge_type?: string;
+}
+
 export interface SbomReachabilityTarget {
   label?: string | null;
   presence?: string;
@@ -54,6 +89,8 @@ export interface SbomReachabilityTarget {
   capability_tier?: string;
   /** Optional AI-generated prose explaining this target's witness path. */
   explanation?: string | null;
+  /** Whether a call path was recorded for this target. */
+  has_witness?: boolean;
 }
 
 export interface SbomReachabilityFinding {
@@ -66,6 +103,8 @@ export interface SbomReachabilityFinding {
   targets_count?: number;
   blockers?: string[];
   witness_path?: SbomReachabilityWitnessEdge[];
+  /** Node-level view of the call path, when the engine supplied one. */
+  witness_nodes?: SbomReachabilityWitnessNode[];
 }
 
 export interface SbomComponentReachability {
@@ -333,18 +372,83 @@ export function formatDexSignature(signature: string): string {
   return `${owner}.${method}(${paramTypes.join(', ')})`;
 }
 
+/**
+ * Split a signature into its package and a short `Class.method()` form.
+ * DEX signatures are read raw so nested-class markers (`$`) survive; anything
+ * else falls back to splitting the dotted name, and signatures with no dots
+ * (mangled Swift symbols) pass through whole.
+ */
+export function shortSignature(signature: string): {
+  packageName: string | null;
+  display: string;
+} {
+  const dex = signature.match(/^L([^;]+);->([^(<]+)(\(.*)?$/);
+
+  if (dex) {
+    const [, rawOwner = '', name = ''] = dex;
+    const segments = rawOwner.split('/');
+    const className = segments.pop() ?? '';
+
+    return {
+      packageName: segments.join('.') || null,
+      display: `${className}.${name}()`,
+    };
+  }
+
+  const segments = (signature.split('(')[0] ?? signature).split('.');
+
+  if (segments.length < 2) {
+    return { packageName: null, display: signature };
+  }
+
+  const method = segments.pop() as string;
+  const className = segments.pop() as string;
+
+  return {
+    packageName: segments.join('.') || null,
+    display: `${className}.${method}()`,
+  };
+}
+
 export interface SbomReachabilityWitnessItem {
   /** Human-readable signature (Java form for DEX signatures). */
   display: string;
+  /** Condensed `Class.method()` form for the default view. */
+  shortDisplay: string;
+  /** Package the frame lives in; null when it cannot be determined. */
+  packageName: string | null;
   /** Raw signature as emitted by the engine. */
   signature: string;
   /** Edge type arriving at this step; undefined for the first step. */
   edgeType?: string;
+  /** Plain-English description of this frame, when the engine supplied one. */
+  note?: string | null;
+  owner?: SbomReachabilityWitnessOwner | null;
 }
 
-export function reachabilityWitnessItems(
+function toWitnessItem(
+  node: SbomReachabilityWitnessNode
+): SbomReachabilityWitnessItem {
+  const short = shortSignature(node.signature);
+
+  return {
+    signature: node.signature,
+    display: formatDexSignature(node.signature),
+    shortDisplay: short.display,
+    packageName: short.packageName,
+    edgeType:
+      node.edge_type && node.edge_type !== 'DIRECT'
+        ? node.edge_type
+        : undefined,
+    note: node.note ?? null,
+    owner: node.owner ?? null,
+  };
+}
+
+/** Flatten ordered edges into the node sequence they describe. */
+export function witnessNodesFromPath(
   path?: SbomReachabilityWitnessEdge[] | null
-): SbomReachabilityWitnessItem[] {
+): SbomReachabilityWitnessNode[] {
   if (!path?.length) {
     return [];
   }
@@ -355,21 +459,181 @@ export function reachabilityWitnessItems(
     return [];
   }
 
-  const signatures: { signature: string; edgeType?: string }[] = [
+  return [
     { signature: first.caller },
-    { signature: first.callee, edgeType: first.edge_type },
+    { signature: first.callee, edge_type: first.edge_type },
     ...rest.map((edge) => ({
       signature: edge.callee,
-      edgeType: edge.edge_type,
+      edge_type: edge.edge_type,
     })),
-  ];
+  ].filter((node) => node.signature);
+}
 
-  return signatures
-    .filter((item) => item.signature)
-    .map((item) => ({
-      signature: item.signature,
-      display: formatDexSignature(item.signature),
-      edgeType:
-        item.edgeType && item.edgeType !== 'DIRECT' ? item.edgeType : undefined,
-    }));
+export function reachabilityWitnessItems(
+  path?: SbomReachabilityWitnessEdge[] | null
+): SbomReachabilityWitnessItem[] {
+  return witnessNodesFromPath(path).map(toWitnessItem);
+}
+
+/**
+ * The call path to render. `witness_nodes` carries the engine's per-frame
+ * annotations and ownership; without it the path is derived from the edges
+ * and renders unannotated.
+ */
+export function reachabilityWitnessPathItems(
+  finding?: SbomReachabilityFinding | null
+): SbomReachabilityWitnessItem[] {
+  const nodes = finding?.witness_nodes?.length
+    ? finding.witness_nodes
+    : witnessNodesFromPath(finding?.witness_path);
+
+  return nodes.filter((node) => node.signature).map(toWitnessItem);
+}
+
+export interface SbomReachabilityWitnessGroup<
+  T extends SbomReachabilityWitnessItem = SbomReachabilityWitnessItem,
+> {
+  kind: WitnessOwnerKindValue | null;
+  label: string | null;
+  componentRef: string | null;
+  items: T[];
+}
+
+/**
+ * Collapse consecutive frames sharing an owner into one group, so the path
+ * renders as "your code" then the library it enters. Unowned paths return a
+ * single anonymous group and render flat.
+ */
+export function groupWitnessByOwner<T extends SbomReachabilityWitnessItem>(
+  items: T[]
+): SbomReachabilityWitnessGroup<T>[] {
+  const groups: SbomReachabilityWitnessGroup<T>[] = [];
+
+  for (const item of items) {
+    const kind = item.owner?.kind ?? null;
+    const label = item.owner?.label ?? null;
+    const last = groups[groups.length - 1];
+
+    if (last && last.kind === kind && last.label === label) {
+      last.items.push(item);
+      continue;
+    }
+
+    groups.push({
+      kind,
+      label,
+      componentRef: item.owner?.component_ref ?? null,
+      items: [item],
+    });
+  }
+
+  return groups;
+}
+
+/**
+ * Index of the frame to mark "Fix here": the last app-owned frame before
+ * control leaves the app. Returns -1 when ownership is unknown.
+ */
+export function fixHereWitnessIndex(
+  items: SbomReachabilityWitnessItem[]
+): number {
+  for (let index = items.length - 1; index >= 0; index -= 1) {
+    const current = items[index];
+    const next = items[index + 1];
+
+    if (
+      current?.owner?.kind === WitnessOwnerKind.APP &&
+      next &&
+      next.owner?.kind !== WitnessOwnerKind.APP
+    ) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+/**
+ * The engine's witness explanation is a two-part template (see enola's
+ * `reachability/explanation/template.py`): an "App behavior" narrative, then
+ * an "Analyst assessment" carrying the uncertain transition. The second part
+ * quotes raw engine signatures, so the UI keeps it behind a disclosure rather
+ * than in the reading flow.
+ */
+const NARRATIVE_BEHAVIOR_PREFIX = 'App behavior:';
+const NARRATIVE_DETAIL_PREFIX = 'Analyst assessment:';
+
+export interface SbomReachabilityNarrative {
+  behavior: string;
+  detail: string | null;
+}
+
+export function splitWitnessNarrative(
+  narrative?: string | null
+): SbomReachabilityNarrative | null {
+  const raw = narrative?.trim();
+
+  if (!raw) {
+    return null;
+  }
+
+  const behavior: string[] = [];
+  const detail: string[] = [];
+
+  for (const block of raw.split(/\n\s*\n/)) {
+    const text = block.trim();
+
+    if (!text) {
+      continue;
+    }
+
+    if (text.startsWith(NARRATIVE_DETAIL_PREFIX)) {
+      detail.push(text.slice(NARRATIVE_DETAIL_PREFIX.length).trim());
+    } else if (text.startsWith(NARRATIVE_BEHAVIOR_PREFIX)) {
+      behavior.push(text.slice(NARRATIVE_BEHAVIOR_PREFIX.length).trim());
+    } else {
+      behavior.push(text);
+    }
+  }
+
+  return {
+    behavior: behavior.join('\n\n'),
+    detail: detail.join('\n\n') || null,
+  };
+}
+
+/** Length past which the narrative is clamped behind a "Show more" toggle. */
+export const NARRATIVE_CLAMP_THRESHOLD = 240;
+
+export interface SbomReachabilityTargetSplit {
+  called: SbomReachabilityTarget[];
+  alsoAffected: SbomReachabilityTarget[];
+}
+
+/**
+ * Separate the vulnerable functions the app actually calls from those that
+ * are present but unreached. Payloads predating `has_witness` fall back to
+ * the serializer's own rule: it promotes the first witness-bearing target.
+ */
+export function splitFindingTargets(
+  finding?: SbomReachabilityFinding | null
+): SbomReachabilityTargetSplit {
+  const targets = finding?.targets ?? [];
+
+  if (!targets.length) {
+    return { called: [], alsoAffected: [] };
+  }
+
+  if (targets.some((target) => target.has_witness !== undefined)) {
+    return {
+      called: targets.filter((target) => target.has_witness),
+      alsoAffected: targets.filter((target) => !target.has_witness),
+    };
+  }
+
+  const [first, ...rest] = targets;
+
+  return finding?.witness_path?.length && first
+    ? { called: [first], alsoAffected: rest }
+    : { called: [], alsoAffected: targets };
 }
