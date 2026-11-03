@@ -182,7 +182,10 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     ];
   }
 
-  /** "Other app…" is chosen, or a saved app id is not one of the known apps. */
+  /**
+   * "Other app…" is chosen (an unsaved change, so Reset clears it), or the app
+   * id is not one of the known apps.
+   */
   get isOtpAppCustom() {
     if (this.isOtpFromKey) {
       return false;
@@ -191,7 +194,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     const value = this.step.value ?? '';
 
     return (
-      this._otpAppIsCustom ||
+      (this._otpAppIsCustom && this.step.hasDirtyAttributes) ||
       (value !== '' && !this.knownOtpApps.some((app) => app.value === value))
     );
   }

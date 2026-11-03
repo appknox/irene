@@ -891,6 +891,32 @@ module(
       assert.dom(selectors.otpAppCustom).exists();
     });
 
+    test('ENTER_OTP Reset after choosing Other app shows the saved app again', async function (assert) {
+      setupOtpStep(this, { value: 'com.apple.MobileSMS' }, ENUMS.PLATFORM.IOS);
+
+      await render(TEMPLATE);
+
+      await chooseAkSelectOption({
+        selectTriggerClass: selectors.otpCodeFrom,
+        labelToSelect: t('dastAutomation.otpApps.other'),
+      });
+
+      assert.dom(selectors.otpAppCustom).exists();
+
+      // The steps table's Reset rolls each dirty step back to its saved values.
+      this.step.rollbackAttributes();
+      await settled();
+
+      await assertAkSelectOptionSelected({
+        assert,
+        selector: selectors.otpCodeFrom,
+        label: 'Messages',
+      });
+
+      assert.dom(selectors.otpAppCustom).doesNotExist();
+      assert.dom(selectors.otpNote).exists();
+    });
+
     test('ENTER_OTP with an unknown saved app id shows Other app with the id prefilled', async function (assert) {
       setupOtpStep(this, { value: 'com.example.mail' }, ENUMS.PLATFORM.IOS);
 
