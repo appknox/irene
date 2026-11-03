@@ -293,6 +293,10 @@ Router.map(function () {
             path: 'apps/:sbom_project_id/scans/:sbom_file_id',
           });
 
+          this.route('original-analysis', {
+            path: 'apps/:sbom_project_id/scans/:sbom_file_id/original-analysis',
+          });
+
           this.route(
             'component-details',
             {

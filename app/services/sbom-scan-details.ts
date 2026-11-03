@@ -25,7 +25,14 @@ export default class SbomScanDetailsService extends Service {
 
   @tracked limit = 25;
   @tracked offset = 0;
-  @tracked viewType: 'list' | 'tree' = 'tree';
+  @tracked viewType: 'list' | 'tree' = 'list';
+
+  /**
+   * Restricts the list to components the reachability run concluded on.
+   * Set by the insights view; the original-analysis view leaves it false so
+   * the full SBOM is listed.
+   */
+  @tracked onlyReachable = false;
   @tracked searchQuery: string = '';
   @tracked selectedDependencyType: boolean | null = null;
   @tracked selectedComponentType = -1;
@@ -107,6 +114,8 @@ export default class SbomScanDetailsService extends Service {
       ...(this.selectedReachability
         ? { reachability: this.selectedReachability }
         : {}),
+
+      ...(this.onlyReachable ? { has_reachability: true } : {}),
     };
 
     // Query Params

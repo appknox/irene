@@ -43,12 +43,22 @@ export type AkTreeNodeProps = {
   children: AkTreeNodeProps[];
 };
 
+/**
+ * Which of the two component views this instance renders.
+ *
+ * `insights` is the landing view: reachability-relevant components only, as a
+ * flat list. `original` is the unfiltered list behind "See original analysis",
+ * where the tree still lives.
+ */
+export type SbomScanDetailsView = 'insights' | 'original';
+
 export interface SbomScanDetailsSignature {
   Args: {
     sbomProject: SbomProjectModel;
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
     queryParams: SbomScanDetailParam;
+    view?: SbomScanDetailsView;
   };
 }
 
@@ -76,11 +86,16 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       reachability,
     } = args.queryParams;
 
+    // The insights view lists only components with reachability findings;
+    // original-analysis lists everything. Set before the first fetch so the
+    // filter is part of the initial query, not a second round trip.
+    this.sbomScanDetailsService.onlyReachable = args.view !== 'original';
+
     // Fetch with default queries from the route
     this.sbomScanDetailsService
       .setQueryData({
         sbomFile: this.args.sbomFile,
-        view_type,
+        view_type: args.view === 'original' ? view_type : 'list',
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
@@ -254,8 +269,26 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return !this.args.sbomFile.isOutdated;
   }
 
+  get isOriginalAnalysis() {
+    return this.args.view === 'original';
+  }
+
+  get scanRouteModels() {
+    return [this.args.sbomProject.id, this.args.sbomFile.id];
+  }
+
+  get totalComponentCount() {
+    return this.args.sbomScanSummary?.componentCount ?? 0;
+  }
+
+  /**
+   * The tree only exists on the original-analysis view; the insights list is
+   * flat so the per-component reachability counts line up in columns.
+   */
   get isTreeView() {
-    return this.sbomScanDetailsService.viewType !== 'list';
+    return (
+      this.isOriginalAnalysis && this.sbomScanDetailsService.viewType !== 'list'
+    );
   }
 
   @action

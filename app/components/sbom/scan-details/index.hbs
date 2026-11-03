@@ -1,4 +1,5 @@
 <div class='py-1' data-test-sbomScanDetails-container>
+  {{#unless this.isOriginalAnalysis}}
   <Sbom::SummaryHeader>
     <:summary>
       <AkStack @alignItems='center' @spacing='1.5'>
@@ -42,35 +43,87 @@
       />
     </:collapsibleContent>
   </Sbom::SummaryHeader>
+  {{/unless}}
 
   {{#if this.scanStatusCompleted}}
-    <Sbom::ScanDetails::Overview
-      @sbomFile={{@sbomFile}}
-      @sbomScanSummary={{@sbomScanSummary}}
-    />
+    {{#unless this.isOriginalAnalysis}}
+      <Sbom::ScanDetails::Overview
+        @sbomFile={{@sbomFile}}
+        @sbomScanSummary={{@sbomScanSummary}}
+      />
+    {{/unless}}
 
     {{#if this.isNotOutdated}}
       <AkStack
         data-test-sbomScanDetails-switch-header
         local-class='switch-view-header'
         @alignItems='center'
-        @justifyContent='{{if this.isTreeView "flex-end" "space-between"}}'
+        @justifyContent='space-between'
       >
-        {{#unless this.isTreeView}}
-          <div {{style width='180px'}}>
-            <AkTextField
-              data-test-sbomScanDetails-componentSearchInput
-              @placeholder={{t 'search'}}
-              @value={{this.sbomScanDetailsService.searchQuery}}
-              {{on 'input' this.handleSearchInput}}
-            >
-              <:leftAdornment>
-                <AkIcon @iconName='search' @color='textSecondary' />
-              </:leftAdornment>
-            </AkTextField>
-          </div>
-        {{/unless}}
+        <AkStack @direction='column' @spacing='0.25'>
+          <AkTypography
+            data-test-sbomScanDetails-viewTitle
+            @variant='subtitle1'
+          >
+            {{if
+              this.isOriginalAnalysis
+              (t 'sbomModule.originalAnalysis.title')
+              (t 'sbomModule.reachabilityInsights.title')
+            }}
+          </AkTypography>
 
+          {{#if this.isOriginalAnalysis}}
+            <AkTypography
+              data-test-sbomScanDetails-viewSubtitle
+              @variant='body2'
+              @color='textSecondary'
+            >
+              {{t
+                'sbomModule.originalAnalysis.subtitle'
+                count=this.totalComponentCount
+              }}
+            </AkTypography>
+          {{/if}}
+        </AkStack>
+
+        <AkStack @alignItems='center' @spacing='1'>
+          {{#if this.isOriginalAnalysis}}
+            <AkLink
+              data-test-sbomScanDetails-backToInsights-link
+              @route='authenticated.dashboard.sbom.scan-details'
+              @models={{this.scanRouteModels}}
+              @underline='always'
+              @fontWeight='medium'
+            >
+              {{t 'sbomModule.reachabilityInsights.backLink'}}
+            </AkLink>
+          {{else}}
+            <AkLink
+              data-test-sbomScanDetails-originalAnalysis-link
+              @route='authenticated.dashboard.sbom.original-analysis'
+              @models={{this.scanRouteModels}}
+              @underline='always'
+              @fontWeight='medium'
+            >
+              {{t 'sbomModule.originalAnalysis.link'}}
+            </AkLink>
+
+            <div {{style width='180px'}}>
+              <AkTextField
+                data-test-sbomScanDetails-componentSearchInput
+                @placeholder={{t 'sbomModule.searchComponents'}}
+                @value={{this.sbomScanDetailsService.searchQuery}}
+                {{on 'input' this.handleSearchInput}}
+              >
+                <:leftAdornment>
+                  <AkIcon @iconName='search' @color='textSecondary' />
+                </:leftAdornment>
+              </AkTextField>
+            </div>
+          {{/if}}
+        </AkStack>
+
+        {{#if this.isOriginalAnalysis}}
         <AkStack>
           {{#if this.isTreeView}}
             <AkButton
@@ -117,6 +170,7 @@
             />
           </AkIconButton>
         </AkStack>
+        {{/if}}
       </AkStack>
     {{/if}}
 
@@ -135,6 +189,7 @@
         @sbomProject={{@sbomProject}}
         @sbomFile={{@sbomFile}}
         @sbomScanSummary={{@sbomScanSummary}}
+        @view={{if this.isOriginalAnalysis 'original' 'insights'}}
         class={{if this.isNotOutdated '' 'mt-2'}}
         data-test-sbomScanDetails-componentList-container
       />
