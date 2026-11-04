@@ -383,8 +383,8 @@ export default class SecurityAnalysisDetailsValidatedFindingsComponent extends C
   get showsTruePositiveConversionNote() {
     return Boolean(
       this.analysis?.isKnoxiqAllFp &&
-        !this.showsFalsePositives &&
-        !this.hasFindings
+      !this.showsFalsePositives &&
+      !this.hasFindings
     );
   }
 
