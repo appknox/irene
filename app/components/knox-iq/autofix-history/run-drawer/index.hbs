@@ -43,7 +43,7 @@
       {{#if @run}}
         <div local-class='drawer-summary'>
           <AkStack @alignItems='center' @spacing='0.5'>
-            <AkSvg::GitBranch local-class='meta-icon meta-icon-strong' />
+            <AkIcon @iconName='mdi:source-branch' local-class='meta-icon meta-icon-strong' />
             <AkTypography
               @variant='h5'
               @tag='h2'
@@ -60,7 +60,7 @@
             local-class='drawer-meta'
           >
             <AkStack @alignItems='center' @spacing='0.5'>
-              <AkSvg::GitBranchSparkle local-class='meta-icon' />
+              <AkIcon @iconName='hugeicons:git-branch' local-class='meta-icon' />
               <AkTypography
                 @tag='span'
                 @breakWord={{true}}
@@ -83,7 +83,7 @@
               data-test-knoxIqAutofixHistoryRunDrawer-commit='{{commit.id}}'
             >
               <AkStack @alignItems='center' @spacing='0.5'>
-                <AkSvg::GitCommit local-class='meta-icon' />
+                <AkIcon @iconName='commit' local-class='meta-icon' />
 
                 <AkTooltip
                   @title={{commit.sha}}

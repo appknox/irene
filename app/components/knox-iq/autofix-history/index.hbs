@@ -75,7 +75,7 @@
             <r.cell>
               {{#if (eq r.columnValue.valuePath 'baseBranch')}}
                 <AkStack @alignItems='center' @spacing='0.5'>
-                  <AkSvg::GitBranch local-class='meta-icon' />
+                  <AkIcon @iconName='mdi:source-branch' local-class='meta-icon' />
                   <AkTypography
                     @tag='span'
                     @breakWord={{true}}
@@ -88,7 +88,7 @@
 
               {{#if (eq r.columnValue.valuePath 'branch')}}
                 <AkStack @alignItems='center' @spacing='0.5'>
-                  <AkSvg::GitBranchSparkle local-class='meta-icon' />
+                  <AkIcon @iconName='hugeicons:git-branch' local-class='meta-icon' />
                   <AkTypography
                     @tag='span'
                     @breakWord={{true}}

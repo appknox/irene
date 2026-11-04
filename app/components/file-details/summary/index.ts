@@ -20,7 +20,7 @@ interface FileMoreMenuItem {
   group?: string;
   query?: Record<string, unknown>;
   label: string;
-  iconName: 'settings' | 'compare-arrows' | 'apps' | 'history';
+  iconName: 'settings' | 'compare-arrows' | 'apps';
   route: string;
   routeModel: string | undefined;
   hideDivider?: boolean;
@@ -87,14 +87,6 @@ export default class FileDetailsSummaryComponent extends Component<FileDetailsSu
           route: 'authenticated.dashboard.choose',
           routeModel: this.args.file.id,
         },
-      this.organization.isKnoxIqEnabled && {
-        group: this.intl.t('projectLevel'),
-        label: this.intl.t('autofix.detailsTitle'),
-        iconName: 'history',
-        route: 'authenticated.dashboard.project.autofix',
-        routeModel: this.args.file.project.get('id'),
-        query: { file_id: null },
-      },
       hasMultipleFiles && {
         group: this.intl.t('projectLevel'),
         label: this.intl.t('allUploads'),
