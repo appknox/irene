@@ -1,3 +1,18 @@
-<AkTypography data-test-sbomComponent-dependencyType @tag='span'>
-  {{this.dependencyType}}
-</AkTypography>
+<AkStack @direction='column' @spacing='0.1'>
+  <AkTypography data-test-sbomComponent-dependencyType @tag='span'>
+    {{this.dependencyType}}
+  </AkTypography>
+
+  {{#if this.via}}
+    <AkTypography
+      data-test-sbomComponent-dependencyVia
+      local-class='via'
+      @tag='span'
+      @variant='body3'
+      @color='textSecondary'
+      @breakWord={{true}}
+    >
+      {{t 'sbomModule.viaComponent' component=this.via}}
+    </AkTypography>
+  {{/if}}
+</AkStack>

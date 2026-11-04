@@ -2116,7 +2116,8 @@
       "fixHere": "ここで修正",
       "calledByYourApp": "アプリから呼び出されています",
       "alsoAffectedNotCalled": "影響あり・未呼び出し ({count})",
-      "analysisDetail": "分析の詳細"
+      "analysisDetail": "分析の詳細",
+      "reasoning": "判断の根拠"
     },
     "sbomAppTitle": "Software Bill of Materials (SBOM)",
     "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it.",
@@ -2148,7 +2149,8 @@
       "link": "元の分析を見る ↗",
       "subtitle": "SBOMスキャンの全{count}件のコンポーネント（到達可能性フィルタ適用前）"
     },
-    "searchComponents": "コンポーネントを検索"
+    "searchComponents": "コンポーネントを検索",
+    "viaComponent": "{component} 経由"
   },
   "scan": "診断",
   "scanned": "scanned",

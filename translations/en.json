@@ -2113,7 +2113,8 @@
       "fixHere": "Fix here",
       "calledByYourApp": "Called by your app",
       "alsoAffectedNotCalled": "Also affected, not called ({count})",
-      "analysisDetail": "Analysis detail"
+      "analysisDetail": "Analysis detail",
+      "reasoning": "Reasoning"
     },
     "sbomAppTitle": "Software Bill of Materials (SBOM)",
     "sbomAppDescription": "Identify the components used in your mobile application and any vulnerabilities associated with it.",
@@ -2148,7 +2149,8 @@
       "link": "See original analysis ↗",
       "subtitle": "All {count} components from the SBOM scan, before reachability filtering"
     },
-    "searchComponents": "Search components"
+    "searchComponents": "Search components",
+    "viaComponent": "via {component}"
   },
   "scan": "scan(s)",
   "scanned": "scanned",
