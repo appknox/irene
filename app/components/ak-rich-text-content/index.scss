@@ -1,4 +1,7 @@
 .rich-text-content {
+  min-width: 0;
+  overflow-wrap: anywhere;
+
   p {
     margin: 0 0 0.5em;
   }
