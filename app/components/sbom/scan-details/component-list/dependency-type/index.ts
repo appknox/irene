@@ -20,6 +20,13 @@ export default class SbomScanDetailsComponentListDependencyTypeComponent extends
 
     return this.intl.t('dependencyTypes.direct');
   }
+
+  /** The parent that pulls a transitive dependency in, when known. */
+  get via() {
+    return this.args.sbomComponent.isDependency
+      ? this.args.sbomComponent.via || null
+      : null;
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

@@ -115,6 +115,10 @@ export default class SbomComponentModel extends Model {
   @attr('string')
   declare aiAssociatedModelPath: string;
 
+  /** Component this transitive dependency is pulled in through. */
+  @attr('string')
+  declare via: string | null;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
