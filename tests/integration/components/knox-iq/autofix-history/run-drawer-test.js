@@ -124,7 +124,7 @@ module(
           .dom(selectors.patchedFilesLabel, commits[i])
           .includesText(t('autofix.patchedFiles'));
 
-        const files = findAll(selectors.patchedFile, commits[i]);
+        const files = commits[i].querySelectorAll(selectors.patchedFile);
 
         assert.strictEqual(files.length, commit.patchedFiles.length);
 

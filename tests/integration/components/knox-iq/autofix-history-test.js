@@ -204,8 +204,10 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
   // ─── Pagination ──────────────────────────────────────────────────────────────
 
   test('transitions with the next page query params', async function (assert) {
+    // The factory attaches every commit to file 1, so file_id must match it
+    // for the mirage handler to return rows.
     this.server.createList('autofix-pr', 11, { project: 1 });
-    this.set('queryParams', { ...this.queryParams, file_id: '20' });
+    this.set('queryParams', { ...this.queryParams, file_id: '1' });
 
     const router = this.owner.lookup('service:router');
 
@@ -220,7 +222,7 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
       queryParams: {
         autofix_limit: 10,
         autofix_offset: 10,
-        file_id: '20',
+        file_id: '1',
       },
     });
   });
