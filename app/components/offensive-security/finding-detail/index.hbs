@@ -1,4 +1,7 @@
-<div local-class='finding-detail-wrap' {{did-update this.handleFindingIdChange @findingId}}>
+<div
+  local-class='finding-detail-wrap'
+  {{did-update this.handleFindingIdChange @findingId}}
+>
   {{#if this.isLoading}}
     <AkStack @direction='column' @spacing='3' class='p-3'>
       <AkSkeleton @width='100%' @height='40px' />
@@ -13,37 +16,64 @@
       @alignItems='center'
       local-class='global-nav-bar'
     >
-      <AkBreadcrumbs::AutoTrail
-        aria-label='Breadcrumb'
-      />
+      <AkBreadcrumbs::AutoTrail aria-label={{t 'offensiveSecurity.findingDetail.breadcrumb'}} />
 
       {{#if (gt this.totalFindingsCount 0)}}
         <div local-class='finding-nav' data-test-offensiveSecurity-findingNav>
-          <AkIconButton
-            @size='small'
-            disabled={{this.isFirstFinding}}
-            {{on 'click' this.goToPreviousFinding}}
-            aria-label='Previous finding'
+          <button
+            type='button'
             local-class='nav-arrow-btn'
+            disabled={{this.isFirstFinding}}
+            aria-label={{t 'offensiveSecurity.previousFinding'}}
+            {{on 'click' this.goToPreviousFinding}}
             data-test-offensiveSecurity-findingNav-prev
           >
-            <AkIcon @iconName='chevron-left' />
-          </AkIconButton>
+            <AkIcon @iconName='chevron-left' @size='small' />
+          </button>
 
-          <span local-class='nav-counter' data-test-offensiveSecurity-findingNav-counter>
-            Finding {{this.currentFindingPosition}} of {{this.totalFindingsCount}}
+          <span local-class='nav-label'>{{t 'offensiveSecurity.finding'}}</span>
+
+          <div local-class='nav-select-wrap'>
+            <select
+              local-class='nav-select'
+              aria-label={{t 'offensiveSecurity.jumpToFinding'}}
+              {{on 'change' this.handleFindingJump}}
+              data-test-offensiveSecurity-findingNav-select
+            >
+              {{#each this.findingPositionOptions as |position|}}
+                <option
+                  value={{position.value}}
+                  selected={{eq position.value this.currentFindingIndex}}
+                >
+                  {{position.label}}
+                </option>
+              {{/each}}
+            </select>
+
+            <AkIcon
+              @iconName='arrow-drop-down'
+              @size='small'
+              local-class='nav-select-icon'
+            />
+          </div>
+
+          <span
+            local-class='nav-total'
+            data-test-offensiveSecurity-findingNav-counter
+          >
+            {{t 'offensiveSecurity.findingNavOf' total=this.totalFindingsLabel}}
           </span>
 
-          <AkIconButton
-            @size='small'
-            disabled={{this.isLastFinding}}
-            {{on 'click' this.goToNextFinding}}
-            aria-label='Next finding'
+          <button
+            type='button'
             local-class='nav-arrow-btn'
+            disabled={{this.isLastFinding}}
+            aria-label={{t 'offensiveSecurity.nextFinding'}}
+            {{on 'click' this.goToNextFinding}}
             data-test-offensiveSecurity-findingNav-next
           >
-            <AkIcon @iconName='chevron-right' />
-          </AkIconButton>
+            <AkIcon @iconName='chevron-right' @size='small' />
+          </button>
         </div>
       {{/if}}
     </AkStack>
@@ -52,29 +82,33 @@
     <section local-class='hero'>
       <div local-class='hero-grid'>
         <div local-class='hero-main'>
-          <p local-class='kicker'>SIGNATURE · {{this.finding.signatureId}}</p>
+          <p local-class='kicker'>
+            {{t 'offensiveSecurity.signature'}}
+            <span local-class='kicker-sep'>·</span>
+            <span local-class='kicker-value'>{{this.finding.signatureId}}</span>
+          </p>
           <h1 local-class='title'>{{this.finding.name}}</h1>
 
           <div local-class='status-row'>
             {{#if this.finding.isExploited}}
               <span local-class='pill breach'>
                 <span local-class='dot'></span>
-                Bypassed
+                {{t 'offensiveSecurity.bypassed'}}
               </span>
             {{else if this.finding.isResisted}}
               <span local-class='pill defended'>
                 <span local-class='dot'></span>
-                Resisted
+                {{t 'offensiveSecurity.findingDetail.statusResisted'}}
               </span>
             {{else if this.finding.isTriggered}}
               <span local-class='pill detected'>
                 <span local-class='dot'></span>
-                Triggered
+                {{t 'offensiveSecurity.outcome.triggered'}}
               </span>
             {{else if this.finding.isUntriggered}}
               <span local-class='pill neutral'>
                 <span local-class='dot'></span>
-                Untriggered
+                {{t 'offensiveSecurity.notTriggered'}}
               </span>
             {{else}}
               <span local-class='pill neutral'>
@@ -86,14 +120,14 @@
             {{#if this.isVerified}}
               <span local-class='pill ok'>
                 <span local-class='dot'></span>
-                Verified reproducible
+                {{t 'offensiveSecurity.findingDetail.verifiedReproducible'}}
               </span>
             {{/if}}
 
             {{#if this.isExploitAttached}}
               <span local-class='pill ok'>
                 <span local-class='dot'></span>
-                Exploit attached
+                {{t 'offensiveSecurity.findingDetail.exploitAttached'}}
               </span>
             {{/if}}
           </div>
@@ -105,7 +139,7 @@
 
         {{!-- Resilience score card - commented out for now
         <div local-class='hero-score'>
-          <div local-class='score-label'>Resilience score</div>
+          <div local-class='score-label'>{{t 'offensiveSecurity.findingDetail.resilienceScore'}}</div>
           <div local-class='score-num'>
             {{this.scoreNumber}}<span>/100</span>
           </div>
@@ -129,18 +163,23 @@
         <section local-class='card exploit'>
           <div local-class='card-h'>
             <span local-class='glyph glyph-code'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+              <svg
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              >
                 <polyline points='4 17 10 11 4 5' />
                 <line x1='12' y1='19' x2='20' y2='19' />
               </svg>
             </span>
-            <h2>Working exploit</h2>
+            <h2>{{t 'offensiveSecurity.findingDetail.workingExploit'}}</h2>
           </div>
           <div local-class='card-b'>
             <div local-class='evi'>
               <div local-class='evi-h'>
                 <span local-class='evi-name'>{{this.exploitFileName}}</span>
-                <span local-class='evi-surface'>Frida · JavaScript</span>
+                <span local-class='evi-surface'>{{t 'offensiveSecurity.findingDetail.fridaJavascript'}}</span>
               </div>
               <div local-class='evi-code-wrapper'>
                 <KnoxIq::CodeBlock @code={{this.exploitScript}} />
@@ -148,7 +187,7 @@
             </div>
 
             <div local-class='repro'>
-              <h3>Reproduce</h3>
+              <h3>{{t 'offensiveSecurity.findingDetail.reproduce'}}</h3>
               {{#each this.reproduceSteps as |step|}}
                 <div local-class='step'>
                   <span local-class='step-num'>{{step.step}}</span>
@@ -168,57 +207,80 @@
       {{/if}}
 
       {{! DETECTION BACKTRACE }}
-      {{#if this.hasBacktrace}}
-        <section local-class='card verify'>
-          <div local-class='card-h'>
-            <span local-class='glyph glyph-verify'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
-                <path d='M3 3v18h18' />
-                <path d='m7 14 4-4 3 3 5-6' />
-              </svg>
-            </span>
-            <h2>Detection backtrace</h2>
-            <span local-class='meta'>{{this.detectionBacktrace.length}} triggered checks</span>
-          </div>
-          <div local-class='card-b'>
-            <div local-class='backtrace-scroll'>
-              {{#each this.detectionBacktrace as |trigger|}}
-                <div local-class='evi'>
-                  <div local-class='evi-h'>
-                    <span local-class='evi-id'>{{or trigger.kind 'check'}}</span>
-                    {{#if trigger.arg}}
-                      <span local-class='evi-name'>{{trigger.arg}}</span>
-                    {{/if}}
-                    {{#if trigger.layer}}
-                      <span local-class='evi-surface'>{{trigger.layer}}</span>
-                    {{/if}}
-                  </div>
-                  {{#if trigger.app_frame}}
-                    <p local-class='evi-cap'>{{trigger.app_frame}}</p>
+      <section local-class='card verify'>
+        <div local-class='card-h'>
+          <span local-class='glyph glyph-verify'>
+            <svg
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2'
+            >
+              <path d='M3 3v18h18' />
+              <path d='m7 14 4-4 3 3 5-6' />
+            </svg>
+          </span>
+          <h2>{{t 'offensiveSecurity.findingDetail.detectionBacktrace'}}</h2>
+          <span local-class='meta'>{{t
+              'offensiveSecurity.triggeredChecksCount'
+              count=this.detectionBacktrace.length
+            }}</span>
+        </div>
+        <div local-class='card-b'>
+          <div local-class='backtrace-scroll'>
+            {{#unless this.hasBacktrace}}
+              <p
+                class='offsec-prose'
+                local-class='empty-msg'
+                data-test-offensiveSecurity-findingDetail-noBacktrace
+              >
+                {{t 'offensiveSecurity.noBacktrace'}}
+              </p>
+            {{/unless}}
+            {{#each this.detectionBacktrace as |trigger|}}
+              <div local-class='evi'>
+                <div local-class='evi-h'>
+                  <span local-class='evi-id'>{{or trigger.kind 'check'}}</span>
+                  {{#if trigger.arg}}
+                    <span local-class='evi-name'>{{trigger.arg}}</span>
                   {{/if}}
-                  {{#if trigger.smali_path}}
-                    <div local-class='evi-code-wrapper'>
-                      <KnoxIq::CodeBlock @code={{trigger.smali_path}} />
-                    </div>
+                  {{#if trigger.layer}}
+                    <span local-class='evi-surface'>{{trigger.layer}}</span>
                   {{/if}}
                 </div>
-              {{/each}}
-            </div>
+                {{#if trigger.app_frame}}
+                  <p local-class='evi-cap'>{{trigger.app_frame}}</p>
+                {{/if}}
+                {{#if trigger.smali_path}}
+                  <div local-class='evi-code-wrapper'>
+                    <KnoxIq::CodeBlock @code={{trigger.smali_path}} />
+                  </div>
+                {{/if}}
+              </div>
+            {{/each}}
           </div>
-        </section>
-      {{/if}}
+        </div>
+      </section>
 
       {{! STATIC EVIDENCE }}
       {{#if this.hasStaticEvidence}}
         <section local-class='card verify'>
           <div local-class='card-h'>
             <span local-class='glyph glyph-verify'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+              <svg
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              >
                 <path d='M4 4h16v4H4zM4 12h16v4H4zM4 20h10' />
               </svg>
             </span>
-            <h2>Static evidence</h2>
-            <span local-class='meta'>{{this.staticEvidence.length}} from static analysis</span>
+            <h2>{{t 'offensiveSecurity.findingDetail.staticEvidence'}}</h2>
+            <span local-class='meta'>{{t
+                'offensiveSecurity.staticEvidenceCount'
+                count=this.staticEvidence.length
+              }}</span>
           </div>
           <div local-class='card-b'>
             <div local-class='backtrace-scroll'>
@@ -247,29 +309,39 @@
         <section local-class='card verify'>
           <div local-class='card-h'>
             <span local-class='glyph glyph-code'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+              <svg
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              >
                 <path d='M12 2 3 7v10l9 5 9-5V7z' />
               </svg>
             </span>
-            <h2>Bypass artifacts</h2>
+            <h2>{{t 'offensiveSecurity.findingDetail.bypassArtifacts'}}</h2>
             {{#if this.hasPatchedApk}}
               <button
                 type='button'
                 local-class='download-apk-btn'
                 {{on 'click' this.triggerApkDownload}}
                 disabled={{this.downloadPatchedApk.isRunning}}
-                title='Download {{this.patchedApkName}}'
+                title={{t 'offensiveSecurity.findingDetail.downloadFile' name=this.patchedApkName}}
               >
-                <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+                <svg
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  stroke-width='2'
+                >
                   <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
                   <polyline points='7 10 12 15 17 10' />
                   <line x1='12' y1='15' x2='12' y2='3' />
                 </svg>
                 <span>
                   {{#if this.downloadPatchedApk.isRunning}}
-                    Preparing…
+                    {{t 'offensiveSecurity.findingDetail.preparing'}}
                   {{else}}
-                    Download Patched APK
+                    {{t 'offensiveSecurity.findingDetail.downloadPatchedApk'}}
                   {{/if}}
                 </span>
               </button>
@@ -282,7 +354,7 @@
                   {{#if this.smaliPatchPath}}
                     <span local-class='evi-name'>{{this.smaliPatchPath}}</span>
                   {{/if}}
-                  <span local-class='evi-surface'>smali patch</span>
+                  <span local-class='evi-surface'>{{t 'offensiveSecurity.findingDetail.smaliPatch'}}</span>
                 </div>
                 {{#if this.smaliPatchText}}
                   <div local-class='evi-code-wrapper'>
@@ -291,7 +363,7 @@
                 {{/if}}
               </div>
             {{else if this.hasPatchedApk}}
-              <div local-class='empty-msg'>
+              <div class='offsec-prose' local-class='empty-msg'>
                 Patched APK ({{this.patchedApkName}}) is available for download.
               </div>
             {{/if}}
@@ -303,19 +375,30 @@
       <section local-class='card verify'>
         <div local-class='card-h'>
           <span local-class='glyph glyph-verify'>
-            <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'>
+            <svg
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='currentColor'
+              stroke-width='2.5'
+            >
               <path d='M20 6 9 17l-5-5' />
             </svg>
           </span>
-          <h2>Evidence</h2>
-          <span local-class='meta'>{{this.evidence.length}} verifier runs</span>
+          <h2>{{t 'offensiveSecurity.evidence'}}</h2>
+          <span local-class='meta'>{{t
+              'offensiveSecurity.verifierRunsCount'
+              count=this.evidence.length
+            }}</span>
         </div>
         <div local-class='card-b'>
           {{#each this.evidence as |item|}}
             <div local-class='evi'>
               <div local-class='evi-h'>
                 <span local-class='evi-id'>{{item.evidence_id}}</span>
-                <span local-class='evi-name'>{{or item.tool item.evidence_id}}</span>
+                <span local-class='evi-name'>{{or
+                    item.tool
+                    item.evidence_id
+                  }}</span>
                 {{#if item.source}}
                   <span local-class='evi-surface'>{{item.source}}</span>
                 {{/if}}
@@ -328,12 +411,15 @@
               {{/if}}
               {{#if (or item.content item.metadata)}}
                 <div local-class='evi-code-wrapper'>
-                  <KnoxIq::CodeBlock @code={{this.formatPayload (or item.content item.metadata)}} />
+                  <KnoxIq::CodeBlock
+                    @code={{this.formatPayload (or item.content item.metadata)}}
+                  />
                 </div>
               {{/if}}
             </div>
           {{else}}
-            <div local-class='empty-msg'>No verifier runs recorded for this finding.</div>
+            <div class='offsec-prose' local-class='empty-msg'>No verifier runs
+              recorded for this finding.</div>
           {{/each}}
         </div>
       </section>
@@ -348,7 +434,7 @@
                 <path d='m19 9-5 5-4-4-3 3' />
               </svg>
             </span>
-            <h2>Execution attempts</h2>
+            <h2>{{t 'offensiveSecurity.findingDetail.executionAttempts'}}</h2>
             <span local-class='meta'>{{this.finding.attempts.length}} attempts total</span>
           </div>
           <div local-class='card-b'>
@@ -361,7 +447,7 @@
                 </div>
                 {{#if this.effectiveAttempt.technique_id}}
                   <div local-class='att-tech'>
-                    <span local-class='lbl'>Technique: </span>
+                    <span local-class='lbl'>{{t 'offensiveSecurity.findingDetail.technique'}}</span>
                     <code>{{this.effectiveAttempt.technique_id}}</code>
                   </div>
                 {{/if}}
@@ -374,22 +460,22 @@
                 {{/if}}
                 <div local-class='att-foot'>
                   <div>
-                    <span local-class='k'>Attempt No.</span>
+                    <span local-class='k'>{{t 'offensiveSecurity.findingDetail.attemptNo'}}</span>
                     <span local-class='v'>{{this.effectiveAttempt.attempt_no}}</span>
                   </div>
                   <div>
-                    <span local-class='k'>State</span>
+                    <span local-class='k'>{{t 'offensiveSecurity.findingDetail.state'}}</span>
                     <span local-class='v mono'>{{this.effectiveAttempt.state}}</span>
                   </div>
                   {{#if this.effectiveAttempt.protection_id}}
                     <div>
-                      <span local-class='k'>Protection ID</span>
+                      <span local-class='k'>{{t 'offensiveSecurity.findingDetail.protectionId'}}</span>
                       <span local-class='v mono'>{{this.effectiveAttempt.protection_id}}</span>
                     </div>
                   {{/if}}
                   {{#if (or this.effectiveAttempt.verifier_ids this.effectiveAttempt.verifier_id)}}
                     <div>
-                      <span local-class='k'>Verifier IDs</span>
+                      <span local-class='k'>{{t 'offensiveSecurity.findingDetail.verifierIds'}}</span>
                       <span local-class='v mono'>{{or this.effectiveAttempt.verifier_ids this.effectiveAttempt.verifier_id}}</span>
                     </div>
                   {{/if}}
@@ -406,8 +492,8 @@
                   aria-expanded={{if this.showEarlierAttempts 'true' 'false'}}
                 >
                   <span local-class='chev {{if this.showEarlierAttempts "open"}}'>›</span>
-                  <span local-class='ftitle'>{{this.earlierAttempts.length}} earlier diagnostic / retry attempts</span>
-                  <span local-class='fmeta'>all retried</span>
+                  <span local-class='ftitle'>{{t 'offensiveSecurity.findingDetail.earlierAttempts' count=this.earlierAttempts.length}}</span>
+                  <span local-class='fmeta'>{{t 'offensiveSecurity.findingDetail.allRetried'}}</span>
                 </button>
                 {{#if this.showEarlierAttempts}}
                   <div local-class='faillist'>
@@ -432,11 +518,16 @@
         <section local-class='card impact'>
           <div local-class='card-h'>
             <span local-class='glyph glyph-impact'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+              <svg
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              >
                 <path d='M13 2 3 14h7l-1 8 10-12h-7z' />
               </svg>
             </span>
-            <h2>Impact</h2>
+            <h2>{{t 'offensiveSecurity.findingDetail.impact'}}</h2>
           </div>
           <div local-class='card-b'>
             {{#if this.impactSummary}}
@@ -464,12 +555,17 @@
         <section local-class='card bizrisk'>
           <div local-class='card-h'>
             <span local-class='glyph glyph-risk'>
-              <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+              <svg
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                stroke-width='2'
+              >
                 <path d='M12 2 2 20h20z' />
                 <path d='M12 9v5M12 17v.5' />
               </svg>
             </span>
-            <h2>Business risk</h2>
+            <h2>{{t 'offensiveSecurity.findingDetail.businessRisk'}}</h2>
           </div>
           <div local-class='card-b'>
             {{#if this.businessRiskSummary}}
@@ -492,7 +588,7 @@
       type='button'
       local-class='overlay {{if this.isDrawerOpen "open"}}'
       {{on 'click' this.closeDrawer}}
-      aria-label='Close drawer'
+      aria-label={{t 'offensiveSecurity.findingDetail.closeDrawer'}}
       tabindex='-1'
     ></button>
 
@@ -500,27 +596,39 @@
       local-class='drawer {{if this.isDrawerOpen "open"}}'
       role='dialog'
       aria-modal='true'
-      aria-label='Resilience scoring details'
+      aria-label={{t 'offensiveSecurity.findingDetail.resilienceScoringDetails'}}
       aria-hidden={{if this.isDrawerOpen 'false' 'true'}}
       data-test-scoring-drawer
     >
       <div local-class='drawer-h'>
         <span local-class='glyph glyph-impact'>
-          <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+          <svg
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+          >
             <path d='M12 2 4 6v6c0 5 3.5 8 8 10 4.5-2 8-5 8-10V6z' />
           </svg>
         </span>
         <div local-class='tt'>
-          <h2>Resilience scoring</h2>
+          <h2>{{t 'offensiveSecurity.findingDetail.resilienceScoring'}}</h2>
           <div local-class='sub'>{{this.finding.signatureId}}</div>
         </div>
         <button
           type='button'
           local-class='drawer-close'
           {{on 'click' this.closeDrawer}}
-          aria-label='Close'
+          aria-label={{t 'offensiveSecurity.findingDetail.close'}}
         >
-          <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'>
+          <svg
+            width='14'
+            height='14'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+          >
             <path d='M18 6 6 18M6 6l12 12' />
           </svg>
         </button>
@@ -533,11 +641,12 @@
           </div>
           <div>
             <span local-class='st'>{{this.bandTag}}</span>
-            <span local-class='sd'>The protection was evaluated against automated runtime bypass techniques.</span>
+            <span local-class='sd'>The protection was evaluated against
+              automated runtime bypass techniques.</span>
           </div>
         </div>
 
-        <p local-class='drawer-sec'>Contributing factors</p>
+        <p local-class='drawer-sec'>{{t 'offensiveSecurity.findingDetail.contributingFactors'}}</p>
 
         {{#each this.scoringFactors as |factor|}}
           <div local-class='factor'>
@@ -545,7 +654,12 @@
               <div local-class='ft'>{{factor.title}}</div>
               <div local-class='fd'>{{factor.desc}}</div>
             </div>
-            <div local-class='fw {{if factor.isBase "base"}} {{if factor.isMinus "minus"}}'>
+            <div
+              local-class='fw {{if factor.isBase "base"}} {{if
+                factor.isMinus
+                "minus"
+              }}'
+            >
               {{factor.points}}
             </div>
           </div>
@@ -553,32 +667,32 @@
 
         <div local-class='factor total'>
           <div local-class='fx'>
-            <div local-class='ft'>Final score</div>
+            <div local-class='ft'>{{t 'offensiveSecurity.findingDetail.finalScore'}}</div>
           </div>
           <div local-class='fw total-score'>{{this.scoreNumber}}</div>
         </div>
 
         <div local-class='scale'>
-          <p local-class='drawer-sec'>Scale</p>
+          <p local-class='drawer-sec'>{{t 'offensiveSecurity.findingDetail.scale'}}</p>
           <div local-class='scale-row {{if this.isWeak "on"}}'>
             <span local-class='tick'></span>
             <span local-class='band'>0–39</span>
-            <span>Weak — defeated by generic or low-effort techniques</span>
+            <span>{{t 'offensiveSecurity.findingDetail.scaleWeak'}}</span>
           </div>
           <div local-class='scale-row {{if this.isModerate "on"}}'>
             <span local-class='tick'></span>
             <span local-class='band'>40–69</span>
-            <span>Moderate — requires targeted effort to bypass</span>
+            <span>{{t 'offensiveSecurity.findingDetail.scaleModerate'}}</span>
           </div>
           <div local-class='scale-row {{if this.isStrong "on"}}'>
             <span local-class='tick'></span>
             <span local-class='band'>70–100</span>
-            <span>Strong — resisted all attempted bypasses</span>
+            <span>{{t 'offensiveSecurity.findingDetail.scaleStrong'}}</span>
           </div>
         </div>
 
-        <p local-class='drawer-note'>
-          Weights shown are the factors this engine applied to this finding during autonomous assessment.
+        <p class='offsec-prose' local-class='drawer-note'>
+          {{t 'offensiveSecurity.findingDetail.weightsNote'}}
         </p>
       </div>
     </aside>

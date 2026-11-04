@@ -11,13 +11,27 @@
     />
   {{/if}}
 
-  <AkTypography
-    @variant='body2'
-    @fontWeight='bold'
-    @noWrap={{true}}
-    title={{@scan.displayName}}
-    data-test-offensiveSecurity-attackRuns-targetCell
-  >
-    {{@scan.displayName}}
-  </AkTypography>
+  <div local-class='target-text'>
+    <AkTypography
+      @variant='body2'
+      @fontWeight='bold'
+      @noWrap={{true}}
+      title={{@scan.displayName}}
+      data-test-offensiveSecurity-attackRuns-targetCell
+    >
+      {{@scan.displayName}}
+    </AkTypography>
+
+    {{#if this.showPackageName}}
+      <AkTypography
+        @variant='caption'
+        @color='textSecondary'
+        @noWrap={{true}}
+        title={{@scan.packageName}}
+        data-test-offensiveSecurity-attackRuns-packageCell
+      >
+        {{@scan.packageName}}
+      </AkTypography>
+    {{/if}}
+  </div>
 </AkStack>

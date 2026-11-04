@@ -8,21 +8,33 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 1em 1.5em;
-  border-bottom: var(--offensive-security-new-assessment-card-border);
+  padding: 16px 24px;
+  border-bottom: var(--offensive-security-new-assessment-divider-border);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.card-subtitle {
+  font-size: 14px;
+  line-height: 1.5;
 }
 
 .assessment-options {
   display: grid;
-  gap: 0.75em;
-  padding: 1.5em;
+  gap: 12px;
+  padding: 24px;
 }
 
 .assessment-option {
   display: block;
-  padding: 1.25em;
+  padding: 20px;
   cursor: pointer;
-  border: var(--offensive-security-new-assessment-card-border);
+  border: var(--offensive-security-new-assessment-divider-border);
   border-radius: var(--offensive-security-new-assessment-card-border-radius);
   background-color: var(--offensive-security-new-assessment-card-bg-color);
   transition:
@@ -61,7 +73,7 @@
 .option-top-row {
   display: flex;
   align-items: center;
-  gap: 0.75em;
+  gap: 12px;
 }
 
 .radio-indicator {
@@ -90,6 +102,10 @@
 .option-title {
   flex: 1;
   min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--text-primary);
 }
 
 .option-tag {
@@ -98,8 +114,9 @@
   white-space: nowrap;
   padding: 3px 10px;
   border-radius: 9999px;
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.5;
 
   &.tag-success {
     color: var(--offensive-security-new-assessment-tag-success-color);
@@ -117,6 +134,9 @@
 }
 
 .option-description {
+  display: block;
   margin-top: 4px;
   padding-left: 30px;
+  font-size: 14px;
+  line-height: 20px;
 }

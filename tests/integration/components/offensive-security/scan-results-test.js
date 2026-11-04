@@ -114,7 +114,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.header).exists();
     assert.dom(SELECTORS.header).containsText('com.example.app');
     assert.dom(SELECTORS.summaryCard).exists();
-    assert.strictEqual(findAll(SELECTORS.summaryStat).length, 3);
+    assert.strictEqual(findAll(SELECTORS.summaryStat).length, 4);
   });
 
   test('it displays target_id in the header when present in scan response', async function (assert) {
@@ -146,11 +146,18 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(stats[0]).containsText('10');
     assert
       .dom(stats[0])
-      .containsText(t('offensiveSecurity.protectionsDetected'));
+      .containsText(t('offensiveSecurity.summary.defensesDetected'));
     assert.dom(stats[1]).containsText('2');
-    assert.dom(stats[1]).containsText(t('offensiveSecurity.bypassed'));
+    assert
+      .dom(stats[1])
+      .containsText(t('offensiveSecurity.summary.defensesExploited'));
     assert.dom(stats[2]).containsText('4');
-    assert.dom(stats[2]).containsText(t('offensiveSecurity.resisted'));
+    assert
+      .dom(stats[2])
+      .containsText(t('offensiveSecurity.summary.defensesResisted'));
+    assert
+      .dom(stats[3])
+      .containsText(t('offensiveSecurity.summary.businessRisksConfirmed'));
   });
 
   test('it hides the unassessed caption when everything was assessed', async function (assert) {
@@ -350,14 +357,27 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.deepEqual(router.lastModels, [String(scan.id)]);
   });
 
-  test('the scan summary is only shown once the run has completed', async function (assert) {
-    const scan = createScan(this, { status: SCAN_STATUS.RUNNING });
+  test('the scan summary is hidden while the run is queued', async function (assert) {
+    const scan = createScan(this, { status: SCAN_STATUS.QUEUED });
     serveScan(this, scan);
 
     this.set('scanId', String(scan.id));
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.summaryCard).doesNotExist();
+  });
+
+  test('the scan summary shows live without artifacts while the run is running', async function (assert) {
+    const scan = createScan(this, { status: SCAN_STATUS.RUNNING });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.summaryCard).exists();
+    assert.dom(SELECTORS.summaryCard).containsText(t('offensiveSecurity.live'));
+    assert.dom(SELECTORS.artifactsBtn).doesNotExist();
+    assert.dom(SELECTORS.viewResultsBtn).exists();
   });
 
   test('the artifacts drawer opens from the summary and closes again', async function (assert) {
@@ -408,6 +428,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert
       .dom(SELECTORS.deviceStatusPill)
       .hasText(t('offensiveSecurity.deviceConnecting'));
+    // The pill says it all, so there is no caption under the phone
     assert.dom(SELECTORS.deviceCaption).doesNotExist();
   });
 
@@ -543,11 +564,8 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
 
   test.each(
     'the device card stays after the run ends with the stream marked ended',
-    [
-      [SCAN_STATUS.COMPLETED, 'offensiveSecurity.deviceCaptionEnded'],
-      [SCAN_STATUS.FAILED, 'offensiveSecurity.deviceCaptionFailed'],
-    ],
-    async function (assert, [status, captionKey]) {
+    [[SCAN_STATUS.COMPLETED], [SCAN_STATUS.FAILED]],
+    async function (assert, [status]) {
       const scan = createScan(this, { status });
       serveScan(this, scan);
 
@@ -559,7 +577,16 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
         .dom(SELECTORS.deviceStatusPill)
         .hasAttribute('data-test-offensiveSecurity-deviceLiveBadge', 'ended')
         .hasText(t('offensiveSecurity.deviceStreamEnded'));
-      assert.dom(SELECTORS.deviceCaption).hasText(t(captionKey));
+      assert.dom(SELECTORS.deviceCaption).doesNotExist();
+      assert
+        .dom('[data-test-offensiveSecurity-deviceEnded]')
+        .hasText(
+          t(
+            status === SCAN_STATUS.FAILED
+              ? 'offensiveSecurity.deviceCaptionFailed'
+              : 'offensiveSecurity.deviceCaptionEnded'
+          )
+        );
       assert.dom(SELECTORS.deviceScreen).doesNotExist();
       assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
     }

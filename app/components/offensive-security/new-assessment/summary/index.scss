@@ -6,8 +6,15 @@
 }
 
 .summary-header {
-  padding: 1em 1.25em;
-  border-bottom: var(--offensive-security-new-assessment-card-border);
+  padding: 16px 20px;
+  border-bottom: var(--offensive-security-new-assessment-divider-border);
+}
+
+.summary-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--text-primary);
 }
 
 .summary-list {
@@ -17,8 +24,8 @@
 }
 
 .summary-footer {
-  padding: 1.25em;
-  border-top: var(--offensive-security-new-assessment-card-border);
+  padding: 20px;
+  border-top: var(--offensive-security-new-assessment-divider-border);
   background-color: var(--offensive-security-new-assessment-footer-bg-color);
 }
 
@@ -30,19 +37,20 @@
 .optional-tag {
   display: inline-flex;
   align-items: center;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 1.4;
+  line-height: 1.5;
   white-space: nowrap;
-  color: var(--offensive-security-new-assessment-step-upcoming-color);
+  color: var(--offensive-security-new-assessment-optional-tag-color);
   background-color: var(
-    --offensive-security-new-assessment-platform-icon-bg-color
+    --offensive-security-new-assessment-optional-tag-bg-color
   );
 }
 
 .begin-help {
-  margin-top: 0.75em;
+  margin-top: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }

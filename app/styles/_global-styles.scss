@@ -32,10 +32,43 @@
 }
 
 @font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/IBMPlexMono-700.woff2') format('woff2');
+}
+
+@font-face {
   font-family: 'DM Mono';
   font-weight: 400;
   font-style: normal;
-  src: url('/fonts/DMMono-Regular.woff2') format('woff2'),
+  src:
+    url('/fonts/DMMono-Regular.woff2') format('woff2'),
     url('/fonts/DMMono-Regular.ttf') format('truetype');
 }
 
@@ -52,4 +85,26 @@ body {
 html {
   overflow-y: auto;
   font-size: var(--html-font-size);
+}
+
+// Offensive security pages use IBM Plex Mono for the whole UI; text marked
+// offsec-prose (descriptions, subtitles) stays Open Sans.
+.offsec-type {
+  display: contents;
+  // Plex Mono is wide: long unbroken strings must wrap, never spill out of a card
+  overflow-wrap: anywhere;
+  font-variant-ligatures: none;
+  font-feature-settings:
+    'zero' 1,
+    'calt' 0;
+}
+
+.offsec-type.offsec-type,
+.offsec-type.offsec-type * {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+.offsec-type.offsec-type .offsec-prose,
+.offsec-type.offsec-type .offsec-prose * {
+  font-family: 'Open Sans', sans-serif;
 }

@@ -1,7 +1,16 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl } from 'ember-intl/test-support';
-import { render, click, fillIn, findAll } from '@ember/test-helpers';
+import {
+  render,
+  click,
+  fillIn,
+  find,
+  findAll,
+  waitFor,
+  waitUntil,
+} from '@ember/test-helpers';
+import { selectFiles } from 'ember-file-upload/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 
@@ -19,9 +28,37 @@ class NotificationsStub extends Service {
 
 class RouterStub extends Service {
   transitionedTo = null;
+  listeners = {};
+
+  on(name, fn) {
+    (this.listeners[name] ??= []).push(fn);
+  }
+
+  off(name, fn) {
+    this.listeners[name] = (this.listeners[name] ?? []).filter((f) => f !== fn);
+  }
 
   transitionTo(route) {
     this.transitionedTo = route;
+  }
+}
+
+// The scan created by Begin shows up on the first poll, so the page opens it
+class StoreStub extends Service {
+  query() {
+    return Promise.resolve([
+      { id: '42', createdAt: new Date(Date.now() + 60 * 1000) },
+    ]);
+  }
+}
+
+let rejectPendingUpload;
+
+class PendingStoreStub extends Service {
+  queryRecord() {
+    return new Promise((_, reject) => {
+      rejectPendingUpload = reject;
+    });
   }
 }
 
@@ -46,6 +83,8 @@ module(
       this.owner.unregister('service:router');
       this.owner.register('service:router', RouterStub);
       this.owner.register('service:realtime', RealtimeStub);
+      this.owner.unregister('service:store');
+      this.owner.register('service:store', StoreStub);
     });
 
     test('it renders Step 1 dropzone with locked steps and summary when no file has been uploaded', async function (assert) {
@@ -141,6 +180,7 @@ module(
         )
         .hasText('None added');
 
+      await click('[data-test-add-first-credential-btn]');
       await fillIn('[data-test-cred-role="0"]', 'Admin');
       await fillIn('[data-test-cred-username="0"]', 'admin@example.com');
       await fillIn('[data-test-cred-password="0"]', 'Secret123!');
@@ -190,24 +230,26 @@ module(
       assert.dom('[data-test-card-comprehensive]').exists();
       assert.dom('[data-test-card-resilience]').exists();
 
-      // Default is comprehensive
       assert
         .dom('[data-test-begin-assessment-btn]')
-        .containsText('Comprehensive');
+        .containsText('Begin assessment');
 
       // Switch to resilience
       await click('[data-test-card-resilience]');
       assert.strictEqual(offsecService.assessmentType, 'resilience');
-      assert.dom('[data-test-begin-assessment-btn]').containsText('Resilience');
 
-      // Check credentials rows
-      const initialRows = findAll('[data-test-credential-row]');
-      assert.strictEqual(initialRows.length, 3);
+      // Credentials start empty, with an add button
+      assert.dom('[data-test-credentials-empty]').exists();
+      assert.strictEqual(findAll('[data-test-credential-row]').length, 0);
+
+      await click('[data-test-add-first-credential-btn]');
+      assert.strictEqual(findAll('[data-test-credential-row]').length, 1);
+      assert.dom('[data-test-credentials-count]').hasText('1 of 5');
 
       // Add another credential row
       await click('[data-test-add-role-btn]');
-      const updatedRows = findAll('[data-test-credential-row]');
-      assert.strictEqual(updatedRows.length, 4);
+      assert.strictEqual(findAll('[data-test-credential-row]').length, 2);
+      assert.dom('[data-test-credentials-count]').hasText('2 of 5');
 
       // Fill in credentials
       await fillIn('[data-test-cred-role="0"]', 'Security Auditor');
@@ -252,11 +294,13 @@ module(
 
       assert.strictEqual(
         router.transitionedTo,
-        'authenticated.offensive-security.index'
+        'authenticated.offensive-security.scan',
+        'the page opens the new scan once it appears'
       );
-      assert.ok(
+      assert.strictEqual(
         offsecService.assessmentStartedAt,
-        'the runs page is told to open the new scan once it appears'
+        null,
+        'the started marker is cleared once the scan opens'
       );
     });
 
@@ -296,11 +340,11 @@ module(
       // Switch to resilience where credentials are optional
       await click('[data-test-card-resilience]');
 
-      // 3 empty rows are present on screen
-      const rows = findAll('[data-test-credential-row]');
-      assert.strictEqual(rows.length, 3);
+      // An added row left empty is omitted
+      await click('[data-test-add-first-credential-btn]');
+      assert.strictEqual(findAll('[data-test-credential-row]').length, 1);
 
-      // User submits without filling any of the 3 rows
+      // User submits without filling the row
       await click('[data-test-begin-assessment-btn]');
 
       assert.ok(savedOptions, 'uploadItem.save was called');
@@ -367,6 +411,8 @@ module(
 
       await render(hbs`<OffensiveSecurity::NewAssessment />`);
 
+      await click('[data-test-add-first-credential-btn]');
+      await fillIn('[data-test-cred-role="0"]', 'Auditor');
       await fillIn('[data-test-cred-username="0"]', 'audit@example.com');
       await fillIn('[data-test-cred-password="0"]', 'Secret123!');
 
@@ -386,6 +432,33 @@ module(
         savedOptions.adapterOptions.credentials[0].password,
         'Secret123!'
       );
+    });
+
+    test('a partly filled credential row shows an error and blocks Begin until finished or removed', async function (assert) {
+      const offsecService = this.owner.lookup('service:offsec-new-assessment');
+
+      offsecService.setUploadedApp({
+        uploadItem: { url: 'https://test.com' },
+        file: { name: 'test.apk', size: 5000 },
+      });
+
+      await render(hbs`<OffensiveSecurity::NewAssessment />`);
+
+      await click('[data-test-add-first-credential-btn]');
+      await fillIn('[data-test-cred-username="0"]', 'audit@example.com');
+
+      assert
+        .dom('[data-test-credential-row-error="0"]')
+        .hasText('Fill in all three fields, or remove this row.');
+      assert.dom('[data-test-begin-assessment-btn]').isDisabled();
+      assert
+        .dom('[data-test-new-assessment-summary-credentials]')
+        .hasAttribute('data-test-new-assessment-summary-item', 'todo');
+
+      await click('[data-test-remove-cred-btn="0"]');
+
+      assert.dom('[data-test-credential-row-error]').doesNotExist();
+      assert.dom('[data-test-begin-assessment-btn]').isNotDisabled();
     });
 
     test('switching between comprehensive and resilience keeps credentials optional in both modes', async function (assert) {
@@ -429,6 +502,88 @@ module(
 
       assert.dom('[data-test-new-assessment-dropzone]').exists();
       assert.dom('[data-test-upload-progress-bar]').doesNotExist();
+    });
+
+    module('leaving while a build is uploading', function (hooks) {
+      hooks.beforeEach(async function () {
+        const offsecService = this.owner.lookup(
+          'service:offsec-new-assessment'
+        );
+        offsecService.reset();
+
+        // keeps the upload pending so the page stays in its uploading state
+        this.owner.unregister('service:store');
+        this.owner.register('service:store', PendingStoreStub);
+
+        await render(hbs`<OffensiveSecurity::NewAssessment />`);
+
+        const file = new File(['content'], 'my-app.apk');
+
+        selectFiles('[data-test-file-input]', file);
+        await waitFor('[data-test-upload-progress-bar]');
+
+        this.fakeTransition = {
+          aborted: false,
+          retried: false,
+          abort() {
+            this.aborted = true;
+          },
+          retry() {
+            this.retried = true;
+          },
+        };
+
+        this.navigate = () => {
+          const router = this.owner.lookup('service:router');
+          router.listeners.routeWillChange.forEach((fn) =>
+            fn(this.fakeTransition)
+          );
+        };
+      });
+
+      hooks.afterEach(function () {
+        rejectPendingUpload?.(new Error('test cleanup'));
+      });
+
+      test('it holds the navigation and asks before leaving', async function (assert) {
+        this.navigate();
+
+        await waitFor('[data-test-confirmbox-description]');
+
+        assert.true(this.fakeTransition.aborted, 'navigation is held');
+        assert.false(this.fakeTransition.retried);
+        assert
+          .dom('[data-test-confirmbox-confirmBtn]')
+          .hasText('Leave and cancel upload');
+        assert
+          .dom('[data-test-confirmbox-cancelBtn]')
+          .hasText('Stay on this page');
+      });
+
+      test('Stay on this page keeps the upload running and drops the navigation', async function (assert) {
+        this.navigate();
+        await waitFor('[data-test-confirmbox-description]');
+
+        // click() waits for settled, which the pending upload never reaches
+        find('[data-test-confirmbox-cancelBtn]').click();
+        await waitUntil(() => !find('[data-test-confirmbox-description]'));
+
+        assert.dom('[data-test-confirmbox-description]').doesNotExist();
+        assert.dom('[data-test-upload-progress-bar]').exists();
+        assert.false(this.fakeTransition.retried, 'navigation stays cancelled');
+      });
+
+      test('Leave and cancel upload lets the held navigation continue', async function (assert) {
+        this.navigate();
+        await waitFor('[data-test-confirmbox-description]');
+
+        // click() waits for settled, which the pending upload never reaches
+        find('[data-test-confirmbox-confirmBtn]').click();
+        await waitUntil(() => !find('[data-test-confirmbox-description]'));
+
+        assert.true(this.fakeTransition.retried, 'navigation is retried');
+        assert.dom('[data-test-confirmbox-description]').doesNotExist();
+      });
     });
   }
 );

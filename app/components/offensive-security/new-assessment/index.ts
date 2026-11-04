@@ -6,6 +6,7 @@ import { waitForPromise } from '@ember/test-waiters';
 import { task, timeout } from 'ember-concurrency';
 import type Store from '@ember-data/store';
 import type RouterService from '@ember/routing/router-service';
+import type Transition from '@ember/routing/transition';
 import type IntlService from 'ember-intl/services/intl';
 import type RealtimeService from 'irene/services/realtime';
 import type FileQueueService from 'ember-file-upload/services/file-queue';
@@ -18,6 +19,9 @@ const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500 MB
 const ALLOWED_EXTENSIONS = ['apk', 'ipa', 'aab'];
 const STARTED_SCAN_POLL_INTERVAL_MS = 3000;
 const STARTED_SCAN_POLL_MAX_ATTEMPTS = 100;
+
+/** The upload promise from ember-file-upload is cancelable at runtime. */
+type UploadRequest = Promise<unknown> & { abort?: () => unknown };
 
 export function formatFileSize(bytes?: number): string {
   if (!bytes || bytes <= 0) {
@@ -43,8 +47,27 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
   @tracked uploadProgress = 0;
   @tracked currentFile: UploadFile | null = null;
   @tracked isStartingAssessment = false;
+  @tracked showLeaveConfirm = false;
+
+  pendingTransition: Transition | null = null;
+  isLeaveConfirmed = false;
+  uploadRequest: UploadRequest | null = null;
 
   fileQueueName = 'offsecAssessmentUpload';
+
+  constructor(owner: unknown, args: object) {
+    super(owner, args);
+
+    this.router.on('routeWillChange', this.handleRouteWillChange);
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  }
+
+  willDestroy() {
+    super.willDestroy();
+
+    this.router.off('routeWillChange', this.handleRouteWillChange);
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  }
 
   get progress(): number {
     const queue = this.fileQueue.find(this.fileQueueName);
@@ -52,6 +75,18 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
       this.currentFile?.progress ?? queue?.progress ?? this.uploadProgress ?? 0;
 
     return Math.min(100, Math.max(0, Math.round(prog)));
+  }
+
+  get isUploadComplete(): boolean {
+    return this.isUploading && this.progress >= 100;
+  }
+
+  get ringCircumference(): number {
+    return 2 * Math.PI * 40;
+  }
+
+  get ringDashOffset(): number {
+    return this.ringCircumference * (1 - Math.min(this.progress, 100) / 100);
   }
 
   get hasUploadedApp(): boolean {
@@ -69,18 +104,8 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     return formatFileSize(this.uploadedFile?.size);
   }
 
-  get isComprehensive(): boolean {
-    return this.offsecNewAssessment.assessmentType === 'comprehensive';
-  }
-
-  get credentials() {
-    return this.offsecNewAssessment.credentials;
-  }
-
   get hasValidCredentials(): boolean {
-    return this.credentials.some(
-      (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
-    );
+    return this.offsecNewAssessment.completeCredentials.length > 0;
   }
 
   get isIosBuild(): boolean {
@@ -96,9 +121,15 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
   }
 
   get credentialsStepState(): NewAssessmentStepState {
-    return this.hasUploadedApp && this.hasValidCredentials
-      ? 'done'
-      : 'upcoming';
+    if (!this.hasUploadedApp) {
+      return 'upcoming';
+    }
+
+    if (this.offsecNewAssessment.hasIncompleteCredential) {
+      return 'current';
+    }
+
+    return this.hasValidCredentials ? 'done' : 'upcoming';
   }
 
   get isBeginDisabled(): boolean {
@@ -110,13 +141,47 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
       return true;
     }
 
-    return false;
+    return this.offsecNewAssessment.hasIncompleteCredential;
   }
 
   get beginCtaLabel(): string {
-    return this.isComprehensive
-      ? this.intl.t('offensiveSecurity.beginAssessmentComprehensive')
-      : this.intl.t('offensiveSecurity.beginAssessmentResilience');
+    return this.intl.t('offensiveSecurity.beginAssessment');
+  }
+
+  /** Holds navigation while a build is uploading and asks the user first. */
+  handleRouteWillChange = (transition: Transition) => {
+    if (!this.isUploading || this.isLeaveConfirmed) {
+      return;
+    }
+
+    transition.abort();
+    this.pendingTransition = transition;
+    this.showLeaveConfirm = true;
+  };
+
+  handleBeforeUnload = (event: BeforeUnloadEvent) => {
+    if (this.isUploading) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  };
+
+  @action
+  stayOnPage() {
+    this.showLeaveConfirm = false;
+    this.pendingTransition = null;
+  }
+
+  @action
+  leaveAndCancelUpload() {
+    const transition = this.pendingTransition;
+
+    this.isLeaveConfirmed = true;
+    this.showLeaveConfirm = false;
+    this.pendingTransition = null;
+    this.uploadRequest?.abort?.();
+
+    transition?.retry();
   }
 
   @action
@@ -160,12 +225,12 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
         this.store.queryRecord('upload-app', { offsec: true })
       )) as UploadAppModel;
 
-      await waitForPromise(
-        file.uploadBinary(uploadItem.url, {
-          method: 'PUT',
-          withCredentials: false,
-        })
-      );
+      this.uploadRequest = file.uploadBinary(uploadItem.url, {
+        method: 'PUT',
+        withCredentials: false,
+      });
+
+      await waitForPromise(this.uploadRequest);
 
       this.offsecNewAssessment.setUploadedApp({
         uploadItem,
@@ -178,10 +243,13 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
 
       this.notify.success(this.intl.t('fileUploadedSuccessfully'));
     } catch (error) {
-      this.notify.error(this.intl.t('errorWhileUploading'));
+      if (!this.isLeaveConfirmed) {
+        this.notify.error(this.intl.t('errorWhileUploading'));
+      }
     } finally {
       this.isUploading = false;
       this.currentFile = null;
+      this.uploadRequest = null;
     }
   }
 
@@ -195,11 +263,8 @@ export default class OffensiveSecurityNewAssessmentComponent extends Component {
     this.isStartingAssessment = true;
 
     try {
-      const credentialsPayload = this.credentials
-        .filter(
-          (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
-        )
-        .map((c) => ({
+      const credentialsPayload =
+        this.offsecNewAssessment.completeCredentials.map((c) => ({
           role: c.role.trim(),
           role_label: c.role.trim(),
           username: c.username.trim(),

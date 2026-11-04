@@ -24,6 +24,31 @@
   }
 }
 
+.target-name {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: normal;
+  color: var(--text-primary);
+}
+
+.target-package {
+  font-family: var(--font-family-literal, monospace);
+  font-size: 13px;
+  line-height: normal;
+}
+
+.target-id,
+.target-id strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.target-platform {
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .failure-banner {
   border-radius: var(--offensive-security-scan-results-card-border-radius);
   background-color: var(--offensive-security-finding-detail-exploited-bg-color);
@@ -33,12 +58,11 @@
 .run-card {
   background-color: var(--offensive-security-scan-results-card-bg-color);
   border: var(--offensive-security-scan-results-card-border);
-  border-radius: var(--offensive-security-scan-results-card-border-radius);
-  padding: 1.25rem;
+  border-radius: var(--border-radius-10, 10px);
+  padding: 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   width: 100%;
 }
 
@@ -46,93 +70,91 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1.5rem;
+  gap: 24px;
   width: 100%;
 }
 
 .run-title-group {
-  display: flex;
-  align-items: center;
-  flex: 1 1 auto;
-  gap: 0.75rem;
   min-width: 0;
 }
 
 .run-title {
-  flex-shrink: 0;
-  white-space: nowrap;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--text-primary);
 }
 
 .run-subtitle {
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-// Too narrow to share a line with the actions; stack the sentence under the title
-@media (max-width: 1200px) {
-  .run-title-group {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-  }
-
-  .run-title-divider {
-    display: none;
-  }
-
-  .run-subtitle {
-    white-space: normal;
-  }
+  margin: 2px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
 }
 
 .run-card-header-actions {
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  gap: 1.25rem;
-}
+  gap: 12px;
 
-// Same box as the status chip beside it; scoped to outrank AkButton's own sizing
-.run-card-header-actions .view-results-btn {
-  height: 24px;
-  min-height: 24px;
-  padding: 0 0.75em;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  line-height: 1;
-}
+  // Status badge: 30px tall bordered chip with per-state colours
+  > div {
+    height: 30px;
+    min-width: 0;
+    padding: 0 12px;
+    gap: 7px;
+    border-radius: 6px;
+    border: 1px solid var(--neutral-grey-300);
+    font-size: 13px;
+    font-weight: 600;
+    background-color: var(--neutral-grey-100);
+    color: var(--neutral-grey-700);
+  }
 
-.header-divider {
-  width: 1px;
-  height: 24px;
-  background-color: var(--offensive-security-scan-results-divider-color);
+  > [data-test-offensivesecurity-statuschip-failed] {
+    border-color: #f2c0bd;
+    background-color: #fdecea;
+    color: #b42318;
+  }
+
+  > [data-test-offensivesecurity-statuschip-completed] {
+    border-color: #bfe0c2;
+    background-color: #e9f5ed;
+    color: #1d6f16;
+  }
+
+  > [data-test-offensivesecurity-statuschip-running] {
+    border-color: #bcd5f2;
+    background-color: #eaf2fd;
+    color: #0a5db0;
+  }
 }
 
 .run-split {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
   width: 100%;
-  gap: 1.25rem;
+  margin-top: 20px;
+  gap: 20px;
   align-items: stretch;
 
+  &.is-done {
+    margin-top: 24px;
+  }
 }
 
 .run-logs-col {
-  flex: 1 1 72%;
   min-width: 0;
   display: flex;
   flex-direction: column;
 }
 
 .run-device-col {
-  flex: 0 0 320px;
-  max-width: 350px;
-  min-width: 290px;
   position: sticky;
   top: 1rem;
+  min-width: 0;
   align-self: stretch;
   display: flex;
   flex-direction: column;
@@ -143,56 +165,42 @@
   inset: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1299;
   border: none;
   cursor: default;
 }
 
 .device-panel {
-  background-color: var(--neutral-grey-50);
-  border: 1px solid var(--neutral-grey-200);
-  border-radius: var(--border-radius-12);
-  padding: 0.875rem 1rem 0.625rem 1rem;
+  background-color: var(--common-white, #fff);
+  border: 1px solid var(--border-color-1);
+  border-radius: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-width: 0;
   height: 100%;
-  min-height: 440px;
+  overflow: hidden;
 
   &.is-expanded {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(90vw, 380px);
+    width: min(90vw, 420px);
     height: min(92vh, 740px);
     max-height: 92vh;
     z-index: 1300;
-    background-color: #ffffff;
-    box-shadow:
-      0 25px 50px -12px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
-    padding: 1.25rem;
+    border: 0;
+    box-shadow: var(--box-shadow-6);
 
     .phone-frame {
-      width: 280px;
-      height: 570px;
-      border-width: 7px;
-      border-radius: 26px;
-    }
-
-    .phone-frame.is-ios {
-      width: 288px;
-      height: 570px;
-      padding: 6px;
-      border-radius: 34px;
+      width: 283px;
+      height: 576px;
+      border-radius: 48px;
 
       .phone-screen {
-        border-radius: 28px;
+        border-radius: 42px;
       }
     }
   }
@@ -202,35 +210,53 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   width: 100%;
-  margin-bottom: 0.5rem;
+  padding: 14px 20px;
+  box-sizing: border-box;
 }
 
 .device-title-group {
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
-  gap: 0.5rem;
+  gap: 12px;
   min-width: 0;
-  flex-wrap: wrap;
+}
+
+.device-title {
+  flex-shrink: 0;
+  margin: 0;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
 .title-divider {
-  color: var(--neutral-grey-400);
-  font-size: 0.8125rem;
-  line-height: 1;
-  user-select: none;
+  width: 1px;
+  height: 16px;
+  flex-shrink: 0;
+  background-color: var(--border-color-2);
 }
 
 .collapse-panel-btn {
-  padding: 4px !important;
-  min-width: 28px !important;
-  height: 28px !important;
-  border-radius: var(--border-radius-6) !important;
-  color: var(--text-secondary) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
+  width: 30px !important;
+  min-width: 30px !important;
+  height: 30px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 6px !important;
+  background-color: transparent !important;
+  color: var(--neutral-grey-600) !important;
 
   &:hover {
     color: var(--text-primary) !important;
-    background-color: var(--neutral-grey-200) !important;
+    background-color: var(--neutral-grey-100) !important;
   }
 
   .expand-icon-svg {
@@ -241,20 +267,31 @@
 
 .device-status-pill {
   display: inline-flex;
+  flex: 0 1 auto;
   align-items: center;
-  gap: 0.5em;
-  padding: 0.3em 0.75em;
-  border-radius: 9999px;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 5px 12px;
+  border-radius: var(--border-radius-capsule, 999px);
   white-space: nowrap;
-  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--offensive-security-scan-results-label-color);
-  background-color: var(--offensive-security-scan-results-icon-bg-color);
+  color: var(--neutral-grey-700);
+  background-color: var(--neutral-grey-100);
 
   &.is-live {
-    color: var(--offensive-security-scan-results-stat-defended-color);
-    background-color: var(--offensive-security-scan-results-live-bg-color);
+    color: #1f7a17;
+    background-color: #e6f6e4;
   }
+}
+
+.device-status-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .device-status-dot {
@@ -262,83 +299,56 @@
   height: 8px;
   flex-shrink: 0;
   border-radius: 50%;
-  background-color: currentColor;
+  background-color: var(--neutral-grey-500);
 
   .is-live & {
-    animation: pulse-dot 1.5s infinite ease-in-out;
+    background-color: var(--success-main);
   }
-}
-
-.device-ended-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  max-width: 200px;
-  padding: 0 1rem;
-  text-align: center;
-  color: #e2e8f0;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 0.875rem;
-  line-height: 1.4;
 }
 
 .phone-frame-wrapper {
   display: flex;
+  flex: 1 1 auto;
   justify-content: center;
   align-items: center;
   width: 100%;
-  flex: 1 1 auto;
-  padding: 0.25rem 0 0.125rem 0;
-}
-
-.phone-frame {
-  width: 232px;
-  height: 475px;
-  flex: 0 0 auto;
-  background-color: #000000;
-  border: 6px solid #1f242d;
-  border-radius: 24px;
-  box-shadow:
-    0 8px 24px -4px rgba(0, 0, 0, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
+  padding: 24px 20px;
   box-sizing: border-box;
-  transition:
-    width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--neutral-grey-50);
 }
 
 .phone-device {
   position: relative;
   display: flex;
+  align-self: stretch;
+  max-height: 640px;
 }
 
-.phone-frame.is-ios {
+.phone-frame {
+  position: relative;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
   width: 236px;
-  height: 480px;
+  height: 100%;
+  min-height: 480px;
   padding: 5px;
+  box-sizing: border-box;
   border: 0;
-  // Real iPhone display corners are ~10% of the screen width; the bezel adds its padding
-  border-radius: 29px;
-  background: var(--offensive-security-scan-results-iphone-bezel);
-  box-shadow: var(--offensive-security-scan-results-iphone-shadow);
-
-  .phone-screen {
-    height: 100%;
-    padding-bottom: 0;
-    border-radius: 24px;
-  }
+  border-radius: 40px;
+  background: linear-gradient(145deg, #6b6f78 0%, #2a2c31 45%, #141518 100%);
+  box-shadow:
+    0 18px 30px -12px rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.25);
+  transition:
+    width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .side-button {
   position: absolute;
   width: 3px;
-  background-color: var(--offensive-security-scan-results-iphone-button-color);
+  background-color: var(--neutral-grey-700);
 
   &.volume-up,
   &.volume-down {
@@ -368,7 +378,7 @@
   position: absolute;
   top: 9px;
   left: 50%;
-  z-index: 3;
+  z-index: 20;
   width: 74px;
   height: 22px;
   border-radius: 9999px;
@@ -376,51 +386,60 @@
   background-color: #000000;
 }
 
+.punch-hole {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  z-index: 20;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  transform: translateX(-50%);
+  background-color: #000000;
+  box-shadow: 0 0 0 1px var(--neutral-grey-800);
+}
+
 .home-indicator {
   position: absolute;
   bottom: 6px;
   left: 50%;
-  z-index: 3;
+  z-index: 20;
   width: 84px;
   height: 4px;
   border-radius: 9999px;
   transform: translateX(-50%);
-  background-color: var(
-    --offensive-security-scan-results-iphone-indicator-color
-  );
+  background-color: var(--neutral-grey-600);
+
+  &.is-on-screen {
+    background-color: var(--neutral-grey-900);
+  }
 }
 
 .screen-glare {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 30;
   pointer-events: none;
-  background: var(--offensive-security-scan-results-iphone-glare);
-}
-
-.phone-speaker-slit {
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background-color: #374151;
-  margin: 5px auto 4px auto;
-  flex-shrink: 0;
-  z-index: 2;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 38%
+  );
 }
 
 .phone-screen {
-  flex: 1 1 auto;
-  width: 100%;
-  height: calc(100% - 13px);
-  min-height: 0;
-  background-color: #000000;
-  overflow: hidden;
+  position: relative;
   display: flex;
+  flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   box-sizing: border-box;
-  padding-bottom: 2px;
+  border-radius: 35px;
+  background-color: #000000;
 }
 
 .device-screen-wrapper {
@@ -448,46 +467,39 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1rem;
   width: 100%;
   height: 100%;
-  gap: 0.5rem;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--neutral-grey-400);
 }
 
 .device-placeholder-icon {
-  font-size: 2.25rem !important;
-  color: #475569;
+  font-size: 26px !important;
+  color: inherit;
 }
 
 .device-placeholder-text {
-  color: #64748b;
-  font-size: 0.75rem;
-  max-width: 140px;
-  line-height: 1.3;
-}
-
-@keyframes pulse-dot {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.4;
-    transform: scale(0.8);
-  }
+  font-size: 13px;
+  color: inherit;
 }
 
 @media (max-width: 1024px) {
   .run-split {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .run-device-col {
-    flex: 1 1 auto;
     width: 100%;
-    max-width: none;
     position: static;
   }
+}
+
+.device-ended-text {
+  margin: 0;
+  padding: 0 24px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--common-white, #fff);
 }

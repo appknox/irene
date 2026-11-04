@@ -1,17 +1,16 @@
 <section local-class='findings-card' data-test-offensiveSecurity-findingsList>
   <div local-class='findings-header'>
     <div>
-      <AkTypography
-        @variant='subtitle1'
-        @fontWeight='bold'
+      <h2
+        local-class='findings-title'
         data-test-offensiveSecurity-findingsList-title
       >
         {{t 'offensiveSecurity.findings'}}
-      </AkTypography>
+      </h2>
 
-      <AkTypography @variant='body2' @color='textSecondary'>
+      <p class='offsec-prose' local-class='findings-subtitle'>
         {{t 'offensiveSecurity.findingsSubtitle'}}
-      </AkTypography>
+      </p>
     </div>
 
     {{#if @scan.isInProgress}}
@@ -49,33 +48,32 @@
               </span>
 
               <span local-class='group-text'>
-                <AkTypography
-                  @fontWeight='bold'
+                <span
+                  local-class='group-title'
                   data-test-offensiveSecurity-findingsList-groupTitle
                 >
                   {{group.title}}
-                </AkTypography>
+                </span>
 
                 {{#if group.summary}}
-                  <AkTypography
-                    @variant='body3'
-                    @color='textSecondary'
-                    @noWrap={{true}}
+                  <span
+                    class='offsec-prose'
+                    local-class='group-summary'
                     title={{group.summary}}
                     data-test-offensiveSecurity-findingsList-groupSummary
                   >
                     {{group.summary}}
-                  </AkTypography>
+                  </span>
                 {{/if}}
               </span>
             </span>
 
-            <AkTypography
-              @fontWeight='bold'
+            <span
+              local-class='group-count'
               data-test-offensiveSecurity-findingsList-groupCount
             >
               {{group.findings.length}}
-            </AkTypography>
+            </span>
 
             <span
               local-class='outcome-badge {{this.outcomeClass group.status}}'
@@ -86,7 +84,7 @@
 
             <AkIcon
               @iconName='chevron-right'
-              @color='textSecondary'
+              @size='small'
               local-class='row-chevron'
               data-test-offensiveSecurity-findingsList-expandIcon
             />
@@ -98,6 +96,7 @@
     <AkTypography
       @variant='body2'
       @color='textSecondary'
+      class='offsec-prose'
       local-class='findings-empty'
       data-test-offensiveSecurity-findingsList-empty
     >

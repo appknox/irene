@@ -8,7 +8,14 @@ export interface OffensiveSecurityAttackRunsTableTargetSignature {
   };
 }
 
-export default class OffensiveSecurityAttackRunsTableTargetComponent extends Component<OffensiveSecurityAttackRunsTableTargetSignature> {}
+export default class OffensiveSecurityAttackRunsTableTargetComponent extends Component<OffensiveSecurityAttackRunsTableTargetSignature> {
+  /** Package name is shown under the app name unless it is already the displayed name. */
+  get showPackageName() {
+    const { packageName, displayName } = this.args.scan;
+
+    return Boolean(packageName) && packageName !== displayName;
+  }
+}
 
 declare module '@glint/environment-ember-loose/registry' {
   export default interface Registry {

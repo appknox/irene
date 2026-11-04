@@ -2,7 +2,7 @@
   <button
     type='button'
     local-class='log-backdrop'
-    aria-label='Close expanded terminal'
+    aria-label={{t 'offensiveSecurity.collapseTerminal'}}
     {{on 'click' this.toggleExpand}}
     data-test-offensiveSecurity-agentLog-backdrop
   />
@@ -39,8 +39,7 @@
 
       {{#if (and this.isExpanded (gt this.styledLines.length 0))}}
         <span local-class='line-count-badge'>
-          {{this.styledLines.length}}
-          lines
+          {{t 'offensiveSecurity.linesCount' count=this.styledLines.length}}
         </span>
       {{/if}}
     </AkStack>
@@ -62,8 +61,16 @@
         <AkIconButton
           @size='small'
           @variant='default'
-          aria-label={{if this.isScrolledUp 'Jump to latest' 'Scroll to top'}}
-          title={{if this.isScrolledUp 'Jump to latest' 'Scroll to top'}}
+          aria-label={{if
+            this.isScrolledUp
+            (t 'offensiveSecurity.jumpToLatest')
+            (t 'offensiveSecurity.scrollToTop')
+          }}
+          title={{if
+            this.isScrolledUp
+            (t 'offensiveSecurity.jumpToLatest')
+            (t 'offensiveSecurity.scrollToTop')
+          }}
           local-class='scroll-nav-btn'
           {{on 'click' this.scrollNav}}
           data-test-offensiveSecurity-agentLog-scrollNav
@@ -83,7 +90,11 @@
           (t 'offensiveSecurity.collapseTerminal')
           (t 'offensiveSecurity.expandTerminal')
         }}
-        title={{if this.isExpanded 'Collapse terminal (Esc)' 'Expand terminal'}}
+        title={{if
+          this.isExpanded
+          (t 'offensiveSecurity.collapseTerminal')
+          (t 'offensiveSecurity.expandTerminal')
+        }}
         local-class='expand-btn'
         {{on 'click' this.toggleExpand}}
         data-test-offensiveSecurity-agentLog-expandBtn
@@ -162,7 +173,7 @@
                 rel='noopener noreferrer'
                 local-class='log-direct-link'
               >
-                Open log file directly ↗
+                {{t 'offensiveSecurity.openLogFile'}}
               </a>
             </div>
           {{/if}}

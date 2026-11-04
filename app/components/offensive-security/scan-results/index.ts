@@ -309,7 +309,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     );
   }
 
-  get canViewResults(): boolean {
+  get showSummary(): boolean {
     return Boolean(this.scan && (this.scan.isRunning || this.scan.isCompleted));
   }
 
@@ -395,17 +395,12 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     );
   }
 
-  get deviceCaption(): string {
-    if (this.scan?.isFailed) {
-      return this.intl.t('offensiveSecurity.deviceCaptionFailed');
-    }
-
+  /** Shown inside the dark screen once the run is over and the stream is gone. */
+  get deviceEndedMessage(): string {
     return this.intl.t(
-      {
-        live: 'offensiveSecurity.deviceCaptionLive',
-        waiting: 'offensiveSecurity.deviceCaptionWaiting',
-        ended: 'offensiveSecurity.deviceCaptionEnded',
-      }[this.deviceStatus]
+      this.scan?.isFailed
+        ? 'offensiveSecurity.deviceCaptionFailed'
+        : 'offensiveSecurity.deviceCaptionEnded'
     );
   }
 

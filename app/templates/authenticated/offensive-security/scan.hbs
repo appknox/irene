@@ -1,5 +1,7 @@
 {{page-title (t 'offensiveSecurity.attackRun')}}
 
 <PageWrapper @backgroundColor='dark'>
-  <OffensiveSecurity::ScanResults @scanId={{@model.id}} />
+  <div class='offsec-type'>
+    <OffensiveSecurity::ScanResults @scanId={{@model.id}} />
+  </div>
 </PageWrapper>

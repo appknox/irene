@@ -1008,10 +1008,6 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return this.currentFindingIndex >= this.findingList.length - 1;
   }
 
-  get currentFindingPosition(): number {
-    return this.currentFindingIndex >= 0 ? this.currentFindingIndex + 1 : 1;
-  }
-
   get totalFindingsCount(): number {
     return this.findingList.length;
   }
@@ -1020,22 +1016,40 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return this.totalFindingsCount > 1;
   }
 
+  get findingPositionOptions(): { value: number; label: string }[] {
+    return this.findingList.map((_, index) => ({
+      value: index,
+      label: String(index + 1).padStart(2, '0'),
+    }));
+  }
+
+  get totalFindingsLabel(): string {
+    return String(this.totalFindingsCount).padStart(2, '0');
+  }
+
+  goToFindingAt(index: number): void {
+    const target = this.findingList[index];
+
+    if (!target?.id || !this.scanId) {
+      return;
+    }
+
+    const targetId = String(target.id);
+    this.loadFinding.perform(targetId);
+    this.router.transitionTo(
+      'authenticated.offensive-security.finding',
+      this.scanId,
+      targetId
+    );
+  }
+
   @action
   goToPreviousFinding(): void {
     if (this.isFirstFinding) {
       return;
     }
 
-    const prevFinding = this.findingList[this.currentFindingIndex - 1];
-    if (prevFinding?.id && this.scanId) {
-      const prevId = String(prevFinding.id);
-      this.loadFinding.perform(prevId);
-      this.router.transitionTo(
-        'authenticated.offensive-security.finding',
-        this.scanId,
-        prevId
-      );
-    }
+    this.goToFindingAt(this.currentFindingIndex - 1);
   }
 
   @action
@@ -1044,15 +1058,15 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       return;
     }
 
-    const nextFinding = this.findingList[this.currentFindingIndex + 1];
-    if (nextFinding?.id && this.scanId) {
-      const nextId = String(nextFinding.id);
-      this.loadFinding.perform(nextId);
-      this.router.transitionTo(
-        'authenticated.offensive-security.finding',
-        this.scanId,
-        nextId
-      );
+    this.goToFindingAt(this.currentFindingIndex + 1);
+  }
+
+  @action
+  handleFindingJump(event: Event): void {
+    const index = Number((event.target as HTMLSelectElement).value);
+
+    if (!Number.isNaN(index) && index !== this.currentFindingIndex) {
+      this.goToFindingAt(index);
     }
   }
 

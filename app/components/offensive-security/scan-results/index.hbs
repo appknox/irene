@@ -27,11 +27,15 @@
           />
 
           <AkStack @direction='column' @spacing='0.5'>
-            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+            <AkTypography
+              @variant='subtitle1'
+              @fontWeight='bold'
+              local-class='target-name'
+            >
               {{this.scan.displayName}}
             </AkTypography>
 
-            <AkTypography @color='textSecondary' class='font-mono'>
+            <AkTypography @color='textSecondary' local-class='target-package'>
               {{this.scan.packageName}}
             </AkTypography>
           </AkStack>
@@ -78,7 +82,7 @@
               />
             </AkIconButton>
 
-            <AkTypography @variant='subtitle1'>
+            <AkTypography @variant='subtitle1' local-class='target-id'>
               {{t 'targetID'}}
               -
               <strong>{{this.displayTargetId}}</strong>
@@ -92,6 +96,7 @@
               @variant='body2'
               @fontWeight='bold'
               @color='textSecondary'
+              local-class='target-platform'
               data-test-offensiveSecurity-scanResults-platform
             >
               {{this.platformLabel}}
@@ -173,7 +178,10 @@
               </AkTypography>
 
               <AkStack @alignItems='center' @spacing='1'>
-                <PlatformIcon @code={{this.scan.devFrameworkCode}} @size='18px' />
+                <PlatformIcon
+                  @code={{this.scan.devFrameworkCode}}
+                  @size='18px'
+                />
 
                 <AkTypography @variant='h6'>
                   {{this.scan.devFrameworkLabel}}
@@ -208,60 +216,33 @@
     <div local-class='run-card'>
       <div local-class='run-card-header'>
         <div local-class='run-title-group'>
-          <AkTypography
-            @variant='body1'
-            @fontWeight='bold'
-            local-class='run-title'
-          >
-            {{t 'offensiveSecurity.attackRun'}}
-          </AkTypography>
+          <h2 local-class='run-title'>{{t 'offensiveSecurity.attackRun'}}</h2>
 
-          <span local-class='title-divider run-title-divider'>|</span>
-
-          <AkTypography
-            @variant='body2'
-            @color='textSecondary'
+          <p
+            class='offsec-prose'
             local-class='run-subtitle'
-            title={{this.runSubtitle}}
             data-test-offensiveSecurity-scanResults-runSubtitle
           >
             {{this.runSubtitle}}
-          </AkTypography>
+          </p>
         </div>
 
         <div local-class='run-card-header-actions'>
           <OffensiveSecurity::StatusChip @scan={{this.scan}} />
-
-          {{#if this.canViewResults}}
-            <span local-class='header-divider'></span>
-
-            <AkButton
-              @variant='filled'
-              @color='primary'
-              local-class='view-results-btn'
-              {{on 'click' this.viewResults}}
-              data-test-offensiveSecurity-scanResults-viewResultsBtn
-            >
-              <:default>{{t 'offensiveSecurity.viewResults'}}</:default>
-
-              <:rightIcon>
-                <AkIcon @iconName='arrow-forward' @size='small' />
-              </:rightIcon>
-            </AkButton>
-          {{/if}}
         </div>
       </div>
 
-      {{#if this.scan.isCompleted}}
+      {{#if this.showSummary}}
         <OffensiveSecurity::ScanResults::SummaryCard
           @scan={{this.scan}}
           @artifacts={{this.artifacts}}
           @onDownload={{perform this.downloadArtifact}}
           @isDownloading={{this.downloadArtifact.isRunning}}
+          @onViewResults={{this.viewResults}}
         />
       {{/if}}
 
-      <div local-class='run-split'>
+      <div local-class='run-split {{if this.scan.isCompleted "is-done"}}'>
         <div local-class='run-logs-col'>
           <OffensiveSecurity::ScanResults::AgentLog
             @scan={{this.scan}}
@@ -272,212 +253,197 @@
           />
         </div>
 
+        <div
+          local-class='run-device-col'
+          data-test-offensiveSecurity-deviceCard
+        >
+          {{#if this.isDeviceExpanded}}
+            <button
+              type='button'
+              local-class='device-modal-backdrop'
+              aria-label={{t 'offensiveSecurity.closeDevicePreview'}}
+              {{on 'click' this.toggleDeviceExpand}}
+              data-test-offensiveSecurity-deviceModal-backdrop
+            />
+          {{/if}}
+
           <div
-            local-class='run-device-col'
-            data-test-offensiveSecurity-deviceCard
+            local-class='device-panel {{if
+              this.isDeviceExpanded
+              "is-expanded"
+            }}'
           >
-            {{#if this.isDeviceExpanded}}
-              <button
-                type='button'
-                local-class='device-modal-backdrop'
-                aria-label='Close device preview'
-                {{on 'click' this.toggleDeviceExpand}}
-                data-test-offensiveSecurity-deviceModal-backdrop
-              />
-            {{/if}}
+            <div local-class='device-panel-header'>
+              <div local-class='device-title-group'>
+                <h3 local-class='device-title'>{{t 'realDevice'}}</h3>
 
-            <div
-              local-class='device-panel {{if
-                this.isDeviceExpanded
-                "is-expanded"
-              }}'
-            >
-              <div local-class='device-panel-header'>
-                <div local-class='device-title-group'>
-                  <AkTypography @variant='body2' @fontWeight='bold'>
-                    {{t 'realDevice'}}
-                  </AkTypography>
+                <span local-class='title-divider' aria-hidden='true'></span>
 
-                  <span local-class='title-divider'>|</span>
-
-                  <span
-                    local-class='device-status-pill {{if
-                      this.isDeviceActive
-                      "is-live"
-                    }}'
-                    role='status'
-                    data-test-offensiveSecurity-deviceLiveBadge={{this.deviceStatus}}
-                  >
-                    <span local-class='device-status-dot'></span>
-                    {{this.deviceStatusLabel}}
-                  </span>
-                </div>
-
-                <AkIconButton
-                  @size='small'
-                  @variant='default'
-                  aria-label={{if
-                    this.isDeviceExpanded
-                    'Collapse preview (Esc)'
-                    (t 'offensiveSecurity.expandPreview')
-                  }}
-                  title={{if
-                    this.isDeviceExpanded
-                    'Collapse preview (Esc)'
-                    (t 'offensiveSecurity.expandPreview')
-                  }}
-                  local-class='collapse-panel-btn'
-                  {{on 'click' this.toggleDeviceExpand}}
-                  data-test-offensiveSecurity-expandPreviewBtn
+                <span
+                  local-class='device-status-pill {{if
+                    this.isDeviceActive
+                    "is-live"
+                  }}'
+                  role='status'
+                  data-test-offensiveSecurity-deviceLiveBadge={{this.deviceStatus}}
                 >
-                  {{#if this.isDeviceExpanded}}
-                    <svg
-                      viewBox='0 0 24 24'
-                      width='15'
-                      height='15'
-                      fill='none'
-                      stroke='currentColor'
-                      stroke-width='2'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      aria-hidden='true'
-                      local-class='expand-icon-svg'
-                    >
-                      <polyline points='4 8 8 8 8 4' />
-                      <line x1='3' y1='3' x2='8' y2='8' />
-                      <polyline points='20 8 16 8 16 4' />
-                      <line x1='21' y1='3' x2='16' y2='8' />
-                      <polyline points='20 16 16 16 16 20' />
-                      <line x1='21' y1='21' x2='16' y2='16' />
-                      <polyline points='4 16 8 16 8 20' />
-                      <line x1='3' y1='21' x2='8' y2='16' />
-                    </svg>
-                  {{else}}
-                    <svg
-                      viewBox='0 0 24 24'
-                      width='15'
-                      height='15'
-                      fill='none'
-                      stroke='currentColor'
-                      stroke-width='2'
-                      stroke-linecap='round'
-                      stroke-linejoin='round'
-                      aria-hidden='true'
-                      local-class='expand-icon-svg'
-                    >
-                      <polyline points='15 3 21 3 21 9' />
-                      <line x1='21' y1='3' x2='14' y2='10' />
-                      <polyline points='9 3 3 3 3 9' />
-                      <line x1='3' y1='3' x2='10' y2='10' />
-                      <polyline points='15 21 21 21 21 15' />
-                      <line x1='21' y1='21' x2='14' y2='14' />
-                      <polyline points='9 21 3 21 3 15' />
-                      <line x1='3' y1='21' x2='10' y2='14' />
-                    </svg>
-                  {{/if}}
-                </AkIconButton>
+                  <span local-class='device-status-dot'></span>
+                  <span
+                    local-class='device-status-label'
+                  >{{this.deviceStatusLabel}}</span>
+                </span>
               </div>
 
-              <div local-class='phone-frame-wrapper'>
-                <div local-class='phone-device'>
-                  {{#if this.isIosDevice}}
-                    <span
-                      local-class='side-button volume-up'
-                      aria-hidden='true'
-                    ></span>
-                    <span
-                      local-class='side-button volume-down'
-                      aria-hidden='true'
-                    ></span>
-                    <span
-                      local-class='side-button power'
-                      aria-hidden='true'
-                    ></span>
-                  {{/if}}
-
-                  <div
-                    local-class='phone-frame {{if this.isIosDevice "is-ios"}}'
-                    style={{this.phoneFrameStyle}}
-                    data-test-offensiveSecurity-phoneFrame={{if
-                      this.isIosDevice
-                      'ios'
-                      'android'
-                    }}
+              <AkIconButton
+                @size='small'
+                @variant='default'
+                aria-label={{if
+                  this.isDeviceExpanded
+                  'Collapse preview (Esc)'
+                  (t 'offensiveSecurity.expandPreview')
+                }}
+                title={{if
+                  this.isDeviceExpanded
+                  'Collapse preview (Esc)'
+                  (t 'offensiveSecurity.expandPreview')
+                }}
+                local-class='collapse-panel-btn'
+                {{on 'click' this.toggleDeviceExpand}}
+                data-test-offensiveSecurity-expandPreviewBtn
+              >
+                {{#if this.isDeviceExpanded}}
+                  <svg
+                    viewBox='0 0 24 24'
+                    width='15'
+                    height='15'
+                    fill='none'
+                    stroke='currentColor'
+                    stroke-width='2'
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                    aria-hidden='true'
+                    local-class='expand-icon-svg'
                   >
-                    {{#unless this.isIosDevice}}
-                      <div local-class='phone-speaker-slit'></div>
-                    {{/unless}}
+                    <polyline points='4 8 8 8 8 4' />
+                    <line x1='3' y1='3' x2='8' y2='8' />
+                    <polyline points='20 8 16 8 16 4' />
+                    <line x1='21' y1='3' x2='16' y2='8' />
+                    <polyline points='20 16 16 16 16 20' />
+                    <line x1='21' y1='21' x2='16' y2='16' />
+                    <polyline points='4 16 8 16 8 20' />
+                    <line x1='3' y1='21' x2='8' y2='16' />
+                  </svg>
+                {{else}}
+                  <svg
+                    viewBox='0 0 24 24'
+                    width='15'
+                    height='15'
+                    fill='none'
+                    stroke='currentColor'
+                    stroke-width='2'
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                    aria-hidden='true'
+                    local-class='expand-icon-svg'
+                  >
+                    <polyline points='15 3 21 3 21 9' />
+                    <line x1='21' y1='3' x2='14' y2='10' />
+                    <polyline points='9 3 3 3 3 9' />
+                    <line x1='3' y1='3' x2='10' y2='10' />
+                    <polyline points='15 21 21 21 21 15' />
+                    <line x1='21' y1='21' x2='14' y2='14' />
+                    <polyline points='9 21 3 21 3 15' />
+                    <line x1='3' y1='21' x2='10' y2='14' />
+                  </svg>
+                {{/if}}
+              </AkIconButton>
+            </div>
 
-                    <div local-class='phone-screen'>
-                      {{#if this.isIosDevice}}
-                        <span
-                          local-class='dynamic-island'
-                          aria-hidden='true'
-                        ></span>
-                      {{/if}}
+            <div local-class='phone-frame-wrapper'>
+              <div local-class='phone-device'>
+                <span
+                  local-class='side-button volume-up'
+                  aria-hidden='true'
+                ></span>
+                <span
+                  local-class='side-button volume-down'
+                  aria-hidden='true'
+                ></span>
+                <span local-class='side-button power' aria-hidden='true'></span>
 
-                      {{#if this.isDeviceActive}}
+                <div
+                  local-class='phone-frame'
+                  style={{this.phoneFrameStyle}}
+                  data-test-offensiveSecurity-phoneFrame={{if
+                    this.isIosDevice
+                    'ios'
+                    'android'
+                  }}
+                >
+                  <div local-class='phone-screen'>
+                    {{#if this.isIosDevice}}
+                      <span
+                        local-class='dynamic-island'
+                        aria-hidden='true'
+                      ></span>
+                    {{else}}
+                      <span local-class='punch-hole' aria-hidden='true'></span>
+                    {{/if}}
+
+                    {{#if this.isDeviceActive}}
+                      <div
+                        local-class='device-screen-wrapper {{if
+                          this.deviceAspectRatio
+                          "is-fitted"
+                        }}'
+                        data-test-offensiveSecurity-deviceScreen
+                        {{did-insert this.setupDeviceObserver}}
+                        {{will-destroy this.teardownDeviceObserver}}
+                      >
+                        <NovncRfb
+                          @deviceFarmURL={{this.deviceFarmURL}}
+                          @deviceFarmPassword={{this.deviceFarmPassword}}
+                          @allowInteraction={{false}}
+                          @containCanvas={{true}}
+                        />
+                      </div>
+                    {{else}}{{#unless this.scan.isTerminal}}
                         <div
-                          local-class='device-screen-wrapper {{if
-                            this.deviceAspectRatio
-                            "is-fitted"
-                          }}'
-                          data-test-offensiveSecurity-deviceScreen
-                          {{did-insert this.setupDeviceObserver}}
-                          {{will-destroy this.teardownDeviceObserver}}
+                          local-class='device-placeholder'
+                          data-test-offensiveSecurity-devicePlaceholder
                         >
-                          <NovncRfb
-                            @deviceFarmURL={{this.deviceFarmURL}}
-                            @deviceFarmPassword={{this.deviceFarmPassword}}
-                            @allowInteraction={{false}}
-                            @containCanvas={{true}}
+                          <AkIcon
+                            @iconName='mobile'
+                            local-class='device-placeholder-icon'
                           />
+
+                          <span local-class='device-placeholder-text'>
+                            {{t 'offensiveSecurity.waitingForDevice'}}
+                          </span>
                         </div>
-                      {{else}}{{#unless this.scan.isTerminal}}
-                          <div
-                            local-class='device-placeholder'
-                            data-test-offensiveSecurity-devicePlaceholder
-                          >
-                            <AkIcon
-                              @iconName='mobile'
-                              local-class='device-placeholder-icon'
-                            />
+                      {{/unless}}
+                      {{#if this.scan.isTerminal}}
+                        <p
+                          class='offsec-prose'
+                          local-class='device-ended-text'
+                          data-test-offensiveSecurity-deviceEnded
+                        >
+                          {{this.deviceEndedMessage}}
+                        </p>
+                      {{/if}}{{/if}}
 
-                            <span local-class='device-placeholder-text'>
-                              {{if
-                                this.scan.isRunning
-                                (t 'offensiveSecurity.waitingForDevice')
-                                'Live device preview'
-                              }}
-                            </span>
-                          </div>
-                        {{/unless}}{{/if}}
-
-                      {{#unless this.isDeviceActive}}{{#if this.scan.isTerminal}}
-                          <div
-                            local-class='device-ended-message'
-                            data-test-offensiveSecurity-deviceCaption
-                          >
-                            {{this.deviceCaption}}
-                          </div>
-                        {{/if}}{{/unless}}
-
-                      {{#if this.isIosDevice}}
-                        <span
-                          local-class='home-indicator'
-                          aria-hidden='true'
-                        ></span>
-                        <span
-                          local-class='screen-glare'
-                          aria-hidden='true'
-                        ></span>
-                      {{/if}}
-                    </div>
+                    <span
+                      local-class='home-indicator
+                          {{if this.isDeviceActive "is-on-screen"}}'
+                      aria-hidden='true'
+                    ></span>
+                    <span local-class='screen-glare' aria-hidden='true'></span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
   {{/if}}

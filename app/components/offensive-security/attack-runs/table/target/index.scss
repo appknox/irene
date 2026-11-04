@@ -6,11 +6,30 @@
 .target-cell .target-icon {
   flex-shrink: 0;
   overflow: hidden;
-  border-radius: 10px;
+
+  width: 39px;
+  height: 39px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 6px;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+}
+
+.target-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+// Name and package share one 13px scale, name semibold, package secondary
+.target-text > * {
+  font-size: 13px;
+}
+
+.target-text > :first-child {
+  font-weight: 600;
 }

@@ -10,6 +10,8 @@
   flex: 1 1 auto;
   min-height: 0;
   height: auto;
+  // overflow-y alone would turn overflow-x into auto and add a sideways scrollbar
+  overflow-x: hidden;
   overflow-y: auto;
   border: 0;
   border-radius: 0;
@@ -17,6 +19,61 @@
   .artifacts-scroll-container {
     max-height: none;
     overflow: visible;
+    padding-right: 0;
+    border-top: 1px solid var(--border-color-1);
+  }
+
+  .artifact-box {
+    gap: 12px;
+    padding: 16px 20px;
+    border: 0;
+    border-bottom: 1px solid var(--border-color-1);
+    border-radius: 0;
+
+    &:hover {
+      border-color: var(--border-color-1);
+    }
+  }
+
+  .artifact-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    color: var(--primary-main) !important;
+    background-color: color-mix(
+      in oklab,
+      var(--primary-main) 10%,
+      transparent
+    ) !important;
+  }
+
+  .artifact-title {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: var(--text-primary);
+  }
+
+  .artifact-size {
+    font-family: inherit;
+    font-size: 13px;
+    line-height: normal;
+    color: var(--text-secondary);
+  }
+
+  .download-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 6px;
+    border: 1px solid var(--neutral-grey-400);
+    background-color: var(--common-white);
+    color: var(--neutral-grey-700);
+
+    &:hover {
+      border-color: var(--neutral-grey-500);
+      background-color: var(--neutral-grey-100);
+    }
   }
 }
 

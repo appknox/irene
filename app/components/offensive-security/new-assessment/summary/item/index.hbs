@@ -8,6 +8,8 @@
       <AkIcon @iconName='check' @size='small' />
     {{else if (eq @state 'active')}}
       <AkIcon @iconName='autorenew' @size='small' local-class='spinner' />
+    {{else if (eq @state 'todo')}}
+      <span local-class='state-todo-mark' aria-hidden='true'>!</span>
     {{else}}
       <span local-class='state-glyph'></span>
     {{/if}}
@@ -19,6 +21,7 @@
         @variant='body3'
         @fontWeight='bold'
         @color='textSecondary'
+        local-class='item-label'
         data-test-new-assessment-summary-item-label
       >
         {{@label}}
@@ -31,6 +34,7 @@
       @fontWeight='bold'
       @noWrap={{true}}
       @color={{if (eq @state 'locked') 'textSecondary' 'textPrimary'}}
+      local-class='item-value'
       title={{@value}}
       data-test-new-assessment-summary-item-value
     >
@@ -40,6 +44,8 @@
     <AkTypography
       @variant='body3'
       @color='textSecondary'
+      class='offsec-prose'
+      local-class='item-sub'
       data-test-new-assessment-summary-item-sub
     >
       {{@sub}}

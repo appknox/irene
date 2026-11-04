@@ -1,10 +1,19 @@
 <section local-class='card' data-test-assessment-type-card>
   <div local-class='card-header'>
-    <AkTypography @variant='subtitle1' @fontWeight='bold'>
+    <AkTypography
+      @variant='subtitle1'
+      @fontWeight='bold'
+      local-class='card-title'
+    >
       {{t 'offensiveSecurity.assessmentType'}}
     </AkTypography>
 
-    <AkTypography @variant='body2' @color='textSecondary'>
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      class='offsec-prose'
+      local-class='card-subtitle'
+    >
       {{t 'offensiveSecurity.assessmentTypeSubtitle'}}
     </AkTypography>
   </div>
@@ -38,6 +47,7 @@
       <AkTypography
         @variant='body2'
         @color='textSecondary'
+        class='offsec-prose'
         local-class='option-description'
       >
         {{t 'offensiveSecurity.comprehensiveDesc'}}
@@ -72,6 +82,7 @@
       <AkTypography
         @variant='body2'
         @color='textSecondary'
+        class='offsec-prose'
         local-class='option-description'
       >
         {{t 'offensiveSecurity.resilienceDesc'}}

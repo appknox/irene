@@ -259,7 +259,7 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
     await render(TEMPLATE);
 
-    assert.dom(SELECTORS.table).containsText('Defenses Bypassed');
+    assert.dom(SELECTORS.table).containsText('Bypassed');
     assert.dom(SELECTORS.row).containsText('3');
     assert.dom('.ember-table__text-align-center').exists();
   });
@@ -345,10 +345,11 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
     const riskBadges = findAll(SELECTORS.riskBadge);
     assert.strictEqual(riskBadges.length, 4);
-    assert.dom(riskBadges[0]).containsText('Critical');
-    assert.dom(riskBadges[1]).containsText('High');
-    assert.dom(riskBadges[2]).containsText('Medium');
-    assert.dom(riskBadges[3]).containsText('Low');
+    // Rows come highest target ID first, so ids 4..1 read Low to Critical
+    assert.dom(riskBadges[0]).containsText('Low');
+    assert.dom(riskBadges[1]).containsText('Medium');
+    assert.dom(riskBadges[2]).containsText('High');
+    assert.dom(riskBadges[3]).containsText('Critical');
   });
 
   test('a failed or completed scan with empty risk rating shows No Rating', async function (assert) {
@@ -519,7 +520,7 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
   // ─── Sorting ───────────────────────────────────────────────────────────────
 
-  test('toggling the date sort reverses the row order', async function (assert) {
+  test('the Run on sort starts newest first and reverses on the next click', async function (assert) {
     serveScans(this, [
       buildScan({
         id: 1,
@@ -537,17 +538,21 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
     await render(TEMPLATE);
 
-    // Defaults to most recent first.
+    // Defaults to highest target ID first.
     assert.dom(findAll(SELECTORS.row)[0]).containsText('Newer App');
 
+    // First click switches to Run on, newest first.
     await click(SELECTORS.sortToggle);
+    assert.dom(findAll(SELECTORS.row)[0]).containsText('Newer App');
 
+    // Second click reverses it.
+    await click(SELECTORS.sortToggle);
     assert.dom(findAll(SELECTORS.row)[0]).containsText('Older App');
   });
 
   // ─── Interaction ───────────────────────────────────────────────────────────
 
-  test('newest runs come first by start time, even if an older run finished later', async function (assert) {
+  test('highest target ID comes first by default, regardless of finish time', async function (assert) {
     serveScans(this, [
       buildScan({
         id: 1,
@@ -671,19 +676,20 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
 
     const badges = findAll(SELECTORS.scanType);
     assert.strictEqual(badges.length, 2);
-    assert.dom(badges[0]).hasText('Comprehensive');
+    // Highest target ID first: the resilience scan (id 2) leads
+    assert.dom(badges[0]).hasText('Resilience Only');
     assert
       .dom(badges[0])
       .hasAttribute(
         'data-test-offensiveSecurity-attackRuns-scanType',
-        'comprehensive'
+        'resilience'
       );
-    assert.dom(badges[1]).hasText('Resilience Only');
+    assert.dom(badges[1]).hasText('Comprehensive');
     assert
       .dom(badges[1])
       .hasAttribute(
         'data-test-offensiveSecurity-attackRuns-scanType',
-        'resilience'
+        'comprehensive'
       );
   });
 

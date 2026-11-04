@@ -1,9 +1,11 @@
 {{page-title (t 'offensiveSecurity.finding')}}
 
 <PageWrapper @backgroundColor='dark'>
-  <OffensiveSecurity::FindingDetail
-    @scan={{@model.scan}}
-    @scanId={{@model.scan.id}}
-    @findingId={{@model.finding.id}}
-  />
+  <div class='offsec-type'>
+    <OffensiveSecurity::FindingDetail
+      @scan={{@model.scan}}
+      @scanId={{@model.scan.id}}
+      @findingId={{@model.finding.id}}
+    />
+  </div>
 </PageWrapper>

@@ -4,6 +4,7 @@ import AkBreadcrumbsRoute from 'irene/utils/ak-breadcrumbs-route';
 import type {
   PlatformFilter,
   ResilienceFilter,
+  SortColumn,
   SortDirection,
 } from 'irene/components/offensive-security/attack-runs';
 
@@ -14,6 +15,7 @@ export interface OffensiveSecurityIndexRouteQueryParams {
   scan_platform: PlatformFilter;
   scan_resilience: ResilienceFilter;
   scan_sort: SortDirection;
+  scan_sort_by: SortColumn;
 }
 
 export default class AuthenticatedOffensiveSecurityIndexRoute extends ScrollToTop(
@@ -26,6 +28,7 @@ export default class AuthenticatedOffensiveSecurityIndexRoute extends ScrollToTo
     scan_platform: { refreshModel: true },
     scan_resilience: { refreshModel: true },
     scan_sort: { refreshModel: true },
+    scan_sort_by: { refreshModel: true },
   };
 
   model(params: Partial<OffensiveSecurityIndexRouteQueryParams>) {
@@ -36,6 +39,7 @@ export default class AuthenticatedOffensiveSecurityIndexRoute extends ScrollToTo
       scan_platform,
       scan_resilience,
       scan_sort,
+      scan_sort_by,
     } = params;
 
     return {
@@ -46,6 +50,7 @@ export default class AuthenticatedOffensiveSecurityIndexRoute extends ScrollToTo
         scan_platform,
         scan_resilience,
         scan_sort,
+        scan_sort_by,
       },
     };
   }

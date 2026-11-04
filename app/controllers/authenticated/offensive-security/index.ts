@@ -26,6 +26,9 @@ export default class AuthenticatedOffensiveSecurityIndexController extends Contr
     {
       scan_sort: { type: 'string' as const },
     },
+    {
+      scan_sort_by: { type: 'string' as const },
+    },
   ];
 
   scan_limit = 25;
@@ -34,6 +37,7 @@ export default class AuthenticatedOffensiveSecurityIndexController extends Contr
   scan_platform = 'all';
   scan_resilience = 'all';
   scan_sort = 'desc';
+  scan_sort_by = 'target';
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {

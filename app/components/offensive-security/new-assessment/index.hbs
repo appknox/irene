@@ -1,16 +1,22 @@
 <div local-class='new-assessment-container' data-test-offsec-new-assessment>
-  <AkBreadcrumbs::AutoTrail class='mb-2' />
+  <AkBreadcrumbs::AutoTrail class='mb-4' />
 
   <div local-class='header-card' data-test-new-assessment-header-card>
     <AkTypography
       @variant='h5'
       @fontWeight='bold'
+      local-class='header-title'
       data-test-new-assessment-title
     >
       {{t 'offensiveSecurity.startNewAssessment'}}
     </AkTypography>
 
-    <AkTypography @variant='body2' data-test-new-assessment-subtitle>
+    <AkTypography
+      @variant='body2'
+      class='offsec-prose'
+      local-class='header-subtitle'
+      data-test-new-assessment-subtitle
+    >
       {{#if this.hasUploadedApp}}
         {{t 'offensiveSecurity.startNewAssessmentReadySubtitle'}}
       {{else}}
@@ -26,41 +32,53 @@
         @state={{this.uploadStepState}}
       >
         {{#if this.hasUploadedApp}}
-          <div local-class='card build-card' data-test-uploaded-build-card>
+          <div
+            local-class='card build-card build-card-rise'
+            data-test-uploaded-build-card
+          >
             <div local-class='platform-icon-box'>
               <AkIcon @iconName={{if this.isIosBuild 'ios' 'android'}} />
             </div>
 
             <div local-class='build-meta'>
-              <AkTypography @variant='body3' @color='textSecondary'>
+              <AkTypography
+                @variant='body3'
+                @color='textSecondary'
+                local-class='build-label'
+              >
                 {{t 'offensiveSecurity.uploadBuild'}}
               </AkTypography>
 
-              <AkStack @alignItems='center' @spacing='1.5'>
+              <div local-class='build-name-row'>
                 <AkTypography
                   @fontWeight='bold'
                   @noWrap={{true}}
+                  local-class='build-text'
                   title={{this.uploadedFile.name}}
                   data-test-uploaded-filename
                 >
                   {{this.uploadedFile.name}}
                 </AkTypography>
 
-                <AkTypography @color='textSecondary' @noWrap={{true}}>
+                <AkTypography
+                  @color='textSecondary'
+                  @noWrap={{true}}
+                  local-class='build-text'
+                >
                   {{this.formattedFileSize}}
                 </AkTypography>
-              </AkStack>
+              </div>
             </div>
 
             <AkButton
               @variant='outlined'
-              @color='neutral'
+              @color='primary'
               @type='button'
               data-test-change-build-btn
               {{on 'click' this.changeBuild}}
             >
               <:leftIcon>
-                <AkIcon @iconName='swap-horiz' />
+                <AkIcon @iconName='autorenew' />
               </:leftIcon>
 
               <:default>{{t 'offensiveSecurity.changeBuild'}}</:default>
@@ -69,11 +87,20 @@
         {{else}}
           <section>
             <div local-class='step-heading'>
-              <AkTypography @variant='subtitle1' @fontWeight='bold'>
+              <AkTypography
+                @variant='subtitle1'
+                @fontWeight='bold'
+                local-class='step-title'
+              >
                 {{t 'offensiveSecurity.uploadBuild'}}
               </AkTypography>
 
-              <AkTypography @variant='body2' @color='textSecondary'>
+              <AkTypography
+                @variant='body2'
+                @color='textSecondary'
+                class='offsec-prose'
+                local-class='step-subtitle'
+              >
                 {{t 'offensiveSecurity.uploadBuildSubtitle'}}
               </AkTypography>
             </div>
@@ -98,50 +125,153 @@
                     {{queue.selectFile}}
                   />
 
-                  <span local-class='dropzone-icon-circle'>
-                    <AkIcon
-                      @iconName={{if
-                        this.isUploading
-                        'autorenew'
-                        'cloud-upload'
-                      }}
-                      local-class={{if this.isUploading 'spinner-icon'}}
-                    />
+                  {{#if this.isUploading}}
+                    <svg
+                      local-class='march-border'
+                      aria-hidden='true'
+                      data-test-new-assessment-dropzone-march
+                    >
+                      <rect
+                        x='1'
+                        y='1'
+                        rx='9'
+                        local-class='march-rect {{unless
+                          this.isUploadComplete
+                          "is-marching"
+                        }}'
+                      ></rect>
+                    </svg>
+                  {{/if}}
+
+                  <span
+                    local-class='upload-ring {{if dropzone.active "is-hot"}}'
+                    aria-hidden='true'
+                  >
+                    {{#if (or dropzone.active this.isUploading)}}
+                      {{#unless this.isUploadComplete}}
+                        <span
+                          local-class='ring-ping {{if dropzone.active "hot"}}'
+                        ></span>
+                      {{/unless}}
+                    {{/if}}
+
+                    <svg
+                      local-class='ring-svg'
+                      viewBox='0 0 92 92'
+                      width='92'
+                      height='92'
+                    >
+                      <circle
+                        local-class='ring-track'
+                        cx='46'
+                        cy='46'
+                        r='40'
+                      ></circle>
+                      {{#if (gt this.progress 0)}}
+                        <circle
+                          local-class='ring-arc'
+                          cx='46'
+                          cy='46'
+                          r='40'
+                          stroke-dasharray={{this.ringCircumference}}
+                          stroke-dashoffset={{this.ringDashOffset}}
+                        ></circle>
+                      {{/if}}
+                    </svg>
+
+                    <span
+                      local-class='ring-core
+                        {{if this.isUploadComplete "is-complete"}}
+                        {{if dropzone.active "is-hot"}}'
+                    >
+                      {{#if this.isUploadComplete}}
+                        <AkIcon
+                          @iconName='check'
+                          local-class='ring-check'
+                          data-test-new-assessment-dropzone-complete
+                        />
+                      {{else}}
+                        <svg
+                          width='28'
+                          height='28'
+                          viewBox='0 0 24 24'
+                          fill='none'
+                          stroke='currentColor'
+                          stroke-width='1.75'
+                          stroke-linecap='round'
+                          stroke-linejoin='round'
+                        >
+                          <path
+                            d='M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z'
+                          ></path>
+                          <path d='M14 2v4a2 2 0 0 0 2 2h4'></path>
+                          <g
+                            local-class='ring-arrow
+                              {{if
+                              (or dropzone.active this.isUploading)
+                              "is-moving"
+                            }}
+                              {{if dropzone.active "is-fast"}}'
+                          >
+                            <path d='M12 18v-6'></path>
+                            <path d='m9 15 3-3 3 3'></path>
+                          </g>
+                        </svg>
+                      {{/if}}
+                    </span>
                   </span>
 
                   {{#if this.isUploading}}
-                    <AkTypography @variant='h6' @fontWeight='bold'>
-                      {{t 'uploading'}}
-                      {{this.currentFile.name}}
+                    <AkTypography
+                      @variant='h6'
+                      @fontWeight='bold'
+                      local-class='dropzone-title'
+                    >
+                      {{#if this.isUploadComplete}}
+                        {{t 'offensiveSecurity.uploadComplete'}}
+                      {{else}}
+                        {{t 'uploading'}}
+                        {{this.currentFile.name}}
+                      {{/if}}
                     </AkTypography>
 
                     <div local-class='progress-container'>
-                      <AkLoader::Linear
-                        @variant={{if
-                          (gt this.progress 0)
-                          'determinate'
-                          'indeterminate'
-                        }}
-                        @progress={{this.progress}}
-                        @color='success'
-                        @height={{8}}
+                      <div
+                        local-class='progress-track'
+                        role='progressbar'
+                        aria-valuenow={{this.progress}}
+                        aria-valuemin='0'
+                        aria-valuemax='100'
                         data-test-upload-progress-bar
                       >
-                        <:label>
-                          <span local-class='progress-percentage'>
-                            {{this.progress}}%
-                          </span>
-                        </:label>
-                      </AkLoader::Linear>
+                        <div
+                          local-class='progress-fill
+                            {{if this.isUploadComplete "is-complete"}}'
+                          {{style width=(concat this.progress '%')}}
+                        >
+                          {{#unless this.isUploadComplete}}
+                            <span local-class='progress-sheen'></span>
+                          {{/unless}}
+                        </div>
+                      </div>
+
+                      <span local-class='progress-percentage'>
+                        {{this.progress}}%
+                      </span>
                     </div>
                   {{else}}
-                    <AkTypography @variant='h6' @fontWeight='bold'>
+                    <AkTypography
+                      @variant='h6'
+                      @fontWeight='bold'
+                      local-class='dropzone-title'
+                    >
                       {{t 'offensiveSecurity.dropAppToBrowse'}}
                     </AkTypography>
 
                     <AkTypography
                       @variant='body2'
                       @color='textSecondary'
+                      class='offsec-prose'
                       local-class='dropzone-notice'
                     >
                       {{t 'offensiveSecurity.dropAppNotice'}}
@@ -165,11 +295,20 @@
             local-class='card locked-card'
             data-test-assessment-type-locked
           >
-            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+            <AkTypography
+              @variant='subtitle1'
+              @fontWeight='bold'
+              local-class='step-title'
+            >
               {{t 'offensiveSecurity.assessmentType'}}
             </AkTypography>
 
-            <AkTypography @variant='body2' @color='textSecondary'>
+            <AkTypography
+              @variant='body2'
+              @color='textSecondary'
+              class='offsec-prose'
+              local-class='step-subtitle'
+            >
               {{t 'offensiveSecurity.assessmentTypeLockedNote'}}
             </AkTypography>
           </section>
@@ -185,11 +324,20 @@
           <OffensiveSecurity::NewAssessment::Credentials />
         {{else}}
           <section local-class='card locked-card' data-test-credentials-locked>
-            <AkTypography @variant='subtitle1' @fontWeight='bold'>
+            <AkTypography
+              @variant='subtitle1'
+              @fontWeight='bold'
+              local-class='step-title'
+            >
               {{t 'offensiveSecurity.testCredentials'}}
             </AkTypography>
 
-            <AkTypography @variant='body2' @color='textSecondary'>
+            <AkTypography
+              @variant='body2'
+              @color='textSecondary'
+              class='offsec-prose'
+              local-class='step-subtitle'
+            >
               {{t 'offensiveSecurity.testCredentialsLockedNote'}}
             </AkTypography>
           </section>
@@ -212,3 +360,14 @@
     </aside>
   </div>
 </div>
+
+<ConfirmBox
+  @isActive={{this.showLeaveConfirm}}
+  @title={{t 'offensiveSecurity.leaveUploadTitle'}}
+  @description={{t 'offensiveSecurity.leaveUploadDescription'}}
+  @confirmText={{t 'offensiveSecurity.leaveAndCancelUpload'}}
+  @cancelText={{t 'offensiveSecurity.stayOnPage'}}
+  @confirmAction={{this.leaveAndCancelUpload}}
+  @cancelAction={{this.stayOnPage}}
+  @key='offsec-leave-upload'
+/>

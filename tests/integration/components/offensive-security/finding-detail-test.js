@@ -75,7 +75,7 @@ module(
       assert.dom(this.element).includesText('Evidence');
     });
 
-    test('the hero pill reads Untriggered for a detected but not-attempted finding', async function (assert) {
+    test('the hero pill reads Not triggered for a detected but not-attempted finding', async function (assert) {
       const finding = this.server.create('offsec-finding', {
         signature_id: 'frida-port-scan',
         name: 'Frida port scan',
@@ -96,7 +96,7 @@ module(
         />
       `);
 
-      assert.dom(this.element).includesText('Untriggered');
+      assert.dom(this.element).includesText('Not triggered');
       // The raw outcome token must not leak into the hero.
       assert.dom(this.element).doesNotIncludeText('not_attempted');
     });
@@ -123,7 +123,7 @@ module(
       `);
 
       assert.dom(this.element).includesText('Triggered');
-      assert.dom(this.element).doesNotIncludeText('Untriggered');
+      assert.dom(this.element).doesNotIncludeText('Not triggered');
     });
 
     test('view details button is commented out for now', async function (assert) {

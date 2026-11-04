@@ -4,7 +4,8 @@ export type NewAssessmentSummaryItemState =
   | 'done'
   | 'active'
   | 'locked'
-  | 'optional';
+  | 'optional'
+  | 'todo';
 
 export interface OffensiveSecurityNewAssessmentSummaryItemSignature {
   Element: HTMLLIElement;

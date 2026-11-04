@@ -8,13 +8,13 @@
   box-sizing: border-box;
   height: 24px;
   min-width: 96px;
-  padding: 0 0.6em;
+  padding: 0 8px;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.05em;
+  letter-spacing: normal;
   line-height: 1;
-  gap: 0.35rem;
+  gap: 6px;
   border: 1px solid transparent;
   background-color: var(--offensive-security-status-chip-bg-color);
   color: var(--offensive-security-status-chip-color);

@@ -26,6 +26,10 @@
     --offensive-security-new-assessment-step-upcoming-bg-color
   );
 
+  iconify-icon {
+    font-size: 16px !important;
+  }
+
   &.marker-current {
     color: var(--offensive-security-new-assessment-step-active-color);
     background-color: var(--offensive-security-new-assessment-selected-color);

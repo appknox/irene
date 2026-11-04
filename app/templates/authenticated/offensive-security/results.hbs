@@ -1,9 +1,11 @@
 {{page-title (t 'offensiveSecurity.results')}}
 
 <PageWrapper @backgroundColor='dark'>
-  <OffensiveSecurity::RunResults
-    @scan={{@model}}
-    @activeGoalParam={{this.goal}}
-    @onGoalParamChange={{this.handleGoalParamChange}}
-  />
+  <div class='offsec-type'>
+    <OffensiveSecurity::RunResults
+      @scan={{@model}}
+      @activeGoalParam={{this.goal}}
+      @onGoalParamChange={{this.handleGoalParamChange}}
+    />
+  </div>
 </PageWrapper>

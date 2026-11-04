@@ -2,13 +2,24 @@ import Component from '@glimmer/component';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 
+import { MAX_CREDENTIALS } from 'irene/services/offsec-new-assessment';
 import type OffsecNewAssessmentService from 'irene/services/offsec-new-assessment';
 
 export default class OffensiveSecurityNewAssessmentCredentialsComponent extends Component {
   @service declare offsecNewAssessment: OffsecNewAssessmentService;
 
+  maxCredentials = MAX_CREDENTIALS;
+
   get credentials() {
     return this.offsecNewAssessment.credentials;
+  }
+
+  get hasCredentials() {
+    return this.credentials.length > 0;
+  }
+
+  get canAddCredential() {
+    return this.credentials.length < MAX_CREDENTIALS;
   }
 
   @action

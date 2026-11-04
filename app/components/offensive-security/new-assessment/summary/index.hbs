@@ -1,6 +1,10 @@
 <section local-class='summary-card' data-test-new-assessment-summary>
   <div local-class='summary-header'>
-    <AkTypography @variant='subtitle1' @fontWeight='bold'>
+    <AkTypography
+      @variant='subtitle1'
+      @fontWeight='bold'
+      local-class='summary-title'
+    >
       {{t 'offensiveSecurity.readyToBegin'}}
     </AkTypography>
   </div>
@@ -53,7 +57,19 @@
         {{on 'click' @onBegin}}
       >
         <:leftIcon>
-          <AkIcon @iconName='play-arrow' />
+          <svg
+            width='15'
+            height='15'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+            aria-hidden='true'
+          >
+            <polygon points='6 3 20 12 6 21 6 3'></polygon>
+          </svg>
         </:leftIcon>
 
         <:default>{{@beginLabel}}</:default>
@@ -65,10 +81,13 @@
         <AkTypography
           @variant='body3'
           @color='textSecondary'
+          class='offsec-prose'
           local-class='begin-help'
           data-test-begin-assessment-help
         >
-          {{#if this.hasUploadedApp}}
+          {{#if this.hasIncompleteCredential}}
+            {{t 'offensiveSecurity.finishIncompleteCredential'}}
+          {{else if this.hasUploadedApp}}
             {{t 'offensiveSecurity.beginAssessmentHelp'}}
           {{else}}
             {{t 'offensiveSecurity.uploadBuildToContinue'}}

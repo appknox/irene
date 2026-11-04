@@ -30,10 +30,12 @@ export default class OffensiveSecurityNewAssessmentSummaryComponent extends Comp
     );
   }
 
+  get hasIncompleteCredential(): boolean {
+    return this.offsecNewAssessment.hasIncompleteCredential;
+  }
+
   get completeCredentials() {
-    return this.offsecNewAssessment.credentials.filter(
-      (c) => Boolean(c.username?.trim()) && Boolean(c.password?.trim())
-    );
+    return this.offsecNewAssessment.completeCredentials;
   }
 
   get buildState(): NewAssessmentSummaryItemState {
@@ -106,10 +108,18 @@ export default class OffensiveSecurityNewAssessmentSummaryComponent extends Comp
       return 'locked';
     }
 
+    if (this.offsecNewAssessment.hasIncompleteCredential) {
+      return 'todo';
+    }
+
     return this.completeCredentials.length > 0 ? 'done' : 'optional';
   }
 
   get credentialsValue(): string {
+    if (this.offsecNewAssessment.hasIncompleteCredential) {
+      return this.intl.t('offensiveSecurity.incompleteRow');
+    }
+
     const count = this.completeCredentials.length;
 
     return count > 0
@@ -122,9 +132,11 @@ export default class OffensiveSecurityNewAssessmentSummaryComponent extends Comp
       return this.intl.t('offensiveSecurity.availableAfterUpload');
     }
 
-    const roles = this.completeCredentials
-      .map((c) => c.role.trim() || c.username.trim())
-      .join(', ');
+    if (this.offsecNewAssessment.hasIncompleteCredential) {
+      return this.intl.t('offensiveSecurity.finishOrRemoveRow');
+    }
+
+    const roles = this.completeCredentials.map((c) => c.role.trim()).join(', ');
 
     return roles || this.intl.t('offensiveSecurity.addCredentialHint');
   }

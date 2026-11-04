@@ -2,9 +2,9 @@
 <AkStack
   @width='full'
   @direction='column'
-  @spacing='2'
+  @spacing={{if @isInDrawer '0' '2'}}
   local-class='artifacts-card {{if @isInDrawer "is-in-drawer"}}'
-  class='p-3'
+  class={{unless @isInDrawer 'p-3'}}
   data-test-offensiveSecurity-artifactsCard
 >
   {{#unless @isInDrawer}}
@@ -22,16 +22,27 @@
             {{on 'click' (fn this.handleDownload artifact)}}
             data-test-offensiveSecurity-artifactsCard-row
           >
-            <AkStack @alignItems='center' @spacing='1.5' local-class='artifact-left'>
-              <div local-class='artifact-icon-box {{this.getArtifactIconClass artifact}}'>
-                <AkIcon @iconName={{this.getArtifactIcon artifact}} @size='small' />
+            <AkStack
+              @alignItems='center'
+              @spacing='1.5'
+              local-class='artifact-left'
+            >
+              <div
+                local-class='artifact-icon-box {{this.getArtifactIconClass
+                  artifact
+                }}'
+              >
+                <AkIcon
+                  @iconName={{this.getArtifactIcon artifact}}
+                  @size='small'
+                />
               </div>
 
               <AkStack @direction='column' local-class='artifact-meta'>
                 <AkTypography
                   @variant='body2'
                   @fontWeight='bold'
-                  local-class='artifact-description'
+                  local-class='artifact-description artifact-title'
                   title={{this.getArtifactDescription artifact}}
                 >
                   {{this.getArtifactDescription artifact}}
@@ -40,7 +51,7 @@
                 <AkTypography
                   @variant='caption'
                   @color='textSecondary'
-                  class='font-mono'
+                  local-class='artifact-size'
                 >
                   {{this.sizeLabel artifact.size}}
                 </AkTypography>
@@ -49,6 +60,7 @@
 
             <AkStack @alignItems='center' local-class='artifact-right'>
               <AkIconButton
+                local-class='download-btn'
                 {{on 'click' (fn this.handleDownload artifact)}}
                 @disabled={{@isDownloading}}
                 data-test-offensiveSecurity-artifactsCard-download

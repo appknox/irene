@@ -1,11 +1,11 @@
 .item-root {
   display: flex;
   align-items: flex-start;
-  gap: 0.75em;
-  padding: 1.125em 1.25em;
+  gap: 12px;
+  padding: 16px 20px;
 
   & + & {
-    border-top: var(--offensive-security-new-assessment-card-border);
+    border-top: var(--offensive-security-new-assessment-divider-border);
   }
 }
 
@@ -23,9 +23,24 @@
     --offensive-security-new-assessment-step-upcoming-bg-color
   );
 
+  &.state-done iconify-icon {
+    font-size: 13px !important;
+  }
+
+  &.state-active iconify-icon {
+    font-size: 14px !important;
+  }
+
   &.state-done {
     color: var(--offensive-security-new-assessment-step-active-color);
     background-color: var(--offensive-security-new-assessment-step-done-color);
+    animation: summary-item-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
+      backwards;
+  }
+
+  &.state-todo {
+    color: var(--primary-main);
+    background-color: var(--primary-light, #fff7f6);
   }
 
   &.state-active {
@@ -40,23 +55,49 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: currentColor;
+  background-color: var(
+    --offensive-security-new-assessment-state-locked-dot-color
+  );
 
   .state-optional & {
+    background-color: currentColor;
     width: 8px;
     height: 2px;
     border-radius: 1px;
   }
 }
 
+.state-todo-mark {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
 .spinner {
   animation: summary-item-spin 1s linear infinite;
+}
+
+.item-label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.item-value {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.item-sub {
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .item-content {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
   min-width: 0;
 }
@@ -68,5 +109,27 @@
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes summary-item-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .state-done {
+    animation: none;
   }
 }

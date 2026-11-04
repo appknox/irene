@@ -1,5 +1,7 @@
 {{page-title (t 'offensiveSecurity.title')}}
 
 <PageWrapper @backgroundColor='dark'>
-  <OffensiveSecurity::AttackRuns @queryParams={{@model.queryParams}} />
+  <div class='offsec-type'>
+    <OffensiveSecurity::AttackRuns @queryParams={{@model.queryParams}} />
+  </div>
 </PageWrapper>

@@ -44,6 +44,7 @@ export type StatusFilter =
   | 'not_started';
 
 export type SortDirection = 'asc' | 'desc';
+export type SortColumn = 'target' | 'run_on';
 
 export interface OffsecStatusCounts {
   completed?: number;
@@ -67,6 +68,7 @@ export interface OffensiveSecurityAttackRunsQueryParams {
   scan_platform?: PlatformFilter;
   scan_resilience?: ResilienceFilter;
   scan_sort?: SortDirection;
+  scan_sort_by?: SortColumn;
 }
 
 const DEFAULT_LIMIT = 25;
@@ -186,6 +188,10 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     return this.args.queryParams?.scan_sort ?? 'desc';
   }
 
+  get sortColumn(): SortColumn {
+    return this.args.queryParams?.scan_sort_by ?? 'target';
+  }
+
   // ─── Derived view state ────────────────────────────────────────────────────
 
   get isLoading() {
@@ -214,7 +220,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         name: this.intl.t('targetID'),
         valuePath: 'displayTargetId',
         textAlign: 'center',
-        width: 100,
+        width: 120,
         isSortable: false,
       },
       {
@@ -222,19 +228,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         component: 'offensive-security/attack-runs/table/platform',
         headerComponent: 'offensive-security/attack-runs/table/platform-header',
         textAlign: 'center',
-        width: 90,
+        width: 140,
         isSortable: false,
       },
       {
         name: this.intl.t('offensiveSecurity.application'),
         component: 'offensive-security/attack-runs/table/target',
         minWidth: 220,
-        isSortable: false,
-      },
-      {
-        name: this.intl.t('offensiveSecurity.package'),
-        valuePath: 'packageName',
-        minWidth: 180,
         isSortable: false,
       },
       {
@@ -262,16 +262,16 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
         isSortable: false,
       },
       {
-        name: this.intl.t('offensiveSecurity.defensesBypassed'),
+        name: this.intl.t('offensiveSecurity.bypassed'),
         valuePath: 'protectionsBypassedLabel',
         textAlign: 'center',
-        width: 100,
+        width: 120,
         isSortable: false,
       },
       {
         name: this.intl.t('offensiveSecurity.runOn'),
         valuePath: 'scannedOnLabel',
-        width: 130,
+        width: 140,
       },
       {
         name: this.intl.t('status'),
@@ -283,7 +283,12 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     ];
   }
 
+  /** Target ID is the default order and has no header sort; only Run on shows a sort state. */
   get sorts(): EmberTableSort[] {
+    if (this.sortColumn !== 'run_on') {
+      return [];
+    }
+
     return [
       {
         valuePath: 'scannedOnLabel',
@@ -299,7 +304,7 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
 
   @action
   isColumnSortedAsc(valuePath?: string) {
-    if (valuePath === 'scannedOnLabel') {
+    if (valuePath === 'scannedOnLabel' && this.sortColumn === 'run_on') {
       return this.sortDirection === 'asc';
     }
 
@@ -307,22 +312,21 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
   }
 
   @action
-  updateSorts(incomingSorts: EmberTableSort[]): void {
-    if (incomingSorts.length) {
-      const clicked = incomingSorts[incomingSorts.length - 1];
-      if (clicked?.valuePath === 'scannedOnLabel') {
-        const nextDirection: SortDirection = clicked.isAscending
-          ? 'asc'
-          : 'desc';
-        this.setRouteQueryParams({ scan_sort: nextDirection });
+  updateSorts(): void {
+    const sortBy: SortColumn = 'run_on';
 
-        return;
-      }
-    }
-
-    const nextDirection: SortDirection =
+    const isSameColumn = sortBy === this.sortColumn;
+    const flippedDirection: SortDirection =
       this.sortDirection === 'asc' ? 'desc' : 'asc';
-    this.setRouteQueryParams({ scan_sort: nextDirection });
+
+    const nextDirection: SortDirection = isSameColumn
+      ? flippedDirection
+      : 'desc';
+
+    this.setRouteQueryParams({
+      scan_sort: nextDirection,
+      scan_sort_by: sortBy,
+    });
   }
 
   @tracked selectedStatusFilter: StatusFilter = 'all';
@@ -460,8 +464,13 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     const direction = this.sortDirection === 'desc' ? -1 : 1;
 
     return rows.sort((a, b) => {
-      const left = a.scannedOn?.getTime() ?? 0;
-      const right = b.scannedOn?.getTime() ?? 0;
+      const byRunOn = this.sortColumn === 'run_on';
+      const left = byRunOn
+        ? (a.scannedOn?.getTime() ?? 0)
+        : Number(a.displayTargetId) || 0;
+      const right = byRunOn
+        ? (b.scannedOn?.getTime() ?? 0)
+        : Number(b.displayTargetId) || 0;
 
       return (left - right) * direction;
     });
