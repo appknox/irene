@@ -13,15 +13,15 @@
   color: var(--knoxiq-autofix-history-icon-color);
 }
 
-.commit-link {
+.pr-link {
   display: inline-flex;
   align-items: center;
   gap: 0.28571em;
-  color: var(--knoxiq-autofix-history-commit-link-color);
+  color: var(--knoxiq-autofix-history-pr-link-color);
   text-decoration: underline;
   text-underline-offset: 2px;
 
   &:hover {
-    color: var(--knoxiq-autofix-history-commit-link-hover-color);
+    color: var(--knoxiq-autofix-history-pr-link-hover-color);
   }
 }

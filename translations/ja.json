@@ -177,7 +177,6 @@
     "fileId": "ファイル {fileId}",
     "generatedFromScan": "Appknox Autofixがスキャンからこの変更を生成しました。",
     "historyTitle": "Autofix履歴",
-    "itemsPerPage": "ページあたりの項目数",
     "noPatchedFiles": "修正されたファイルは記録されていません",
     "openCommit": "コミット {sha} を開く",
     "openPullRequest": "プルリクエストを開く",

@@ -1,7 +1,8 @@
 <AkStack
   @direction='column'
   @spacing='2.5'
-  {{did-update this.refetchHistory this.limit this.offset @queryParams.file_id}}
+  ...attributes
+  {{did-update this.refetchHistory @queryParams}}
 >
   <AkBreadcrumbs::AutoTrail data-test-knoxIqAutofixHistory-breadcrumbs />
 
@@ -105,7 +106,7 @@
                     target='_blank'
                     rel='noopener noreferrer'
                     aria-label={{t 'autofix.openPullRequest'}}
-                    local-class='commit-link'
+                    local-class='pr-link'
                     {{on 'click' this.handlePRLinkClick}}
                     data-test-knoxIqAutofixHistory-prLink
                   >
@@ -142,7 +143,7 @@
         @selectedOption={{pgc.selectedOption}}
         @totalItems={{pgc.totalItems}}
         @tableItemLabel={{t 'autofix.pullRequests'}}
-        @perPageTranslation={{t 'autofix.itemsPerPage'}}
+        @perPageTranslation={{t 'recordPerPage'}}
         data-test-knoxIqAutofixHistory-pagination
       />
     {{/if}}
