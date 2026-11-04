@@ -69,8 +69,8 @@ export default class SecurityAnalysisDetailsHeaderComponent extends Component<Se
   get showsKnoxIqAnalysisPage() {
     return Boolean(
       this.args.isKnoxIqEnabled &&
-        !this.analysis?.isUntested &&
-        !this.analysis?.isPassed
+      !this.analysis?.isUntested &&
+      !this.analysis?.isPassed
     );
   }
 

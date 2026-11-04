@@ -529,9 +529,9 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     );
   });
 
-  test('the update sends popia, which the endpoint requires', async function (assert) {
-    // The dashboard does not model popia yet, so it sends an empty list
-    // rather than omitting the key and getting a 400.
+  test('the update sends the popia ids of the analysis', async function (assert) {
+    const popiaIds = this.secAnalysis.hasMany('popia').ids();
+
     let body = null;
 
     this.server.put('/hudson-api/analyses/:id', (schema, req) => {
@@ -549,7 +549,8 @@ module('Integration | Component | security/analysis-details', function (hooks) {
     await click('[data-test-securityAnalysisDetailsHeader-markAsPassedBtn]');
     await click('[data-test-confirmbox-confirmBtn]');
 
-    assert.deepEqual(body.popia, []);
+    assert.true(popiaIds.length > 0, 'the analysis has popia entries');
+    assert.deepEqual(body.popia, popiaIds);
   });
 
   test('it marks a test case as passed', async function (assert) {
