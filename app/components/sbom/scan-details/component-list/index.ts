@@ -22,6 +22,7 @@ export interface SbomScanDetailsComponentListSignature {
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
     view?: SbomScanDetailsView;
+    showReachability?: boolean;
   };
 }
 
@@ -108,7 +109,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
   }
 
   get columns() {
-    return [
+    const columns = [
       {
         name: this.intl.t('sbomModule.componentName'),
         valuePath: 'name',
@@ -129,6 +130,16 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
         name: this.intl.t('status'),
         component: 'sbom/component-status',
       },
+    ];
+
+    // Without reachability every cell would read "-", so the column is
+    // dropped rather than shown empty.
+    if (this.args.showReachability === false) {
+      return columns;
+    }
+
+    return [
+      ...columns,
       {
         name: this.intl.t(
           this.isOriginalAnalysis

@@ -61,16 +61,18 @@
         @justifyContent='space-between'
       >
         <AkStack @direction='column' @spacing='0.25'>
-          <AkTypography
-            data-test-sbomScanDetails-viewTitle
-            @variant='subtitle1'
-          >
-            {{if
-              this.isOriginalAnalysis
-              (t 'sbomModule.originalAnalysis.title')
-              (t 'sbomModule.reachabilityInsights.title')
-            }}
-          </AkTypography>
+          {{#if this.hasReachability}}
+            <AkTypography
+              data-test-sbomScanDetails-viewTitle
+              @variant='subtitle1'
+            >
+              {{if
+                this.isOriginalAnalysis
+                (t 'sbomModule.originalAnalysis.title')
+                (t 'sbomModule.reachabilityInsights.title')
+              }}
+            </AkTypography>
+          {{/if}}
 
           {{#if this.isOriginalAnalysis}}
             <AkTypography
@@ -86,8 +88,8 @@
           {{/if}}
         </AkStack>
 
-        <AkStack @alignItems='center' @spacing='1'>
-          {{#if this.isOriginalAnalysis}}
+        <AkStack @alignItems='center' @spacing='2'>
+          {{#if (and this.hasReachability this.isOriginalAnalysis)}}
             <AkLink
               data-test-sbomScanDetails-backToInsights-link
               @route='authenticated.dashboard.sbom.scan-details'
@@ -97,7 +99,7 @@
             >
               {{t 'sbomModule.reachabilityInsights.backLink'}}
             </AkLink>
-          {{else}}
+          {{else if this.hasReachability}}
             <AkLink
               data-test-sbomScanDetails-originalAnalysis-link
               @route='authenticated.dashboard.sbom.original-analysis'
@@ -107,7 +109,9 @@
             >
               {{t 'sbomModule.originalAnalysis.link'}}
             </AkLink>
+          {{/if}}
 
+          {{#unless this.isTreeView}}
             <div {{style width='180px'}}>
               <AkTextField
                 data-test-sbomScanDetails-componentSearchInput
@@ -120,10 +124,10 @@
                 </:leftAdornment>
               </AkTextField>
             </div>
-          {{/if}}
+          {{/unless}}
         </AkStack>
 
-        {{#if this.isOriginalAnalysis}}
+        {{#if this.showViewToggle}}
         <AkStack>
           {{#if this.isTreeView}}
             <AkButton
@@ -190,6 +194,7 @@
         @sbomFile={{@sbomFile}}
         @sbomScanSummary={{@sbomScanSummary}}
         @view={{if this.isOriginalAnalysis 'original' 'insights'}}
+        @showReachability={{this.hasReachability}}
         class={{if this.isNotOutdated '' 'mt-2'}}
         data-test-sbomScanDetails-componentList-container
       />

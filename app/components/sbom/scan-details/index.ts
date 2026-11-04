@@ -89,13 +89,16 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     // The insights view lists only components with reachability findings;
     // original-analysis lists everything. Set before the first fetch so the
     // filter is part of the initial query, not a second round trip.
-    this.sbomScanDetailsService.onlyReachable = args.view !== 'original';
+    // Without reachability there are no findings to filter on, so the filter
+    // would empty the list entirely.
+    this.sbomScanDetailsService.onlyReachable =
+      this.hasReachability && args.view !== 'original';
 
     // Fetch with default queries from the route
     this.sbomScanDetailsService
       .setQueryData({
         sbomFile: this.args.sbomFile,
-        view_type: args.view === 'original' ? view_type : 'list',
+        view_type: this.insightsLanding ? 'list' : view_type || 'tree',
         component_query: component_query,
         dependency_type: is_dependency,
         component_type: Number(component_type),
@@ -273,6 +276,34 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return this.args.view === 'original';
   }
 
+  /**
+   * Whether reachability ran for this file at all.
+   *
+   * Customers who have not enabled it have no scan record, and a skipped run
+   * produces no findings either. Both fall back to the component list as it
+   * was before reachability existed: no insights split, no reachability
+   * column, tree view by default.
+   */
+  get hasReachability() {
+    const status = this.args.sbomFile.reachabilityStatus;
+
+    return (
+      status !== null &&
+      status !== undefined &&
+      status !== ReachabilityScanStatus.SKIPPED
+    );
+  }
+
+  /** The filtered insights list is the landing view only when it has data. */
+  get insightsLanding() {
+    return this.hasReachability && !this.isOriginalAnalysis;
+  }
+
+  /** The tree survives wherever the insights columns are not shown. */
+  get showViewToggle() {
+    return !this.insightsLanding;
+  }
+
   get scanRouteModels() {
     return [this.args.sbomProject.id, this.args.sbomFile.id];
   }
@@ -287,7 +318,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
    */
   get isTreeView() {
     return (
-      this.isOriginalAnalysis && this.sbomScanDetailsService.viewType !== 'list'
+      this.showViewToggle && this.sbomScanDetailsService.viewType !== 'list'
     );
   }
 
