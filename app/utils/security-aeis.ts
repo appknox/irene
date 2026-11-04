@@ -1,0 +1,96 @@
+import ENUMS from 'irene/enums';
+
+import type { SecurityAnalysisExploitabilitySignal } from 'irene/models/security/analysis';
+
+export type SecurityAnalysisAeisSignals = Record<
+  string,
+  SecurityAnalysisExploitabilitySignal
+>;
+
+export type SecurityAnalysisAeisLikelihood =
+  (typeof SECURITY_ANALYSIS_AEIS_LIKELIHOODS)[number];
+
+export const SECURITY_ANALYSIS_AEIS_LIKELIHOODS = [
+  'low',
+  'medium',
+  'high',
+  'critical',
+] as const;
+
+// The tri-state each vector can hold.
+export const SECURITY_ANALYSIS_AEIS_SIGNAL_VALUES: SecurityAnalysisExploitabilitySignal[] =
+  ['unknown', true, false];
+
+// An omitted vector is normalized to 'unknown', so every write sends all seven.
+export const SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS = [
+  'requires_chaining',
+  'remote_exploitation',
+  'public_exploit_exists',
+  'local_exploitation_only',
+  'minimal_user_interaction',
+  'no_authentication_required',
+  'obscure_or_environment_specific',
+] as const;
+
+/**
+ * Narrows a stored likelihood to one the override endpoint accepts.
+ *
+ * @param value A likelihood from the record, in any casing.
+ * @returns True when the endpoint would accept it.
+ */
+const AEIS_LIKELIHOOD_RISK: Record<string, number> = {
+  critical: ENUMS.RISK.CRITICAL,
+  high: ENUMS.RISK.HIGH,
+  medium: ENUMS.RISK.MEDIUM,
+  low: ENUMS.RISK.LOW,
+};
+
+/**
+ * Fills in every missing vector so a partial write cannot blank the rest.
+ *
+ * @param signals The vectors currently known, if any.
+ * @returns All seven vectors, unknown where none was given.
+ */
+export function buildFullSignals(
+  signals?: SecurityAnalysisAeisSignals | null
+): SecurityAnalysisAeisSignals {
+  return Object.fromEntries(
+    SECURITY_ANALYSIS_AEIS_SIGNAL_KEYS.map((key) => [
+      key,
+      signals?.[key] ?? 'unknown',
+    ])
+  );
+}
+
+/**
+ * Maps a stored likelihood onto the risk scale the risk tag and colours use.
+ *
+ * @param likelihood A likelihood from the record, in any casing.
+ * @returns The matching risk, or unknown when there is none.
+ */
+export function aeisRiskForLikelihood(likelihood?: string | null) {
+  return (
+    AEIS_LIKELIHOOD_RISK[likelihood?.toLowerCase() ?? ''] ?? ENUMS.RISK.UNKNOWN
+  );
+}
+
+export function isAeisLikelihood(
+  value: string
+): value is SecurityAnalysisAeisLikelihood {
+  return SECURITY_ANALYSIS_AEIS_LIKELIHOODS.includes(
+    value as SecurityAnalysisAeisLikelihood
+  );
+}
+
+/**
+ * Turns a vector key into its display label.
+ *
+ * @param key The snake_case vector key.
+ * @returns The humanized label.
+ */
+export function humanizeAeisSignalKey(key: string) {
+  return key
+    .split('_')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
