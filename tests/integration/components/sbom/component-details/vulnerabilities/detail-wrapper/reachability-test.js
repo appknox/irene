@@ -26,6 +26,12 @@ const selectors = {
     '[data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks]',
   narrative:
     '[data-test-sbomComponentVulnerabilities-reachabilityCallPathNarrative]',
+  reasoning:
+    '[data-test-sbomComponentVulnerabilities-detailReachabilityReasoning]',
+  reasoningText:
+    '[data-test-sbomComponentVulnerabilities-detailReachabilityReasoningText]',
+  reasoningVerdict:
+    '[data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict]',
 };
 
 // ─── Template ───
@@ -461,6 +467,124 @@ module(
       await render(TEMPLATE);
 
       assert.dom(selectors.root).doesNotExist();
+    });
+    // ─── Sections ─────────────────────────────────────────────────────────────
+    test('it renders the narrative and the reasoning sections', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [
+              {
+                caller: 'Lcom/example/MainActivity;->onCreate()',
+                callee: 'Lcom/example/Parser;->parse()',
+              },
+            ],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                has_witness: true,
+                narrative: 'On startup, Synth passes a YAML string to load.',
+                reasoning:
+                  'REACHABLE. The path resolved statically, and no step ' +
+                  'depended on a modeled dispatch.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.narrative)
+        .hasText('On startup, Synth passes a YAML string to load.');
+
+      // The raw verdict token becomes the same chip used elsewhere rather
+      // than being printed as prose.
+      assert
+        .dom(selectors.reasoningVerdict)
+        .hasText(t('sbomModule.reachability.pathFound'));
+
+      assert
+        .dom(selectors.reasoningText)
+        .includesText(
+          'The path resolved statically, and no step depended on a modeled ' +
+            'dispatch.'
+        );
+
+      assert.dom(selectors.reasoningText).doesNotIncludeText('REACHABLE.');
+    });
+
+    test('it keeps reasoning prose whole when it has no verdict prefix', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                reasoning: 'The path resolved statically end to end.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.reasoningVerdict).doesNotExist();
+      assert
+        .dom(selectors.reasoningText)
+        .hasText('The path resolved statically end to end.');
+    });
+
+    test('it falls back to the legacy blob when sections are absent', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [
+              {
+                caller: 'Lcom/example/MainActivity;->onCreate()',
+                callee: 'Lcom/example/Parser;->parse()',
+              },
+            ],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                explanation: 'App behavior: The confirmed prefix starts here.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.narrative)
+        .includesText('The confirmed prefix starts here.');
+      assert.dom(selectors.reasoning).doesNotExist();
     });
   }
 );

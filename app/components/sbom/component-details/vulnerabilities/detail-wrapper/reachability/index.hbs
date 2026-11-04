@@ -59,6 +59,44 @@
       @finding={{this.reachability}}
     />
 
+    {{#if this.reasoning}}
+      <AkStack
+        @direction='column'
+        @spacing='0.5'
+        @width='full'
+        data-test-sbomComponentVulnerabilities-detailReachabilityReasoning
+      >
+        <AkTypography
+          local-class='section-label'
+          data-test-sbomComponentVulnerabilities-detailReachabilityReasoningLabel
+          @variant='body3'
+          @color='textSecondary'
+          @fontWeight='bold'
+        >
+          {{t 'sbomModule.reachability.reasoning'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityReasoningText
+          @variant='body2'
+          @color='textPrimary'
+          @breakWord={{true}}
+        >
+          {{#if this.reasoningVerdictLabel}}
+            <span local-class='inline-chip'>
+              <AkChip
+                data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict
+                @variant='filled'
+                @size='small'
+                @color={{this.reasoningVerdictColor}}
+                @label={{this.reasoningVerdictLabel}}
+              />
+            </span>
+          {{/if}}{{this.reasoningBody}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
     {{#if this.hasBlockers}}
       <AkStack
         @direction='column'

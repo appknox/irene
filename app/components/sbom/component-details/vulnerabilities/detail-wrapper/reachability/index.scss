@@ -1,3 +1,15 @@
 .reachability-root {
   width: 100%;
 }
+
+.section-label {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// Keeps the verdict chip on the text baseline when the paragraph wraps.
+.inline-chip {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-right: 0.4em;
+}
