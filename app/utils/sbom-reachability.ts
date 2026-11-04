@@ -87,8 +87,12 @@ export interface SbomReachabilityTarget {
   verdict?: string;
   match_technique?: string;
   capability_tier?: string;
-  /** Optional AI-generated prose explaining this target's witness path. */
+  /** Legacy single prose blob, for payloads predating the section split. */
   explanation?: string | null;
+  /** One plain-language sentence: how the app reaches this function. */
+  narrative?: string | null;
+  /** Short paragraph justifying the verdict for this target. */
+  reasoning?: string | null;
   /** Whether a call path was recorded for this target. */
   has_witness?: boolean;
 }
