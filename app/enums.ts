@@ -25,6 +25,7 @@ const ENUMS = {
   ANALYSIS_OVERRIDE_CRITERIA: {
     CURRENT_FILE: 'current_file' as const,
     ALL_FUTURE_UPLOAD: 'all_future_upload' as const,
+    REOPEN_IF_CHANGED: 'reopen_if_changed' as const,
   },
 
   OFFER: {

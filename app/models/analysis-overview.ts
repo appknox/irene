@@ -32,6 +32,10 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 
+  // set when an "All Future Analyses (Reopen if changed)" baseline applies
+  @attr({ defaultValue: null })
+  declare ignoreIfUnchanged: { passed: boolean } | null;
+
   @attr('number', { defaultValue: null })
   declare overrideRequestStatus: number | null;
 
@@ -86,6 +90,14 @@ export default class AnalysisOverviewModel extends Model {
     return (
       this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
     );
+  }
+
+  /**
+   * Overridden as Passed, or Passed because an "All Future Analyses (Reopen if
+   * changed)" baseline applies. Only the file-details pages use this.
+   */
+  get isOverriddenOrIgnoredAsPassed() {
+    return this.isOverriddenAsPassed || Boolean(this.ignoreIfUnchanged?.passed);
   }
 
   /**

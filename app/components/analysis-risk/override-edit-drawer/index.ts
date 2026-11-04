@@ -6,6 +6,7 @@ import { runTask } from 'ember-lifeline';
 import type IntlService from 'ember-intl/services/intl';
 
 import type AnalysisModel from 'irene/models/analysis';
+import type { IgnoreIfUnchanged } from 'irene/models/analysis';
 import type VulnerabilityPreferenceModel from 'irene/models/vulnerability-preference';
 import type AnalysisOverrideRequestModel from 'irene/models/analysis-override-request';
 
@@ -29,8 +30,17 @@ export interface AnalysisRiskDataModel {
   overriddenBy: string | null;
   approvedBy?: string | null;
   overrideCriteria: string | null;
-  overrideCriteriaOptions: { label: string; value: string }[];
+  overrideCriteriaOptions: {
+    label: string;
+    value: string;
+    // option is listed only when Ignore Vulnerability is the selected severity
+    onlyForIgnoreVulnerability?: boolean;
+  }[];
   overriddenOn: Date | null;
+  // set while a "Reopen if changed" baseline decides the analysis
+  ignoreIfUnchanged?: IgnoreIfUnchanged | null;
+  // shown instead of the "Reopen if changed" option while scans are running
+  ignoreIfUnchangedWaitingNote?: string | null;
   overrideSuccessMessage: string;
   showOverrideSuccessOriginalToOverriddenRisk?: boolean;
   ignoreVulnerabilityHelperText: string;
@@ -48,7 +58,8 @@ export interface AnalysisRiskDataModel {
   editSaveOverrideHandler: (
     risk: number,
     comment: string,
-    all: boolean
+    all: boolean,
+    reopenIfChanged?: boolean
   ) => Promise<void>;
 }
 

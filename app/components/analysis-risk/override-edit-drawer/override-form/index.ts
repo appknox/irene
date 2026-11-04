@@ -98,7 +98,10 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
   }
 
   get overrideRiskForOptions() {
-    return this.args.dataModel.overrideCriteriaOptions;
+    return this.args.dataModel.overrideCriteriaOptions.filter(
+      (it) =>
+        !it.onlyForIgnoreVulnerability || this.isIgnoreVulnerabilitySelected
+    );
   }
 
   get criteriaTextIfSingleOption() {
@@ -173,13 +176,15 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
       this.filteredRisks.find((it) => it.value === dataModel.overriddenRisk) ||
       null;
 
-    const hasSingleCriteriaOption = this.overrideRiskForOptions.length === 1;
+    // changeset is not ready yet, so filter the options for the initial risk
+    const initialOptions = dataModel.overrideCriteriaOptions.filter(
+      (it) => !it.onlyForIgnoreVulnerability || risk?.value === ENUMS.RISK.NONE
+    );
 
-    const criteria = hasSingleCriteriaOption
-      ? this.overrideRiskForOptions[0]
-      : this.overrideRiskForOptions.find(
-          (it) => it.value === dataModel.overrideCriteria
-        );
+    const criteria =
+      initialOptions.length === 1
+        ? initialOptions[0]
+        : initialOptions.find((it) => it.value === dataModel.overrideCriteria);
 
     return {
       risk: risk?.value ?? null,
@@ -215,6 +220,16 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
   @action
   handleOverrideRiskChange(risk: RiskValue) {
     this.changeset?.set('risk', risk.value);
+
+    // criteria that is not offered for the new severity must be cleared
+    const criteria = this.changeset?.criteria;
+
+    if (
+      criteria &&
+      !this.overrideRiskForOptions.some((it) => it.value === criteria)
+    ) {
+      this.changeset?.set('criteria', null);
+    }
   }
 
   @action
@@ -297,10 +312,15 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
         this.changeset?.criteria ===
         ENUMS.ANALYSIS_OVERRIDE_CRITERIA.ALL_FUTURE_UPLOAD;
 
+      const reopenIfChanged =
+        this.changeset?.criteria ===
+        ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED;
+
       await this.dataModel.editSaveOverrideHandler(
         riskOverride as number,
         comment as string,
-        all
+        all,
+        reopenIfChanged
       );
 
       this.changeset?.rollback();
