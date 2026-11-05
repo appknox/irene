@@ -20,6 +20,11 @@
   }
 }
 
+// Header label and cell content share one centre line
+.centered-column {
+  text-align: center;
+}
+
 // ember-table overshoots eq-container by a pixel or two of border, which
 // shows a scrollbar; Endpoint truncates, so nothing is hidden
 .scanned-apis-table :global(.ember-table-overflow) {

@@ -67,6 +67,14 @@ class NotificationsStub extends Service {
 // Mirrors APIScanStatusEnum in mycroft
 const API_SCAN_URL_STATUS = ENUMS.API_SCAN_URL_STATUS;
 
+const NO_VULNERABILITY_COUNTS = {
+  total: 0,
+  critical: 0,
+  high: 0,
+  medium: 0,
+  low: 0,
+};
+
 const API_SCAN_URLS = [
   {
     id: 1,
@@ -79,6 +87,7 @@ const API_SCAN_URLS = [
     },
     status: API_SCAN_URL_STATUS.COMPLETED,
     scanned_on: '2026-10-28T10:42:08Z',
+    vulnerability_counts: { total: 6, critical: 1, high: 2, medium: 1, low: 2 },
   },
   {
     id: 2,
@@ -91,6 +100,7 @@ const API_SCAN_URLS = [
     },
     status: API_SCAN_URL_STATUS.COMPLETED,
     scanned_on: '2026-10-28T10:42:31Z',
+    vulnerability_counts: NO_VULNERABILITY_COUNTS,
   },
   {
     id: 3,
@@ -103,6 +113,7 @@ const API_SCAN_URLS = [
     },
     status: API_SCAN_URL_STATUS.IN_PROGRESS,
     scanned_on: null,
+    vulnerability_counts: NO_VULNERABILITY_COUNTS,
   },
   {
     id: 4,
@@ -115,6 +126,7 @@ const API_SCAN_URLS = [
     },
     status: API_SCAN_URL_STATUS.PENDING,
     scanned_on: null,
+    vulnerability_counts: NO_VULNERABILITY_COUNTS,
   },
   {
     id: 5,
@@ -127,6 +139,7 @@ const API_SCAN_URLS = [
     },
     status: API_SCAN_URL_STATUS.FAILED,
     scanned_on: null,
+    vulnerability_counts: NO_VULNERABILITY_COUNTS,
   },
 ];
 
@@ -153,11 +166,14 @@ function setupApiScanUrlsEndpoint(
     onRequest(req);
 
     const q = (req.queryParams.q || '').toLowerCase();
-    const results = scanUrls.filter(
+    const matches = scanUrls.filter(
       (u) =>
         u.request.host.toLowerCase().includes(q) ||
         u.request.path.toLowerCase().includes(q)
     );
+
+    // Any ordering reverses the rows, so the table must keep the API's order
+    const results = req.queryParams.ordering ? [...matches].reverse() : matches;
 
     return {
       count: results.length,
@@ -1342,6 +1358,22 @@ module('Acceptance | file-details/api-scan', function (hooks) {
             .doesNotExist();
         }
 
+        if (url.status === API_SCAN_URL_STATUS.COMPLETED) {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-vulnerabilityCount]',
+              row
+            )
+            .hasText(String(url.vulnerability_counts.total));
+        } else {
+          assert
+            .dom(
+              '[data-test-fileDetails-apiScan-progressStatus-vulnerabilityCountEmpty]',
+              row
+            )
+            .hasText('—');
+        }
+
         if (url.scanned_on) {
           assert
             .dom(
@@ -1360,6 +1392,122 @@ module('Acceptance | file-details/api-scan', function (hooks) {
       });
     }
   );
+
+  test('it sorts scanned apis by status through the api', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+      is_api_done: false,
+    });
+
+    const requests = [];
+
+    setupApiScanUrlsEndpoint(this.server, (req) => {
+      requests.push(req.queryParams);
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    const statusHeader =
+      '[data-test-fileDetails-apiScan-progressStatus-columnHeader="status"]';
+    const sortIcon = '[data-test-fileDetails-apiScan-progressStatus-sortIcon]';
+    const firstEndpoint = () =>
+      find('[data-test-fileDetails-apiScan-progressStatus-endpoint]');
+
+    assert.notOk('ordering' in requests.at(-1));
+    assert.dom(sortIcon).doesNotExist();
+    assert
+      .dom(firstEndpoint())
+      .hasText(`https://api.example.com${API_SCAN_URLS[0].request.path}`);
+
+    await click(statusHeader);
+
+    assert.strictEqual(requests.at(-1).ordering, '-status');
+    assert.strictEqual(requests.at(-1).offset, '0');
+    assert
+      .dom(sortIcon, find(statusHeader))
+      .hasAttribute('icon', /arrow-drop-down/);
+    assert
+      .dom(firstEndpoint())
+      .hasText(`https://api.example.com${API_SCAN_URLS.at(-1).request.path}`);
+
+    await click(statusHeader);
+
+    assert.strictEqual(requests.at(-1).ordering, 'status');
+    assert
+      .dom(sortIcon, find(statusHeader))
+      .hasAttribute('icon', /arrow-drop-up/);
+
+    await click(statusHeader);
+
+    assert.notOk('ordering' in requests.at(-1));
+    assert.dom(sortIcon).doesNotExist();
+    assert
+      .dom(firstEndpoint())
+      .hasText(`https://api.example.com${API_SCAN_URLS[0].request.path}`);
+  });
+
+  test.each(
+    'it sorts scanned apis by the clicked column',
+    [
+      ['vulnerabilities', '-vulnerability_count'],
+      ['scannedOn', '-scanned_on'],
+    ],
+    async function (assert, [columnId, ordering]) {
+      this.file.update({
+        api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+        is_api_done: false,
+      });
+
+      let lastOrdering = null;
+
+      setupApiScanUrlsEndpoint(this.server, (req) => {
+        lastOrdering = req.queryParams.ordering ?? null;
+      });
+
+      await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+      const header = `[data-test-fileDetails-apiScan-progressStatus-columnHeader="${columnId}"]`;
+
+      await click(header);
+
+      assert.strictEqual(lastOrdering, ordering);
+      assert
+        .dom(
+          '[data-test-fileDetails-apiScan-progressStatus-sortIcon]',
+          find(header)
+        )
+        .hasAttribute('icon', /arrow-drop-down/);
+    }
+  );
+
+  test('it does not sort scanned apis by endpoint', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.RUNNING,
+      is_api_done: false,
+    });
+
+    let requestCount = 0;
+    let lastOrdering = null;
+
+    setupApiScanUrlsEndpoint(this.server, (req) => {
+      requestCount += 1;
+      lastOrdering = req.queryParams.ordering ?? null;
+    });
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    const requestsBefore = requestCount;
+
+    await click(
+      '[data-test-fileDetails-apiScan-progressStatus-columnHeader="endpoint"]'
+    );
+
+    assert.strictEqual(requestCount, requestsBefore);
+    assert.strictEqual(lastOrdering, null);
+    assert
+      .dom('[data-test-fileDetails-apiScan-progressStatus-sortIcon]')
+      .doesNotExist();
+  });
 
   test('it filters scanned apis by endpoint search', async function (assert) {
     this.file.update({

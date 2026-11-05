@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
+import type { EmberTableSort } from 'ember-table';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
@@ -15,12 +16,14 @@ import type FileModel from 'irene/models/file';
 import type { Request } from 'irene/models/capturedapi';
 import type ApiScanService from 'irene/services/api-scan';
 import type IreneAjaxService from 'irene/services/ajax';
+import type { ApiScanUrlVulnerabilityCounts } from './vulnerability-counts';
 
 export interface ApiScanUrl {
   id: number;
   request: Request;
   status: number;
   scanned_on: string | null;
+  vulnerability_counts: ApiScanUrlVulnerabilityCounts;
 }
 
 interface ApiScanUrlsResponse {
@@ -53,6 +56,7 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
   @tracked limit = 10;
   @tracked offset = 0;
   @tracked searchQuery = '';
+  @tracked sorts: EmberTableSort[] = [];
 
   constructor(
     owner: unknown,
@@ -70,13 +74,28 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
         id: 'endpoint',
         name: this.intl.t('apiScanModule.endpoint'),
         width: 400,
+        isSortable: false,
       },
-      { id: 'status', name: this.intl.t('status'), width: 150 },
+      {
+        id: 'status',
+        name: this.intl.t('status'),
+        valuePath: 'status',
+        width: 150,
+      },
+      {
+        id: 'vulnerabilities',
+        name: this.intl.t('vulnerabilities'),
+        valuePath: 'vulnerability_count',
+        width: 170,
+        minWidth: 170,
+        isCentered: true,
+      },
       {
         id: 'scannedOn',
         name: this.intl.t('apiScanModule.scannedAt'),
-        width: 140,
-        minWidth: 140,
+        valuePath: 'scanned_on',
+        width: 150,
+        minWidth: 150,
       },
     ];
   }
@@ -98,6 +117,17 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
     return this.fetchScanUrls.isRunning && !this.scanUrlsResponse;
   }
 
+  // Column valuePaths match the API's ordering fields
+  get ordering() {
+    const [sort] = this.sorts;
+
+    if (!sort) {
+      return '';
+    }
+
+    return sort.isAscending ? sort.valuePath : `-${sort.valuePath}`;
+  }
+
   get scanUrlsEndpoint() {
     return [
       ENV.endpoints['files'],
@@ -115,6 +145,12 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
         cancelledCount: this.scanUrlsResponse?.cancelled_count ?? 0,
       }
     );
+  }
+
+  // Rows arrive sorted from the API; stop ember-table re-sorting the page
+  @action
+  keepServerOrder() {
+    return 0;
   }
 
   @action
@@ -149,6 +185,15 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
   }
 
   @action
+  handleSortsUpdate(sorts: EmberTableSort[]) {
+    // The API orders by one field; a modifier-click must not stack sorts
+    this.sorts = sorts.slice(-1);
+    this.offset = 0;
+
+    this.fetchScanUrls.perform();
+  }
+
+  @action
   handleSearch(query: string) {
     this.searchQuery = query;
     this.offset = 0;
@@ -168,6 +213,7 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
       limit: String(this.limit),
       offset: String(this.offset),
       q: this.searchQuery,
+      ...(this.ordering ? { ordering: this.ordering } : {}),
     }).toString();
 
     try {
