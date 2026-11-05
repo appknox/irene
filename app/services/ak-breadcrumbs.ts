@@ -16,6 +16,9 @@ export interface AkBreadcrumbsItemProps {
   query?: Record<string, unknown>;
   multiPageAccess?: boolean;
   stopCrumbGeneration?: boolean;
+
+  // A step the user passes through (e.g. a form that redirects once done); pages reached from it start from their own fallback crumbs
+  isTransientCrumb?: boolean;
   siblingRoutes?: string[];
   parentCrumb?: Omit<AkBreadcrumbsItemProps, 'fallbackCrumbs'>;
 
@@ -231,6 +234,7 @@ export default class AkBreadcrumbsService extends Service {
       routeFrom !== null && routeFromCrumbProps && !routeFromCrumbProps.title;
 
     if (
+      routeFromCrumbProps?.isTransientCrumb ||
       (routeFrom &&
         routeFromAndToTitlesExist &&
         (originRouteHasDiffModelWithSameRouteInCrumbs ||

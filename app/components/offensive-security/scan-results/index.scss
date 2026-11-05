@@ -199,6 +199,8 @@
       width: min(92vw, 1100px);
     }
     max-height: calc(100vh - 56px - 32px);
+    // a zoomed-in window can be shorter than the device; the card scrolls instead of shrinking it
+    overflow: auto;
     z-index: 1300;
     border: 0;
     box-shadow: var(--box-shadow-6);
@@ -316,7 +318,18 @@
   background-color: var(--neutral-grey-500);
 
   .is-live & {
-    background-color: var(--success-main);
+    background-color: #3ddc4a;
+    animation: live-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+}
+
+@keyframes live-pulse {
+  50% {
+    opacity: 0.5;
   }
 }
 
@@ -505,11 +518,32 @@
   pointer-events: none;
   user-select: none;
 
+  // noVNC's own screen div always spans the whole screen area, and never scrolls
+  > div > div {
+    position: absolute !important;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    background: #000000 !important;
+  }
+
+  // The frame already has the stream's aspect ratio, so the canvas fills it exactly
   &.is-fitted {
     canvas {
-      width: 100% !important;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: auto;
+      // stream margins are pushed out of the frame by a wider canvas
+      left: calc(var(--crop-left, 0) * -100%);
+      display: block;
+      margin: 0 !important;
+      width: calc(100% * var(--crop-scale, 1)) !important;
       height: 100% !important;
-      object-fit: cover !important;
+      max-width: none !important;
+      max-height: none !important;
+      object-fit: fill !important;
     }
   }
 

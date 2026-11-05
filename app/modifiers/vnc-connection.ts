@@ -8,6 +8,7 @@ export interface VncConnectionModifierSignature {
       url: string | null;
       password?: string | null;
       allowInteraction?: boolean;
+      highQuality?: boolean;
     };
   };
 }
@@ -17,7 +18,7 @@ export interface VncConnectionModifierSignature {
 // (e.g. switching the selected scan / user role) automatically disconnects
 // the old socket and reconnects against the new device.
 export const vncConnectionModifier = modifier<VncConnectionModifierSignature>(
-  (element, _positional, { url, password, allowInteraction }) => {
+  (element, _positional, { url, password, allowInteraction, highQuality }) => {
     if (!url) {
       return;
     }
@@ -32,6 +33,11 @@ export const vncConnectionModifier = modifier<VncConnectionModifierSignature>(
     }
 
     rfb.viewOnly = !allowInteraction;
+
+    // noVNC defaults to level 6 of 9, which softens small text on a big preview
+    if (highQuality) {
+      rfb.qualityLevel = 9;
+    }
 
     // One-shot: scale the viewport once the handshake completes, then
     // self-remove the listener.

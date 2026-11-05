@@ -24,8 +24,94 @@ const POLL_INTERVAL_MS = 5000;
 // Typical tall phone, used to size the expanded device while there is no stream
 const FALLBACK_PHONE_AR = 0.46;
 
+// Some device streams carry unused black columns beside the picture; they are cropped out
+const CROP_SAMPLE_INTERVAL_MS = 1000;
+const CROP_PROBE_WIDTH = 128;
+const CROP_BLACK_LEVEL = 24;
+const MAX_CROP_FRACTION = 0.1;
+
+export interface DeviceCrop {
+  left: number;
+  right: number;
+}
+
+/**
+ * Measures the black columns on the left and right of a drawn canvas, as fractions of its width.
+ * Returns null while the canvas is blank or when the margins are too wide to be stream padding.
+ */
+export function measureBlackMargins(
+  canvas: HTMLCanvasElement,
+  probe: HTMLCanvasElement
+): DeviceCrop | null {
+  if (!canvas.width || !canvas.height) {
+    return null;
+  }
+
+  const width = CROP_PROBE_WIDTH;
+  const height = Math.max(
+    1,
+    Math.round((width * canvas.height) / canvas.width)
+  );
+
+  probe.width = width;
+  probe.height = height;
+
+  const context = probe.getContext('2d', { willReadFrequently: true });
+
+  if (!context) {
+    return null;
+  }
+
+  context.drawImage(canvas, 0, 0, width, height);
+
+  const { data } = context.getImageData(0, 0, width, height);
+
+  const isBlackColumn = (x: number) => {
+    for (let y = 0; y < height; y++) {
+      const i = (y * width + x) * 4;
+
+      if (
+        (data[i] ?? 0) > CROP_BLACK_LEVEL ||
+        (data[i + 1] ?? 0) > CROP_BLACK_LEVEL ||
+        (data[i + 2] ?? 0) > CROP_BLACK_LEVEL
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  let left = 0;
+
+  while (left < width && isBlackColumn(left)) {
+    left++;
+  }
+
+  // a fully black frame says nothing about the margins
+  if (left === width) {
+    return null;
+  }
+
+  let right = 0;
+
+  while (isBlackColumn(width - 1 - right)) {
+    right++;
+  }
+
+  const maxColumns = Math.floor(width * MAX_CROP_FRACTION);
+
+  return {
+    left: left <= maxColumns ? left / width : 0,
+    right: right <= maxColumns ? right / width : 0,
+  };
+}
+
 // Widest the screen of a sideways expanded device gets; the card around it stays roomy
 const MAX_LANDSCAPE_INNER_WIDTH = 700;
+
+// Zooming the page shrinks its CSS viewport; the expanded device keeps at least this much room and the card scrolls
+const MIN_EXPANDED_ROOM = { width: 360, height: 520 };
 
 export interface OffensiveSecurityScanResultsSignature {
   Args: {
@@ -50,12 +136,15 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked activeScreenPassword: string | null = null;
   @tracked isDeviceExpanded = false;
   @tracked deviceAspectRatio: number | null = null;
+  @tracked deviceCrop: DeviceCrop | null = null;
   @tracked viewport = { width: window.innerWidth, height: window.innerHeight };
 
   private deviceObserver: MutationObserver | null = null;
   private canvasMutationObserver: MutationObserver | null = null;
   private canvasResizeObserver: ResizeObserver | null = null;
   private canvasPollTimer: number | null = null;
+  private cropTimer: number | null = null;
+  private cropProbe: HTMLCanvasElement | null = null;
 
   @action
   setupDeviceObserver(wrapperElement: HTMLElement): void {
@@ -74,6 +163,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
             Math.abs((this.deviceAspectRatio ?? 0) - ar) > 0.001
           ) {
             this.deviceAspectRatio = ar;
+            this.deviceCrop = null;
           }
         }
       }
@@ -114,6 +204,11 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       this.canvasResizeObserver.observe(wrapperElement);
     }
 
+    this.cropTimer = window.setInterval(
+      () => this.sampleCrop(wrapperElement),
+      CROP_SAMPLE_INTERVAL_MS
+    );
+
     let pollCount = 0;
     this.canvasPollTimer = window.setInterval(() => {
       checkCanvas();
@@ -145,7 +240,42 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
       clearInterval(this.canvasPollTimer);
       this.canvasPollTimer = null;
     }
+    if (this.cropTimer !== null) {
+      clearInterval(this.cropTimer);
+      this.cropTimer = null;
+    }
     this.deviceAspectRatio = null;
+    this.deviceCrop = null;
+  }
+
+  /**
+   * Keeps the smallest margins seen so far: later frames can only show more picture, so a dark
+   * moment never crops real content for long.
+   */
+  sampleCrop(wrapperElement: HTMLElement): void {
+    const canvas = wrapperElement.querySelector('canvas');
+
+    if (!canvas || this.isDeviceLandscape) {
+      return;
+    }
+
+    this.cropProbe ??= document.createElement('canvas');
+
+    const measured = measureBlackMargins(canvas, this.cropProbe);
+
+    if (!measured) {
+      return;
+    }
+
+    const current = this.deviceCrop;
+    const next = {
+      left: current ? Math.min(current.left, measured.left) : measured.left,
+      right: current ? Math.min(current.right, measured.right) : measured.right,
+    };
+
+    if (next.left !== current?.left || next.right !== current?.right) {
+      this.deviceCrop = next;
+    }
   }
 
   get isIosDevice(): boolean {
@@ -156,11 +286,34 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return (this.deviceAspectRatio ?? 0) > 1;
   }
 
+  /** Aspect ratio of the picture left once the black stream margins are cropped. */
+  get visibleAspectRatio(): number | null {
+    const ar = this.deviceAspectRatio;
+    const crop = this.deviceCrop;
+
+    return ar && crop ? ar * (1 - crop.left - crop.right) : ar;
+  }
+
+  /** Stretches the canvas past the screen so its black margins fall outside the frame. */
+  get deviceCropStyle(): SafeString | undefined {
+    const crop = this.deviceCrop;
+
+    if (!crop || (!crop.left && !crop.right) || this.isDeviceLandscape) {
+      return undefined;
+    }
+
+    const visible = 1 - crop.left - crop.right;
+
+    return htmlSafe(
+      `--crop-scale: ${1 / visible}; --crop-left: ${crop.left / visible};`
+    );
+  }
+
   /** The device is always built upright; a landscape stream turns it a quarter turn. */
   get phoneFrameSize(): { width: number; height: number } | null {
     // Without a stream (ended or waiting) the expanded device still has to fit the window
     const ar =
-      this.deviceAspectRatio ??
+      this.visibleAspectRatio ??
       (this.isDeviceExpanded ? FALLBACK_PHONE_AR : null);
 
     if (!ar) {
@@ -213,9 +366,15 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     const { width, height } = this.viewport;
 
     return {
-      width: Math.min(width * 0.92, 1100) - 40,
+      width: Math.max(
+        Math.min(width * 0.92, 1100) - 40,
+        MIN_EXPANDED_ROOM.width
+      ),
       // app bar 56, page margin 32, modal header 58, frame wrapper padding 48
-      height: Math.min(height - 56 - 32 - 58 - 48, 760),
+      height: Math.max(
+        Math.min(height - 56 - 32 - 58 - 48, 760),
+        MIN_EXPANDED_ROOM.height
+      ),
     };
   }
 

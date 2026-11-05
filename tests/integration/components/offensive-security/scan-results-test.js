@@ -1,3 +1,4 @@
+import { measureBlackMargins } from 'irene/components/offensive-security/scan-results';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -688,6 +689,64 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       );
     }
   );
+
+  // A canvas painted white between the given margins, as a stream with black side columns
+  function paintedCanvas(width, height, margin) {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext('2d');
+    context.fillStyle = '#ffffff';
+    context.fillRect(margin, 0, width - margin * 2, height);
+
+    return canvas;
+  }
+
+  test('it measures the black columns beside a stream picture', function (assert) {
+    const margins = measureBlackMargins(
+      paintedCanvas(200, 400, 8),
+      document.createElement('canvas')
+    );
+
+    assert.closeTo(margins.left, 0.04, 0.02);
+    assert.closeTo(margins.right, 0.04, 0.02);
+
+    assert.strictEqual(
+      measureBlackMargins(
+        document.createElement('canvas'),
+        document.createElement('canvas')
+      ),
+      null,
+      'a blank canvas says nothing about margins'
+    );
+  });
+
+  test('it crops the black stream margins and fits the frame to the picture', async function (assert) {
+    const scan = createScan(this, {
+      status: SCAN_STATUS.RUNNING,
+      device_serial: 'emulator-5554',
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    this.element
+      .querySelector(SELECTORS.deviceScreen)
+      .appendChild(paintedCanvas(200, 400, 8));
+
+    await waitUntil(
+      () =>
+        this.element
+          .querySelector(SELECTORS.deviceScreen)
+          .getAttribute('style')
+          ?.includes('--crop-scale'),
+      { timeout: 4000 }
+    );
+
+    assert.dom(SELECTORS.deviceScreen).hasAttribute('style', /--crop-left/);
+  });
 
   test('it renders the device placeholder when scan is running but has no device_serial', async function (assert) {
     const scan = createScan(this, {

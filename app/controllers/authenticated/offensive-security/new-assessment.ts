@@ -14,6 +14,7 @@ export default class AuthenticatedOffensiveSecurityNewAssessmentController exten
       title,
       route: 'authenticated.offensive-security.new-assessment',
       routeGroup: 'offensive-security',
+      isTransientCrumb: true,
 
       parentCrumb: {
         title: this.intl.t('offensiveSecurity.attackRuns'),

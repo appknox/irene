@@ -22,6 +22,7 @@ const TEMPLATE = hbs`
       url=this.url
       password=this.testPassword
       allowInteraction=this.allowInteraction
+      highQuality=this.highQuality
     }}
   />
 `;
@@ -51,6 +52,7 @@ module('Integration | Modifier | vnc-connection', function (hooks) {
       url: null,
       testPassword: null,
       allowInteraction: false,
+      highQuality: false,
     });
   });
 
@@ -125,6 +127,19 @@ module('Integration | Modifier | vnc-connection', function (hooks) {
       const rfb = await connect(this, { url: VALID_URL, allowInteraction });
 
       assert.strictEqual(rfb.viewOnly, viewOnly);
+    }
+  );
+
+  test.each(
+    'only raises the noVNC quality level when highQuality is set',
+    [
+      { highQuality: true, qualityLevel: 9 },
+      { highQuality: false, qualityLevel: 6 },
+    ],
+    async function (assert, { highQuality, qualityLevel }) {
+      const rfb = await connect(this, { url: VALID_URL, highQuality });
+
+      assert.strictEqual(rfb.qualityLevel, qualityLevel);
     }
   );
 

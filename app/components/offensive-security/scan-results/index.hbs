@@ -412,6 +412,7 @@
                           {{if this.deviceAspectRatio "is-fitted"}}
                           {{if this.isDeviceLandscape "is-landscape"}}'
                           data-test-offensiveSecurity-deviceScreen
+                          style={{this.deviceCropStyle}}
                           data-test-offensiveSecurity-deviceOrientation={{if
                             this.isDeviceLandscape
                             'landscape'
@@ -425,6 +426,7 @@
                             @deviceFarmPassword={{this.deviceFarmPassword}}
                             @allowInteraction={{false}}
                             @containCanvas={{true}}
+                            @highQuality={{true}}
                           />
                         </div>
                       {{else}}{{#unless this.scan.isTerminal}}

@@ -6,6 +6,7 @@ export interface NovncRfbSignature {
     deviceFarmPassword?: string | null;
     allowInteraction?: boolean;
     containCanvas?: boolean;
+    highQuality?: boolean;
   };
 }
 
