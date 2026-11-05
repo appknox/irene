@@ -74,15 +74,43 @@
         local-class='scanned-apis-table'
         as |t|
       >
-        {{! Endpoint absorbs the spare width so Status and Scanned At stay right-aligned }}
+        {{! Endpoint absorbs the spare width so the other columns stay right-aligned }}
         <t.head
           @columns={{this.columns}}
           @widthConstraint='eq-container'
           @fillMode='first-column'
-        />
+          @sorts={{this.sorts}}
+          @onUpdateSorts={{this.handleSortsUpdate}}
+          @sortFunction={{this.keepServerOrder}}
+          as |h|
+        >
+          <h.row as |r|>
+            <r.cell
+              data-test-fileDetails-apiScan-progressStatus-columnHeader='{{r.columnValue.id}}'
+              local-class={{if r.columnValue.isCentered 'centered-column'}}
+              as |columnValue columnMeta|
+            >
+              {{columnValue.name}}
+
+              {{#if columnMeta.isSorted}}
+                <AkIcon
+                  data-test-fileDetails-apiScan-progressStatus-sortIcon
+                  {{style verticalAlign='middle'}}
+                  @iconName={{if
+                    columnMeta.isSortedAsc
+                    'arrow-drop-up'
+                    'arrow-drop-down'
+                  }}
+                />
+              {{/if}}
+            </r.cell>
+          </h.row>
+        </t.head>
         <t.body @rows={{pgc.currentPageResults}} as |b|>
           <b.row data-test-fileDetails-apiScan-progressStatus-row as |r|>
-            <r.cell>
+            <r.cell
+              local-class={{if r.columnValue.isCentered 'centered-column'}}
+            >
               {{#if (eq r.columnValue.id 'endpoint')}}
                 <AkStack
                   local-class='endpoint-cell'
@@ -109,6 +137,11 @@
               {{else if (eq r.columnValue.id 'status')}}
                 <FileDetails::ApiScan::ProgressStatus::UrlStatus
                   @status={{r.rowValue.status}}
+                />
+              {{else if (eq r.columnValue.id 'vulnerabilities')}}
+                <FileDetails::ApiScan::ProgressStatus::VulnerabilityCounts
+                  @status={{r.rowValue.status}}
+                  @counts={{r.rowValue.vulnerability_counts}}
                 />
               {{else}}
                 <AkTypography
