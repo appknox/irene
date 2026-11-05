@@ -54,8 +54,6 @@ export default class OrganizationService extends Service {
 
       dynamicScanAutomation:
         !this.orgFeatures?.dynamicscan_automation && this.hideUpsellUI,
-
-      apiScanAutomation: !this.orgFeatures?.apiscan && this.hideUpsellUI,
     };
   }
 

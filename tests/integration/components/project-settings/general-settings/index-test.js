@@ -57,17 +57,17 @@ function setupMe(context, ...traits) {
 
 function setupOrganization(
   context,
-  { registrationEnabled = true, showApiScanAutomation = false } = {}
+  { registrationEnabled = true, automatedApiScan = false } = {}
 ) {
-  const organization = context.server.create('organization', 'withCyodEnabled');
+  const organization = context.server.create('organization', {
+    features: { cyod: true, automated_apiscan: automatedApiScan },
+    cyod_registration_enabled: true,
+  });
 
   class OrganizationStub extends Service {
     selected = organization;
     isCyodEnabled = true;
     isCyodRegistrationEnabled = registrationEnabled;
-    hideUpsellUIStatus = {
-      apiScanAutomation: !showApiScanAutomation,
-    };
   }
 
   context.owner.unregister('service:organization');
@@ -173,7 +173,7 @@ module(
     });
 
     test('api scan automation sits under the API scanner URL filter', async function (assert) {
-      setupOrganization(this, { showApiScanAutomation: true });
+      setupOrganization(this, { automatedApiScan: true });
 
       this.server.get(
         '/profiles/:id/apiscanautomation_preference',
@@ -202,28 +202,25 @@ module(
         el.querySelector('[data-test-apiScanAutomation-title]')
       );
 
+      assert.notStrictEqual(
+        filterIndex,
+        -1,
+        'the API scanner URL filter renders'
+      );
+
       assert.ok(
-        filterIndex !== -1 && automationIndex > filterIndex,
+        automationIndex > filterIndex,
         'automation follows the API scanner URL filter'
       );
     });
 
-    test('api scan automation stays hidden when the upsell is hidden', async function (assert) {
-      setupOrganization(this, { showApiScanAutomation: false });
+    test('api scan automation is hidden when the Automated API Scan feature is off', async function (assert) {
+      setupOrganization(this, { automatedApiScan: false });
 
       await renderFor(this, ENUMS.PLATFORM.ANDROID);
 
       assert.dom('[data-test-apiScanAutomation-toggle]').doesNotExist();
-    });
-
-    test('an enterprise org does not get the automation toggle', async function (assert) {
-      setupOrganization(this, { showApiScanAutomation: true });
-
-      this.owner.lookup('service:configuration').serverData.enterprise = true;
-
-      await renderFor(this, ENUMS.PLATFORM.ANDROID);
-
-      assert.dom('[data-test-apiScanAutomation-toggle]').doesNotExist();
+      assert.dom('[data-test-apiScanAutomation-title]').doesNotExist();
     });
 
     test('a non-iOS project gets no CYOD section', async function (assert) {
