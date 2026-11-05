@@ -184,12 +184,21 @@
 
   &.is-expanded {
     position: fixed;
-    top: 50%;
+    // centred in the space under the 56px app bar
+    top: calc(50% + 28px);
     left: 50%;
     transform: translate(-50%, -50%);
-    width: min(90vw, 420px);
-    height: min(92vh, 740px);
-    max-height: 92vh;
+    // hugs the device: wide for a landscape stream, tall for a portrait one
+    width: max-content;
+    min-width: min(92vw, 360px);
+    max-width: 92vw;
+    height: auto;
+
+    // a sideways device sits in a wide, steady card
+    &.is-landscape {
+      width: min(92vw, 1100px);
+    }
+    max-height: calc(100vh - 56px - 32px);
     z-index: 1300;
     border: 0;
     box-shadow: var(--box-shadow-6);
@@ -221,9 +230,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   width: 100%;
-  padding: 14px 20px;
+  padding: 14px 16px;
   box-sizing: border-box;
 }
 
@@ -231,7 +240,7 @@
   display: flex;
   flex: 1 1 auto;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   min-width: 0;
 }
 
@@ -278,17 +287,13 @@
 
 .device-status-pill {
   display: inline-flex;
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   align-items: center;
-  gap: 8px;
-  min-width: 0;
-  max-width: 100%;
-  overflow: hidden;
-  padding: 5px 12px;
+  gap: 6px;
+  padding: 5px 10px;
   border-radius: var(--border-radius-capsule, 999px);
   white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   color: var(--neutral-grey-700);
   background-color: var(--neutral-grey-100);
@@ -300,9 +305,7 @@
 }
 
 .device-status-label {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .device-status-dot {
@@ -333,6 +336,27 @@
   display: flex;
   align-self: stretch;
   max-height: 640px;
+
+  // The upright device is turned a quarter turn when the stream is landscape
+  &.is-landscape {
+    position: relative;
+    align-self: center;
+
+    .phone-rotor {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-90deg);
+    }
+
+    .phone-frame {
+      min-height: 0;
+    }
+  }
+}
+
+.phone-rotor {
+  display: flex;
 }
 
 .phone-frame {
@@ -489,13 +513,16 @@
     }
   }
 
-  // A landscape stream is turned so the phone always shows upright in portrait
+  // The screen is upright inside the turned device, so a landscape stream is turned back
   &.is-fitted.is-landscape canvas {
     position: absolute !important;
     top: 50%;
     left: 50%;
     width: 100cqh !important;
     height: 100cqw !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: fill !important;
     transform: translate(-50%, -50%) rotate(90deg);
   }
 }

@@ -57,6 +57,7 @@ const SELECTORS = {
   deviceStatusPill: '[data-test-offensiveSecurity-deviceLiveBadge]',
   deviceCaption: '[data-test-offensiveSecurity-deviceCaption]',
   phoneFrame: '[data-test-offensiveSecurity-phoneFrame]',
+  phoneDevice: '[data-test-offensiveSecurity-phoneDevice]',
   phoneSpeakerSlit: '[data-test-offensiveSecurity-phoneSpeakerSlit]',
   artifactsBtn: '[data-test-offensiveSecurity-summaryCard-artifactsBtn]',
   artifactsDrawer: '[data-test-offensiveSecurity-summaryCard-artifactsDrawer]',
@@ -641,7 +642,7 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
   });
 
   test.each(
-    'the device frame stays portrait and rotates a landscape stream',
+    'the whole device turns sideways for a landscape stream',
     [
       [800, 400, 'landscape'],
       [400, 800, 'portrait'],
@@ -671,10 +672,19 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       );
 
       const frame = this.element.querySelector(SELECTORS.phoneFrame);
+      const device = this.element.querySelector(SELECTORS.phoneDevice);
 
       assert.true(
         parseInt(frame.style.height, 10) > parseInt(frame.style.width, 10),
-        'phone frame is portrait'
+        'the device itself is always built upright'
+      );
+
+      // Only a landscape stream turns it, so its footprint becomes wider than tall
+      assert.strictEqual(
+        parseInt(device.style.width || '0', 10) >
+          parseInt(device.style.height || '0', 10),
+        orientation === 'landscape',
+        `device is shown ${orientation}`
       );
     }
   );

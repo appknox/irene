@@ -268,10 +268,9 @@
           {{/if}}
 
           <div
-            local-class='device-panel {{if
-              this.isDeviceExpanded
-              "is-expanded"
-            }}'
+            local-class='device-panel
+              {{if this.isDeviceExpanded "is-expanded"}}
+              {{if this.isDeviceLandscape "is-landscape"}}'
           >
             <div local-class='device-panel-header'>
               <div local-class='device-title-group'>
@@ -360,104 +359,111 @@
             </div>
 
             <div local-class='phone-frame-wrapper'>
-              <div local-class='phone-device'>
-                {{#if this.isIosDevice}}
-                  <span
-                    local-class='side-button volume-up'
-                    aria-hidden='true'
-                  ></span>
-                  <span
-                    local-class='side-button volume-down'
-                    aria-hidden='true'
-                  ></span>
-                  <span
-                    local-class='side-button power'
-                    aria-hidden='true'
-                  ></span>
-                {{/if}}
+              <div
+                local-class='phone-device
+                  {{if this.isDeviceLandscape "is-landscape"}}'
+                style={{this.phoneDeviceStyle}}
+                data-test-offensiveSecurity-phoneDevice
+              >
+                <div local-class='phone-rotor'>
+                  {{#if this.isIosDevice}}
+                    <span
+                      local-class='side-button volume-up'
+                      aria-hidden='true'
+                    ></span>
+                    <span
+                      local-class='side-button volume-down'
+                      aria-hidden='true'
+                    ></span>
+                    <span
+                      local-class='side-button power'
+                      aria-hidden='true'
+                    ></span>
+                  {{/if}}
 
-                <div
-                  local-class='phone-frame
+                  <div
+                    local-class='phone-frame
                     {{if this.isIosDevice "is-ios" "is-android"}}'
-                  style={{this.phoneFrameStyle}}
-                  data-test-offensiveSecurity-phoneFrame={{if
-                    this.isIosDevice
-                    'ios'
-                    'android'
-                  }}
-                >
-                  {{#unless this.isIosDevice}}
-                    <div
-                      local-class='phone-speaker-slit'
-                      data-test-offensiveSecurity-phoneSpeakerSlit
-                    ></div>
-                  {{/unless}}
-
-                  <div local-class='phone-screen'>
-                    {{#if this.isIosDevice}}
-                      <span
-                        local-class='dynamic-island'
-                        aria-hidden='true'
-                      ></span>
-                    {{/if}}
-
-                    {{#if this.isDeviceActive}}
+                    style={{this.phoneFrameStyle}}
+                    data-test-offensiveSecurity-phoneFrame={{if
+                      this.isIosDevice
+                      'ios'
+                      'android'
+                    }}
+                  >
+                    {{#unless this.isIosDevice}}
                       <div
-                        local-class='device-screen-wrapper
+                        local-class='phone-speaker-slit'
+                        data-test-offensiveSecurity-phoneSpeakerSlit
+                      ></div>
+                    {{/unless}}
+
+                    <div local-class='phone-screen'>
+                      {{#if this.isIosDevice}}
+                        <span
+                          local-class='dynamic-island'
+                          aria-hidden='true'
+                        ></span>
+                      {{/if}}
+
+                      {{#if this.isDeviceActive}}
+                        <div
+                          local-class='device-screen-wrapper
                           {{if this.deviceAspectRatio "is-fitted"}}
                           {{if this.isDeviceLandscape "is-landscape"}}'
-                        data-test-offensiveSecurity-deviceScreen
-                        data-test-offensiveSecurity-deviceOrientation={{if
-                          this.isDeviceLandscape
-                          'landscape'
-                          'portrait'
-                        }}
-                        {{did-insert this.setupDeviceObserver}}
-                        {{will-destroy this.teardownDeviceObserver}}
-                      >
-                        <NovncRfb
-                          @deviceFarmURL={{this.deviceFarmURL}}
-                          @deviceFarmPassword={{this.deviceFarmPassword}}
-                          @allowInteraction={{false}}
-                          @containCanvas={{true}}
-                        />
-                      </div>
-                    {{else}}{{#unless this.scan.isTerminal}}
-                        <div
-                          local-class='device-placeholder'
-                          data-test-offensiveSecurity-devicePlaceholder
+                          data-test-offensiveSecurity-deviceScreen
+                          data-test-offensiveSecurity-deviceOrientation={{if
+                            this.isDeviceLandscape
+                            'landscape'
+                            'portrait'
+                          }}
+                          {{did-insert this.setupDeviceObserver}}
+                          {{will-destroy this.teardownDeviceObserver}}
                         >
-                          <AkIcon
-                            @iconName='mobile'
-                            local-class='device-placeholder-icon'
+                          <NovncRfb
+                            @deviceFarmURL={{this.deviceFarmURL}}
+                            @deviceFarmPassword={{this.deviceFarmPassword}}
+                            @allowInteraction={{false}}
+                            @containCanvas={{true}}
                           />
-
-                          <span local-class='device-placeholder-text'>
-                            {{t 'offensiveSecurity.waitingForDevice'}}
-                          </span>
                         </div>
-                      {{/unless}}
-                      {{#if this.scan.isTerminal}}
-                        <p
-                          class='offsec-prose'
-                          local-class='device-ended-text'
-                          data-test-offensiveSecurity-deviceEnded
-                        >
-                          {{this.deviceEndedMessage}}
-                        </p>
-                      {{/if}}{{/if}}
+                      {{else}}{{#unless this.scan.isTerminal}}
+                          <div
+                            local-class='device-placeholder'
+                            data-test-offensiveSecurity-devicePlaceholder
+                          >
+                            <AkIcon
+                              @iconName='mobile'
+                              local-class='device-placeholder-icon'
+                            />
 
-                    {{#if this.isIosDevice}}
-                      <span
-                        local-class='home-indicator
+                            <span local-class='device-placeholder-text'>
+                              {{t 'offensiveSecurity.waitingForDevice'}}
+                            </span>
+                          </div>
+                        {{/unless}}
+                        {{#if this.scan.isTerminal}}
+                          <p
+                            class='offsec-prose'
+                            local-class='device-ended-text'
+                            data-test-offensiveSecurity-deviceEnded
+                          >
+                            {{this.deviceEndedMessage}}
+                          </p>
+                        {{/if}}{{/if}}
+
+                      {{#if this.isIosDevice}}
+                        <span
+                          local-class='home-indicator
                           {{if this.isDeviceActive "is-on-screen"}}'
-                        aria-hidden='true'
-                      ></span>
-                      <span
-                        local-class='screen-glare'
-                        aria-hidden='true'
-                      ></span>
-                    {{/if}}
+                          aria-hidden='true'
+                        ></span>
+                        <span
+                          local-class='screen-glare'
+                          aria-hidden='true'
+                        ></span>
+                      {{/if}}
+                    </div>
                   </div>
                 </div>
               </div>

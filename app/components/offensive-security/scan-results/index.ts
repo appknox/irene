@@ -21,6 +21,12 @@ import type DevicefarmService from 'irene/services/devicefarm';
 
 const POLL_INTERVAL_MS = 5000;
 
+// Typical tall phone, used to size the expanded device while there is no stream
+const FALLBACK_PHONE_AR = 0.46;
+
+// Widest the screen of a sideways expanded device gets; the card around it stays roomy
+const MAX_LANDSCAPE_INNER_WIDTH = 700;
+
 export interface OffensiveSecurityScanResultsSignature {
   Args: {
     scanId: string;
@@ -44,6 +50,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
   @tracked activeScreenPassword: string | null = null;
   @tracked isDeviceExpanded = false;
   @tracked deviceAspectRatio: number | null = null;
+  @tracked viewport = { width: window.innerWidth, height: window.innerHeight };
 
   private deviceObserver: MutationObserver | null = null;
   private canvasMutationObserver: MutationObserver | null = null;
@@ -149,72 +156,102 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return (this.deviceAspectRatio ?? 0) > 1;
   }
 
-  /** Aspect ratio of the screen as shown: a landscape stream is rotated into portrait. */
-  get screenAspectRatio(): number | null {
-    const ar = this.deviceAspectRatio;
+  /** The device is always built upright; a landscape stream turns it a quarter turn. */
+  get phoneFrameSize(): { width: number; height: number } | null {
+    // Without a stream (ended or waiting) the expanded device still has to fit the window
+    const ar =
+      this.deviceAspectRatio ??
+      (this.isDeviceExpanded ? FALLBACK_PHONE_AR : null);
 
     if (!ar) {
       return null;
-    }
-
-    return ar > 1 ? 1 / ar : ar;
-  }
-
-  get phoneFrameStyle(): SafeString | undefined {
-    const ar = this.screenAspectRatio;
-
-    if (!ar) {
-      return undefined;
     }
 
     const bezel = this.phoneBezel;
     let innerHeight = bezel.targetInnerHeight;
     let innerWidth = Math.round(innerHeight * ar);
 
-    if (innerWidth > bezel.maxInnerWidth) {
+    if (this.isDeviceLandscape) {
+      innerWidth = bezel.landscapeInnerWidth;
+      innerHeight = Math.round(innerWidth / ar);
+    } else if (innerWidth > bezel.maxInnerWidth) {
       innerWidth = bezel.maxInnerWidth;
       innerHeight = Math.round(innerWidth / ar);
     }
 
-    const frameWidth = innerWidth + bezel.horizontal;
-    const frameHeight = innerHeight + bezel.vertical;
+    // inner sizes are as seen by the user, so swap them for the upright frame
+    return this.isDeviceLandscape
+      ? {
+          width: innerHeight + bezel.horizontal,
+          height: innerWidth + bezel.vertical,
+        }
+      : {
+          width: innerWidth + bezel.horizontal,
+          height: innerHeight + bezel.vertical,
+        };
+  }
 
-    return htmlSafe(`width: ${frameWidth}px; height: ${frameHeight}px;`);
+  get phoneFrameStyle(): SafeString | undefined {
+    const size = this.phoneFrameSize;
+
+    return size
+      ? htmlSafe(`width: ${size.width}px; height: ${size.height}px;`)
+      : undefined;
+  }
+
+  /** Reserves the sideways footprint, as the turned device does not change its layout box. */
+  get phoneDeviceStyle(): SafeString | undefined {
+    const size = this.phoneFrameSize;
+
+    return size && this.isDeviceLandscape
+      ? htmlSafe(`width: ${size.height}px; height: ${size.width}px;`)
+      : undefined;
+  }
+
+  /** Room the expanded preview can use for the screen itself, after the app bar and modal chrome. */
+  get expandedRoom() {
+    const { width, height } = this.viewport;
+
+    return {
+      width: Math.min(width * 0.92, 1100) - 40,
+      // app bar 56, page margin 32, modal header 58, frame wrapper padding 48
+      height: Math.min(height - 56 - 32 - 58 - 48, 760),
+    };
   }
 
   // Space the frame adds around the stream; mirrors the bezel sizes in index.scss
   get phoneBezel() {
-    if (this.isIosDevice) {
-      // 5px (6px expanded) metal padding on every side; the island overlays the screen
-      return this.isDeviceExpanded
-        ? {
-            horizontal: 12,
-            vertical: 12,
-            targetInnerHeight: 558,
-            maxInnerWidth: 310,
-          }
-        : {
-            horizontal: 10,
-            vertical: 10,
-            targetInnerHeight: 470,
-            maxInnerWidth: 260,
-          };
+    const metal = this.isIosDevice
+      ? // 5px metal padding on every side; the island overlays the screen
+        { horizontal: 10, vertical: 10 }
+      : // 6px border plus a 13px speaker slit and 2px bottom padding
+        { horizontal: 12, vertical: 27 };
+
+    if (!this.isDeviceExpanded) {
+      return {
+        ...metal,
+        targetInnerHeight: this.isIosDevice ? 470 : 448,
+        maxInnerWidth: 260,
+        landscapeInnerWidth: 270,
+      };
     }
 
-    // 6px (7px expanded) border plus a 13px speaker slit and 2px bottom padding
-    return this.isDeviceExpanded
-      ? {
-          horizontal: 14,
-          vertical: 29,
-          targetInnerHeight: 541,
-          maxInnerWidth: 310,
-        }
-      : {
-          horizontal: 12,
-          vertical: 27,
-          targetInnerHeight: 448,
-          maxInnerWidth: 260,
-        };
+    const room = this.expandedRoom;
+    const ar = this.deviceAspectRatio ?? 16 / 9;
+
+    return {
+      ...metal,
+      targetInnerHeight: room.height - metal.vertical,
+      maxInnerWidth: room.width - metal.horizontal,
+      // limited by the room's width, or by its height once turned sideways
+      landscapeInnerWidth: Math.round(
+        Math.min(
+          room.width - metal.vertical,
+          (room.height - metal.horizontal) * ar,
+          MAX_LANDSCAPE_INNER_WIDTH
+        )
+      ),
+    };
   }
 
   @action
@@ -227,10 +264,18 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     this.isDeviceExpanded = !this.isDeviceExpanded;
     if (this.isDeviceExpanded) {
       document.body.style.overflow = 'hidden';
+      this.updateViewport();
+      window.addEventListener('resize', this.updateViewport);
     } else {
       document.body.style.overflow = '';
+      window.removeEventListener('resize', this.updateViewport);
     }
   }
+
+  /** Remembers the window size so the expanded preview can fill the room it has. */
+  updateViewport = () => {
+    this.viewport = { width: window.innerWidth, height: window.innerHeight };
+  };
 
   @action
   handleDocumentKeyDown(event: KeyboardEvent): void {
@@ -261,6 +306,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
 
   willDestroy(): void {
     super.willDestroy();
+    window.removeEventListener('resize', this.updateViewport);
 
     this.eventBus.off(
       'ws:offsec-scan:update',
