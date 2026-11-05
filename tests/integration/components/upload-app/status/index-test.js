@@ -342,6 +342,60 @@ module('Integration | Component | upload-app/status', function (hooks) {
       .exists('the failed store/URL submission is rendered in the popover');
   });
 
+  test.each(
+    'offsec submissions stay out of the VAPT status but show on offsec routes',
+    [
+      { routeName: 'authenticated.dashboard.projects', isShown: false },
+      {
+        routeName: 'authenticated.dashboard.offensive-security.new-assessment',
+        isShown: true,
+      },
+    ],
+    async function (assert, { routeName, isShown }) {
+      this.server.get('/submissions', (schema, request) => {
+        const status = Number(request.queryParams.status);
+
+        return schema.submissions
+          .all()
+          .models.filter((submission) => submission.status === status);
+      });
+
+      const offsecSubmission = this.server.create('submission', {
+        status: ENUMS.SUBMISSION_STATUS.DOWNLOAD_FAILED,
+      });
+
+      const id = String(offsecSubmission.id);
+      const uploadApp = this.owner.lookup('service:upload-app');
+
+      // An offsec submission seen earlier on the shared service
+      uploadApp.submissionSet.add(id);
+      uploadApp.offsecSubmissionIds.add(id);
+
+      this.store.push(
+        this.store.normalize('submission', {
+          id,
+          status: offsecSubmission.status,
+          created_on: offsecSubmission.created_on,
+        })
+      );
+
+      Object.defineProperty(
+        this.owner.lookup('service:router'),
+        'currentRouteName',
+        {
+          value: routeName,
+          configurable: true,
+        }
+      );
+
+      await render(hbs`<UploadApp::Status @inline={{true}} />`);
+
+      assert
+        .dom(`[data-test-uploadAppStatus-submission="${id}"]`)
+        [isShown ? 'exists' : 'doesNotExist']();
+    }
+  );
+
   test('test submission list popup status counts', async function (assert) {
     // create failed submissions
     const failedSubmissions = [

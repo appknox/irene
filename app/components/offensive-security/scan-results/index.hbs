@@ -361,18 +361,24 @@
 
             <div local-class='phone-frame-wrapper'>
               <div local-class='phone-device'>
-                <span
-                  local-class='side-button volume-up'
-                  aria-hidden='true'
-                ></span>
-                <span
-                  local-class='side-button volume-down'
-                  aria-hidden='true'
-                ></span>
-                <span local-class='side-button power' aria-hidden='true'></span>
+                {{#if this.isIosDevice}}
+                  <span
+                    local-class='side-button volume-up'
+                    aria-hidden='true'
+                  ></span>
+                  <span
+                    local-class='side-button volume-down'
+                    aria-hidden='true'
+                  ></span>
+                  <span
+                    local-class='side-button power'
+                    aria-hidden='true'
+                  ></span>
+                {{/if}}
 
                 <div
-                  local-class='phone-frame'
+                  local-class='phone-frame
+                    {{if this.isIosDevice "is-ios" "is-android"}}'
                   style={{this.phoneFrameStyle}}
                   data-test-offensiveSecurity-phoneFrame={{if
                     this.isIosDevice
@@ -380,23 +386,32 @@
                     'android'
                   }}
                 >
+                  {{#unless this.isIosDevice}}
+                    <div
+                      local-class='phone-speaker-slit'
+                      data-test-offensiveSecurity-phoneSpeakerSlit
+                    ></div>
+                  {{/unless}}
+
                   <div local-class='phone-screen'>
                     {{#if this.isIosDevice}}
                       <span
                         local-class='dynamic-island'
                         aria-hidden='true'
                       ></span>
-                    {{else}}
-                      <span local-class='punch-hole' aria-hidden='true'></span>
                     {{/if}}
 
                     {{#if this.isDeviceActive}}
                       <div
-                        local-class='device-screen-wrapper {{if
-                          this.deviceAspectRatio
-                          "is-fitted"
-                        }}'
+                        local-class='device-screen-wrapper
+                          {{if this.deviceAspectRatio "is-fitted"}}
+                          {{if this.isDeviceLandscape "is-landscape"}}'
                         data-test-offensiveSecurity-deviceScreen
+                        data-test-offensiveSecurity-deviceOrientation={{if
+                          this.isDeviceLandscape
+                          'landscape'
+                          'portrait'
+                        }}
                         {{did-insert this.setupDeviceObserver}}
                         {{will-destroy this.teardownDeviceObserver}}
                       >
@@ -432,12 +447,17 @@
                         </p>
                       {{/if}}{{/if}}
 
-                    <span
-                      local-class='home-indicator
+                    {{#if this.isIosDevice}}
+                      <span
+                        local-class='home-indicator
                           {{if this.isDeviceActive "is-on-screen"}}'
-                      aria-hidden='true'
-                    ></span>
-                    <span local-class='screen-glare' aria-hidden='true'></span>
+                        aria-hidden='true'
+                      ></span>
+                      <span
+                        local-class='screen-glare'
+                        aria-hidden='true'
+                      ></span>
+                    {{/if}}
                   </div>
                 </div>
               </div>

@@ -271,7 +271,13 @@ export default class UploadAppStatusComponent extends Component<UploadAppStatusS
 
       // Add new submissions to submission set once the client receives them
       // To persist submissions in the popover even if the popover is not opened
-      validatingSubs.forEach((sub) => this.uploadApp.submissionSet.add(sub.id));
+      validatingSubs.forEach((sub) => {
+        this.uploadApp.submissionSet.add(sub.id);
+
+        if (isOffsec) {
+          this.uploadApp.offsecSubmissionIds.add(sub.id);
+        }
+      });
 
       const trackedSubs = Array.from(this.uploadApp.submissionSet)
         .map((id) => this.store.peekRecord('submission', id))
@@ -280,7 +286,11 @@ export default class UploadAppStatusComponent extends Component<UploadAppStatusS
       const submissionsById = new Map<string, SubmissionModel>();
 
       [...validatingSubs.slice(), ...trackedSubs].forEach((sub) => {
-        if (sub) {
+        // Offsec submissions stay out of the VAPT list, even though they share the set
+        const isHidden =
+          !isOffsec && this.uploadApp.offsecSubmissionIds.has(sub.id);
+
+        if (sub && !isHidden) {
           submissionsById.set(sub.id, sub);
         }
       });

@@ -145,12 +145,28 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
     return this.scan?.platform === 'ios';
   }
 
+  get isDeviceLandscape(): boolean {
+    return (this.deviceAspectRatio ?? 0) > 1;
+  }
+
+  /** Aspect ratio of the screen as shown: a landscape stream is rotated into portrait. */
+  get screenAspectRatio(): number | null {
+    const ar = this.deviceAspectRatio;
+
+    if (!ar) {
+      return null;
+    }
+
+    return ar > 1 ? 1 / ar : ar;
+  }
+
   get phoneFrameStyle(): SafeString | undefined {
-    if (!this.deviceAspectRatio) {
+    const ar = this.screenAspectRatio;
+
+    if (!ar) {
       return undefined;
     }
 
-    const ar = this.deviceAspectRatio;
     const bezel = this.phoneBezel;
     let innerHeight = bezel.targetInnerHeight;
     let innerWidth = Math.round(innerHeight * ar);

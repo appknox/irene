@@ -52,10 +52,12 @@ const SELECTORS = {
   deviceCard: '[data-test-offensiveSecurity-deviceCard]',
   devicePlaceholder: '[data-test-offensiveSecurity-devicePlaceholder]',
   deviceScreen: '[data-test-offensiveSecurity-deviceScreen]',
+  deviceOrientation: '[data-test-offensiveSecurity-deviceOrientation]',
   deviceLiveBadge: '[data-test-offensiveSecurity-deviceLiveBadge="live"]',
   deviceStatusPill: '[data-test-offensiveSecurity-deviceLiveBadge]',
   deviceCaption: '[data-test-offensiveSecurity-deviceCaption]',
   phoneFrame: '[data-test-offensiveSecurity-phoneFrame]',
+  phoneSpeakerSlit: '[data-test-offensiveSecurity-phoneSpeakerSlit]',
   artifactsBtn: '[data-test-offensiveSecurity-summaryCard-artifactsBtn]',
   artifactsDrawer: '[data-test-offensiveSecurity-summaryCard-artifactsDrawer]',
   artifactsClose: '[data-test-offensiveSecurity-summaryCard-artifactsClose]',
@@ -448,6 +450,13 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       assert
         .dom(SELECTORS.phoneFrame)
         .hasAttribute('data-test-offensiveSecurity-phoneFrame', frame);
+
+      // Only the Android frame has the speaker slit
+      if (platform === 'android') {
+        assert.dom(SELECTORS.phoneSpeakerSlit).exists();
+      } else {
+        assert.dom(SELECTORS.phoneSpeakerSlit).doesNotExist();
+      }
     }
   );
 
@@ -630,6 +639,45 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
     assert.dom(SELECTORS.deviceCaption).doesNotExist();
     assert.dom(SELECTORS.devicePlaceholder).doesNotExist();
   });
+
+  test.each(
+    'the device frame stays portrait and rotates a landscape stream',
+    [
+      [800, 400, 'landscape'],
+      [400, 800, 'portrait'],
+    ],
+    async function (assert, [width, height, orientation]) {
+      const scan = createScan(this, {
+        status: SCAN_STATUS.RUNNING,
+        device_serial: 'emulator-5554',
+      });
+      serveScan(this, scan);
+
+      this.set('scanId', String(scan.id));
+      await render(TEMPLATE);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      this.element.querySelector(SELECTORS.deviceScreen).appendChild(canvas);
+
+      await waitUntil(
+        () =>
+          this.element
+            .querySelector(SELECTORS.deviceOrientation)
+            ?.getAttribute('data-test-offensiveSecurity-deviceOrientation') ===
+            orientation &&
+          this.element.querySelector(SELECTORS.phoneFrame).style.height
+      );
+
+      const frame = this.element.querySelector(SELECTORS.phoneFrame);
+
+      assert.true(
+        parseInt(frame.style.height, 10) > parseInt(frame.style.width, 10),
+        'phone frame is portrait'
+      );
+    }
+  );
 
   test('it renders the device placeholder when scan is running but has no device_serial', async function (assert) {
     const scan = createScan(this, {

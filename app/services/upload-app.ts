@@ -7,6 +7,9 @@ import RLM, { type RateLimitState } from 'irene/utils/rate-limit';
 
 export default class UploadAppService extends Service {
   @tracked submissionSet = new Set<string>();
+
+  // Ids fetched on offensive-security routes, kept out of the VAPT status
+  offsecSubmissionIds = new Set<string>();
   @tracked anchorRef?: HTMLElement | null;
   @tracked dupAnchorRef?: HTMLElement | null;
   @tracked systemFileQueue: Queue | null = null;
