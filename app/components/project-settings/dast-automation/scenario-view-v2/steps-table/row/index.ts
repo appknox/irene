@@ -46,6 +46,27 @@ const OTP_AUTHENTICATOR_KEY_OPTION: OtpCodeFromOption = {
   value: '',
 };
 
+// Option objects are reused so the select can match the chosen one.
+const knownOtpAppOptions = new Map<
+  number | null | undefined,
+  OtpCodeFromOption[]
+>();
+
+function knownOtpAppsFor(platform?: number | null) {
+  let options = knownOtpAppOptions.get(platform);
+
+  if (!options) {
+    options = otpAppsForPlatform(platform).map((app) => ({
+      kind: 'app',
+      ...app,
+    }));
+
+    knownOtpAppOptions.set(platform, options);
+  }
+
+  return options;
+}
+
 /** Copy of the step metadata without `note`; other keys are kept as-is. */
 function metadataWithoutNote(metadata?: ScenarioStepMetadata) {
   const rest = { ...metadata };
@@ -118,13 +139,6 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     return this.actionConfig?.valueKind;
   }
 
-  get identifierPlaceholder() {
-    return (
-      this.actionConfig?.identifierPlaceholder ??
-      'dastAutomation.stepPlaceholders.text'
-    );
-  }
-
   get valuePlaceholder() {
     return (
       this.actionConfig?.valuePlaceholder ??
@@ -133,7 +147,9 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
   }
 
   get isSecureText() {
-    return this.valueKind === 'secure-text';
+    return (
+      this.valueKind === 'secure-text' || (this.isEnterOtp && this.isOtpFromKey)
+    );
   }
 
   get maskDisabled() {
@@ -168,10 +184,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
   get knownOtpApps(): OtpCodeFromOption[] {
     const project = this.args.scenarioDetail?.get('project');
 
-    return otpAppsForPlatform(project?.get('platform')).map((app) => ({
-      kind: 'app',
-      ...app,
-    }));
+    return knownOtpAppsFor(project?.get('platform'));
   }
 
   get otpCodeFromOptions() {
@@ -194,13 +207,12 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     const value = this.step.value ?? '';
 
     return (
-      (this._otpAppIsCustom && this.step.hasDirtyAttributes) ||
+      (this._otpAppIsCustom && 'value' in this.step.changedAttributes()) ||
       (value !== '' && !this.knownOtpApps.some((app) => app.value === value))
     );
   }
 
-  // Getter/setter so the text field's two-way binding also replaces (never
-  // mutates) the metadata object; empty instructions drop `note`.
+  // Replaces (never mutates) metadata; empty instructions drop `note`.
   get otpNote() {
     const note = this.step.metadata?.note;
 
@@ -432,8 +444,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     this.args.clearStepError?.(this.step, 'value');
   }
 
-  // A saved key comes back masked: clear it on focus so a new key can be typed,
-  // and restore the mask on blur if nothing was entered. The key stays secure.
+  // A saved key is masked: clear it on focus, restore the mask on blur if empty.
   @action
   handleOtpKeyFocus(event: FocusEvent) {
     const isSavedKey =

@@ -53,7 +53,6 @@ export interface StepActionConfig {
   icon: AkIconVariantType;
   valueKind: StepValueKind;
   valuePlaceholder: StepPlaceholderKey;
-  identifierPlaceholder?: StepPlaceholderKey;
   unitOptions?: string[];
   defaultValue?: string;
   defaultMetadata?: ScenarioStepMetadata;
@@ -165,8 +164,7 @@ export const CHECK_OPTIONS: CheckOption[] = [
   { label: 'dastAutomation.checkOptions.unchecked', value: 'false' },
 ];
 
-// Enter OTP has no identifier input; the code field gets this name instead,
-// numbered when the same steps list already has an Enter OTP step using it.
+// Auto identifier for Enter OTP steps, numbered when already taken.
 export const OTP_IDENTIFIER_BASE = 'Verification code';
 const OTP_IDENTIFIER_PATTERN = /^Verification code( \d+)?$/;
 
@@ -208,10 +206,7 @@ export function configForAction(
   return STEP_ACTION_CONFIGS.find((config) => config.action === action);
 }
 
-/**
- * Known OTP apps for a project platform. When the platform is unknown, both
- * lists are offered with a platform suffix so same-named apps stay distinct.
- */
+/** Known OTP apps for a platform; both lists (suffixed) when it is unknown. */
 export function otpAppsForPlatform(platform?: number | null): OtpAppOption[] {
   if (platform === ENUMS.PLATFORM.IOS) {
     return IOS_OTP_APPS;

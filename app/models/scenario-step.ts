@@ -16,7 +16,7 @@ export enum ScenarioStepAction {
 
 export type OtpSource = 'app' | 'authenticator_key';
 
-/** Per-action extras; only Enter OTP uses it today. Unknown keys are kept as-is. */
+/** Per-action extras; only Enter OTP uses it today. */
 export interface ScenarioStepMetadata {
   source?: OtpSource;
   note?: string;

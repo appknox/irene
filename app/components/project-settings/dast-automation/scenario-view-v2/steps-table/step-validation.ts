@@ -53,8 +53,7 @@ const OTP_APP_ID = /^[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)+$/;
 const OTP_APP_ID_MAX_LENGTH = 255;
 const OTP_NOTE_MAX_LENGTH = 256;
 
-// Apps the agent must never open to read a code. Mirrors phoenix
-// `scenario/schema.py` (OPEN_APP_DENIED_*) and the mycroft step validators.
+// Apps the agent must never open. Mirrors phoenix and mycroft; keep in sync.
 const OTP_APP_DENIED_IDS = new Set([
   // iOS
   'com.apple.Preferences',

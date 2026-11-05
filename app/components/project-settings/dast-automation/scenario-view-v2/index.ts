@@ -15,6 +15,7 @@ import {
 
 import {
   configForAction,
+  otpIdentifierFor,
   type StepActionConfig,
 } from './steps-table/step-actions';
 
@@ -197,14 +198,20 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
   createStep(role: ScenarioUserRoleModel | null, config: StepActionConfig) {
     const roleSteps = this.allSteps.filter((s) => s.role.content === role);
     const roleStepCount = roleSteps.length;
+    const isOtp = config.action === ScenarioStepAction.ENTER_OTP;
+
+    const otpIdentifiers = roleSteps
+      .filter((s) => s.action === ScenarioStepAction.ENTER_OTP)
+      .map((s) => s.identifier);
 
     return this.store.createRecord('scenario-step', {
       role,
       order: roleStepCount + 1,
       action: config.action,
-      identifier: '',
+      identifier: isOtp ? otpIdentifierFor(otpIdentifiers) : '',
       value: config.defaultValue ?? '',
       isSecure: false,
+      metadata: { ...config.defaultMetadata },
       scenario: this.args.scenarioDetail,
     });
   }

@@ -199,8 +199,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
 
     step.action = config.action;
 
-    // Enter OTP names its code field itself; leaving it drops only that auto
-    // name, so a saved custom identifier (e.g. "Authenticator code") is kept.
+    // Leaving Enter OTP drops only its auto identifier, not a custom one.
     if (config.action === ScenarioStepAction.ENTER_OTP) {
       step.identifier = this.otpIdentifier(step);
     } else if (!wasOtp || isAutoOtpIdentifier(step.identifier)) {
