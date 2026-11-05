@@ -603,6 +603,37 @@ module('Integration | Component | file-details', function (hooks) {
       .hasText(t('knoxIq.statusCard.completeApiSubtitle'));
   });
 
+  test('automated: SAST + DAST done, API scan never run, knoxiq_api_scan enabled → complete-api nudge still shows', async function (assert) {
+    enableKnoxiqForTests(this, { knoxiqApiScan: true });
+
+    this.file.isStaticDone = true;
+    this.file.isDynamicDone = true;
+    this.file.isApiDone = false;
+    this.file.isKnoxiqAutomated = true;
+
+    setupKnoxiqScanStatusMirage(this.server, {
+      sast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+      dast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+      api: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+    });
+
+    await render(hbs`
+      <FileDetails
+        @file={{this.file}}
+        @fileAnalysesListContext={{this.fileAnalysesListContext}}
+      />
+    `);
+
+    await waitFor('[data-test-knoxiq-status-card]', { timeout: 5000 });
+
+    assert
+      .dom('[data-test-knoxiq-status-card-subtitle]')
+      .hasText(
+        t('knoxIq.statusCard.completeApiSubtitle'),
+        'completing the API scan is still a manual step even in automated mode'
+      );
+  });
+
   test('SAST + DAST done, API scan never run, knoxiq_api_scan toggle off → still shows completed (API not required)', async function (assert) {
     this.file.isStaticDone = true;
     this.file.isDynamicDone = true;

@@ -1109,13 +1109,19 @@
     "aeis": "AEIS",
     "aeisDescription": "Appknox Exploit Intelligence Score",
     "aeisSignals": {
+      "customer_controlled_endpoint": "The endpoint URL or host can be influenced by customer/tenant configuration",
+      "exposed_injection_point": "Accepts attacker-controlled input via a parameter, header, or body field",
       "local_exploitation_only": "Requires device access or root",
       "minimal_user_interaction": "Requires user to open app or click link, but no deep interaction.",
       "no_authentication_required": "Exploitable without login/session/cookies",
+      "obscure_environment_required": "Needs unusual setup, edge cases, or special environment conditions",
       "obscure_or_environment_specific": "Needs unusual setup, edge cases, or special OS conditions",
       "public_exploit_exists": "Known exploit method exists in public domain <br/> (e.g., GitHub, blogs, PoCs) - even if not CVE-mapped",
+      "reachable_without_app_headers": "Responds without requiring the mobile app's custom headers or tokens",
+      "reachable_without_authentication": "Endpoint can be reached without any authentication",
       "remote_exploitation": "Can be exploited over the network or through remote attack vectors <br/> (e.g., exposed APIs, WebView)",
-      "requires_chaining": "Cannot be exploited standalone"
+      "requires_chaining": "Cannot be exploited standalone",
+      "requires_user_interaction": "Requires the user to open the app or trigger an action first"
     },
     "analysisPageTitle": "KnoxIQ Analysis",
     "attackScenario": "Attack Scenario",

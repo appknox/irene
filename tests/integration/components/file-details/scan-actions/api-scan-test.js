@@ -210,7 +210,7 @@ module(
           .doesNotExist();
       });
 
-      test('automated: shows KnoxIQ status chip instead of legacy completed chip', async function (assert) {
+      test('automated: still shows the green legacy completed chip, never the purple KnoxIQ status chip', async function (assert) {
         this.file.isKnoxiqAutomated = true;
         this.file.isApiDone = true;
 
@@ -229,11 +229,10 @@ module(
 
         assert
           .dom('[data-test-fileDetailScanActions-apiScanCompletedStatus]')
-          .doesNotExist(
-            'legacy chip must not appear when KnoxIQ status chip is shown'
+          .hasText(
+            t('completed'),
+            'API scan always shows the green completed chip, unlike SAST/DAST'
           );
-
-        assert.dom().containsText(t('completed'));
       });
     });
 

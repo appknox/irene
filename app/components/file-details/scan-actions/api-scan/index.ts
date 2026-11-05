@@ -23,10 +23,11 @@ export default class FileDetailsScanActionsApiScanComponent extends Component<Fi
     return this.apiStatus === ENUMS.KNOXIQ_SCAN_STATUS.API_SCAN_DISABLED;
   }
 
+  // Unlike SAST/DAST, the API scan card always shows the green "Completed"
+  // chip — it never switches to the purple KnoxIQ status chip, even in
+  // automated mode.
   get showKnoxiqStatusChip() {
-    return Boolean(
-      this.args.isKnoxiqEnabled && this.args.file.isKnoxiqAutomated
-    );
+    return false;
   }
 
   get knoxiqStatusChipState() {

@@ -239,9 +239,7 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
 
     // Informational states (in progress / failed / completed / the
     // sub-feature being off) are shown regardless of automated mode — none
-    // of them carry a "run" action. Only the "ready to trigger" nudges
-    // below are suppressed for automated files, since there's nothing to
-    // click either way.
+    // of them carry a "run" action.
     const informationalCard =
       this.knoxiqProgressCard(sastStatus, dastStatus, apiStatus) ??
       this.apiScanDisabledCard(apiStatus);
@@ -251,7 +249,14 @@ export default class FileDetailsComponent extends Component<FileDetailsSignature
     }
 
     if (this.args.file.isKnoxiqAutomated) {
-      return null;
+      // KnoxIQ triggers itself in automated mode, so the "ready to
+      // trigger KnoxIQ" cards don't apply — but the nudge cards
+      // (complete-dast/complete-api) still point at a manual step (running
+      // the underlying scan) that automated mode doesn't do for the user,
+      // so those still need to show.
+      return this.isKnoxiqEnabled
+        ? this.knoxiqNudgeCard(sastStatus, dastStatus, apiStatus)
+        : null;
     }
 
     return this.knoxiqReadyCard(sastStatus, dastStatus, apiStatus);
