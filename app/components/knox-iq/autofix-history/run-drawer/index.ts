@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 import type { AutofixRun } from 'irene/components/knox-iq/autofix-history';
@@ -14,6 +15,8 @@ export interface KnoxIqAutofixHistoryRunDrawerSignature {
 }
 
 export default class KnoxIqAutofixHistoryRunDrawerComponent extends Component<KnoxIqAutofixHistoryRunDrawerSignature> {
+  @service('browser/document') declare document: Document;
+
   drawerScroller: HTMLElement | null = null;
 
   @tracked drawerBodyScrolled = false;
@@ -24,7 +27,7 @@ export default class KnoxIqAutofixHistoryRunDrawerComponent extends Component<Kn
   ) {
     super(owner, args);
 
-    document.addEventListener('keydown', this.handleEscape);
+    this.document.addEventListener('keydown', this.handleEscape);
   }
 
   get isOpen() {
@@ -63,7 +66,7 @@ export default class KnoxIqAutofixHistoryRunDrawerComponent extends Component<Kn
   willDestroy(): void {
     super.willDestroy();
 
-    document.removeEventListener('keydown', this.handleEscape);
+    this.document.removeEventListener('keydown', this.handleEscape);
     this.unwatchDrawerScroll();
   }
 }
