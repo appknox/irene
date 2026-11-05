@@ -11,6 +11,16 @@ export enum ScenarioStepAction {
   SWIPE = 5,
   DRAG = 6,
   WAIT = 7,
+  ENTER_OTP = 8,
+}
+
+export type OtpSource = 'app' | 'authenticator_key';
+
+/** Per-action extras; only Enter OTP uses it today. */
+export interface ScenarioStepMetadata {
+  source?: OtpSource;
+  note?: string;
+  [key: string]: unknown;
 }
 
 export default class ScenarioStepModel extends Model {
@@ -28,6 +38,9 @@ export default class ScenarioStepModel extends Model {
 
   @attr('boolean', { defaultValue: false })
   declare isSecure: boolean;
+
+  @attr({ defaultValue: () => ({}) })
+  declare metadata: ScenarioStepMetadata;
 
   @belongsTo('scenario-user-role', { async: true, inverse: null })
   declare role: AsyncBelongsTo<ScenarioUserRoleModel>;

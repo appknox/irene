@@ -1,6 +1,7 @@
 import commondrf from './commondrf';
 import type { Snapshot } from '@ember-data/store';
 import type ModelRegistry from 'ember-data/types/registries/model';
+import type { ScenarioStepMetadata } from 'irene/models/scenario-step';
 
 // ─── Shared payload / response shapes ────────────────────────────────────────
 type ModelOrRelationID = string | number;
@@ -31,6 +32,7 @@ export interface ScenarioStepPayload {
   identifier: string;
   value: string;
   is_secure: boolean;
+  metadata: ScenarioStepMetadata;
 }
 
 /** Step payload for the per-role endpoint — role comes from the URL. */
@@ -41,6 +43,7 @@ export interface RoleStepPayload {
   identifier: string;
   value: string;
   is_secure: boolean;
+  metadata: ScenarioStepMetadata;
 }
 
 export interface ScenarioBulkUpdateStepsBody {
