@@ -111,16 +111,18 @@
     </:header>
 
     <:headerCTA>
-      {{#if (or this.baseFile this.fileToCompare)}}
-        <AkButton
-          @disabled={{this.disableCompareBtn}}
-          {{style minWidth='100px'}}
-          {{on 'click' this.onCompareBtnClick}}
-          data-test-fileList-projectOverview-header-compareBtn
-        >
-          {{t 'compare'}}
-        </AkButton>
-      {{/if}}
+      <AkStack @alignItems='center' @spacing='1.5'>
+        {{#if (or this.baseFile this.fileToCompare)}}
+          <AkButton
+            @disabled={{this.disableCompareBtn}}
+            {{style minWidth='100px'}}
+            {{on 'click' this.onCompareBtnClick}}
+            data-test-fileList-projectOverview-header-compareBtn
+          >
+            {{t 'compare'}}
+          </AkButton>
+        {{/if}}
+      </AkStack>
     </:headerCTA>
   </FileCompare::Header>
 

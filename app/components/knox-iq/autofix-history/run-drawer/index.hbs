@@ -1,0 +1,147 @@
+<AkDrawer
+  @open={{this.isOpen}}
+  @onClose={{@onClose}}
+  @anchor='right'
+  @drawerContainerClass={{this.drawerPanelClass}}
+  data-test-knoxIqAutofixHistoryRunDrawer-root
+  as |dr|
+>
+  <div
+    local-class='drawer'
+    {{did-insert this.watchDrawerScroll}}
+    {{will-destroy this.unwatchDrawerScroll}}
+  >
+    <div local-class='drawer-top {{if this.drawerBodyScrolled "scrolled"}}'>
+      <div local-class='drawer-header'>
+        <AkStack @direction='column' @spacing='0.5'>
+          <AkTypography
+            @variant='h5'
+            data-test-knoxIqAutofixHistoryRunDrawer-title
+          >
+            {{t 'autofix.detailsTitle'}}
+          </AkTypography>
+
+          <AkTypography
+            @variant='body2'
+            @color='textSecondary'
+            data-test-knoxIqAutofixHistoryRunDrawer-subtitle
+          >
+            {{t 'autofix.generatedFromScan'}}
+          </AkTypography>
+        </AkStack>
+
+        <AkIconButton
+          @size='small'
+          aria-label={{t 'close'}}
+          {{on 'click' dr.closeHandler}}
+          data-test-knoxIqAutofixHistoryRunDrawer-close
+        >
+          <AkIcon @iconName='close' />
+        </AkIconButton>
+      </div>
+
+      {{#if @run}}
+        <div local-class='drawer-summary'>
+          <AkStack @alignItems='center' @spacing='0.5'>
+            <AkIcon @iconName='mdi:source-branch' local-class='meta-icon meta-icon-strong' />
+            <AkTypography
+              @variant='h5'
+              @tag='h2'
+              data-test-knoxIqAutofixHistoryRunDrawer-baseBranch
+            >
+              {{@run.baseBranch}}
+            </AkTypography>
+          </AkStack>
+
+          <AkStack
+            @alignItems='center'
+            @spacing='1'
+            @flexWrap='wrap'
+            local-class='drawer-meta'
+          >
+            <AkStack @alignItems='center' @spacing='0.5'>
+              <AkIcon @iconName='hugeicons:git-branch' local-class='meta-icon' />
+              <AkTypography
+                @tag='span'
+                @breakWord={{true}}
+                data-test-knoxIqAutofixHistoryRunDrawer-branch
+              >
+                {{@run.branch}}
+              </AkTypography>
+            </AkStack>
+          </AkStack>
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if @run}}
+      <div local-class='drawer-body' data-test-knoxIqAutofixHistoryRunDrawer-body>
+        <ul local-class='commit-list'>
+          {{#each @run.commits as |commit|}}
+            <li
+              local-class='commit-item'
+              data-test-knoxIqAutofixHistoryRunDrawer-commit='{{commit.id}}'
+            >
+              <AkStack @alignItems='center' @spacing='0.5'>
+                <AkIcon @iconName='commit' local-class='meta-icon' />
+
+                <AkTooltip
+                  @title={{commit.sha}}
+                  @placement='top'
+                  @renderInPlace={{true}}
+                >
+                  <a
+                    href={{commit.url}}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={{t 'autofix.openCommit' sha=commit.sha}}
+                    local-class='commit-link'
+                    data-test-knoxIqAutofixHistoryRunDrawer-commitLink
+                  >
+                    <span local-class='commit-sha'>{{commit.shortSha}}</span>
+                    <AkIcon @iconName='open-in-new' @color='primary' />
+                  </a>
+                </AkTooltip>
+
+                <AkTypography
+                  @tag='span'
+                  @variant='body2'
+                  @color='textSecondary'
+                  data-test-knoxIqAutofixHistoryRunDrawer-commitCreatedOn
+                >
+                  {{dayjs-from-now commit.createdOn}}
+                </AkTypography>
+              </AkStack>
+
+              <div
+                local-class='patched-files'
+                data-test-knoxIqAutofixHistoryRunDrawer-patchedFilesLabel
+              >
+                {{t 'autofix.patchedFiles'}}
+                <ul local-class='nested-list'>
+                  {{#each commit.patchedFiles as |patchedFile|}}
+                    <li local-class='nested-list-item'>
+                      <span
+                        local-class='code-pill'
+                        data-test-knoxIqAutofixHistoryRunDrawer-patchedFile
+                      >
+                        {{patchedFile}}
+                      </span>
+                    </li>
+                  {{else}}
+                    <li
+                      local-class='nested-list-item'
+                      data-test-knoxIqAutofixHistoryRunDrawer-noPatchedFiles
+                    >
+                      {{t 'autofix.noPatchedFiles'}}
+                    </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      </div>
+    {{/if}}
+  </div>
+</AkDrawer>

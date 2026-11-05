@@ -6,6 +6,7 @@
         @buttonVariant={{true}}
         @onTabClick={{this.handleTabClick}}
         @isActive={{eq item.id this.selectedTab}}
+        data-test-fileDetailsInsightsWrapper-tab={{item.id}}
       >
         {{item.label}}
       </akt.tabItem>
@@ -17,6 +18,7 @@
       @file={{@file}}
       @fileAnalyses={{@fileAnalysesListContext.analyses}}
       @isFetchingAnalyses={{@fileAnalysesListContext.isFetchingAnalyses}}
+      @hasAnyKnoxiqScanCompleted={{@hasAnyKnoxiqScanCompleted}}
     />
   {{/let}}
 </div>
