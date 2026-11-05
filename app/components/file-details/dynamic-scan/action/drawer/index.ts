@@ -19,6 +19,8 @@ import type AvailableManualDeviceModel from 'irene/models/available-manual-devic
 import type IreneAjaxService from 'irene/services/ajax';
 import type DynamicScanService from 'irene/services/dynamic-scan';
 import type AnalyticsService from 'irene/services/analytics';
+import type OrganizationService from 'irene/services/organization';
+import type LoggerService from 'irene/services/logger';
 
 export interface FileDetailsDynamicScanActionDrawerSignature {
   Args: {
@@ -35,10 +37,13 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   @service declare ajax: IreneAjaxService;
   @service declare store: Store;
   @service declare analytics: AnalyticsService;
+  @service declare organization: OrganizationService;
+  @service declare logger: LoggerService;
   @service('dynamic-scan') declare dynamicScanService: DynamicScanService;
   @service('notifications') declare notify: NotificationService;
 
   @tracked isApiCaptureEnabled = false;
+  @tracked isApiCaptureLocked = false;
   @tracked availableManualDevices: AvailableManualDeviceModel[] = [];
   @tracked selectedAvailableManualDeviceIdentifier: string | null = null;
 
@@ -50,6 +55,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
     if (!this.args.isAutomatedScan) {
       this.fetchAvailableManualDevices.perform();
+      this.fetchApiScanAutomationPreference.perform();
     }
   }
 
@@ -63,6 +69,10 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   get tPleaseTryAgain() {
     return this.intl.t('pleaseTryAgain');
+  }
+
+  get hasApiScanFeature() {
+    return Boolean(this.organization.selected?.features?.apiscan);
   }
 
   get disableCloseDastModal() {
@@ -120,6 +130,10 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
 
   @action
   handleApiCaptureChange(_: Event, checked: boolean) {
+    if (this.isApiCaptureLocked) {
+      return;
+    }
+
     this.isApiCaptureEnabled = !!checked;
   }
 
@@ -160,6 +174,34 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
       if (!isRateLimitError) {
         this.notify.error(this.intl.t('errorFetchingAvailableDevices'));
       }
+    }
+  });
+
+  // API Scan Automation scans the APIs a DAST captures, so capture stays on
+  fetchApiScanAutomationPreference = task(async () => {
+    const profileId = this.file.project?.get('activeProfileId');
+
+    if (!this.hasApiScanFeature || !profileId) {
+      return;
+    }
+
+    try {
+      this.store
+        .adapterFor('apiscan-automation-preference')
+        .setNestedUrlNamespace(String(profileId));
+
+      const preference = await this.store.queryRecord(
+        'apiscan-automation-preference',
+        {}
+      );
+
+      if (preference.apiScanAutomationEnabled) {
+        this.isApiCaptureEnabled = true;
+        this.isApiCaptureLocked = true;
+      }
+    } catch (error) {
+      // Without the preference the toggle stays editable, as before
+      this.logger.error(parseError(error));
     }
   });
 
