@@ -1174,7 +1174,9 @@ module(
     };
 
     const loadOrganization = async (owner, server, { apiscan }) => {
-      server.create('organization', { features: { apiscan } });
+      server.create('organization', {
+        features: { automated_apiscan: apiscan },
+      });
 
       await owner.lookup('service:organization').load();
     };

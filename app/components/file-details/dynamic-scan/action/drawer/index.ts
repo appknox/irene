@@ -72,7 +72,7 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
   }
 
   get hasApiScanFeature() {
-    return Boolean(this.organization.selected?.features?.apiscan);
+    return Boolean(this.organization.selected?.features?.automated_apiscan);
   }
 
   get disableCloseDastModal() {

@@ -14,7 +14,6 @@ import type ProjectModel from 'irene/models/project';
 import type ProfileModel from 'irene/models/profile';
 import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
-import type ConfigurationService from 'irene/services/configuration';
 import type LoggerService from 'irene/services/logger';
 
 interface ProjectSettingsGeneralSettingsSignature {
@@ -27,7 +26,6 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
   @service declare me: MeService;
   @service declare store: Store;
   @service declare organization: OrganizationService;
-  @service declare configuration: ConfigurationService;
   @service declare logger: LoggerService;
 
   @tracked profile: ProfileModel | null = null;
@@ -45,12 +43,9 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
-  // Hidden for enterprise, and when the org has neither the feature nor the upsell
+  // Shown only when Automated API Scan is enabled for the org (hudson features page)
   get showApiScanAutomation() {
-    return (
-      !this.configuration.serverData.enterprise &&
-      !this.organization.hideUpsellUIStatus?.apiScanAutomation
-    );
+    return Boolean(this.organization.selected?.features?.automated_apiscan);
   }
 
   get showCyodSection() {
