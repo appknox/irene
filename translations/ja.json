@@ -93,6 +93,7 @@
   "api": "API",
   "apiDocumentation": "API Documentation",
   "apiScanAutomation": {
+    "apiCaptureRequired": "APIスキャン自動化が有効な間は無効にできません。",
     "description": "DASTの実行が完了したら、APIスキャンを自動的に開始します。",
     "settingsUpdated": "APIスキャン自動化の設定を更新しました",
     "title": "APIスキャン自動化"

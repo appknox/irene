@@ -93,6 +93,7 @@
   "api": "API",
   "apiDocumentation": "API Documentation",
   "apiScanAutomation": {
+    "apiCaptureRequired": "This cannot be deactivated while API Scan Automation is enabled.",
     "description": "Automatically start an API scan when a DAST run finishes.",
     "settingsUpdated": "API scan automation settings updated",
     "title": "API Scan Automation"
