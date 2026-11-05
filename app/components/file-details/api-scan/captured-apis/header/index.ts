@@ -13,6 +13,7 @@ export interface FileDetailsApiScanCapturedApiHeaderSignature {
     selectedAPIUrlDomain: string[];
     handleSelectAllCapturedApis: (event: Event, checked: boolean) => void;
     onDomainFilterApply: (domainFilters: string[]) => void;
+    onSearch: (query: string) => void;
     isLoadingCapturedApis: boolean;
   };
 }

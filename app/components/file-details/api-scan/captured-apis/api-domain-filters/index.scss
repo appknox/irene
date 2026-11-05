@@ -1,3 +1,8 @@
+.domain-filters-root {
+  width: 220px;
+  flex-shrink: 0;
+}
+
 .filter-input-dropdown {
   min-width: 280px !important;
 
@@ -25,7 +30,12 @@
 }
 
 .filter-trigger {
-  height: 40px !important;
+  height: var(
+    --file-details-api-scan-captured-apis-domain-filters-trigger-height
+  ) !important;
+  // power-select's overflow-x: hidden turns overflow-y to auto and shows a
+  // scrollbar on the one-line trigger
+  overflow: hidden !important;
 
   :global(.ember-power-select-status-icon) {
     right: 12px;
