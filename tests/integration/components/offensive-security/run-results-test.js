@@ -39,14 +39,21 @@ class RouterStub extends Service {
 
 const SELECTORS = {
   risksCard: '[data-test-offensiveSecurity-pentestGoalsCard]',
-  risksTitle: '[data-test-offensiveSecurity-pentestGoalsCard-title]',
+  risksIntro: '[data-test-offensiveSecurity-pentestGoalsCard-intro]',
+  tab: (key) => `[data-test-offensiveSecurity-runResults-tab="${key}"]`,
+  tabs: '[data-test-offensiveSecurity-runResults-tab]',
+  posture: '[data-test-offensiveSecurity-findingsList-posture]',
+  postureTotals: '[data-test-offensiveSecurity-findingsList-postureTotals]',
+  postureSegment: (key) =>
+    `[data-test-offensiveSecurity-findingsList-postureSegment="${key}"]`,
+  bypassNote: '[data-test-offensiveSecurity-findingsList-bypassNote]',
+  groupBypassed: '[data-test-offensiveSecurity-findingsList-groupBypassed]',
   risksEmpty: '[data-test-offensiveSecurity-pentestGoalsCard-empty]',
   updatingLive: '[data-test-offensiveSecurity-pentestGoalsCard-updatingLive]',
   goalRow: (index) =>
     `[data-test-offensiveSecurity-pentest-goal-row="${index}"]`,
   goalName: '[data-test-offensiveSecurity-pentest-goal-name]',
   goalReason: '[data-test-offensiveSecurity-pentest-goal-reason]',
-  goalFindingsCount: '[data-test-offensiveSecurity-pentest-goal-findingsCount]',
   goalStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalDetailBack: '[data-test-offensiveSecurity-pentest-back]',
   goalDetailNav: '[data-test-offensiveSecurity-pentest-nav]',
@@ -107,6 +114,12 @@ function pushScan(test, scan) {
   return store.push(store.normalize('offsec-scan', scan.toJSON()));
 }
 
+// Findings and defenses live on the App Resilience tab
+async function renderResilienceTab() {
+  await render(TEMPLATE);
+  await click(SELECTORS.tab('app-resilience'));
+}
+
 // ─── Test suite ──────────────────────────────────────────────────────────────
 
 module('Integration | Component | offensive-security/run-results', (hooks) => {
@@ -131,15 +144,17 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
 
   // ─── Business risks ────────────────────────────────────────────────────────
 
-  test('it lists every business risk with its findings count and status', async function (assert) {
+  test('it lists every business risk with its status', async function (assert) {
     const scan = createScan(this, { pentest_results: GOALS });
 
     this.set('scan', pushScan(this, scan));
     await render(TEMPLATE);
 
     assert
-      .dom(SELECTORS.risksTitle)
-      .hasText(t('offensiveSecurity.businessRisks'));
+      .dom(SELECTORS.risksIntro)
+      .hasText(
+        'The business risks the agent set out to prove. Each can be reached through a family of techniques — used on their own or chained together. The status shows how far the agent got: Exploited (carried through to a working exploit), Partly exploited, Weakness found (a real weakness not yet exploited), Untested, or Not vulnerable.'
+      );
     assert.dom(SELECTORS.risksEmpty).doesNotExist();
     assert.dom(SELECTORS.updatingLive).doesNotExist();
 
@@ -147,7 +162,6 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
 
     assert.dom(SELECTORS.goalName, find(firstRow)).hasText(GOALS[0].goal_name);
     assert.dom(SELECTORS.goalReason, find(firstRow)).hasText(GOALS[0].reason);
-    assert.dom(SELECTORS.goalFindingsCount, find(firstRow)).hasText('3');
     assert
       .dom(SELECTORS.goalStatus, find(firstRow))
       .hasText('Budget Exhausted');
@@ -155,7 +169,6 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     const secondRow = SELECTORS.goalRow(1);
 
     assert.dom(SELECTORS.goalReason, find(secondRow)).doesNotExist();
-    assert.dom(SELECTORS.goalFindingsCount, find(secondRow)).hasText('1');
     assert.dom(SELECTORS.goalStatus, find(secondRow)).hasText('Completed');
   });
 
@@ -229,6 +242,56 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     assert.dom(SELECTORS.goalDetailNav).doesNotExist();
   });
 
+  // ─── Tabs ──────────────────────────────────────────────────────────────────
+
+  test('a comprehensive run has both tabs, opens on Business Risks and switches to App Resilience', async function (assert) {
+    const scan = createScan(this, { pentest_results: GOALS });
+
+    this.set('scan', pushScan(this, scan));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.tabs).exists({ count: 2 });
+    assert
+      .dom(SELECTORS.tab('business-risks'))
+      .hasText(t('offensiveSecurity.resultsTabBusinessRisks'))
+      .hasAttribute('aria-selected', 'true');
+    assert
+      .dom(SELECTORS.tab('app-resilience'))
+      .hasText(t('offensiveSecurity.resultsTabAppResilience'))
+      .hasAttribute('aria-selected', 'false');
+    assert.dom(SELECTORS.risksCard).exists();
+    assert.dom(SELECTORS.findingsList).doesNotExist();
+
+    await click(SELECTORS.tab('app-resilience'));
+
+    assert
+      .dom(SELECTORS.tab('app-resilience'))
+      .hasAttribute('aria-selected', 'true');
+    assert.dom(SELECTORS.risksCard).doesNotExist();
+    assert.dom(SELECTORS.findingsList).exists();
+
+    await click(SELECTORS.tab('business-risks'));
+
+    assert.dom(SELECTORS.risksCard).exists();
+  });
+
+  test('a resilience-only run only has the App Resilience tab', async function (assert) {
+    const scan = createScan(this, {
+      assessment_type: 'resilience',
+      pentest_results: GOALS,
+    });
+
+    this.set('scan', pushScan(this, scan));
+    await render(TEMPLATE);
+
+    assert.dom(SELECTORS.tabs).exists({ count: 1 });
+    assert.dom(SELECTORS.tab('business-risks')).doesNotExist();
+    assert
+      .dom(SELECTORS.tab('app-resilience'))
+      .hasAttribute('aria-selected', 'true');
+    assert.dom(SELECTORS.findingsList).exists();
+  });
+
   // ─── Findings ──────────────────────────────────────────────────────────────
 
   test('it lists findings for the scan', async function (assert) {
@@ -255,7 +318,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert.dom(SELECTORS.findingsList).exists();
     const headers = findAll(SELECTORS.groupHeader);
@@ -292,7 +355,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     const headers = findAll(SELECTORS.groupHeader);
     assert.strictEqual(headers.length, 2);
@@ -318,7 +381,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert.dom(SELECTORS.findingsList).includesText('Root Package Query');
     assert.strictEqual(findAll(SELECTORS.groupHeader).length, 1);
@@ -354,7 +417,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       },
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert.dom(SELECTORS.findingsList).exists();
     const headers = findAll(SELECTORS.groupHeader);
@@ -393,7 +456,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       },
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     const headers = findAll(SELECTORS.groupHeader);
     assert.strictEqual(headers.length, 2, 'Two group headers rendered');
@@ -424,15 +487,15 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       },
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     const headers = findAll(SELECTORS.groupHeader);
     assert.strictEqual(headers.length, 2, 'Two group rows rendered');
 
     assert.dom(headers[0]).includesText('Debug Settings Probe');
-    assert.dom(SELECTORS.groupCount, headers[0]).hasText('1');
+    assert.dom(SELECTORS.groupCount, headers[0]).hasText('1/1');
     assert.dom(headers[1]).includesText('Freerasp Talsec');
-    assert.dom(SELECTORS.groupCount, headers[1]).hasText('1');
+    assert.dom(SELECTORS.groupCount, headers[1]).hasText('1/1');
   });
 
   test('it groups findings when API findings object contains arrays of findings under category keys', async function (assert) {
@@ -482,26 +545,26 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       },
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     const headers = findAll(SELECTORS.groupHeader);
     assert.strictEqual(headers.length, 3, 'Three group headers rendered');
 
     // Title formatting and acronym handling
     assert.dom(headers[0]).includesText('Root Detection');
-    assert.dom(SELECTORS.groupCount, headers[0]).hasText('2');
+    assert.dom(SELECTORS.groupCount, headers[0]).hasText('2/2');
 
     assert.dom(headers[1]).includesText('Debugger Detection');
-    assert.dom(SELECTORS.groupCount, headers[1]).hasText('2');
+    assert.dom(SELECTORS.groupCount, headers[1]).hasText('2/2');
 
     assert.dom(headers[2]).includesText('SSL Pinning');
-    assert.dom(SELECTORS.groupCount, headers[2]).hasText('1');
+    assert.dom(SELECTORS.groupCount, headers[2]).hasText('1/1');
   });
 
   test('it shows an empty state when there are no findings', async function (assert) {
     const scan = createScan(this, { findings: [] });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert
       .dom(SELECTORS.findingsEmpty)
@@ -532,7 +595,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert.dom(SELECTORS.findingsList).exists();
     const headers = findAll(SELECTORS.groupHeader);
@@ -556,7 +619,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert
       .dom(SELECTORS.findingsEmpty)
@@ -603,7 +666,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     });
 
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     const headers = findAll(SELECTORS.groupHeader);
 
@@ -614,7 +677,8 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     assert
       .dom(SELECTORS.groupSummary, headers[0])
       .hasText('Magisk artifact probe, su binary probe');
-    assert.dom(SELECTORS.groupCount, headers[0]).hasText('2');
+    assert.dom(SELECTORS.groupCount, headers[0]).hasText('2/2');
+    assert.dom(SELECTORS.groupBypassed, headers[0]).hasText('1');
     assert
       .dom(SELECTORS.groupOutcome, headers[0])
       .hasAttribute(
@@ -624,7 +688,8 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       .hasText(t('offensiveSecurity.outcome.bypassed'));
 
     assert.dom(SELECTORS.groupTitle, headers[1]).hasText('SSL Pinning');
-    assert.dom(SELECTORS.groupCount, headers[1]).hasText('1');
+    assert.dom(SELECTORS.groupCount, headers[1]).hasText('1/1');
+    assert.dom(SELECTORS.groupBypassed, headers[1]).hasText('—');
     assert
       .dom(SELECTORS.groupOutcome, headers[1])
       .hasText(t('offensiveSecurity.outcome.resisted'));
@@ -634,7 +699,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     const scan = createScan(this, { status: SCAN_STATUS.RUNNING });
 
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     assert
       .dom(SELECTORS.findingsUpdatingLive)
@@ -642,6 +707,76 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     assert
       .dom(SELECTORS.findingsEmpty)
       .hasText(t('offensiveSecurity.findingsRecording'));
+  });
+
+  test('the posture card counts each defense by how far the agent got', async function (assert) {
+    const defense = (id, group, outcome, extra = {}) => ({
+      id,
+      group,
+      signature_id: `sig-${id}`,
+      name: `check ${id}`,
+      category: group,
+      outcome,
+      detected: true,
+      order: id,
+      evidence_ids: [],
+      ...extra,
+    });
+
+    const scan = createScan(this, {
+      findings: [
+        defense(1, 'root_detection', 'bypassed'),
+        defense(2, 'ssl_pinning', 'resisted'),
+        defense(3, 'emulator_detection', 'not_attempted', { triggered: true }),
+        defense(4, 'debugger_detection', 'not_attempted'),
+        defense(5, 'tamper_check', 'unassessed'),
+      ],
+    });
+
+    this.set('scan', pushScan(this, scan));
+    await renderResilienceTab();
+
+    assert.dom(SELECTORS.posture).exists();
+    assert.dom(SELECTORS.postureSegment('bypassed')).hasText('1');
+    assert.dom(SELECTORS.postureSegment('held')).hasText('1');
+    assert.dom(SELECTORS.postureSegment('triggered')).hasText('1');
+    assert.dom(SELECTORS.postureSegment('untested')).hasText('2');
+    assert.dom(SELECTORS.postureTotals).hasText(
+      t('offensiveSecurity.postureTotals', {
+        active: 1,
+        bypassed: 1,
+        held: 1,
+        untested: 2,
+      })
+    );
+    assert.dom(SELECTORS.bypassNote).exists();
+  });
+
+  test('the posture card and bypass note stay hidden while there is nothing to show', async function (assert) {
+    const scan = createScan(this, {
+      findings: [
+        {
+          id: 1,
+          group: 'root_detection',
+          signature_id: 'sig-1',
+          name: 'check 1',
+          category: 'root_detection',
+          outcome: 'bypassed',
+          detected: true,
+          order: 0,
+          evidence_ids: [],
+        },
+      ],
+    });
+
+    this.set('scan', pushScan(this, scan));
+    await renderResilienceTab();
+
+    assert.dom(SELECTORS.postureSegment('bypassed')).exists();
+    assert.dom(SELECTORS.postureSegment('held')).doesNotExist();
+    assert
+      .dom(SELECTORS.bypassNote)
+      .doesNotExist('every defense was bypassed, so nothing is left untested');
   });
 
   // ─── Interaction ───────────────────────────────────────────────────────────
@@ -661,7 +796,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
       ],
     });
     this.set('scan', pushScan(this, scan));
-    await render(TEMPLATE);
+    await renderResilienceTab();
 
     await click(SELECTORS.groupHeader);
 

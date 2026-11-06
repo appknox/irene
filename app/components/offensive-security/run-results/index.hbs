@@ -15,18 +15,37 @@
   {{else}}
     <AkBreadcrumbs::AutoTrail class='mb-1' />
 
-    {{#unless @scan.isExplicitlyResilienceOnly}}
+    <div
+      role='tablist'
+      local-class='tabs'
+      data-test-offensiveSecurity-runResults-tabs
+    >
+      {{#each this.tabs as |tab|}}
+        <button
+          type='button'
+          role='tab'
+          local-class='tab {{if tab.isActive "is-active"}}'
+          aria-selected={{if tab.isActive 'true' 'false'}}
+          data-test-offensiveSecurity-runResults-tab={{tab.key}}
+          {{on 'click' (fn this.selectTab tab.key)}}
+        >
+          {{t tab.labelKey}}
+        </button>
+      {{/each}}
+    </div>
+
+    {{#if this.isBusinessRisksTabActive}}
       <OffensiveSecurity::ScanResults::PentestGoalsCard
         @scan={{@scan}}
         @goals={{this.pentestGoals}}
         @onGoalClick={{this.openGoal}}
       />
-    {{/unless}}
-
-    <OffensiveSecurity::ScanResults::FindingsList
-      @scan={{@scan}}
-      @findings={{this.findings}}
-      @onFindingClick={{this.handleFindingClick}}
-    />
+    {{else}}
+      <OffensiveSecurity::ScanResults::FindingsList
+        @scan={{@scan}}
+        @findings={{this.findings}}
+        @onFindingClick={{this.handleFindingClick}}
+      />
+    {{/if}}
   {{/if}}
 </AkStack>

@@ -1,17 +1,12 @@
-<section local-class='findings-card' data-test-offensiveSecurity-findingsList>
-  <div local-class='findings-header'>
-    <div>
-      <h2
-        local-class='findings-title'
-        data-test-offensiveSecurity-findingsList-title
-      >
-        {{t 'offensiveSecurity.findings'}}
-      </h2>
-
-      <p class='offsec-prose' local-class='findings-subtitle'>
-        {{t 'offensiveSecurity.findingsSubtitle'}}
-      </p>
-    </div>
+<div local-class='findings-root' data-test-offensiveSecurity-findingsList>
+  <div local-class='intro-row'>
+    <p
+      class='offsec-prose'
+      local-class='intro'
+      data-test-offensiveSecurity-findingsList-intro
+    >
+      {{t 'offensiveSecurity.defensesIntro'}}
+    </p>
 
     {{#if @scan.isInProgress}}
       <span
@@ -24,87 +19,182 @@
     {{/if}}
   </div>
 
-  <div local-class='findings-grid findings-column-header'>
-    <span>{{t 'offensiveSecurity.defensesAssessed'}}</span>
-    <span>{{t 'offensiveSecurity.checksCount'}}</span>
-    <span>{{t 'offensiveSecurity.outcomeHeader'}}</span>
-    <span></span>
-  </div>
-
   {{#if this.hasFindings}}
-    <ul local-class='groups-list'>
-      {{#each this.groupedFindings as |group|}}
-        <li>
-          <button
-            type='button'
-            local-class='findings-grid group-row'
-            {{on 'click' (fn this.handleCategoryClick group)}}
-            data-test-offensiveSecurity-findingsList-group={{group.key}}
-            data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
-          >
-            <span local-class='group-title-cell'>
-              <span local-class='group-icon-box'>
-                <AkIcon @iconName='shield' @size='small' />
-              </span>
+    <section
+      local-class='posture-card'
+      data-test-offensiveSecurity-findingsList-posture
+    >
+      <div local-class='posture-header'>
+        <h3 local-class='posture-title'>
+          {{t 'offensiveSecurity.defensePosture'}}
+        </h3>
 
-              <span local-class='group-text'>
-                <span
-                  local-class='group-title'
-                  data-test-offensiveSecurity-findingsList-groupTitle
-                >
-                  {{group.title}}
+        <span
+          local-class='posture-totals'
+          data-test-offensiveSecurity-findingsList-postureTotals
+        >
+          {{t
+            'offensiveSecurity.postureTotals'
+            active=this.postureCounts.triggered
+            bypassed=this.postureCounts.bypassed
+            held=this.postureCounts.held
+            untested=this.postureCounts.untested
+          }}
+        </span>
+      </div>
+
+      <div local-class='posture-bar'>
+        {{#each this.postureSegments as |segment|}}
+          <div
+            local-class='posture-segment segment-{{segment.key}}'
+            data-test-offensiveSecurity-findingsList-postureSegment={{segment.key}}
+            {{style flex=(concat segment.count)}}
+          >
+            {{segment.count}}
+          </div>
+        {{/each}}
+      </div>
+
+      <ul local-class='posture-legend'>
+        <li>
+          <span local-class='legend-swatch segment-bypassed'></span>
+          {{t 'offensiveSecurity.postureBypassed'}}
+          <strong>{{this.postureCounts.bypassed}}</strong>
+        </li>
+        <li>
+          <span local-class='legend-swatch segment-held'></span>
+          {{t 'offensiveSecurity.postureHeld'}}
+          <strong>{{this.postureCounts.held}}</strong>
+        </li>
+        <li>
+          <span local-class='legend-swatch segment-triggered'></span>
+          {{t 'offensiveSecurity.postureTriggered'}}
+          <strong>{{this.postureCounts.triggered}}</strong>
+        </li>
+        <li>
+          <span local-class='legend-swatch segment-untested'></span>
+          {{t 'offensiveSecurity.postureUntested'}}
+          <strong>{{this.postureCounts.untested}}</strong>
+        </li>
+      </ul>
+    </section>
+  {{/if}}
+
+  <section local-class='findings-card'>
+    <div local-class='findings-grid findings-column-header'>
+      <span>{{t 'offensiveSecurity.defensesAssessed'}}</span>
+      <span>{{t 'offensiveSecurity.checksTriggeredHeader'}}</span>
+      <span>{{t 'offensiveSecurity.bypassedHeader'}}</span>
+      <span></span>
+    </div>
+
+    {{#if this.hasFindings}}
+      <ul local-class='groups-list'>
+        {{#each this.groupedFindings as |group|}}
+          <li>
+            <button
+              type='button'
+              local-class='findings-grid group-row'
+              {{on 'click' (fn this.handleCategoryClick group)}}
+              data-test-offensiveSecurity-findingsList-group={{group.key}}
+              data-test-offensiveSecurity-findingsList-groupHeader={{group.key}}
+            >
+              <span local-class='group-title-cell'>
+                <span local-class='group-icon-box'>
+                  <AkIcon @iconName='shield' @size='small' />
                 </span>
 
-                {{#if group.summary}}
+                <span local-class='group-text'>
                   <span
-                    class='offsec-prose'
-                    local-class='group-summary'
-                    title={{group.summary}}
-                    data-test-offensiveSecurity-findingsList-groupSummary
+                    local-class='group-title'
+                    data-test-offensiveSecurity-findingsList-groupTitle
                   >
-                    {{group.summary}}
+                    {{group.title}}
                   </span>
-                {{/if}}
+
+                  {{#if group.summary}}
+                    <span
+                      class='offsec-prose'
+                      local-class='group-summary'
+                      title={{group.summary}}
+                      data-test-offensiveSecurity-findingsList-groupSummary
+                    >
+                      {{group.summary}}
+                    </span>
+                  {{/if}}
+
+                  <span
+                    local-class='outcome-badge {{this.outcomeClass
+                      group.status
+                    }}'
+                    data-test-offensiveSecurity-findingsList-groupOutcome={{group.status}}
+                  >
+                    {{t (concat 'offensiveSecurity.outcome.' group.status)}}
+                  </span>
+                </span>
               </span>
-            </span>
 
-            <span
-              local-class='group-count'
-              data-test-offensiveSecurity-findingsList-groupCount
-            >
-              {{group.findings.length}}
-            </span>
+              <span
+                local-class='group-count'
+                data-test-offensiveSecurity-findingsList-groupCount
+              >
+                {{group.triggeredCount}}<span
+                  local-class='group-count-total'
+                >/{{group.findings.length}}</span>
+              </span>
 
-            <span
-              local-class='outcome-badge {{this.outcomeClass group.status}}'
-              data-test-offensiveSecurity-findingsList-groupOutcome={{group.status}}
-            >
-              {{t (concat 'offensiveSecurity.outcome.' group.status)}}
-            </span>
+              <span
+                local-class='group-count {{unless
+                  group.bypassedCount
+                  "is-none"
+                }}'
+                data-test-offensiveSecurity-findingsList-groupBypassed
+              >
+                {{if group.bypassedCount group.bypassedCount '—'}}
+              </span>
 
-            <AkIcon
-              @iconName='chevron-right'
-              @size='small'
-              local-class='row-chevron'
-              data-test-offensiveSecurity-findingsList-expandIcon
-            />
-          </button>
-        </li>
-      {{/each}}
-    </ul>
-  {{else}}
-    <AkTypography
-      @variant='body2'
-      @color='textSecondary'
-      class='offsec-prose'
-      local-class='findings-empty'
-      data-test-offensiveSecurity-findingsList-empty
+              <AkIcon
+                @iconName='chevron-right'
+                @size='small'
+                local-class='row-chevron'
+                data-test-offensiveSecurity-findingsList-expandIcon
+              />
+            </button>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <AkTypography
+        @variant='body2'
+        @color='textSecondary'
+        class='offsec-prose'
+        local-class='findings-empty'
+        data-test-offensiveSecurity-findingsList-empty
+      >
+        {{if
+          @scan.isInProgress
+          (t 'offensiveSecurity.findingsRecording')
+          (t 'offensiveSecurity.noFindings')
+        }}
+      </AkTypography>
+    {{/if}}
+  </section>
+
+  {{#if this.showBypassNote}}
+    <div
+      local-class='bypass-note'
+      data-test-offensiveSecurity-findingsList-bypassNote
     >
-      {{if
-        @scan.isInProgress
-        (t 'offensiveSecurity.findingsRecording')
-        (t 'offensiveSecurity.noFindings')
-      }}
-    </AkTypography>
+      <AkIcon @iconName='info' @size='small' local-class='bypass-note-icon' />
+
+      <p class='offsec-prose' local-class='bypass-note-text'>
+        <strong>{{t 'offensiveSecurity.bypassNotCompleted'}}</strong>
+        {{t
+          'offensiveSecurity.bypassNotCompletedDetail'
+          active=this.postureCounts.triggered
+          untested=this.postureCounts.untested
+        }}
+      </p>
+    </div>
   {{/if}}
-</section>
+</div>

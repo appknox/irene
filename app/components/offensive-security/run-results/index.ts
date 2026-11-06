@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import type RouterService from '@ember/routing/router-service';
 
@@ -15,9 +16,51 @@ export interface OffensiveSecurityRunResultsSignature {
   };
 }
 
+export type RunResultsTabKey = 'business-risks' | 'app-resilience';
+
+export interface RunResultsTab {
+  key: RunResultsTabKey;
+  labelKey: string;
+  isActive: boolean;
+}
+
 export default class OffensiveSecurityRunResultsComponent extends Component<OffensiveSecurityRunResultsSignature> {
   @service declare router: RouterService;
   @service('browser/window') declare window: Window;
+
+  @tracked selectedTab: RunResultsTabKey | null = null;
+
+  /** A resilience-only run has no business risks, so it only gets the App Resilience tab. */
+  get availableTabKeys(): RunResultsTabKey[] {
+    return this.args.scan?.isExplicitlyResilienceOnly
+      ? ['app-resilience']
+      : ['business-risks', 'app-resilience'];
+  }
+
+  get activeTabKey(): RunResultsTabKey {
+    const [firstKey] = this.availableTabKeys as [RunResultsTabKey];
+
+    return this.selectedTab && this.availableTabKeys.includes(this.selectedTab)
+      ? this.selectedTab
+      : firstKey;
+  }
+
+  get isBusinessRisksTabActive(): boolean {
+    return this.activeTabKey === 'business-risks';
+  }
+
+  get tabs(): RunResultsTab[] {
+    const labelKeys: Record<RunResultsTabKey, string> = {
+      'business-risks': 'offensiveSecurity.resultsTabBusinessRisks',
+      'app-resilience': 'offensiveSecurity.resultsTabAppResilience',
+    };
+
+    return this.availableTabKeys.map((key) => ({
+      key,
+      labelKey: labelKeys[key],
+      isActive: key === this.activeTabKey,
+    }));
+  }
 
   get pentestGoals(): PentestGoalResult[] {
     return this.args.scan?.pentestGoals ?? [];
@@ -50,6 +93,11 @@ export default class OffensiveSecurityRunResultsComponent extends Component<Offe
   scrollToTop() {
     scrollDashboardMainContainerTo({ top: 0, left: 0 });
     this.window.scrollTo({ top: 0, left: 0 });
+  }
+
+  @action
+  selectTab(key: RunResultsTabKey): void {
+    this.selectedTab = key;
   }
 
   @action

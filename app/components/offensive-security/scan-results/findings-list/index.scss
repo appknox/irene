@@ -1,3 +1,7 @@
+.findings-root {
+  width: 100%;
+}
+
 .findings-card {
   width: 100%;
   overflow: hidden;
@@ -6,27 +10,20 @@
   border-radius: 10px;
 }
 
-.findings-header {
+.intro-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1.25rem 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.findings-title {
+.intro {
   margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.5rem;
-  color: var(--text-primary);
-}
-
-.findings-subtitle {
-  margin: 0;
+  font-family: var(--font-family-prose, inherit);
   font-size: 0.875rem;
   line-height: 1.25rem;
-  color: var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .updating-live {
@@ -46,7 +43,7 @@
 
 .findings-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 150px 160px 28px;
+  grid-template-columns: minmax(0, 1fr) 140px 120px 28px;
   align-items: center;
   gap: 1.5rem;
 }
@@ -56,7 +53,6 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--offensive-security-scan-results-label-color);
-  border-top: 1px solid var(--offensive-security-scan-results-divider-color);
   border-bottom: 1px solid var(--offensive-security-scan-results-divider-color);
   background-color: var(--offensive-security-scan-results-header-bg-color);
 }
@@ -137,6 +133,133 @@
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
+
+  &.is-none {
+    color: var(--text-secondary);
+  }
+}
+
+.group-count-total {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.posture-card {
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: 10px;
+}
+
+.posture-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.875rem;
+}
+
+.posture-title {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  color: var(--text-primary);
+}
+
+.posture-totals {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.posture-bar {
+  display: flex;
+  height: 34px;
+  overflow: hidden;
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: 8px;
+  background-color: var(--offensive-security-scan-results-icon-bg-color);
+}
+
+.posture-segment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--common-white);
+}
+
+.segment-bypassed {
+  background-color: var(--offensive-security-scan-results-stat-exploited-color);
+}
+
+.segment-held {
+  background-color: var(--offensive-security-scan-results-stat-defended-color);
+}
+
+.segment-triggered {
+  background-color: var(--offensive-security-scan-results-in-progress-color);
+}
+
+.segment-untested {
+  background-color: var(--neutral-grey-500);
+}
+
+.posture-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.4375rem;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+  }
+
+  strong {
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+}
+
+.legend-swatch {
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+}
+
+.bypass-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.8125rem 1rem;
+  border-radius: 8px;
+  background-color: var(--offensive-security-scan-results-header-bg-color);
+}
+
+.bypass-note-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--text-secondary);
+}
+
+.bypass-note-text {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--text-primary);
 }
 
 .row-chevron {
@@ -161,6 +284,8 @@
 }
 
 .outcome-badge {
+  display: inline-block;
+  margin-top: 0.5rem;
   justify-self: start;
   box-sizing: border-box;
   max-width: 100%;

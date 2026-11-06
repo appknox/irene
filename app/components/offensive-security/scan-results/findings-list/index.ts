@@ -9,8 +9,18 @@ export interface FindingGroup {
   title: string;
   summary: string;
   status: string;
+  triggeredCount: number;
+  bypassedCount: number;
   findings: OffsecScanEmbeddedFinding[];
 }
+
+export type PostureKey = 'bypassed' | 'held' | 'triggered' | 'untested';
+
+const POSTURE_BY_STATUS: Record<string, PostureKey> = {
+  bypassed: 'bypassed',
+  resisted: 'held',
+  triggered: 'triggered',
+};
 
 export interface OffensiveSecurityScanResultsFindingsListSignature {
   Args: {
@@ -111,11 +121,52 @@ export default class OffensiveSecurityScanResultsFindingsListComponent extends C
           .join(', '),
         // Sorted worst-first, so the lead finding carries the group's outcome
         status: this.statusKey(list[0] as OffsecScanEmbeddedFinding),
+        // A bypassed or resisted check must have fired, even without a backtrace flag
+        triggeredCount: list.filter(
+          (finding) =>
+            finding.triggered ||
+            finding.outcome === 'bypassed' ||
+            finding.outcome === 'resisted'
+        ).length,
+        bypassedCount: list.filter((finding) => finding.outcome === 'bypassed')
+          .length,
         findings: list,
       });
     }
 
     return groups;
+  }
+
+  /** How many defenses sit in each posture; errors and unreached checks count as untested. */
+  get postureCounts(): Record<PostureKey, number> {
+    const counts: Record<PostureKey, number> = {
+      bypassed: 0,
+      held: 0,
+      triggered: 0,
+      untested: 0,
+    };
+
+    for (const group of this.groupedFindings) {
+      counts[POSTURE_BY_STATUS[group.status] ?? 'untested']++;
+    }
+
+    return counts;
+  }
+
+  /** Bar segments for the postures that have at least one defense, worst first. */
+  get postureSegments(): { key: PostureKey; count: number }[] {
+    const counts = this.postureCounts;
+
+    return (['bypassed', 'held', 'triggered', 'untested'] as const)
+      .map((key) => ({ key, count: counts[key] }))
+      .filter((segment) => segment.count > 0);
+  }
+
+  /** Defenses that were present but never put to a bypass attempt, once the run is over. */
+  get showBypassNote(): boolean {
+    const { triggered, untested } = this.postureCounts;
+
+    return !this.args.scan?.isInProgress && triggered + untested > 0;
   }
 
   @action
