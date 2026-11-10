@@ -742,6 +742,94 @@ module(
       assert.strictEqual(this.clearStepErrorCalledWith, this.step1);
     });
 
+    test('switching to Enter OTP sets the auto identifier and metadata; switching away clears both', async function (assert) {
+      const otpConfig = STEP_ACTION_CONFIGS.find(
+        (c) => c.action === ScenarioStepAction.ENTER_OTP
+      );
+
+      const tapConfig = STEP_ACTION_CONFIGS.find(
+        (c) => c.action === ScenarioStepAction.TAP
+      );
+
+      await render(TEMPLATE);
+
+      await chooseAkSelectOption({
+        selectTriggerClass: `${selectors.row(0)} ${selectors.rowActionSelect}`,
+        labelToSelect: t(otpConfig.label),
+      });
+
+      assert.strictEqual(this.step1.action, ScenarioStepAction.ENTER_OTP);
+      assert.strictEqual(this.step1.identifier, 'Verification code');
+      assert.deepEqual(this.step1.metadata, { source: 'app' });
+      assert.strictEqual(this.step1.value, '');
+      assert.false(this.step1.isSecure);
+
+      // A second Enter OTP step in the same list gets a numbered identifier
+      await chooseAkSelectOption({
+        selectTriggerClass: `${selectors.row(1)} ${selectors.rowActionSelect}`,
+        labelToSelect: t(otpConfig.label),
+      });
+
+      assert.strictEqual(this.step2.identifier, 'Verification code 2');
+
+      await chooseAkSelectOption({
+        selectTriggerClass: `${selectors.row(0)} ${selectors.rowActionSelect}`,
+        labelToSelect: t(tapConfig.label),
+      });
+
+      assert.strictEqual(this.step1.action, ScenarioStepAction.TAP);
+      assert.strictEqual(this.step1.identifier, '');
+      assert.deepEqual(this.step1.metadata, {});
+    });
+
+    test('switching a saved Enter OTP step with a custom identifier away keeps that identifier', async function (assert) {
+      const tapConfig = STEP_ACTION_CONFIGS.find(
+        (c) => c.action === ScenarioStepAction.TAP
+      );
+
+      this.step1.action = ScenarioStepAction.ENTER_OTP;
+      this.step1.identifier = 'Authenticator code';
+
+      await render(TEMPLATE);
+
+      await chooseAkSelectOption({
+        selectTriggerClass: `${selectors.row(0)} ${selectors.rowActionSelect}`,
+        labelToSelect: t(tapConfig.label),
+      });
+
+      assert.strictEqual(this.step1.action, ScenarioStepAction.TAP);
+      assert.strictEqual(this.step1.identifier, 'Authenticator code');
+    });
+
+    test('adding Enter OTP steps names their code fields and starts from no selection', async function (assert) {
+      const otpConfig = STEP_ACTION_CONFIGS.find(
+        (c) => c.action === ScenarioStepAction.ENTER_OTP
+      );
+
+      await render(TEMPLATE);
+
+      await click(selectors.addStepsBtn);
+      await click(selectors.addStepsPopoverItem(otpConfig.label));
+
+      const newStep = this.onStepsChangedWith[2];
+
+      assert.strictEqual(newStep.action, ScenarioStepAction.ENTER_OTP);
+      assert.strictEqual(newStep.identifier, 'Verification code');
+      assert.deepEqual(newStep.metadata, { source: 'app' });
+      assert.strictEqual(newStep.value, '');
+      assert.false(newStep.isSecure);
+
+      this.set('steps', this.onStepsChangedWith);
+
+      await click(selectors.addStepsBtn);
+      await click(selectors.addStepsPopoverItem(otpConfig.label));
+
+      assert.strictEqual(
+        this.onStepsChangedWith[3].identifier,
+        'Verification code 2'
+      );
+    });
+
     test('selecting the same action leaves all step fields unchanged and does not call clearStepError', async function (assert) {
       const tapConfig = STEP_ACTION_CONFIGS.find(
         (c) => c.action === ScenarioStepAction.TAP

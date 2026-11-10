@@ -189,6 +189,28 @@ module(
       assert.dom(selectors.saveBtn).isNotDisabled();
     });
 
+    test('a Fetch OTP step added from the empty state gets its identifier and source', async function (assert) {
+      const sdRecord = this.server.create('scenario-detail', { type: OTHER });
+      const scenarioDetail = pushScenarioDetail(this.store, sdRecord);
+
+      this.set('scenarioDetail', scenarioDetail);
+
+      await render(TEMPLATE);
+
+      await click(selectors.emptyAddBtn);
+
+      await click(
+        selectors.addStepsPopoverItem('dastAutomation.stepActions.enterOtp')
+      );
+
+      const step = this.store
+        .peekAll('scenario-step')
+        .find((s) => s.action === ScenarioStepAction.ENTER_OTP);
+
+      assert.strictEqual(step.identifier, 'Verification code');
+      assert.deepEqual(step.metadata, { source: 'app' });
+    });
+
     test('selecting a step from the empty-state popover on a LOGIN scenario auto-creates a role and exits empty state', async function (assert) {
       const sdRecord = this.server.create('scenario-detail', { type: LOGIN });
       const scenarioDetail = pushScenarioDetail(this.store, sdRecord);

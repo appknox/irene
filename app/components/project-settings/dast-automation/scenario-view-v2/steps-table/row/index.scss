@@ -248,3 +248,13 @@
     --project-settings-dast-automation-scenario-view-v2-steps-table-row-info-icon-color
   );
 }
+
+// "Authenticator key" is the last Code from option; set it apart from the apps.
+.steps-table-otp-code-from-dropdown {
+  :global(.ember-power-select-option:last-child) {
+    border-top: 1px solid
+      var(
+        --project-settings-dast-automation-scenario-view-v2-steps-table-row-separator-color
+      );
+  }
+}

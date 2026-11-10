@@ -11,6 +11,7 @@ import {
   CHECK_OPTIONS,
   DIRECTION_OPTIONS,
   configForAction,
+  otpAppsForPlatform,
   type StepActionConfig,
 } from '../step-actions';
 
@@ -21,7 +22,59 @@ import parseError from 'irene/utils/parse-error';
 import { ScenarioStepAction } from 'irene/models/scenario-step';
 import type { AkDndProviderApi } from 'irene/components/ak-dnd-provider';
 import type ScenarioStepModel from 'irene/models/scenario-step';
+import type { ScenarioStepMetadata } from 'irene/models/scenario-step';
 import type ScenarioDetailModel from 'irene/models/scenario-detail';
+
+/** One "Code from" choice: a known app, "Other app…", or "Authenticator key". */
+interface OtpCodeFromOption {
+  kind: 'app' | 'other' | 'key';
+  label: string;
+  value: string;
+}
+
+// "Other app…" shows a text field for a bundle / package id.
+const OTP_OTHER_APP_OPTION: OtpCodeFromOption = {
+  kind: 'other',
+  label: 'dastAutomation.otpApps.other',
+  value: '',
+};
+
+// "Authenticator key" shows the masked key input.
+const OTP_AUTHENTICATOR_KEY_OPTION: OtpCodeFromOption = {
+  kind: 'key',
+  label: 'dastAutomation.otpSources.authenticatorKey',
+  value: '',
+};
+
+// Option objects are reused so the select can match the chosen one.
+const knownOtpAppOptions = new Map<
+  number | null | undefined,
+  OtpCodeFromOption[]
+>();
+
+function knownOtpAppsFor(platform?: number | null) {
+  let options = knownOtpAppOptions.get(platform);
+
+  if (!options) {
+    options = otpAppsForPlatform(platform).map((app) => ({
+      kind: 'app',
+      ...app,
+    }));
+
+    knownOtpAppOptions.set(platform, options);
+  }
+
+  return options;
+}
+
+/** Copy of the step metadata without `note`; other keys are kept as-is. */
+function metadataWithoutNote(metadata?: ScenarioStepMetadata) {
+  const rest = { ...metadata };
+
+  delete rest.note;
+
+  return rest;
+}
 
 export interface ProjectSettingsDastAutomationScenarioViewV2StepsTableRowSignature {
   Element: HTMLElement;
@@ -53,8 +106,10 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
 
   @tracked rowElement: HTMLElement | null = null;
   @tracked _selectedUnit?: string;
+  @tracked _otpAppIsCustom = false;
 
   _secureValueBeforeFocus: string | null = null;
+  _otpKeyBeforeFocus: string | null = null;
 
   get step() {
     return this.args.step;
@@ -66,6 +121,18 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
 
   get isEnterTextAction() {
     return this.step.action === ScenarioStepAction.ENTER_TEXT;
+  }
+
+  get actionInfo() {
+    if (this.isEnterTextAction) {
+      return 'dastAutomation.enterInputTypeInfo';
+    }
+
+    if (this.step.action === ScenarioStepAction.ENTER_OTP) {
+      return 'dastAutomation.enterOtpInfo';
+    }
+
+    return null;
   }
 
   get valueKind() {
@@ -80,7 +147,9 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
   }
 
   get isSecureText() {
-    return this.valueKind === 'secure-text';
+    return (
+      this.valueKind === 'secure-text' || (this.isEnterOtp && this.isOtpFromKey)
+    );
   }
 
   get maskDisabled() {
@@ -104,6 +173,70 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     return this.directionOptions.find((option) => option.value === val);
   }
 
+  get isEnterOtp() {
+    return this.step.action === ScenarioStepAction.ENTER_OTP;
+  }
+
+  get isOtpFromKey() {
+    return this.step.metadata?.source === 'authenticator_key';
+  }
+
+  get knownOtpApps(): OtpCodeFromOption[] {
+    const project = this.args.scenarioDetail?.get('project');
+
+    return knownOtpAppsFor(project?.get('platform'));
+  }
+
+  get otpCodeFromOptions() {
+    return [
+      ...this.knownOtpApps,
+      OTP_OTHER_APP_OPTION,
+      OTP_AUTHENTICATOR_KEY_OPTION,
+    ];
+  }
+
+  /**
+   * "Other app…" is chosen (an unsaved change, so Reset clears it), or the app
+   * id is not one of the known apps.
+   */
+  get isOtpAppCustom() {
+    if (this.isOtpFromKey) {
+      return false;
+    }
+
+    const value = this.step.value ?? '';
+
+    return (
+      (this._otpAppIsCustom && 'value' in this.step.changedAttributes()) ||
+      (value !== '' && !this.knownOtpApps.some((app) => app.value === value))
+    );
+  }
+
+  // Replaces (never mutates) metadata; empty instructions drop `note`.
+  get otpNote() {
+    const note = this.step.metadata?.note;
+
+    return typeof note === 'string' ? note : '';
+  }
+
+  set otpNote(note: string) {
+    const rest = metadataWithoutNote(this.step.metadata);
+
+    this.step.metadata = note ? { ...rest, note } : rest;
+  }
+
+  get selectedOtpCodeFrom() {
+    if (this.isOtpFromKey) {
+      return OTP_AUTHENTICATOR_KEY_OPTION;
+    }
+
+    if (this.isOtpAppCustom) {
+      return OTP_OTHER_APP_OPTION;
+    }
+
+    return this.knownOtpApps.find((app) => app.value === this.step.value);
+  }
+
   get stepError() {
     return this.args.stepErrors?.get(this.step) ?? null;
   }
@@ -122,6 +255,23 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
 
   get valueErrorMessage() {
     return this.valueError ? this.intl.t(this.valueError) : '';
+  }
+
+  // Nothing chosen yet: the "required" error belongs on the Code from select.
+  get otpCodeFromError() {
+    return this.selectedOtpCodeFrom ? null : this.valueError;
+  }
+
+  get otpCodeFromErrorMessage() {
+    return this.otpCodeFromError ? this.intl.t(this.otpCodeFromError) : '';
+  }
+
+  get otpInputError() {
+    return this.selectedOtpCodeFrom ? this.valueError : null;
+  }
+
+  get otpInputErrorMessage() {
+    return this.otpInputError ? this.intl.t(this.otpInputError) : '';
   }
 
   get isBeingDragged() {
@@ -158,6 +308,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     return {
       enterInputTrigger: styles['steps-table-enter-input-trigger'],
       compactTrigger: styles['steps-table-compact-trigger'],
+      otpCodeFromDropdown: styles['steps-table-otp-code-from-dropdown'],
     };
   }
 
@@ -180,6 +331,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
 
   @action
   handleActionSelect(config: StepActionConfig) {
+    this._otpAppIsCustom = false;
     this.args.onActionChange(this.step, config);
   }
 
@@ -258,6 +410,69 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
   handleDirectionSelect(option: { label: string; value: string }) {
     this.step.value = option.value;
     this.args.clearStepError?.(this.step, 'value');
+  }
+
+  @action
+  handleOtpCodeFromSelect(option: OtpCodeFromOption) {
+    const current = this.selectedOtpCodeFrom;
+
+    if (current?.kind === option.kind && current.value === option.value) {
+      return;
+    }
+
+    const isKey = option.kind === 'key';
+
+    this._otpAppIsCustom = option.kind === 'other';
+
+    // Drop the instructions (`note`) but keep keys this row does not own.
+    const rest = metadataWithoutNote(this.step.metadata);
+
+    this.step.metadata = {
+      ...rest,
+      source: isKey ? 'authenticator_key' : 'app',
+    };
+
+    this.step.value = option.value;
+    this.step.isSecure = isKey;
+
+    this.args.clearStepError?.(this.step, 'value');
+  }
+
+  @action
+  handleOtpNoteInput(event: Event) {
+    this.otpNote = (event.target as HTMLInputElement).value;
+    this.args.clearStepError?.(this.step, 'value');
+  }
+
+  // A saved key is masked: clear it on focus, restore the mask on blur if empty.
+  @action
+  handleOtpKeyFocus(event: FocusEvent) {
+    const isSavedKey =
+      Boolean(this.step.id) &&
+      this.step.isSecure &&
+      !('value' in this.step.changedAttributes());
+
+    if (isSavedKey) {
+      this._otpKeyBeforeFocus = this.step.value;
+
+      (event.target as HTMLInputElement).value = '';
+      this.step.value = '';
+
+      this.args.clearStepError?.(this.step, 'value');
+    }
+  }
+
+  @action
+  handleOtpKeyBlur(event: FocusEvent) {
+    if (this._otpKeyBeforeFocus === null) {
+      return;
+    }
+
+    if ((event.target as HTMLInputElement).value === '') {
+      this.step.value = this._otpKeyBeforeFocus;
+    }
+
+    this._otpKeyBeforeFocus = null;
   }
 
   maskStepTask = task(async (step: ScenarioStepModel) => {
