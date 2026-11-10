@@ -383,5 +383,123 @@ module(
         }
       }
     );
+
+    module('KnoxIQ states', function (nestedHooks) {
+      nestedHooks.beforeEach(function () {
+        this.file.isDynamicDone = true;
+
+        this.server.get('/manualscans/:id', (schema, req) => {
+          return { id: req.params.id };
+        });
+
+        this.server.get('/v3/projects/:id', (schema, req) => {
+          return schema.projects.find(`${req.params.id}`)?.toJSON();
+        });
+      });
+
+      test('automated: shows KnoxIQ status chip instead of the dynamic status chip', async function (assert) {
+        this.file.isKnoxiqAutomated = true;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
+            ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::DynamicScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ status chip is shown'
+          );
+
+        assert.dom().containsText(t('completed'));
+      });
+
+      test('manual (DAST running): KnoxIQ chip shown (not the legacy one)', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
+            ENUMS.KNOXIQ_SCAN_STATUS.RUNNING,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::DynamicScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ is enabled, automated or not'
+          );
+
+        assert.dom().containsText(t('knoxIq.statusChip.running'));
+      });
+
+      test('manual (DAST not triggered): legacy status chip shown (not a false "running" KnoxIQ chip)', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
+            ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::DynamicScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
+          .exists(
+            'legacy chip must appear when KnoxIQ has not been triggered yet'
+          );
+
+        assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
+      });
+
+      test('manual (DAST completed): KnoxIQ chip shown (not the legacy one)', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+
+        this.knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.DAST_MANUAL]:
+            ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+        };
+
+        await render(hbs`
+          <FileDetails::ScanActions::DynamicScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-dynamicScanStatus]')
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ is enabled, automated or not'
+          );
+
+        assert.dom().containsText(t('completed'));
+      });
+    });
   }
 );

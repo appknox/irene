@@ -11,6 +11,7 @@ interface KnoxIqStatusCardSignature {
     title?: string;
     subtitle?: string;
     state: KnoxIqStatusCardState;
+    hideAction?: boolean;
     onRunKnoxiq?: () => void;
   };
 }
