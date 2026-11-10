@@ -197,7 +197,7 @@
     "luxon": "^3.7.2",
     "miragejs": "^0.1.48",
     "mock-socket": "9.0.8",
-    "netlify-cli": "^27.6.0",
+    "netlify-cli": "^27.16.3",
     "pace-progressbar": "1.0.9",
     "postcss": "^8.4.49",
     "prettier": "^3.2.5",
