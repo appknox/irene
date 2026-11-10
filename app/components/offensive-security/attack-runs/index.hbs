@@ -144,6 +144,7 @@
         >
           <t.head
             @sorts={{this.sorts}}
+            @sortFunction={{this.keepRowOrder}}
             @onUpdateSorts={{this.updateSorts}}
             @columns={{this.columns}}
             as |h|

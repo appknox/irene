@@ -297,6 +297,12 @@ export default class OffensiveSecurityAttackRunsComponent extends Component<Offe
     ];
   }
 
+  /** Rows arrive pre-sorted from `filteredScans`; keep ember-table from re-sorting the formatted date label. */
+  @action
+  keepRowOrder(): number {
+    return 0;
+  }
+
   @action
   isSortableColumn(valuePath?: string) {
     return valuePath === 'scannedOnLabel';

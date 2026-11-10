@@ -550,6 +550,30 @@ module('Integration | Component | offensive-security/attack-runs', (hooks) => {
     assert.dom(findAll(SELECTORS.row)[0]).containsText('Older App');
   });
 
+  test('the Run on sort orders by date across months, not by the DD-MM-YYYY label', async function (assert) {
+    // As strings "30-10-2026" > "10-11-2026", so a label sort gets this wrong.
+    serveScans(this, [
+      buildScan({
+        id: 1,
+        app_name: 'October App',
+        created_at: '2026-10-30T09:00:00Z',
+      }),
+      buildScan({
+        id: 2,
+        app_name: 'November App',
+        created_at: '2026-11-10T09:00:00Z',
+      }),
+    ]);
+
+    await render(TEMPLATE);
+
+    await click(SELECTORS.sortToggle);
+    assert.dom(findAll(SELECTORS.row)[0]).containsText('November App');
+
+    await click(SELECTORS.sortToggle);
+    assert.dom(findAll(SELECTORS.row)[0]).containsText('October App');
+  });
+
   // ─── Interaction ───────────────────────────────────────────────────────────
 
   test('highest target ID comes first by default, regardless of finish time', async function (assert) {

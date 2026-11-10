@@ -56,7 +56,7 @@ const SELECTORS = {
   goalReason: '[data-test-offensiveSecurity-pentest-goal-reason]',
   goalStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalDetailBack: '[data-test-offensiveSecurity-pentest-back]',
-  goalDetailCard: '[data-test-offensiveSecurity-pentest-card]',
+  goalDetailCard: '[data-test-offensiveSecurity-goalView]',
   findingsList: '[data-test-offensiveSecurity-findingsList]',
   findingsEmpty: '[data-test-offensiveSecurity-findingsList-empty]',
   groupTitle: '[data-test-offensiveSecurity-findingsList-groupTitle]',
@@ -164,12 +164,14 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     assert.dom(SELECTORS.goalReason, find(firstRow)).hasText(GOALS[0].reason);
     assert
       .dom(SELECTORS.goalStatus, find(firstRow))
-      .hasText('Budget Exhausted');
+      .hasText('Untested');
 
     const secondRow = SELECTORS.goalRow(1);
 
     assert.dom(SELECTORS.goalReason, find(secondRow)).doesNotExist();
-    assert.dom(SELECTORS.goalStatus, find(secondRow)).hasText('Completed');
+    assert
+      .dom(SELECTORS.goalStatus, find(secondRow))
+      .hasText('Weakness found');
   });
 
   test('it shows an empty state when no business risks were assessed', async function (assert) {

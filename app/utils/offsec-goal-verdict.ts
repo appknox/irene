@@ -124,7 +124,7 @@ function maskSecrets(finding: PentestFinding): string | undefined {
 }
 
 function isDemonstrated(finding: PentestFinding): boolean {
-  return /demonstrated|proven|confirmed|exploited/i.test(
+  return /\b(demonstrated|proven|confirmed|exploited)\b/i.test(
     finding.exploitability ?? ''
   );
 }
