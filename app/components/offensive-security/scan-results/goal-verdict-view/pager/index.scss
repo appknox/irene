@@ -1,0 +1,42 @@
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pager-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-6);
+  cursor: pointer;
+  color: var(--text-secondary);
+  background-color: var(--background-main);
+
+  &:hover:not(:disabled) {
+    color: var(--text-primary);
+    border-color: var(--border-color-2);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.pager-label {
+  min-width: 46px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.pager-single {
+  font-size: 13px;
+  color: var(--text-secondary);
+}

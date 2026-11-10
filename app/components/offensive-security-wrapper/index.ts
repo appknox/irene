@@ -9,6 +9,7 @@ import type RouterService from '@ember/routing/router-service';
 import ENV from 'irene/config/environment';
 import type UserModel from 'irene/models/user';
 import type ConfigurationService from 'irene/services/configuration';
+import type OffsecThemeService from 'irene/services/offsec-theme';
 import type { MenuItem } from '../side-nav';
 
 export interface OffensiveSecurityWrapperSignature {
@@ -25,6 +26,7 @@ export default class OffensiveSecurityWrapperComponent extends Component<Offensi
   @service declare intl: IntlService;
   @service declare configuration: ConfigurationService;
   @service declare router: RouterService;
+  @service declare offsecTheme: OffsecThemeService;
 
   @tracked isSidebarCollapsed: boolean;
 
@@ -37,6 +39,15 @@ export default class OffensiveSecurityWrapperComponent extends Component<Offensi
 
     this.isSidebarCollapsed =
       storedState !== null ? storedState === 'collapsed' : true;
+
+    this.offsecTheme.activate();
+  }
+
+  willDestroy() {
+    super.willDestroy();
+
+    // The dark theme belongs to offensive security only; other products stay light
+    this.offsecTheme.deactivate();
   }
 
   get menuItems(): MenuItem[] {

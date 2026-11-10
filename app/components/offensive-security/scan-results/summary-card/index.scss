@@ -103,13 +103,23 @@
 }
 
 .summary-btn-secondary {
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   border-color: var(--primary-main);
   color: var(--primary-main);
 
   &:hover {
     background-color: var(--primary-light);
     box-shadow: var(--box-shadow-3);
+  }
+
+  // Tinted fill and brighter text so it reads as an action on the dark surface
+  :global(:root[data-offsec-theme='dark']) & {
+    background-color: rgba(254, 77, 63, 0.14);
+    color: var(--primary-dark);
+
+    &:hover {
+      background-color: rgba(254, 77, 63, 0.26);
+    }
   }
 }
 

@@ -11,7 +11,7 @@
 .hero {
   border: 1px solid var(--border-color-1);
   border-radius: var(--border-radius-8);
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   box-shadow: var(--box-shadow-3);
   overflow: hidden;
   margin-bottom: 1.5rem;
@@ -100,7 +100,7 @@
   font-weight: 600;
   line-height: 1;
   color: var(--text-primary);
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   border: 1px solid var(--border-color-1);
   border-radius: var(--border-radius-4);
   outline: none;
@@ -108,6 +108,10 @@
   &:focus {
     border-color: var(--neutral-grey-500);
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+
+    :global(:root[data-offsec-theme='dark']) & {
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+    }
   }
 }
 
@@ -330,7 +334,7 @@
 .card {
   border: 1px solid var(--border-color-1);
   border-radius: var(--border-radius-8);
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   box-shadow: var(--box-shadow-3);
   overflow: hidden;
 }
@@ -364,7 +368,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--offensive-security-finding-detail-btn-color);
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   border: 1px solid var(--offensive-security-finding-detail-btn-border);
   border-radius: 6px;
   cursor: pointer;
@@ -617,7 +621,7 @@
   font-family: var(--offensive-security-finding-detail-code-font-family);
   font-size: 0.6875rem;
   color: var(--text-secondary);
-  background-color: var(--common-white);
+  background-color: var(--background-main);
   border: 1px solid var(--border-color-1);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
@@ -727,7 +731,7 @@
     font-family: var(--offensive-security-finding-detail-code-font-family);
     font-size: 0.75rem;
     color: var(--text-primary);
-    background-color: var(--common-white);
+    background-color: var(--background-main);
     border: 1px solid var(--border-color-1);
     padding: 0.1rem 0.35rem;
     border-radius: 4px;
@@ -766,7 +770,7 @@
 .failgroup {
   border: 1px dashed var(--border-color-1);
   border-radius: 8px;
-  background-color: var(--common-white);
+  background-color: var(--background-main);
 }
 
 .failhead {

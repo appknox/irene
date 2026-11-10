@@ -1,0 +1,186 @@
+// Dark theme for the offensive security screens.
+// The `offsec-theme` service sets data-offsec-theme="dark" on <html> while an offsec page is open,
+// so these tokens never reach the other products. Component variables are declared on `body`
+// from these tokens, so redefining the tokens here recolours every shared component as well.
+:root[data-offsec-theme='dark'] {
+  color-scheme: dark;
+
+  // Surfaces: cards, bars and menus sit on --background-main; the page and header strips are darker
+  --background-main: #1a1c21;
+  --background-light: #131519;
+
+  --neutral-grey-50: #1e2026;
+  --neutral-grey-100: #24272e;
+  --neutral-grey-200: #2c3038;
+  --neutral-grey-300: #383d47;
+  --neutral-grey-400: #4c5260;
+  --neutral-grey-500: #7c8494;
+  --neutral-grey-600: #98a0ae;
+  --neutral-grey-700: #b7bdc8;
+  --neutral-grey-800: #d3d7de;
+  --neutral-grey-900: #eceef2;
+
+  --text-primary: #eceef2;
+  --text-secondary: #9aa1ae;
+  --text-disabled: #5a6070;
+
+  --divider: #24272e;
+  --divider-dark: #2c3038;
+  --divider-light: #1f2227;
+
+  --border-color-1: #2c3038;
+  --border-color-2: #3d424d;
+
+  // Brand and status colours, brightened where needed to hold contrast on dark surfaces
+  --primary-dark: #ff7a6f;
+  --secondary-main: #565c6b;
+
+  --success-main: #43c538;
+  --success-light: #12301a;
+
+  --error-main: #ef5b5b;
+  --error-main-5: rgba(239, 91, 91, 0.08);
+  --error-light: #4a2226;
+  --error-bg: #3a1a1c;
+
+  --warn-dark: #d9b44a;
+  --warn-light: #3a3213;
+
+  --info-main: #4aa3f0;
+  --info-dark: #7ab8f5;
+  --info-light: #12283d;
+
+  --hover-light-background: rgba(255, 255, 255, 0.06);
+  --backdrop-overlay-background: rgba(0, 0, 0, 0.6);
+
+  --disabled-background-textfield: #24272e;
+  --disabled-background-button: #3a3f4a;
+
+  --box-shadow-1: 4px 4px 8px 0px rgba(0, 0, 0, 0.4);
+  --box-shadow-2: 4px 4px 10px 0px rgba(0, 0, 0, 0.5);
+  --box-shadow-3: 4px 4px 15px rgba(0, 0, 0, 0.3);
+  --box-shadow-4: 0px -4px 8px 4px rgba(0, 0, 0, 0.25);
+  --box-shadow-5: 3px 4px 6px rgba(0, 0, 0, 0.35);
+  --box-shadow-6: 0px 5px 14px 0px rgba(0, 0, 0, 0.45);
+  --box-shadow-7: 0px 2px 6px 0px rgba(0, 0, 0, 0.5);
+  --box-shadow-8: -5px 0px 9px 0px rgba(0, 0, 0, 0.3);
+  --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.5);
+  --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.3);
+  --box-shadow-12: 1px 0px 0px 0px #24272e inset,
+    -1px 0px 0px 0px #24272e inset, 0px 1px 0px 0px #24272e inset,
+    -1px -1px 0px 0px #24272e inset;
+  --box-shadow-13: 0px -1px 10px 0px rgba(0, 0, 0, 0.35);
+  --box-shadow-14: 4px 4px 15px 0px rgba(0, 0, 0, 0.3);
+  --box-shadow-15: 0px 2px 4px -1px rgba(0, 0, 0, 0.4);
+  --box-shadow-16: 0 5px 5px 0 rgba(0, 0, 0, 0.35);
+  --box-shadow-17: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --box-shadow-light: 4px 4px 20px rgba(0, 0, 0, 0.35);
+
+  --side-menu-active-background-light: rgba(254, 77, 63, 0.16);
+
+  // Offsec palette from _theme.scss: pastel fills and dark text swapped for dark tints
+  --offensive-security-detected-bg: #12283d;
+  --offensive-security-detected-color: #7ab8f5;
+  --offensive-security-errored-bg: #3a2413;
+  --offensive-security-errored-color: #f0a35a;
+  --offensive-security-artifact-hover-border: #4c5260;
+  --offensive-security-artifact-blue-bg: #12283d;
+  --offensive-security-artifact-blue-color: #7ab8f5;
+  --offensive-security-artifact-purple-bg: #25214a;
+  --offensive-security-artifact-purple-color: #b4a5f8;
+  --offensive-security-artifact-orange-bg: #3a2413;
+  --offensive-security-artifact-orange-color: #f0a35a;
+  --offensive-security-artifact-green-bg: #12301a;
+  --offensive-security-artifact-green-color: #6fd66a;
+
+  --offensive-security-finding-detail-hero-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --offensive-security-finding-detail-amber-kicker: #f5c26b;
+  --offensive-security-finding-detail-amber-border: #5a4a1d;
+  --offensive-security-finding-detail-amber-bg: #3a3112;
+  --offensive-security-finding-detail-amber-accent: #f59e0b;
+  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px
+    rgba(245, 158, 11, 0.25);
+  --offensive-security-finding-detail-green-dark: #86e07f;
+  --offensive-security-finding-detail-green-border: #1f4a28;
+  --offensive-security-finding-detail-green-bg: #12301a;
+  --offensive-security-finding-detail-green-accent: #4ade80;
+  --offensive-security-finding-detail-emerald-dark: #6ee7b7;
+  --offensive-security-finding-detail-emerald-border: #1f4a3a;
+  --offensive-security-finding-detail-emerald-bg: #0f2e25;
+  --offensive-security-finding-detail-emerald-accent: #34d399;
+  --offensive-security-finding-detail-blue-border: #1f4366;
+  --offensive-security-finding-detail-blue-accent: #4aa3f0;
+  --offensive-security-finding-detail-blue-main: #7ab8f5;
+  --offensive-security-finding-detail-blue-dark: #a5cdf8;
+  --offensive-security-finding-detail-blue-subtle-border: #1f4366;
+  --offensive-security-finding-detail-blue-subtle-bg: #12283d;
+  --offensive-security-finding-detail-purple-main: #b4a5f8;
+  --offensive-security-finding-detail-purple-border: #3b3470;
+  --offensive-security-finding-detail-purple-bg: #25214a;
+
+  // Nothing paints the page behind the app, so without this the edges and overscroll stay white
+  background-color: var(--background-light);
+}
+
+:root[data-offsec-theme='dark'] body {
+  color: var(--text-primary);
+  background-color: var(--background-light);
+}
+
+// Component variables that cannot follow the tokens: `--common-white` is also used as the
+// "text on a coloured background" colour (buttons, chips), so it stays white, and the
+// surfaces that were painted with it are pointed at the dark surface instead.
+:root[data-offsec-theme='dark'] body {
+  --ak-pagination-button-background: var(--background-main);
+
+  --offensive-security-attack-runs-bg-color: var(--background-main);
+  --offensive-security-attack-runs-filter-bg-color: var(--background-main);
+  --offensive-security-new-assessment-card-bg-color: var(--background-main);
+  --offensive-security-scan-results-card-bg-color: var(--background-main);
+  --offensive-security-finding-detail-card-bg-color: var(--background-main);
+  --offensive-security-finding-detail-drawer-bg: var(--background-main);
+
+  // finding-detail surfaces that were built from the slate palette (the terminal keeps it)
+  --offensive-security-finding-detail-step-code-color: var(--text-primary);
+  --offensive-security-finding-detail-step-code-bg: var(--neutral-grey-100);
+  --offensive-security-finding-detail-step-code-border: var(--border-color-2);
+  --offensive-security-finding-detail-btn-color: var(--text-primary);
+  --offensive-security-finding-detail-btn-border: var(--border-color-2);
+  --offensive-security-finding-detail-btn-hover-bg: var(
+    --hover-light-background
+  );
+  --offensive-security-finding-detail-btn-hover-border: var(--neutral-grey-400);
+  --offensive-security-finding-detail-score-bar-bg: var(--neutral-grey-200);
+
+  // Status chips and verdicts become solid fills with dark text, like the brand buttons,
+  // so green / amber / red / blue stand out instead of sitting as dim tints.
+  --offensive-security-status-chip-completed-bg-color: #43c538;
+  --offensive-security-status-chip-completed-color: #0b2a08;
+  --offensive-security-status-chip-failed-bg-color: #ef5b5b;
+  --offensive-security-status-chip-failed-color: #2e0a0a;
+  --offensive-security-status-chip-running-bg-color: #4aa3f0;
+  --offensive-security-status-chip-running-color: #08203a;
+  --offensive-security-status-chip-running-track-color: rgba(8, 32, 58, 0.25);
+
+  --offensive-security-verdict-exploited-bg-color: #ef5b5b;
+  --offensive-security-verdict-exploited-color: #2e0a0a;
+  --offensive-security-verdict-held-bg-color: #43c538;
+  --offensive-security-verdict-held-color: #0b2a08;
+  --offensive-security-verdict-partial-color: #3a1d08;
+  --offensive-security-verdict-partial-bg-color: #f0a35a;
+
+  --offensive-security-new-assessment-card-border: 1px solid
+    var(--border-color-1);
+  --offensive-security-new-assessment-selected-bg-color: rgba(
+    254,
+    77,
+    63,
+    0.12
+  );
+  --offensive-security-new-assessment-tag-success-color: #6fd66a;
+  --offensive-security-new-assessment-tag-success-bg-color: #15321a;
+  --offensive-security-new-assessment-tag-info-color: #a99cf5;
+  --offensive-security-new-assessment-tag-info-bg-color: #25214a;
+  --offensive-security-new-assessment-optional-tag-color: #e8c76a;
+  --offensive-security-new-assessment-optional-tag-bg-color: #3a3112;
+}

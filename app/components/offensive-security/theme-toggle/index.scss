@@ -1,0 +1,23 @@
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border-color-2);
+  border-radius: var(--border-radius-8);
+  cursor: pointer;
+  color: var(--text-primary);
+  background-color: var(--background-main);
+
+  &:hover {
+    border-color: var(--text-secondary);
+    background-color: var(--neutral-grey-100);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-main);
+    outline-offset: 2px;
+  }
+}

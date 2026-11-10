@@ -1,0 +1,567 @@
+.goal-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 6px 0 2px;
+}
+
+.head-main {
+  flex: 1;
+  min-width: 240px;
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-main);
+}
+
+.title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0 10px;
+}
+
+.title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.description {
+  max-width: 74ch;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  flex: none;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-capsule);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  color: var(--text-primary);
+  background-color: var(--neutral-grey-100);
+
+  &:hover {
+    border-color: var(--border-color-2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-main);
+    outline-offset: 2px;
+  }
+}
+
+// ─── Status pill (five tones, shared with the goal list) ─────────────────────
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--border-radius-capsule);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &.pill-large {
+    padding: 5px 12px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentcolor;
+}
+
+.verdict-exploited {
+  color: var(--offensive-security-verdict-exploited-color);
+  background-color: var(--offensive-security-verdict-exploited-bg-color);
+}
+
+.verdict-partial {
+  color: var(--offensive-security-verdict-partial-color);
+  background-color: var(--offensive-security-verdict-partial-bg-color);
+}
+
+.verdict-weakness {
+  color: var(--offensive-security-verdict-weakness-color);
+  background-color: var(--offensive-security-verdict-weakness-bg-color);
+}
+
+.verdict-untested {
+  color: var(--offensive-security-verdict-untested-color);
+  background-color: var(--offensive-security-verdict-untested-bg-color);
+}
+
+.verdict-held {
+  color: var(--offensive-security-verdict-held-color);
+  background-color: var(--offensive-security-verdict-held-bg-color);
+}
+
+// ─── Panels ──────────────────────────────────────────────────────────────────
+
+.panel {
+  overflow: hidden;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+  border: var(--offensive-security-scan-results-card-border);
+  border-radius: 10px;
+}
+
+.panel-h {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--offensive-security-scan-results-divider-color);
+}
+
+.panel-icon {
+  font-size: 15px;
+  color: var(--primary-main);
+}
+
+.cta-arrow {
+  flex: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--primary-main);
+}
+
+.panel-title {
+  flex: 1;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.panel-b {
+  padding: 16px;
+}
+
+.intro {
+  max-width: 78ch;
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+
+// ─── Chain ───────────────────────────────────────────────────────────────────
+
+.chain {
+  padding: 14px 16px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 8px;
+  background-color: var(--offensive-security-scan-results-card-bg-color);
+}
+
+.chain-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 13px;
+}
+
+.path-tag {
+  padding: 3px 7px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background-color: var(--neutral-grey-200);
+
+  &.is-chain {
+    color: var(--primary-main);
+    background-color: var(--primary-main-10);
+  }
+}
+
+.chain-count {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.chain-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chain-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+  padding-bottom: 15px;
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  // the line that joins one step to the next
+  &::before {
+    content: '';
+    position: absolute;
+    top: 23px;
+    bottom: -3px;
+    left: 11px;
+    width: 2px;
+    background-color: var(--border-color-2);
+  }
+
+  &:last-child::before {
+    display: none;
+  }
+
+  &.is-outcome .chain-text {
+    font-weight: 700;
+    color: var(--success-main);
+  }
+}
+
+.chain-node {
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border-color-2);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background-color: var(--neutral-grey-100);
+
+  &.is-done {
+    border-color: var(--success-main);
+    color: var(--common-white);
+    background-color: var(--success-main);
+  }
+}
+
+.chain-text {
+  padding-top: 2px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+
+.sub-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--border-color-1);
+  }
+}
+
+// ─── Technique cards and fields ──────────────────────────────────────────────
+
+.tech-card {
+  margin-bottom: 14px;
+  overflow: hidden;
+  border: 1px solid var(--border-color-1);
+  border-radius: 8px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.tech-card-h {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+  border-bottom: 1px solid var(--border-color-1);
+  background-color: var(--offensive-security-scan-results-header-bg-color);
+}
+
+.tech-card-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.step-tag {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--primary-main);
+}
+
+.tech-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+
+  &.is-large {
+    font-size: 16px;
+  }
+}
+
+.tech-card-b {
+  padding: 15px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color-1);
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field-label {
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.field-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+
+.location {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  word-break: break-all;
+  color: var(--primary-main);
+}
+
+.repro {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+
+  li {
+    margin: 0 0 6px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.code {
+  margin-top: 12px;
+}
+
+.remediation {
+  padding: 14px 16px;
+  border-radius: 8px;
+  background-color: var(--success-light);
+}
+
+.remediation-text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  color: var(--text-primary);
+}
+
+.fix-list {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+
+  li {
+    margin: 0 0 6px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.refs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 4px;
+}
+
+.ref-chip {
+  padding: 3px 8px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--neutral-grey-100);
+}
+
+// ─── Banner and notes ────────────────────────────────────────────────────────
+
+.banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: 8px;
+  color: var(--offensive-security-verdict-weakness-color);
+  background-color: var(--offensive-security-verdict-weakness-bg-color);
+}
+
+.banner-icon {
+  flex: none;
+  margin-top: 1px;
+}
+
+.banner-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+
+  strong {
+    color: var(--offensive-security-verdict-weakness-color);
+  }
+}
+
+.note {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 8px;
+  background-color: var(--offensive-security-scan-results-header-bg-color);
+}
+
+.note-icon {
+  margin-top: 1px;
+  color: var(--text-secondary);
+}
+
+.note-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+
+// ─── Other techniques page ───────────────────────────────────────────────────
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color-1);
+  border-radius: var(--border-radius-capsule);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-secondary);
+  background-color: var(--background-main);
+
+  &:hover {
+    border-color: var(--border-color-2);
+    color: var(--text-primary);
+  }
+
+  &.is-on {
+    border-color: transparent;
+    color: var(--primary-main);
+    background-color: var(--primary-main-10);
+  }
+}
+
+.filter-count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.card-head-right {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.budget-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--border-radius-capsule);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--offensive-security-verdict-partial-color);
+  background-color: var(--offensive-security-verdict-partial-bg-color);
+}

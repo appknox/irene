@@ -55,6 +55,11 @@
     border-radius: 10px;
     min-height: 520px;
 
+    // The log is dark in both themes, so on a dark page it needs an edge to stand apart
+    :global(:root[data-offsec-theme='dark']) & {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
     .log-header {
       margin: 0;
       padding: 16px 24px;
@@ -73,7 +78,8 @@
       height: 30px !important;
       padding: 0 !important;
       border-radius: 6px !important;
-      color: var(--neutral-grey-300) !important;
+      // The log panel is dark in both themes, so these can't use the theme-flipping greys
+      color: #b7bdc8 !important;
       opacity: 1;
 
       &:hover {
@@ -129,7 +135,7 @@
   font-size: 13px;
   padding: 4px 12px;
   border-radius: var(--border-radius-capsule, 999px);
-  color: var(--neutral-grey-200);
+  color: #e5e7eb;
   background-color: rgba(255, 255, 255, 0.1);
   user-select: none;
 }

@@ -1,0 +1,34 @@
+{{#if this.showNav}}
+  <div local-class='pager' data-test-offensiveSecurity-goalView-pager>
+    <button
+      type='button'
+      local-class='pager-btn'
+      disabled={{this.isFirst}}
+      aria-label={{@previousLabel}}
+      {{on 'click' @onPrevious}}
+      data-test-offensiveSecurity-goalView-pager-prev
+    >
+      <AkIcon @iconName='chevron-left' @size='small' />
+    </button>
+
+    <span
+      local-class='pager-label'
+      data-test-offensiveSecurity-goalView-pager-label
+    >
+      {{t 'offensiveSecurity.goalView.pagerOf' current=@current total=@total}}
+    </span>
+
+    <button
+      type='button'
+      local-class='pager-btn'
+      disabled={{this.isLast}}
+      aria-label={{@nextLabel}}
+      {{on 'click' @onNext}}
+      data-test-offensiveSecurity-goalView-pager-next
+    >
+      <AkIcon @iconName='chevron-right' @size='small' />
+    </button>
+  </div>
+{{else if @total}}
+  <span local-class='pager-single'>{{@singleLabel}}</span>
+{{/if}}

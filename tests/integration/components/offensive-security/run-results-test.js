@@ -56,7 +56,7 @@ const SELECTORS = {
   goalReason: '[data-test-offensiveSecurity-pentest-goal-reason]',
   goalStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalDetailBack: '[data-test-offensiveSecurity-pentest-back]',
-  goalDetailNav: '[data-test-offensiveSecurity-pentest-nav]',
+  goalDetailCard: '[data-test-offensiveSecurity-pentest-card]',
   findingsList: '[data-test-offensiveSecurity-findingsList]',
   findingsEmpty: '[data-test-offensiveSecurity-findingsList-empty]',
   groupTitle: '[data-test-offensiveSecurity-findingsList-groupTitle]',
@@ -217,14 +217,14 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.deepEqual(this.goalParamChanges, []);
-    assert.dom(SELECTORS.goalDetailNav).doesNotExist();
+    assert.dom(SELECTORS.goalDetailCard).doesNotExist();
 
     await click(SELECTORS.goalRow(1));
 
     assert.deepEqual(this.goalParamChanges, ['bypass-root']);
     assert.dom(SELECTORS.risksCard).doesNotExist();
     assert.dom(SELECTORS.findingsList).doesNotExist();
-    assert.dom(SELECTORS.goalDetailNav).exists();
+    assert.dom(SELECTORS.goalDetailCard).exists();
 
     await click(SELECTORS.goalDetailBack);
 
@@ -239,7 +239,7 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     await render(TEMPLATE);
 
     assert.dom(SELECTORS.risksCard).exists();
-    assert.dom(SELECTORS.goalDetailNav).doesNotExist();
+    assert.dom(SELECTORS.goalDetailCard).doesNotExist();
   });
 
   // ─── Tabs ──────────────────────────────────────────────────────────────────

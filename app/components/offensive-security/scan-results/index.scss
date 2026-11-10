@@ -117,18 +117,36 @@
     border-color: #f2c0bd;
     background-color: #fdecea;
     color: #b42318;
+
+    :global(:root[data-offsec-theme='dark']) & {
+      border-color: #5a2a2d;
+      background-color: #3a1a1c;
+      color: #f08080;
+    }
   }
 
   > [data-test-offensivesecurity-statuschip-completed] {
     border-color: #bfe0c2;
     background-color: #e9f5ed;
     color: #1d6f16;
+
+    :global(:root[data-offsec-theme='dark']) & {
+      border-color: #1f4a28;
+      background-color: #12301a;
+      color: #6fd66a;
+    }
   }
 
   > [data-test-offensivesecurity-statuschip-running] {
     border-color: #bcd5f2;
     background-color: #eaf2fd;
     color: #0a5db0;
+
+    :global(:root[data-offsec-theme='dark']) & {
+      border-color: #1f4366;
+      background-color: #12283d;
+      color: #7ab8f5;
+    }
   }
 }
 
@@ -172,7 +190,7 @@
 }
 
 .device-panel {
-  background-color: var(--common-white, #fff);
+  background-color: var(--background-main);
   border: 1px solid var(--border-color-1);
   border-radius: 10px;
   box-sizing: border-box;
@@ -303,6 +321,11 @@
   &.is-live {
     color: #1f7a17;
     background-color: #e6f6e4;
+
+    :global(:root[data-offsec-theme='dark']) & {
+      color: #6fd66a;
+      background-color: #15321a;
+    }
   }
 }
 

@@ -4595,6 +4595,18 @@ body {
     --offensive-security-artifact-green-color
   );
 
+  // variables for the five goal verdicts (Exploited ... Not vulnerable)
+  --offensive-security-verdict-exploited-color: var(--error-main);
+  --offensive-security-verdict-exploited-bg-color: var(--error-bg);
+  --offensive-security-verdict-partial-color: #a85a0f;
+  --offensive-security-verdict-partial-bg-color: #fdeee0;
+  --offensive-security-verdict-weakness-color: var(--info-main);
+  --offensive-security-verdict-weakness-bg-color: var(--info-light);
+  --offensive-security-verdict-untested-color: var(--text-secondary);
+  --offensive-security-verdict-untested-bg-color: var(--neutral-grey-100);
+  --offensive-security-verdict-held-color: var(--success-main);
+  --offensive-security-verdict-held-bg-color: var(--success-light);
+
   // variables for offensive-security/scan-results/agent-log
   // The log pane is a terminal transcript, so it stays dark in both themes.
   --offensive-security-agent-log-bg-color: var(--background-dark);

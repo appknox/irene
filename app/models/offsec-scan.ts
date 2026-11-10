@@ -95,6 +95,58 @@ export interface PentestObservation {
   elapsed_ms: number;
 }
 
+/**
+ * How far the agent got on a business risk. When a goal carries one, its detail page uses the
+ * layout for that verdict: exploited and partial share one, the others each have their own.
+ */
+export type GoalVerdict =
+  | 'exploited'
+  | 'partial'
+  | 'weakness'
+  | 'untested'
+  | 'held';
+
+export interface GoalPathStep {
+  /** The id of the technique this step uses, when it has one. */
+  label?: string;
+  text: string;
+}
+
+/** One way the agent reached the goal: a single technique, or several chained together. */
+export interface GoalPath {
+  type: 'individual' | 'chain';
+  steps: GoalPathStep[];
+  outcome: string;
+  summary?: string;
+}
+
+export type GoalTechniqueStatus =
+  | 'exploited'
+  | 'confirmed'
+  | 'safe'
+  | 'not_tested';
+
+/** A technique the agent assessed for a goal, with its result and how to fix it. */
+export interface GoalTechnique {
+  id: string;
+  category: string;
+  name: string;
+  flaw: string;
+  status: GoalTechniqueStatus;
+  description?: string;
+  impact?: string;
+  location?: string;
+  evidence?: string;
+  repro?: string[];
+  fix?: string;
+  fix_steps?: string[];
+  refs?: string[];
+  tried?: string;
+  outcome?: string;
+  safe_result?: string;
+  safe_conclusion?: string;
+}
+
 export interface PentestGoalResult {
   goal_id: string;
   goal_name: string;
@@ -110,6 +162,11 @@ export interface PentestGoalResult {
     single?: number;
     refused?: number;
   };
+  verdict?: GoalVerdict | string;
+  description?: string;
+  detail?: string;
+  paths?: GoalPath[];
+  techniques?: GoalTechnique[];
   findings_count?: number;
   findings?: PentestFinding[];
   plans?: PentestPlan[];
