@@ -1,8 +1,8 @@
-// @ts-expect-error no type defs
-import SwaggerUI from 'swagger-ui';
-
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
+
+import loadSwaggerUI from 'irene/utils/load-swagger-ui';
+import loadPublicApiDocsStyles from 'irene/utils/load-public-api-docs-styles';
 import { type SwaggerUIDataProps } from '..';
 
 interface PublicApiDocsSchemasSignature {
@@ -13,7 +13,16 @@ interface PublicApiDocsSchemasSignature {
 
 export default class PublicApiDocsSchemasComponent extends Component<PublicApiDocsSchemasSignature> {
   @action
-  initializeSchemas(element: HTMLDivElement) {
+  async initializeSchemas(element: HTMLDivElement) {
+    const [SwaggerUI] = await Promise.all([
+      loadSwaggerUI(),
+      loadPublicApiDocsStyles(),
+    ]);
+
+    if (this.isDestroying) {
+      return;
+    }
+
     SwaggerUI({
       spec: { ...this.args.data, info: {}, paths: {} },
       domNode: element,
