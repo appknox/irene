@@ -1,0 +1,18 @@
+.section-card {
+  background-color: var(
+    --security-analysis-details-section-card-background-color
+  );
+  border: 1px solid var(--security-analysis-details-section-card-border-color);
+  border-radius: var(--security-analysis-details-section-card-border-radius);
+  box-shadow: var(--security-analysis-details-section-card-box-shadow);
+  overflow: hidden;
+}
+
+.section-card-header {
+  padding: 0.85em 1.25em;
+}
+
+.section-card-body {
+  width: 100%;
+  padding: 1.25em;
+}

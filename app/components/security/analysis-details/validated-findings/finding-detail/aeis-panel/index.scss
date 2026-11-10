@@ -1,0 +1,16 @@
+.panel-group {
+  border: 1px solid
+    var(--security-analysis-details-validated-findings-border-color);
+  border-top: none;
+  border-radius: var(
+      --security-analysis-details-validated-findings-border-radius
+    )
+    var(--security-analysis-details-validated-findings-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius)
+    var(--security-analysis-details-validated-findings-expand-all-border-radius);
+  overflow: hidden;
+}
+
+.signal-select {
+  width: 10rem;
+}

@@ -1,0 +1,137 @@
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.aeis.title'}}
+  @description={{t 'securityAnalysisDetails.aeis.description'}}
+  @testId='aeis'
+>
+  <:content>
+    {{#if this.showAllFalsePositivesBanner}}
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @spacing='1.5'
+        class='mb-3'
+        local-class='all-fp-banner'
+        data-test-securityAnalysisDetails-aeis-allFalsePositivesBanner
+      >
+        <AkIcon @iconName='error' @size='small' @color='error' />
+
+        <AkTypography @variant='body2' @color='error'>
+          {{t 'securityAnalysisDetails.aeis.allFalsePositives'}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    <AkStack
+      @justifyContent='space-between'
+      @alignItems='center'
+      @width='full'
+      @spacing='3.5'
+    >
+      <AkStack
+        @direction='column'
+        @width='6/12'
+        @alignItems='center'
+        @justifyContent='center'
+        @spacing='2'
+      >
+        <AkTooltip
+          @title={{this.readOnlyReason}}
+          @multiline={{true}}
+          @maxWidth='260px'
+          @arrow={{true}}
+        >
+          <Security::AnalysisDetails::ScoreChip
+            @score={{this.displayScore}}
+            @label={{this.scoreLabel}}
+            @riskClass={{this.scoreRiskClass}}
+            @testId='aeis'
+          />
+        </AkTooltip>
+
+        {{#if this.showNoScoreMessage}}
+          <AkTypography
+            @variant='body3'
+            @color='textSecondary'
+            @align='center'
+            data-test-securityAnalysisDetails-aeis-noScore
+          >
+            {{this.noScoreMessage}}
+          </AkTypography>
+        {{/if}}
+
+        <AkDivider @color='dark' @width='250px' />
+
+        <AkStack
+          @direction='column'
+          @alignItems='center'
+          @spacing='0.5'
+          local-class='likelihood-field'
+        >
+          <AkTypography
+            local-class='likelihood-label'
+            data-test-securityAnalysisDetails-aeis-likelihoodLabel
+          >
+            {{t 'securityAnalysisDetails.aeis.likelihoodLabel'}}
+          </AkTypography>
+
+          <AkTooltip
+            @title={{this.readOnlyReason}}
+            @multiline={{true}}
+            @maxWidth='260px'
+            @arrow={{true}}
+          >
+            <AkSelect
+              @selected={{this.selectedLikelihood}}
+              @options={{this.likelihoodOptions}}
+              @onChange={{this.noop}}
+              @disabled={{true}}
+              @placeholder={{t 'securityAnalysisDetails.aeis.likelihoodLabel'}}
+              local-class='signal-select'
+              data-test-securityAnalysisDetails-aeis-likelihoodSelect
+              as |value|
+            >
+              {{this.likelihoodOptionLabel value}}
+            </AkSelect>
+          </AkTooltip>
+        </AkStack>
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='2.5' @width='6/12'>
+        {{#each this.signalRows as |row|}}
+          <AkStack
+            @spacing='3.5'
+            @width='full'
+            @justifyContent='space-between'
+            @alignItems='center'
+          >
+            <AkTypography
+              local-class='signal-label'
+              data-test-securityAnalysisDetails-aeis-signalLabel='{{row.key}}'
+            >
+              {{row.label}}
+            </AkTypography>
+
+            <AkTooltip
+              @title={{this.readOnlyReason}}
+              @multiline={{true}}
+              @maxWidth='260px'
+              @arrow={{true}}
+            >
+              <AkSelect
+                @selected={{row.selected}}
+                @options={{this.signalValues}}
+                @onChange={{this.noop}}
+                @disabled={{true}}
+                local-class='signal-select'
+                data-test-securityAnalysisDetails-aeis-signalSelect='{{row.key}}'
+                as |value|
+              >
+                {{this.signalOptionLabel value}}
+              </AkSelect>
+            </AkTooltip>
+          </AkStack>
+        {{/each}}
+      </AkStack>
+    </AkStack>
+  </:content>
+</Security::AnalysisDetails::SectionCard>

@@ -26,6 +26,8 @@ export const SECURITY_FILE_FACTORY_DEF = {
   manual() {
     return faker.helpers.arrayElement(ENUMS.MANUAL.VALUES);
   },
+
+  is_knoxiq_file: false,
 };
 
 export default Factory.extend(SECURITY_FILE_FACTORY_DEF);
