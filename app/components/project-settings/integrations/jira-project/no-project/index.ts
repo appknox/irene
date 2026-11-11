@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 export interface ProjectSettingsIntegrationsJiraProjectNoProjectSignature {
   Args: {
     reconnect: boolean;
+    jiraSecurityConnected?: boolean;
   };
 }
 
