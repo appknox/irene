@@ -35,7 +35,9 @@ export default class FileDetailsApiScanComponent extends Component<FileDetailsAp
         id: 'api-scan',
         label: this.intl.t('apiScan'),
         route: 'authenticated.dashboard.file.api-scan.index',
-        currentWhen: 'authenticated.dashboard.file.api-scan.index',
+        // An endpoint's vulnerabilities are opened from the scanned APIs list
+        currentWhen:
+          'authenticated.dashboard.file.api-scan.index authenticated.dashboard.file.api-scan.endpoint',
       },
       {
         id: 'api-results',

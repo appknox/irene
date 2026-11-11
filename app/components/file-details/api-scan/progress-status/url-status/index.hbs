@@ -1,0 +1,23 @@
+<AkStack
+  data-test-fileDetails-apiScan-progressStatus-status
+  @alignItems='center'
+  @spacing='1'
+  ...attributes
+>
+  {{#if this.isInProgress}}
+    <AkLoader
+      data-test-fileDetails-apiScan-progressStatus-statusLoader
+      @color='info-dark'
+      @size={{13}}
+    />
+  {{else}}
+    <span local-class='status-dot status-dot-{{this.color}}'></span>
+  {{/if}}
+
+  <AkTypography
+    data-test-fileDetails-apiScan-progressStatus-statusLabel
+    local-class='status-text-{{this.color}}'
+  >
+    {{this.label}}
+  </AkTypography>
+</AkStack>

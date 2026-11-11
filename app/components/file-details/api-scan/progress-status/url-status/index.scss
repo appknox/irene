@@ -1,0 +1,53 @@
+.status-dot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background-color: var(
+    --file-details-api-scan-progress-status-url-status-dot-color
+  );
+}
+
+.status-dot-queued {
+  width: 0.4em;
+  height: 0.4em;
+  background-color: transparent;
+  border: 1.5px solid
+    var(--file-details-api-scan-progress-status-url-status-dot-color);
+}
+
+.status-dot-success {
+  background-color: var(
+    --file-details-api-scan-progress-status-url-status-success-color
+  );
+}
+
+.status-dot-error {
+  background-color: var(
+    --file-details-api-scan-progress-status-url-status-error-color
+  );
+}
+
+.status-dot-info {
+  background-color: var(
+    --file-details-api-scan-progress-status-url-status-info-color
+  );
+}
+
+.status-text-success {
+  color: var(
+    --file-details-api-scan-progress-status-url-status-success-color
+  ) !important;
+}
+
+.status-text-info {
+  color: var(
+    --file-details-api-scan-progress-status-url-status-info-color
+  ) !important;
+}
+
+.status-text-error {
+  color: var(
+    --file-details-api-scan-progress-status-url-status-error-color
+  ) !important;
+}

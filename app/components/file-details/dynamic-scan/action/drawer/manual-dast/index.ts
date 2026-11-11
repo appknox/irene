@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 import ENUMS from 'irene/enums';
 
 import type FileModel from 'irene/models/file';
@@ -12,6 +13,7 @@ export interface FileDetailsDynamicScanDrawerManualDastSignature {
     file: FileModel;
     dpContext: DsPreferenceContext;
     isApiCaptureEnabled: boolean;
+    isApiCaptureLocked?: boolean;
     onApiCaptureChange(event: Event, checked?: boolean): void;
     onSelectedManualDeviceAvailable(deviceIdentifier: string): void;
   };
@@ -19,6 +21,8 @@ export interface FileDetailsDynamicScanDrawerManualDastSignature {
 
 export default class FileDetailsDynamicScanDrawerManualDastComponent extends Component<FileDetailsDynamicScanDrawerManualDastSignature> {
   deviceSelectionTypes = ENUMS.DS_MANUAL_DEVICE_SELECTION.BASE_CHOICES;
+
+  @tracked showApiCaptureLockedAlert = false;
 
   willDestroy(): void {
     super.willDestroy();
@@ -67,6 +71,14 @@ export default class FileDetailsDynamicScanDrawerManualDastComponent extends Com
 
   get deviceDisplay() {
     return this.file.project.get('platformDisplay');
+  }
+
+  // The locked toggle is readonly, so a click is the only sign of an attempt
+  @action
+  handleApiCaptureToggleClick() {
+    if (this.args.isApiCaptureLocked) {
+      this.showApiCaptureLockedAlert = true;
+    }
   }
 
   @action

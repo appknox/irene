@@ -33,6 +33,16 @@
     </ApiFilter>
   </AkStack>
 
+  {{#if this.showApiScanAutomation}}
+    <AkDivider @color='dark' />
+
+    <AkStack @width='9/12' @direction='column' @spacing='2' class='px-3'>
+      <ProjectSettings::ApiScanAutomation::Settings
+        @profileId={{this.project.activeProfileId}}
+      />
+    </AkStack>
+  {{/if}}
+
   {{#if this.showCyodSection}}
     <AkDivider @color='dark' />
 

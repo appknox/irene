@@ -222,6 +222,7 @@ Router.map(function () {
           this.route('api-scan', function () {
             this.route('index', { path: '/' });
             this.route('results');
+            this.route('endpoint', { path: '/endpoint/:url_id' });
           });
 
           this.route('manual-scan', function () {

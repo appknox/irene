@@ -1,0 +1,91 @@
+<div
+  data-test-fileDetails-apiScan-endpointVulnerabilities-container
+  local-class='endpoint-vulnerabilities'
+>
+  {{#if this.scanUrl}}
+    <AkStack
+      local-class='endpoint-header'
+      @alignItems='center'
+      @spacing='2'
+      class='p-2'
+    >
+      <AkChip
+        data-test-fileDetails-apiScan-endpointVulnerabilities-method
+        @variant='semi-filled'
+        @size='small'
+        @label={{this.scanUrl.request.method}}
+        @color={{this.methodChipColor this.scanUrl.request.method}}
+      />
+
+      <AkTypography
+        data-test-fileDetails-apiScan-endpointVulnerabilities-endpoint
+        local-class='endpoint-url'
+        title={{request-to-url this.scanUrl.request}}
+        @fontWeight='medium'
+        @noWrap={{true}}
+      >
+        {{request-to-url this.scanUrl.request}}
+      </AkTypography>
+    </AkStack>
+  {{/if}}
+
+  <AkTypography
+    data-test-fileDetails-apiScan-endpointVulnerabilities-desc
+    @color='textSecondary'
+    class='p-2'
+  >
+    {{t 'apiScanModule.endpointVulnerabilitiesDesc'}}
+  </AkTypography>
+
+  {{#if this.isLoading}}
+    <AkTable::Loading @columns={{this.columns}} />
+  {{else if this.hasNoVulnerabilities}}
+    <AkStack
+      data-test-fileDetails-apiScan-endpointVulnerabilities-empty
+      @direction='column'
+      @alignItems='center'
+      @spacing='3'
+      class='p-4'
+    >
+      <AkSvg::NoTestCase />
+
+      <AkTypography @variant='h6'>
+        {{t 'apiScanModule.noEndpointVulnerabilities'}}
+      </AkTypography>
+    </AkStack>
+  {{else}}
+    <AkTable
+      data-test-fileDetails-apiScan-endpointVulnerabilities-table
+      @hoverable={{true}}
+      as |t|
+    >
+      <t.head @columns={{this.columns}} />
+      <t.body @rows={{this.vulnerabilities}} as |b|>
+        <b.row
+          data-test-fileDetails-apiScan-endpointVulnerabilities-row
+          {{style cursor=(if (this.isRowClickable b.rowValue) 'pointer')}}
+          @onClick={{this.handleRowClick}}
+          as |r|
+        >
+          <r.cell>
+            {{#if (eq r.columnValue.id 'impact')}}
+              <AnalysisRisk::Tag
+                data-test-fileDetails-apiScan-endpointVulnerabilities-risk
+                @computedRisk={{r.rowValue.risk}}
+                @isOverridden={{this.isRiskOverridden r.rowValue}}
+                @overriddenRisk={{r.rowValue.overridden_risk}}
+                @originalRisk={{r.rowValue.original_risk}}
+              />
+            {{else}}
+              <AkTypography
+                data-test-fileDetails-apiScan-endpointVulnerabilities-title
+              >
+                {{r.rowValue.vulnerability.name}}
+              </AkTypography>
+            {{/if}}
+          </r.cell>
+        </b.row>
+      </t.body>
+    </AkTable>
+  {{/if}}
+</div>
