@@ -13,6 +13,20 @@ import type ReportRequestModel from 'irene/models/ai-reporting/report-request';
 import type PollService from 'irene/services/poll';
 import type OrganizationAiFeatureModel from 'irene/models/organization-ai-feature';
 
+// Each id has a label and prompt1..prompt5 under reportModule.categories in the translations
+const PROMPT_CATEGORIES = [
+  'scan',
+  'sbom',
+  'privacyShield',
+  'storeknox',
+  'storeReleaseReadiness',
+  'users',
+] as const;
+
+const PROMPTS_PER_CATEGORY = 5;
+
+type PromptCategoryId = (typeof PROMPT_CATEGORIES)[number];
+
 export default class AiReportingChatGenerate extends Component {
   @service declare router: RouterService;
   @service declare intl: IntlService;
@@ -35,15 +49,12 @@ export default class AiReportingChatGenerate extends Component {
     this.fetchOrganizationAiFeatures.perform();
   }
 
-  // Categories of report prompts available to users
+  // Categories of report prompts available to users, in dropdown order
   get categories() {
-    return [
-      { id: 'scan', label: this.intl.t('reportModule.categories.scan.label') },
-      {
-        id: 'users',
-        label: this.intl.t('reportModule.categories.users.label'),
-      },
-    ];
+    return PROMPT_CATEGORIES.map((id) => ({
+      id,
+      label: this.intl.t(`reportModule.categories.${id}.label`),
+    }));
   }
 
   get showTurnOnSettings() {
@@ -52,32 +63,16 @@ export default class AiReportingChatGenerate extends Component {
     );
   }
 
-  // All prompt examples by category
-  get promptsByCategory() {
-    return {
-      scan: [
-        this.intl.t('reportModule.categories.scan.prompt1'),
-        this.intl.t('reportModule.categories.scan.prompt2'),
-        this.intl.t('reportModule.categories.scan.prompt3'),
-        this.intl.t('reportModule.categories.scan.prompt4'),
-        this.intl.t('reportModule.categories.scan.prompt5'),
-      ],
-      users: [
-        this.intl.t('reportModule.categories.users.prompt1'),
-        this.intl.t('reportModule.categories.users.prompt2'),
-        this.intl.t('reportModule.categories.users.prompt3'),
-        this.intl.t('reportModule.categories.users.prompt4'),
-        this.intl.t('reportModule.categories.users.prompt5'),
-      ],
-    };
-  }
-
-  // Filtered prompts based on selected category
+  // Example prompts of the selected category
   get filteredPrompts() {
-    return (
-      this.promptsByCategory[
-        this.selectedCategory?.id as keyof typeof this.promptsByCategory
-      ] || []
+    const id = this.selectedCategory?.id;
+
+    if (!id) {
+      return [];
+    }
+
+    return Array.from({ length: PROMPTS_PER_CATEGORY }, (_, index) =>
+      this.intl.t(`reportModule.categories.${id}.prompt${index + 1}`)
     );
   }
 
@@ -86,7 +81,10 @@ export default class AiReportingChatGenerate extends Component {
   }
 
   @action
-  updateSelectedCategory(selectedCategory: { id: string; label: string }) {
+  updateSelectedCategory(selectedCategory: {
+    id: PromptCategoryId;
+    label: string;
+  }) {
     this.selectedCategory = selectedCategory;
   }
 

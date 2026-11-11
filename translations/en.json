@@ -2013,6 +2013,38 @@
         "prompt3": "List all users",
         "prompt4": "Generate audit log of all the user activities",
         "prompt5": "List of inactive users and their last activity"
+      },
+      "sbom": {
+        "label": "SBOM",
+        "prompt1": "Give me an SBOM summary of all my apps",
+        "prompt2": "How many vulnerable and outdated components does each app have?",
+        "prompt3": "List all components with known vulnerabilities in my apps",
+        "prompt4": "List outdated components that have a newer version available",
+        "prompt5": "List all AI BoM components in my apps"
+      },
+      "privacyShield": {
+        "label": "Privacy Shield",
+        "prompt1": "Which apps in my organization have trackers",
+        "prompt2": "List all apps for which privacy analysis is completed",
+        "prompt3": "List all apps for which privacy analysis has failed",
+        "prompt4": "Show PII data found in my apps",
+        "prompt5": "List apps that connect to servers in high-risk countries"
+      },
+      "storeknox": {
+        "label": "Storeknox",
+        "prompt1": "List all apps in my store monitoring inventory",
+        "prompt2": "List all apps with monitoring status Needs Action",
+        "prompt3": "List all apps in my inventory for which monitoring is disabled",
+        "prompt4": "List fake apps found for my inventory apps",
+        "prompt5": "List store versions of my apps that are not scanned by Appknox"
+      },
+      "storeReleaseReadiness": {
+        "label": "Store Release Readiness",
+        "prompt1": "Store release readiness apps which have high rejection risk",
+        "prompt2": "List apps whose latest build has store release blockers",
+        "prompt3": "List failed store release readiness checks for my apps",
+        "prompt4": "List store release readiness findings in the permission category",
+        "prompt5": "List store release readiness scans from the last 30 days"
       }
     },
     "characterLimit": "400 characters",
