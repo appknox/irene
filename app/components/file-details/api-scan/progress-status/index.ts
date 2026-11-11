@@ -5,11 +5,13 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import dayjs from 'dayjs';
 import type IntlService from 'ember-intl/services/intl';
+import type RouterService from '@ember/routing/router-service';
 import type { EmberTableSort } from 'ember-table';
 
 import ENV from 'irene/config/environment';
 import parseError from 'irene/utils/parse-error';
 import apiMethodChipColor from 'irene/utils/api-method-chip-color';
+import apiScanUrlHasResults from 'irene/utils/api-scan-url-has-results';
 import { DsStatusGroup } from 'irene/utils/ds-status-group';
 import type { PaginationProviderActionsArgs } from 'irene/components/ak-pagination-provider';
 import type FileModel from 'irene/models/file';
@@ -46,6 +48,7 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
   @service declare apiScan: ApiScanService;
   @service declare ajax: IreneAjaxService;
   @service declare intl: IntlService;
+  @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
   stoppingStatus = DsStatusGroup.STOPPING;
@@ -148,6 +151,38 @@ export default class FileDetailsApiScanProgressStatusComponent extends Component
   }
 
   // Rows arrive sorted from the API; stop ember-table re-sorting the page
+  @action
+  isRowClickable(scanUrl: ApiScanUrl) {
+    return apiScanUrlHasResults(
+      scanUrl.status,
+      scanUrl.vulnerability_counts.total
+    );
+  }
+
+  // Opens the endpoint's vulnerabilities; modifier-click opens a tab
+  @action
+  handleRowClick({
+    rowValue,
+    event,
+  }: {
+    rowValue: ApiScanUrl;
+    event: MouseEvent;
+  }) {
+    if (!this.isRowClickable(rowValue)) {
+      return;
+    }
+
+    const route = 'authenticated.dashboard.file.api-scan.endpoint';
+    const fileId = this.args.file.id;
+    const id = String(rowValue.id);
+
+    if (event.ctrlKey || event.metaKey) {
+      window.open(this.router.urlFor(route, fileId, id), '_blank');
+    } else {
+      this.router.transitionTo(route, fileId, id);
+    }
+  }
+
   @action
   keepServerOrder() {
     return 0;

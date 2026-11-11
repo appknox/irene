@@ -1289,6 +1289,17 @@ body {
     --info-dark
   );
 
+  // variables for file-details/api-scan/endpoint-vulnerabilities
+  --file-details-api-scan-endpoint-vulnerabilities-background: var(
+    --background-main
+  );
+  --file-details-api-scan-endpoint-vulnerabilities-border-radius: var(
+    --border-radius
+  );
+  --file-details-api-scan-endpoint-vulnerabilities-border-color: var(
+    --border-color-1
+  );
+
   // variables for file-details/api-scan/results
   --file-details-api-scan-results-tabs-container-background: var(
     --background-light

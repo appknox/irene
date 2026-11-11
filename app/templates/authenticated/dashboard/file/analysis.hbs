@@ -1,3 +1,6 @@
 {{page-title (t 'analysisPageTitle')}}
 
-<FileDetails::VulnerabilityAnalysisDetails @analysis={{@model}} />
+<FileDetails::VulnerabilityAnalysisDetails
+  @analysis={{@model}}
+  @apiScanUrlId={{this.api_scan_url}}
+/>
