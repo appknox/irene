@@ -1480,6 +1480,72 @@ module('Acceptance | file-details/api-scan', function (hooks) {
     }
   );
 
+  test('it opens the vulnerabilities of a scanned endpoint', async function (assert) {
+    this.file.update({
+      api_scan_status: ENUMS.SCAN_STATUS.COMPLETED,
+      is_api_done: true,
+    });
+
+    setupApiScanUrlsEndpoint(this.server);
+
+    const scanUrl = API_SCAN_URLS[0];
+
+    this.server.get('/v2/files/:id/api_scan_urls/:urlId', () => scanUrl);
+    this.server.get(
+      '/v2/files/:id/api_scan_urls/:urlId/vulnerabilities',
+      () => [
+        {
+          id: 1,
+          vulnerability: { id: 72, name: 'SQL Injection Vulnerabilities' },
+          risk: ENUMS.RISK.HIGH,
+          original_risk: ENUMS.RISK.HIGH,
+          overridden_risk: null,
+          cvss_base: 8.2,
+          cvss_vector: '',
+          analysis_id: 11,
+          findings: [],
+        },
+      ]
+    );
+
+    await visit(`/dashboard/file/${this.file.id}/api-scan`);
+
+    const rows = findAll('[data-test-fileDetails-apiScan-progressStatus-row]');
+
+    // Scanning, queued and failed endpoints have no results to open
+    await click(rows[2]);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/api-scan`
+    );
+
+    await click(rows[0]);
+
+    assert.strictEqual(
+      currentURL(),
+      `/dashboard/file/${this.file.id}/api-scan/endpoint/${scanUrl.id}`
+    );
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-endpointVulnerabilities-endpoint]')
+      .hasText(`https://api.example.com${scanUrl.request.path}`);
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-endpointVulnerabilities-title]')
+      .hasText('SQL Injection Vulnerabilities');
+
+    assert
+      .dom(
+        '[data-test-ak-breadcrumbs-auto-trail-item-key="authenticated.dashboard.file.api-scan.endpoint"]'
+      )
+      .containsText(t('apiScanModule.endpointVulnerabilities'));
+
+    assert
+      .dom('[data-test-fileDetails-apiScan-tabs="api-scan-tab"] a')
+      .hasClass(/active-shadow/);
+  });
+
   test('it does not sort scanned apis by endpoint', async function (assert) {
     this.file.update({
       api_scan_status: ENUMS.SCAN_STATUS.RUNNING,

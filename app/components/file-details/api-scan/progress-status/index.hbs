@@ -107,7 +107,12 @@
           </h.row>
         </t.head>
         <t.body @rows={{pgc.currentPageResults}} as |b|>
-          <b.row data-test-fileDetails-apiScan-progressStatus-row as |r|>
+          <b.row
+            data-test-fileDetails-apiScan-progressStatus-row
+            {{style cursor=(if (this.isRowClickable b.rowValue) 'pointer')}}
+            @onClick={{this.handleRowClick}}
+            as |r|
+          >
             <r.cell
               local-class={{if r.columnValue.isCentered 'centered-column'}}
             >
