@@ -2,7 +2,7 @@
   <AkStack
     local-class='reachability-root'
     @direction='column'
-    @spacing='1.5'
+    @spacing='2'
     @width='full'
     data-test-sbomComponentVulnerabilities-detailReachability
   >
@@ -82,17 +82,20 @@
           @color='textPrimary'
           @breakWord={{true}}
         >
-          {{#if this.reasoningVerdictLabel}}
-            <span local-class='inline-chip'>
-              <AkChip
-                data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict
-                @variant='filled'
-                @size='small'
-                @color={{this.reasoningVerdictColor}}
-                @label={{this.reasoningVerdictLabel}}
-              />
-            </span>
-          {{/if}}{{this.reasoningBody}}
+          {{~#each this.reasoningSegments as |segment|~}}
+            {{~#if segment.isVerdict~}}
+              <span local-class='inline-chip'><AkChip
+                  data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict
+                  @variant={{segment.variant}}
+                  @size='small'
+                  @color={{segment.color}}
+                  @fontWeight={{segment.fontWeight}}
+                  @label={{segment.text}}
+                /></span>
+            {{~else~}}
+              {{segment.text}}
+            {{~/if~}}
+          {{~/each~}}
         </AkTypography>
       </AkStack>
     {{/if}}

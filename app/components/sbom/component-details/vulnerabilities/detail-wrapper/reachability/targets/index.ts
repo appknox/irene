@@ -3,6 +3,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import {
   formatDexSignature,
+  isTargetCallStatusUnknown,
   splitFindingTargets,
   type SbomReachabilityFinding,
   type SbomReachabilityTarget,
@@ -31,11 +32,39 @@ function toRows(targets: SbomReachabilityTarget[]): TargetRow[] {
 }
 
 export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilityTargetsComponent extends Component<SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilityTargetsSignature> {
+  @tracked showCalled = true;
   @tracked showAlsoAffected = false;
+  @tracked showUnknownStatus = true;
+
+  @action
+  toggleCalled() {
+    this.showCalled = !this.showCalled;
+  }
 
   @action
   toggleAlsoAffected() {
     this.showAlsoAffected = !this.showAlsoAffected;
+  }
+
+  @action
+  toggleUnknownStatus() {
+    this.showUnknownStatus = !this.showUnknownStatus;
+  }
+
+  /**
+   * Inconclusive or untraced findings cannot say which functions are called,
+   * so they get one neutral list instead of a misleading called/not-called
+   * split.
+   */
+  get isCallStatusUnknown() {
+    return isTargetCallStatusUnknown(this.args.finding);
+  }
+
+  /** Every vulnerable function, for the neutral "call status unknown" list. */
+  get unknownStatusTargets() {
+    return this.isCallStatusUnknown
+      ? toRows(this.args.finding?.targets ?? [])
+      : [];
   }
 
   get split() {
@@ -44,12 +73,12 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
 
   /** Vulnerable functions the app has a proven call path to. */
   get calledTargets() {
-    return toRows(this.split.called);
+    return this.isCallStatusUnknown ? [] : toRows(this.split.called);
   }
 
   /** Vulnerable functions in the build that nothing on the app's side calls. */
   get alsoAffectedTargets() {
-    return toRows(this.split.alsoAffected);
+    return this.isCallStatusUnknown ? [] : toRows(this.split.alsoAffected);
   }
 
   get hasAlsoAffected() {
@@ -57,7 +86,11 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
   }
 
   get shouldShow() {
-    return this.calledTargets.length > 0 || this.hasAlsoAffected;
+    return (
+      this.calledTargets.length > 0 ||
+      this.hasAlsoAffected ||
+      this.unknownStatusTargets.length > 0
+    );
   }
 }
 

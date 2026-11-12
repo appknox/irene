@@ -95,6 +95,27 @@ module(
     });
 
     test('it renders a reachability row when a path was found', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomComponent = store.push(
+        store.normalize(
+          'sbom-component',
+          this.server
+            .create('sbom-component', {
+              id: 4,
+              reachability: {
+                verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
+                path_found_count: 1,
+                potential_count: 2,
+                no_path_found_count: 1,
+                advisory_count: 6,
+                unknown_count: 2,
+              },
+            })
+            .toJSON()
+        )
+      );
+
       await render(hbs`
         <Sbom::ComponentDetails::Summary @sbomComponent={{this.sbomComponent}} />
       `);

@@ -26,11 +26,14 @@
 }
 
 .vulnerability-detail-content {
-  // The call path and the reasoning paragraph both need the full row; the
-  // old 650px column left most of the panel empty.
   max-width: 1100px;
   width: 100%;
   padding: 2em;
+
+  // The call path and reasoning paragraph need the full row.
+  &.full-row {
+    max-width: none;
+  }
 
   .vulnerability-reference-list {
     list-style: unset;

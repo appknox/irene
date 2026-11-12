@@ -14,6 +14,7 @@ import { module, test } from 'qunit';
 
 import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
 import {
+  ReachabilityVerdict,
   reachabilityLabelKey,
   shouldShowReachabilityChip,
 } from 'irene/utils/sbom-reachability';
@@ -30,9 +31,7 @@ module(
 
       this.sbomFile = this.server.create('sbom-file');
 
-      this.sbomComponent = this.server.create('sbom-component', {
-        id: 1,
-      });
+      this.sbomComponent = this.server.create('sbom-component', { id: 1 });
 
       this.sbomVulnerabilityAudits = this.server.createList(
         'sbom-vulnerability-audit',
@@ -246,18 +245,17 @@ module(
         )
         .hasText(sbomVulnerabilityAudit.sbVulnerability.description);
 
+      // reachability and remediation live on the insights page
       assert
         .dom(
           '[data-test-sbomComponentVulnerabilities-detailReachabilityTitle]',
           vulnerabilityRows[0]
         )
-        .hasText(t('sbomModule.reachability.title'));
+        .doesNotExist();
 
       assert
-        .dom('[data-test-sbomReachability-status]', vulnerabilityRows[0])
-        .hasText(
-          t(reachabilityLabelKey(sbomVulnerabilityAudit.reachability?.verdict))
-        );
+        .dom('[data-test-sbomRemediation]', vulnerabilityRows[0])
+        .doesNotExist();
 
       // affected & fixed version
       assert
@@ -340,6 +338,41 @@ module(
           vulnerabilityRows[0]
         )
         .doesNotExist();
+    });
+
+    test('the expanded row links to the reachability insight', async function (assert) {
+      this.server.get(
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+        (schema) => {
+          const results = schema.sbomVulnerabilityAudits.all().models;
+
+          results[0].reachability = {
+            verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
+            blockers: [],
+            witness_path: [],
+          };
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      await render(hbs`
+        <Sbom::ComponentDetails::Vulnerabilities @sbomComponent={{this.sbomComponent}} />
+      `);
+
+      const [firstRow] = findAll(
+        '[data-test-sbomComponentVulnerabilities-listItem]'
+      );
+
+      await click(
+        firstRow.querySelector(
+          '[data-test-sbomComponentVulnerabilities-toggleDetailsBtn]'
+        )
+      );
+
+      assert
+        .dom('[data-test-sbomComponentVulnerabilities-insightLink]', firstRow)
+        .hasText(t('sbomModule.reachability.viewInsight'));
     });
 
     test.each(

@@ -8,7 +8,8 @@
       <AkChip
         local-class='reachability-chip'
         data-test-sbomReachability-status
-        @variant='semi-filled'
+        @variant={{this.variant}}
+        @fontWeight={{this.fontWeight}}
         @size='small'
         @color={{this.color}}
         @label={{this.label}}
@@ -16,7 +17,13 @@
     </:default>
 
     <:tooltipContent>
-      <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.explanation}}</div>
+      <div
+        {{style
+          width='360px'
+          white-space='pre-line'
+          overflow-wrap='break-word'
+        }}
+      >{{this.explanation}}</div>
     </:tooltipContent>
   </AkTooltip>
 {{else}}

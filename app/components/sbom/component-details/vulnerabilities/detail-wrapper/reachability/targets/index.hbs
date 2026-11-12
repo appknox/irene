@@ -5,45 +5,121 @@
     @width='full'
     data-test-sbomComponentVulnerabilities-reachabilityTargets
   >
+    {{#if this.unknownStatusTargets.length}}
+      <AkStack @direction='column' @spacing='0.5' @width='full'>
+        <button
+          type='button'
+          local-class='also-affected-toggle'
+          data-test-sbomComponentVulnerabilities-reachabilityTargetsUnknownToggle
+          aria-expanded='{{if this.showUnknownStatus "true" "false"}}'
+          {{on 'click' this.toggleUnknownStatus}}
+        >
+          <AkIcon
+            @iconName={{if
+              this.showUnknownStatus
+              'arrow-drop-down'
+              'chevron-right'
+            }}
+            @size='small'
+            @color='textSecondary'
+          />
+
+          <AkTypography @variant='body2' @color='textSecondary'>
+            {{t
+              'sbomModule.reachability.callStatusUnknown'
+              count=this.unknownStatusTargets.length
+            }}
+          </AkTypography>
+        </button>
+
+        {{#if this.showUnknownStatus}}
+          {{#each this.unknownStatusTargets as |target|}}
+            <AkTooltip @arrow={{true}} @placement='top'>
+              <:default>
+                <div
+                  local-class='target-row target-row-uncalled'
+                  data-test-sbomComponentVulnerabilities-reachabilityTargetsUnknown='{{target.testIndex}}'
+                >
+                  <AkTypography
+                    local-class='signature'
+                    @variant='body2'
+                    @breakWord={{true}}
+                  >
+                    {{target.display}}
+                  </AkTypography>
+                </div>
+              </:default>
+
+              <:tooltipContent>
+                <div
+                  {{style
+                    width='360px'
+                    white-space='pre-line'
+                    overflow-wrap='break-word'
+                  }}
+                >{{target.signature}}</div>
+              </:tooltipContent>
+            </AkTooltip>
+          {{/each}}
+        {{/if}}
+      </AkStack>
+    {{/if}}
+
     {{#if this.calledTargets.length}}
       <AkStack @direction='column' @spacing='0.5' @width='full'>
-        <AkTypography
-          data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledLabel
-          @variant='body2'
-          @color='textSecondary'
+        <button
+          type='button'
+          local-class='also-affected-toggle'
+          data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledToggle
+          aria-expanded='{{if this.showCalled "true" "false"}}'
+          {{on 'click' this.toggleCalled}}
         >
-          {{t 'sbomModule.reachability.calledByYourApp'}}
-        </AkTypography>
+          <AkIcon
+            @iconName={{if this.showCalled 'arrow-drop-down' 'chevron-right'}}
+            @size='small'
+            @color='textSecondary'
+          />
 
-        {{#each this.calledTargets as |target|}}
-          <AkTooltip @arrow={{true}} @placement='top'>
-            <:default>
-              <div
-                local-class='target-row target-row-called'
-                data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled='{{target.testIndex}}'
-              >
-                <AkTypography
-                  local-class='signature'
-                  @variant='body2'
-                  @fontWeight='bold'
-                  @breakWord={{true}}
+          <AkTypography
+            data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledLabel
+            @variant='body2'
+            @color='textSecondary'
+          >
+            {{t 'sbomModule.reachability.calledByYourApp'}}
+          </AkTypography>
+        </button>
+
+        {{#if this.showCalled}}
+          {{#each this.calledTargets as |target|}}
+            <AkTooltip @arrow={{true}} @placement='top'>
+              <:default>
+                <div
+                  local-class='target-row target-row-called'
+                  data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled='{{target.testIndex}}'
                 >
-                  {{target.display}}
-                </AkTypography>
-              </div>
-            </:default>
+                  <AkTypography
+                    local-class='signature'
+                    @variant='body2'
+                    @fontWeight='bold'
+                    @breakWord={{true}}
+                  >
+                    {{target.display}}
+                  </AkTypography>
+                </div>
+              </:default>
 
-            <:tooltipContent>
-              <div
-                {{style
-                  width='360px'
-                  white-space='pre-line'
-                  overflow-wrap='break-word'
-                }}
-              >{{target.signature}}</div>
-            </:tooltipContent>
-          </AkTooltip>
-        {{/each}}
+              <:tooltipContent>
+                <div
+                  {{style
+                    width='360px'
+                    white-space='pre-line'
+                    overflow-wrap='break-word'
+                  }}
+                >{{target.signature}}</div>
+              </:tooltipContent>
+            </AkTooltip>
+          {{/each}}
+        {{/if}}
       </AkStack>
     {{/if}}
 
@@ -59,8 +135,8 @@
           <AkIcon
             @iconName={{if
               this.showAlsoAffected
-              'keyboard-arrow-down'
-              'keyboard-arrow-right'
+              'arrow-drop-down'
+              'chevron-right'
             }}
             @size='small'
             @color='textSecondary'

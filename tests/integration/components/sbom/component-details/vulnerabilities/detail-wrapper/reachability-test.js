@@ -38,8 +38,13 @@ const selectors = {
 const TEMPLATE = hbs`
   <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability
     @sbomVulnerabilityAudit={{this.sbomVulnerabilityAudit}}
+    @sbomComponent={{this.sbomComponent}}
+    @appName={{this.appName}}
   />
 `;
+
+const explanationSelector =
+  '[data-test-sbomComponentVulnerabilities-detailReachabilityExplanation]';
 
 // ─── Helpers ───
 /**
@@ -512,6 +517,11 @@ module(
         .dom(selectors.reasoningVerdict)
         .hasText(t('sbomModule.reachability.pathFound'));
 
+      // The filled Reachable badge is bold, like Sbom::ReachabilityStatus.
+      assert
+        .dom(`${selectors.reasoningVerdict} [data-test-ak-typography]`)
+        .hasClass(/ak-typography-font-weight-bold/);
+
       assert
         .dom(selectors.reasoningText)
         .includesText(
@@ -585,6 +595,209 @@ module(
         .dom(selectors.narrative)
         .includesText('The confirmed prefix starts here.');
       assert.dom(selectors.reasoning).doesNotExist();
+    });
+
+    test('it renders reasoning when the target has no call path', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.UNKNOWN,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                has_witness: false,
+                reasoning: 'The engine found no route from app code.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.reasoningText)
+        .includesText('The engine found no route from app code.');
+    });
+
+    test('it shows the witness target reasoning and narrative, not an earlier witness-free target', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.REACHABLE,
+            target_presence: 'PRESENT',
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [
+              {
+                caller: 'Lcom/example/MainActivity;->onCreate()',
+                callee: 'Lcom/example/Parser;->parse()',
+              },
+            ],
+            targets: [
+              {
+                label: 'Lcom/example/Other;->run()',
+                has_witness: false,
+                reasoning: 'UNKNOWN. This target could not be analysed.',
+              },
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                has_witness: true,
+                narrative: 'On startup, Synth parses a document.',
+                reasoning: 'REACHABLE. The path resolved statically.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.narrative)
+        .hasText('On startup, Synth parses a document.');
+      assert
+        .dom(selectors.reasoningText)
+        .includesText('The path resolved statically.');
+      assert
+        .dom(selectors.reasoningText)
+        .doesNotIncludeText('could not be analysed');
+    });
+
+    // ─── App-named explanation ───────────────────────────────────────────────
+    test('it names the app from its sbom project in the explanation', async function (assert) {
+      const store = this.owner.lookup('service:store');
+      const sbProject = store.createRecord('sbom-project', { name: 'LeafPic' });
+      const sbFile = store.createRecord('sbom-file', { sbProject });
+
+      this.sbomComponent = store.createRecord('sbom-component', { sbFile });
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert.dom(explanationSelector).hasText(
+        t('sbomModule.reachability.explanationNamed.reachable', {
+          app: 'LeafPic',
+        })
+      );
+      assert.dom(explanationSelector).includesText("LeafPic's code");
+    });
+
+    test('it falls back to generic wording without an app name', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.NO_PATH_FOUND,
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(explanationSelector)
+        .hasText(t('sbomModule.reachability.explanation.noPathFound'));
+
+      this.set('appName', 'LeafPic');
+
+      assert.dom(explanationSelector).hasText(
+        t('sbomModule.reachability.explanationNamed.noPathFound', {
+          app: 'LeafPic',
+        })
+      );
+    });
+
+    test('it explains an inconclusive verdict in terms of the function call', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.appName = 'LeafPic';
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.UNKNOWN,
+            target: 'Lorg/junit/rules/TemporaryFolder;->create()',
+            blockers: [],
+            witness_path: [],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(explanationSelector)
+        .hasText(
+          'Analysis could not determine whether the vulnerable function is called.'
+        );
+    });
+
+    // ─── Inline verdict chips ────────────────────────────────────────────────
+    test('it renders every verdict in the reasoning as an inline chip', async function (assert) {
+      const store = this.owner.lookup('service:store');
+
+      this.sbomVulnerabilityAudit = pushAudit(
+        store,
+        this.server.create('sbom-vulnerability-audit', {
+          reachability: {
+            verdict: ReachabilityVerdict.UNKNOWN,
+            target: 'Lcom/example/Parser;->parse()',
+            blockers: [],
+            witness_path: [],
+            targets: [
+              {
+                label: 'Lcom/example/Parser;->parse()',
+                reasoning:
+                  'Reflection hides the class. The result is INCONCLUSIVE. ' +
+                  'It would be Potentially Reachable with a <b>trace</b>.',
+              },
+            ],
+          },
+        })
+      );
+
+      await render(TEMPLATE);
+
+      const chips = this.element.querySelectorAll(selectors.reasoningVerdict);
+
+      assert.strictEqual(chips.length, 2);
+      assert.dom(chips[0]).hasText(t('sbomModule.reachability.inconclusive'));
+      assert.dom(chips[1]).hasText(t('sbomModule.reachability.potential'));
+
+      assert
+        .dom(selectors.reasoningText)
+        .includesText('Reflection hides the class. The result is');
+      assert.dom(selectors.reasoningText).doesNotIncludeText('INCONCLUSIVE');
+
+      // Model text is never interpreted as markup.
+      assert.dom(`${selectors.reasoningText} b`).doesNotExist();
+      assert.dom(selectors.reasoningText).includesText('<b>trace</b>');
     });
   }
 );

@@ -6,8 +6,10 @@ import {
   formatDexSignature,
   groupWitnessByOwner,
   isQuietReachabilityVerdict,
+  isReachableOrPotentialFinding,
   presenceLabelKey,
   reachabilityChipColor,
+  reachabilityChipVariant,
   reachabilityExplanationKey,
   reachabilityLabelKey,
   reachabilityWitnessItems,
@@ -20,8 +22,8 @@ import {
 } from 'irene/utils/sbom-reachability';
 
 module('Unit | Utility | sbom-reachability', function () {
-  test('path-found verdicts show a primary chip', function (assert) {
-    assert.expect(12);
+  test('path-found verdicts show a filled error chip', function (assert) {
+    assert.expect(15);
 
     for (const verdict of [
       ReachabilityVerdict.REACHABLE,
@@ -29,7 +31,8 @@ module('Unit | Utility | sbom-reachability', function () {
       ReachabilityVerdict.CONDITION_MET,
     ]) {
       assert.true(shouldShowReachabilityChip(verdict));
-      assert.strictEqual(reachabilityChipColor(verdict), 'primary');
+      assert.strictEqual(reachabilityChipColor(verdict), 'error');
+      assert.strictEqual(reachabilityChipVariant(verdict), 'filled');
       assert.strictEqual(
         reachabilityLabelKey(verdict),
         'sbomModule.reachability.pathFound'
@@ -42,7 +45,7 @@ module('Unit | Utility | sbom-reachability', function () {
   });
 
   test('potential verdicts show a warn chip', function (assert) {
-    assert.expect(8);
+    assert.expect(10);
 
     for (const verdict of [
       ReachabilityVerdict.POTENTIALLY_REACHABLE,
@@ -50,6 +53,7 @@ module('Unit | Utility | sbom-reachability', function () {
     ]) {
       assert.true(shouldShowReachabilityChip(verdict));
       assert.strictEqual(reachabilityChipColor(verdict), 'warn');
+      assert.strictEqual(reachabilityChipVariant(verdict), 'semi-filled');
       assert.strictEqual(
         reachabilityLabelKey(verdict),
         'sbomModule.reachability.potential'
@@ -501,5 +505,30 @@ module('Unit | Utility | sbom-reachability', function () {
   test('an empty narrative splits to nothing', function (assert) {
     assert.strictEqual(splitWitnessNarrative(null), null);
     assert.strictEqual(splitWitnessNarrative('   '), null);
+  });
+
+  test('reachable-or-potential follows the display verdict', function (assert) {
+    // Exposure wins when present.
+    assert.true(
+      isReachableOrPotentialFinding({ exposure: 'CONFIRMED_EXPOSURE' })
+    );
+    assert.true(
+      isReachableOrPotentialFinding({ exposure: 'POTENTIAL_EXPOSURE' })
+    );
+    assert.false(
+      isReachableOrPotentialFinding({
+        exposure: 'NO_EXPOSURE_OBSERVED',
+        verdict: 'REACHABLE',
+      })
+    );
+
+    // Without an exposure, the raw verdict decides.
+    assert.true(isReachableOrPotentialFinding({ verdict: 'REACHABLE' }));
+    assert.true(
+      isReachableOrPotentialFinding({ verdict: 'POTENTIALLY_REACHABLE' })
+    );
+    assert.false(isReachableOrPotentialFinding({ verdict: 'NO_PATH_FOUND' }));
+    assert.false(isReachableOrPotentialFinding({ verdict: 'UNKNOWN' }));
+    assert.false(isReachableOrPotentialFinding(null));
   });
 });

@@ -1,4 +1,4 @@
-{{#if this.hasPath}}
+{{#if this.shouldShow}}
   <AkStack
     @direction='column'
     @spacing='1'
@@ -18,32 +18,34 @@
         {{t 'sbomModule.reachability.howYourAppReachesIt'}}
       </AkTypography>
 
-      <div
-        local-class='signature-toggle'
-        data-test-sbomComponentVulnerabilities-reachabilityCallPathToggle
-      >
-        <button
-          type='button'
-          local-class='toggle-option
+      {{#if this.hasPath}}
+        <div
+          local-class='signature-toggle'
+          data-test-sbomComponentVulnerabilities-reachabilityCallPathToggle
+        >
+          <button
+            type='button'
+            local-class='toggle-option
             {{unless this.showFullSignatures "toggle-option-active"}}'
-          data-test-sbomComponentVulnerabilities-reachabilityCallPathShortNames
-          aria-pressed='{{unless this.showFullSignatures "true" "false"}}'
-          {{on 'click' this.selectShortNames}}
-        >
-          {{t 'sbomModule.reachability.shortNames'}}
-        </button>
+            data-test-sbomComponentVulnerabilities-reachabilityCallPathShortNames
+            aria-pressed='{{unless this.showFullSignatures "true" "false"}}'
+            {{on 'click' this.selectShortNames}}
+          >
+            {{t 'sbomModule.reachability.shortNames'}}
+          </button>
 
-        <button
-          type='button'
-          local-class='toggle-option
+          <button
+            type='button'
+            local-class='toggle-option
             {{if this.showFullSignatures "toggle-option-active"}}'
-          data-test-sbomComponentVulnerabilities-reachabilityCallPathFullSignatures
-          aria-pressed='{{if this.showFullSignatures "true" "false"}}'
-          {{on 'click' this.selectFullSignatures}}
-        >
-          {{t 'sbomModule.reachability.fullSignatures'}}
-        </button>
-      </div>
+            data-test-sbomComponentVulnerabilities-reachabilityCallPathFullSignatures
+            aria-pressed='{{if this.showFullSignatures "true" "false"}}'
+            {{on 'click' this.selectFullSignatures}}
+          >
+            {{t 'sbomModule.reachability.fullSignatures'}}
+          </button>
+        </div>
+      {{/if}}
     </AkStack>
 
     {{#if this.narrative}}
@@ -54,6 +56,7 @@
         >
           <AkTypography
             local-class='{{if this.narrativeIsClamped "narrative-clamped"}}'
+            {{did-insert this.measureNarrative}}
             @variant='body2'
             @breakWord={{true}}
           >
@@ -61,7 +64,7 @@
           </AkTypography>
         </div>
 
-        {{#if this.narrativeIsClampable}}
+        {{#if this.narrativeOverflows}}
           <button
             type='button'
             local-class='text-toggle'
@@ -86,8 +89,8 @@
             <AkIcon
               @iconName={{if
                 this.analysisDetailExpanded
-                'keyboard-arrow-down'
-                'keyboard-arrow-right'
+                'arrow-drop-down'
+                'chevron-right'
               }}
               @size='small'
               @color='textSecondary'
@@ -116,128 +119,148 @@
       </AkStack>
     {{/if}}
 
-    <div
-      local-class='path-box'
-      data-test-sbomComponentVulnerabilities-reachabilityCallPathSteps
-    >
-      {{#each this.groups as |group|}}
-        {{#if group.headerLabel}}
-          <div
-            local-class='group-header
-              {{if group.isComponent "group-header-boundary"}}'
-            data-test-sbomComponentVulnerabilities-reachabilityCallPathGroupHeader='{{group.testKey}}'
-          >
-            <AkTypography
-              local-class='group-header-text'
-              @variant='body3'
-              @color='textSecondary'
-              @fontWeight='bold'
-            >
-              {{group.headerLabel}}
-            </AkTypography>
-          </div>
-        {{/if}}
+    {{#if this.showNoTrace}}
+      <div
+        local-class='no-trace'
+        data-test-sbomComponentVulnerabilities-reachabilityCallPathNoTrace
+      >
+        <AkTypography @variant='body2' @color='textSecondary'>
+          {{t this.noTraceKey}}
+        </AkTypography>
+      </div>
+    {{/if}}
 
-        <div
-          local-class='group-steps {{if group.isComponent "group-steps-library"}}'
-        >
-          {{#each group.items as |step|}}
+    {{#if this.hasPath}}
+      <div
+        local-class='path-box'
+        data-test-sbomComponentVulnerabilities-reachabilityCallPathSteps
+      >
+        {{#each this.groups as |group|}}
+          {{#if group.headerLabel}}
             <div
-              local-class='step'
-              data-test-sbomComponentVulnerabilities-reachabilityCallPathStep='{{step.testIndex}}'
+              local-class='group-header
+              {{if group.isComponent "group-header-boundary"}}'
+              data-test-sbomComponentVulnerabilities-reachabilityCallPathGroupHeader='{{group.testKey}}'
             >
-              <span
-                local-class='step-marker
-                  {{if step.isMilestone "step-marker-milestone"}}'
-                data-test-sbomComponentVulnerabilities-reachabilityCallPathStepMarker='{{step.testIndex}}'
-              ></span>
+              <AkTypography
+                local-class='group-header-text'
+                @variant='body3'
+                @color='textSecondary'
+                @fontWeight='bold'
+              >
+                {{group.headerLabel}}
+              </AkTypography>
+            </div>
+          {{/if}}
 
-              <div local-class='step-body'>
-                <AkStack @alignItems='center' @spacing='0.5' @flexWrap='wrap'>
-                  <AkTypography
-                    local-class='signature'
-                    data-test-sbomComponentVulnerabilities-reachabilityCallPathStepSignature='{{step.testIndex}}'
-                    @variant='body2'
-                    @fontWeight='bold'
-                    @breakWord={{true}}
-                  >
-                    {{if
-                      this.showFullSignatures
-                      step.display
-                      step.shortDisplay
-                    }}
-                  </AkTypography>
+          <div
+            local-class='group-steps {{if
+              group.isComponent
+              "group-steps-library"
+            }}'
+          >
+            {{#each group.items as |step|}}
+              <div
+                local-class='step'
+                data-test-sbomComponentVulnerabilities-reachabilityCallPathStep='{{step.testIndex}}'
+              >
+                <span
+                  local-class='step-marker
+                  {{if step.isMilestone "step-marker-milestone"}}
+                  {{if step.isTarget "step-marker-vulnerable"}}'
+                  data-test-sbomComponentVulnerabilities-reachabilityCallPathStepMarker='{{step.testIndex}}'
+                ></span>
 
-                  {{#if step.isEntryPoint}}
-                    <AkChip
-                      data-test-sbomComponentVulnerabilities-reachabilityCallPathEntry
-                      @variant='semi-filled'
-                      @size='small'
-                      @color='default'
-                      @label={{t 'sbomModule.reachability.entryPoint'}}
-                    />
-                  {{/if}}
-
-                  {{#if step.isFixHere}}
-                    <AkChip
-                      data-test-sbomComponentVulnerabilities-reachabilityCallPathFixHere
-                      @variant='semi-filled'
-                      @size='small'
-                      @color='error'
-                      @label={{t 'sbomModule.reachability.fixHere'}}
-                    />
-                  {{/if}}
-
-                  {{#if step.isTarget}}
-                    <AkChip
-                      data-test-sbomComponentVulnerabilities-reachabilityCallPathTarget
-                      @variant='filled'
-                      @size='small'
-                      @color='error'
-                      @label={{t 'sbomModule.reachability.vulnerableFunction'}}
-                    />
-                  {{/if}}
-
-                  {{#if step.edgeLabel}}
-                    <AkChip
-                      data-test-sbomComponentVulnerabilities-reachabilityCallPathEdge
-                      @variant='semi-filled'
-                      @size='small'
-                      @color='default'
-                      @label={{step.edgeLabel}}
-                    />
-                  {{/if}}
-                </AkStack>
-
-                {{#unless this.showFullSignatures}}
-                  {{#if step.packageName}}
+                <div local-class='step-body'>
+                  <AkStack @alignItems='center' @spacing='0.5' @flexWrap='wrap'>
                     <AkTypography
-                      local-class='signature package-name'
-                      data-test-sbomComponentVulnerabilities-reachabilityCallPathStepPackage='{{step.testIndex}}'
-                      @variant='body3'
+                      local-class='signature'
+                      data-test-sbomComponentVulnerabilities-reachabilityCallPathStepSignature='{{step.testIndex}}'
+                      @variant='body2'
+                      @color={{if step.isTarget 'error' 'textPrimary'}}
+                      @fontWeight='bold'
+                      @breakWord={{true}}
+                    >
+                      {{if
+                        this.showFullSignatures
+                        step.display
+                        step.shortDisplay
+                      }}
+                    </AkTypography>
+
+                    {{#if step.isEntryPoint}}
+                      <AkChip
+                        data-test-sbomComponentVulnerabilities-reachabilityCallPathEntry
+                        @variant='semi-filled'
+                        @size='small'
+                        @color='default'
+                        @label={{t 'sbomModule.reachability.entryPoint'}}
+                      />
+                    {{/if}}
+
+                    {{#if step.isFixHere}}
+                      <AkChip
+                        data-test-sbomComponentVulnerabilities-reachabilityCallPathFixHere
+                        @variant='semi-filled'
+                        @size='small'
+                        @color={{this.fixHereColor}}
+                        @label={{this.fixHereLabel}}
+                      />
+                    {{/if}}
+
+                    {{#if step.isTarget}}
+                      <AkChip
+                        data-test-sbomComponentVulnerabilities-reachabilityCallPathTarget
+                        @variant='filled'
+                        @size='small'
+                        @color='error'
+                        @label={{t
+                          'sbomModule.reachability.vulnerableFunction'
+                        }}
+                      />
+                    {{/if}}
+
+                    {{#if step.edgeLabel}}
+                      <AkChip
+                        data-test-sbomComponentVulnerabilities-reachabilityCallPathEdge
+                        @variant='semi-filled'
+                        @size='small'
+                        @color='default'
+                        @label={{step.edgeLabel}}
+                      />
+                    {{/if}}
+                  </AkStack>
+
+                  {{#unless this.showFullSignatures}}
+                    {{#if step.packageName}}
+                      <AkTypography
+                        local-class='signature package-name'
+                        data-test-sbomComponentVulnerabilities-reachabilityCallPathStepPackage='{{step.testIndex}}'
+                        @variant='body3'
+                        @color='textSecondary'
+                        @breakWord={{true}}
+                      >
+                        {{step.packageName}}
+                      </AkTypography>
+                    {{/if}}
+                  {{/unless}}
+
+                  {{#if step.note}}
+                    <AkTypography
+                      data-test-sbomComponentVulnerabilities-reachabilityCallPathStepNote='{{step.testIndex}}'
+                      @variant='body2'
                       @color='textSecondary'
                       @breakWord={{true}}
                     >
-                      {{step.packageName}}
+                      {{step.note}}
                     </AkTypography>
                   {{/if}}
-                {{/unless}}
-
-                {{#if step.note}}
-                  <AkTypography
-                    data-test-sbomComponentVulnerabilities-reachabilityCallPathStepNote='{{step.testIndex}}'
-                    @variant='body2'
-                    @color='textSecondary'
-                    @breakWord={{true}}
-                  >
-                    {{step.note}}
-                  </AkTypography>
-                {{/if}}
+                </div>
               </div>
-            </div>
-          {{/each}}
-        </div>
-      {{/each}}
-    </div>
+            {{/each}}
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
   </AkStack>
 {{/if}}

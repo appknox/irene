@@ -178,7 +178,7 @@ export function shouldShowReachabilityDetail(
 
 export function reachabilityChipColor(verdict?: string | null): AkChipColor {
   if (isPathFoundVerdict(verdict)) {
-    return 'primary';
+    return 'error';
   }
 
   if (POTENTIAL_VERDICTS.has(verdict ?? '')) {
@@ -186,6 +186,18 @@ export function reachabilityChipColor(verdict?: string | null): AkChipColor {
   }
 
   return 'default';
+}
+
+export type ReachabilityChipVariant = 'filled' | 'semi-filled';
+
+/**
+ * Reachable is the one state that renders as a solid (filled) badge, so it
+ * reads the same everywhere; every other verdict stays semi-filled.
+ */
+export function reachabilityChipVariant(
+  verdict?: string | null
+): ReachabilityChipVariant {
+  return isPathFoundVerdict(verdict) ? 'filled' : 'semi-filled';
 }
 
 export function reachabilityLabelKey(verdict?: string | null): string {
@@ -606,9 +618,6 @@ export function splitWitnessNarrative(
   };
 }
 
-/** Length past which the narrative is clamped behind a "Show more" toggle. */
-export const NARRATIVE_CLAMP_THRESHOLD = 240;
-
 export interface SbomReachabilityTargetSplit {
   called: SbomReachabilityTarget[];
   alsoAffected: SbomReachabilityTarget[];
@@ -640,4 +649,181 @@ export function splitFindingTargets(
   return finding?.witness_path?.length && first
     ? { called: [first], alsoAffected: rest }
     : { called: [], alsoAffected: targets };
+}
+
+/**
+ * Key for the verdict explanation that names the app (`{app}` placeholder),
+ * or null when the verdict's copy does not mention the app at all.
+ */
+export function reachabilityNamedExplanationKey(
+  verdict?: string | null
+): string | null {
+  if (isPathFoundVerdict(verdict)) {
+    return 'sbomModule.reachability.explanationNamed.reachable';
+  }
+
+  if (NO_PATH_VERDICTS.has(verdict ?? '')) {
+    return 'sbomModule.reachability.explanationNamed.noPathFound';
+  }
+
+  return null;
+}
+
+/**
+ * The verdict a finding is presented under: the engine's folded exposure
+ * when present, the raw reachability verdict otherwise.
+ */
+export function findingDisplayVerdict(
+  finding?: SbomReachabilityFinding | null
+): string | null {
+  return verdictForExposure(finding?.exposure) ?? finding?.verdict ?? null;
+}
+
+/**
+ * Whether a call path was proven to the vulnerable functions — i.e. the
+ * "fix" frame is a confirmed fix point rather than one to check.
+ */
+export function isConfirmedFinding(
+  finding?: SbomReachabilityFinding | null
+): boolean {
+  return isPathFoundVerdict(findingDisplayVerdict(finding));
+}
+
+/**
+ * Whether the finding is presented as Reachable or Potentially reachable,
+ * from the same display verdict the chip uses (exposure, else verdict).
+ */
+export function isReachableOrPotentialFinding(
+  finding?: SbomReachabilityFinding | null
+): boolean {
+  const verdict = findingDisplayVerdict(finding);
+
+  return isPathFoundVerdict(verdict) || POTENTIAL_VERDICTS.has(verdict ?? '');
+}
+
+/**
+ * Whether splitting targets into "called" and "not called" would overstate
+ * what the analysis knows: the verdict is inconclusive, or nothing was traced
+ * at all. A not-reachable verdict is a proven absence, so it still splits.
+ */
+export function isTargetCallStatusUnknown(
+  finding?: SbomReachabilityFinding | null
+): boolean {
+  if (!finding) {
+    return false;
+  }
+
+  const verdict = findingDisplayVerdict(finding);
+
+  if (verdict === ReachabilityVerdict.UNKNOWN) {
+    return true;
+  }
+
+  if (NO_PATH_VERDICTS.has(verdict ?? '')) {
+    return false;
+  }
+
+  const hasWitness =
+    reachabilityWitnessPathItems(finding).length > 0 ||
+    (finding.targets ?? []).some((target) => target.has_witness);
+
+  return !hasWitness;
+}
+
+/** One run of a reasoning paragraph: prose, or a verdict to render as a chip. */
+export type SbomReasoningSegment =
+  | { kind: 'text'; text: string }
+  | { kind: 'verdict'; verdict: string; raw: string };
+
+const REASONING_TOKEN_VERDICTS: Record<string, string> = {
+  REACHABLE: ReachabilityVerdict.REACHABLE,
+  CONFIRMED_REACHABLE: ReachabilityVerdict.CONFIRMED_REACHABLE,
+  POTENTIALLY_REACHABLE: ReachabilityVerdict.POTENTIALLY_REACHABLE,
+  NOT_REACHABLE: ReachabilityVerdict.NO_PATH_FOUND,
+  NO_PATH_FOUND: ReachabilityVerdict.NO_PATH_FOUND,
+  INCONCLUSIVE: ReachabilityVerdict.UNKNOWN,
+};
+
+const KNOWN_VERDICTS = new Set<string>(Object.values(ReachabilityVerdict));
+
+/** A raw verdict token opening the paragraph, e.g. "POTENTIALLY_REACHABLE:". */
+const LEADING_VERDICT_TOKEN = /^([A-Z][A-Z_]{3,})[.:](?=\s|$)/;
+
+/**
+ * Verdict words inside the prose. Case-sensitive on purpose: lower-case
+ * "reachable" is ordinary English, the capitalised and upper-case forms are
+ * the verdict names. Longer phrases come first so "Potentially Reachable"
+ * never splits into prose plus a "Reachable" chip, and a negated verdict
+ * ("not Reachable") becomes the not-reachable chip rather than "Reachable".
+ */
+const INLINE_VERDICT_SOURCE =
+  '\\b(?:(?:CONFIRMED|POTENTIALLY|NOT|[Nn]ot)[_ ])?REACHABLE\\b' +
+  '|\\bNO[_ ]PATH[_ ]FOUND\\b|\\bINCONCLUSIVE\\b' +
+  '|\\b(?:[Pp]otentially|[Nn]ot) Reachable\\b|\\b(?:Potentially|Not) reachable\\b' +
+  '|\\bReachable\\b|\\bInconclusive\\b';
+
+function reasoningTokenVerdict(raw: string): string | null {
+  const token = raw.toUpperCase().replace(/\s+/g, '_');
+  const mapped = REASONING_TOKEN_VERDICTS[token];
+
+  if (mapped) {
+    return mapped;
+  }
+
+  return KNOWN_VERDICTS.has(token) ? token : null;
+}
+
+function splitInlineVerdicts(text: string): SbomReasoningSegment[] {
+  const segments: SbomReasoningSegment[] = [];
+  const pattern = new RegExp(INLINE_VERDICT_SOURCE, 'g');
+  let cursor = 0;
+  let match = pattern.exec(text);
+
+  while (match) {
+    const raw = match[0];
+    const verdict = reasoningTokenVerdict(raw) as string;
+
+    if (match.index > cursor) {
+      segments.push({ kind: 'text', text: text.slice(cursor, match.index) });
+    }
+
+    segments.push({ kind: 'verdict', verdict, raw });
+    cursor = match.index + raw.length;
+    match = pattern.exec(text);
+  }
+
+  if (cursor < text.length) {
+    segments.push({ kind: 'text', text: text.slice(cursor) });
+  }
+
+  return segments;
+}
+
+/**
+ * Split a reasoning paragraph into prose and verdict runs so the UI can show
+ * each verdict as the same chip it uses elsewhere. A leading raw token
+ * ("REACHABLE.") is consumed with its punctuation; later occurrences keep
+ * the surrounding punctuation as prose. Pure text in, plain data out — the
+ * caller renders it, nothing here produces HTML.
+ */
+export function tokenizeReasoning(
+  text?: string | null
+): SbomReasoningSegment[] {
+  if (!text) {
+    return [];
+  }
+
+  const leading = text.match(LEADING_VERDICT_TOKEN);
+  const leadingVerdict = leading
+    ? reasoningTokenVerdict(leading[1] ?? '')
+    : null;
+
+  if (!leading || !leadingVerdict) {
+    return splitInlineVerdicts(text);
+  }
+
+  return [
+    { kind: 'verdict', verdict: leadingVerdict, raw: leading[1] ?? '' },
+    ...splitInlineVerdicts(text.slice(leading[0].length)),
+  ];
 }

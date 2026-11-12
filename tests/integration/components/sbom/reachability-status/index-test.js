@@ -4,7 +4,10 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
-import { ReachabilityVerdict } from 'irene/utils/sbom-reachability';
+import {
+  FindingExposure,
+  ReachabilityVerdict,
+} from 'irene/utils/sbom-reachability';
 
 // ─── Selectors ───
 const selectors = {
@@ -71,6 +74,45 @@ module('Integration | Component | sbom/reachability-status', function (hooks) {
       assert.dom(selectors.empty).doesNotExist();
     }
   );
+
+  test.each(
+    'it renders one colour and variant per state',
+    [
+      [ReachabilityVerdict.CONFIRMED_REACHABLE, 'error', 'filled'],
+      [ReachabilityVerdict.POTENTIALLY_REACHABLE, 'warn', 'semi-filled'],
+      [ReachabilityVerdict.UNKNOWN, 'default', 'semi-filled'],
+      [ReachabilityVerdict.NO_PATH_FOUND, 'default', 'semi-filled'],
+    ],
+    async function (assert, [verdict, color, variant]) {
+      this.set('verdict', verdict);
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.chip)
+        .hasClass(RegExp(`ak-chip-color-${color}`))
+        .hasClass(RegExp(`ak-chip-variant-${variant}`));
+    }
+  );
+
+  test('exposure overrides the verdict for the chip state', async function (assert) {
+    this.setProperties({
+      verdict: ReachabilityVerdict.UNKNOWN,
+      exposure: FindingExposure.CONFIRMED,
+    });
+
+    await render(hbs`
+      <Sbom::ReachabilityStatus
+        @verdict={{this.verdict}}
+        @exposure={{this.exposure}}
+      />
+    `);
+
+    assert
+      .dom(selectors.chip)
+      .hasText(t('sbomModule.reachability.pathFound'))
+      .hasClass(/ak-chip-color-error/);
+  });
 
   test('compact mode shows unknown as inconclusive', async function (assert) {
     this.setProperties({
