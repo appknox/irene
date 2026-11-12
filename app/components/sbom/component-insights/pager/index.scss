@@ -1,0 +1,26 @@
+.pager-index {
+  min-width: 2.25em;
+  text-align: center;
+  padding: 0.125em 0.5em;
+  border: 1px solid var(--sbom-component-insights-pager-index-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-pager-index-background-color);
+}
+
+.pager-button[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

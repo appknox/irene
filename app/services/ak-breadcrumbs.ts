@@ -167,6 +167,34 @@ export default class AkBreadcrumbsService extends Service {
   }
 
   /**
+   * Patches the query of the crumb for `route` in the current trail and in
+   * session storage. Query-param-only transitions do not re-enter a route, so
+   * a crumb saved on entry would otherwise keep a stale query.
+   *
+   * @param {string} route - The route name of the crumb to patch.
+   * @param {Record<string, unknown> | undefined} query - The new query, or undefined to clear it.
+   */
+  @action updateCrumbQuery(
+    route: string,
+    query: Record<string, unknown> | undefined
+  ): void {
+    const items = this.breadcrumbItems.map((it) => {
+      if (it.route !== route) {
+        return it;
+      }
+
+      const rest = { ...it };
+
+      delete rest.query;
+
+      return query ? { ...rest, query } : rest;
+    });
+
+    this.breadcrumbItems = items;
+    this._saveBreadcrumbItemsToLStorage(items, route);
+  }
+
+  /**
    * Retrieves stored breadcrumbs from either fallback crumbs or local storage if available
    *
    * @param {Route} originRouteClass - The route class instance.

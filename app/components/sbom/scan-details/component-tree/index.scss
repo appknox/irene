@@ -23,7 +23,7 @@
     }
   }
 }
-  
+
 .tree-node {
   height: 34px;
   margin-left: 20px;
@@ -41,9 +41,10 @@
     height: 34px;
     top: -17px;
     position: relative;
-    border-bottom: 1px solid var(--sbom-scan-details-component-tree-border-color);
+    border-bottom: 1px solid
+      var(--sbom-scan-details-component-tree-border-color);
     border-left: 1px solid var(--sbom-scan-details-component-tree-border-color);
-  }  
+  }
 
   .space {
     position: relative;
@@ -56,10 +57,12 @@
       border-left: 0px;
     }
   }
-}  
+}
 
 .tree-package-name-container {
-  background-color: var(--sbom-scan-details-component-tree-header-background-color);
+  background-color: var(
+    --sbom-scan-details-component-tree-header-background-color
+  );
   margin-bottom: 15px;
   padding: 0.3em 0.7em;
 }
@@ -74,8 +77,12 @@
   overflow: auto;
   max-height: 66vh;
   border: 1px solid var(--sbom-scan-details-component-tree-border-color);
-  border-bottom-left-radius: var(--sbom-scan-details-component-tree-border-radius);
-  border-bottom-right-radius: var(--sbom-scan-details-component-tree-border-radius);
+  border-bottom-left-radius: var(
+    --sbom-scan-details-component-tree-border-radius
+  );
+  border-bottom-right-radius: var(
+    --sbom-scan-details-component-tree-border-radius
+  );
   // box-shadow: inset 0 10px 10px -10px rgba(0, 0, 0, 0.2), inset 0 -10px 10px -10px rgba(0, 0, 0, 0.2);
 }
 
@@ -84,24 +91,41 @@
   background: 
     /* Shadow covers */
     linear-gradient(white 30%, rgba(255, 255, 255, 0)),
-    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%, 
+    linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
     /* Shadows */
-    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)),
-    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, .2), rgba(0, 0, 0, 0)) 0 100%;
+      radial-gradient(
+        farthest-side at 50% 0,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)
+      ),
+    radial-gradient(
+        farthest-side at 50% 100%,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
   background-repeat: no-repeat;
   background-color: white;
-  background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+  background-size:
+    100% 40px,
+    100% 40px,
+    100% 14px,
+    100% 14px;
   background-attachment: local, local, scroll, scroll;
 }
 
 .tree-label-highlighted {
-  background-color: var(--sbom-scan-details-component-tree-highlighted-background-color);
+  background-color: var(
+    --sbom-scan-details-component-tree-highlighted-background-color
+  );
   border-radius: 4px;
   padding: 2px 5px;
 }
 
 .highlighted-return-icon-container {
-  background-color: var(--sbom-scan-details-component-tree-highlighted-background-color);
+  background-color: var(
+    --sbom-scan-details-component-tree-highlighted-background-color
+  );
   border-radius: 50%;
   padding: 2px;
 

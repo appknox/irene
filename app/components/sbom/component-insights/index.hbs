@@ -1,0 +1,36 @@
+<AkStack
+  @direction='column'
+  @alignItems='stretch'
+  @width='full'
+  @spacing='3'
+  data-test-sbomComponentInsights-container
+  ...attributes
+>
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='2'
+    @flexWrap='wrap'
+    local-class='header'
+    data-test-sbomComponentInsights-header
+  >
+    <AkTypography
+      @variant='h5'
+      local-class='coordinate'
+      data-test-sbomComponentInsights-coordinate
+    >
+      {{this.coordinate}}
+    </AkTypography>
+
+    <Sbom::ComponentStatus @sbomComponent={{@sbomComponent}} />
+  </AkStack>
+
+  <Sbom::ComponentInsights::Details @sbomComponent={{@sbomComponent}} />
+
+  <Sbom::ComponentInsights::Vulnerabilities
+    @sbomComponent={{@sbomComponent}}
+    @selectedId={{@vuln}}
+    @onSelect={{this.handleSelect}}
+  />
+</AkStack>

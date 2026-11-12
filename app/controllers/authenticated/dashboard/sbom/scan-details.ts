@@ -38,6 +38,12 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
     {
       view_type: { type: 'string' as const },
     },
+    {
+      reachability: { type: 'string' as const },
+    },
+    {
+      tab: { type: 'string' as const },
+    },
   ];
 
   component_limit = 25;
@@ -46,12 +52,16 @@ export default class AuthenticatedDashboardSbomScanDetailsController extends Con
   is_dependency = null;
   component_type = -1;
   view_type = 'tree';
+  reachability = null;
+  tab = null;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     return {
       title: `${this.intl.t('sbomModule.allComponentsAndVulnerabilities')} (${this.model.projectLastFileName})`,
       route: 'authenticated.dashboard.sbom.scan-details',
       models: [this.model.sbomProject.id, this.model.sbomFile.id],
+      // Keep the open tab so crumbs from a child page return to it.
+      ...(this.tab === 'complete' ? { query: { tab: 'complete' } } : {}),
       routeGroup: 'sbom',
 
       parentCrumb: {

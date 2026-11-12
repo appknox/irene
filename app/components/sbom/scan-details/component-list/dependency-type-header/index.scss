@@ -1,19 +1,31 @@
 .status-filter {
   width: 12.5em;
-  background-color: var(--sbom-scanDetails-componentList-dependencyTypeHeader-background-color);
-  box-shadow: var(--sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow);
-  border-radius: var(--sbom-scanDetails-componentList-dependencyTypeHeader-border-radius);
+  background-color: var(
+    --sbom-scanDetails-componentList-dependencyTypeHeader-background-color
+  );
+  box-shadow: var(
+    --sbom-scanDetails-componentList-dependencyTypeHeader-box-shadow
+  );
+  border-radius: var(
+    --sbom-scanDetails-componentList-dependencyTypeHeader-border-radius
+  );
 
   .filter-option:hover {
-    background-color: var(--sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color);
+    background-color: var(
+      --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-hover-background-color
+    );
   }
 
   .clear-filter-section {
-    background-color: var(--sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color);
+    background-color: var(
+      --sbom-scanDetails-componentList-dependencyTypeHeader-filter-option-clear-filter-background-color
+    );
   }
 
   .filter-header {
-    background-color: var(--sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color);
+    background-color: var(
+      --sbom-scanDetails-componentList-dependencyTypeHeader-filter-header-background-color
+    );
     padding: 0.5em 1em;
 
     .filter-header-text {

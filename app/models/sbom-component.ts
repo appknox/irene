@@ -74,6 +74,10 @@ export default class SbomComponentModel extends Model {
   @attr('string')
   declare via: string | null;
 
+  /** Version of that parent, for quoting its declared dependency line. */
+  @attr('string')
+  declare viaVersion: string | null;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 

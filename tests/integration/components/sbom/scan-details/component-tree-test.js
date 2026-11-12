@@ -11,6 +11,7 @@ import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import {
   ReachabilityVerdict,
   reachabilityLabelKey,
@@ -344,20 +345,24 @@ module(
         unknown_count: 0,
       };
 
-      this.server.get('/v2/sb_files/:id/sb_file_components', (schema, request) => {
-        const results = schema.sbomComponents.all().models;
-        const retdata = results.slice(
-          request.queryParams.offset,
-          Number(request.queryParams.offset) + Number(request.queryParams.limit)
-        );
+      this.server.get(
+        '/v2/sb_files/:id/sb_file_components',
+        (schema, request) => {
+          const results = schema.sbomComponents.all().models;
+          const retdata = results.slice(
+            request.queryParams.offset,
+            Number(request.queryParams.offset) +
+              Number(request.queryParams.limit)
+          );
 
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results: retdata,
-        };
-      });
+          return {
+            count: results.length,
+            next: null,
+            previous: null,
+            results: retdata,
+          };
+        }
+      );
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentTree
@@ -377,7 +382,9 @@ module(
 
       assert
         .dom('[data-test-sbomReachability-status]', nodes[0])
-        .hasText(t(reachabilityLabelKey(ReachabilityVerdict.CONFIRMED_REACHABLE)));
+        .hasText(
+          t(reachabilityLabelKey(ReachabilityVerdict.CONFIRMED_REACHABLE))
+        );
     });
 
     test('it hides reachability on tree nodes when the verdict is unknown', async function (assert) {
@@ -393,20 +400,24 @@ module(
         unknown_count: 4,
       };
 
-      this.server.get('/v2/sb_files/:id/sb_file_components', (schema, request) => {
-        const results = schema.sbomComponents.all().models;
-        const retdata = results.slice(
-          request.queryParams.offset,
-          Number(request.queryParams.offset) + Number(request.queryParams.limit)
-        );
+      this.server.get(
+        '/v2/sb_files/:id/sb_file_components',
+        (schema, request) => {
+          const results = schema.sbomComponents.all().models;
+          const retdata = results.slice(
+            request.queryParams.offset,
+            Number(request.queryParams.offset) +
+              Number(request.queryParams.limit)
+          );
 
-        return {
-          count: results.length,
-          next: null,
-          previous: null,
-          results: retdata,
-        };
-      });
+          return {
+            count: results.length,
+            next: null,
+            previous: null,
+            results: retdata,
+          };
+        }
+      );
 
       await render(hbs`
         <Sbom::ScanDetails::ComponentTree
@@ -424,7 +435,9 @@ module(
 
       const nodes = findAll('[data-test-component-tree-node]');
 
-      assert.dom('[data-test-sbomReachability-status]', nodes[0]).doesNotExist();
+      assert
+        .dom('[data-test-sbomReachability-status]', nodes[0])
+        .doesNotExist();
       assert.dom('[data-test-sbomReachability-empty]', nodes[0]).doesNotExist();
     });
   }

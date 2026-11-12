@@ -1,0 +1,26 @@
+.section {
+  border: 1px solid var(--sbom-component-insights-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-background-color);
+  overflow: hidden;
+}
+
+.pager-row {
+  padding: 0.5em 1em;
+  background-color: var(--sbom-component-insights-strip-background-color);
+  border-bottom: 1px solid var(--sbom-component-insights-border-color);
+}
+
+.advisory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  color: var(--text-primary);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

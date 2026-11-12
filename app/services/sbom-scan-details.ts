@@ -29,8 +29,8 @@ export default class SbomScanDetailsService extends Service {
 
   /**
    * Restricts the list to components the reachability run concluded on.
-   * Set by the insights view; the original-analysis view leaves it false so
-   * the full SBOM is listed.
+   * Set by the Reachability insights tab; the default Complete analysis tab
+   * leaves it false so the full SBOM is listed.
    */
   @tracked onlyReachable = false;
   @tracked searchQuery: string = '';
@@ -69,20 +69,34 @@ export default class SbomScanDetailsService extends Service {
     view_type: 'tree' | 'list';
     reachability: string | null;
   }>) {
-    this.sbomFile = sbomFile ?? this.sbomFile;
-    this.viewType = view_type ?? this.viewType;
-    this.searchQuery = component_query ?? this.searchQuery;
-    this.selectedComponentType = component_type ?? this.selectedComponentType;
+    // Only write the fields that were passed. Reading a tracked field and
+    // writing it back in the same render (as `x = arg ?? this.x` would) trips
+    // Glimmer's "updated after it was used" assertion when this is called
+    // from a component constructor.
+    if (sbomFile) {
+      this.sbomFile = sbomFile;
+    }
 
-    this.selectedDependencyType =
-      dependency_type === undefined
-        ? this.selectedDependencyType
-        : dependency_type === null
-          ? null
-          : dependency_type === 'true';
+    if (view_type) {
+      this.viewType = view_type;
+    }
 
-    this.selectedReachability =
-      reachability === undefined ? this.selectedReachability : reachability;
+    if (component_query !== undefined && component_query !== null) {
+      this.searchQuery = component_query;
+    }
+
+    if (component_type !== undefined && component_type !== null) {
+      this.selectedComponentType = component_type;
+    }
+
+    if (dependency_type !== undefined) {
+      this.selectedDependencyType =
+        dependency_type === null ? null : dependency_type === 'true';
+    }
+
+    if (reachability !== undefined) {
+      this.selectedReachability = reachability;
+    }
 
     return this;
   }

@@ -23,6 +23,8 @@ export interface SbomScanDetailsComponentListSignature {
     sbomScanSummary: SbomScanSummaryModel | null;
     view?: SbomScanDetailsView;
     showReachability?: boolean;
+    /** Switches the scan-details page to the Complete analysis tab. */
+    onViewComplete?: () => void;
   };
 }
 
@@ -41,6 +43,18 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
 
   get tNoComponentsFound() {
     return this.intl.t('sbomModule.componentListEmptyText.title');
+  }
+
+  /**
+   * Empty-result heading: echoes the search term when there is one, so the
+   * user can see what matched nothing; otherwise the generic filter copy.
+   */
+  get tEmptyResultTitle() {
+    const query = this.searchQuery?.trim();
+
+    return query
+      ? this.intl.t('sbomModule.noComponentsMatch', { query })
+      : this.tNoComponentsFound;
   }
 
   get tNoComponentsFoundFilter() {
@@ -108,28 +122,84 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
     return this.hasNoSbomComponent && !this.isAnyFilterApplied;
   }
 
-  get columns() {
-    const columns = [
+  /**
+   * Reachability ran, the insights list is empty and nothing narrows it:
+   * the scan simply has no reachable finding, which is not a missing SBOM.
+   */
+  get isInsightsEmpty() {
+    return (
+      this.isInsightsView &&
+      this.args.showReachability !== false &&
+      this.isEmptyAndNoFilterApplied
+    );
+  }
+
+  @action
+  viewCompleteAnalysis() {
+    this.args.onViewComplete?.();
+  }
+
+  get nameColumn() {
+    return {
+      name: this.intl.t('sbomModule.componentName'),
+      valuePath: 'name',
+      width: 150,
+    };
+  }
+
+  get typeColumn() {
+    return {
+      name: this.intl.t('sbomModule.componentType'),
+      component: 'sbom/scan-details/component-list/type',
+      headerComponent: 'sbom/scan-details/component-list/type-header',
+    };
+  }
+
+  get dependencyTypeColumn() {
+    return {
+      name: this.intl.t('dependencyType'),
+      component: 'sbom/scan-details/component-list/dependency-type',
+      headerComponent:
+        'sbom/scan-details/component-list/dependency-type-header',
+    };
+  }
+
+  get statusColumn() {
+    return {
+      name: this.intl.t('status'),
+      component: 'sbom/component-status',
+    };
+  }
+
+  /**
+   * Insights tab: the full purl leads, the verdict sits next to the status
+   * it qualifies, and the component-type column is dropped — every row here
+   * is a vulnerable library, so the type adds nothing.
+   */
+  get insightsColumns() {
+    return [
       {
         name: this.intl.t('sbomModule.componentName'),
-        valuePath: 'name',
-        width: 150,
+        component: 'sbom/scan-details/component-list/purl',
+        width: 220,
       },
+      this.statusColumn,
       {
-        name: this.intl.t('sbomModule.componentType'),
-        component: 'sbom/scan-details/component-list/type',
-        headerComponent: 'sbom/scan-details/component-list/type-header',
+        name: this.intl.t('sbomModule.reachabilityInsights.title'),
+        // Per-advisory counts rather than one rolled-up chip.
+        component: 'sbom/scan-details/component-list/reachability-counts',
+        headerComponent: 'sbom/scan-details/component-list/reachability-header',
       },
-      {
-        name: this.intl.t('dependencyType'),
-        component: 'sbom/scan-details/component-list/dependency-type',
-        headerComponent:
-          'sbom/scan-details/component-list/dependency-type-header',
-      },
-      {
-        name: this.intl.t('status'),
-        component: 'sbom/component-status',
-      },
+      this.dependencyTypeColumn,
+    ];
+  }
+
+  get columns() {
+    const columns = [
+      this.nameColumn,
+      this.typeColumn,
+      this.dependencyTypeColumn,
+      this.statusColumn,
     ];
 
     // Without reachability every cell would read "-", so the column is
@@ -138,37 +208,51 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       return columns;
     }
 
+    if (this.isInsightsView) {
+      return this.insightsColumns;
+    }
+
     return [
       ...columns,
       {
-        name: this.intl.t(
-          this.isOriginalAnalysis
-            ? 'sbomModule.reachability.title'
-            : 'sbomModule.reachabilityInsights.title'
-        ),
-        // The insights view breaks the verdict out into per-advisory counts;
-        // the original list stays a single rolled-up chip.
-        component: this.isOriginalAnalysis
-          ? 'sbom/scan-details/component-list/reachability'
-          : 'sbom/scan-details/component-list/reachability-counts',
+        name: this.intl.t('sbomModule.reachability.title'),
+        component: 'sbom/scan-details/component-list/reachability',
         headerComponent: 'sbom/scan-details/component-list/reachability-header',
       },
     ];
   }
 
-  get isOriginalAnalysis() {
-    return this.args.view === 'original';
+  /** Defaults to the complete list; only an explicit `insights` filters. */
+  get isInsightsView() {
+    return this.args.view === 'insights';
   }
 
+  /**
+   * Insights rows open the one-page reachability insights screen; Complete
+   * analysis rows keep opening the tabbed component details.
+   */
   @action
   handleComponentClick({ rowValue }: { rowValue: SbomComponentModel }) {
-    this.router.transitionTo(
-      'authenticated.dashboard.sbom.component-details.overview',
+    const base = [
       this.args.sbomProject.id,
       this.args.sbomFile.id,
       rowValue.id,
-      0
-    );
+      0,
+    ] as const;
+
+    if (this.isInsightsView) {
+      // A fresh row click opens the first vulnerability, not the last paged-to.
+      this.router.transitionTo(
+        'authenticated.dashboard.sbom.component-insights',
+        ...base,
+        { queryParams: { vuln: null } }
+      );
+    } else {
+      this.router.transitionTo(
+        'authenticated.dashboard.sbom.component-details.overview',
+        ...base
+      );
+    }
   }
 
   @action

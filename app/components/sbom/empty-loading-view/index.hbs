@@ -1,8 +1,9 @@
-{{! @glint-nocheck: or}}
+{{! @glint-nocheck: or, and}}
 {{#if (or @empty @loading)}}
   <AkStack
     local-class='empty-loading-container
-    {{if @skeleton "skeleton"}}'
+    {{if (and @loading @skeleton) "skeleton"}}'
+    data-test-sbom-emptyLoadingView
     {{style height=(or @height '500px')}}
     @direction='column'
     @spacing='2.5'
@@ -41,7 +42,6 @@
         @justifyContent='center'
         @direction='column'
         @width='full'
-        local-class='{{if @bordered "empty-loading-content-bordered"}}'
       >
         {{#if (has-block 'emptySvg')}}
           {{yield to='emptySvg'}}

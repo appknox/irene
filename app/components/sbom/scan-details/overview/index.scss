@@ -8,7 +8,9 @@
 }
 
 .new-feature-container {
-  background-color: var(--sbom-scan-details-overview-new-feature-background-color);
+  background-color: var(
+    --sbom-scan-details-overview-new-feature-background-color
+  );
   border-radius: var(--sbom-scan-details-overview-border-radius);
   padding: 0.2em;
 }

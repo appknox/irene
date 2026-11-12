@@ -119,7 +119,7 @@ module(
     );
 
     // ─── Not applicable ─────────────────────────────────────────────────────
-    test('it shows N/A for a completed scan with no vulnerable findings', async function (assert) {
+    test('it shows a dash for a completed scan with no vulnerable findings', async function (assert) {
       const store = this.owner.lookup('service:store');
 
       this.sbomComponent = setupCell(store, {
@@ -129,9 +129,7 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(selectors.notApplicable)
-        .hasText(t('sbomModule.reachability.notApplicable'));
+      assert.dom(selectors.notApplicable).hasText('–');
       assert.dom(selectors.chip).doesNotExist();
     });
 

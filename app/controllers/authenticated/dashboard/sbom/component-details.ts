@@ -35,6 +35,8 @@ export default class AuthenticatedDashboardSbomComponentDetailsController extend
       title: `${this.intl.t('sbomModule.allComponentsAndVulnerabilities')} (${this.model.projectLastFile?.get('name')})`,
       route: 'authenticated.dashboard.sbom.scan-details',
       models: [this.model.sbomProject.id, this.model.sbomFile.id],
+      // Component details open from the complete tab's rows.
+      query: { tab: 'complete' },
       routeGroup: 'sbom',
     };
 

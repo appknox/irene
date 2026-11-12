@@ -2051,7 +2051,26 @@
     "knownVulnerabilities": "Known Vulnerabilities",
     "knownVulnerabilitiesEmptyText": {
       "title": "No Vulnerability Found",
-      "description": "We could not locate any known vulnerabilities associated with this component, at this point in time."
+      "description": "We could not locate any known vulnerabilities associated with this component, at this point in time.",
+      "outdated": "既知の脆弱性はありません。このコンポーネントは古いバージョンです: {current} → {latest}。"
+    },
+    "componentInsights": {
+      "title": "到達可能性インサイト",
+      "openGithubAdvisory": "GitHub セキュリティアドバイザリを開く",
+      "openAdvisory": "アドバイザリを開く",
+      "noKnownVulnerabilities": "既知の脆弱性はありません。",
+      "vulnerability": "脆弱性",
+      "ofTotal": "/ {total}",
+      "pagerPosition": "脆弱性 {current} / {total}",
+      "previousVulnerability": "前の脆弱性",
+      "nextVulnerability": "次の脆弱性",
+      "showComponentDetails": "コンポーネントの詳細を表示",
+      "hideComponentDetails": "コンポーネントの詳細を非表示",
+      "latest": "最新",
+      "cvss": "CVSS {score}",
+      "outdated": "このコンポーネントは古いバージョンです: {current} → {latest}。",
+      "loadError": "このコンポーネントの脆弱性を読み込めませんでした。",
+      "retry": "再試行"
     },
     "vulnerabilityId": "Vulnerability ID",
     "cvssV3Score": "CVSS V3 Score",
@@ -2063,6 +2082,7 @@
     },
     "reachability": {
       "title": "到達可能性",
+      "viewInsight": "到達可能性インサイトを表示 →",
       "pathFound": "到達可能",
       "potential": "到達する可能性あり",
       "noPathFound": "到達不可",
@@ -2076,7 +2096,6 @@
       "entryPoint": "エントリポイント",
       "howItWorks": "アプリのバイナリを解析し、アプリ自身のコードから脆弱な関数への呼び出しパスを探します。「到達可能」はそのパスが見つかったことを意味します。",
       "analyzing": "解析中",
-      "notApplicable": "対象外",
       "presentInVersion": "このバージョンに存在",
       "notObserved": "アプリのバイナリに未検出",
       "ambiguous": "複数の一致候補",
@@ -2088,8 +2107,12 @@
         "reachable": "アプリのコードから脆弱な関数への呼び出しパスが見つかりました。",
         "potential": "パスが存在する可能性がありますが、実行時の動作または曖昧なコード一致のため、静的には確認できませんでした。",
         "noPathFound": "脆弱なコードはアプリ内に存在しますが、このビルドではそれを呼び出すエントリポイントはありません。",
-        "inconclusive": "解析では確実な結論に達しませんでした。",
+        "inconclusive": "脆弱な関数が呼び出されるかどうかを解析で判断できませんでした。",
         "unsupported": "この脆弱性タイプまたはアプリのフレームワークは、まだ到達可能性解析の対象外です。"
+      },
+      "explanationNamed": {
+        "reachable": "{app} のコードから脆弱な関数への呼び出しパスが見つかりました。",
+        "noPathFound": "脆弱なコードは {app} 内に存在しますが、このビルドではそれを呼び出すエントリポイントはありません。"
       },
       "blockerCategories": {
         "notAnalyzed": "未解析",
@@ -2112,10 +2135,15 @@
       "fullSignatures": "完全なシグネチャ",
       "yourCode": "あなたのコード",
       "entersComponent": "{component} に入ります",
+      "entersThirdPartyCode": "サードパーティコードに入ります",
       "platformCode": "プラットフォームコード",
       "fixHere": "ここで修正",
+      "checkHere": "ここを確認",
+      "noTrace": "トレースなし。解析対象のビルドに脆弱なコードは見つかりませんでした。",
+      "noTraceRecorded": "呼び出しパスは記録されていません。",
       "calledByYourApp": "アプリから呼び出されています",
       "alsoAffectedNotCalled": "影響あり・未呼び出し ({count})",
+      "callStatusUnknown": "脆弱な関数・呼び出し状況不明 ({count})",
       "analysisDetail": "分析の詳細",
       "reasoning": "判断の根拠"
     },
@@ -2140,17 +2168,67 @@
       "description": "We could not locate any report associated with this SBOM analysis."
     },
     "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "noComponentsMatch": "「{query}」に一致するコンポーネントはありません",
     "reachabilityInsights": {
       "title": "到達可能性インサイト",
-      "backLink": "← 到達可能性インサイトに戻る"
+      "tab": "到達可能性インサイト",
+      "emptyTitle": "到達可能性の検出結果はありません",
+      "emptyDescription": "このスキャンでは到達可能性分析が実行されましたが、到達可能、到達の可能性あり、または判定不能の結果を持つ脆弱なコンポーネントはありません。",
+      "viewComplete": "完全な分析を表示"
     },
-    "originalAnalysis": {
-      "title": "元の分析",
-      "link": "元の分析を見る ↗",
-      "subtitle": "SBOMスキャンの全{count}件のコンポーネント（到達可能性フィルタ適用前）"
+    "completeAnalysis": {
+      "tab": "完全な分析"
     },
     "searchComponents": "コンポーネントを検索",
-    "viaComponent": "{component} 経由"
+    "viaComponent": "{component} 経由",
+    "remediation": {
+      "title": "修復",
+      "transitiveUpgrade": "{parent} が取り込んでいるため、{parent} を編集せずにバージョンを固定してください。",
+      "openOnMavenCentral": "Maven Central で {component} {version} を開く",
+      "ownFix": "この脆弱性は {version} で修正されています。",
+      "coverage": {
+        "single": "この脆弱性を修正します。",
+        "all": "このコンポーネントの {count} 件の脆弱性をすべて修正します。",
+        "partial": "このコンポーネントの {total} 件中 {fixed} 件の脆弱性を修正します。"
+      },
+      "patchRelease": "同じ {line} 系の小さなパッチ更新です。",
+      "retestIntro": "アップグレード後、アプリの次の箇所を試してください:",
+      "usedBy": "{advisory} で使用",
+      "maven": {
+        "buildFileTitle": "アプリモジュールのビルドファイルで <code>{target}</code> を探す",
+        "buildFileBody": "Android Studio で <strong>Gradle Scripts</strong> → <code>build.gradle</code> または <code>build.gradle.kts</code> <strong>(Module :app)</strong> を開きます。<kbd>Ctrl+F</kbd> (Mac: <kbd>⌘F</kbd>) を押して <code>{target}</code> を検索してください。次の行が見つかります:",
+        "catalogTitle": "見つからない場合はバージョンカタログを確認",
+        "catalogBody": "新しいプロジェクトではバージョンを <code>gradle/libs.versions.toml</code> で管理しています。そこで <code>{target}</code> を検索してください。バージョンは <code>[versions]</code> の下にあり、ビルドファイルからは <code>{alias}</code> のような名前で参照されます。古いプロジェクトでは、ルートの <code>build.gradle</code> で <code>ext</code> 変数として設定されている場合があります。",
+        "confirmTitle": "Gradle が実際に解決するバージョンを確認する",
+        "confirmBody": "Android Studio で <strong>View → Tool Windows → Terminal</strong> を開きます。ターミナルはプロジェクトルートで開きます。次を実行してください:",
+        "windowsNote": "Windows では <code>gradlew.bat</code> を使用し、コマンドを1行で記述してください。",
+        "usagesTitle": "コード内の使用箇所を探す",
+        "usagesBody": "<kbd>Ctrl+Shift+F</kbd> (Mac: <kbd>⌘⇧F</kbd>) (Find in Files) を押して <code>import {pkg}</code> を検索してください。"
+      },
+      "npm": {
+        "managerNote": "ご使用のパッケージマネージャに合うブロックを使用してください。"
+      },
+      "cocoapods": {
+        "caution": "別の pod が異なるバージョンを必要とする場合は、その pod を更新してください。"
+      },
+      "action": "{component} {current} をアップグレード →",
+      "actionNoCurrent": "{component} のアップグレード先:",
+      "steps": {
+        "find": "場所を確認",
+        "upgrade": "アップグレード",
+        "retest": "再テスト"
+      },
+      "find": {
+        "maven": "app/build.gradle(または build.gradle.kts)の dependencies ブロック、またはバージョンカタログを使用している場合は gradle/libs.versions.toml に記載されています。",
+        "npm": "package.json に記載されています。",
+        "cocoapods": "Podfile に記載されています。",
+        "other": "パッケージマニフェストで {component} を探してください。",
+        "transitive": "{component} はビルドファイルには記載されていません。{parent} 経由で取り込まれています。"
+      },
+      "showDetailedSteps": "詳細な手順を表示",
+      "hideDetailedSteps": "詳細な手順を隠す",
+      "upgradeBody": "{component} を {version} に変更します。"
+    }
   },
   "scan": "診断",
   "scanned": "scanned",

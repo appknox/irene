@@ -1,5 +1,8 @@
-<div class='py-1' data-test-sbomScanDetails-container>
-  {{#unless this.isOriginalAnalysis}}
+<div
+  class='py-1'
+  data-test-sbomScanDetails-container
+  {{did-update this.syncTabFromUrl @tab}}
+>
   <Sbom::SummaryHeader>
     <:summary>
       <AkStack @alignItems='center' @spacing='1.5'>
@@ -43,137 +46,114 @@
       />
     </:collapsibleContent>
   </Sbom::SummaryHeader>
-  {{/unless}}
 
   {{#if this.scanStatusCompleted}}
-    {{#unless this.isOriginalAnalysis}}
-      <Sbom::ScanDetails::Overview
-        @sbomFile={{@sbomFile}}
-        @sbomScanSummary={{@sbomScanSummary}}
-      />
-    {{/unless}}
+    <Sbom::ScanDetails::Overview
+      @sbomFile={{@sbomFile}}
+      @sbomScanSummary={{@sbomScanSummary}}
+    />
 
-    {{#if this.isNotOutdated}}
+    {{#if this.showTabs}}
+      <AkTabs class='mt-2' data-test-sbomScanDetails-tabs as |Akt|>
+        <Akt.tabItem
+          @id='insights'
+          @isActive={{eq this.activeView 'insights'}}
+          @buttonVariant={{true}}
+          @onTabClick={{this.selectTab}}
+          data-test-sbomScanDetails-insightsTab
+        >
+          {{t 'sbomModule.reachabilityInsights.tab'}}
+        </Akt.tabItem>
+
+        <Akt.tabItem
+          @id='complete'
+          @isActive={{eq this.activeView 'complete'}}
+          @buttonVariant={{true}}
+          @hasBadge={{true}}
+          @badgeCount={{this.totalComponentCount}}
+          @onTabClick={{this.selectTab}}
+          data-test-sbomScanDetails-completeTab
+        >
+          {{t 'sbomModule.completeAnalysis.tab'}}
+        </Akt.tabItem>
+      </AkTabs>
+    {{/if}}
+
+    {{#if this.showToolbar}}
       <AkStack
         data-test-sbomScanDetails-switch-header
         local-class='switch-view-header'
         @alignItems='center'
         @justifyContent='space-between'
       >
-        <AkStack @direction='column' @spacing='0.25'>
-          {{#if this.hasReachability}}
-            <AkTypography
-              data-test-sbomScanDetails-viewTitle
-              @variant='subtitle1'
+        {{#if this.showSearch}}
+          <div {{style width='250px'}}>
+            <AkTextField
+              data-test-sbomScanDetails-componentSearchInput
+              @placeholder={{t 'sbomModule.searchComponents'}}
+              @value={{this.sbomScanDetailsService.searchQuery}}
+              {{on 'input' this.handleSearchInput}}
             >
-              {{if
-                this.isOriginalAnalysis
-                (t 'sbomModule.originalAnalysis.title')
-                (t 'sbomModule.reachabilityInsights.title')
-              }}
-            </AkTypography>
-          {{/if}}
-
-          {{#if this.isOriginalAnalysis}}
-            <AkTypography
-              data-test-sbomScanDetails-viewSubtitle
-              @variant='body2'
-              @color='textSecondary'
-            >
-              {{t
-                'sbomModule.originalAnalysis.subtitle'
-                count=this.totalComponentCount
-              }}
-            </AkTypography>
-          {{/if}}
-        </AkStack>
-
-        <AkStack @alignItems='center' @spacing='2'>
-          {{#if (and this.hasReachability this.isOriginalAnalysis)}}
-            <AkLink
-              data-test-sbomScanDetails-backToInsights-link
-              @route='authenticated.dashboard.sbom.scan-details'
-              @models={{this.scanRouteModels}}
-              @underline='always'
-              @fontWeight='medium'
-            >
-              {{t 'sbomModule.reachabilityInsights.backLink'}}
-            </AkLink>
-          {{else if this.hasReachability}}
-            <AkLink
-              data-test-sbomScanDetails-originalAnalysis-link
-              @route='authenticated.dashboard.sbom.original-analysis'
-              @models={{this.scanRouteModels}}
-              @underline='always'
-              @fontWeight='medium'
-            >
-              {{t 'sbomModule.originalAnalysis.link'}}
-            </AkLink>
-          {{/if}}
-
-          {{#unless this.isTreeView}}
-            <div {{style width='180px'}}>
-              <AkTextField
-                data-test-sbomScanDetails-componentSearchInput
-                @placeholder={{t 'sbomModule.searchComponents'}}
-                @value={{this.sbomScanDetailsService.searchQuery}}
-                {{on 'input' this.handleSearchInput}}
-              >
-                <:leftAdornment>
-                  <AkIcon @iconName='search' @color='textSecondary' />
-                </:leftAdornment>
-              </AkTextField>
-            </div>
-          {{/unless}}
-        </AkStack>
+              <:leftAdornment>
+                <AkIcon @iconName='search' @color='textSecondary' />
+              </:leftAdornment>
+            </AkTextField>
+          </div>
+        {{else}}
+          <div></div>
+        {{/if}}
 
         {{#if this.showViewToggle}}
-        <AkStack>
-          {{#if this.isTreeView}}
-            <AkButton
-              data-test-sbomScanDetails-collapseAllButton
-              {{on 'click' this.collapseAll}}
+          <AkStack>
+            {{#if this.isTreeView}}
+              <AkButton
+                data-test-sbomScanDetails-collapseAllButton
+                {{on 'click' this.collapseAll}}
+                @variant='outlined'
+                @color='neutral'
+                @disabled={{not this.isTreeExpanded}}
+                local-class='toggle-button'
+                class='mr-2'
+              >
+                <:leftIcon>
+                  <AkIcon @iconName='unfold-less' />
+                </:leftIcon>
+
+                <:default>
+                  {{t 'collapseAll'}}
+                </:default>
+              </AkButton>
+            {{/if}}
+
+            <AkIconButton
+              local-class='switch-button tree {{if this.isTreeView "active"}}'
               @variant='outlined'
-              @color='neutral'
-              @disabled={{not this.isTreeExpanded}}
-              local-class='toggle-button'
-              class='mr-2'
+              @size='medium'
+              {{on 'click' this.handleTreeViewClick}}
+              data-test-sbomScanDetails-switch-treeViewButton
             >
-              <:leftIcon>
-                <AkIcon @iconName='unfold-less' />
-              </:leftIcon>
+              <AkIcon
+                @color={{if this.isTreeView 'primary'}}
+                @iconName='account-tree'
+              />
+            </AkIconButton>
 
-              <:default>
-                {{t 'collapseAll'}}
-              </:default>
-            </AkButton>
-          {{/if}}
-
-          <AkIconButton
-            local-class='switch-button tree {{if this.isTreeView "active"}}'
-            @variant='outlined'
-            @size='medium'
-            {{on 'click' this.handleTreeViewClick}}
-            data-test-sbomScanDetails-switch-treeViewButton
-          >
-            <AkIcon
-              @color={{if this.isTreeView 'primary'}}
-              @iconName='account-tree'
-            />
-          </AkIconButton>
-
-          <AkIconButton
-            local-class='switch-button list {{if this.isTreeView "" "active"}}'
-            @variant='outlined'
-            {{on 'click' this.handleListViewClick}}
-            data-test-sbomScanDetails-switch-listViewButton
-          >
-            <AkIcon
-              @color={{unless this.isTreeView 'primary'}}
-              @iconName='format-list-bulleted'
-            />
-          </AkIconButton>
-        </AkStack>
+            <AkIconButton
+              local-class='switch-button list {{if
+                this.isTreeView
+                ""
+                "active"
+              }}'
+              @variant='outlined'
+              {{on 'click' this.handleListViewClick}}
+              data-test-sbomScanDetails-switch-listViewButton
+            >
+              <AkIcon
+                @color={{unless this.isTreeView 'primary'}}
+                @iconName='format-list-bulleted'
+              />
+            </AkIconButton>
+          </AkStack>
         {{/if}}
       </AkStack>
     {{/if}}
@@ -193,9 +173,10 @@
         @sbomProject={{@sbomProject}}
         @sbomFile={{@sbomFile}}
         @sbomScanSummary={{@sbomScanSummary}}
-        @view={{if this.isOriginalAnalysis 'original' 'insights'}}
+        @view={{this.activeView}}
         @showReachability={{this.hasReachability}}
-        class={{if this.isNotOutdated '' 'mt-2'}}
+        @onViewComplete={{this.viewCompleteAnalysis}}
+        class={{if this.showToolbar '' 'mt-2'}}
         data-test-sbomScanDetails-componentList-container
       />
     {{/if}}
@@ -258,7 +239,11 @@
 
               <:tooltipContent>
                 <div
-                  {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}
+                  {{style
+                    width='360px'
+                    white-space='pre-line'
+                    overflow-wrap='break-word'
+                  }}
                 >{{stage.error}}</div>
               </:tooltipContent>
             </AkTooltip>

@@ -12,7 +12,6 @@ export interface SbomEmptyLoadingViewSignature {
     emptySvgHeight?: string;
     emptyText?: string;
     height?: string;
-    bordered?: boolean;
   };
   Blocks: {
     loadingSvg: [];

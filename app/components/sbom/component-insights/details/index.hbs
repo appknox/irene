@@ -1,0 +1,61 @@
+<AkStack
+  @direction='column'
+  @alignItems='stretch'
+  @width='full'
+  local-class='details-root'
+  data-test-sbomComponentInsights-details
+  ...attributes
+>
+  <AkStack
+    @width='full'
+    @alignItems='center'
+    @justifyContent='space-between'
+    @spacing='2'
+    local-class='details-strip'
+  >
+    <AkStack @alignItems='center' @spacing='1.5' @flexWrap='wrap'>
+      <AkTypography @variant='h6' @fontWeight='medium'>
+        {{t 'sbomModule.componentDetails'}}
+      </AkTypography>
+
+      {{#unless this.isExpanded}}
+        <AkTypography
+          @color='textSecondary'
+          data-test-sbomComponentInsights-details-inlineSummary
+        >
+          {{this.inlineSummary}}
+        </AkTypography>
+      {{/unless}}
+    </AkStack>
+
+    <AkIconButton
+      @size='small'
+      aria-expanded='{{if this.isExpanded "true" "false"}}'
+      aria-controls={{if this.isExpanded this.contentId}}
+      aria-label={{if
+        this.isExpanded
+        (t 'sbomModule.componentInsights.hideComponentDetails')
+        (t 'sbomModule.componentInsights.showComponentDetails')
+      }}
+      data-test-sbomComponentInsights-details-toggle
+      {{on 'click' this.toggle}}
+    >
+      <AkIcon
+        @iconName={{if this.isExpanded 'arrow-drop-up' 'arrow-drop-down'}}
+      />
+    </AkIconButton>
+  </AkStack>
+
+  {{#if this.isExpanded}}
+    <AkStack
+      @direction='column'
+      @alignItems='stretch'
+      @spacing='1'
+      id={{this.contentId}}
+      class='p-1'
+      data-test-sbomComponentInsights-details-content
+    >
+      <Sbom::ComponentDetails::Summary @sbomComponent={{@sbomComponent}} />
+    </AkStack>
+  {{/if}}
+</AkStack>

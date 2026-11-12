@@ -2048,7 +2048,26 @@
     "knownVulnerabilities": "Known Vulnerabilities",
     "knownVulnerabilitiesEmptyText": {
       "title": "No Vulnerability Found",
-      "description": "We could not locate any known vulnerabilities associated with this component, at this point in time."
+      "description": "We could not locate any known vulnerabilities associated with this component, at this point in time.",
+      "outdated": "No known vulnerabilities. This component is outdated: {current} → {latest}."
+    },
+    "componentInsights": {
+      "title": "Reachability Insights",
+      "openGithubAdvisory": "Open the GitHub Security Advisory",
+      "openAdvisory": "Open the advisory",
+      "noKnownVulnerabilities": "No known vulnerabilities.",
+      "vulnerability": "Vulnerability",
+      "ofTotal": "of {total}",
+      "pagerPosition": "Vulnerability {current} of {total}",
+      "previousVulnerability": "Previous vulnerability",
+      "nextVulnerability": "Next vulnerability",
+      "showComponentDetails": "Show component details",
+      "hideComponentDetails": "Hide component details",
+      "latest": "Latest",
+      "cvss": "CVSS {score}",
+      "outdated": "This component is outdated: {current} → {latest}.",
+      "loadError": "Could not load the vulnerabilities of this component.",
+      "retry": "Retry"
     },
     "vulnerabilityId": "Vulnerability ID",
     "cvssV3Score": "CVSS V3 Score",
@@ -2060,6 +2079,7 @@
     },
     "reachability": {
       "title": "Reachability",
+      "viewInsight": "View reachability insight →",
       "pathFound": "Reachable",
       "potential": "Potentially reachable",
       "noPathFound": "Not reachable",
@@ -2073,7 +2093,6 @@
       "entryPoint": "Entry point",
       "howItWorks": "We scan the app binary for a call path from the app's own code to the vulnerable function. A Reachable result means such a path was found.",
       "analyzing": "Analyzing",
-      "notApplicable": "N/A",
       "presentInVersion": "Present in this version",
       "notObserved": "Not found in app binary",
       "ambiguous": "Multiple possible matches",
@@ -2085,8 +2104,12 @@
         "reachable": "A call path from the app's code to the vulnerable function was found.",
         "potential": "A path likely exists, but it depends on runtime behavior or an ambiguous code match that cannot be confirmed statically.",
         "noPathFound": "The vulnerable code is in the app, but no entry point calls it in this build.",
-        "inconclusive": "Analysis could not reach a reliable conclusion.",
+        "inconclusive": "Analysis could not determine whether the vulnerable function is called.",
         "unsupported": "This vulnerability type or app framework is not covered by reachability analysis yet."
+      },
+      "explanationNamed": {
+        "reachable": "A call path from {app}'s code to the vulnerable function was found.",
+        "noPathFound": "The vulnerable code is in {app}, but no entry point calls it in this build."
       },
       "blockerCategories": {
         "notAnalyzed": "Not analyzed yet",
@@ -2109,10 +2132,15 @@
       "fullSignatures": "Full signatures",
       "yourCode": "Your code",
       "entersComponent": "Enters {component}",
+      "entersThirdPartyCode": "Enters third-party code",
       "platformCode": "Platform code",
       "fixHere": "Fix here",
+      "checkHere": "Check here",
+      "noTrace": "No trace. The vulnerable code was not found in the analysed build.",
+      "noTraceRecorded": "No call path was recorded.",
       "calledByYourApp": "Called by your app",
       "alsoAffectedNotCalled": "Also affected, not called ({count})",
+      "callStatusUnknown": "Vulnerable functions, call status unknown ({count})",
       "analysisDetail": "Analysis detail",
       "reasoning": "Reasoning"
     },
@@ -2140,17 +2168,67 @@
       "description": "We could not locate any report associated with this SBOM analysis."
     },
     "noComponentsFoundFilter": "No components found for the selected filter. Please try a different filter.",
+    "noComponentsMatch": "No components match \"{query}\"",
     "reachabilityInsights": {
       "title": "Reachability Insights",
-      "backLink": "← Back to Reachability Insights"
+      "tab": "Reachability insights",
+      "emptyTitle": "No reachability findings",
+      "emptyDescription": "Reachability analysis ran on this scan, but no vulnerable component has a reachable, potentially reachable or inconclusive result.",
+      "viewComplete": "View complete analysis"
     },
-    "originalAnalysis": {
-      "title": "Original Analysis",
-      "link": "See original analysis ↗",
-      "subtitle": "All {count} components from the SBOM scan, before reachability filtering"
+    "completeAnalysis": {
+      "tab": "Complete analysis"
     },
     "searchComponents": "Search components",
-    "viaComponent": "via {component}"
+    "viaComponent": "via {component}",
+    "remediation": {
+      "title": "Remediation",
+      "transitiveUpgrade": "Because {parent} brings it in, pin the version instead of editing {parent}.",
+      "openOnMavenCentral": "Open {component} {version} on Maven Central",
+      "ownFix": "This vulnerability is fixed in {version}.",
+      "coverage": {
+        "single": "Fixes this vulnerability.",
+        "all": "Fixes all {count} vulnerabilities in this component.",
+        "partial": "Fixes {fixed} of {total} vulnerabilities in this component."
+      },
+      "patchRelease": "Small patch update in the same {line} line.",
+      "retestIntro": "After upgrading, try these parts of the app:",
+      "usedBy": "Used by {advisory}",
+      "maven": {
+        "buildFileTitle": "Find <code>{target}</code> in your app module's build file",
+        "buildFileBody": "In Android Studio, open <strong>Gradle Scripts</strong> → <code>build.gradle</code> or <code>build.gradle.kts</code> <strong>(Module :app)</strong>. Press <kbd>Ctrl+F</kbd> (Mac: <kbd>⌘F</kbd>) and search for <code>{target}</code>. You should find:",
+        "catalogTitle": "Not there? Check the version catalog",
+        "catalogBody": "Newer projects keep versions in <code>gradle/libs.versions.toml</code>. Search it for <code>{target}</code>. The version sits under <code>[versions]</code>, and the build file refers to it as something like <code>{alias}</code>. Older projects may set it in the root <code>build.gradle</code> as an <code>ext</code> variable.",
+        "confirmTitle": "Confirm what Gradle actually resolves",
+        "confirmBody": "Open <strong>View → Tool Windows → Terminal</strong> in Android Studio. It opens in the project root. Run:",
+        "windowsNote": "On Windows, use <code>gradlew.bat</code> and put the command on one line.",
+        "usagesTitle": "Find where your code uses it",
+        "usagesBody": "Press <kbd>Ctrl+Shift+F</kbd> (Mac: <kbd>⌘⇧F</kbd>) (Find in Files) and search for <code>import {pkg}</code>."
+      },
+      "npm": {
+        "managerNote": "Use whichever block matches your package manager."
+      },
+      "cocoapods": {
+        "caution": "If another pod needs a different version, update that pod instead."
+      },
+      "action": "Upgrade {component} {current} →",
+      "actionNoCurrent": "Upgrade {component} to",
+      "steps": {
+        "find": "Find it",
+        "upgrade": "Upgrade",
+        "retest": "Retest"
+      },
+      "find": {
+        "maven": "It is listed in the dependencies block of app/build.gradle (or build.gradle.kts), or in gradle/libs.versions.toml if you use a version catalog.",
+        "npm": "It is listed in package.json.",
+        "cocoapods": "It is listed in your Podfile.",
+        "other": "Look for {component} in your package manifest.",
+        "transitive": "You won't find {component} in your build file. It comes in through {parent}."
+      },
+      "showDetailedSteps": "Show detailed steps",
+      "hideDetailedSteps": "Hide detailed steps",
+      "upgradeBody": "Change {component} to {version}."
+    }
   },
   "scan": "scan(s)",
   "scanned": "scanned",

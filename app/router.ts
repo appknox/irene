@@ -307,6 +307,10 @@ Router.map(function () {
               this.route('vulnerabilities');
             }
           );
+
+          this.route('component-insights', {
+            path: 'apps/:sbom_project_id/scans/:sbom_file_id/components/:sbom_component_id/:sbom_component_parent_id/insights',
+          });
         });
 
         this.route(
