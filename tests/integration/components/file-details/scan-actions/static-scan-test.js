@@ -78,7 +78,7 @@ module(
         assert.dom().containsText(t('completed'));
       });
 
-      test('manual (SAST running): legacy completed chip shown with a pending accent', async function (assert) {
+      test('manual (SAST running): KnoxIQ chip shown (not the legacy one) with a pending accent', async function (assert) {
         this.file.isKnoxiqAutomated = false;
         this.file.isStaticDone = true;
 
@@ -99,7 +99,11 @@ module(
 
         assert
           .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
-          .hasText(t('completed'));
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ is enabled, automated or not'
+          );
+
+        assert.dom().containsText(t('knoxIq.statusChip.running'));
 
         const accentDiv = find(
           '[data-test-fileDetailScanActions-staticScan-accent]'
@@ -108,7 +112,35 @@ module(
         assert.ok(accentDiv.className.includes('pending'));
       });
 
-      test('manual (SAST completed): legacy completed chip shown with a done accent', async function (assert) {
+      test('manual (SAST not triggered): legacy completed chip shown (not a false "running" KnoxIQ chip)', async function (assert) {
+        this.file.isKnoxiqAutomated = false;
+        this.file.isStaticDone = true;
+
+        const knoxiqStatuses = {
+          [ENUMS.KNOXIQ_SCAN_TYPE.SAST]: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+        };
+
+        this.set('knoxiqStatuses', knoxiqStatuses);
+
+        await render(hbs`
+          <FileDetails::ScanActions::StaticScan
+            @file={{this.file}}
+            @isKnoxiqEnabled={{true}}
+            @knoxiqStatuses={{this.knoxiqStatuses}}
+            @vulnerabilityCount={{0}}
+          />
+        `);
+
+        assert
+          .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
+          .exists(
+            'legacy chip must appear when KnoxIQ has not been triggered yet'
+          );
+
+        assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
+      });
+
+      test('manual (SAST completed): KnoxIQ chip shown (not the legacy one) with a done accent', async function (assert) {
         this.file.isKnoxiqAutomated = false;
         this.file.isStaticDone = true;
 
@@ -129,7 +161,11 @@ module(
 
         assert
           .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
-          .hasText(t('completed'));
+          .doesNotExist(
+            'legacy chip must not appear when KnoxIQ is enabled, automated or not'
+          );
+
+        assert.dom().containsText(t('completed'));
 
         const accentDiv = find(
           '[data-test-fileDetailScanActions-staticScan-accent]'

@@ -18,9 +18,17 @@ export default class FileDetailsScanActionsStaticScanComponent extends Component
     return this.args.knoxiqStatuses?.[ENUMS.KNOXIQ_SCAN_TYPE.SAST];
   }
 
+  // Purple KnoxIQ chip regardless of automated vs. manual trigger, but only
+  // once KnoxIQ actually has a status to show — a manual-trigger scan that
+  // hasn't been run yet is NOT_TRIGGERED, not "running".
   get showKnoxiqStatusChip() {
+    const { DISABLED, NOT_TRIGGERED } = ENUMS.KNOXIQ_SCAN_STATUS;
+
     return Boolean(
-      this.args.isKnoxiqEnabled && this.args.file.isKnoxiqAutomated
+      this.args.isKnoxiqEnabled &&
+      this.sastStatus !== undefined &&
+      this.sastStatus !== DISABLED &&
+      this.sastStatus !== NOT_TRIGGERED
     );
   }
 
