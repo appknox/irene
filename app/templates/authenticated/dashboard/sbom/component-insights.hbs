@@ -1,0 +1,8 @@
+{{page-title (t 'sbomModule.componentInsights.title')}}
+
+<AkBreadcrumbs::AutoTrail class='pt-2 pb-3' />
+
+<Sbom::ComponentInsights
+  @sbomComponent={{@model.sbomComponent}}
+  @vuln={{this.vuln}}
+/>

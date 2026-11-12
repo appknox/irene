@@ -1,0 +1,65 @@
+<AkStack
+  @alignItems='center'
+  @spacing='1'
+  role='group'
+  aria-label={{t 'sbomModule.componentInsights.vulnerability'}}
+  data-test-sbomComponentInsights-pager
+  ...attributes
+>
+  <AkIconButton
+    @size='small'
+    aria-disabled={{if this.isFirst 'true'}}
+    local-class='pager-button'
+    aria-label={{t 'sbomModule.componentInsights.previousVulnerability'}}
+    data-test-sbomComponentInsights-pager-prev
+    {{on 'click' this.handlePrev}}
+  >
+    <AkIcon @iconName='chevron-left' @size='small' />
+  </AkIconButton>
+
+  <AkTypography
+    @color='textSecondary'
+    data-test-sbomComponentInsights-pager-label
+  >
+    {{t 'sbomModule.componentInsights.vulnerability'}}
+  </AkTypography>
+
+  <AkTypography
+    local-class='pager-index'
+    @fontWeight='medium'
+    aria-hidden='true'
+    data-test-sbomComponentInsights-pager-current
+  >
+    {{this.currentLabel}}
+  </AkTypography>
+
+  <AkTypography
+    @color='textSecondary'
+    data-test-sbomComponentInsights-pager-total
+  >
+    {{t 'sbomModule.componentInsights.ofTotal' total=this.totalLabel}}
+  </AkTypography>
+
+  <span
+    local-class='visually-hidden'
+    aria-live='polite'
+    data-test-sbomComponentInsights-pager-announcement
+  >
+    {{t
+      'sbomModule.componentInsights.pagerPosition'
+      current=this.currentLabel
+      total=this.totalLabel
+    }}
+  </span>
+
+  <AkIconButton
+    @size='small'
+    aria-disabled={{if this.isLast 'true'}}
+    local-class='pager-button'
+    aria-label={{t 'sbomModule.componentInsights.nextVulnerability'}}
+    data-test-sbomComponentInsights-pager-next
+    {{on 'click' this.handleNext}}
+  >
+    <AkIcon @iconName='chevron-right' @size='small' />
+  </AkIconButton>
+</AkStack>

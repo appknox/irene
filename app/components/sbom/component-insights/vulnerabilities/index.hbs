@@ -1,0 +1,167 @@
+<AkStack
+  @direction='column'
+  @alignItems='stretch'
+  @width='full'
+  @spacing='2'
+  data-test-sbomComponentInsights-vulnerabilities
+  ...attributes
+>
+  <AkTypography @variant='h6' @fontWeight='medium'>
+    {{t 'vulnerabilities'}}
+  </AkTypography>
+
+  {{#if this.fetchVulnerabilities.isRunning}}
+    <AkStack
+      @direction='column'
+      @spacing='1.5'
+      local-class='section'
+      class='p-2'
+      data-test-sbomComponentInsights-vulnerabilities-loading
+    >
+      <AkSkeleton @width='200px' @height='18px' />
+      <AkSkeleton @width='100%' @height='14px' />
+      <AkSkeleton @width='100%' @height='120px' />
+    </AkStack>
+  {{else if this.loadFailed}}
+    <AkStack
+      @direction='column'
+      @alignItems='flex-start'
+      @spacing='1.5'
+      local-class='section'
+      class='p-2'
+      role='alert'
+      data-test-sbomComponentInsights-vulnerabilities-error
+    >
+      <AkTypography>
+        {{t 'sbomModule.componentInsights.loadError'}}
+      </AkTypography>
+
+      <AkButton
+        @variant='outlined'
+        data-test-sbomComponentInsights-vulnerabilities-retry
+        {{on 'click' this.retry}}
+      >
+        {{t 'sbomModule.componentInsights.retry'}}
+      </AkButton>
+    </AkStack>
+  {{else if this.hasNoVulnerabilities}}
+    <AkStack
+      @direction='column'
+      @spacing='1'
+      local-class='section'
+      class='p-2'
+      data-test-sbomComponentInsights-vulnerabilities-empty
+    >
+      <AkTypography data-test-sbomComponentInsights-vulnerabilities-emptyTitle>
+        {{t 'sbomModule.componentInsights.noKnownVulnerabilities'}}
+      </AkTypography>
+
+      {{#if this.outdatedText}}
+        <AkTypography
+          @color='textSecondary'
+          data-test-sbomComponentInsights-vulnerabilities-outdated
+        >
+          {{this.outdatedText}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+  {{else}}
+    <div local-class='section'>
+      <AkStack @width='full' @alignItems='center' local-class='pager-row'>
+        <Sbom::ComponentInsights::Pager
+          @index={{this.currentIndex}}
+          @total={{this.total}}
+          @onChange={{this.handlePagerChange}}
+        />
+
+      </AkStack>
+
+      {{#if this.current}}
+        <AkStack
+          @direction='column'
+          @alignItems='stretch'
+          @spacing='2'
+          class='p-2'
+          data-test-sbomComponentInsights-vulnerabilities-current
+        >
+          <AkStack
+            @width='full'
+            @alignItems='center'
+            @justifyContent='space-between'
+            @spacing='2'
+            @flexWrap='wrap'
+          >
+            <AkStack @alignItems='center' @spacing='1.5' @flexWrap='wrap'>
+              {{#if this.advisoryUrl}}
+                <AkTooltip @arrow={{true}} @placement='top'>
+                  <:default>
+                    <a
+                      href={{this.advisoryUrl}}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      local-class='advisory-link'
+                      aria-label='{{this.displayId}} - {{this.advisoryTooltip}}'
+                      data-test-sbomComponentInsights-vulnerabilities-idLink
+                    >
+                      <AkTypography
+                        @variant='h5'
+                        @color='inherit'
+                        @tag='span'
+                        data-test-sbomComponentInsights-vulnerabilities-id
+                      >
+                        {{this.displayId}}
+                      </AkTypography>
+
+                      <AkIcon
+                        @iconName='open-in-new'
+                        @size='small'
+                        @color='inherit'
+                        aria-hidden='true'
+                      />
+                    </a>
+                  </:default>
+
+                  <:tooltipContent>
+                    {{this.advisoryTooltip}}
+                  </:tooltipContent>
+                </AkTooltip>
+              {{else}}
+                <AkTypography
+                  @variant='h5'
+                  data-test-sbomComponentInsights-vulnerabilities-id
+                >
+                  {{this.displayId}}
+                </AkTypography>
+              {{/if}}
+
+              <AkTypography
+                data-test-sbomComponentInsights-vulnerabilities-severity
+                @color='textSecondary'
+              >
+                {{this.severityText}}
+              </AkTypography>
+            </AkStack>
+
+            <Sbom::ReachabilityStatus
+              @verdict={{this.reachability.verdict}}
+              @exposure={{this.reachability.exposure}}
+              @tooltip={{this.reachability.summary}}
+              @compact={{true}}
+            />
+          </AkStack>
+
+          {{! Keyed on the audit so the panel's open/collapse state resets per vulnerability. }}
+          {{#each (array this.current) as |audit|}}
+            <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper
+              @sbomVulnerabilityAudit={{audit}}
+              @sbomComponent={{@sbomComponent}}
+              @componentAudits={{this.audits}}
+              @expanded={{true}}
+              @showAdvisoryMeta={{false}}
+            />
+          {{/each}}
+        </AkStack>
+      {{/if}}
+    </div>
+  {{/if}}
+</AkStack>

@@ -29,8 +29,8 @@ export default class SbomScanDetailsService extends Service {
 
   /**
    * Restricts the list to components the reachability run concluded on.
-   * Set by the insights view; the original-analysis view leaves it false so
-   * the full SBOM is listed.
+   * Set by the Reachability insights tab; the default Complete analysis tab
+   * leaves it false so the full SBOM is listed.
    */
   @tracked onlyReachable = false;
   @tracked searchQuery: string = '';
@@ -90,11 +90,11 @@ export default class SbomScanDetailsService extends Service {
       this.viewType = view_type;
     }
 
-    if (component_query !== undefined) {
+    if (component_query !== undefined && component_query !== null) {
       this.searchQuery = component_query;
     }
 
-    if (component_type !== undefined) {
+    if (component_type !== undefined && component_type !== null) {
       this.selectedComponentType = component_type;
     }
 
@@ -120,8 +120,9 @@ export default class SbomScanDetailsService extends Service {
       this.ordering = ordering;
     }
 
-    this.selectedReachability =
-      reachability === undefined ? this.selectedReachability : reachability;
+    if (reachability !== undefined) {
+      this.selectedReachability = reachability;
+    }
 
     return this;
   }

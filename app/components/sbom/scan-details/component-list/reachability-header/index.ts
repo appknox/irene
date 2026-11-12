@@ -11,6 +11,8 @@ interface SbomScanDetailsComponentListReachabilityHeaderComponentSignature {
   Args: {
     onReachabilityChange: (exposure: string | null) => void;
     selectedReachability?: string | null;
+    /** Column label; the insights tab names it "Reachability Insights". */
+    title?: string;
   };
 }
 
@@ -43,6 +45,10 @@ export default class SbomScanDetailsComponentListReachabilityHeaderComponent ext
         value: FindingExposure.UNSUPPORTED,
       },
     ];
+  }
+
+  get title() {
+    return this.args.title || this.intl.t('sbomModule.reachability.title');
   }
 
   get selectedReachability() {

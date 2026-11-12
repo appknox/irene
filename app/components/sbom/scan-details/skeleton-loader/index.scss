@@ -1,5 +1,7 @@
 .summary-header-root {
-  background-color: var(--sbom-scan-details-skeleton-loader-summary-background-color);
+  background-color: var(
+    --sbom-scan-details-skeleton-loader-summary-background-color
+  );
   border-radius: var(--sbom-scan-details-skeleton-loader-summary-border-radius);
   border: 1px solid
     var(--sbom-scan-details-skeleton-loader-summary-border-color);

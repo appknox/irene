@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import {
   visit,
   currentURL,
+  find,
   findAll,
   click,
   waitFor,
@@ -179,6 +180,25 @@ module('Acceptance | sbom', function (hooks) {
       currentURL(),
       `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`
     );
+  });
+
+  test('legacy original-analysis link redirects to the complete analysis tab', async function (assert) {
+    const scanUrl = `/dashboard/sbom/apps/${this.sbomProjects[0].id}/scans/${this.sbomFiles[0].id}`;
+
+    await visit(`${scanUrl}/original-analysis?view_type=list`);
+
+    assert.strictEqual(currentURL(), `${scanUrl}?view_type=list`);
+    assert.dom('[data-test-sbomScanDetails-container]').exists();
+  });
+
+  test('legacy original-analysis link lands on Complete when reachability ran', async function (assert) {
+    this.sbomFiles[1].update({ reachability_status: 3 });
+
+    const scanUrl = `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`;
+
+    await visit(`${scanUrl}/original-analysis`);
+
+    assert.strictEqual(currentURL(), `${scanUrl}?tab=complete`);
   });
 
   test('test navigate to past scans & sbom scan list row click', async function (assert) {
@@ -833,6 +853,165 @@ module('Acceptance | sbom', function (hooks) {
       .exists();
 
     assert.dom('[data-test-sbomComponentDetails-tab="overview"]').exists();
+  });
+
+  module('reachability insights', function (nestedHooks) {
+    nestedHooks.beforeEach(function () {
+      this.sbomFiles[1].update({ reachability_status: 3 });
+
+      this.audits = this.server.createList('sbom-vulnerability-audit', 3);
+
+      this.vulnIds = this.audits.map(
+        (a) => a.sb_vulnerability.vulnerability_id
+      );
+
+      this.server.get('/v2/sb_file_component/:id', (schema, req) =>
+        schema.sbomComponents.find(`${req.params.id}`)?.toJSON()
+      );
+
+      this.server.get(
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+        (schema) => {
+          const results = schema.sbomVulnerabilityAudits.all().models;
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      this.scanUrl = `/dashboard/sbom/apps/${this.sbomProjects[1].id}/scans/${this.sbomFiles[1].id}`;
+      this.componentPath = `${this.scanUrl}/components/${this.sbomComponents[1].id}/0`;
+    });
+
+    test('an insights tab row opens the component insights page with a pager', async function (assert) {
+      await visit(`${this.scanUrl}?tab=insights`);
+
+      const rows = findAll('[data-test-sbomComponent-row]');
+
+      await click(rows[1]);
+
+      assert.strictEqual(currentURL(), `${this.componentPath}/insights`);
+
+      assert.dom('[data-test-sbomComponentInsights-container]').exists();
+      assert.dom('[data-test-sbomComponentInsights-pager]').exists();
+
+      assert
+        .dom('[data-test-sbomComponentInsights-vulnerabilities-id]')
+        .hasText(this.vulnIds[0]);
+
+      await click('[data-test-sbomComponentInsights-pager-next]');
+
+      assert
+        .dom('[data-test-sbomComponentInsights-vulnerabilities-id]')
+        .hasText(this.vulnIds[1]);
+
+      assert.strictEqual(
+        currentURL(),
+        `${this.componentPath}/insights?vuln=${encodeURIComponent(this.vulnIds[1])}`
+      );
+    });
+
+    test('the parent crumb of a paged insights page returns to the insights tab', async function (assert) {
+      await visit(`${this.scanUrl}`);
+
+      await click(findAll('[data-test-sbomComponent-row]')[1]);
+      await click('[data-test-sbomComponentInsights-pager-next]');
+
+      await click(
+        '[data-test-ak-breadcrumbs-auto-trail-item-key="authenticated.dashboard.sbom.scan-details"] a'
+      );
+
+      assert.strictEqual(currentURL(), this.scanUrl);
+      assert.dom('[data-test-sbomScanDetails-insightsTab]').exists();
+
+      // Complete shows the tree/list toggle; insights never does.
+      assert
+        .dom('[data-test-sbomScanDetails-switch-treeViewButton]')
+        .doesNotExist();
+    });
+
+    test('the parent crumb of component details returns to the complete tab', async function (assert) {
+      await visit(this.scanUrl);
+
+      await click('[data-test-sbomScanDetails-completeTab] button');
+      await click('[data-test-sbomScanDetails-switch-listViewButton]');
+      await click(findAll('[data-test-sbomComponent-row]')[1]);
+
+      await click(
+        '[data-test-ak-breadcrumbs-auto-trail-item-key="authenticated.dashboard.sbom.scan-details"] a'
+      );
+
+      assert.ok(currentURL().includes('tab=complete'), currentURL());
+
+      assert.dom('[data-test-sbomScanDetails-switch-treeViewButton]').exists();
+    });
+
+    test('reopening an insights row starts on the first vulnerability', async function (assert) {
+      await visit(`${this.scanUrl}?tab=insights`);
+
+      await click(findAll('[data-test-sbomComponent-row]')[1]);
+      await click('[data-test-sbomComponentInsights-pager-next]');
+
+      await visit(`${this.scanUrl}?tab=insights`);
+      await click(findAll('[data-test-sbomComponent-row]')[1]);
+
+      assert
+        .dom('[data-test-sbomComponentInsights-vulnerabilities-id]')
+        .hasText(this.vulnIds[0]);
+    });
+
+    test('a complete analysis row still opens the existing component details', async function (assert) {
+      await visit(`${this.scanUrl}?tab=complete`);
+
+      await click('[data-test-sbomScanDetails-switch-listViewButton]');
+
+      const rows = findAll('[data-test-sbomComponent-row]');
+
+      await click(rows[1]);
+
+      assert.strictEqual(currentURL(), `${this.componentPath}/overview`);
+
+      assert
+        .dom('[data-test-sbomComponentDetails-tab="vulnerabilities"]')
+        .exists();
+
+      assert.dom('[data-test-sbomComponentInsights-container]').doesNotExist();
+    });
+
+    test('the insight link on the vulnerabilities tab lands on that vulnerability', async function (assert) {
+      await visit(`${this.componentPath}/vulnerabilities`);
+
+      const items = findAll(
+        '[data-test-sbomComponentVulnerabilities-listItem]'
+      );
+
+      await click(
+        items[1].querySelector(
+          '[data-test-sbomComponentVulnerabilities-toggleDetailsBtn]'
+        )
+      );
+
+      await click(
+        items[1].querySelector(
+          '[data-test-sbomComponentVulnerabilities-insightLink]'
+        )
+      );
+
+      assert.strictEqual(
+        currentURL().split('?')[0],
+        `${this.componentPath}/insights`
+      );
+
+      const shown = find(
+        '[data-test-sbomComponentInsights-vulnerabilities-id]'
+      ).textContent.trim();
+
+      assert.strictEqual(
+        new URL(currentURL(), 'http://x').searchParams.get('vuln'),
+        shown
+      );
+
+      assert.ok(this.vulnIds.includes(shown));
+    });
   });
 
   test('test search in sbom app list', async function (assert) {

@@ -1,12 +1,31 @@
-import AuthenticatedDashboardSbomScanDetailsRoute from './scan-details';
+import Route from '@ember/routing/route';
+import { service } from '@ember/service';
+import type RouterService from '@ember/routing/router-service';
+import type Transition from '@ember/routing/transition';
 
 /**
- * The unfiltered component list for one scan.
+ * Legacy deep link to the unfiltered component list.
  *
- * A sibling of `scan-details` rather than a child of it: the breadcrumb chain
- * comes from the controller's crumb props (see `component-details`, which does
- * the same), so nesting buys nothing and would mean splitting `scan-details`
- * into an index route. The model and query params are inherited unchanged —
- * both views load the same scan.
+ * The complete list is the `tab=complete` view of `scan-details`, so this route
+ * only forwards there, carrying any list query params along. It replaces the
+ * history entry so Back does not bounce through the redirect.
  */
-export default class AuthenticatedDashboardSbomOriginalAnalysisRoute extends AuthenticatedDashboardSbomScanDetailsRoute {}
+export default class AuthenticatedDashboardSbomOriginalAnalysisRoute extends Route {
+  @service declare router: RouterService;
+
+  beforeModel(transition: Transition) {
+    const params = transition.to?.params ?? {};
+    const queryParams = { ...(transition.to?.queryParams ?? {}) };
+
+    // Insights is the default tab when reachability ran; this link means the
+    // complete list. Without reachability the tab param is dropped on arrival.
+    queryParams['tab'] = 'complete';
+
+    this.router.replaceWith(
+      'authenticated.dashboard.sbom.scan-details',
+      String(params['sbom_project_id']),
+      String(params['sbom_file_id']),
+      { queryParams }
+    );
+  }
+}

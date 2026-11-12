@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import { service } from '@ember/service';
 import type Store from 'ember-data/store';
 
@@ -16,6 +17,8 @@ export interface SbomComponentQueryParam {
   ai_confidence: string | null;
   ordering: string | null;
   reachability: string | null;
+  /** `complete` opens Complete analysis; otherwise Reachability insights when reachability ran. */
+  tab?: string | null;
 }
 
 export interface SbomScanDetailParam extends SbomComponentQueryParam {
@@ -62,7 +65,28 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
     reachability: {
       refreshModel: false,
     },
+    tab: {
+      refreshModel: false,
+    },
   };
+
+  /**
+   * `tab` changes do not re-enter the route, so keep the saved crumb's query
+   * in step; otherwise a crumb from a child page returns to the wrong tab.
+   */
+  @action
+  queryParamsDidChange(changed: Record<string, unknown>) {
+    const controller = this.controller as { tab?: string | null } | undefined;
+
+    if ('tab' in changed && controller) {
+      this.bCS.updateCrumbQuery(
+        this.routeName,
+        controller.tab === 'complete' ? { tab: 'complete' } : undefined
+      );
+    }
+
+    return true;
+  }
 
   async model(params: SbomScanDetailParam) {
     const { sbom_project_id, sbom_file_id } = params;

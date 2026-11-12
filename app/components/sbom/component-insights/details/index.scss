@@ -1,0 +1,11 @@
+.details-root {
+  border: 1px solid var(--sbom-component-insights-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-background-color);
+  overflow: hidden;
+}
+
+.details-strip {
+  padding: 0.5em 1em;
+  background-color: var(--sbom-component-insights-strip-background-color);
+}

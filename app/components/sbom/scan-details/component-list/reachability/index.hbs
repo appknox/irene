@@ -24,21 +24,30 @@
         </:default>
 
         <:tooltipContent>
-          <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.scanStatusReason}}</div>
+          <div
+            {{style
+              width='360px'
+              white-space='pre-line'
+              overflow-wrap='break-word'
+            }}
+          >{{this.scanStatusReason}}</div>
         </:tooltipContent>
       </AkTooltip>
     {{else}}
-      <AkTypography data-test-sbomComponent-reachabilityNotRun @fontWeight='bold'>
+      <AkTypography
+        data-test-sbomComponent-reachabilityNotRun
+        @fontWeight='bold'
+      >
         -
       </AkTypography>
     {{/if}}
   {{else if this.notApplicable}}
+    {{! Not vulnerable: nothing to analyze, so a quiet dash, not a label. }}
     <AkTypography
       data-test-sbomComponent-reachabilityNotApplicable
-      @fontWeight='bold'
       @color='textSecondary'
     >
-      {{t 'sbomModule.reachability.notApplicable'}}
+      –
     </AkTypography>
   {{else}}
     <AkStack @alignItems='center' @spacing='0.5'>
@@ -65,7 +74,13 @@
           </:default>
 
           <:tooltipContent>
-            <div {{style width='360px' white-space='pre-line' overflow-wrap='break-word'}}>{{this.summaryTooltip}}</div>
+            <div
+              {{style
+                width='360px'
+                white-space='pre-line'
+                overflow-wrap='break-word'
+              }}
+            >{{this.summaryTooltip}}</div>
           </:tooltipContent>
         </AkTooltip>
       {{/if}}
@@ -88,7 +103,11 @@
 
           <:tooltipContent>
             <div
-              {{style width='320px' white-space='pre-line' overflow-wrap='break-word'}}
+              {{style
+                width='320px'
+                white-space='pre-line'
+                overflow-wrap='break-word'
+              }}
             >{{t 'sbomModule.reachability.notInBinaryHint'}}</div>
           </:tooltipContent>
         </AkTooltip>

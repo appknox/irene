@@ -44,13 +44,13 @@ export type AkTreeNodeProps = {
 };
 
 /**
- * Which of the two component views this instance renders.
+ * The two component tabs.
  *
- * `insights` is the landing view: reachability-relevant components only, as a
- * flat list. `original` is the unfiltered list behind "See original analysis",
- * where the tree still lives.
+ * `insights` is the landing tab when reachability ran: only components the
+ * run concluded on, as a flat list. `complete` is the unfiltered SBOM, where
+ * the tree lives. `?tab=complete` selects it; no param means insights.
  */
-export type SbomScanDetailsView = 'insights' | 'original';
+export type SbomScanDetailsView = 'complete' | 'insights';
 
 export interface SbomScanDetailsSignature {
   Args: {
@@ -58,7 +58,12 @@ export interface SbomScanDetailsSignature {
     sbomFile: SbomFileModel;
     sbomScanSummary: SbomScanSummaryModel | null;
     queryParams: SbomScanDetailParam;
-    view?: SbomScanDetailsView;
+    /**
+     * The live `tab` query param. `queryParams` is the route's snapshot and
+     * does not change on Back/Forward (the param does not refresh the
+     * model), so the active tab follows this instead.
+     */
+    tab?: string | null;
   };
 }
 
@@ -73,6 +78,9 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @tracked expandedNodes: string[] = [];
   @tracked treeNodes: AkTreeNodeProps[] = [];
   @tracked activeTab: 'sbom' | 'aibom' = 'sbom';
+  @tracked activeView: SbomScanDetailsView = 'insights';
+
+  /** Tree/list choice on the complete tab, restored when switching back. */
   @tracked sbomViewType: 'tree' | 'list' = 'tree';
 
   constructor(owner: unknown, args: SbomScanDetailsSignature['Args']) {
@@ -90,6 +98,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       ai_confidence,
       ordering,
       reachability,
+      tab,
     } = args.queryParams;
 
     // Always set is_ai_component explicitly; outdated files stay pinned to SBOM since they have no tab bar.
@@ -98,24 +107,31 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       : 'false';
 
     this.activeTab = resolvedIsAiComponent === 'true' ? 'aibom' : 'sbom';
+    this.activeView = this.viewForTab(tab);
 
-    // Force list mode for the insights view, AI-BOM and outdated files to preserve filters and avoid the tree-mode default.
-    const resolvedViewType =
-      this.insightsLanding ||
-      resolvedIsAiComponent === 'true' ||
-      this.args.sbomFile.isOutdated
-        ? 'list'
-        : view_type || 'tree';
+    // A stale `?tab=complete` without reachability would otherwise linger in
+    // the URL while the complete tab is shown.
+    if (tab === 'complete' && !this.hasReachability) {
+      runTask(this, () =>
+        this.router.replaceWith(this.router.currentRouteName ?? '', {
+          queryParams: { tab: null },
+        })
+      );
+    }
 
     this.sbomViewType = this.isNotOutdated ? (view_type ?? 'tree') : 'list';
 
-    // The insights view lists only components with reachability findings;
-    // original-analysis lists everything. Set before the first fetch so the
-    // filter is part of the initial query, not a second round trip.
-    // Without reachability there are no findings to filter on, so the filter
-    // would empty the list entirely.
-    this.sbomScanDetailsService.onlyReachable =
-      this.hasReachability && args.view !== 'original';
+    // Force list mode for the insights view, AI-BOM and outdated files to preserve filters and avoid the tree-mode default.
+    const resolvedViewType =
+      this.isInsightsView ||
+      resolvedIsAiComponent === 'true' ||
+      this.args.sbomFile.isOutdated
+        ? 'list'
+        : this.sbomViewType;
+
+    // Set before the first fetch so the filter is part of the initial query,
+    // not a second round trip.
+    this.sbomScanDetailsService.onlyReachable = this.isInsightsView;
 
     // Fetch with default queries from the route
     this.sbomScanDetailsService
@@ -171,6 +187,13 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       // Terminal state — refresh the component list once so verdict chips
       // appear without a page reload, then stop polling.
       this.sbomScanDetailsService.reload();
+
+      // A bare URL means Insights now, so keep Complete explicit.
+      if (this.activeView === 'complete' && !this.args.tab) {
+        this.router.replaceWith(this.router.currentRouteName ?? '', {
+          queryParams: { tab: 'complete' },
+        });
+      }
 
       return;
     }
@@ -299,8 +322,19 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     return !this.args.sbomFile.isOutdated;
   }
 
-  get isOriginalAnalysis() {
-    return this.args.view === 'original';
+  get isInsightsView() {
+    return this.activeView === 'insights';
+  }
+
+  /**
+   * The view a `tab` query param value selects. Without reachability there
+   * are no findings to filter on, so the insights tab would be empty; it
+   * is the default only when the run produced data. `complete` is explicit.
+   */
+  viewForTab(tab?: string | null): SbomScanDetailsView {
+    return this.reachabilityCompleted && tab !== 'complete'
+      ? 'insights'
+      : 'complete';
   }
 
   /**
@@ -321,18 +355,59 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     );
   }
 
-  /** The filtered insights list is the landing view only when it has data. */
-  get insightsLanding() {
-    return this.hasReachability && !this.isOriginalAnalysis;
+  /** Insights is the default only once the run finished with findings. */
+  get reachabilityCompleted() {
+    return (
+      this.args.sbomFile.reachabilityStatus === ReachabilityScanStatus.COMPLETED
+    );
+  }
+
+  /** The tabs exist only when there is an insights list to switch to. */
+  get showTabs() {
+    return this.hasReachability;
+  }
+
+  /**
+   * The search box sits on the left of the toolbar: on insights unless it is empty, and
+   * on the complete tab only in list view (the tree has no search).
+   */
+  get showSearch() {
+    return (
+      (!this.isInsightsView || !this.isInsightsEmpty) && this.showSearchBase
+    );
+  }
+
+  private get showSearchBase() {
+    return this.isInsightsView || !this.isTreeView;
+  }
+
+  /**
+   * Insights finished loading with no findings and nothing narrowing it
+   * (no search/filter), i.e. the "No reachability findings" empty state.
+   * Read from the service data the list already loaded.
+   */
+  get isInsightsEmpty() {
+    const svc = this.sbomScanDetailsService;
+
+    return (
+      this.isInsightsView &&
+      !svc.isFetchingSbomComponentList &&
+      svc.sbomComponentsCount === 0 &&
+      (svc.searchQuery ?? '').trim() === '' &&
+      svc.selectedDependencyType === null &&
+      svc.selectedComponentType <= -1 &&
+      svc.selectedReachability === null
+    );
+  }
+
+  /** The toolbar strip only renders when it has something in it. */
+  get showToolbar() {
+    return this.isNotOutdated && (this.showSearch || this.showViewToggle);
   }
 
   /** The tree survives wherever the insights columns are not shown. */
   get showViewToggle() {
-    return !this.insightsLanding;
-  }
-
-  get scanRouteModels() {
-    return [this.args.sbomProject.id, this.args.sbomFile.id];
+    return !this.isInsightsView;
   }
 
   get totalComponentCount() {
@@ -340,8 +415,8 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   }
 
   /**
-   * The tree only exists on the original-analysis view; the insights list is
-   * flat so the per-component reachability counts line up in columns.
+   * The tree only exists on the complete tab; the insights list is flat so
+   * the per-component reachability counts line up in columns.
    */
   get isTreeView() {
     return (
@@ -367,6 +442,75 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @action
   handleViewReportDrawerClose() {
     this.openViewReportDrawer = false;
+  }
+
+  /**
+   * Switch between Complete analysis and Reachability insights. Filters,
+   * search and paging are reset so the URL cannot drift from the service
+   * state; the complete tab gets back the tree/list mode it was left in.
+   */
+  @action
+  selectViewTab(id: string | number) {
+    const tab: SbomScanDetailsView =
+      id === 'insights' ? 'insights' : 'complete';
+
+    if (tab === this.activeView) {
+      return;
+    }
+
+    this.applyView(tab);
+
+    this.router.transitionTo({
+      queryParams: {
+        tab: tab === 'complete' ? 'complete' : null,
+        view_type: this.viewTypeFor(tab),
+        component_query: '',
+        component_type: -1,
+        is_dependency: null,
+        reachability: null,
+        component_offset: 0,
+      },
+    });
+  }
+
+  @action
+  viewCompleteAnalysis() {
+    this.selectViewTab('complete');
+  }
+
+  /**
+   * Follow the `tab` query param when it changes without a tab click
+   * (browser Back/Forward, a link). The URL already holds the tab, so only
+   * the view and the list are brought in line with it.
+   */
+  @action
+  syncTabFromUrl() {
+    const tab = this.viewForTab(this.args.tab);
+
+    if (tab !== this.activeView) {
+      this.applyView(tab);
+    }
+  }
+
+  private viewTypeFor(tab: SbomScanDetailsView) {
+    return tab === 'insights' ? 'list' : this.sbomViewType;
+  }
+
+  /** Show `tab` and reload its list with filters, search and paging reset. */
+  private applyView(tab: SbomScanDetailsView) {
+    this.activeView = tab;
+    this.sbomScanDetailsService.onlyReachable = tab === 'insights';
+
+    this.sbomScanDetailsService
+      .setQueryData({
+        view_type: this.viewTypeFor(tab),
+        component_query: '',
+        component_type: -1,
+        dependency_type: null,
+        reachability: null,
+      })
+      .setLimitOffset({ offset: 0 })
+      .reload();
   }
 
   @action
@@ -423,7 +567,6 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   @action
   handleListViewClick() {
     this.sbomViewType = 'list';
-
     const queryParams = { view_type: 'list' as const };
 
     this.router.transitionTo({ queryParams });

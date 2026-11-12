@@ -7,6 +7,8 @@ import type SbomComponentModel from 'irene/models/sbom-component';
 export interface SbomScanDetailsComponentListDependencyTypeSignature {
   Args: {
     sbomComponent: SbomComponentModel;
+    /** The "via <parent>" line shows on the insights tab only. */
+    showVia?: boolean;
   };
 }
 
@@ -19,6 +21,10 @@ export default class SbomScanDetailsComponentListDependencyTypeComponent extends
     }
 
     return this.intl.t('dependencyTypes.direct');
+  }
+
+  get showVia() {
+    return Boolean(this.args.showVia) && Boolean(this.via);
   }
 
   /** The parent that pulls a transitive dependency in, when known. */

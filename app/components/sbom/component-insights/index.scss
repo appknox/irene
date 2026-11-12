@@ -1,0 +1,11 @@
+.header {
+  padding: 1em;
+  border: 1px solid var(--sbom-component-insights-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-background-color);
+}
+
+.coordinate {
+  font-family: monospace !important;
+  overflow-wrap: anywhere;
+}
