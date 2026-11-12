@@ -1,0 +1,19 @@
+<div local-class='chain' data-test-sbomRemediation-chain>
+  {{#each @links as |link index|}}
+    {{#if index}}
+      <AkIcon
+        @iconName='codicon:arrow-small-right'
+        @size='small'
+        @color='textSecondary'
+      />
+    {{/if}}
+
+    <span
+      local-class='chain-link {{if
+        (eq index this.lastIndex)
+        "chain-link-last"
+      }}'
+      data-test-sbomRemediation-chainLink
+    >{{link}}</span>
+  {{/each}}
+</div>

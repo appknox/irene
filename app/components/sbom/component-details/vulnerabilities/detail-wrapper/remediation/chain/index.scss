@@ -1,0 +1,19 @@
+.chain {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-wrap: wrap;
+}
+
+.chain-link {
+  padding: 0.25em 0.6em;
+  border-radius: var(--border-radius-4);
+  background: var(--sbom-remediation-chain-background);
+  font-family: var(--font-family-mono);
+  font-size: 0.85em;
+}
+
+.chain-link-last {
+  background: var(--sbom-remediation-chain-last-background);
+  color: var(--sbom-remediation-chain-last-color);
+}

@@ -974,9 +974,34 @@ body {
     --text-primary
   );
 
+  // variables for sbom/component-details/vulnerabilities/detail-wrapper/remediation
+  --sbom-remediation-border-radius: var(--border-radius-6);
+  --sbom-remediation-border-color: var(--border-color-1);
+  --sbom-remediation-action-color: var(--text-secondary);
+  --sbom-remediation-code-background: var(--neutral-grey-900);
+  --sbom-remediation-code-bar-background: var(--neutral-grey-800);
+  --sbom-remediation-code-color: var(--neutral-grey-100);
+  --sbom-remediation-code-label-color: var(--neutral-grey-400);
+  --sbom-remediation-copy-background: var(--neutral-grey-700);
+  --sbom-remediation-copy-color: var(--common-white);
+  --sbom-remediation-step-background: var(--text-primary);
+  --sbom-remediation-step-color: var(--common-white);
+  --sbom-remediation-chain-background: var(--neutral-grey-100);
+  --sbom-remediation-chain-last-background: var(--text-primary);
+  --sbom-remediation-chain-last-color: var(--common-white);
+  --sbom-remediation-version-link-color: var(--primary-main);
+  --sbom-remediation-substep-background: var(--neutral-grey-100);
+  --sbom-remediation-substep-border-color: var(--border-color-1);
+  --sbom-remediation-substep-border-radius: 3px;
+  --sbom-remediation-inline-code-background: var(--neutral-grey-100);
+  --sbom-remediation-inline-code-border-color: var(--neutral-grey-200);
+  --sbom-remediation-kbd-background: var(--common-white);
+  --sbom-remediation-kbd-border-color: var(--border-color-1);
+  --sbom-remediation-kbd-border-radius: 3px;
+
   // variables for sbom/scan-details/component-list/reachability-counts
-  --sbom-reachability-counts-reachable-background: var(--error-bg);
-  --sbom-reachability-counts-reachable-color: var(--error-main);
+  --sbom-reachability-counts-reachable-background: var(--error-main);
+  --sbom-reachability-counts-reachable-color: var(--common-white);
   --sbom-reachability-counts-potential-background: var(--warn-light);
   --sbom-reachability-counts-potential-color: var(--warn-dark);
   --sbom-reachability-counts-inconclusive-background: var(--neutral-grey-100);
@@ -1016,6 +1041,15 @@ body {
   );
   --sbom-component-details-vulnerabilities-reachability-call-path-marker-hollow-background: var(
     --background-main
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-color: var(
+    --error-main
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-halo-color: var(
+    --error-bg
+  );
+  --sbom-component-details-vulnerabilities-reachability-call-path-no-trace-border-color: var(
+    --border-color-2
   );
 
   // variables for sbom/component-details/vulnerabilities/detail-wrapper/reachability/targets
@@ -1081,6 +1115,14 @@ body {
   --sbom-component-details-overview-section-background-color: var(
     --common-white
   );
+
+  // variables for sbom/component-insights
+  --sbom-component-insights-border-color: var(--border-color-1);
+  --sbom-component-insights-border-radius: var(--border-radius);
+  --sbom-component-insights-background-color: var(--common-white);
+  --sbom-component-insights-strip-background-color: var(--neutral-grey-100);
+  --sbom-component-insights-pager-index-border-color: var(--border-color-1);
+  --sbom-component-insights-pager-index-background-color: var(--common-white);
 
   // variables for sbom/component-details/summary/reachability
   --sbom-component-details-summary-reachability-indicator-path-found-color: var(

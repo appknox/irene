@@ -4,6 +4,7 @@ import type IntlService from 'ember-intl/services/intl';
 import type { AkChipColor } from 'irene/components/ak-chip';
 import {
   reachabilityChipColor,
+  reachabilityChipVariant,
   reachabilityExplanationKey,
   reachabilityLabelKey,
   shouldShowReachabilityChip,
@@ -66,6 +67,15 @@ export default class SbomReachabilityStatusComponent extends Component<SbomReach
 
   get color(): AkChipColor {
     return reachabilityChipColor(this.verdict);
+  }
+
+  get variant() {
+    return reachabilityChipVariant(this.verdict);
+  }
+
+  /** The solid Reachable badge carries bold white text; others stay regular. */
+  get fontWeight() {
+    return this.variant === 'filled' ? 'bold' : 'regular';
   }
 }
 

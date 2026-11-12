@@ -3,7 +3,9 @@
   flex-shrink: 0;
   overflow: hidden;
   border: 1px solid
-    var(--sbom-component-details-vulnerabilities-reachability-call-path-border-color);
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+    );
   border-radius: var(
     --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
   );
@@ -77,7 +79,9 @@
   padding: 1em 1.25em;
   box-sizing: border-box;
   border: 1px solid
-    var(--sbom-component-details-vulnerabilities-reachability-call-path-border-color);
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+    );
   border-radius: var(
     --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
   );
@@ -178,9 +182,39 @@
     --sbom-component-details-vulnerabilities-reachability-call-path-font-family-mono
   );
   font-variant-ligatures: none;
-  font-feature-settings: 'liga' 0, 'calt' 0;
+  font-feature-settings:
+    'liga' 0,
+    'calt' 0;
 }
 
 .package-name {
   opacity: 0.9;
+}
+
+// The vulnerable frame: a red node inside a soft halo, its name in the same
+// error ink (set on the typography), so the end of the path reads at a glance.
+.step-marker-vulnerable {
+  border-color: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-color
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-color
+  );
+  box-shadow: 0 0 0 0.25em
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-halo-color
+    );
+}
+
+.no-trace {
+  width: 100%;
+  padding: 0.75em 1em;
+  box-sizing: border-box;
+  border: 1px dashed
+    var(
+      --sbom-component-details-vulnerabilities-reachability-call-path-no-trace-border-color
+    );
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+  );
 }

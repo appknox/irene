@@ -1,0 +1,31 @@
+<div local-class='code-block' data-test-sbomRemediation-codeBlock={{@testId}}>
+  <div local-class='code-block-bar'>
+    <AkTypography
+      local-class='code-block-label'
+      @variant='body3'
+      @color='inherit'
+    >
+      {{@label}}
+    </AkTypography>
+
+    <AkClipboard
+      @onSuccess={{this.handleCopySuccess}}
+      @onError={{this.handleCopyError}}
+      as |cb|
+    >
+      <button
+        type='button'
+        id={{cb.triggerId}}
+        local-class='copy-button'
+        data-clipboard-text={{@code}}
+        data-test-sbomRemediation-copyButton={{@testId}}
+      >
+        <AkTypography @variant='body3' @color='inherit'>
+          {{t 'copy'}}
+        </AkTypography>
+      </button>
+    </AkClipboard>
+  </div>
+
+  <pre local-class='code-block-body'>{{@code}}</pre>
+</div>

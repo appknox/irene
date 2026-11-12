@@ -13,6 +13,14 @@ export default class SbomComponentDetailsVulnerabilitiesReachabilityComponent ex
   }
 
   /**
+   * Engine exposure: passed through so the list chip shows the same
+   * headline state as the detail panel.
+   */
+  get exposure() {
+    return this.args.sbomVulnerabilityAudit?.reachability?.exposure ?? null;
+  }
+
+  /**
    * Server-computed explanation: for inconclusive verdicts this names the
    * actual reason (from the blocker taxonomy) instead of a generic line.
    */

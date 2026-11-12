@@ -1,0 +1,183 @@
+.remediation {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--sbom-remediation-border-color);
+  border-radius: var(--sbom-remediation-border-radius);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  padding: 0.75em 1em;
+}
+
+.header-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.action {
+  color: var(--sbom-remediation-action-color);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25em;
+  padding: 1em 1em 1.25em;
+  border-top: 1px solid var(--sbom-remediation-border-color);
+}
+
+.details-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.step {
+  display: flex;
+  gap: 0.9em;
+  width: 100%;
+  min-width: 0;
+}
+
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 50%;
+  background: var(--sbom-remediation-step-background);
+  color: var(--sbom-remediation-step-color);
+  font-size: 0.85em;
+  font-weight: var(--font-weight-bold);
+}
+
+.step-body {
+  flex: 1 1 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.retest-row {
+  width: 100%;
+  padding: 0.75em 1em;
+  box-sizing: border-box;
+  border: 1px solid var(--sbom-remediation-border-color);
+  border-radius: var(--sbom-remediation-border-radius);
+}
+
+.retest-signature {
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-bold);
+  font-size: 0.9em;
+}
+
+.retest-component {
+  padding: 0.2em 0.6em;
+  border: 1px dashed var(--sbom-remediation-border-color);
+  border-radius: var(--border-radius-4);
+  color: var(--text-secondary);
+  font-family: var(--font-family-mono);
+  font-size: 0.85em;
+}
+
+.retest-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.version-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2em;
+  color: var(--sbom-remediation-version-link-color);
+  font-family: var(--font-family-mono);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.version {
+  font-family: var(--font-family-mono);
+}
+
+// Lettered sub-steps of step 1 (maven only).
+.substeps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9em;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.substep {
+  display: grid;
+  grid-template-columns: 1.6em minmax(0, 1fr);
+  gap: 0.7em;
+}
+
+.substep-letter {
+  display: grid;
+  place-items: center;
+  width: 1.45em;
+  height: 1.45em;
+  margin-top: 0.1em;
+  border: 1px solid var(--sbom-remediation-substep-border-color);
+  border-radius: var(--sbom-remediation-substep-border-radius);
+  background: var(--sbom-remediation-substep-background);
+  color: var(--text-secondary);
+  font-size: 0.85em;
+  font-weight: var(--font-weight-bold);
+}
+
+.substep-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  min-width: 0;
+
+  // Inline markup arrives from translations, so it is styled by element.
+  code {
+    padding: 0 0.35em;
+    border: 1px solid var(--sbom-remediation-inline-code-border-color);
+    background: var(--sbom-remediation-inline-code-background);
+    font-family: var(--font-family-mono);
+    font-size: 0.92em;
+    word-break: break-all;
+  }
+
+  kbd {
+    padding: 0 0.35em;
+    border: 1px solid var(--sbom-remediation-kbd-border-color);
+    border-bottom-width: 2px;
+    border-radius: var(--sbom-remediation-kbd-border-radius);
+    background: var(--sbom-remediation-kbd-background);
+    font-family: var(--font-family-mono);
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
+}

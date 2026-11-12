@@ -1,0 +1,410 @@
+{{#if this.shouldShow}}
+  <div local-class='remediation' data-test-sbomRemediation>
+    {{! Header: one line with the key action. The version link sits outside
+        the toggle so following it never collapses or expands the section. }}
+    <div local-class='header'>
+      <button
+        type='button'
+        local-class='header-toggle'
+        aria-expanded='{{if this.isExpanded "true" "false"}}'
+        aria-controls={{if this.isExpanded this.bodyId}}
+        data-test-sbomRemediation-toggle
+        {{on 'click' this.toggleExpanded}}
+      >
+        <AkIcon
+          @iconName={{if this.isExpanded 'arrow-drop-down' 'chevron-right'}}
+          @size='small'
+          @color='textSecondary'
+        />
+
+        <AkTypography
+          data-test-sbomRemediation-title
+          @tag='span'
+          @variant='subtitle1'
+        >
+          {{t 'sbomModule.remediation.title'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-sbomRemediation-action
+          local-class='action'
+          @tag='span'
+          @variant='body2'
+        >
+          {{#if this.currentVersion}}
+            {{t
+              'sbomModule.remediation.action'
+              component=this.componentName
+              current=this.currentVersion
+            }}
+          {{else}}
+            {{t
+              'sbomModule.remediation.actionNoCurrent'
+              component=this.componentName
+            }}
+          {{/if}}
+        </AkTypography>
+      </button>
+
+      {{#if this.upgradeVersionUrl}}
+        <a
+          href={{this.upgradeVersionUrl}}
+          target='_blank'
+          rel='noopener noreferrer'
+          title={{t
+            'sbomModule.remediation.openOnMavenCentral'
+            component=this.componentName
+            version=this.fixVersion
+          }}
+          local-class='version-link'
+          data-test-sbomRemediation-versionLink
+        >
+          {{this.fixVersion}}
+          <AkIcon @iconName='open-in-new' @size='small' @color='inherit' />
+        </a>
+      {{else}}
+        <span local-class='version' data-test-sbomRemediation-version>
+          {{this.fixVersion}}
+        </span>
+      {{/if}}
+    </div>
+
+    {{#if this.isExpanded}}
+      <div id={{this.bodyId}} local-class='body' data-test-sbomRemediation-body>
+        {{! Step 1: find it }}
+        <div local-class='step' data-test-sbomRemediation-step='find'>
+          <span local-class='step-number'>1</span>
+
+          <AkStack @direction='column' @spacing='0.75' local-class='step-body'>
+            <AkTypography
+              data-test-sbomRemediation-findTitle
+              @variant='body1'
+              @fontWeight='bold'
+            >
+              {{t 'sbomModule.remediation.steps.find'}}
+            </AkTypography>
+
+            <AkTypography @variant='body2' data-test-sbomRemediation-findText>
+              {{t
+                this.findKey
+                component=this.componentName
+                parent=this.parentName
+              }}
+            </AkTypography>
+
+            {{#if this.isTransitive}}
+              <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::Chain
+                @links={{this.dependencyChain}}
+              />
+            {{/if}}
+
+            {{#if this.hasDetailedSteps}}
+              <button
+                type='button'
+                local-class='details-toggle'
+                aria-expanded='{{if this.showDetailedSteps "true" "false"}}'
+                aria-controls={{if this.showDetailedSteps this.substepsId}}
+                data-test-sbomRemediation-detailsToggle
+                {{on 'click' this.toggleDetailedSteps}}
+              >
+                <AkIcon
+                  @iconName={{if
+                    this.showDetailedSteps
+                    'arrow-drop-down'
+                    'chevron-right'
+                  }}
+                  @size='small'
+                  @color='primary'
+                />
+
+                <AkTypography @tag='span' @variant='body2' @color='primary'>
+                  {{if
+                    this.showDetailedSteps
+                    (t 'sbomModule.remediation.hideDetailedSteps')
+                    (t 'sbomModule.remediation.showDetailedSteps')
+                  }}
+                </AkTypography>
+              </button>
+
+              {{#if this.showDetailedSteps}}
+                <ol
+                  id={{this.substepsId}}
+                  local-class='substeps'
+                  data-test-sbomRemediation-substeps
+                >
+                  <li
+                    local-class='substep'
+                    data-test-sbomRemediation-substep='a'
+                  >
+                    <span local-class='substep-letter'>a</span>
+                    <div local-class='substep-body'>
+                      <AkTypography @variant='body2' @fontWeight='bold'>
+                        {{t
+                          'sbomModule.remediation.maven.buildFileTitle'
+                          target=this.searchTarget
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+
+                      <AkTypography @variant='body2'>
+                        {{t
+                          'sbomModule.remediation.maven.buildFileBody'
+                          target=this.searchTarget
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+
+                      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
+                        @label='app/build.gradle.kts'
+                        @code={{this.declaredLine}}
+                        @testId='declared'
+                      />
+                    </div>
+                  </li>
+
+                  <li
+                    local-class='substep'
+                    data-test-sbomRemediation-substep='b'
+                  >
+                    <span local-class='substep-letter'>b</span>
+                    <div local-class='substep-body'>
+                      <AkTypography @variant='body2' @fontWeight='bold'>
+                        {{t 'sbomModule.remediation.maven.catalogTitle'}}
+                      </AkTypography>
+
+                      <AkTypography @variant='body2'>
+                        {{t
+                          'sbomModule.remediation.maven.catalogBody'
+                          target=this.searchTarget
+                          alias=this.catalogAlias
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+                    </div>
+                  </li>
+
+                  <li
+                    local-class='substep'
+                    data-test-sbomRemediation-substep='c'
+                  >
+                    <span local-class='substep-letter'>c</span>
+                    <div local-class='substep-body'>
+                      <AkTypography @variant='body2' @fontWeight='bold'>
+                        {{t 'sbomModule.remediation.maven.confirmTitle'}}
+                      </AkTypography>
+
+                      <AkTypography @variant='body2'>
+                        {{t
+                          'sbomModule.remediation.maven.confirmBody'
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+
+                      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
+                        @label='Terminal'
+                        @code={{this.insightCommand}}
+                        @testId='insight'
+                      />
+
+                      <AkTypography @variant='body3' @color='textSecondary'>
+                        {{t
+                          'sbomModule.remediation.maven.windowsNote'
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+                    </div>
+                  </li>
+
+                  <li
+                    local-class='substep'
+                    data-test-sbomRemediation-substep='d'
+                  >
+                    <span local-class='substep-letter'>d</span>
+                    <div local-class='substep-body'>
+                      <AkTypography @variant='body2' @fontWeight='bold'>
+                        {{t 'sbomModule.remediation.maven.usagesTitle'}}
+                      </AkTypography>
+
+                      <AkTypography @variant='body2'>
+                        {{t
+                          'sbomModule.remediation.maven.usagesBody'
+                          pkg=this.importPackage
+                          htmlSafe=true
+                        }}
+                      </AkTypography>
+                    </div>
+                  </li>
+                </ol>
+              {{/if}}
+            {{/if}}
+          </AkStack>
+        </div>
+
+        {{! Step 2: upgrade }}
+        <div local-class='step' data-test-sbomRemediation-step='upgrade'>
+          <span local-class='step-number'>2</span>
+
+          <AkStack @direction='column' @spacing='0.75' local-class='step-body'>
+            <AkTypography
+              data-test-sbomRemediation-upgradeTitle
+              @variant='body1'
+              @fontWeight='bold'
+            >
+              {{t 'sbomModule.remediation.steps.upgrade'}}
+            </AkTypography>
+
+            <AkTypography
+              @variant='body2'
+              data-test-sbomRemediation-upgradeText
+            >
+              {{t
+                'sbomModule.remediation.upgradeBody'
+                component=this.componentName
+                version=this.fixVersion
+              }}
+            </AkTypography>
+
+            <AkTypography @variant='body2' data-test-sbomRemediation-coverage>
+              {{t
+                this.coverageKey
+                count=this.coverage.total
+                fixed=this.coverage.fixedCount
+                total=this.coverage.total
+              }}
+              {{#if this.showOwnFixNote}}
+                {{t 'sbomModule.remediation.ownFix' version=this.ownFixVersion}}
+              {{/if}}
+            </AkTypography>
+
+            {{#if this.isTransitive}}
+              <AkTypography
+                @variant='body2'
+                data-test-sbomRemediation-transitiveUpgrade
+              >
+                {{t
+                  'sbomModule.remediation.transitiveUpgrade'
+                  parent=this.parentName
+                }}
+              </AkTypography>
+            {{/if}}
+
+            {{#if this.isPatchBump}}
+              <AkTypography
+                data-test-sbomRemediation-patchNote
+                @variant='body2'
+                @color='textSecondary'
+              >
+                {{t
+                  'sbomModule.remediation.patchRelease'
+                  line=this.fixReleaseLine
+                }}
+              </AkTypography>
+            {{/if}}
+
+            {{#if this.isCocoapods}}
+              <AkTypography
+                data-test-sbomRemediation-cocoapodsCaution
+                @variant='body2'
+                @color='textSecondary'
+              >
+                {{t 'sbomModule.remediation.cocoapods.caution'}}
+              </AkTypography>
+            {{/if}}
+
+            {{#if this.hasUpgradeSnippet}}
+              {{#if this.isNpm}}
+                <AkTypography @variant='body3' @color='textSecondary'>
+                  {{t 'sbomModule.remediation.npm.managerNote'}}
+                </AkTypography>
+              {{/if}}
+
+              <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
+                @label={{this.upgradeFileLabel}}
+                @code={{this.upgradeSnippet}}
+                @testId='upgrade'
+              />
+            {{/if}}
+          </AkStack>
+        </div>
+
+        {{#if this.retestRows.length}}
+          {{! Step 3: retest }}
+          <div local-class='step' data-test-sbomRemediation-step='retest'>
+            <span local-class='step-number'>3</span>
+
+            <AkStack
+              @direction='column'
+              @spacing='0.75'
+              local-class='step-body'
+            >
+              <AkTypography
+                data-test-sbomRemediation-retestTitle
+                @variant='body1'
+                @fontWeight='bold'
+              >
+                {{t 'sbomModule.remediation.steps.retest'}}
+              </AkTypography>
+
+              <AkTypography @variant='body2'>
+                {{t 'sbomModule.remediation.retestIntro'}}
+              </AkTypography>
+
+              <div local-class='retest-list'>
+                {{#each this.retestRows as |row|}}
+                  <div
+                    local-class='retest-row'
+                    data-test-sbomRemediation-retestRow
+                  >
+                    <AkStack
+                      @alignItems='center'
+                      @spacing='0.5'
+                      @flexWrap='wrap'
+                    >
+                      <span
+                        local-class='retest-signature'
+                        data-test-sbomRemediation-retestEntry
+                      >{{row.entry}}</span>
+
+                      {{#if row.caller}}
+                        <AkIcon
+                          @iconName='codicon:arrow-small-right'
+                          @size='small'
+                          @color='textSecondary'
+                        />
+
+                        <span
+                          local-class='retest-signature'
+                          data-test-sbomRemediation-retestCaller
+                        >{{row.caller}}</span>
+                      {{/if}}
+
+                      <AkIcon
+                        @iconName='codicon:arrow-small-right'
+                        @size='small'
+                        @color='textSecondary'
+                      />
+
+                      <span
+                        local-class='retest-component'
+                        data-test-sbomRemediation-retestLib
+                      >{{this.libraryLabel}}</span>
+                    </AkStack>
+
+                    {{#if row.advisories}}
+                      <AkTypography @variant='body3' @color='textSecondary'>
+                        {{t
+                          'sbomModule.remediation.usedBy'
+                          advisory=row.advisories
+                        }}
+                      </AkTypography>
+                    {{/if}}
+                  </div>
+                {{/each}}
+              </div>
+            </AkStack>
+          </div>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+{{/if}}

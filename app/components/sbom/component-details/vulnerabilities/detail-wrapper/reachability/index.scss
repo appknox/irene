@@ -3,13 +3,19 @@
 }
 
 .section-label {
+  font-weight: var(--font-weight-bold) !important;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-// Keeps the verdict chip on the text baseline when the paragraph wraps.
+// Keeps verdict chips on the text baseline when the paragraph wraps; the
+// prose around them carries its own spaces, so the margin stays slight.
 .inline-chip {
   display: inline-flex;
   vertical-align: middle;
-  margin-right: 0.4em;
+  margin: 0 0.15em;
+
+  &:first-child {
+    margin-left: 0;
+  }
 }

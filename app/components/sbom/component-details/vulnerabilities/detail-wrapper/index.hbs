@@ -15,7 +15,10 @@
     <AkStack
       @direction='column'
       @spacing='3.5'
-      local-class='vulnerability-detail-content'
+      local-class='vulnerability-detail-content {{if
+        this.showReachability
+        "full-row"
+      }}'
     >
       <AkStack @direction='column' @spacing='0.5'>
         <AkTypography
@@ -30,111 +33,137 @@
         </AkTypography>
       </AkStack>
 
-      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability
-        @sbomVulnerabilityAudit={{@sbomVulnerabilityAudit}}
-      />
-
-      <AkStack @direction='column' @spacing='2' @width='full'>
-        <AkTypography
-          data-test-sbomComponentVulnerabilities-affectedFixedVersionTitle
-          @variant='subtitle1'
+      {{#if this.showInsightLink}}
+        <AkLink
+          data-test-sbomComponentVulnerabilities-insightLink
+          @route='authenticated.dashboard.sbom.component-insights'
+          @models={{this.insightLinkModels}}
+          @query={{this.insightLinkQuery}}
+          @color='textPrimary'
+          @fontWeight='medium'
+          @underline='hover'
         >
-          {{t 'sbomModule.affectedAndFixedVersion.title'}}
-        </AkTypography>
+          {{t 'sbomModule.reachability.viewInsight'}}
+        </AkLink>
+      {{/if}}
 
-        {{#if this.isHumanizedVersionRangeListEmpty}}
-          <AkStack
-            local-class='empty-container'
-            @direction='column'
-            @alignItems='center'
-            @justifyContent='center'
-            @spacing='2'
+      {{#if this.showReachability}}
+        <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability
+          @sbomVulnerabilityAudit={{@sbomVulnerabilityAudit}}
+          @sbomComponent={{@sbomComponent}}
+        />
+
+        <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation
+          @sbomVulnerabilityAudit={{@sbomVulnerabilityAudit}}
+          @sbomComponent={{@sbomComponent}}
+          @componentAudits={{@componentAudits}}
+          @onNeedAllAudits={{@onNeedAllAudits}}
+        />
+      {{/if}}
+
+      {{#if this.showAdvisoryMeta}}
+        <AkStack @direction='column' @spacing='2' @width='full'>
+          <AkTypography
+            data-test-sbomComponentVulnerabilities-affectedFixedVersionTitle
+            @variant='subtitle1'
           >
-            <AkSvg::AffectedFixedVersionEmpty
-              data-test-sbomComponentVulnerabilities-affectedFixedVersion-emptySvg
-            />
+            {{t 'sbomModule.affectedAndFixedVersion.title'}}
+          </AkTypography>
 
-            <AkTypography
-              data-test-sbomComponentVulnerabilities-affectedFixedVersion-emptyTitle
-              @variant='h6'
-            >
-              {{t 'sbomModule.affectedAndFixedVersion.emptyTitle'}}
-            </AkTypography>
-          </AkStack>
-        {{else}}
-          <AkTable
-            @dense={{true}}
-            @variant='full-bordered'
-            data-test-sbomComponentVulnerabilities-affectedFixedVersion-table
-            as |akt|
-          >
-            <akt.head
-              data-test-sbomComponentVulnerabilities-affectedFixedVersion-thead
-              @columns={{this.columns}}
-            />
-            <akt.body @rows={{this.humanizedVersionRangeList}} as |b|>
-              <b.row
-                data-test-sbomComponentVulnerabilities-affectedFixedVersion-row
-                as |r|
-              >
-                <r.cell
-                  data-test-sbomComponentVulnerabilities-affectedFixedVersion-cell
-                  as |value|
-                >
-                  {{#if value}}
-                    <AkTypography title={{value}} @noWrap={{true}}>
-                      {{value}}
-                    </AkTypography>
-                  {{else}}
-                    <AkChip
-                      @variant='semi-filled'
-                      @size='small'
-                      @label={{t 'notAvailable'}}
-                    />
-                  {{/if}}
-                </r.cell>
-              </b.row>
-            </akt.body>
-          </AkTable>
-        {{/if}}
-      </AkStack>
-
-      <AkStack @direction='column'>
-        <AkTypography
-          data-test-sbomComponentVulnerabilities-detailSourceTitle
-          @variant='subtitle1'
-        >
-          {{t 'source'}}
-        </AkTypography>
-
-        <AkList local-class='vulnerability-reference-list' as |akl|>
-          <akl.listItem @noGutters={{true}}>
+          {{#if this.isHumanizedVersionRangeListEmpty}}
             <AkStack
-              data-test-sbomComponentVulnerabilities-detailSourceText
+              local-class='empty-container'
+              @direction='column'
               @alignItems='center'
-              @spacing='0.5'
+              @justifyContent='center'
+              @spacing='2'
             >
-              <AkTypography @tag='span'>
-                {{@sbomVulnerabilityAudit.sbVulnerability.sourceName}}
-                -
-              </AkTypography>
+              <AkSvg::AffectedFixedVersionEmpty
+                data-test-sbomComponentVulnerabilities-affectedFixedVersion-emptySvg
+              />
 
-              <AkButton
-                data-test-sbomComponentVulnerabilities-detailSourceLink
-                @tag='a'
-                @variant='text'
-                @color='primary'
-                @underline='always'
-                href={{@sbomVulnerabilityAudit.sbVulnerability.sourceUrl}}
-                target='_blank'
-                rel='noopener noreferrer'
+              <AkTypography
+                data-test-sbomComponentVulnerabilities-affectedFixedVersion-emptyTitle
+                @variant='h6'
               >
-                {{@sbomVulnerabilityAudit.sbVulnerability.sourceUrl}}
-              </AkButton>
+                {{t 'sbomModule.affectedAndFixedVersion.emptyTitle'}}
+              </AkTypography>
             </AkStack>
-          </akl.listItem>
-        </AkList>
-      </AkStack>
+          {{else}}
+            <AkTable
+              @dense={{true}}
+              @variant='full-bordered'
+              data-test-sbomComponentVulnerabilities-affectedFixedVersion-table
+              as |akt|
+            >
+              <akt.head
+                data-test-sbomComponentVulnerabilities-affectedFixedVersion-thead
+                @columns={{this.columns}}
+              />
+              <akt.body @rows={{this.humanizedVersionRangeList}} as |b|>
+                <b.row
+                  data-test-sbomComponentVulnerabilities-affectedFixedVersion-row
+                  as |r|
+                >
+                  <r.cell
+                    data-test-sbomComponentVulnerabilities-affectedFixedVersion-cell
+                    as |value|
+                  >
+                    {{#if value}}
+                      <AkTypography title={{value}} @noWrap={{true}}>
+                        {{value}}
+                      </AkTypography>
+                    {{else}}
+                      <AkChip
+                        @variant='semi-filled'
+                        @size='small'
+                        @label={{t 'notAvailable'}}
+                      />
+                    {{/if}}
+                  </r.cell>
+                </b.row>
+              </akt.body>
+            </AkTable>
+          {{/if}}
+        </AkStack>
+
+        <AkStack @direction='column'>
+          <AkTypography
+            data-test-sbomComponentVulnerabilities-detailSourceTitle
+            @variant='subtitle1'
+          >
+            {{t 'source'}}
+          </AkTypography>
+
+          <AkList local-class='vulnerability-reference-list' as |akl|>
+            <akl.listItem @noGutters={{true}}>
+              <AkStack
+                data-test-sbomComponentVulnerabilities-detailSourceText
+                @alignItems='center'
+                @spacing='0.5'
+              >
+                <AkTypography @tag='span'>
+                  {{@sbomVulnerabilityAudit.sbVulnerability.sourceName}}
+                  -
+                </AkTypography>
+
+                <AkButton
+                  data-test-sbomComponentVulnerabilities-detailSourceLink
+                  @tag='a'
+                  @variant='text'
+                  @color='primary'
+                  @underline='always'
+                  href={{@sbomVulnerabilityAudit.sbVulnerability.sourceUrl}}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  {{@sbomVulnerabilityAudit.sbVulnerability.sourceUrl}}
+                </AkButton>
+              </AkStack>
+            </akl.listItem>
+          </AkList>
+        </AkStack>
+      {{/if}}
     </AkStack>
   </div>
 {{/unless}}

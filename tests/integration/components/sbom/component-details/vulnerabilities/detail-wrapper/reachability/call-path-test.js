@@ -1,4 +1,4 @@
-import { click, render } from '@ember/test-helpers';
+import { click, find, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
@@ -34,6 +34,12 @@ const selectors = {
   fixHere:
     '[data-test-sbomComponentVulnerabilities-reachabilityCallPathFixHere]',
   target: '[data-test-sbomComponentVulnerabilities-reachabilityCallPathTarget]',
+  stepMarker: (index) =>
+    `[data-test-sbomComponentVulnerabilities-reachabilityCallPathStepMarker="${index}"]`,
+  toggle: '[data-test-sbomComponentVulnerabilities-reachabilityCallPathToggle]',
+  steps: '[data-test-sbomComponentVulnerabilities-reachabilityCallPathSteps]',
+  noTrace:
+    '[data-test-sbomComponentVulnerabilities-reachabilityCallPathNoTrace]',
 };
 
 const TEMPLATE = hbs`
@@ -167,7 +173,9 @@ module(
       assert.dom(`${selectors.step(0)} ${selectors.entry}`).exists();
 
       // BackupHelper.restore() is the last app-owned frame before the library.
-      assert.dom(`${selectors.step(1)} ${selectors.fixHere}`).exists();
+      assert
+        .dom(`${selectors.step(1)} ${selectors.fixHere}`)
+        .hasText(t('sbomModule.reachability.fixHere'));
       assert.dom(`${selectors.step(0)} ${selectors.fixHere}`).doesNotExist();
 
       assert.dom(`${selectors.step(3)} ${selectors.target}`).exists();
@@ -180,6 +188,44 @@ module(
       await render(TEMPLATE);
 
       assert.dom(selectors.narrative).hasText(this.narrative);
+    });
+
+    test('a component group with an empty label falls back to third-party code', async function (assert) {
+      this.finding = {
+        verdict: 'CONFIRMED_REACHABLE',
+        witness_nodes: [
+          { signature: 'Lcom/example/App;->run()', owner: APP_OWNER },
+          {
+            signature: 'Lcom/lib/Parser;->parse()',
+            owner: { kind: 'COMPONENT', component_ref: null, label: '' },
+          },
+        ],
+      };
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.groupHeader(1))
+        .hasText(t('sbomModule.reachability.entersThirdPartyCode'));
+    });
+
+    test('a platform group with an empty label falls back to platform code', async function (assert) {
+      this.finding = {
+        verdict: 'CONFIRMED_REACHABLE',
+        witness_nodes: [
+          { signature: 'Lcom/example/App;->run()', owner: APP_OWNER },
+          {
+            signature: 'Landroid/os/Handler;->post()',
+            owner: { kind: 'PLATFORM', component_ref: null, label: '' },
+          },
+        ],
+      };
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.groupHeader(1))
+        .hasText(t('sbomModule.reachability.platformCode'));
     });
 
     test('it falls back to a flat ungrouped path without ownership', async function (assert) {
@@ -228,7 +274,9 @@ module(
 
     test('it clamps a long narrative behind Show more', async function (assert) {
       this.finding = ANNOTATED_FINDING;
-      this.narrative = `App behavior: ${'The witness continues onward. '.repeat(12)}`;
+      // Long enough to overflow three lines at any panel width: the toggle is
+      // driven by measured overflow, not by a character count.
+      this.narrative = `App behavior: ${'The witness continues onward. '.repeat(60)}`;
 
       await render(TEMPLATE);
 
@@ -239,15 +287,126 @@ module(
       assert.dom(selectors.narrativeToggle).hasText(t('showLess'));
     });
 
-    test('a short narrative needs no toggles', async function (assert) {
+    test('a short narrative shows no toggle even when it is wordy', async function (assert) {
       this.finding = ANNOTATED_FINDING;
-      this.narrative = 'When a user imports a backup from Settings…';
+      // Previously a character threshold put a toggle on text that fitted.
+      this.narrative =
+        'When a user imports a backup from Settings, the app passes the ' +
+        'file straight to the parser, which fails on deeply nested input.';
 
       await render(TEMPLATE);
 
       assert.dom(selectors.narrative).hasText(this.narrative);
       assert.dom(selectors.narrativeToggle).doesNotExist();
       assert.dom(selectors.analysisToggle).doesNotExist();
+    });
+
+    test('it labels the fix frame "Check here" when the path is not proven', async function (assert) {
+      for (const finding of [
+        { ...ANNOTATED_FINDING, verdict: 'POTENTIALLY_REACHABLE' },
+        { ...ANNOTATED_FINDING, exposure: 'UNKNOWN' },
+      ]) {
+        this.set('finding', finding);
+
+        await render(TEMPLATE);
+
+        assert
+          .dom(`${selectors.step(1)} ${selectors.fixHere}`)
+          .hasText(t('sbomModule.reachability.checkHere'))
+          .hasClass(/ak-chip-color-warn/)
+          .doesNotHaveClass(/ak-chip-color-error/);
+      }
+    });
+
+    test('a confirmed fix point keeps the error colour', async function (assert) {
+      this.finding = { ...ANNOTATED_FINDING, verdict: 'REACHABLE' };
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(`${selectors.step(1)} ${selectors.fixHere}`)
+        .hasText(t('sbomModule.reachability.fixHere'))
+        .hasClass(/ak-chip-color-error/);
+    });
+
+    test('it rings the vulnerable frame and colours its name', async function (assert) {
+      this.finding = ANNOTATED_FINDING;
+
+      await render(TEMPLATE);
+
+      const marker = getComputedStyle(find(selectors.stepMarker(3)));
+      const entryMarker = getComputedStyle(find(selectors.stepMarker(0)));
+
+      assert.notStrictEqual(marker.boxShadow, 'none', 'halo ring');
+      assert.strictEqual(entryMarker.boxShadow, 'none', 'no ring elsewhere');
+
+      assert.notStrictEqual(
+        getComputedStyle(find(selectors.stepSignature(3))).color,
+        getComputedStyle(find(selectors.stepSignature(0))).color,
+        'the vulnerable frame uses the error ink'
+      );
+    });
+
+    test('it shows a dashed no-trace box when targets exist but nothing was traced', async function (assert) {
+      this.finding = {
+        verdict: 'UNKNOWN',
+        target_presence: 'NOT_OBSERVED',
+        witness_path: [],
+        targets: [{ label: 'Lorg/junit/rules/TemporaryFolder;->create()' }],
+      };
+      this.narrative = 'junit is listed but none of its classes ship.';
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.title)
+        .hasText(t('sbomModule.reachability.howYourAppReachesIt'));
+      assert.dom(selectors.narrative).hasText(this.narrative);
+      assert
+        .dom(selectors.noTrace)
+        .hasText(t('sbomModule.reachability.noTrace'));
+      assert.dom(selectors.steps).doesNotExist();
+
+      // Nothing to abbreviate without frames.
+      assert.dom(selectors.toggle).doesNotExist();
+    });
+
+    test('the no-trace copy says "not found" only when the code was not observed', async function (assert) {
+      const targets = [{ label: 'Lcom/example/Parser;->parse()' }];
+
+      for (const finding of [
+        // Present in the build, but the analysis was blocked.
+        { verdict: 'UNKNOWN', target_presence: 'PRESENT', targets },
+        // Never analysed.
+        { verdict: 'UNSUPPORTED', targets },
+        // Potential without a witness and no presence information.
+        { verdict: 'POTENTIALLY_REACHABLE', targets },
+      ]) {
+        this.set('finding', { witness_path: [], ...finding });
+
+        await render(TEMPLATE);
+
+        assert
+          .dom(selectors.noTrace)
+          .hasText(t('sbomModule.reachability.noTraceRecorded'));
+      }
+    });
+
+    test('it shows no trace box for a proven absence or a traced path', async function (assert) {
+      this.set('finding', {
+        verdict: 'NO_PATH_FOUND',
+        witness_path: [],
+        targets: [{ label: 'Lcom/example/Parser;->parse()' }],
+      });
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.root).doesNotExist();
+
+      this.set('finding', ANNOTATED_FINDING);
+
+      assert.dom(selectors.noTrace).doesNotExist();
+      assert.dom(selectors.steps).exists();
     });
   }
 );
