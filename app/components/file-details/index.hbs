@@ -26,12 +26,17 @@
       @knoxiqStatuses={{this.knoxiqScanStatuses}}
     />
 
-    <FileDetails::InsightsWrapper
-      @file={{@file}}
-      @fileAnalysesListContext={{@fileAnalysesListContext}}
-      @showKnoxiqFileDetails={{this.showKnoxiqFileDetails}}
-      @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
-    />
+    {{#if this.showKnoxiqFileDetails}}
+      <KnoxIq::ScanSummary
+        @file={{@file}}
+        @hasAnyKnoxiqScanCompleted={{this.hasAnyKnoxiqScanCompleted}}
+      />
+    {{else}}
+      <FileDetails::InsightsWrapper
+        @file={{@file}}
+        @fileAnalysesListContext={{@fileAnalysesListContext}}
+      />
+    {{/if}}
 
   </AkStack>
 

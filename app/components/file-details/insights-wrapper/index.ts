@@ -10,18 +10,13 @@ import type { FileDetailsAnalysesProviderContext } from '../analyses-provider';
 interface FileDetailsInsightsTab {
   id: string;
   label: string;
-  component:
-    | 'file-details/scan-summary'
-    | 'file-details/compliance-insights'
-    | 'knox-iq/scan-summary';
+  component: 'file-details/scan-summary' | 'file-details/compliance-insights';
 }
 
 export interface FileDetailsInsightsWrapperSignature {
   Args: {
     file: FileModel;
     fileAnalysesListContext: FileDetailsAnalysesProviderContext;
-    showKnoxiqFileDetails?: boolean;
-    hasAnyKnoxiqScanCompleted?: boolean;
   };
 }
 
@@ -35,9 +30,7 @@ export default class FileDetailsInsightsWrapperComponent extends Component<FileD
       {
         id: 'scan_summary',
         label: this.intl.t('scanSummary'),
-        component: this.args.showKnoxiqFileDetails
-          ? 'knox-iq/scan-summary'
-          : 'file-details/scan-summary',
+        component: 'file-details/scan-summary',
       },
       {
         id: 'compliance_insights',
