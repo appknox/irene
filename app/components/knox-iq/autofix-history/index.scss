@@ -1,0 +1,26 @@
+.runs-table {
+  background-color: var(--knoxiq-autofix-history-table-background-color);
+}
+
+.run-row {
+  cursor: pointer;
+}
+
+.meta-icon {
+  font-size: 14px !important;
+  flex-shrink: 0;
+  color: var(--knoxiq-autofix-history-icon-color);
+}
+
+.pr-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28571em;
+  color: var(--knoxiq-autofix-history-pr-link-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--knoxiq-autofix-history-pr-link-hover-color);
+  }
+}

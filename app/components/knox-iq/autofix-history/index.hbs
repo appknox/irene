@@ -1,0 +1,156 @@
+<AkStack
+  @direction='column'
+  @spacing='2.5'
+  ...attributes
+  {{did-update this.refetchHistory @queryParams}}
+>
+  <AkBreadcrumbs::AutoTrail data-test-knoxIqAutofixHistory-breadcrumbs />
+
+  <AkPaginationProvider
+    @results={{this.runs}}
+    @onItemPerPageChange={{this.handleNextPrevAction}}
+    @totalItems={{this.totalAutofixPRs}}
+    @nextAction={{this.handleNextPrevAction}}
+    @prevAction={{this.handleNextPrevAction}}
+    @itemPerPageOptions={{array 10 20 30}}
+    @defaultLimit={{this.limit}}
+    @offset={{this.offset}}
+    as |pgc|
+  >
+    {{#if this.isInitialLoading}}
+      <AkStack
+        class='py-7'
+        @alignItems='center'
+        @justifyContent='center'
+        data-test-knoxIqAutofixHistory-loading
+      >
+        <AkLoader @size={{32}} />
+      </AkStack>
+    {{else if this.hasNoHistory}}
+      <AkStack
+        class='py-7'
+        @alignItems='center'
+        @justifyContent='center'
+        @direction='column'
+        @spacing='1'
+        data-test-knoxIqAutofixHistory-empty
+      >
+        <AkIcon @iconName='history' @size='medium' @color='textSecondary' />
+        <AkTypography @variant='h5' data-test-knoxIqAutofixHistory-emptyTitle>
+          {{t 'autofix.emptyTitle'}}
+        </AkTypography>
+        <AkTypography
+          @color='textSecondary'
+          @align='center'
+          data-test-knoxIqAutofixHistory-emptyDescription
+        >
+          {{t 'autofix.emptyDescription'}}
+        </AkTypography>
+      </AkStack>
+    {{else}}
+      <AkTable
+        @hoverable={{true}}
+        local-class='runs-table'
+        data-test-knoxIqAutofixHistory-table
+        as |tb|
+      >
+        <tb.head @columns={{this.columns}} as |h|>
+          <h.row as |r|>
+            <r.cell
+              data-test-knoxIqAutofixHistory-header={{r.columnValue.valuePath}}
+              as |column|
+            >
+              {{column.name}}
+            </r.cell>
+          </h.row>
+        </tb.head>
+
+        <tb.body @rows={{pgc.currentPageResults}} as |b|>
+          <b.row
+            @onClick={{this.openRun}}
+            local-class='run-row'
+            data-test-knoxIqAutofixHistory-row
+            as |r|
+          >
+            <r.cell>
+              {{#if (eq r.columnValue.valuePath 'baseBranch')}}
+                <AkStack @alignItems='center' @spacing='0.5'>
+                  <AkIcon @iconName='mdi:source-branch' local-class='meta-icon' />
+                  <AkTypography
+                    @tag='span'
+                    @breakWord={{true}}
+                    data-test-knoxIqAutofixHistory-baseBranch
+                  >
+                    {{r.rowValue.baseBranch}}
+                  </AkTypography>
+                </AkStack>
+              {{/if}}
+
+              {{#if (eq r.columnValue.valuePath 'branch')}}
+                <AkStack @alignItems='center' @spacing='0.5'>
+                  <AkIcon @iconName='hugeicons:git-branch' local-class='meta-icon' />
+                  <AkTypography
+                    @tag='span'
+                    @breakWord={{true}}
+                    data-test-knoxIqAutofixHistory-branch
+                  >
+                    {{r.rowValue.branch}}
+                  </AkTypography>
+                </AkStack>
+              {{/if}}
+
+              {{#if (eq r.columnValue.valuePath 'prUrl')}}
+                <AkTooltip @title={{r.rowValue.prUrl}} @placement='top'>
+                  <a
+                    href={{r.rowValue.prUrl}}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={{t 'autofix.openPullRequest'}}
+                    local-class='pr-link'
+                    {{on 'click' this.handlePRLinkClick}}
+                    data-test-knoxIqAutofixHistory-prLink
+                  >
+                    <span>{{r.rowValue.prLabel}}</span>
+                    <AkIcon @iconName='open-in-new' @color='primary' />
+                  </a>
+                </AkTooltip>
+              {{/if}}
+
+              {{#if (eq r.columnValue.valuePath 'updatedOn')}}
+                <AkTypography
+                  @color='textSecondary'
+                  @tag='span'
+                  data-test-knoxIqAutofixHistory-updatedOn
+                >
+                  {{dayjs-from-now r.rowValue.updatedOn}}
+                </AkTypography>
+              {{/if}}
+            </r.cell>
+          </b.row>
+        </tb.body>
+      </AkTable>
+
+      <AkPagination
+        class='mt-3'
+        @disableNext={{pgc.disableNext}}
+        @nextAction={{pgc.nextAction}}
+        @disablePrev={{pgc.disablePrev}}
+        @prevAction={{pgc.prevAction}}
+        @endItemIdx={{pgc.endItemIdx}}
+        @startItemIdx={{pgc.startItemIdx}}
+        @itemPerPageOptions={{pgc.itemPerPageOptions}}
+        @onItemPerPageChange={{pgc.onItemPerPageChange}}
+        @selectedOption={{pgc.selectedOption}}
+        @totalItems={{pgc.totalItems}}
+        @tableItemLabel={{t 'autofix.pullRequests'}}
+        @perPageTranslation={{t 'recordPerPage'}}
+        data-test-knoxIqAutofixHistory-pagination
+      />
+    {{/if}}
+  </AkPaginationProvider>
+</AkStack>
+
+<KnoxIq::AutofixHistory::RunDrawer
+  @run={{this.selectedRun}}
+  @onClose={{this.closeRun}}
+/>
