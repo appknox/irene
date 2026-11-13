@@ -162,16 +162,12 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
 
     assert.dom(SELECTORS.goalName, find(firstRow)).hasText(GOALS[0].goal_name);
     assert.dom(SELECTORS.goalReason, find(firstRow)).hasText(GOALS[0].reason);
-    assert
-      .dom(SELECTORS.goalStatus, find(firstRow))
-      .hasText('Untested');
+    assert.dom(SELECTORS.goalStatus, find(firstRow)).hasText('Untested');
 
     const secondRow = SELECTORS.goalRow(1);
 
     assert.dom(SELECTORS.goalReason, find(secondRow)).doesNotExist();
-    assert
-      .dom(SELECTORS.goalStatus, find(secondRow))
-      .hasText('Weakness found');
+    assert.dom(SELECTORS.goalStatus, find(secondRow)).hasText('Weakness found');
   });
 
   test('it shows an empty state when no business risks were assessed', async function (assert) {

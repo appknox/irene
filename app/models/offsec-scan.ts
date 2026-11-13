@@ -110,6 +110,8 @@ export interface GoalPathStep {
   /** The id of the technique this step uses, when it has one. */
   label?: string;
   text: string;
+  /** The tool the agent called for this step, when the step was read out of a route string. */
+  verb?: string;
 }
 
 /** One way the agent reached the goal: a single technique, or several chained together. */

@@ -10,9 +10,10 @@ import type OffsecScanModel from 'irene/models/offsec-scan';
 export default class AuthenticatedOffensiveSecurityResultsController extends Controller {
   @service declare intl: IntlService;
 
-  queryParams = ['goal'];
+  queryParams = ['goal', 'view'];
 
   @tracked goal: string | null = null;
+  @tracked view: string | null = null;
 
   declare model: OffsecScanModel;
 
@@ -60,5 +61,11 @@ export default class AuthenticatedOffensiveSecurityResultsController extends Con
   @action
   handleGoalParamChange(goalId: string | null): void {
     this.goal = goalId;
+    this.view = null;
+  }
+
+  @action
+  handleViewParamChange(view: string | null): void {
+    this.view = view;
   }
 }

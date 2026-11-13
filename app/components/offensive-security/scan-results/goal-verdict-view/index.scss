@@ -279,16 +279,46 @@
   color: var(--text-primary);
 }
 
+// about two to three cards show, the rest scroll
+.cards-scroll {
+  max-height: 560px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.chain-verb {
+  margin-right: 6px;
+  padding: 1px 5px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.ruled-out-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text-primary);
+
+  li {
+    margin: 0 0 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .sub-head {
   display: flex;
   align-items: center;
   gap: 8px;
   margin: 18px 0 12px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
 
   &::after {
     content: '';
@@ -343,6 +373,12 @@
   &.is-large {
     font-size: 16px;
   }
+}
+
+.tech-count {
+  margin-left: 6px;
+  font-weight: 600;
+  color: var(--text-secondary);
 }
 
 .tech-card-b {
@@ -406,6 +442,11 @@
 
 .code {
   margin-top: 12px;
+
+  &.is-scroll {
+    max-height: 320px;
+    overflow: auto;
+  }
 }
 
 .remediation {

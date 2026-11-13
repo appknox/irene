@@ -12,6 +12,7 @@ export default class AuthenticatedOffensiveSecurityResultsRoute extends ScrollTo
 
   queryParams = {
     goal: { replace: false },
+    view: { replace: false },
   };
 
   async model({ scan_id }: { scan_id: string }) {
@@ -24,6 +25,7 @@ export default class AuthenticatedOffensiveSecurityResultsRoute extends ScrollTo
   ) {
     if (isExiting) {
       controller.set('goal', null);
+      controller.set('view', null);
     }
   }
 }

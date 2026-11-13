@@ -1,5 +1,6 @@
 import type {
   GoalPath,
+  GoalPathStep,
   GoalTechnique,
   GoalTechniqueStatus,
   GoalVerdict,
@@ -291,4 +292,73 @@ export function resolveGoalView(goal: PentestGoalResult): PentestGoalResult {
     paths: goal.paths ?? paths,
     techniques: goal.techniques ?? techniques,
   };
+}
+
+export interface GoalDetail {
+  /** What is left of the detail once the description, route and ruled-out list are taken out. */
+  intro: string;
+  route: GoalPathStep[];
+  ruledOut: string[];
+}
+
+// "{{obs:12:credential_assignment}}" points at an observation; only its name reads as text
+const OBS_PLACEHOLDER = /\{\{obs:\d+:([^}]+)\}\}/g;
+
+// "read_file(2. read the cache sidecar)" or "list_files(target=x, 1. list Caches)"
+const ROUTE_STEP = /^(\w+)\((?:target=[^,]*,\s*)?(?:\d+\.\s*)?(.*)\)$/s;
+
+function splitOnce(text: string, marker: string): [string, string] {
+  const index = text.indexOf(marker);
+
+  return index === -1
+    ? [text, '']
+    : [text.slice(0, index), text.slice(index + marker.length)];
+}
+
+function routeStep(raw: string): GoalPathStep {
+  const match = raw.match(ROUTE_STEP);
+
+  return match
+    ? { verb: match[1], text: sentence(match[2]) || (match[1] as string) }
+    : { text: raw };
+}
+
+/** Splits a goal's detail into its intro, the "Route: a → b" steps and the "Ruled out: x; y" list. */
+export function parseGoalDetail(
+  detail?: string,
+  description?: string
+): GoalDetail {
+  let text = (detail ?? '')
+    .replace(OBS_PLACEHOLDER, (_, name: string) => name.replace(/_/g, ' '))
+    .trim();
+
+  const lead = (description ?? '').trim();
+
+  if (lead && text.startsWith(lead)) {
+    text = text.slice(lead.length).trim();
+  }
+
+  const [beforeRuledOut, ruledOut] = splitOnce(text, 'Ruled out:');
+  const [intro, route] = splitOnce(beforeRuledOut, 'Route:');
+
+  return {
+    intro: intro.trim(),
+    route: route
+      .split('→')
+      .map((step) => step.trim())
+      .filter(Boolean)
+      .map(routeStep),
+    ruledOut: ruledOut
+      .split(/;\s+/)
+      .map((item) => item.trim().replace(/;$/, ''))
+      .filter(Boolean),
+  };
+}
+
+/** The description without the route it repeats ("X was reached via: a → b" -> "X was reached."). */
+export function goalDescriptionText(description?: string): string {
+  const text = (description ?? '').trim();
+  const index = text.search(/\s+via:/);
+
+  return index === -1 ? text : `${text.slice(0, index)}.`;
 }

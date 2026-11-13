@@ -214,9 +214,13 @@
           </span>
         </div>
 
-        {{#if @goal.description}}
-          <p class='offsec-prose' local-class='description'>
-            {{@goal.description}}
+        {{#if this.description}}
+          <p
+            class='offsec-prose'
+            local-class='description'
+            data-test-offensiveSecurity-goalView-description
+          >
+            {{this.description}}
           </p>
         {{/if}}
       </div>
@@ -296,7 +300,12 @@
                       <span
                         local-class='chain-text'
                         data-test-offensiveSecurity-goalView-chainStep
-                      >{{step.text}}</span>
+                      >
+                        {{#if step.verb}}
+                          <code local-class='chain-verb'>{{step.verb}}</code>
+                        {{/if}}
+                        {{step.text}}
+                      </span>
                     </li>
                   {{/each}}
 
@@ -319,120 +328,138 @@
                   }}
                 </div>
 
-                {{#each page.cards as |card|}}
-                  <article
-                    local-class='tech-card'
-                    data-test-offensiveSecurity-goalView-exploitCard
-                  >
-                    <div local-class='tech-card-h'>
-                      <div local-class='tech-card-title'>
-                        {{#if card.chainStep}}
-                          <span local-class='step-tag'>
+                <div
+                  local-class='cards-scroll'
+                  data-test-offensiveSecurity-goalView-cardsScroll
+                >
+                  {{#each page.cards as |card|}}
+                    <article
+                      local-class='tech-card'
+                      data-test-offensiveSecurity-goalView-exploitCard
+                    >
+                      <div local-class='tech-card-h'>
+                        <div local-class='tech-card-title'>
+                          {{#if card.chainStep}}
+                            <span local-class='step-tag'>
+                              {{t
+                                'offensiveSecurity.goalView.chainStep'
+                                step=card.chainStep.step
+                                total=card.chainStep.total
+                              }}
+                            </span>
+                          {{/if}}
+                          <span local-class='tech-name'>
+                            {{card.technique.category}}
+                            ·
+                            {{card.technique.name}}
+                            {{#if card.count}}
+                              <span
+                                local-class='tech-count'
+                                data-test-offensiveSecurity-goalView-cardCount
+                              >×{{card.count}}</span>
+                            {{/if}}
+                          </span>
+                        </div>
+
+                        {{#unless card.chainStep}}
+                          <span local-class='pill verdict-{{card.tone}}'>
+                            <span local-class='pill-dot'></span>
                             {{t
-                              'offensiveSecurity.goalView.chainStep'
-                              step=card.chainStep.step
-                              total=card.chainStep.total
+                              (concat 'offensiveSecurity.verdict.' card.verdict)
                             }}
                           </span>
-                        {{/if}}
-                        <span local-class='tech-name'>
-                          {{card.technique.category}}
-                          ·
-                          {{card.technique.name}}
-                        </span>
+                        {{/unless}}
                       </div>
 
-                      {{#unless card.chainStep}}
-                        <span local-class='pill verdict-{{card.tone}}'>
-                          <span local-class='pill-dot'></span>
-                          {{t
-                            (concat 'offensiveSecurity.verdict.' card.verdict)
-                          }}
-                        </span>
-                      {{/unless}}
-                    </div>
-
-                    <div local-class='tech-card-b'>
-                      <div local-class='field'>
-                        <div local-class='field-label'>
-                          {{t 'offensiveSecurity.goalView.theWeakness'}}
-                        </div>
-                        <p class='offsec-prose' local-class='field-text'>
-                          {{this.weaknessText card.technique}}
-                        </p>
-                        {{#if card.technique.location}}
-                          <code local-class='location'>
-                            {{card.technique.location}}
-                          </code>
-                        {{/if}}
-                      </div>
-
-                      {{#if
-                        (or card.technique.repro.length card.technique.evidence)
-                      }}
+                      <div local-class='tech-card-b'>
                         <div local-class='field'>
                           <div local-class='field-label'>
-                            {{if
-                              (eq card.technique.status 'exploited')
-                              (t 'offensiveSecurity.goalView.howExploited')
-                              (t 'offensiveSecurity.goalView.evidence')
-                            }}
+                            {{t 'offensiveSecurity.goalView.theWeakness'}}
                           </div>
-                          {{#if card.technique.repro.length}}
-                            <ol class='offsec-prose' local-class='repro'>
-                              {{#each card.technique.repro as |line|}}
-                                <li>{{line}}</li>
-                              {{/each}}
-                            </ol>
+                          <p class='offsec-prose' local-class='field-text'>
+                            {{this.weaknessText card.technique}}
+                          </p>
+                          {{#if card.technique.location}}
+                            <code local-class='location'>
+                              {{card.technique.location}}
+                            </code>
                           {{/if}}
-                          {{#if card.technique.evidence}}
-                            <div local-class='code'>
-                              <KnoxIq::CodeBlock
-                                @code={{card.technique.evidence}}
-                              />
+                        </div>
+
+                        {{#if
+                          (or
+                            card.technique.repro.length card.technique.evidence
+                          )
+                        }}
+                          <div local-class='field'>
+                            <div local-class='field-label'>
+                              {{if
+                                (eq card.technique.status 'exploited')
+                                (t 'offensiveSecurity.goalView.howExploited')
+                                (t 'offensiveSecurity.goalView.evidence')
+                              }}
                             </div>
-                          {{/if}}
-                        </div>
-                      {{/if}}
-
-                      {{#if card.technique.fix}}
-                        <div local-class='field'>
-                          <div local-class='field-label'>
-                            {{t 'offensiveSecurity.goalView.howToFix'}}
-                          </div>
-                          <div local-class='remediation'>
-                            <p
-                              class='offsec-prose'
-                              local-class='remediation-text'
-                            >
-                              {{card.technique.fix}}
-                            </p>
-                            {{#if card.technique.fix_steps.length}}
-                              <ul class='offsec-prose' local-class='fix-list'>
-                                {{#each card.technique.fix_steps as |line|}}
+                            {{#if card.technique.repro.length}}
+                              <ol class='offsec-prose' local-class='repro'>
+                                {{#each card.technique.repro as |line|}}
                                   <li>{{line}}</li>
                                 {{/each}}
-                              </ul>
+                              </ol>
+                            {{/if}}
+                            {{#if card.technique.evidence}}
+                              <div
+                                local-class='code {{if card.count "is-scroll"}}'
+                              >
+                                <KnoxIq::CodeBlock
+                                  @code={{card.technique.evidence}}
+                                />
+                              </div>
                             {{/if}}
                           </div>
-                        </div>
-                      {{/if}}
+                        {{/if}}
 
-                      {{#if card.technique.refs.length}}
-                        <div local-class='refs'>
-                          {{#each card.technique.refs as |ref|}}
-                            <span local-class='ref-chip'>{{ref}}</span>
-                          {{/each}}
-                        </div>
-                      {{/if}}
-                    </div>
-                  </article>
-                {{/each}}
+                        {{#if card.technique.fix}}
+                          <div local-class='field'>
+                            <div local-class='field-label'>
+                              {{t 'offensiveSecurity.goalView.howToFix'}}
+                            </div>
+                            <div local-class='remediation'>
+                              <p
+                                class='offsec-prose'
+                                local-class='remediation-text'
+                              >
+                                {{card.technique.fix}}
+                              </p>
+                              {{#if card.technique.fix_steps.length}}
+                                <ul class='offsec-prose' local-class='fix-list'>
+                                  {{#each card.technique.fix_steps as |line|}}
+                                    <li>{{line}}</li>
+                                  {{/each}}
+                                </ul>
+                              {{/if}}
+                            </div>
+                          </div>
+                        {{/if}}
+
+                        {{#if card.technique.refs.length}}
+                          <div local-class='refs'>
+                            {{#each card.technique.refs as |ref|}}
+                              <span local-class='ref-chip'>{{ref}}</span>
+                            {{/each}}
+                          </div>
+                        {{/if}}
+                      </div>
+                    </article>
+                  {{/each}}
+                </div>
               {{/if}}
             {{/let}}
           {{else}}
-            {{#if @goal.detail}}
-              <p class='offsec-prose' local-class='intro'>{{@goal.detail}}</p>
+            {{#if this.detail.intro}}
+              <p
+                class='offsec-prose'
+                local-class='intro'
+              >{{this.detail.intro}}</p>
             {{/if}}
             <div local-class='note' data-test-offensiveSecurity-goalView-note>
               <span local-class='note-icon'>○</span>
@@ -640,6 +667,33 @@
               </p>
             </div>
           {{/if}}
+        </div>
+      </section>
+    {{/if}}
+
+    {{#if this.detail.ruledOut.length}}
+      <section
+        local-class='panel'
+        data-test-offensiveSecurity-goalView-ruledOut
+      >
+        <div local-class='panel-h'>
+          <span local-class='panel-icon'>✕</span>
+          <h2 local-class='panel-title'>
+            {{t 'offensiveSecurity.goalView.ruledOut'}}
+          </h2>
+        </div>
+
+        <div local-class='panel-b'>
+          <p class='offsec-prose' local-class='intro'>
+            {{t 'offensiveSecurity.goalView.ruledOutIntro'}}
+          </p>
+          <ul class='offsec-prose' local-class='ruled-out-list'>
+            {{#each this.detail.ruledOut as |item|}}
+              <li
+                data-test-offensiveSecurity-goalView-ruledOutItem
+              >{{item}}</li>
+            {{/each}}
+          </ul>
         </div>
       </section>
     {{/if}}

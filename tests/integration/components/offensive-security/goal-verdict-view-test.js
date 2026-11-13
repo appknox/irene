@@ -18,6 +18,9 @@ const SEL = {
   banner: '[data-test-offensiveSecurity-goalView-banner]',
   proof: '[data-test-offensiveSecurity-goalView-proof]',
   note: '[data-test-offensiveSecurity-goalView-note]',
+  description: '[data-test-offensiveSecurity-goalView-description]',
+  ruledOut: '[data-test-offensiveSecurity-goalView-ruledOut]',
+  ruledOutItem: '[data-test-offensiveSecurity-goalView-ruledOutItem]',
   pagerLabel: '[data-test-offensiveSecurity-goalView-pager-label]',
   pagerNext: '[data-test-offensiveSecurity-goalView-pager-next]',
   otherCta: '[data-test-offensiveSecurity-goalView-otherTechniques]',
@@ -204,6 +207,70 @@ module(
       assert.dom(findAll(SEL.exploitCard)[1]).containsText('Chain step 2 of 3');
     });
 
+    test('an exploited goal without paths shows the route and ruled-out list from its detail', async function (assert) {
+      const description =
+        'Reach the login was reached via: list_files(target=app, 1. list Caches) → read_file(2. read the session cache)';
+
+      await renderGoal(this, {
+        paths: [],
+        description,
+        detail: `${description} Route: list_files(target=app, 1. list Caches) → read_file(2. read the session cache) Ruled out: The shipped credential ({{obs:12:credential_assignment}}) signs in.; The forced-update gate blocks the form.`,
+      });
+
+      assert.dom(SEL.description).hasText('Reach the login was reached.');
+      assert
+        .dom(SEL.chain)
+        .hasAttribute('data-test-offensiveSecurity-goalView-chain', 'chain');
+      assert.dom(SEL.chainStep).exists({ count: 2 });
+      assert.dom(findAll(SEL.chainStep)[0]).hasText('list_files List Caches.');
+      assert
+        .dom(SEL.chainOutcome)
+        .hasText(t('offensiveSecurity.goalView.routeOutcome'));
+      assert
+        .dom(SEL.exploitCard)
+        .exists({ count: 2 }, 'the exploited techniques back the route');
+      assert.dom(SEL.note).doesNotExist();
+      assert.dom(SEL.ruledOutItem).exists({ count: 2 });
+      assert
+        .dom(findAll(SEL.ruledOutItem)[0])
+        .hasText('The shipped credential (credential assignment) signs in.');
+    });
+
+    test('exploited techniques of the same kind behind a route share one card', async function (assert) {
+      const secret = (n) => ({
+        id: `high_entropy_assignment-${n}`,
+        category: 'credential-runtime',
+        name: 'high entropy assignment',
+        flaw: 'a credential exposed at runtime',
+        status: 'exploited',
+        evidence: `ea3f****0d3${n} — network_sent com.app`,
+      });
+
+      await renderGoal(this, {
+        paths: [],
+        detail:
+          'Route: read_file(1. read the cache) → read_network(2. filter auth)',
+        techniques: [secret(1), secret(2), secret(3)],
+      });
+
+      assert.dom(SEL.exploitCard).exists({ count: 1 });
+      assert
+        .dom('[data-test-offensiveSecurity-goalView-cardCount]')
+        .hasText('×3');
+      assert.dom(SEL.exploitCard).containsText('ea3f****0d31');
+      assert.dom(SEL.exploitCard).containsText('ea3f****0d33');
+    });
+
+    test('an exploited goal with neither paths nor a route says no steps were reported', async function (assert) {
+      await renderGoal(this, { paths: [], detail: 'Reached.' });
+
+      assert.dom(SEL.chain).doesNotExist();
+      assert
+        .dom(SEL.note)
+        .containsText(t('offensiveSecurity.goalView.noPathReported'));
+      assert.dom(SEL.ruledOut).doesNotExist();
+    });
+
     test('a single attack path still shows the pager, with both buttons off', async function (assert) {
       await renderGoal(this, { paths: [PATHS[0]] });
 
@@ -281,6 +348,14 @@ module(
       assert
         .dom(SEL.otherCta)
         .doesNotExist('every technique was exploited, nothing else to open');
+
+      await renderGoal(this, {
+        verdict: 'weakness',
+        techniques: TECHNIQUES.filter((t) => t.status === 'confirmed'),
+      });
+      assert
+        .dom(SEL.otherCta)
+        .doesNotExist('every weakness is already on the goal page');
     });
 
     test('other techniques lists the techniques beyond the exploited ones, filters them, and returns to the goal', async function (assert) {
@@ -342,13 +417,22 @@ module(
       assert.dom(SEL.otherFilter('all')).containsText('2');
     });
 
-    test('other techniques shows an empty note when nothing else was assessed', async function (assert) {
-      await renderGoal(this, {
-        verdict: 'weakness',
-        paths: [],
-        techniques: TECHNIQUES.filter((t) => t.status === 'confirmed'),
-      });
-      await click(SEL.otherCta);
+    test('other techniques opened from the URL shows an empty note when nothing else was assessed', async function (assert) {
+      this.set('goals', [
+        goal({
+          verdict: 'weakness',
+          paths: [],
+          techniques: TECHNIQUES.filter((t) => t.status === 'confirmed'),
+        }),
+      ]);
+      this.set('onOtherTechniquesChange', () => {});
+
+      await render(hbs`<OffensiveSecurity::ScanResults::PentestResults
+        @goals={{this.goals}}
+        @initialGoalIndex={{0}}
+        @showOtherTechniques={{true}}
+        @onOtherTechniquesChange={{this.onOtherTechniquesChange}}
+      />`);
 
       assert.dom(SEL.otherEmpty).exists();
     });

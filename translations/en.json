@@ -966,7 +966,11 @@
       "safeDefaultConclusion": "No action needed for this technique on this build.",
       "noFindHeld": "No weakness was found for this goal — the agent tried the techniques and the app was not vulnerable, a clean result within what was tested.",
       "noFindUntested": "This goal was not reached before the step budget ran out. Nothing here is cleared — the techniques were never tested.",
-      "noFindOther": "Nothing was carried through to a full exploit for this goal."
+      "noFindOther": "Nothing was carried through to a full exploit for this goal.",
+      "noPathReported": "The agent reached this goal but did not report the steps it took.",
+      "routeOutcome": "Goal reached",
+      "ruledOut": "Ruled out",
+      "ruledOutIntro": "Routes the agent considered for this goal and set aside."
     },
     "otherTechniques": {
       "crumb": "Other techniques",

@@ -5,8 +5,10 @@ import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import {
+  goalDescriptionText,
   goalTechniqueMetrics,
   normalizeGoalVerdict,
+  parseGoalDetail,
   techniqueTone,
   techniqueVerdict,
 } from 'irene/utils/offsec-goal-verdict';
@@ -54,6 +56,8 @@ export interface TechniqueCard {
   tone: GoalVerdict;
   /** Set when the card is one step of a chained path. */
   chainStep?: { step: number; total: number };
+  /** How many techniques of the same kind the card stands for, when more than one. */
+  count?: number;
 }
 
 export interface PathPage {
@@ -102,6 +106,33 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return this.verdict === 'untested';
   }
 
+  get detail() {
+    return parseGoalDetail(this.args.goal.detail, this.args.goal.description);
+  }
+
+  get description(): string {
+    return goalDescriptionText(this.args.goal.description);
+  }
+
+  /** The API's paths; an exploited goal without any falls back to the route its detail spells out. */
+  get goalPaths(): GoalPath[] {
+    const paths = this.args.goal.paths ?? [];
+    const { route, intro } = this.detail;
+
+    if (paths.length || !this.isExploitLayout || !route.length) {
+      return paths;
+    }
+
+    return [
+      {
+        type: route.length > 1 ? 'chain' : 'individual',
+        steps: route,
+        outcome: this.intl.t('offensiveSecurity.goalView.routeOutcome'),
+        summary: intro || undefined,
+      },
+    ];
+  }
+
   get techniques(): GoalTechnique[] {
     return this.args.goal.techniques ?? [];
   }
@@ -113,8 +144,19 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   }
 
   get pathPages(): PathPage[] {
-    return (this.args.goal.paths ?? []).map((path) => {
+    return this.goalPaths.map((path) => {
       const ids = [...new Set(path.steps.map((s) => s.label).filter(Boolean))];
+
+      // a path whose steps name no technique shows the exploited ones, one card per kind
+      if (!ids.length) {
+        return {
+          path,
+          isChain: false,
+          cards: this.groupedCards(
+            this.techniques.filter((t) => t.status === 'exploited')
+          ),
+        };
+      }
 
       const techniques = ids
         .map((id) => this.techniquesById.get(id as string))
@@ -189,9 +231,9 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return goalTechniqueMetrics(this.techniques);
   }
 
-  /** Not shown once everything is listed inline (not vulnerable, untested) or when nothing else was attempted. */
+  /** Not shown once everything is listed inline (not vulnerable, untested) or when the page would be empty. */
   get showOtherTechniques(): boolean {
-    return !this.isProofLayout && this.metrics.total > this.metrics.exploited;
+    return !this.isProofLayout && this.allOthers.length > 0;
   }
 
   get otherTechniquesLabelKey(): string {
@@ -204,6 +246,8 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     const key = {
       held: 'noFindHeld',
       untested: 'noFindUntested',
+      exploited: 'noPathReported',
+      partial: 'noPathReported',
     }[this.verdict as string];
 
     return `offensiveSecurity.goalView.${key ?? 'noFindOther'}`;
@@ -360,6 +404,30 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   @action
   next(): void {
     this.pageIndex = Math.min(this.pageCount - 1, this.safeIndex + 1);
+  }
+
+  /** One card per category and name, its evidence lines gathered into one block. */
+  private groupedCards(techniques: GoalTechnique[]): TechniqueCard[] {
+    const groups = new Map<string, GoalTechnique[]>();
+
+    techniques.forEach((technique) => {
+      const key = `${technique.category}\u0000${technique.name}`;
+      groups.set(key, [...(groups.get(key) ?? []), technique]);
+    });
+
+    return [...groups.values()].map((group) => {
+      const [first] = group as [GoalTechnique];
+
+      const evidence = group
+        .map((t) => t.evidence)
+        .filter(Boolean)
+        .join('\n');
+
+      return {
+        ...this.toCard({ ...first, evidence: evidence || undefined }),
+        count: group.length > 1 ? group.length : undefined,
+      };
+    });
   }
 
   private toCards(techniques: GoalTechnique[]): TechniqueCard[] {

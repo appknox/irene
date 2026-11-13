@@ -13,6 +13,9 @@ export interface OffensiveSecurityRunResultsSignature {
     scan: OffsecScanModel;
     activeGoalParam?: string | null;
     onGoalParamChange: (goalId: string | null) => void;
+    /** 'others' while the goal's other-techniques page is open. */
+    activeViewParam?: string | null;
+    onViewParamChange?: (view: string | null) => void;
   };
 }
 
@@ -112,6 +115,17 @@ export default class OffensiveSecurityRunResultsComponent extends Component<Offe
   closeGoal(): void {
     this.args.onGoalParamChange(null);
     this.scrollToTop();
+  }
+
+  /** True while the open goal shows its other-techniques page. */
+  get showOtherTechniques(): boolean {
+    return this.args.activeViewParam === 'others';
+  }
+
+  /** Opens or closes the other-techniques page through the URL, so each one is a history entry. */
+  @action
+  setOtherTechniques(show: boolean): void {
+    this.args.onViewParamChange?.(show ? 'others' : null);
   }
 
   @action
