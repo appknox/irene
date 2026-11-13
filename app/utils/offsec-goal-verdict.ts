@@ -1,3 +1,4 @@
+import { capitalize } from '@ember/string';
 import type {
   GoalCredential,
   GoalPath,
@@ -83,7 +84,7 @@ const SUCCEEDED_PLAN = ['succeeded', 'achieved'];
 function humanize(raw?: string): string {
   const text = (raw || '').replace(/[_-]+/g, ' ').trim();
 
-  return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+  return capitalize(text);
 }
 
 function isSucceeded(plan: PentestPlan): boolean {
@@ -97,7 +98,7 @@ function sentence(raw?: string): string {
     return '';
   }
 
-  const capital = text.charAt(0).toUpperCase() + text.slice(1);
+  const capital = capitalize(text);
 
   return /[.!?]$/.test(capital) ? capital : `${capital}.`;
 }
@@ -137,13 +138,9 @@ function credentialFromFinding(finding: PentestFinding): GoalCredential {
 
 /** "credential-runtime", "credential_runtime" and "Credential runtime" all read the same. */
 function sameName(a?: string, b?: string): boolean {
-  const normalize = (raw?: string) =>
-    (raw || '')
-      .replace(/[_-\s]+/g, ' ')
-      .trim()
-      .toLowerCase();
+  const name = humanize(a).toLowerCase();
 
-  return Boolean(normalize(a)) && normalize(a) === normalize(b);
+  return Boolean(name) && name === humanize(b).toLowerCase();
 }
 
 /**

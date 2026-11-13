@@ -3,7 +3,9 @@ import type { GoalCredential } from 'irene/models/offsec-scan';
 
 export interface GoalVerdictViewCredentialsSignature {
   Args: {
-    credentials: GoalCredential[];
+    credentials?: GoalCredential[];
+    /** Shown as a plain code block when there are no credentials to list. */
+    evidence?: string;
     /** On a not-vulnerable card the reason is what the check found, and severity is left out. */
     isSafe?: boolean;
   };
@@ -22,7 +24,7 @@ export default class GoalVerdictViewCredentialsComponent extends Component<GoalV
   get groups(): CredentialGroup[] {
     const groups = new Map<string, { quotes: Set<string> } & GoalCredential>();
 
-    this.args.credentials.forEach((credential) => {
+    (this.args.credentials ?? []).forEach((credential) => {
       const key = [
         credential.exploitability_because ?? '',
         ...credential.severity_because,

@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { capitalize } from '@ember/string';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -116,7 +117,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     }
     const label = this.finding.checkType.replaceAll('_', ' ');
 
-    return label.charAt(0).toUpperCase() + label.slice(1);
+    return capitalize(label);
   }
 
   get categoryLabel() {

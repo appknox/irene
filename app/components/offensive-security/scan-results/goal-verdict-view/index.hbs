@@ -106,18 +106,10 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                {{#if card.technique.credentials.length}}
-                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
-                    @credentials={{card.technique.credentials}}
-                  />
-                {{else if card.technique.evidence}}
-                  <div local-class='code'>
-                    <KnoxIq::CodeBlock
-                      @compact={{true}}
-                      @code={{card.technique.evidence}}
-                    />
-                  </div>
-                {{/if}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                  @credentials={{card.technique.credentials}}
+                  @evidence={{card.technique.evidence}}
+                />
               </div>
 
               {{#if card.technique.fix}}
@@ -153,7 +145,7 @@
                   {{t 'offensiveSecurity.goalView.whatItChecks'}}
                 </div>
                 <p class='offsec-prose' local-class='field-text'>
-                  {{or card.technique.description card.technique.flaw}}
+                  {{this.flawText card.technique}}
                 </p>
               </div>
 
@@ -164,12 +156,10 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.otherReason card.technique}}
                 </p>
-                {{#if card.technique.credentials.length}}
-                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
-                    @credentials={{card.technique.credentials}}
-                    @isSafe={{true}}
-                  />
-                {{/if}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                  @credentials={{card.technique.credentials}}
+                  @isSafe={{true}}
+                />
               </div>
             {{else}}
               <div local-class='field'>
@@ -177,7 +167,7 @@
                   {{t 'offensiveSecurity.goalView.theWeakness'}}
                 </div>
                 <p class='offsec-prose' local-class='field-text'>
-                  {{or card.technique.description card.technique.flaw}}
+                  {{this.flawText card.technique}}
                 </p>
               </div>
 
@@ -437,22 +427,12 @@
                                 {{/each}}
                               </ol>
                             {{/if}}
-                            {{#if card.technique.credentials.length}}
-                              <div local-class='{{if card.count "is-scroll"}}'>
-                                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
-                                  @credentials={{card.technique.credentials}}
-                                />
-                              </div>
-                            {{else if card.technique.evidence}}
-                              <div
-                                local-class='code {{if card.count "is-scroll"}}'
-                              >
-                                <KnoxIq::CodeBlock
-                                  @compact={{true}}
-                                  @code={{card.technique.evidence}}
-                                />
-                              </div>
-                            {{/if}}
+                            <div local-class='{{if card.count "is-scroll"}}'>
+                              <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                                @credentials={{card.technique.credentials}}
+                                @evidence={{card.technique.evidence}}
+                              />
+                            </div>
                           </div>
                         {{/if}}
 
@@ -492,19 +472,6 @@
                 </div>
               {{/if}}
             {{/let}}
-          {{else}}
-            {{#if this.detail.intro}}
-              <p
-                class='offsec-prose'
-                local-class='intro'
-              >{{this.detail.intro}}</p>
-            {{/if}}
-            <div local-class='note' data-test-offensiveSecurity-goalView-note>
-              <span local-class='note-icon'>○</span>
-              <p class='offsec-prose' local-class='note-text'>
-                {{t this.noFindKey}}
-              </p>
-            </div>
           {{/if}}
         </div>
       </section>
@@ -579,18 +546,10 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                {{#if card.technique.credentials.length}}
-                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
-                    @credentials={{card.technique.credentials}}
-                  />
-                {{else if card.technique.evidence}}
-                  <div local-class='code'>
-                    <KnoxIq::CodeBlock
-                      @compact={{true}}
-                      @code={{card.technique.evidence}}
-                    />
-                  </div>
-                {{/if}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                  @credentials={{card.technique.credentials}}
+                  @evidence={{card.technique.evidence}}
+                />
               </div>
 
               {{#if card.technique.fix}}
@@ -683,7 +642,7 @@
                   {{t 'offensiveSecurity.goalView.whatItChecks'}}
                 </div>
                 <p class='offsec-prose' local-class='field-text'>
-                  {{or card.technique.description card.technique.flaw}}
+                  {{this.flawText card.technique}}
                 </p>
               </div>
 
@@ -698,12 +657,10 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.proofReason card.technique}}
                 </p>
-                {{#if card.technique.credentials.length}}
-                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
-                    @credentials={{card.technique.credentials}}
-                    @isSafe={{eq card.technique.status 'safe'}}
-                  />
-                {{/if}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                  @credentials={{card.technique.credentials}}
+                  @isSafe={{eq card.technique.status 'safe'}}
+                />
               </div>
             {{/let}}
           {{else}}

@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import { capitalize } from '@ember/string';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
@@ -61,7 +62,7 @@ export interface TechniqueCard {
 }
 
 export interface PathPage {
-  /** Missing when the agent reported no path, yet exploited techniques still have cards to show. */
+  /** Missing when the agent reported no path; the page then shows a note above any exploited cards. */
   path?: GoalPath;
   isChain: boolean;
   cards: TechniqueCard[];
@@ -147,10 +148,9 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   get pathPages(): PathPage[] {
     const exploited = this.techniques.filter((t) => t.status === 'exploited');
 
+    // with no path the page still shows the note, and any exploited cards under it
     if (!this.goalPaths.length) {
-      return exploited.length
-        ? [{ isChain: false, cards: this.groupedCards(exploited) }]
-        : [];
+      return [{ isChain: false, cards: this.groupedCards(exploited) }];
     }
 
     return this.goalPaths.map((path) => {
@@ -301,15 +301,13 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   foundText = (technique: GoalTechnique): string =>
     this.join(this.triedText(technique), technique.outcome ?? '');
 
-  /** The weakness and its impact, starting with a capital since the API often sends it lowercase. */
-  weaknessText = (technique: GoalTechnique): string => {
-    const text = this.join(
-      technique.description ?? technique.flaw,
-      technique.impact ?? ''
-    );
+  /** What a technique checks for, starting with a capital since the API often sends it lowercase. */
+  flawText = (technique: GoalTechnique): string =>
+    capitalize(technique.description ?? technique.flaw ?? '');
 
-    return text.charAt(0).toUpperCase() + text.slice(1);
-  };
+  /** The weakness and its impact. */
+  weaknessText = (technique: GoalTechnique): string =>
+    this.join(this.flawText(technique), technique.impact ?? '');
 
   /** Everything assessed beyond the exploited paths; a weakness-only goal already lists its weaknesses. */
   get allOthers(): GoalTechnique[] {
