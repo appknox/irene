@@ -14,15 +14,15 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: 24px;
+  margin-bottom: 16px;
 }
 
 .intro {
   margin: 0;
   font-family: var(--font-family-prose, inherit);
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: 14px;
+  line-height: 20px;
   color: var(--text-primary);
 }
 
@@ -31,9 +31,9 @@
   align-items: center;
   flex-shrink: 0;
   gap: 0.5rem;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1.25rem;
+  line-height: 20px;
   color: var(--offensive-security-scan-results-in-progress-color);
 }
 
@@ -50,7 +50,7 @@
 
 .findings-column-header {
   padding: 0.75rem 1.5rem;
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 600;
   color: var(--offensive-security-scan-results-label-color);
   border-bottom: 1px solid var(--offensive-security-scan-results-divider-color);
@@ -111,9 +111,9 @@
 
 .group-title {
   display: block;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.25rem;
+  line-height: 20px;
   color: var(--text-primary);
 }
 
@@ -123,13 +123,13 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 0.8125rem;
-  line-height: 1.125rem;
+  font-size: 13px;
+  line-height: 18px;
   color: var(--text-secondary);
 }
 
 .group-count {
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   color: var(--text-primary);
@@ -140,7 +140,7 @@
 }
 
 .group-count-total {
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 400;
   color: var(--text-secondary);
 }
@@ -164,14 +164,14 @@
 
 .posture-title {
   margin: 0;
-  font-size: 0.875rem;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.25rem;
+  line-height: 20px;
   color: var(--text-primary);
 }
 
 .posture-totals {
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
   color: var(--text-secondary);
 }
@@ -190,7 +190,7 @@
   align-items: center;
   justify-content: center;
   min-width: 34px;
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 700;
   color: var(--common-white);
 }
@@ -223,7 +223,7 @@
     display: flex;
     align-items: center;
     gap: 0.4375rem;
-    font-size: 0.8125rem;
+    font-size: 13px;
     color: var(--text-secondary);
   }
 
@@ -257,8 +257,8 @@
 
 .bypass-note-text {
   margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.25rem;
+  font-size: 13px;
+  line-height: 20px;
   color: var(--text-primary);
 }
 
@@ -269,7 +269,7 @@
 
 .findings-empty {
   padding: 1.25rem 1.5rem;
-  font-size: 0.875rem;
+  font-size: 14px;
   color: var(--text-secondary);
 }
 
@@ -294,7 +294,7 @@
   white-space: nowrap;
   padding: 3px 8px;
   border-radius: 4px;
-  font-size: 0.8125rem;
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   text-transform: uppercase;

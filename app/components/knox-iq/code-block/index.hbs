@@ -11,12 +11,15 @@
     <AkButton
       id={{ac.triggerId}}
       data-clipboard-target='#{{this.copyTargetId}}'
-      local-class='copy-button'
+      local-class='copy-button {{if @compact "is-compact"}}'
       @variant='outlined'
       @color='neutral'
     >
       <:leftIcon>
-        <AkIcon @iconName='content-copy-outline' />
+        <AkIcon
+          @iconName='content-copy-outline'
+          @size={{if @compact 'small' 'medium'}}
+        />
       </:leftIcon>
 
       <:default>

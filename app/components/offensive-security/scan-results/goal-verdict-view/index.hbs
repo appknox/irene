@@ -112,7 +112,10 @@
                   />
                 {{else if card.technique.evidence}}
                   <div local-class='code'>
-                    <KnoxIq::CodeBlock @code={{card.technique.evidence}} />
+                    <KnoxIq::CodeBlock
+                      @compact={{true}}
+                      @code={{card.technique.evidence}}
+                    />
                   </div>
                 {{/if}}
               </div>
@@ -161,6 +164,12 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.otherReason card.technique}}
                 </p>
+                {{#if card.technique.credentials.length}}
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                    @credentials={{card.technique.credentials}}
+                    @isSafe={{true}}
+                  />
+                {{/if}}
               </div>
             {{else}}
               <div local-class='field'>
@@ -217,16 +226,6 @@
             {{t (concat 'offensiveSecurity.verdict.' this.verdict)}}
           </span>
         </div>
-
-        {{#if this.description}}
-          <p
-            class='offsec-prose'
-            local-class='description'
-            data-test-offensiveSecurity-goalView-description
-          >
-            {{this.description}}
-          </p>
-        {{/if}}
       </div>
 
       {{#if this.showOtherTechniques}}
@@ -239,6 +238,16 @@
           {{t this.otherTechniquesLabelKey}}
           <span local-class='cta-arrow'>→</span>
         </button>
+      {{/if}}
+
+      {{#if this.description}}
+        <p
+          class='offsec-prose'
+          local-class='description is-full'
+          data-test-offensiveSecurity-goalView-description
+        >
+          {{this.description}}
+        </p>
       {{/if}}
     </header>
 
@@ -265,63 +274,81 @@
         <div local-class='panel-b'>
           {{#if this.currentPathPage}}
             {{#let this.currentPathPage as |page|}}
-              {{#if page.path.summary}}
-                <p class='offsec-prose' local-class='intro'>
-                  {{page.path.summary}}
-                </p>
-              {{/if}}
+              {{#if page.path}}
+                {{#if page.path.summary}}
+                  <p class='offsec-prose' local-class='intro'>
+                    {{page.path.summary}}
+                  </p>
+                {{/if}}
 
-              <div
-                local-class='chain'
-                data-test-offensiveSecurity-goalView-chain={{page.path.type}}
-              >
-                <div local-class='chain-head'>
-                  <span
-                    local-class='path-tag
-                    {{if (eq page.path.type "chain") "is-chain"}}'
-                  >
-                    {{if
-                      (eq page.path.type 'chain')
-                      (t 'offensiveSecurity.goalView.pathChained')
-                      (t 'offensiveSecurity.goalView.pathSingle')
-                    }}
-                  </span>
-
-                  {{#if (eq page.path.type 'chain')}}
-                    <span local-class='chain-count'>
-                      {{t
-                        'offensiveSecurity.goalView.pathStepsToGoal'
-                        count=page.path.steps.length
+                <div
+                  local-class='chain'
+                  data-test-offensiveSecurity-goalView-chain={{page.path.type}}
+                >
+                  <div local-class='chain-head'>
+                    <span
+                      local-class='path-tag
+                      {{if (eq page.path.type "chain") "is-chain"}}'
+                    >
+                      {{if
+                        (eq page.path.type 'chain')
+                        (t 'offensiveSecurity.goalView.pathChained')
+                        (t 'offensiveSecurity.goalView.pathSingle')
                       }}
                     </span>
-                  {{/if}}
-                </div>
 
-                <ol local-class='chain-steps'>
-                  {{#each page.path.steps as |step index|}}
-                    <li local-class='chain-step'>
-                      <span local-class='chain-node'>{{add index 1}}</span>
+                    {{#if (eq page.path.type 'chain')}}
+                      <span local-class='chain-count'>
+                        {{t
+                          'offensiveSecurity.goalView.pathStepsToGoal'
+                          count=page.path.steps.length
+                        }}
+                      </span>
+                    {{/if}}
+                  </div>
+
+                  <ol local-class='chain-steps'>
+                    {{#each page.path.steps as |step index|}}
+                      <li local-class='chain-step'>
+                        <span local-class='chain-node'>{{add index 1}}</span>
+                        <span
+                          local-class='chain-text'
+                          data-test-offensiveSecurity-goalView-chainStep
+                        >
+                          {{#if step.verb}}
+                            <code local-class='chain-verb'>{{step.verb}}</code>
+                          {{/if}}
+                          {{step.text}}
+                        </span>
+                      </li>
+                    {{/each}}
+
+                    <li local-class='chain-step is-outcome'>
+                      <span local-class='chain-node is-done'>✓</span>
                       <span
                         local-class='chain-text'
-                        data-test-offensiveSecurity-goalView-chainStep
-                      >
-                        {{#if step.verb}}
-                          <code local-class='chain-verb'>{{step.verb}}</code>
-                        {{/if}}
-                        {{step.text}}
-                      </span>
+                        data-test-offensiveSecurity-goalView-chainOutcome
+                      >{{page.path.outcome}}</span>
                     </li>
-                  {{/each}}
-
-                  <li local-class='chain-step is-outcome'>
-                    <span local-class='chain-node is-done'>✓</span>
-                    <span
-                      local-class='chain-text'
-                      data-test-offensiveSecurity-goalView-chainOutcome
-                    >{{page.path.outcome}}</span>
-                  </li>
-                </ol>
-              </div>
+                  </ol>
+                </div>
+              {{else}}
+                {{#if this.detail.intro}}
+                  <p
+                    class='offsec-prose'
+                    local-class='intro'
+                  >{{this.detail.intro}}</p>
+                {{/if}}
+                <div
+                  local-class='note'
+                  data-test-offensiveSecurity-goalView-note
+                >
+                  <span local-class='note-icon'>○</span>
+                  <p class='offsec-prose' local-class='note-text'>
+                    {{t this.noFindKey}}
+                  </p>
+                </div>
+              {{/if}}
 
               {{#if page.cards.length}}
                 <div local-class='sub-head'>
@@ -421,6 +448,7 @@
                                 local-class='code {{if card.count "is-scroll"}}'
                               >
                                 <KnoxIq::CodeBlock
+                                  @compact={{true}}
                                   @code={{card.technique.evidence}}
                                 />
                               </div>
@@ -557,7 +585,10 @@
                   />
                 {{else if card.technique.evidence}}
                   <div local-class='code'>
-                    <KnoxIq::CodeBlock @code={{card.technique.evidence}} />
+                    <KnoxIq::CodeBlock
+                      @compact={{true}}
+                      @code={{card.technique.evidence}}
+                    />
                   </div>
                 {{/if}}
               </div>
@@ -667,6 +698,12 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.proofReason card.technique}}
                 </p>
+                {{#if card.technique.credentials.length}}
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                    @credentials={{card.technique.credentials}}
+                    @isSafe={{eq card.technique.status 'safe'}}
+                  />
+                {{/if}}
               </div>
             {{/let}}
           {{else}}

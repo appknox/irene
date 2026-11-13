@@ -204,6 +204,56 @@ module('Unit | Utility | offsec-goal-verdict', function () {
     ]);
   });
 
+  test('a technique the API sent is matched to the finding its id names, even when its redaction is all stars', function (assert) {
+    const resolved = resolveGoalView(
+      goal({
+        verdict: 'exploited',
+        findings: [
+          { ...FINDING, pattern: 'google_api_key', quote: 'MAPS = AIza' },
+          { ...FINDING, redacted: '*******', quote: 'ACCOUNTTOKEN = bca' },
+        ],
+        techniques: [
+          {
+            id: 'credential_assignment-2',
+            category: 'credential-runtime',
+            name: 'credential assignment',
+            flaw: 'a credential exposed at runtime',
+            status: 'exploited',
+            evidence: '******* — shell dumpsys package',
+          },
+        ],
+      })
+    );
+
+    assert.strictEqual(
+      resolved.techniques[0].credentials[0].quote,
+      'ACCOUNTTOKEN = bca'
+    );
+  });
+
+  test('a goal with a verdict but no techniques builds them, and its paths, from its findings', function (assert) {
+    const resolved = resolveGoalView(
+      goal({
+        verdict: 'exploited',
+        detail: 'Ruled out: the deep link needs a session.',
+        findings: [
+          {
+            ...FINDING,
+            exploitability: 'demonstrated',
+            where: 'read_file shared_prefs/p.xml',
+          },
+        ],
+      })
+    );
+
+    assert.strictEqual(resolved.verdict, 'exploited');
+    assert.strictEqual(resolved.techniques[0].status, 'exploited');
+    assert.strictEqual(
+      resolved.paths[0].outcome,
+      'Secret recovered from shared_prefs/p.xml'
+    );
+  });
+
   test('a credential shows its quote when the value is in it, and the value when it is not', function (assert) {
     const inQuote = {
       ...FINDING,

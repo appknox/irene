@@ -4,6 +4,8 @@ import type { GoalCredential } from 'irene/models/offsec-scan';
 export interface GoalVerdictViewCredentialsSignature {
   Args: {
     credentials: GoalCredential[];
+    /** On a not-vulnerable card the reason is what the check found, and severity is left out. */
+    isSafe?: boolean;
   };
 }
 

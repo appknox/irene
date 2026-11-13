@@ -33,4 +33,11 @@
       --knoxiq-code-block-copy-button-hover-color
     ) !important;
   }
+
+  &.is-compact {
+    min-height: 0 !important;
+    padding: 2px 8px !important;
+    font-size: 0.75rem !important;
+    line-height: 1.5 !important;
+  }
 }

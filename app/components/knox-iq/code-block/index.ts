@@ -8,6 +8,8 @@ export interface KnoxIqCodeBlockSignature {
   Args: {
     code: string;
     maxHeight?: string;
+    /** A copy button no taller than the code's own text, for pages that show many blocks. */
+    compact?: boolean;
   };
 }
 

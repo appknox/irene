@@ -147,13 +147,21 @@ function sameName(a?: string, b?: string): boolean {
 }
 
 /**
- * The findings behind a technique the API sent: those whose redacted value its evidence shows,
- * or, failing that, those of the same kind and pattern.
+ * The findings behind a technique the API sent. Its id names one ("credential_assignment-30" is
+ * the 30th finding); otherwise those whose redacted value its evidence shows, or, failing that,
+ * those of the same kind and pattern.
  */
 function findingsForTechnique(
   technique: GoalTechnique,
   findings: PentestFinding[]
 ): PentestFinding[] {
+  const [, pattern, position] = technique.id.match(/^(.+)-(\d+)$/) ?? [];
+  const byId = findings[Number(position) - 1];
+
+  if (byId && byId.pattern === pattern) {
+    return [byId];
+  }
+
   const evidence = technique.evidence ?? '';
 
   const byValue = findings.filter(
@@ -170,12 +178,29 @@ function findingsForTechnique(
       );
 }
 
-/** Gives each technique the API sent the credentials of the findings behind it. */
+/**
+ * Gives each technique the API sent the credentials of the findings behind it. When it sent no
+ * techniques, or no paths and no route in its detail, they are built from the findings instead.
+ */
 function withCredentials(goal: PentestGoalResult): PentestGoalResult {
   const findings = goal.findings ?? [];
 
-  if (!findings.length || !goal.techniques?.length) {
+  if (!findings.length) {
     return goal;
+  }
+
+  if (!goal.techniques?.length) {
+    const hasRoute =
+      parseGoalDetail(goal.detail, goal.description).route.length > 0;
+
+    return {
+      ...goal,
+      techniques: findings.map(techniqueFromFinding),
+      paths:
+        goal.paths?.length || hasRoute
+          ? goal.paths
+          : pathsFromFindings(findings),
+    };
   }
 
   return {

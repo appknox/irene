@@ -261,13 +261,14 @@ module(
       assert.dom(SEL.exploitCard).containsText('ea3f****0d33');
     });
 
-    test('an exploited goal with neither paths nor a route says no steps were reported', async function (assert) {
+    test('an exploited goal with neither paths nor a route says no steps were reported, yet shows its exploit cards', async function (assert) {
       await renderGoal(this, { paths: [], detail: 'Reached.' });
 
       assert.dom(SEL.chain).doesNotExist();
       assert
         .dom(SEL.note)
         .containsText(t('offensiveSecurity.goalView.noPathReported'));
+      assert.dom(SEL.exploitCard).containsText('Shared Prefs · Default file');
       assert.dom(SEL.ruledOut).doesNotExist();
     });
 

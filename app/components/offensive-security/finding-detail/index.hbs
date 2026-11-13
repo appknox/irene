@@ -16,7 +16,9 @@
       @alignItems='center'
       local-class='global-nav-bar'
     >
-      <AkBreadcrumbs::AutoTrail aria-label={{t 'offensiveSecurity.findingDetail.breadcrumb'}} />
+      <AkBreadcrumbs::AutoTrail
+        aria-label={{t 'offensiveSecurity.findingDetail.breadcrumb'}}
+      />
 
       {{#if (gt this.totalFindingsCount 0)}}
         <div local-class='finding-nav' data-test-offensiveSecurity-findingNav>
@@ -179,10 +181,15 @@
             <div local-class='evi'>
               <div local-class='evi-h'>
                 <span local-class='evi-name'>{{this.exploitFileName}}</span>
-                <span local-class='evi-surface'>{{t 'offensiveSecurity.findingDetail.fridaJavascript'}}</span>
+                <span local-class='evi-surface'>{{t
+                    'offensiveSecurity.findingDetail.fridaJavascript'
+                  }}</span>
               </div>
               <div local-class='evi-code-wrapper'>
-                <KnoxIq::CodeBlock @code={{this.exploitScript}} />
+                <KnoxIq::CodeBlock
+                  @compact={{true}}
+                  @code={{this.exploitScript}}
+                />
               </div>
             </div>
 
@@ -195,7 +202,10 @@
                     <span local-class='step-text'>{{step.text}}</span>
                     {{#if step.code}}
                       <div local-class='step-code-wrapper'>
-                        <KnoxIq::CodeBlock @code={{step.code}} />
+                        <KnoxIq::CodeBlock
+                          @compact={{true}}
+                          @code={{step.code}}
+                        />
                       </div>
                     {{/if}}
                   </div>
@@ -253,7 +263,10 @@
                 {{/if}}
                 {{#if trigger.smali_path}}
                   <div local-class='evi-code-wrapper'>
-                    <KnoxIq::CodeBlock @code={{trigger.smali_path}} />
+                    <KnoxIq::CodeBlock
+                      @compact={{true}}
+                      @code={{trigger.smali_path}}
+                    />
                   </div>
                 {{/if}}
               </div>
@@ -294,7 +307,10 @@
                   </div>
                   {{#if item.detail}}
                     <div local-class='evi-code-wrapper'>
-                      <KnoxIq::CodeBlock @code={{item.detail}} />
+                      <KnoxIq::CodeBlock
+                        @compact={{true}}
+                        @code={{item.detail}}
+                      />
                     </div>
                   {{/if}}
                 </div>
@@ -325,7 +341,10 @@
                 local-class='download-apk-btn'
                 {{on 'click' this.triggerApkDownload}}
                 disabled={{this.downloadPatchedApk.isRunning}}
-                title={{t 'offensiveSecurity.findingDetail.downloadFile' name=this.patchedApkName}}
+                title={{t
+                  'offensiveSecurity.findingDetail.downloadFile'
+                  name=this.patchedApkName
+                }}
               >
                 <svg
                   viewBox='0 0 24 24'
@@ -354,11 +373,16 @@
                   {{#if this.smaliPatchPath}}
                     <span local-class='evi-name'>{{this.smaliPatchPath}}</span>
                   {{/if}}
-                  <span local-class='evi-surface'>{{t 'offensiveSecurity.findingDetail.smaliPatch'}}</span>
+                  <span local-class='evi-surface'>{{t
+                      'offensiveSecurity.findingDetail.smaliPatch'
+                    }}</span>
                 </div>
                 {{#if this.smaliPatchText}}
                   <div local-class='evi-code-wrapper'>
-                    <KnoxIq::CodeBlock @code={{this.smaliPatchText}} />
+                    <KnoxIq::CodeBlock
+                      @compact={{true}}
+                      @code={{this.smaliPatchText}}
+                    />
                   </div>
                 {{/if}}
               </div>
@@ -412,6 +436,7 @@
               {{#if (or item.content item.metadata)}}
                 <div local-class='evi-code-wrapper'>
                   <KnoxIq::CodeBlock
+                    @compact={{true}}
                     @code={{this.formatPayload (or item.content item.metadata)}}
                   />
                 </div>
@@ -596,7 +621,9 @@
       local-class='drawer {{if this.isDrawerOpen "open"}}'
       role='dialog'
       aria-modal='true'
-      aria-label={{t 'offensiveSecurity.findingDetail.resilienceScoringDetails'}}
+      aria-label={{t
+        'offensiveSecurity.findingDetail.resilienceScoringDetails'
+      }}
       aria-hidden={{if this.isDrawerOpen 'false' 'true'}}
       data-test-scoring-drawer
     >
@@ -646,7 +673,9 @@
           </div>
         </div>
 
-        <p local-class='drawer-sec'>{{t 'offensiveSecurity.findingDetail.contributingFactors'}}</p>
+        <p local-class='drawer-sec'>{{t
+            'offensiveSecurity.findingDetail.contributingFactors'
+          }}</p>
 
         {{#each this.scoringFactors as |factor|}}
           <div local-class='factor'>
@@ -667,13 +696,17 @@
 
         <div local-class='factor total'>
           <div local-class='fx'>
-            <div local-class='ft'>{{t 'offensiveSecurity.findingDetail.finalScore'}}</div>
+            <div local-class='ft'>{{t
+                'offensiveSecurity.findingDetail.finalScore'
+              }}</div>
           </div>
           <div local-class='fw total-score'>{{this.scoreNumber}}</div>
         </div>
 
         <div local-class='scale'>
-          <p local-class='drawer-sec'>{{t 'offensiveSecurity.findingDetail.scale'}}</p>
+          <p local-class='drawer-sec'>{{t
+              'offensiveSecurity.findingDetail.scale'
+            }}</p>
           <div local-class='scale-row {{if this.isWeak "on"}}'>
             <span local-class='tick'></span>
             <span local-class='band'>0–39</span>

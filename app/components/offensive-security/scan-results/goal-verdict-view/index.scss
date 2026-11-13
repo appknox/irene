@@ -41,11 +41,16 @@
 }
 
 .description {
-  max-width: 74ch;
   margin: 0;
   font-size: 14px;
   line-height: 20px;
   color: var(--text-primary);
+}
+
+// a row of its own under the title and the other-techniques button, as close as before
+.is-full {
+  flex-basis: 100%;
+  margin-top: -16px;
 }
 
 .cta {

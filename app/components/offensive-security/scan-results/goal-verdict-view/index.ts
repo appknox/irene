@@ -61,7 +61,8 @@ export interface TechniqueCard {
 }
 
 export interface PathPage {
-  path: GoalPath;
+  /** Missing when the agent reported no path, yet exploited techniques still have cards to show. */
+  path?: GoalPath;
   isChain: boolean;
   cards: TechniqueCard[];
 }
@@ -144,6 +145,14 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   }
 
   get pathPages(): PathPage[] {
+    const exploited = this.techniques.filter((t) => t.status === 'exploited');
+
+    if (!this.goalPaths.length) {
+      return exploited.length
+        ? [{ isChain: false, cards: this.groupedCards(exploited) }]
+        : [];
+    }
+
     return this.goalPaths.map((path) => {
       const ids = [...new Set(path.steps.map((s) => s.label).filter(Boolean))];
 
@@ -152,9 +161,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
         return {
           path,
           isChain: false,
-          cards: this.groupedCards(
-            this.techniques.filter((t) => t.status === 'exploited')
-          ),
+          cards: this.groupedCards(exploited),
         };
       }
 
