@@ -1,11 +1,7 @@
 import Component from '@glimmer/component';
 
 export type NewAssessmentSummaryItemState =
-  | 'done'
-  | 'active'
-  | 'locked'
-  | 'optional'
-  | 'todo';
+  'done' | 'active' | 'locked' | 'optional' | 'todo';
 
 export interface OffensiveSecurityNewAssessmentSummaryItemSignature {
   Element: HTMLLIElement;

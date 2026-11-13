@@ -100,11 +100,7 @@ export interface PentestObservation {
  * layout for that verdict: exploited and partial share one, the others each have their own.
  */
 export type GoalVerdict =
-  | 'exploited'
-  | 'partial'
-  | 'weakness'
-  | 'untested'
-  | 'held';
+  'exploited' | 'partial' | 'weakness' | 'untested' | 'held';
 
 export interface GoalPathStep {
   /** The id of the technique this step uses, when it has one. */
@@ -123,10 +119,7 @@ export interface GoalPath {
 }
 
 export type GoalTechniqueStatus =
-  | 'exploited'
-  | 'confirmed'
-  | 'safe'
-  | 'not_tested';
+  'exploited' | 'confirmed' | 'safe' | 'not_tested';
 
 /** One secret the agent recovered: the line it was read from and why it matters. */
 export interface GoalCredential {
@@ -307,10 +300,7 @@ export default class OffsecScanModel extends Model {
 
   @attr()
   declare pentestResults:
-    | PentestGoalResult[]
-    | Record<string, unknown>[]
-    | string
-    | undefined;
+    PentestGoalResult[] | Record<string, unknown>[] | string | undefined;
 
   @attr()
   declare pentest_result:
@@ -323,10 +313,7 @@ export default class OffsecScanModel extends Model {
 
   @attr()
   declare pentest_results:
-    | PentestGoalResult[]
-    | Record<string, unknown>[]
-    | string
-    | undefined;
+    PentestGoalResult[] | Record<string, unknown>[] | string | undefined;
 
   @attr('string')
   declare appLogoUrl: string;

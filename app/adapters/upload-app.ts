@@ -93,8 +93,7 @@ export default class UploadAppAdapter extends commondrf {
     );
 
     const adapterOptions = snapshot?.adapterOptions as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
 
     if (adapterOptions) {
       const extraData = { ...adapterOptions };

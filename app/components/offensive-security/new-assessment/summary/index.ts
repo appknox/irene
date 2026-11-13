@@ -26,7 +26,7 @@ export default class OffensiveSecurityNewAssessmentSummaryComponent extends Comp
   get hasUploadedApp(): boolean {
     return Boolean(
       this.offsecNewAssessment.uploadedFile &&
-        this.offsecNewAssessment.uploadItem
+      this.offsecNewAssessment.uploadItem
     );
   }
 

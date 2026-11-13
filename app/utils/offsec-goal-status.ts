@@ -1,9 +1,5 @@
 export type OffsecGoalStatusClass =
-  | 'budget-exhausted'
-  | 'completed'
-  | 'failed'
-  | 'in-progress'
-  | 'neutral';
+  'budget-exhausted' | 'completed' | 'failed' | 'in-progress' | 'neutral';
 
 /** Maps a raw pentest goal status from the agent to its display tone. */
 export function offsecGoalStatusClass(status?: string): OffsecGoalStatusClass {

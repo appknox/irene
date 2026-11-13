@@ -882,15 +882,13 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
         }
 
         const screenToken = (res['screen_token'] ?? res['vnc_token']) as
-          | string
-          | undefined;
+          string | undefined;
         if (screenToken && !this.scan.screenToken) {
           this.scan.screenToken = screenToken;
         }
 
         const deviceSerial = (res['device_serial'] ?? res['deviceSerial']) as
-          | string
-          | undefined;
+          string | undefined;
         if (deviceSerial && !this.scan.deviceSerial) {
           this.scan.deviceSerial = deviceSerial;
         }
