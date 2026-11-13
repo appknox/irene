@@ -953,6 +953,7 @@
       "weaknessBannerBody": "No attack was carried through to a working exploit for this risk, yet {count, plural, one {# weakness is} other {# weaknesses are}} present and exploitable in principle. Fix {count, plural, one {it} other {them}} before {count, plural, one {it} other {they}} can be chained into one.",
       "weaknessesDetected": "Weaknesses detected",
       "whatAgentFound": "What the agent found",
+      "checkFound": "What the check found",
       "whyExploitable": "Why it's exploitable",
       "whySevere": "Why it's severe",
       "triedHeldTitle": "What was tried — and why it's not vulnerable",
