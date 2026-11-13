@@ -110,7 +110,7 @@ module('Unit | Utility | offsec-goal-verdict', function () {
     assert.strictEqual(technique.evidence, '; password:');
   });
 
-  test('demonstrated findings are exploited, grouped into one path per file, with the secret masked', function (assert) {
+  test('demonstrated findings are exploited, grouped into one path per file, with each secret quoted alongside its reasons', function (assert) {
     const demonstrated = {
       ...FINDING,
       exploitability: 'demonstrated',
@@ -148,7 +148,18 @@ module('Unit | Utility | offsec-goal-verdict', function () {
     const [technique] = resolved.techniques;
 
     assert.strictEqual(technique.status, 'exploited');
-    assert.strictEqual(technique.evidence, '"key": "Supe************1234"');
+    assert.strictEqual(
+      resolved.paths[0].steps[0].text,
+      'Credential assignment — "key": "SuperSecretValue1234"'
+    );
+    assert.strictEqual(technique.evidence, '"key": "SuperSecretValue1234"');
+    assert.deepEqual(technique.credentials, [
+      {
+        quote: '"key": "SuperSecretValue1234"',
+        exploitability_because: 'The running app was made to hand it over.',
+        severity_because: ['It ships in the APK.', 'No root needed.'],
+      },
+    ]);
     assert.strictEqual(
       technique.description,
       'It ships in the APK. The running app was made to hand it over.'
@@ -157,6 +168,67 @@ module('Unit | Utility | offsec-goal-verdict', function () {
       'Ran read_file against files/data.json.',
       'The running app was made to hand it over.',
     ]);
+  });
+
+  test('techniques the API sent get the credentials of the findings their evidence shows', function (assert) {
+    const finding = {
+      ...FINDING,
+      redacted: '0758****d8db',
+      quote: '> Authorization: 0758abcdd8db',
+      exploitability_because: 'it was sent over the network',
+    };
+
+    const resolved = resolveGoalView(
+      goal({
+        verdict: 'exploited',
+        findings: [finding, { ...finding, redacted: '********' }],
+        techniques: [
+          {
+            id: 't-1',
+            category: 'credential-runtime',
+            name: 'high entropy assignment',
+            flaw: 'a credential exposed at runtime',
+            status: 'exploited',
+            evidence: '0758****d8db — network_sent com.example',
+          },
+        ],
+      })
+    );
+
+    assert.deepEqual(resolved.techniques[0].credentials, [
+      {
+        quote: '> Authorization: 0758abcdd8db',
+        exploitability_because: 'It was sent over the network.',
+        severity_because: ['It ships in the APK.', 'No root needed.'],
+      },
+    ]);
+  });
+
+  test('a credential shows its quote when the value is in it, and the value when it is not', function (assert) {
+    const inQuote = {
+      ...FINDING,
+      value: '1dbc1c23',
+      quote: '> Authorization: 1dbc1c23',
+    };
+
+    const garbled = {
+      ...FINDING,
+      value: 'eyJhbGciOiJFUzI1NiJ9.e30.sig',
+      quote: 'X$versionY$archiverT$top authToken fheVjfxB …',
+    };
+
+    const { techniques } = resolveGoalView(
+      goal({ findings: [inQuote, garbled] })
+    );
+
+    assert.strictEqual(
+      techniques[0].credentials[0].quote,
+      '> Authorization: 1dbc1c23'
+    );
+    assert.strictEqual(
+      techniques[1].credentials[0].quote,
+      'eyJhbGciOiJFUzI1NiJ9.e30.sig'
+    );
   });
 
   test('with nothing found, a finished goal is held and an unfinished one untested', function (assert) {

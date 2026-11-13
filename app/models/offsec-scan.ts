@@ -128,6 +128,13 @@ export type GoalTechniqueStatus =
   | 'safe'
   | 'not_tested';
 
+/** One secret the agent recovered: the line it was read from and why it matters. */
+export interface GoalCredential {
+  quote?: string;
+  exploitability_because?: string;
+  severity_because: string[];
+}
+
 /** A technique the agent assessed for a goal, with its result and how to fix it. */
 export interface GoalTechnique {
   id: string;
@@ -147,6 +154,8 @@ export interface GoalTechnique {
   outcome?: string;
   safe_result?: string;
   safe_conclusion?: string;
+  /** The secrets behind a finding; a grouped card lists each one. */
+  credentials?: GoalCredential[];
 }
 
 export interface PentestGoalResult {

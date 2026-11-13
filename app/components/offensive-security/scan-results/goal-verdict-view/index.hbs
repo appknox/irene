@@ -106,7 +106,11 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                {{#if card.technique.evidence}}
+                {{#if card.technique.credentials.length}}
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                    @credentials={{card.technique.credentials}}
+                  />
+                {{else if card.technique.evidence}}
                   <div local-class='code'>
                     <KnoxIq::CodeBlock @code={{card.technique.evidence}} />
                   </div>
@@ -406,7 +410,13 @@
                                 {{/each}}
                               </ol>
                             {{/if}}
-                            {{#if card.technique.evidence}}
+                            {{#if card.technique.credentials.length}}
+                              <div local-class='{{if card.count "is-scroll"}}'>
+                                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                                  @credentials={{card.technique.credentials}}
+                                />
+                              </div>
+                            {{else if card.technique.evidence}}
                               <div
                                 local-class='code {{if card.count "is-scroll"}}'
                               >
@@ -541,7 +551,11 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                {{#if card.technique.evidence}}
+                {{#if card.technique.credentials.length}}
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                    @credentials={{card.technique.credentials}}
+                  />
+                {{else if card.technique.evidence}}
                   <div local-class='code'>
                     <KnoxIq::CodeBlock @code={{card.technique.evidence}} />
                   </div>

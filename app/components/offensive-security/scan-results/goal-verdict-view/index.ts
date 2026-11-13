@@ -294,8 +294,15 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   foundText = (technique: GoalTechnique): string =>
     this.join(this.triedText(technique), technique.outcome ?? '');
 
-  weaknessText = (technique: GoalTechnique): string =>
-    this.join(technique.description ?? technique.flaw, technique.impact ?? '');
+  /** The weakness and its impact, starting with a capital since the API often sends it lowercase. */
+  weaknessText = (technique: GoalTechnique): string => {
+    const text = this.join(
+      technique.description ?? technique.flaw,
+      technique.impact ?? ''
+    );
+
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  };
 
   /** Everything assessed beyond the exploited paths; a weakness-only goal already lists its weaknesses. */
   get allOthers(): GoalTechnique[] {
@@ -406,7 +413,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     this.pageIndex = Math.min(this.pageCount - 1, this.safeIndex + 1);
   }
 
-  /** One card per category and name, its evidence lines gathered into one block. */
+  /** One card per category and name, its evidence lines and credentials gathered into one. */
   private groupedCards(techniques: GoalTechnique[]): TechniqueCard[] {
     const groups = new Map<string, GoalTechnique[]>();
 
@@ -423,8 +430,14 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
         .filter(Boolean)
         .join('\n');
 
+      const credentials = group.flatMap((t) => t.credentials ?? []);
+
       return {
-        ...this.toCard({ ...first, evidence: evidence || undefined }),
+        ...this.toCard({
+          ...first,
+          evidence: evidence || undefined,
+          credentials: credentials.length ? credentials : undefined,
+        }),
         count: group.length > 1 ? group.length : undefined,
       };
     });

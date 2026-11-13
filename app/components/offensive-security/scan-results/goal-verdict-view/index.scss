@@ -442,11 +442,11 @@
 
 .code {
   margin-top: 12px;
+}
 
-  &.is-scroll {
-    max-height: 320px;
-    overflow: auto;
-  }
+.is-scroll {
+  max-height: 320px;
+  overflow: auto;
 }
 
 .remediation {

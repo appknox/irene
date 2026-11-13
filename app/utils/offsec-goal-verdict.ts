@@ -1,4 +1,5 @@
 import type {
+  GoalCredential,
   GoalPath,
   GoalPathStep,
   GoalTechnique,
@@ -106,28 +107,91 @@ function findingTarget(finding: PentestFinding): string {
   return (finding.where ?? finding.places?.[0] ?? '').replace(/^\w+\s+/, '');
 }
 
-/** Hides the secret itself: the full value becomes its redacted form, and any other long run is cut short. */
-function maskSecrets(finding: PentestFinding): string | undefined {
-  let quote = finding.quote;
-
-  if (!quote) {
-    return undefined;
-  }
-
-  if (finding.value && finding.redacted) {
-    quote = quote.split(finding.value).join(finding.redacted);
-  }
-
-  return quote.replace(
-    /[A-Za-z0-9+/=]{32,}/g,
-    (run) => `${run.slice(0, 4)}••••••••`
-  );
-}
-
 function isDemonstrated(finding: PentestFinding): boolean {
   return /\b(demonstrated|proven|confirmed|exploited)\b/i.test(
     finding.exploitability ?? ''
   );
+}
+
+/** The quote when it shows the secret; when the secret is cut off or garbled in it, the value itself. */
+function secretText(finding: PentestFinding): string | undefined {
+  const { quote, value } = finding;
+
+  if (value && !quote?.includes(value)) {
+    return value;
+  }
+
+  return quote || undefined;
+}
+
+function credentialFromFinding(finding: PentestFinding): GoalCredential {
+  return {
+    quote: secretText(finding),
+    exploitability_because:
+      sentence(finding.exploitability_because) || undefined,
+    severity_because: (finding.severity_because ?? [])
+      .map(sentence)
+      .filter(Boolean),
+  };
+}
+
+/** "credential-runtime", "credential_runtime" and "Credential runtime" all read the same. */
+function sameName(a?: string, b?: string): boolean {
+  const normalize = (raw?: string) =>
+    (raw || '')
+      .replace(/[_-\s]+/g, ' ')
+      .trim()
+      .toLowerCase();
+
+  return Boolean(normalize(a)) && normalize(a) === normalize(b);
+}
+
+/**
+ * The findings behind a technique the API sent: those whose redacted value its evidence shows,
+ * or, failing that, those of the same kind and pattern.
+ */
+function findingsForTechnique(
+  technique: GoalTechnique,
+  findings: PentestFinding[]
+): PentestFinding[] {
+  const evidence = technique.evidence ?? '';
+
+  const byValue = findings.filter(
+    // an all-star redaction like "********" would match every line
+    (f) => /[^*]/.test(f.redacted ?? '') && evidence.includes(f.redacted ?? '')
+  );
+
+  return byValue.length
+    ? byValue
+    : findings.filter(
+        (f) =>
+          sameName(f.kind, technique.category) &&
+          sameName(f.pattern, technique.name)
+      );
+}
+
+/** Gives each technique the API sent the credentials of the findings behind it. */
+function withCredentials(goal: PentestGoalResult): PentestGoalResult {
+  const findings = goal.findings ?? [];
+
+  if (!findings.length || !goal.techniques?.length) {
+    return goal;
+  }
+
+  return {
+    ...goal,
+    techniques: goal.techniques.map((technique) => {
+      if (technique.credentials?.length) {
+        return technique;
+      }
+
+      const matched = findingsForTechnique(technique, findings);
+
+      return matched.length
+        ? { ...technique, credentials: matched.map(credentialFromFinding) }
+        : technique;
+    }),
+  };
 }
 
 function techniqueFromFinding(
@@ -149,8 +213,9 @@ function techniqueFromFinding(
         .filter(Boolean)
         .join(' ') || undefined,
     location: finding.where ?? finding.places?.join(', '),
-    evidence: maskSecrets(finding),
+    evidence: secretText(finding),
     tried: rest.join(' ') || undefined,
+    credentials: [credentialFromFinding(finding)],
   };
 
   if (technique.status === 'exploited') {
@@ -183,10 +248,9 @@ function pathsFromFindings(findings: PentestFinding[]): GoalPath[] {
     type: 'individual',
     steps: group.map(({ finding, id }) => ({
       label: id,
-      text: `${humanize(finding.pattern)} — ${(finding.redacted ?? '').replace(
-        /\*{4,}/g,
-        '••••'
-      )}`,
+      text: `${humanize(finding.pattern)} — ${
+        secretText(finding) ?? finding.redacted ?? ''
+      }`,
     })),
     outcome:
       group.length > 1
@@ -257,7 +321,7 @@ function pathFromPlan(plan: PentestPlan): GoalPath {
  */
 export function resolveGoalView(goal: PentestGoalResult): PentestGoalResult {
   if (normalizeGoalVerdict(goal.verdict) || goal.goal_id === 'login') {
-    return goal;
+    return withCredentials(goal);
   }
 
   const findingTechniques = (goal.findings ?? []).map(techniqueFromFinding);
