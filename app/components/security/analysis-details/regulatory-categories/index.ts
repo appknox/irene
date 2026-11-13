@@ -27,6 +27,7 @@ import type DoraModel from 'irene/models/dora';
 import type SamaModel from 'irene/models/sama';
 import type Pcidss4Model from 'irene/models/pcidss4';
 import type EucraModel from 'irene/models/eucra';
+import type PopiaModel from 'irene/models/popia';
 
 type RegulatoryCategoryOptionKeys =
   | 'owasp'
@@ -44,7 +45,8 @@ type RegulatoryCategoryOptionKeys =
   | 'nistsp80053'
   | 'sama'
   | 'dora'
-  | 'eucra';
+  | 'eucra'
+  | 'popia';
 
 type RegulatoryCategoryModels =
   | OwaspModel
@@ -62,7 +64,8 @@ type RegulatoryCategoryModels =
   | Nistsp800171Model
   | SamaModel
   | DoraModel
-  | EucraModel;
+  | EucraModel
+  | PopiaModel;
 
 type RegulatoryDataModel<T> = ArrayProxy<T> | null;
 
@@ -95,6 +98,7 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
   @tracked samaData: RegulatoryDataModel<SamaModel> = null;
   @tracked doraData: RegulatoryDataModel<DoraModel> = null;
   @tracked eucraData: RegulatoryDataModel<EucraModel> = null;
+  @tracked popiaData: RegulatoryDataModel<PopiaModel> = null;
 
   risks = ENUMS.RISK.CHOICES;
 
@@ -185,6 +189,10 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   get eucras() {
     return this.eucraData?.slice() || [];
+  }
+
+  get popias() {
+    return this.popiaData?.slice() || [];
   }
 
   get regulatoryCategories() {
@@ -335,6 +343,15 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
         options: this.eucras,
         onChange: this.onCategorySelect('eucra'),
       },
+      {
+        key: 'popia',
+        title: 'Protection of Personal Information Act',
+        placeholder: 'Select POPIA',
+        labelKeys: ['code', 'title'],
+        selected: this.analysis?.popia ?? [],
+        options: this.popias,
+        onChange: this.onCategorySelect('popia'),
+      },
     ] as Array<{
       key: string;
       title: string;
@@ -405,6 +422,8 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
       this.doraData = await this.store.findAll('dora');
 
       this.eucraData = await this.store.findAll('eucra');
+
+      this.popiaData = await this.store.findAll('popia');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }

@@ -97,10 +97,31 @@
     </AkStack>
 
     {{#unless @serviceAccount.allProjects}}
+      {{#if this.forceUserToUpdate}}
+        <AkStack class='mt-3 mb-1' @alignItems='center' @spacing='0.5'>
+          <AkIcon @iconName='info' @size='small' @color='textPrimary' />
+
+          <AkTypography
+            data-test-serviceAccountSection-selectProject-forceUpdateNote
+          >
+            {{t 'serviceAccountModule.forceUpdateToManageProjectsNote'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+
       <Organization::ServiceAccount::Section::SelectProject::List
         @isEditView={{this.isEditView}}
         @isCreateView={{this.isCreateView}}
+        @isPendingSave={{this.isPendingSave}}
         @serviceAccount={{@serviceAccount}}
+        @projects={{this.selectedProjectList}}
+        @totalCount={{this.totalSelectedProjectCount}}
+        @isLoading={{this.fetchSelectedProjects.isRunning}}
+        @limit={{this.limit}}
+        @offset={{this.offset}}
+        @onNextPrev={{this.handleNextPrevAction}}
+        @onItemPerPageChange={{this.handleItemPerPageChange}}
+        @onRefresh={{this.handleSelectedProjectsRefresh}}
       />
     {{/unless}}
   </:default>

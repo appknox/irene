@@ -10,5 +10,6 @@ export default Factory.extend({
     show_sama: faker.datatype.boolean(),
     show_dora: faker.datatype.boolean(),
     show_eucra: faker.datatype.boolean(),
+    show_popia: faker.datatype.boolean(),
   }),
 });

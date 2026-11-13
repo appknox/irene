@@ -12,6 +12,7 @@ export interface OrganizationServiceAccountSectionSelectProjectListOverviewSigna
     model: ServiceAccountProjectModel | ProjectModel;
     isEditView: boolean;
     isCreateView: boolean;
+    isPendingSave: boolean;
     setServiceAccountProjectToDelete: (
       model: ServiceAccountProjectModel
     ) => void;
@@ -23,8 +24,12 @@ export default class OrganizationServiceAccountSectionSelectProjectListOverviewC
 
   @tracked showRemoveConfirm = false;
 
+  get isStaged() {
+    return this.args.isCreateView || this.args.isPendingSave;
+  }
+
   get platformIcon() {
-    return this.args.isCreateView
+    return this.isStaged
       ? (this.args.model as ProjectModel).platformIconClass
       : (this.args.model as ServiceAccountProjectModel)
           .get('project')
@@ -32,7 +37,7 @@ export default class OrganizationServiceAccountSectionSelectProjectListOverviewC
   }
 
   get packageName() {
-    return this.args.isCreateView
+    return this.isStaged
       ? (this.args.model as ProjectModel).packageName
       : (this.args.model as ServiceAccountProjectModel)
           .get('project')
@@ -41,16 +46,16 @@ export default class OrganizationServiceAccountSectionSelectProjectListOverviewC
 
   @action
   handleRemoveClick() {
-    if (this.args.isCreateView) {
+    if (this.isStaged) {
       const project = this.args.model as ProjectModel;
 
       const selectedProjects = {
-        ...this.serviceAccount.selectedProjectsForCreate,
+        ...this.serviceAccount.pendingProjectSelections,
       };
 
       delete selectedProjects[project.id];
 
-      this.serviceAccount.selectedProjectsForCreate = selectedProjects;
+      this.serviceAccount.pendingProjectSelections = selectedProjects;
     } else {
       this.args.setServiceAccountProjectToDelete(
         this.args.model as ServiceAccountProjectModel

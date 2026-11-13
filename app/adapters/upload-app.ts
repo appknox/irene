@@ -30,8 +30,8 @@ export default class UploadAppAdapter extends commondrf {
 
     return Boolean(
       fromAdapterOptions ||
-        fromQuery ||
-        this.router.currentRouteName?.includes('offensive-security')
+      fromQuery ||
+      this.router.currentRouteName?.includes('offensive-security')
     );
   }
 

@@ -7,18 +7,25 @@ export interface OrganizationSigningCertificateCertListSignature {
   Element: HTMLElement;
 
   Args: {
-    certs: CertRow[];
+    projectCerts: CertRow[];
+    orgCerts: CertRow[];
     isLoading: boolean;
     isActivating: boolean;
     isProjectScope: boolean;
-    onActivate: (cert: OrganizationSigningCertificateModel) => void;
-    onDelete: (cert: OrganizationSigningCertificateModel) => void;
+    onActivate: (
+      cert: OrganizationSigningCertificateModel,
+      scope: CertRow['scope']
+    ) => void;
+    onDelete: (
+      cert: OrganizationSigningCertificateModel,
+      scope: CertRow['scope']
+    ) => void;
   };
 }
 
 export default class OrganizationSigningCertificateCertListComponent extends Component<OrganizationSigningCertificateCertListSignature> {
   get hasCerts() {
-    return this.args.certs.length > 0;
+    return this.args.projectCerts.length + this.args.orgCerts.length > 0;
   }
 }
 

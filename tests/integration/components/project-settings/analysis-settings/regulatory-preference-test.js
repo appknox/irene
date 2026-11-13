@@ -146,6 +146,7 @@ module(
         t('sama'),
         t('dora'),
         t('eucra'),
+        t('popia'),
       ];
 
       optionalRegulatoriesLabels.map((regLabel) =>
@@ -185,6 +186,10 @@ module(
             is_inherited: false,
           },
           show_eucra: {
+            value: false,
+            is_inherited: false,
+          },
+          show_popia: {
             value: false,
             is_inherited: false,
           },
@@ -299,6 +304,21 @@ module(
         return profile.report_preference.show_eucra;
       });
 
+      this.server.put('profiles/:id/show_popia', (schema, request) => {
+        const body = JSON.parse(request.requestBody);
+
+        const profile = schema['profiles'].find(request.params.id);
+
+        profile.report_preference.show_popia = {
+          value: body.value,
+          is_inherited: false,
+        };
+
+        profile.save();
+
+        return profile.report_preference.show_popia;
+      });
+
       await render(
         hbs`<ProjectSettings::AnalysisSettings::RegulatoryPreference @project={{this.project}}/>`
       );
@@ -388,6 +408,19 @@ module(
       await click(eucraInput);
 
       assert.strictEqual(eucraInput.checked, !eucraInitialValue);
+
+      const popia = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('popia')}"]`
+      );
+
+      const popiaInitialValue = profile.report_preference.show_popia.value;
+      const popiaInput = popia.querySelector('[data-test-input]');
+
+      assert.strictEqual(popiaInput.checked, popiaInitialValue);
+
+      await click(popiaInput);
+
+      assert.strictEqual(popiaInput.checked, !popiaInitialValue);
     });
 
     test('it does not toggle preference value on error', async function (assert) {
@@ -418,6 +451,10 @@ module(
             is_inherited: false,
           },
           show_eucra: {
+            value: false,
+            is_inherited: false,
+          },
+          show_popia: {
             value: false,
             is_inherited: false,
           },
@@ -462,6 +499,10 @@ module(
       });
 
       this.server.put('profiles/:id/show_eucra', () => {
+        return new Response(400, {}, { value: ['Must be a valid boolean.'] });
+      });
+
+      this.server.put('profiles/:id/show_popia', () => {
         return new Response(400, {}, { value: ['Must be a valid boolean.'] });
       });
 
@@ -553,6 +594,19 @@ module(
       await click(eucraInput);
 
       assert.strictEqual(eucraInput.checked, eucraInitialValue);
+
+      const popia = this.element.querySelector(
+        `[data-test-projectSetting-analysisSettings-regulatoryPreferences="${t('popia')}"]`
+      );
+
+      const popiaInitialValue = profile.report_preference.show_popia.value;
+      const popiaInput = popia.querySelector('[data-test-input]');
+
+      assert.strictEqual(popiaInput.checked, popiaInitialValue);
+
+      await click(popiaInput);
+
+      assert.strictEqual(popiaInput.checked, popiaInitialValue);
     });
 
     test('it displays overridden state with reset button if a preference is updated', async function (assert) {

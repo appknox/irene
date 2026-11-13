@@ -129,13 +129,7 @@ declare global {
   // Type Merging for Distinct Objects
   // SRC: https://stackoverflow.com/questions/60795256/typescript-type-merging
   type Primitive =
-    | string
-    | number
-    | boolean
-    | bigint
-    | symbol
-    | null
-    | undefined;
+    string | number | boolean | bigint | symbol | null | undefined;
 
   type Expand<T> = T extends Primitive
     ? T

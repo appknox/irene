@@ -40,9 +40,7 @@ type IosDeviceInfo = {
 };
 
 type AdbProtocolPropertyKey =
-  | 'ro.product.model'
-  | 'ro.build.version.release'
-  | 'ro.product.cpu.abi';
+  'ro.product.model' | 'ro.build.version.release' | 'ro.product.cpu.abi';
 
 export interface CyodDeviceRegistrationSignature {
   Element: HTMLElement;

@@ -3386,6 +3386,21 @@ body {
   --organization-signing-certificate-delete-confirm-note-background-color: var(
     --neutral-grey-100
   );
+  --organization-signing-certificate-override-confirm-background-main: var(
+    --background-main
+  );
+  --organization-signing-certificate-override-confirm-border-radius: var(
+    --border-radius
+  );
+  --organization-signing-certificate-override-confirm-border-color: var(
+    --border-color-1
+  );
+  --organization-signing-certificate-override-confirm-action-box-shadow: var(
+    --box-shadow-4
+  );
+  --organization-signing-certificate-override-confirm-note-background-color: var(
+    --neutral-grey-100
+  );
 
   // variables for organization/ai-powered-features
   --organization-ai-powered-features-bg-color: var(--common-white);
@@ -3977,8 +3992,16 @@ body {
   );
   --knoxiq-vulnerability-analysis-edit-link-color: var(--primary-main);
 
+  // variables for knox-iq/vulnerability-analysis-details/validated-findings
+  --knoxiq-validated-findings-warning-background-color: var(--error-light);
+
+  // variables for knox-iq/triage-status-banner
+  --knoxiq-triage-status-banner-background-color: var(--error-light);
+  --knoxiq-triage-status-banner-border-color: var(--border-color-1);
+
   // variables for knox-iq/vulnerability-analysis/table
   --knoxiq-vulnerability-analysis-table-border-color: var(--border-color-1);
+  --knoxiq-vulnerability-analysis-table-border-radius: var(--border-radius-8);
   --knoxiq-vulnerability-analysis-table-background-color: var(
     --background-main
   );

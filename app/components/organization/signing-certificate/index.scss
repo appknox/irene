@@ -3,3 +3,9 @@
   width: 780px;
   max-width: 100vw;
 }
+
+.existing-cert-link {
+  // AkButton defaults to vertical-align: middle, which sits proud of the
+  // surrounding sentence text; align it to baseline like ak-link does.
+  vertical-align: baseline;
+}

@@ -25,6 +25,7 @@ export enum AkSvgComponentInvocationByNames {
   FileCompareError,
   NoInsights,
   NoTestCase,
+  ChecklistDone,
   AffectedFixedVersionEmpty,
   MainLoaderImage1,
   MainLoaderImage2,
@@ -148,6 +149,7 @@ export enum AkSvgComponentInvocationByPaths {
   'tp-medium-risk',
   'tp-high-risk',
   'ai-bom-upload',
+  'checklist-done',
 }
 
 type AkSvgComponent = ComponentLike<{
@@ -155,9 +157,13 @@ type AkSvgComponent = ComponentLike<{
 }>;
 
 type AkSvgRegistry = {
-  [k in `AkSvg::${keyof typeof AkSvgComponentInvocationByNames}`]: AkSvgComponent;
+  [
+    k in `AkSvg::${keyof typeof AkSvgComponentInvocationByNames}`
+  ]: AkSvgComponent;
 } & {
-  [k in `ak-svg/${keyof typeof AkSvgComponentInvocationByPaths}`]: AkSvgComponent;
+  [
+    k in `ak-svg/${keyof typeof AkSvgComponentInvocationByPaths}`
+  ]: AkSvgComponent;
 };
 
 export default AkSvgRegistry;

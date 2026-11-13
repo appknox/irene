@@ -19,7 +19,7 @@ jobs:
     name: Run E2E Tests
     runs-on: [ubuntu-latest]
     container:
-      image: cypress/browsers:node-24.21.0-chrome-153.0.8010.36-1-ff-155.0.1-edge-153.0.4234.32-1
+      image: cypress/browsers:node-24.22.1-chrome-156.0.8078.47-1-ff-158.0.1-edge-155.0.4283.62-1
       options: --user 1001
 
     permissions:

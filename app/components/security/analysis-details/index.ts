@@ -40,8 +40,10 @@ export type AnalysisCvssUpdateDetails = {
   risk: number;
 };
 
-export interface AnalysisCvssUpdateDetailsLegacy
-  extends Omit<AnalysisCvssUpdateDetails, 'cvssMetrics'> {
+export interface AnalysisCvssUpdateDetailsLegacy extends Omit<
+  AnalysisCvssUpdateDetails,
+  'cvssMetrics'
+> {
   cvssMetrics: CvssV3Metrics;
 }
 
@@ -293,6 +295,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       sama,
       dora,
       eucra,
+      popia,
     ] = await Promise.all([
       details?.owasp,
       details?.owaspmobile2024,
@@ -310,6 +313,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       details?.sama,
       details?.dora,
       details?.eucra,
+      details?.popia,
     ]);
 
     // Normalise status: Ember Data may hand back a boxed object pre-save.
@@ -347,6 +351,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
       sama: sama?.map((a) => a.id),
       dora: dora?.map((a) => a.id),
       eucra: eucra?.map((a) => a.id),
+      popia: popia?.map((a) => a.id),
       overridden_risk: overriddenRisk,
       overridden_risk_comment: details?.overriddenRiskComment,
       overridden_risk_to_profile: details?.overriddenRiskToProfile,

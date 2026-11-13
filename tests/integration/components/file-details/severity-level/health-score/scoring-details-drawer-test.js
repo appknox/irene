@@ -85,7 +85,7 @@ module(
     });
 
     // ─── Timeline base entry ─────────────────────────────────────────────────────
-    test('timeline always starts with a base entry at Starting point', async function (assert) {
+    test('timeline ends with a base entry at Starting point', async function (assert) {
       const record = this.server.create('file-health-score-audit');
 
       this.set('auditTrail', [record.audit_trail[0]]);
@@ -94,22 +94,24 @@ module(
 
       const entries = findAll(selectors.timelineEntry);
 
-      // base entry + 1 audit entry
+      // 1 audit entry + base entry
       assert.strictEqual(entries.length, 2);
 
+      const baseEntry = entries[1];
+
       assert
-        .dom(selectors.dateChip, entries[0])
+        .dom(selectors.dateChip, baseEntry)
         .hasText(t('healthScore.startingPoint'));
 
       assert
-        .dom(selectors.entryTitle, entries[0])
+        .dom(selectors.entryTitle, baseEntry)
         .hasText(t('healthScore.baseScore'));
 
-      assert.dom(selectors.scoreChange, entries[0]).hasText('+100');
+      assert.dom(selectors.scoreChange, baseEntry).hasText('+100');
     });
 
     // ─── Latest chip ─────────────────────────────────────────────────────────────
-    test('Latest chip appears only on the last audit trail entry', async function (assert) {
+    test('Latest chip appears only on the latest audit trail entry at the top', async function (assert) {
       const record = this.server.create('file-health-score-audit');
 
       this.set('auditTrail', record.audit_trail);
@@ -118,12 +120,12 @@ module(
 
       const entries = findAll(selectors.timelineEntry);
 
-      // entries[0] = base, entries[1] = first audit, entries[2] = last audit
-      assert.dom(selectors.latestChip, entries[0]).doesNotExist();
-      assert.dom(selectors.latestChip, entries[1]).doesNotExist();
+      // entries[0] = latest audit, entries[1] = first audit, entries[2] = base
       assert
-        .dom(selectors.latestChip, entries[2])
+        .dom(selectors.latestChip, entries[0])
         .hasText(t('healthScore.latest'));
+      assert.dom(selectors.latestChip, entries[1]).doesNotExist();
+      assert.dom(selectors.latestChip, entries[2]).doesNotExist();
     });
 
     // ─── KnoxIQ / AEIS chip ──────────────────────────────────────────────────────
@@ -137,7 +139,7 @@ module(
       await render(TEMPLATE);
 
       const entries = findAll(selectors.timelineEntry);
-      const auditEntry = entries[1];
+      const auditEntry = entries[0];
 
       assert
         .dom(selectors.aeisChip, auditEntry)
@@ -158,7 +160,7 @@ module(
       await render(TEMPLATE);
 
       const entries = findAll(selectors.timelineEntry);
-      const auditEntry = entries[1];
+      const auditEntry = entries[0];
 
       assert.dom(selectors.aeisChip, auditEntry).doesNotExist();
       assert
@@ -185,12 +187,92 @@ module(
       const entries = findAll(selectors.timelineEntry);
 
       assert
+        .dom(selectors.entryTitle, entries[0])
+        .hasText(t('healthScore.dastRunTitle', { run: 2 }));
+
+      assert
         .dom(selectors.entryTitle, entries[1])
         .hasText(t('healthScore.dastRunTitle', { run: 1 }));
+    });
+
+    test('KnoxIQ entries do not increment scan run numbers for subsequent scans', async function (assert) {
+      const record = this.server.create('file-health-score-audit');
+
+      this.set('auditTrail', [
+        {
+          ...record.audit_trail[0],
+          event_type: 'dast_completed',
+          knoxiq_ran: false,
+        },
+        {
+          ...record.audit_trail[0],
+          event_type: 'dast_completed',
+          knoxiq_ran: true,
+        },
+        {
+          ...record.audit_trail[0],
+          event_type: 'dast_completed',
+          knoxiq_ran: false,
+          previous_score: 75,
+          score: 80,
+        },
+      ]);
+
+      await render(TEMPLATE);
+
+      const entries = findAll(selectors.timelineEntry);
+
+      // Reversed order:
+      // entries[0] = DAST scan 2 (latest)
+      // entries[1] = KnoxIQ on DAST
+      // entries[2] = DAST scan 1
+      // entries[3] = Base score
+      assert.strictEqual(entries.length, 4);
+
+      assert
+        .dom(selectors.entryTitle, entries[0])
+        .hasText(t('healthScore.dastRunTitle', { run: 2 }));
+
+      assert
+        .dom(selectors.entryTitle, entries[1])
+        .hasText(t('healthScore.knoxiqOnScan', { scanType: t('dast') }));
 
       assert
         .dom(selectors.entryTitle, entries[2])
-        .hasText(t('healthScore.dastRunTitle', { run: 2 }));
+        .hasText(t('healthScore.dastRunTitle', { run: 1 }));
+    });
+
+    test('KnoxIQ entry does not cause a single scan to show a run number', async function (assert) {
+      const record = this.server.create('file-health-score-audit');
+
+      this.set('auditTrail', [
+        {
+          ...record.audit_trail[0],
+          event_type: 'dast_completed',
+          knoxiq_ran: false,
+        },
+        {
+          ...record.audit_trail[0],
+          event_type: 'dast_completed',
+          knoxiq_ran: true,
+        },
+      ]);
+
+      await render(TEMPLATE);
+
+      const entries = findAll(selectors.timelineEntry);
+
+      // Reversed order:
+      // entries[0] = KnoxIQ on DAST
+      // entries[1] = DAST scan (single run, no run number)
+      // entries[2] = Base score
+      assert.strictEqual(entries.length, 3);
+
+      assert
+        .dom(selectors.entryTitle, entries[0])
+        .hasText(t('healthScore.knoxiqOnScan', { scanType: t('dast') }));
+
+      assert.dom(selectors.entryTitle, entries[1]).hasText(t('dastTitle'));
     });
 
     test('a single run of each scan type shows no run number', async function (assert) {
@@ -210,10 +292,10 @@ module(
 
       const entries = findAll(selectors.timelineEntry);
 
+      assert.dom(selectors.entryTitle, entries[0]).hasText(t('dastTitle'));
       assert
         .dom(selectors.entryTitle, entries[1])
         .hasText(t('healthScore.sastRunTitle'));
-      assert.dom(selectors.entryTitle, entries[2]).hasText(t('dastTitle'));
     });
 
     test('unknown event types with special characters (e.g. edit_analysis) are formatted in title case with run numbers', async function (assert) {
@@ -234,15 +316,15 @@ module(
       const entries = findAll(selectors.timelineEntry);
 
       assert
-        .dom(selectors.entryTitle, entries[1])
+        .dom(selectors.entryTitle, entries[0])
         .hasText(
-          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 1 })
+          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 2 })
         );
 
       assert
-        .dom(selectors.entryTitle, entries[2])
+        .dom(selectors.entryTitle, entries[1])
         .hasText(
-          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 2 })
+          t('healthScore.unknownRunTitle', { title: 'Edit Analysis', run: 1 })
         );
     });
 
@@ -257,7 +339,7 @@ module(
 
       const entries = findAll(selectors.timelineEntry);
 
-      assert.dom(selectors.entryTitle, entries[1]).hasText('Edit Analysis');
+      assert.dom(selectors.entryTitle, entries[0]).hasText('Edit Analysis');
     });
 
     // ─── Score change ─────────────────────────────────────────────────────────────
@@ -277,7 +359,7 @@ module(
 
         const entries = findAll(selectors.timelineEntry);
 
-        assert.dom(selectors.scoreChange, entries[1]).hasText(expectedChange);
+        assert.dom(selectors.scoreChange, entries[0]).hasText(expectedChange);
       }
     );
 

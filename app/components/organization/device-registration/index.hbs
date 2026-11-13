@@ -27,6 +27,16 @@
       data-test-orgDeviceRegistration-description
     >
       {{t 'cyod.registration.description'}}
+      {{t 'cyod.registration.addDeviceHint'}}
+      <AkLink
+        data-test-orgDeviceRegistration-accountSettingsLink
+        @route='authenticated.dashboard.account-settings.cyod-settings'
+        @color='primary'
+        @underline='always'
+        @typographyVariant='body2'
+      >
+        {{t 'accountSettings'}}
+      </AkLink>{{t 'cyod.registration.addDeviceHintEnd'}}
     </AkTypography>
   </AkStack>
 

@@ -26,7 +26,16 @@
     >
       {{yield to='title'}}
 
-      {{#if @description}}
+      {{#if (has-block 'description')}}
+        <AkTypography
+          local-class='panel-description'
+          data-test-orgSettingsPanelHeader-description
+          @color='textSecondary'
+          @variant='body2'
+        >
+          {{yield to='description'}}
+        </AkTypography>
+      {{else if @description}}
         <AkTypography
           local-class='panel-description'
           data-test-orgSettingsPanelHeader-description

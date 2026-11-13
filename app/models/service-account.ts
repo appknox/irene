@@ -37,6 +37,9 @@ export default class ServiceAccountModel extends Model {
   declare scopePublicApiTeamOperations: boolean;
 
   @attr('boolean')
+  declare scopePublicApiStoreReleaseReadiness: boolean;
+
+  @attr('boolean')
   declare isExpired: boolean;
 
   @attr('boolean')
@@ -44,6 +47,12 @@ export default class ServiceAccountModel extends Model {
 
   @attr('boolean')
   declare allProjects: boolean;
+
+  @attr('boolean')
+  declare scopeCli: boolean;
+
+  @attr('boolean')
+  declare cliScopeAutoApproveNewNameSpaces: boolean;
 
   @hasMany('service-account-project', { async: true, inverse: null })
   declare projects: AsyncHasMany<ServiceAccountProjectModel>;

@@ -300,9 +300,8 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
     if (filterValue === MONITORING_STATUS_FILTERS.ACTION_NEEDED) {
       return Boolean(
         monitoring_enabled &&
-          (store_monitoring_status === MONITORING_STATUSES.ACTION_NEEDED ||
-            fake_app_detection_status ===
-              FAKE_APP_DETECTION_STATUSES.HAS_RESULTS)
+        (store_monitoring_status === MONITORING_STATUSES.ACTION_NEEDED ||
+          fake_app_detection_status === FAKE_APP_DETECTION_STATUSES.HAS_RESULTS)
       );
     }
 

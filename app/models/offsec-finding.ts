@@ -107,11 +107,7 @@ export default class OffsecFindingModel extends Model {
    * table, the detail header and the tabs cannot drift apart.
    */
   get outcomeClass():
-    | 'exploited'
-    | 'defended'
-    | 'errored'
-    | 'detected'
-    | 'not-applicable' {
+    'exploited' | 'defended' | 'errored' | 'detected' | 'not-applicable' {
     switch (this.outcome) {
       case 'bypassed':
         return 'exploited';

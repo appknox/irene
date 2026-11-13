@@ -2,13 +2,7 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 
 export type AkChipColor =
-  | 'default'
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'error'
-  | 'warn'
-  | 'info';
+  'default' | 'primary' | 'secondary' | 'success' | 'error' | 'warn' | 'info';
 
 interface AkChipSignature {
   Element: HTMLDivElement;

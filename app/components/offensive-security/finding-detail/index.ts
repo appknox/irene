@@ -294,11 +294,9 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     const scanPkg =
       scan?.packageName ||
       ((scan as unknown as Record<string, unknown>)?.['package_name'] as
-        | string
-        | undefined) ||
+        string | undefined) ||
       ((scan as unknown as Record<string, unknown>)?.['package'] as
-        | string
-        | undefined);
+        string | undefined);
 
     if (typeof scanPkg === 'string' && scanPkg.trim()) {
       return scanPkg.trim();
@@ -356,8 +354,7 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
       if (typeof content === 'object' && content !== null) {
         const obj = content as Record<string, unknown>;
         const currentApp = obj['current_app'] as
-          | Record<string, unknown>
-          | undefined;
+          Record<string, unknown> | undefined;
         const clicked = obj['clicked'] as Record<string, unknown> | undefined;
         const pkg =
           (typeof obj['package'] === 'string' && obj['package']) ||

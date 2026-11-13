@@ -518,11 +518,9 @@ export default class OffsecScanModel extends Model {
   get isStaticScanStartedValue(): boolean {
     return Boolean(
       this.isStaticScanStarted ??
-        this.staticScanStarted ??
-        (this as unknown as Record<string, unknown>)[
-          'is_static_scan_started'
-        ] ??
-        (this as unknown as Record<string, unknown>)['static_scan_started']
+      this.staticScanStarted ??
+      (this as unknown as Record<string, unknown>)['is_static_scan_started'] ??
+      (this as unknown as Record<string, unknown>)['static_scan_started']
     );
   }
 
@@ -627,12 +625,7 @@ export default class OffsecScanModel extends Model {
   }
 
   get riskClass():
-    | 'critical'
-    | 'high'
-    | 'medium'
-    | 'low'
-    | 'unknown'
-    | 'not_assessed' {
+    'critical' | 'high' | 'medium' | 'low' | 'unknown' | 'not_assessed' {
     const effective = this.effectiveRiskRating;
 
     if (effective) {
@@ -647,11 +640,7 @@ export default class OffsecScanModel extends Model {
   }
 
   get resilienceClass():
-    | 'weak'
-    | 'medium'
-    | 'strong'
-    | 'very-strong'
-    | 'unknown' {
+    'weak' | 'medium' | 'strong' | 'very-strong' | 'unknown' {
     const score = this.effectiveResilience;
 
     if (score === null || score === undefined) {

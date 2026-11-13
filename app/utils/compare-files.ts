@@ -10,10 +10,7 @@ export type FileComparisonItem = {
 };
 
 export type FileCompareFilterKey =
-  | 'untested'
-  | 'newRisks'
-  | 'recurring'
-  | 'resolved';
+  'untested' | 'newRisks' | 'recurring' | 'resolved';
 
 export type FileComparisonCategories = Record<
   FileCompareFilterKey,

@@ -87,7 +87,7 @@ module('Integration | Component | organization/settings', function (hooks) {
     assert.true(
       Boolean(
         editAnalysis.compareDocumentPosition(mfa) &
-          Node.DOCUMENT_POSITION_FOLLOWING
+        Node.DOCUMENT_POSITION_FOLLOWING
       ),
       'edit analysis is rendered before multi factor auth'
     );

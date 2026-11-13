@@ -26,7 +26,8 @@ declare module '@glint/environment-ember-loose/registry' {
   type PrimitiveTypes = string | number | boolean | undefined | null;
 
   export default interface Registry
-    extends AkSvgRegistry,
+    extends
+      AkSvgRegistry,
       EmberTableRegistry,
       EmberConcurrencyRegistry,
       EmberPowerSelectRegistry,

@@ -113,14 +113,17 @@ export default class FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerComp
 
     const entries = trail.map((entry, index) => {
       const type = this.scanType(entry.event_type);
-      runNumbers[type] = (runNumbers[type] ?? 0) + 1;
+      let runNumber: number | null = null;
 
-      const runNumber = (typeCounts[type] ?? 0) > 1 ? runNumbers[type] : null;
+      if (!entry.knoxiq_ran) {
+        runNumbers[type] = (runNumbers[type] ?? 0) + 1;
+        runNumber = (typeCounts[type] ?? 0) > 1 ? runNumbers[type] : null;
+      }
 
       return this.toTimelineEntry(entry, type, runNumber, index === lastIndex);
     });
 
-    return [baseEntry, ...entries];
+    return [...entries.reverse(), baseEntry];
   }
 
   @action
@@ -130,6 +133,10 @@ export default class FileDetailsSeverityLevelHealthScoreScoringDetailsDrawerComp
 
   private scanTypeCounts(trail: HealthScoreAuditTrailEntry[]) {
     return trail.reduce<Record<string, number>>((acc, entry) => {
+      if (entry.knoxiq_ran) {
+        return acc;
+      }
+
       const type = this.scanType(entry.event_type);
       acc[type] = (acc[type] ?? 0) + 1;
 

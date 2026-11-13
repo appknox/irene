@@ -30,6 +30,16 @@
         />
       </AkFormControlLabel>
 
+      <AkFormControlLabel
+        @label='{{t "serviceAccountModule.showCliEnabled"}}'
+      >
+        <AkCheckbox
+          data-test-serviceAccountList-showCliEnabledCheckbox
+          @checked={{@queryParams.show_cli_enabled}}
+          @onChange={{this.handleShowCliEnabled}}
+        />
+      </AkFormControlLabel>
+
       <div local-class='divider' />
 
       <AkLink

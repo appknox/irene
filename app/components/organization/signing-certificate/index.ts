@@ -20,12 +20,21 @@ import type ProjectModel from 'irene/models/project';
 import type OrganizationSigningCertificateModel from 'irene/models/organization-signing-certificate';
 import type ProjectSigningCertificateModel from 'irene/models/project-signing-certificate';
 
+export type CertScope = 'project' | 'org';
+
 export type CertRow = {
   cert: OrganizationSigningCertificateModel;
+  scope: CertScope;
   showsActiveBadge: boolean;
   showsActivate: boolean;
+  showsDelete: boolean;
   isBusy: boolean;
   deleteDisabled: boolean;
+};
+
+type PendingDelete = {
+  cert: OrganizationSigningCertificateModel;
+  scope: CertScope;
 };
 
 export interface OrganizationSigningCertificateSignature {
@@ -46,7 +55,9 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   @tracked cert: ProjectSigningCertificateModel | null = null;
   @tracked certs: OrganizationSigningCertificateModel[] = [];
   @tracked busyCertId: string | null = null;
-  @tracked pendingDelete: OrganizationSigningCertificateModel | null = null;
+  @tracked pendingDelete: PendingDelete | null = null;
+  @tracked isConfirmingOverride = false;
+  @tracked certFetchFailed = false;
 
   get uploadUrl() {
     return this.args.project
@@ -56,6 +67,17 @@ export default class OrganizationSigningCertificateComponent extends Component<O
 
   get isProjectScope() {
     return !!this.args.project;
+  }
+
+  // Treat a still-loading or failed fetch as "there might be an existing
+  // cert" rather than "there is none" -- otherwise a save that races ahead of
+  // fetchCertificates would silently overwrite a project cert it never saw.
+  get hasExistingProjectCert() {
+    return this.isProjectScope && (!!this.cert || this.certFetchFailed);
+  }
+
+  get isLoadingExistingCert() {
+    return this.isProjectScope && this.fetchCertificates.isRunning;
   }
 
   get hasManageRole() {
@@ -79,14 +101,6 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     );
   }
 
-  get hasCerts() {
-    return this.certs.length > 0;
-  }
-
-  get canActivate() {
-    return !this.isProjectScope;
-  }
-
   get isAddTab() {
     return this.activeTab === 'add';
   }
@@ -95,22 +109,49 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     return this.activeTab === 'existing';
   }
 
-  get scopedCerts() {
-    if (!this.isProjectScope) {
-      return this.certs;
+  // A project cert can be switched off and back on in place (its own
+  // `is_active`), rather than only ever being deleted -- that is how a
+  // project defers back to the org's cert without losing its own upload.
+  get projectCertRows(): CertRow[] {
+    if (!this.cert) {
+      return [];
     }
 
-    return this.cert ? [this.cert] : [];
+    return [
+      {
+        cert: this.cert,
+        scope: 'project',
+        showsActiveBadge: this.cert.isActive,
+        showsActivate: !this.cert.isActive,
+        showsDelete: true,
+        isBusy: this.busyCertId === this.cert.id,
+        deleteDisabled: false,
+      },
+    ];
   }
 
-  get existingCerts(): CertRow[] {
-    return this.scopedCerts.map((cert) => ({
+  // A project with its own active cert overrides the org's, so its row's
+  // active badge is hidden and its action becomes reverting to the org cert
+  // instead of the org-wide activate used at org scope.
+  get orgCertRows(): CertRow[] {
+    const overriddenByProjectCert =
+      this.isProjectScope && !!this.cert?.isActive;
+
+    return this.certs.map((cert) => ({
       cert,
-      showsActiveBadge: cert.isActive || this.isProjectScope,
-      showsActivate: this.canActivate && !cert.isActive && !cert.isExpired,
+      scope: 'org',
+      showsActiveBadge: cert.isActive && !overriddenByProjectCert,
+      showsActivate: this.isProjectScope
+        ? overriddenByProjectCert
+        : !cert.isActive && !cert.isExpired,
+      showsDelete: !this.isProjectScope,
       isBusy: this.busyCertId === cert.id,
       deleteDisabled: cert.isActive && this.certs.length > 1,
     }));
+  }
+
+  get existingCerts(): CertRow[] {
+    return [...this.projectCertRows, ...this.orgCertRows];
   }
 
   get hasExistingCerts() {
@@ -134,8 +175,17 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   }
 
   @action
+  openExistingTab() {
+    this.activeTab = 'existing';
+    this.showDrawer = true;
+
+    this.fetchCertificates.perform();
+  }
+
+  @action
   handleClose() {
     this.pendingDelete = null;
+    this.isConfirmingOverride = false;
     this.showDrawer = false;
   }
 
@@ -145,8 +195,8 @@ export default class OrganizationSigningCertificateComponent extends Component<O
   }
 
   @action
-  requestDelete(cert: OrganizationSigningCertificateModel) {
-    this.pendingDelete = cert;
+  requestDelete(cert: OrganizationSigningCertificateModel, scope: CertScope) {
+    this.pendingDelete = { cert, scope };
   }
 
   @action
@@ -154,13 +204,60 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     this.pendingDelete = null;
   }
 
+  @action
+  requestOverrideConfirm() {
+    this.isConfirmingOverride = true;
+  }
+
+  @action
+  cancelOverrideConfirm() {
+    this.isConfirmingOverride = false;
+  }
+
+  // The drawer header's back button serves whichever confirmation is pending
+  // -- deleting a certificate or overriding the project's existing one.
+  @action
+  handleConfirmationBack() {
+    if (this.pendingDelete) {
+      this.cancelDelete();
+    } else {
+      this.cancelOverrideConfirm();
+    }
+  }
+
+  // Dispatches a click on a row's activate action to the right place: the
+  // project's own toggle, deferring to the org cert by switching the project's
+  // own cert off, or the org-wide activate used when managing the org's full
+  // collection at org scope.
+  @action
+  handleActivate(cert: OrganizationSigningCertificateModel, scope: CertScope) {
+    this.busyCertId = cert.id;
+
+    if (scope === 'project') {
+      this.setProjectCertActive.perform(true);
+    } else if (this.isProjectScope) {
+      this.setProjectCertActive.perform(false);
+    } else {
+      this.activateCert.perform(cert);
+    }
+  }
+
+  // Project scope returns the project's own cert alongside the org's whole
+  // collection in one call, so this goes through a raw ajax request (like
+  // `activate()` below) rather than `store.queryRecord`, which only knows how
+  // to normalize a single record shape.
   fetchCertificates = task(async () => {
+    this.certFetchFailed = false;
+
     try {
       if (this.args.project) {
-        this.cert = await this.store.queryRecord(
-          'project-signing-certificate',
-          { projectId: this.args.project.id }
-        );
+        const { projectCertificate, organizationCertificates } =
+          await waitForPromise(
+            this.projectCertAdapter.fetchWithOrgCerts(this.args.project.id)
+          );
+
+        this.cert = projectCertificate;
+        this.certs = organizationCertificates;
       } else {
         const certs = await this.store.query(
           'organization-signing-certificate',
@@ -172,25 +269,54 @@ export default class OrganizationSigningCertificateComponent extends Component<O
     } catch (e) {
       this.cert = null;
       this.certs = [];
+      this.certFetchFailed = true;
 
       this.logger.error('[CYOD] Could not load signing certificates:', e);
     }
   });
 
   confirmDelete = task({ drop: true }, async () => {
-    const cert = this.pendingDelete;
+    const pending = this.pendingDelete;
 
-    if (!cert) {
+    if (!pending) {
       return;
     }
 
-    if (this.isProjectScope) {
+    if (pending.scope === 'project') {
       await this.deleteCert.perform();
     } else {
-      await this.deleteOrgCert.perform(cert);
+      await this.deleteOrgCert.perform(pending.cert);
     }
 
     this.pendingDelete = null;
+  });
+
+  // Toggles the project's own cert in place, without deleting or re-uploading
+  // it, so switching back is a single click rather than a fresh upload.
+  setProjectCertActive = task({ drop: true }, async (active: boolean) => {
+    const projectId = this.args.project?.id;
+
+    if (!projectId) {
+      return;
+    }
+
+    try {
+      this.cert = await waitForPromise(
+        this.projectCertAdapter.setActive(projectId, active)
+      );
+
+      this.notify.success(
+        this.intl.t(
+          active ? 'cyod.signingCert.activated' : 'cyod.signingCert.deactivated'
+        )
+      );
+
+      await this.fetchCertificates.perform();
+
+      this.busyCertId = null;
+    } catch (err) {
+      this.notify.error(parseError(err, this.intl.t('pleaseTryAgain')));
+    }
   });
 
   deleteCert = task({ drop: true }, async () => {

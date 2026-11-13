@@ -24,8 +24,7 @@ type ChangesetBufferProps = BufferedChangeset &
   PartnerInviteClientFields & {
     error: {
       [key in keyof PartnerInviteClientFields]:
-        | boolean
-        | { validation: string };
+        boolean | { validation: string };
     };
   };
 

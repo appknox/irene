@@ -11,6 +11,7 @@ export interface OrganizationSettingsPanelHeaderSignature {
 
   Blocks: {
     title?: [];
+    description?: [];
     action?: [];
   };
 }

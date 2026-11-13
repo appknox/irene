@@ -12,6 +12,7 @@ export interface ProfileReportPreference {
   show_dynamic_scan: boolean;
   show_api_scan: boolean;
   show_manual_scan: boolean;
+  show_needs_review_analyses: boolean;
   show_pcidss: ValueObject;
   show_hipaa: ValueObject;
   show_gdpr: ValueObject;
@@ -19,11 +20,15 @@ export interface ProfileReportPreference {
   show_sama: ValueObject;
   show_dora: ValueObject;
   show_eucra: ValueObject;
+  show_popia: ValueObject;
 }
 
 export type SaveReportPreferenceData = Pick<
   ProfileReportPreference,
-  'show_api_scan' | 'show_dynamic_scan' | 'show_manual_scan'
+  | 'show_api_scan'
+  | 'show_dynamic_scan'
+  | 'show_manual_scan'
+  | 'show_needs_review_analyses'
 >;
 
 export type SetProfileRegulatorPrefData = { value: boolean };
@@ -31,13 +36,7 @@ export type SetProfileRegulatorPrefData = { value: boolean };
 export type SaveKnoxIqAutomatedTriggerData = { status: boolean };
 
 export type ProfileRegulatoryReportPreference =
-  | 'pcidss'
-  | 'hipaa'
-  | 'gdpr'
-  | 'nist'
-  | 'sama'
-  | 'dora'
-  | 'eucra';
+  'pcidss' | 'hipaa' | 'gdpr' | 'nist' | 'sama' | 'dora' | 'eucra' | 'popia';
 
 type ProfileAdapterName = 'profile';
 

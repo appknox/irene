@@ -86,7 +86,7 @@ const scopeDetails = () => [
               'serviceAccountModule.scopes.auto-approve-new-name-spaces.label'
             ),
             scopeDescription: t(
-              'serviceAccountModule.scopes.auto-approve-new-name-spaces.description'
+              'serviceAccountModule.scopes.auto-approve-new-name-spaces.writeDescription'
             ),
             accessType: t('write'),
             scopeKey: 'scopeAutoApproveNewNameSpaces',
@@ -102,9 +102,136 @@ const scopeDetails = () => [
         accessType: t('write'),
         scopeKey: 'scopePublicApiTeamOperations',
       },
+      {
+        key: 'store-release-readiness',
+        scopeLabel: t(
+          'serviceAccountModule.scopes.store-release-readiness.label'
+        ),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.store-release-readiness.description'
+        ),
+        accessType: t('read'),
+        scopeKey: 'scopePublicApiStoreReleaseReadiness',
+      },
+    ],
+  },
+  {
+    key: 'cli',
+    scopeLabel: t('serviceAccountModule.scopes.cli.label'),
+    scopeDescription: t('serviceAccountModule.scopes.cli.description'),
+    scopeKey: 'scopeCli',
+    children: [
+      {
+        key: 'cli-auto-approve-new-name-spaces',
+        scopeLabel: t(
+          'serviceAccountModule.scopes.cli-auto-approve-new-name-spaces.label'
+        ),
+        scopeDescription: t(
+          'serviceAccountModule.scopes.cli-auto-approve-new-name-spaces.description'
+        ),
+        accessType: t('write'),
+        scopeKey: 'cliScopeAutoApproveNewNameSpaces',
+      },
     ],
   },
 ];
+
+// Asserts a single node's own rendered content: checked/unchecked icon,
+// label text, access type, and (if present) its hover tooltip. Used both
+// for root-level leaves (e.g. 'team-operations') and for a parent that also
+// carries its own scope (e.g. 'cli', which is one row with a nested child).
+async function assertScopeNode(assert, scope, container, serviceAccount) {
+  if (scope.scopeKey) {
+    const isChecked = serviceAccount.get(scope.scopeKey);
+    const expectedState = isChecked ? 'checked' : 'unchecked';
+
+    assert
+      .dom(
+        `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
+        container
+      )
+      .exists();
+  }
+
+  if (scope.scopeLabel) {
+    assert
+      .dom('[data-test-serviceAccountSection-selectScope-nodeLabel]', container)
+      .containsText(scope.scopeLabel);
+  }
+
+  if (scope.accessType) {
+    assert
+      .dom(
+        '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
+        container
+      )
+      .containsText(scope.accessType);
+  }
+
+  const infoIcon = container.querySelector(
+    '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
+  );
+
+  if (infoIcon && scope.scopeDescription) {
+    assert
+      .dom('[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]')
+      .doesNotExist('Tooltip should not be visible initially');
+
+    await triggerEvent(infoIcon, 'mouseenter');
+
+    assert
+      .dom('[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]')
+      .exists('Tooltip should be visible on hover')
+      .hasText(scope.scopeDescription);
+
+    await triggerEvent(infoIcon, 'mouseleave');
+  }
+}
+
+// Walks the whole scopeDetails() tree and asserts every node that's
+// actually rendered: a plain-label parent (e.g. 'upload') only gets its
+// heading text checked, a scope-carrying node (leaf or hybrid parent like
+// 'cli') gets the full assertScopeNode treatment, and any children are
+// checked the same way (one level deep — matches the tree's actual depth).
+async function assertRenderedTree(assert, serviceAccount) {
+  for (const scope of scopeDetails()) {
+    const container = find(
+      `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
+    );
+
+    if (container) {
+      if (scope.label) {
+        assert
+          .dom(
+            '[data-test-serviceAccountSection-selectScope-nodeLabel]',
+            container
+          )
+          .containsText(scope.label);
+      } else if (scope.scopeLabel) {
+        await assertScopeNode(assert, scope, container, serviceAccount);
+      }
+    }
+
+    for (const childScope of scope.children || []) {
+      if (childScope.children) {
+        continue;
+      }
+
+      const childContainer = find(
+        `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
+      );
+
+      if (childContainer) {
+        await assertScopeNode(
+          assert,
+          childScope,
+          childContainer,
+          serviceAccount
+        );
+      }
+    }
+  }
+}
 
 module(
   'Integration | Component | organization/service-account/section/select-scope',
@@ -131,6 +258,8 @@ module(
       });
     });
 
+    // assertion count depends on the rendered scope tree, so no fixed expect()
+    // eslint-disable-next-line qunit/require-expect
     test('it renders selected scope', async function (assert) {
       await render(hbs`<Organization::ServiceAccount::Section::SelectScope
         @serviceAccount={{this.serviceAccount}}
@@ -155,162 +284,7 @@ module(
         )
         .containsText(t('serviceAccountModule.scopes.public-api.label'));
 
-      for (const scope of scopeDetails()) {
-        if (scope.children) {
-          // Handle parent nodes (like 'user' and 'upload')
-          if (scope.label) {
-            const container = find(
-              `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-            );
-
-            if (container) {
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                  container
-                )
-                .containsText(scope.label);
-            }
-          }
-
-          // Handle child nodes
-          for (const childScope of scope.children) {
-            // Skip if childScope is actually a parent node (like 'user' node having children)
-            if (childScope.children) {
-              continue;
-            }
-
-            const container = find(
-              `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
-            );
-
-            if (!container) {
-              continue;
-            }
-
-            // Only check icon state if it's a leaf node with scopeKey
-            if (childScope.scopeKey) {
-              const isChecked = this.serviceAccount.get(childScope.scopeKey);
-              const expectedState = isChecked ? 'checked' : 'unchecked';
-
-              // Check that the correct icon exists
-              assert
-                .dom(
-                  `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
-                  container
-                )
-                .exists();
-            }
-
-            // Check node label and access type
-            if (childScope.scopeLabel) {
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                  container
-                )
-                .containsText(childScope.scopeLabel);
-            }
-
-            if (childScope.accessType) {
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-                  container
-                )
-                .containsText(childScope.accessType);
-            }
-
-            // Test tooltip if info icon exists
-            const infoIcon = container.querySelector(
-              '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-            );
-
-            if (infoIcon && childScope.scopeDescription) {
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                )
-                .doesNotExist('Tooltip should not be visible initially');
-
-              await triggerEvent(infoIcon, 'mouseenter');
-
-              assert
-                .dom(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                )
-                .exists('Tooltip should be visible on hover')
-                .hasText(childScope.scopeDescription);
-
-              await triggerEvent(infoIcon, 'mouseleave');
-            }
-          }
-        } else {
-          // Handle root-level leaf nodes (like 'team-operations')
-          const container = find(
-            `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-          );
-
-          if (!container) {
-            continue;
-          }
-
-          if (scope.scopeKey) {
-            const isChecked = this.serviceAccount.get(scope.scopeKey);
-            const expectedState = isChecked ? 'checked' : 'unchecked';
-
-            assert
-              .dom(
-                `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
-                container
-              )
-              .exists();
-          }
-
-          // Check node label and access type
-          if (scope.scopeLabel) {
-            assert
-              .dom(
-                '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                container
-              )
-              .containsText(scope.scopeLabel);
-          }
-
-          if (scope.accessType) {
-            assert
-              .dom(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-                container
-              )
-              .containsText(scope.accessType);
-          }
-
-          // Test tooltip if info icon exists
-          const infoIcon = container.querySelector(
-            '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-          );
-
-          if (infoIcon && scope.scopeDescription) {
-            assert
-              .dom(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-              )
-              .doesNotExist('Tooltip should not be visible initially');
-
-            await triggerEvent(infoIcon, 'mouseenter');
-
-            assert
-              .dom(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-              )
-              .exists('Tooltip should be visible on hover')
-              .hasText(scope.scopeDescription);
-
-            await triggerEvent(infoIcon, 'mouseleave');
-          }
-        }
-      }
+      await assertRenderedTree(assert, this.serviceAccount);
     });
 
     test.each(
@@ -326,6 +300,7 @@ module(
             scopePublicApiUploadApp: true,
             scopeAutoApproveNewNameSpaces: true,
             scopePublicApiTeamOperations: false,
+            scopePublicApiStoreReleaseReadiness: true,
           },
         },
         {
@@ -359,6 +334,7 @@ module(
           scope_public_api_user_write: allChecked,
           scope_public_api_upload_app: allChecked,
           scope_public_api_team_operations: allChecked,
+          scope_public_api_store_release_readiness: allChecked,
           scope_auto_approve_new_name_spaces: allChecked,
         });
 
@@ -430,6 +406,12 @@ module(
                 const container = find(
                   `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
                 );
+
+                // Collapsed groups (e.g. CLI, unlike Upload, isn't
+                // auto-expanded) don't render their children at all.
+                if (!container) {
+                  continue;
+                }
 
                 const checkbox = container.querySelector(
                   '[data-test-ak-checkbox-tree-nodeCheckbox]'
@@ -553,166 +535,192 @@ module(
             }
           }
 
-          for (const scope of scopeDetails()) {
-            if (scope.children) {
-              // Handle parent nodes (like 'user' and 'upload')
-              if (scope.label) {
-                const container = find(
-                  `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-                );
-
-                if (container) {
-                  assert
-                    .dom(
-                      '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                      container
-                    )
-                    .containsText(scope.label);
-                }
-              }
-
-              // Handle child nodes
-              for (const childScope of scope.children) {
-                // Skip if childScope is actually a parent node (like 'user' node having children)
-                if (childScope.children) {
-                  continue;
-                }
-
-                const container = find(
-                  `[data-test-ak-checkbox-tree-nodeKey="${childScope.key}"]`
-                );
-
-                if (!container) {
-                  continue;
-                }
-
-                // Only check icon state if it's a leaf node with scopeKey
-                if (childScope.scopeKey) {
-                  const isChecked = this.serviceAccount.get(
-                    childScope.scopeKey
-                  );
-                  const expectedState = isChecked ? 'checked' : 'unchecked';
-
-                  // Check that the correct icon exists
-                  assert
-                    .dom(
-                      `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
-                      container
-                    )
-                    .exists();
-                }
-
-                // Check node label and access type
-                if (childScope.scopeLabel) {
-                  assert
-                    .dom(
-                      '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                      container
-                    )
-                    .containsText(childScope.scopeLabel);
-                }
-
-                if (childScope.accessType) {
-                  assert
-                    .dom(
-                      '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-                      container
-                    )
-                    .containsText(childScope.accessType);
-                }
-
-                // Test tooltip if info icon exists
-                const infoIcon = container.querySelector(
-                  '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-                );
-
-                if (infoIcon && childScope.scopeDescription) {
-                  assert
-                    .dom(
-                      '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                    )
-                    .doesNotExist('Tooltip should not be visible initially');
-
-                  await triggerEvent(infoIcon, 'mouseenter');
-
-                  assert
-                    .dom(
-                      '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                    )
-                    .exists('Tooltip should be visible on hover')
-                    .hasText(childScope.scopeDescription);
-
-                  await triggerEvent(infoIcon, 'mouseleave');
-                }
-              }
-            } else {
-              // Handle root-level leaf nodes (like 'team-operations')
-              const container = find(
-                `[data-test-ak-checkbox-tree-nodeKey="${scope.key}"]`
-              );
-
-              if (!container) {
-                continue;
-              }
-
-              if (scope.scopeKey) {
-                const isChecked = this.serviceAccount.get(scope.scopeKey);
-                const expectedState = isChecked ? 'checked' : 'unchecked';
-
-                assert
-                  .dom(
-                    `[data-test-serviceAccountSection-selectScope-nodeLabelIcon="${expectedState}"]`,
-                    container
-                  )
-                  .exists();
-              }
-
-              // Check node label and access type
-              if (scope.scopeLabel) {
-                assert
-                  .dom(
-                    '[data-test-serviceAccountSection-selectScope-nodeLabel]',
-                    container
-                  )
-                  .containsText(scope.scopeLabel);
-              }
-
-              if (scope.accessType) {
-                assert
-                  .dom(
-                    '[data-test-serviceAccountSection-selectScope-nodeLabelAccessType]',
-                    container
-                  )
-                  .containsText(scope.accessType);
-              }
-
-              // Test tooltip if info icon exists
-              const infoIcon = container.querySelector(
-                '[data-test-serviceAccountSection-selectScope-nodeLabelInfoIcon]'
-              );
-
-              if (infoIcon && scope.scopeDescription) {
-                assert
-                  .dom(
-                    '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                  )
-                  .doesNotExist('Tooltip should not be visible initially');
-
-                await triggerEvent(infoIcon, 'mouseenter');
-
-                assert
-                  .dom(
-                    '[data-test-serviceAccountSection-selectScope-nodeLabelInfoText]'
-                  )
-                  .exists('Tooltip should be visible on hover')
-                  .hasText(scope.scopeDescription);
-
-                await triggerEvent(infoIcon, 'mouseleave');
-              }
-            }
-          }
+          await assertRenderedTree(assert, this.serviceAccount);
         }
       }
     );
+
+    test('unchecking the APIs parent after checking it clears every API sub-scope (regression)', async function (assert) {
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      const apiCheckbox = () =>
+        find('[data-test-ak-checkbox-tree-nodeKey="public-api"]').querySelector(
+          '[data-test-ak-checkbox-tree-nodeCheckbox]'
+        );
+
+      await click(apiCheckbox());
+
+      assert.true(this.serviceAccount.scopePublicApiProjectRead);
+      assert.true(this.serviceAccount.scopePublicApiScanResultVa);
+      assert.true(this.serviceAccount.scopePublicApiUserRead);
+      assert.true(this.serviceAccount.scopePublicApiUserWrite);
+      assert.true(this.serviceAccount.scopePublicApiUploadApp);
+      assert.true(this.serviceAccount.scopeAutoApproveNewNameSpaces);
+      assert.true(this.serviceAccount.scopePublicApiTeamOperations);
+
+      await click(apiCheckbox());
+
+      assert.false(this.serviceAccount.scopePublicApiProjectRead);
+      assert.false(this.serviceAccount.scopePublicApiScanResultVa);
+      assert.false(this.serviceAccount.scopePublicApiUserRead);
+      assert.false(this.serviceAccount.scopePublicApiUserWrite);
+      assert.false(this.serviceAccount.scopePublicApiUploadApp);
+      assert.false(this.serviceAccount.scopeAutoApproveNewNameSpaces);
+      assert.false(this.serviceAccount.scopePublicApiTeamOperations);
+    });
+
+    test('checking CLI cascades auto-approve on and leaves expiry untouched', async function (assert) {
+      assert.expect(3);
+
+      const originalExpiry = new Date();
+      this.serviceAccount.expiry = originalExpiry;
+
+      this.server.put('/service_accounts/:id', (schema, req) => {
+        const data = JSON.parse(req.requestBody);
+
+        assert.true(data.scope_cli);
+        assert.true(data.cli_scope_auto_approve_new_name_spaces);
+
+        return schema.serviceAccounts.find(req.params.id).update(data).toJSON();
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      const container = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        container.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.strictEqual(this.serviceAccount.expiry, originalExpiry);
+
+      await click('[data-test-serviceAccountSection-selectScope-updateBtn]');
+    });
+
+    test('checking CLI cascades auto-approve on, same as the Upload group', async function (assert) {
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      const cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        cliContainer.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.true(this.serviceAccount.scopeCli);
+      assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+    });
+
+    test('unchecking CLI also turns off CLI auto-approve', async function (assert) {
+      this.serviceAccount.updateValues({
+        scope_cli: true,
+        cli_scope_auto_approve_new_name_spaces: true,
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      const container = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        container.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.false(this.serviceAccount.scopeCli);
+      assert.false(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+    });
+
+    test('checking CLI auto-approve forces CLI on too', async function (assert) {
+      this.serviceAccount.updateValues({
+        scope_cli: false,
+        cli_scope_auto_approve_new_name_spaces: false,
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      // CLI is collapsed by default (like Upload) — expand it first to
+      // reach its Auto Approve child.
+      const cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        cliContainer.querySelector(
+          '[data-test-ak-checkbox-tree-nodeExpandIcon]'
+        )
+      );
+
+      const container = find(
+        '[data-test-ak-checkbox-tree-nodeKey="cli-auto-approve-new-name-spaces"]'
+      );
+
+      await click(
+        container.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+      assert.true(this.serviceAccount.scopeCli);
+    });
+
+    test('unchecking CLI auto-approve after enabling CLI via its parent checkbox leaves CLI checked (regression)', async function (assert) {
+      this.serviceAccount.updateValues({
+        scope_cli: false,
+        cli_scope_auto_approve_new_name_spaces: false,
+      });
+
+      await render(hbs`<Organization::ServiceAccount::Section::SelectScope
+        @serviceAccount={{this.serviceAccount}}
+      />`);
+
+      await click('[data-test-serviceAccountSection-selectScope-actionBtn]');
+
+      let cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      // Check CLI via its own (parent) checkbox first — this now cascades
+      // auto-approve on too, same as the Upload group.
+      await click(
+        cliContainer.querySelector('[data-test-ak-checkbox-tree-nodeCheckbox]')
+      );
+
+      assert.true(this.serviceAccount.scopeCli);
+      assert.true(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+
+      cliContainer = find('[data-test-ak-checkbox-tree-nodeKey="cli"]');
+
+      await click(
+        cliContainer.querySelector(
+          '[data-test-ak-checkbox-tree-nodeExpandIcon]'
+        )
+      );
+
+      const autoApproveSelector =
+        '[data-test-ak-checkbox-tree-nodeKey="cli-auto-approve-new-name-spaces"] [data-test-ak-checkbox-tree-nodeCheckbox]';
+
+      // Toggling the already-cascaded-on child off directly must not drag
+      // CLI's own checked state along with it.
+      await click(autoApproveSelector);
+
+      assert.false(this.serviceAccount.cliScopeAutoApproveNewNameSpaces);
+      assert.true(
+        this.serviceAccount.scopeCli,
+        'CLI stays checked after independently toggling auto-approve off'
+      );
+    });
   }
 );
