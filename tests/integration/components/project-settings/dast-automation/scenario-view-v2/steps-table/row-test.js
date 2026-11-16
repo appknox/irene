@@ -101,12 +101,12 @@ const selectors = {
     `[data-test-dastAutomationScenario-stepsTable-row="${index}"]`,
 };
 
-/** Pushes an Enter OTP step (and optionally a scenario on a platform) into the store. */
+/** Pushes an Fetch OTP step (and optionally a scenario on a platform) into the store. */
 function setupOtpStep(context, stepAttrs = {}, platform = null) {
   const store = context.owner.lookup('service:store');
 
   const stepRecord = context.server.create('scenario-step', {
-    action: ScenarioStepAction.ENTER_OTP,
+    action: ScenarioStepAction.FETCH_OTP,
     identifier: 'Verification code',
     value: '',
     is_secure: false,
@@ -754,9 +754,9 @@ module(
       assert.dom(selectors.value).hasValue(this.step.value);
     });
 
-    // ─── Enter OTP ────────────────────────────────────────────────────────────
+    // ─── Fetch OTP ────────────────────────────────────────────────────────────
 
-    test('ENTER_OTP renders Code from in the field column and an empty value cell', async function (assert) {
+    test('FETCH_OTP renders Code from in the field column and an empty value cell', async function (assert) {
       assert.expect(6);
 
       setupOtpStep(this);
@@ -776,7 +776,7 @@ module(
     });
 
     test.each(
-      'ENTER_OTP Code from lists the platform apps, then Other app, then Authenticator key',
+      'FETCH_OTP Code from lists the platform apps, then Other app, then Authenticator key',
       [
         [ENUMS.PLATFORM.IOS, IOS_OTP_APPS],
         [ENUMS.PLATFORM.ANDROID, ANDROID_OTP_APPS],
@@ -802,7 +802,7 @@ module(
       }
     );
 
-    test('ENTER_OTP picking an app stores its bundle id as the value', async function (assert) {
+    test('FETCH_OTP picking an app stores its bundle id as the value', async function (assert) {
       setupOtpStep(this, {}, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -828,7 +828,7 @@ module(
       assert.dom(selectors.value).doesNotExist();
     });
 
-    test('ENTER_OTP instructions are stored in metadata.note and omitted when empty', async function (assert) {
+    test('FETCH_OTP instructions are stored in metadata.note and omitted when empty', async function (assert) {
       setupOtpStep(
         this,
         { value: 'com.apple.MobileSMS', metadata: { source: 'app', extra: 1 } },
@@ -853,7 +853,7 @@ module(
       assert.deepEqual(this.step.metadata, { source: 'app', extra: 1 });
     });
 
-    test('ENTER_OTP a saved app step shows its instructions', async function (assert) {
+    test('FETCH_OTP a saved app step shows its instructions', async function (assert) {
       setupOtpStep(
         this,
         {
@@ -868,7 +868,7 @@ module(
       assert.dom(selectors.otpNote).hasValue('Open the AuthLab entry');
     });
 
-    test('ENTER_OTP choosing Other app shows a text field for a custom app id', async function (assert) {
+    test('FETCH_OTP choosing Other app shows a text field for a custom app id', async function (assert) {
       setupOtpStep(this, { value: 'com.apple.MobileSMS' }, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -891,7 +891,7 @@ module(
       assert.dom(selectors.otpAppCustom).exists();
     });
 
-    test('ENTER_OTP Reset after choosing Other app shows the saved app again', async function (assert) {
+    test('FETCH_OTP Reset after choosing Other app shows the saved app again', async function (assert) {
       setupOtpStep(this, { value: 'com.apple.MobileSMS' }, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -917,7 +917,7 @@ module(
       assert.dom(selectors.otpNote).exists();
     });
 
-    test('ENTER_OTP editing the instructions after Reset keeps the saved app', async function (assert) {
+    test('FETCH_OTP editing the instructions after Reset keeps the saved app', async function (assert) {
       setupOtpStep(this, { value: 'com.apple.MobileSMS' }, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -942,7 +942,7 @@ module(
       assert.strictEqual(this.step.value, 'com.apple.MobileSMS');
     });
 
-    test('ENTER_OTP highlights the saved app in the Code from list', async function (assert) {
+    test('FETCH_OTP highlights the saved app in the Code from list', async function (assert) {
       setupOtpStep(this, { value: 'com.apple.MobileSMS' }, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -955,7 +955,7 @@ module(
       });
     });
 
-    test('ENTER_OTP a saved key step says the key is already masked', async function (assert) {
+    test('FETCH_OTP a saved key step says the key is already masked', async function (assert) {
       setupOtpStep(this, {
         value: '************',
         is_secure: true,
@@ -974,7 +974,7 @@ module(
         .containsText(t('dastAutomation.cannotMaskAlreadyMasked'));
     });
 
-    test('ENTER_OTP with an unknown saved app id shows Other app with the id prefilled', async function (assert) {
+    test('FETCH_OTP with an unknown saved app id shows Other app with the id prefilled', async function (assert) {
       setupOtpStep(this, { value: 'com.example.mail' }, ENUMS.PLATFORM.IOS);
 
       await render(TEMPLATE);
@@ -988,7 +988,7 @@ module(
       assert.dom(selectors.otpAppCustom).hasValue('com.example.mail');
     });
 
-    test('ENTER_OTP a saved key step shows Authenticator key with the masked value', async function (assert) {
+    test('FETCH_OTP a saved key step shows Authenticator key with the masked value', async function (assert) {
       setupOtpStep(this, {
         value: '************',
         is_secure: true,
@@ -1018,7 +1018,7 @@ module(
       assert.true(this.step.isSecure);
     });
 
-    test('ENTER_OTP switching between app and key clears value and note, toggles is_secure and keeps other metadata', async function (assert) {
+    test('FETCH_OTP switching between app and key clears value and note, toggles is_secure and keeps other metadata', async function (assert) {
       setupOtpStep(this, {
         value: 'com.apple.MobileSMS',
         metadata: { source: 'app', note: 'Open the AuthLab entry', extra: 1 },
@@ -1061,7 +1061,7 @@ module(
       assert.dom(selectors.otpAppCustom).exists().hasValue('');
     });
 
-    test('ENTER_OTP shows a missing selection error on Code from and a note error on the instructions', async function (assert) {
+    test('FETCH_OTP shows a missing selection error on Code from and a note error on the instructions', async function (assert) {
       setupOtpStep(this, {}, ENUMS.PLATFORM.IOS);
 
       this.set(
@@ -1101,7 +1101,7 @@ module(
       assert.dom(selectors.otpNote).exists();
     });
 
-    test('ENTER_OTP disables every control when isReadOnly', async function (assert) {
+    test('FETCH_OTP disables every control when isReadOnly', async function (assert) {
       assert.expect(3);
 
       setupOtpStep(this, { value: 'com.example.mail' });
@@ -1123,7 +1123,7 @@ module(
       assert.dom(selectors.value).isDisabled();
     });
 
-    test('hovering the ENTER_OTP info icon shows the OTP tooltip', async function (assert) {
+    test('hovering the FETCH_OTP info icon shows the OTP tooltip', async function (assert) {
       setupOtpStep(this);
 
       await render(TEMPLATE);
@@ -1132,7 +1132,7 @@ module(
 
       assert
         .dom('[data-test-ak-tooltip-content]')
-        .containsText(t('dastAutomation.enterOtpInfo'));
+        .containsText(t('dastAutomation.fetchOtpInfo'));
     });
   }
 );

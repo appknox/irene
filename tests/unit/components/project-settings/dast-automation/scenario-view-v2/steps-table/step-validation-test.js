@@ -93,10 +93,10 @@ module('Unit | Utility | step-validation', function () {
     }
   );
 
-  // ─── ENTER_OTP ───────────────────────────────────────────────────────────
+  // ─── FETCH_OTP ───────────────────────────────────────────────────────────
 
   test.each(
-    'ENTER_OTP (from an app): requires a well-formed, allowed app id',
+    'FETCH_OTP (from an app): requires a well-formed, allowed app id',
     [
       ['com.apple.MobileSMS', null],
       ['com.google.android.apps.messaging', null],
@@ -113,7 +113,7 @@ module('Unit | Utility | step-validation', function () {
     function (assert, [value, expectedError]) {
       const result = validateStep(
         makeStep({
-          action: ScenarioStepAction.ENTER_OTP,
+          action: ScenarioStepAction.FETCH_OTP,
           identifier: 'Verification code',
           value,
           metadata: { source: 'app' },
@@ -125,7 +125,7 @@ module('Unit | Utility | step-validation', function () {
   );
 
   test.each(
-    'ENTER_OTP (from an app): optional instructions (metadata.note) up to 256 chars',
+    'FETCH_OTP (from an app): optional instructions (metadata.note) up to 256 chars',
     [
       [undefined, null],
       ['Open the AuthLab entry', null],
@@ -138,7 +138,7 @@ module('Unit | Utility | step-validation', function () {
 
       const result = validateStep(
         makeStep({
-          action: ScenarioStepAction.ENTER_OTP,
+          action: ScenarioStepAction.FETCH_OTP,
           identifier: 'Verification code',
           value: 'com.apple.MobileSMS',
           metadata,
@@ -149,10 +149,10 @@ module('Unit | Utility | step-validation', function () {
     }
   );
 
-  test('ENTER_OTP: missing source is treated as from an app', function (assert) {
+  test('FETCH_OTP: missing source is treated as from an app', function (assert) {
     const result = validateStep(
       makeStep({
-        action: ScenarioStepAction.ENTER_OTP,
+        action: ScenarioStepAction.FETCH_OTP,
         identifier: 'Verification code',
         value: 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ',
         metadata: {},
@@ -166,7 +166,7 @@ module('Unit | Utility | step-validation', function () {
   });
 
   test.each(
-    'ENTER_OTP (authenticator key): requires a base32 key or otpauth://totp link',
+    'FETCH_OTP (authenticator key): requires a base32 key or otpauth://totp link',
     [
       ['', 'dastAutomation.validation.valueRequired'],
       ['GEZD GNBV GY3T QOJQ GEZD GNBV GY3T QOJQ', null],
@@ -186,7 +186,7 @@ module('Unit | Utility | step-validation', function () {
     function (assert, [value, expectedError]) {
       const result = validateStep(
         makeStep({
-          action: ScenarioStepAction.ENTER_OTP,
+          action: ScenarioStepAction.FETCH_OTP,
           identifier: 'Verification code',
           value,
           isSecure: true,
@@ -198,9 +198,9 @@ module('Unit | Utility | step-validation', function () {
     }
   );
 
-  test('ENTER_OTP (authenticator key): secure mask passes', function (assert) {
+  test('FETCH_OTP (authenticator key): secure mask passes', function (assert) {
     const step = makeStep({
-      action: ScenarioStepAction.ENTER_OTP,
+      action: ScenarioStepAction.FETCH_OTP,
       identifier: 'Verification code',
       value: '************',
       isSecure: true,
@@ -211,7 +211,7 @@ module('Unit | Utility | step-validation', function () {
   });
 
   test.each(
-    'ENTER_OTP: the identifier is set automatically, so it is never reported',
+    'FETCH_OTP: the identifier is set automatically, so it is never reported',
     [
       [{ source: 'app' }, 'com.apple.MobileSMS'],
       [{ source: 'authenticator_key' }, 'GEZDGNBVGY3TQOJQ'],
@@ -219,7 +219,7 @@ module('Unit | Utility | step-validation', function () {
     function (assert, [metadata, value]) {
       const result = validateStep(
         makeStep({
-          action: ScenarioStepAction.ENTER_OTP,
+          action: ScenarioStepAction.FETCH_OTP,
           identifier: '',
           value,
           metadata,

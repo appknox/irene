@@ -396,7 +396,7 @@
     "inputValue": "Input Value",
     "inputType": "Input Type",
     "enterInputTypeInfo": "Type of input can be Text, OTP & Password",
-    "enterOtpInfo": "Code from an app: during login the agent opens that app, reads the newest code and types it into the verification code field. Add optional instructions to help it find the code (e.g. Open the AuthLab entry). Authenticator key: the code is generated from the key at the moment it is typed; the key is always masked.",
+    "fetchOtpInfo": "Code from an app: during login the agent opens that app, reads the newest code and types it into the verification code field. Add optional instructions to help it find the code (e.g. Open the AuthLab entry). Authenticator key: the code is generated from the key at the moment it is typed; the key is always masked.",
     "otpCodeFrom": "Choose where the code comes from",
     "enterType": "Enter Type",
     "noScenariosFound": "No scenarios found.",
@@ -446,7 +446,7 @@
       "longPress": "Long Press",
       "swipe": "Swipe",
       "drag": "Drag",
-      "enterOtp": "Fetch OTP"
+      "fetchOtp": "Fetch OTP"
     },
     "stepPlaceholders": {
       "count": "Select the count",

@@ -198,10 +198,10 @@ export default class ProjectSettingsDastAutomationScenarioViewV2Component extend
   createStep(role: ScenarioUserRoleModel | null, config: StepActionConfig) {
     const roleSteps = this.allSteps.filter((s) => s.role.content === role);
     const roleStepCount = roleSteps.length;
-    const isOtp = config.action === ScenarioStepAction.ENTER_OTP;
+    const isOtp = config.action === ScenarioStepAction.FETCH_OTP;
 
     const otpIdentifiers = roleSteps
-      .filter((s) => s.action === ScenarioStepAction.ENTER_OTP)
+      .filter((s) => s.action === ScenarioStepAction.FETCH_OTP)
       .map((s) => s.identifier);
 
     return this.store.createRecord('scenario-step', {

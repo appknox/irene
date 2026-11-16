@@ -142,10 +142,10 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
     this.addStepsAnchorRef = null;
   }
 
-  /** Identifier for an Enter OTP step, unique among this list's other Enter OTP steps. */
+  /** Identifier for an Fetch OTP step, unique among this list's other Fetch OTP steps. */
   otpIdentifier(step?: ScenarioStepModel) {
     const taken = this.steps
-      .filter((s) => s !== step && s.action === ScenarioStepAction.ENTER_OTP)
+      .filter((s) => s !== step && s.action === ScenarioStepAction.FETCH_OTP)
       .map((s) => s.identifier);
 
     return otpIdentifierFor(taken);
@@ -153,7 +153,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
 
   @action
   addStep(config: StepActionConfig) {
-    const isOtp = config.action === ScenarioStepAction.ENTER_OTP;
+    const isOtp = config.action === ScenarioStepAction.FETCH_OTP;
 
     const step = this.store.createRecord('scenario-step', {
       order: this.steps.length + 1,
@@ -195,12 +195,12 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableCompon
       return;
     }
 
-    const wasOtp = step.action === ScenarioStepAction.ENTER_OTP;
+    const wasOtp = step.action === ScenarioStepAction.FETCH_OTP;
 
     step.action = config.action;
 
-    // Leaving Enter OTP drops only its auto identifier, not a custom one.
-    if (config.action === ScenarioStepAction.ENTER_OTP) {
+    // Leaving Fetch OTP drops only its auto identifier, not a custom one.
+    if (config.action === ScenarioStepAction.FETCH_OTP) {
       step.identifier = this.otpIdentifier(step);
     } else if (!wasOtp || isAutoOtpIdentifier(step.identifier)) {
       step.identifier = '';

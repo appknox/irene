@@ -78,8 +78,8 @@
     {{/if}}
   </div>
 
-  {{! Identifier cell (Enter OTP: "Code from"; its identifier is set automatically) }}
-  {{#if this.isEnterOtp}}
+  {{! Identifier cell (Fetch OTP: "Code from"; its identifier is set automatically) }}
+  {{#if this.isFetchOtp}}
     <ProjectSettings::DastAutomation::ScenarioViewV2::StepsTable::InputErrorWrapper
       @errorMessage={{this.otpCodeFromErrorMessage}}
     >

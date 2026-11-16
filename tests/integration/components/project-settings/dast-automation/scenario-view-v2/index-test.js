@@ -200,12 +200,12 @@ module(
       await click(selectors.emptyAddBtn);
 
       await click(
-        selectors.addStepsPopoverItem('dastAutomation.stepActions.enterOtp')
+        selectors.addStepsPopoverItem('dastAutomation.stepActions.fetchOtp')
       );
 
       const step = this.store
         .peekAll('scenario-step')
-        .find((s) => s.action === ScenarioStepAction.ENTER_OTP);
+        .find((s) => s.action === ScenarioStepAction.FETCH_OTP);
 
       assert.strictEqual(step.identifier, 'Verification code');
       assert.deepEqual(step.metadata, { source: 'app' });

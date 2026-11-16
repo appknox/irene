@@ -396,7 +396,7 @@
     "inputValue": "Input Value",
     "inputType": "Input Type",
     "enterInputTypeInfo": "入力タイプはテキスト、OTP、パスワードが使用できます",
-    "enterOtpInfo": "アプリから取得: ログイン中にエージェントがそのアプリを開き、最新のコードを読み取って確認コード欄に入力します。コードを見つけやすくするための指示を任意で追加できます（例: AuthLab の項目を開く）。認証キー: コードは入力する時点でキーから生成されます。キーは常にマスクされます。",
+    "fetchOtpInfo": "アプリから取得: ログイン中にエージェントがそのアプリを開き、最新のコードを読み取って確認コード欄に入力します。コードを見つけやすくするための指示を任意で追加できます（例: AuthLab の項目を開く）。認証キー: コードは入力する時点でキーから生成されます。キーは常にマスクされます。",
     "otpCodeFrom": "コードの取得元を選択",
     "enterType": "Enter Type",
     "noScenariosFound": "No scenarios found.",
@@ -446,7 +446,7 @@
       "longPress": "長押し",
       "swipe": "スワイプ",
       "drag": "ドラッグ",
-      "enterOtp": "OTPを取得"
+      "fetchOtp": "OTPを取得"
     },
     "stepPlaceholders": {
       "count": "回数を選択",

@@ -11,12 +11,12 @@ export enum ScenarioStepAction {
   SWIPE = 5,
   DRAG = 6,
   WAIT = 7,
-  ENTER_OTP = 8,
+  FETCH_OTP = 8,
 }
 
 export type OtpSource = 'app' | 'authenticator_key';
 
-/** Per-action extras; only Enter OTP uses it today. */
+/** Per-action extras; only Fetch OTP uses it today. */
 export interface ScenarioStepMetadata {
   source?: OtpSource;
   note?: string;

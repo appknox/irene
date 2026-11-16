@@ -128,8 +128,8 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
       return 'dastAutomation.enterInputTypeInfo';
     }
 
-    if (this.step.action === ScenarioStepAction.ENTER_OTP) {
-      return 'dastAutomation.enterOtpInfo';
+    if (this.step.action === ScenarioStepAction.FETCH_OTP) {
+      return 'dastAutomation.fetchOtpInfo';
     }
 
     return null;
@@ -148,7 +148,7 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
 
   get isSecureText() {
     return (
-      this.valueKind === 'secure-text' || (this.isEnterOtp && this.isOtpFromKey)
+      this.valueKind === 'secure-text' || (this.isFetchOtp && this.isOtpFromKey)
     );
   }
 
@@ -173,8 +173,8 @@ export default class ProjectSettingsDastAutomationScenarioViewV2StepsTableRowCom
     return this.directionOptions.find((option) => option.value === val);
   }
 
-  get isEnterOtp() {
-    return this.step.action === ScenarioStepAction.ENTER_OTP;
+  get isFetchOtp() {
+    return this.step.action === ScenarioStepAction.FETCH_OTP;
   }
 
   get isOtpFromKey() {

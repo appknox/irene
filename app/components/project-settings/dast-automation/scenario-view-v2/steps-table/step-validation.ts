@@ -197,14 +197,14 @@ const all =
     return null;
   };
 
-const enterOtpFromApp = all(required, otpAppId, otpNote);
-const enterOtpFromKey = all(required, authenticatorKey);
+const fetchOtpFromApp = all(required, otpAppId, otpNote);
+const fetchOtpFromKey = all(required, authenticatorKey);
 
-/** Enter OTP: the value is an app id or an authenticator key, by `metadata.source`. */
-const enterOtp: ValueValidator = (ctx) =>
+/** Fetch OTP: the value is an app id or an authenticator key, by `metadata.source`. */
+const fetchOtp: ValueValidator = (ctx) =>
   ctx.step.metadata?.source === 'authenticator_key'
-    ? enterOtpFromKey(ctx)
-    : enterOtpFromApp(ctx);
+    ? fetchOtpFromKey(ctx)
+    : fetchOtpFromApp(ctx);
 
 // ─── Per-action rules ─────────────────────────────────────────────────────────
 
@@ -236,7 +236,7 @@ const VALUE_VALIDATORS: Partial<Record<ScenarioStepAction, ValueValidator>> = {
     oneOf(SWIPE_DIRECTIONS, ERR.swipeValueInvalid)
   ),
 
-  [ScenarioStepAction.ENTER_OTP]: enterOtp,
+  [ScenarioStepAction.FETCH_OTP]: fetchOtp,
 
   [ScenarioStepAction.WAIT]: all(
     required,
@@ -265,9 +265,9 @@ function validateIdentifier(identifier: string): string | null {
 export function validateStep(step: ScenarioStepModel) {
   const errors: StepValidationError = {};
 
-  // Enter OTP has no identifier input; it is always set automatically.
+  // Fetch OTP has no identifier input; it is always set automatically.
   const identifierError =
-    step.action === ScenarioStepAction.ENTER_OTP
+    step.action === ScenarioStepAction.FETCH_OTP
       ? null
       : validateIdentifier(step.identifier ?? '');
 

@@ -14,7 +14,7 @@ export type StepValueKind =
   | 'boolean' // check: checked
   | 'duration' // wait, long_press: number + unit (ms/s/m)
   | 'direction' // swipe, drag: up/down/left/right
-  | 'otp'; // enter_otp: app id or authenticator key, by metadata.source
+  | 'otp'; // fetch_otp: app id or authenticator key, by metadata.source
 
 export type StepActionLabelKey =
   | 'dastAutomation.stepActions.tap'
@@ -25,7 +25,7 @@ export type StepActionLabelKey =
   | 'dastAutomation.stepActions.longPress'
   | 'dastAutomation.stepActions.swipe'
   | 'dastAutomation.stepActions.drag'
-  | 'dastAutomation.stepActions.enterOtp';
+  | 'dastAutomation.stepActions.fetchOtp';
 
 export type StepPlaceholderKey =
   | 'dastAutomation.stepPlaceholders.count'
@@ -133,8 +133,8 @@ export const STEP_ACTION_CONFIGS: StepActionConfig[] = [
     defaultValue: 'up',
   },
   {
-    action: ScenarioStepAction.ENTER_OTP,
-    label: 'dastAutomation.stepActions.enterOtp',
+    action: ScenarioStepAction.FETCH_OTP,
+    label: 'dastAutomation.stepActions.fetchOtp',
     icon: 'key',
     valueKind: 'otp',
     valuePlaceholder: 'dastAutomation.otpCodeFrom',
@@ -164,7 +164,7 @@ export const CHECK_OPTIONS: CheckOption[] = [
   { label: 'dastAutomation.checkOptions.unchecked', value: 'false' },
 ];
 
-// Auto identifier for Enter OTP steps, numbered when already taken.
+// Auto identifier for Fetch OTP steps, numbered when already taken.
 export const OTP_IDENTIFIER_BASE = 'Verification code';
 const OTP_IDENTIFIER_PATTERN = /^Verification code( \d+)?$/;
 
