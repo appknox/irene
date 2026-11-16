@@ -48,14 +48,14 @@ export default class KnoxIqScanSummaryComponent extends Component<KnoxIqScanSumm
     return this.args.file.belongsTo('project').id();
   }
 
-  get isAutofixEnabled() {
+  get isKnoxiqEnabled() {
     return Boolean(
-      this.args.file.project?.get('organization')?.get('aiFeatures')?.autofix
+      this.args.file.project?.get('organization')?.get('aiFeatures')?.knoxiq
     );
   }
 
   get showAutofixLink() {
-    return Boolean(this.autofixProjectId && this.isAutofixEnabled);
+    return Boolean(this.autofixProjectId && this.isKnoxiqEnabled);
   }
 
   loadHealthScore = task(async () => {

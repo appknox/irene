@@ -28,7 +28,6 @@ export interface AiFeatures {
   pii: boolean;
   knoxiq: boolean;
   ai_dast: boolean;
-  autofix: boolean;
 }
 
 export default class OrganizationModel extends Model {

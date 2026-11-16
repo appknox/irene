@@ -229,7 +229,7 @@ module('Integration | Component | knox-iq/scan-summary', function (hooks) {
       .includesText(criticalCount);
   });
 
-  test('links to autofix details for this file when autofix is enabled', async function (assert) {
+  test('links to autofix details for this file when knoxiq is enabled', async function (assert) {
     setupFileExploitabilityMirageEndpoint(this.server);
 
     const store = this.owner.lookup('service:store');
@@ -241,13 +241,16 @@ module('Integration | Component | knox-iq/scan-summary', function (hooks) {
         type: 'project',
         relationships: {
           organization: {
-            data: { id: organizationService.selected?.id, type: 'organization' },
+            data: {
+              id: organizationService.selected?.id,
+              type: 'organization',
+            },
           },
         },
       },
     });
 
-    organizationService.selected?.set('aiFeatures', { autofix: true });
+    organizationService.selected?.set('aiFeatures', { knoxiq: true });
 
     await render(hbs`
       <KnoxIq::ScanSummary
@@ -267,14 +270,14 @@ module('Integration | Component | knox-iq/scan-summary', function (hooks) {
     assert.ok(href?.includes(`file_id=${this.file.id}`), href);
   });
 
-  test('hides the autofix details link when autofix is disabled for the organization', async function (assert) {
+  test('hides the autofix details link when knoxiq is disabled for the organization', async function (assert) {
     setupFileExploitabilityMirageEndpoint(this.server);
 
     const organizationService = this.owner.lookup('service:organization');
     const projectRecord = this.file.belongsTo('project').value();
 
     projectRecord?.set('organization', organizationService.selected);
-    organizationService.selected?.set('aiFeatures', { autofix: false });
+    organizationService.selected?.set('aiFeatures', { knoxiq: false });
 
     await render(hbs`
       <KnoxIq::ScanSummary
