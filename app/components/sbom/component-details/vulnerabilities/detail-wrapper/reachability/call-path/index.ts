@@ -4,12 +4,10 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 import {
-  TargetPresence,
   WitnessOwnerKind,
   fixHereWitnessIndex,
   groupWitnessByOwner,
   isConfirmedFinding,
-  isTargetCallStatusUnknown,
   reachabilityWitnessPathItems,
   splitWitnessNarrative,
   type SbomReachabilityFinding,
@@ -130,32 +128,10 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
     return isConfirmedFinding(this.args.finding) ? 'error' : 'warn';
   }
 
-  /**
-   * Nothing was traced, yet the finding names vulnerable functions and the
-   * verdict is not a proven absence: say so instead of hiding the section.
-   */
-  get showNoTrace() {
-    const finding = this.args.finding;
-    const hasTargets =
-      Boolean(finding?.target) ||
-      (finding?.targets ?? []).some((target) => target.label);
-
-    return !this.hasPath && hasTargets && isTargetCallStatusUnknown(finding);
-  }
-
-  /**
-   * "Not found in the build" is only true when the engine did not observe
-   * the vulnerable code. When it is present (analysis blocked) or was never
-   * analysed, say neutrally that no path was recorded.
-   */
-  get noTraceKey() {
-    return this.args.finding?.target_presence === TargetPresence.NOT_OBSERVED
-      ? 'sbomModule.reachability.noTrace'
-      : 'sbomModule.reachability.noTraceRecorded';
-  }
-
   get shouldShow() {
-    return this.hasPath || this.showNoTrace;
+    // Without a traced path there is nothing to explain here; the Reasoning
+    // section carries why the result is inconclusive.
+    return this.hasPath;
   }
 
   /**

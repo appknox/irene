@@ -38,8 +38,6 @@ const selectors = {
     `[data-test-sbomComponentVulnerabilities-reachabilityCallPathStepMarker="${index}"]`,
   toggle: '[data-test-sbomComponentVulnerabilities-reachabilityCallPathToggle]',
   steps: '[data-test-sbomComponentVulnerabilities-reachabilityCallPathSteps]',
-  noTrace:
-    '[data-test-sbomComponentVulnerabilities-reachabilityCallPathNoTrace]',
 };
 
 const TEMPLATE = hbs`
@@ -347,66 +345,18 @@ module(
       );
     });
 
-    test('it shows a dashed no-trace box when targets exist but nothing was traced', async function (assert) {
+    test('it renders nothing when targets exist but no path was traced', async function (assert) {
       this.finding = {
         verdict: 'UNKNOWN',
-        target_presence: 'NOT_OBSERVED',
+        target: null,
+        targets: [{ label: 'org.example.Vulnerable.run()' }],
         witness_path: [],
-        targets: [{ label: 'Lorg/junit/rules/TemporaryFolder;->create()' }],
       };
-      this.narrative = 'junit is listed but none of its classes ship.';
-
-      await render(TEMPLATE);
-
-      assert
-        .dom(selectors.title)
-        .hasText(t('sbomModule.reachability.howYourAppReachesIt'));
-      assert.dom(selectors.narrative).hasText(this.narrative);
-      assert
-        .dom(selectors.noTrace)
-        .hasText(t('sbomModule.reachability.noTrace'));
-      assert.dom(selectors.steps).doesNotExist();
-
-      // Nothing to abbreviate without frames.
-      assert.dom(selectors.toggle).doesNotExist();
-    });
-
-    test('the no-trace copy says "not found" only when the code was not observed', async function (assert) {
-      const targets = [{ label: 'Lcom/example/Parser;->parse()' }];
-
-      for (const finding of [
-        // Present in the build, but the analysis was blocked.
-        { verdict: 'UNKNOWN', target_presence: 'PRESENT', targets },
-        // Never analysed.
-        { verdict: 'UNSUPPORTED', targets },
-        // Potential without a witness and no presence information.
-        { verdict: 'POTENTIALLY_REACHABLE', targets },
-      ]) {
-        this.set('finding', { witness_path: [], ...finding });
-
-        await render(TEMPLATE);
-
-        assert
-          .dom(selectors.noTrace)
-          .hasText(t('sbomModule.reachability.noTraceRecorded'));
-      }
-    });
-
-    test('it shows no trace box for a proven absence or a traced path', async function (assert) {
-      this.set('finding', {
-        verdict: 'NO_PATH_FOUND',
-        witness_path: [],
-        targets: [{ label: 'Lcom/example/Parser;->parse()' }],
-      });
+      this.narrative = { summary: 'Should not show.' };
 
       await render(TEMPLATE);
 
       assert.dom(selectors.root).doesNotExist();
-
-      this.set('finding', ANNOTATED_FINDING);
-
-      assert.dom(selectors.noTrace).doesNotExist();
-      assert.dom(selectors.steps).exists();
     });
   }
 );
