@@ -96,7 +96,7 @@ module('Integration | Component | knox-iq/autofix-history', function (hooks) {
 
   test('reports an API failure', async function (assert) {
     this.server.get(
-      '/knoxiq/project/:projectId/knoxfixer_prs/',
+      '/knoxiq/project/:projectId/autofix_prs/',
       () => new Response(500)
     );
 
