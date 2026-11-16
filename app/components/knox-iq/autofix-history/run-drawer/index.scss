@@ -1,0 +1,125 @@
+.meta-icon {
+  font-size: 14px !important;
+  flex-shrink: 0;
+  color: var(--knoxiq-autofix-history-run-drawer-icon-color);
+}
+
+.meta-icon-strong {
+  color: var(--knoxiq-autofix-history-run-drawer-icon-strong-color);
+}
+
+.commit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28571em;
+  color: var(--knoxiq-autofix-history-run-drawer-commit-link-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: var(--knoxiq-autofix-history-run-drawer-commit-link-hover-color);
+  }
+}
+
+.commit-sha {
+  overflow-wrap: anywhere;
+}
+
+.drawer-panel {
+  width: 860px;
+  max-width: 100vw;
+}
+
+.drawer-top {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  &.scrolled {
+    box-shadow: var(--knoxiq-autofix-history-run-drawer-sticky-shadow);
+  }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.42857em;
+  background-color: var(
+    --knoxiq-autofix-history-run-drawer-header-background-color
+  );
+  border-bottom: 1px solid
+    var(--knoxiq-autofix-history-run-drawer-divider-color);
+}
+
+.drawer-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28571em;
+  padding: 1.14286em 1.42857em;
+  background-color: var(
+    --knoxiq-autofix-history-run-drawer-summary-background-color
+  );
+  border-bottom: 1px solid
+    var(--knoxiq-autofix-history-run-drawer-divider-color);
+}
+
+.drawer-meta {
+  min-height: 2em;
+}
+
+.drawer-body {
+  padding: 1.42857em;
+  color: var(--knoxiq-autofix-history-run-drawer-body-color);
+  font-size: 1rem;
+  line-height: 1.57143em;
+}
+
+.commit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.14286em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.commit-item {
+  padding-bottom: 1.14286em;
+  border-bottom: 1px solid
+    var(--knoxiq-autofix-history-run-drawer-divider-color);
+
+  &:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+.patched-files {
+  margin-top: 0.57143em;
+  padding-left: 1.42857em;
+}
+
+.nested-list {
+  margin-top: 0.28571em;
+  padding-left: 1.71429em;
+}
+
+.nested-list-item {
+  padding: 0.21429em 0;
+}
+
+.code-pill {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.07143em 0.57143em;
+  overflow-wrap: anywhere;
+  border-radius: 0.28571em;
+  background-color: var(
+    --knoxiq-autofix-history-run-drawer-pill-background-color
+  );
+  color: var(--knoxiq-autofix-history-run-drawer-body-color);
+  font-size: 0.92857rem;
+  line-height: 1.42857em;
+  vertical-align: baseline;
+}

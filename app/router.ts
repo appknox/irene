@@ -215,10 +215,13 @@ Router.map(function () {
             });
 
             this.route('files');
+            this.route('autofix');
           }
         );
 
         this.route('file', { path: '/file/:fileid' }, function () {
+          this.route('autofix');
+
           this.route('api-scan', function () {
             this.route('index', { path: '/' });
             this.route('results');

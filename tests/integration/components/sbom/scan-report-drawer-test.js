@@ -1,4 +1,11 @@
-import { find, findAll, render, click, waitFor } from '@ember/test-helpers';
+import {
+  find,
+  findAll,
+  render,
+  click,
+  settled,
+  waitFor,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -238,10 +245,10 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
 
     assert.dom('[data-test-sbomReportDrawer-drawer]').exists();
 
-    // wait for api
-    await waitFor('[data-test-sbomReportList-reportlist]', {
-      timeout: 200,
-    });
+    // wait for every request fired on open (reports + ai_summary). Waiting only
+    // for the list lets a late ai_summary response re-render the rows mid-click,
+    // cancelling the download task before window.open runs.
+    await settled();
 
     // refresh dom reference
     reportList = findAll('[data-test-sbomReportList-reportlistItem]');

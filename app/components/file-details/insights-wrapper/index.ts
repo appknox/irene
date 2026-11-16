@@ -7,6 +7,12 @@ import type IntlService from 'ember-intl/services/intl';
 import type FileModel from 'irene/models/file';
 import type { FileDetailsAnalysesProviderContext } from '../analyses-provider';
 
+interface FileDetailsInsightsTab {
+  id: string;
+  label: string;
+  component: 'file-details/scan-summary' | 'file-details/compliance-insights';
+}
+
 export interface FileDetailsInsightsWrapperSignature {
   Args: {
     file: FileModel;
@@ -19,17 +25,17 @@ export default class FileDetailsInsightsWrapperComponent extends Component<FileD
 
   @tracked selectedTab = 'scan_summary';
 
-  get tabItems() {
+  get tabItems(): FileDetailsInsightsTab[] {
     return [
       {
         id: 'scan_summary',
         label: this.intl.t('scanSummary'),
-        component: 'file-details/scan-summary' as const,
+        component: 'file-details/scan-summary',
       },
       {
         id: 'compliance_insights',
         label: this.intl.t('owaspDetails'),
-        component: 'file-details/compliance-insights' as const,
+        component: 'file-details/compliance-insights',
       },
     ];
   }

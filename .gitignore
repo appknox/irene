@@ -48,3 +48,4 @@ cypress.env.json
 /cypress/downloads/
 /cypress/snapshots/actual
 /cypress/snapshots/diff
+.idea/

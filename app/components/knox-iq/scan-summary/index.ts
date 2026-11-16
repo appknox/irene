@@ -44,6 +44,20 @@ export default class KnoxIqScanSummaryComponent extends Component<KnoxIqScanSumm
     return null;
   }
 
+  get autofixProjectId() {
+    return this.args.file.belongsTo('project').id();
+  }
+
+  get isKnoxiqEnabled() {
+    return Boolean(
+      this.args.file.project?.get('organization')?.get('aiFeatures')?.knoxiq
+    );
+  }
+
+  get showAutofixLink() {
+    return Boolean(this.autofixProjectId && this.isKnoxiqEnabled);
+  }
+
   loadHealthScore = task(async () => {
     try {
       const audit = await waitForPromise(

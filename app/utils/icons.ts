@@ -203,6 +203,7 @@ export const MaterialSymbolsSet = [
   'cloud-outline',
   'key-outline',
   'token-outline',
+  'commit',
 ] as const;
 
 export const MdiIconsSet = [
@@ -233,6 +234,7 @@ export const MdiIconsSet = [
   'frame',
   'file-outline',
   'clock-alert-outline',
+  'source-branch',
 ] as const;
 
 export const HugeIconsSet = [
@@ -240,6 +242,7 @@ export const HugeIconsSet = [
   'ai-brain-04',
   'image-03',
   'ai-magic',
+  'git-branch',
 ] as const;
 
 export const FaBrandsIconsSet = ['apple'] as const;
