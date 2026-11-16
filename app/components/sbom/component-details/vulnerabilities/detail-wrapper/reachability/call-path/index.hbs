@@ -119,17 +119,6 @@
       </AkStack>
     {{/if}}
 
-    {{#if this.showNoTrace}}
-      <div
-        local-class='no-trace'
-        data-test-sbomComponentVulnerabilities-reachabilityCallPathNoTrace
-      >
-        <AkTypography @variant='body2' @color='textSecondary'>
-          {{t this.noTraceKey}}
-        </AkTypography>
-      </div>
-    {{/if}}
-
     {{#if this.hasPath}}
       <div
         local-class='path-box'
