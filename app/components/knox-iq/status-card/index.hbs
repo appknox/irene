@@ -41,6 +41,8 @@
 
   {{#if (eq @state 'failed')}}
     {{! no action button or chip for failed state }}
+  {{else if @hideAction}}
+    {{! permanently inactive — nothing will ever make this actionable }}
   {{else if this.showStatusChip}}
     <KnoxIq::StatusChip @state={{@state}} />
   {{else}}

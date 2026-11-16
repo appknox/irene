@@ -58,6 +58,19 @@ module('Integration | Component | knox-iq/status-card', function (hooks) {
         .hasClass(/status-card-icon-inactive/);
     });
 
+    test('inactive state with hideAction: no run button at all', async function (assert) {
+      await render(hbs`
+        <KnoxIq::StatusCard
+          @title='KnoxIQ'
+          @subtitle='API scan disabled'
+          @state='inactive'
+          @hideAction={{true}}
+        />
+      `);
+
+      assert.dom('[data-test-knoxiq-status-card-runBtn]').doesNotExist();
+    });
+
     test('running state: no run button, AkLoader exists, icon has running class', async function (assert) {
       await render(hbs`
         <KnoxIq::StatusCard

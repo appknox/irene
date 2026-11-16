@@ -1,3 +1,21 @@
+.api-scan-accent {
+  width: 100%;
+  height: 4px;
+  flex-shrink: 0;
+}
+
+.api-scan-accent-pending {
+  background-color: var(
+    --file-details-scan-actions-knoxiq-accent-pending-color
+  );
+}
+
+.api-scan-accent-done {
+  background-color: var(
+    --file-details-scan-actions-knoxiq-accent-completed-color
+  );
+}
+
 .scanning-chip {
   gap: 0.285em;
   border: 1px solid var(--file-details-scan-actions-api-scan-border-color);
