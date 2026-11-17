@@ -276,10 +276,18 @@ export default class FileModel extends ModelBaseMixin {
     return await this.pendingLastAutomatedDynamicScan;
   }
 
+  // In-flight sharing (see getFileLastManualDynamicScan): scan-actions and the
+  // severity chart both ask for the risk while the page loads.
+  private pendingFileRisk?: ReturnType<FileAdapter['fetchFileRisk']>;
+
   async fetchFileRisk() {
     const adapter = this.store.adapterFor('file');
 
-    return await adapter.fetchFileRisk(this.id);
+    this.pendingFileRisk ??= adapter.fetchFileRisk(this.id).finally(() => {
+      this.pendingFileRisk = undefined;
+    });
+
+    return await this.pendingFileRisk;
   }
 
   async fetchFileExploitability() {
