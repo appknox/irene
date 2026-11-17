@@ -63,17 +63,15 @@ export default class AuthenticatedDashboardSbomScanDetailsRoute extends AkBreadc
   async model(params: SbomScanDetailParam) {
     const { sbom_project_id, sbom_file_id } = params;
 
-    const sbomProject = await this.store.findRecord(
-      'sbom-project',
-      sbom_project_id
-    );
-
-    const sbomFile = await this.store.findRecord('sbom-file', sbom_file_id);
-
-    const sbomScanSummary = await this.store.queryRecord('sbom-scan-summary', {
-      sbomProjectId: sbom_project_id,
-      sbomFileId: sbom_file_id,
-    });
+    // The three records only need the route params: request them together.
+    const [sbomProject, sbomFile, sbomScanSummary] = await Promise.all([
+      this.store.findRecord('sbom-project', sbom_project_id),
+      this.store.findRecord('sbom-file', sbom_file_id),
+      this.store.queryRecord('sbom-scan-summary', {
+        sbomProjectId: sbom_project_id,
+        sbomFileId: sbom_file_id,
+      }),
+    ]);
 
     const sbomPrj = await sbomProject.get('project');
     const projectLastFile = sbomPrj.get('lastFile');
