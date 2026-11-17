@@ -3,7 +3,7 @@
   data-test-ak-menu-popover
   local-class='ak-menu-root'
   @anchorRef={{@anchorRef}}
-  @placement='bottom-start'
+  @placement={{or @placement 'bottom-start'}}
   @modifiers={{this.modifiers}}
   @arrow={{@arrow}}
   @sameWidthAsRef={{@sameWidthAsRef}}
