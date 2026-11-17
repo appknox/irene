@@ -67,15 +67,19 @@ export default class AuthenticatedRoute extends Route {
     // These loads do not depend on each other, so start them together.
     // The vulnerability list must be loaded before the page renders (analysis
     // rows read it). The Storeknox organization is optional.
-    // NOTE: nothing here touches the `me` service on purpose: the Storeknox
-    // org check reads `me.org`, and starting `me` earlier would change its result.
-    const skOrganizationPromise = this.skOrganization
-      .load()
+    // NOTE: `me` is instantiated by the Storeknox org load (it reads `me.org`)
+    // and its URL needs `org.selected`, so the Storeknox load must start only
+    // after the organization has loaded. Starting `me` any earlier would also
+    // change that check's result.
+    const orgPromise = this.org.load();
+
+    const skOrganizationPromise = orgPromise
+      .then(() => this.skOrganization.load())
       .catch(() => this.logger.info('No Storeknox Organization found'));
 
     const [, , , user] = await all([
       this.store.findAll('vulnerability'),
-      this.org.load(),
+      orgPromise,
       this.configuration.getDashboardConfig(),
       this.store.findRecord('user', userId),
       skOrganizationPromise,
