@@ -8,6 +8,7 @@ import type OrganizationTeamModel from './organization-team';
 export interface Features {
   app_monitoring: boolean;
   dynamicscan_automation: boolean;
+  automated_apiscan: boolean;
   manualscan: boolean;
   partner_dashboard: boolean;
   sso: boolean;
