@@ -122,12 +122,12 @@ export default class FileDetailsComplianceInsightsComponent extends Component<Fi
       );
 
       const analysisRisk = analysis?.get('risk');
-      const owasp2024 = await aOwaspData?.get('owaspmobile2024');
-      const owasps = await aOwaspData?.get('owasp');
 
       if (this.analysisRisks.includes(analysisRisk as number)) {
-        owasp2024?.map((it) => owaspmobile2024s.push(it.id));
-        owasps?.map((it) => owaspsIds.push(it.id));
+        // Only the ids are used: read them from the record's relationship
+        // data instead of awaiting (and possibly fetching) each related record.
+        owaspmobile2024s.push(...aOwaspData.hasMany('owaspmobile2024').ids());
+        owaspsIds.push(...aOwaspData.hasMany('owasp').ids());
       }
     }
 
