@@ -5,78 +5,19 @@
   @spacing='3.5'
   ...attributes
 >
-  <AkStack
-    @width='6/12'
-    @direction='column'
-    @alignItems='center'
-    @justifyContent='center'
-    @spacing='2'
-  >
-    <AkTypography @fontWeight='medium' @color='inherit'>
-      Risk Score Based on CVSSv{{@cvssVersion}}
-      Metrics
-    </AkTypography>
-
-    <AkDivider @color='dark' @width='50%' />
-
-    <AkStack
-      @justifyContent='center'
-      @alignItems='center'
-      local-class='colored-box
-        {{@cvssDetails.riskLabelClass}}
-        {{if @cvssDetails.isInValidCvssBase "is-error"}}
-      '
-      data-test-securityAnalysisDetails-cvssMetrics-cvssBaseAndRisk
-    >
-      {{#if @cvssDetails.isInValidCvssBase}}
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          @justifyContent='center'
-          @spacing='2.5'
-          data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBase
-        >
-          <AkIcon
-            @iconName='warning'
-            data-test-securityAnalysisDetails-cvssMetrics-invalidCvssBaseIcon
-          />
-
-          <AkTypography
-            @variant='h5'
-            @color='inherit'
-            @align='center'
-            {{style textTransform='uppercase'}}
-          >
-            Invalid vector
-          </AkTypography>
-        </AkStack>
-
-      {{else}}
-        <AkStack
-          @direction='column'
-          @alignItems='center'
-          @justifyContent='center'
-        >
-          <AkTypography
-            @variant='h1'
-            @color='inherit'
-            {{style fontSize='3.42em'}}
-            data-test-securityAnalysisDetails-cvssMetrics-cvssBase
-          >
-            {{@cvssDetails.base}}
-          </AkTypography>
-
-          <AkTypography
-            @variant='h5'
-            @color='inherit'
-            {{style textTransform='uppercase'}}
-            data-test-securityAnalysisDetails-cvssMetrics-cvssRisk
-          >
-            {{risk-text @cvssDetails.risk}}
-          </AkTypography>
-        </AkStack>
-      {{/if}}
-    </AkStack>
+  <AkStack @width='6/12' @justifyContent='center'>
+    <Security::AnalysisDetails::ScoreChip
+      @caption={{t
+        'securityAnalysisDetails.cvssMetrics.riskScoreCaption'
+        version=@cvssVersion
+      }}
+      @score={{@cvssDetails.base}}
+      @label={{risk-text @cvssDetails.risk}}
+      @riskClass={{@cvssDetails.riskLabelClass}}
+      @isInvalid={{@cvssDetails.isInValidCvssBase}}
+      @invalidLabel={{t 'securityAnalysisDetails.cvssMetrics.invalidVector'}}
+      @testId='cvss'
+    />
   </AkStack>
 
   <AkStack @direction='column' @spacing='2.5' @width='6/12'>
@@ -88,7 +29,7 @@
         @alignItems='center'
       >
         <AkTypography
-          {{style width='320px'}}
+          local-class='metric-label'
           data-test-securityAnalysisDetails-cvssMetrics-metricSelectLabel='{{metric.key}}'
         >
           {{metric.label}}

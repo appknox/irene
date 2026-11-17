@@ -4,6 +4,7 @@ import type { SecurityAnalysisFinding } from 'irene/models/security/analysis';
 export interface SecurityAnalysisDetailsFindingsTableTitleComponentSignature {
   Args: {
     finding: SecurityAnalysisFinding;
+    onFindingEdited: () => void;
   };
 }
 

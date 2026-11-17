@@ -144,23 +144,36 @@ module(
       enableKnoxiqForTests(this);
       createApiAnalysis(this.server, this.file.id);
 
+      // Hold the KnoxIQ status response until the legacy table has rendered,
+      // so the assertion does not race a fixed response delay.
+      let releaseKnoxiqStatus;
+      const knoxiqStatusGate = new Promise((resolve) => {
+        releaseKnoxiqStatus = resolve;
+      });
+
       this.server.get(
         '/knoxiq/file/:fileId/knoxiq_scan/status',
-        (_, req) => ({
-          id: req.params.fileId,
-          sast_status: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
-          dast_status: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
-          api_status: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
-        }),
-        { timing: 100 }
+        async (_, req) => {
+          await knoxiqStatusGate;
+
+          return {
+            id: req.params.fileId,
+            sast_status: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+            dast_status: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+            api_status: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+          };
+        }
       );
 
-      render(TEMPLATE);
+      const renderPromise = render(TEMPLATE);
 
-      await waitFor(selectors.legacyTable, { timeout: 100 });
+      await waitFor(selectors.legacyTable, { timeout: 5000 });
 
       assert.dom(selectors.legacyTable).exists();
       assert.dom(selectors.knoxTable).doesNotExist();
+
+      releaseKnoxiqStatus();
+      await renderPromise;
 
       await assertVulnerabilityTableType(assert, 'knox');
     });

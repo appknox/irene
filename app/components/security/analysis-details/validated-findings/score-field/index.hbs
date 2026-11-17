@@ -1,0 +1,42 @@
+<AkStack
+  @alignItems='center'
+  @spacing='1'
+  local-class='score-stepper'
+  data-test-securityAnalysisDetails-validatedFindings-scoreField
+>
+  <AkIconButton
+    @size='small'
+    @variant='outlined'
+    disabled={{this.isDecrementDisabled}}
+    aria-label={{t 'securityAnalysisDetails.aeis.decreaseScore'}}
+    {{on 'click' (fn this.stepScore this.scoreStepDown)}}
+    data-test-securityAnalysisDetails-validatedFindings-scoreDecrementBtn
+  >
+    <AkIcon @iconName='remove' @size='small' />
+  </AkIconButton>
+
+  <input
+    type='number'
+    value={{this.fieldValue}}
+    min={{this.scoreMin}}
+    max={{this.scoreMax}}
+    step={{this.scoreStepUp}}
+    disabled={{@disabled}}
+    local-class='score-input'
+    aria-label={{t 'securityAnalysisDetails.aeis.scoreField'}}
+    {{on 'input' this.updateScore}}
+    {{on 'blur' this.commitScore}}
+    data-test-securityAnalysisDetails-validatedFindings-scoreInput
+  />
+
+  <AkIconButton
+    @size='small'
+    @variant='outlined'
+    disabled={{this.isIncrementDisabled}}
+    aria-label={{t 'securityAnalysisDetails.aeis.increaseScore'}}
+    {{on 'click' (fn this.stepScore this.scoreStepUp)}}
+    data-test-securityAnalysisDetails-validatedFindings-scoreIncrementBtn
+  >
+    <AkIcon @iconName='add' @size='small' />
+  </AkIconButton>
+</AkStack>

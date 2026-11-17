@@ -11,6 +11,12 @@ export default class SecurityAnalysisListTableNameComponent extends Component<Se
   get vulnerabilityName() {
     return this.args.analysis?.vulnerability?.get('name');
   }
+
+  // Flagged beside the name because the row's risk and exploitability both
+  // still read as if the vulnerability were open.
+  get isAllFalsePositive() {
+    return Boolean(this.args.analysis?.isKnoxiqAllFp);
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {
