@@ -351,6 +351,10 @@ module(
       class OrganizationMeStub extends Service {
         org = currentOrganizationMe;
 
+        async fetchOrganizationMe() {
+          return currentOrganizationMe;
+        }
+
         async getMembership() {
           return currentOrganizationMember;
         }
