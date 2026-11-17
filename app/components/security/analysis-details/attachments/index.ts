@@ -37,12 +37,31 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
   @tracked showRemoveFileConfirmBox = false;
   @tracked fileIDToDelete: string | null = null;
 
+  @tracked uploadingFile: UploadFile | null = null;
+
+  @tracked previewName: string | null = null;
+  @tracked previewUrl: string | null = null;
+
   get tPleaseTryAgain() {
     return this.intl.t('pleaseTryAgain');
   }
 
   get analysis() {
     return this.args.analysis;
+  }
+
+  get isUploading() {
+    return this.uploadFile.isRunning;
+  }
+
+  get hasAttachments() {
+    return Boolean(this.analysis?.attachments?.length) || this.isUploading;
+  }
+
+  @action openPreviewInNewTab() {
+    if (this.previewUrl) {
+      this.window.open(this.previewUrl, '_blank');
+    }
   }
 
   @action openRemoveFileConfirmBox(fileId: string) {
@@ -68,21 +87,43 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
     this.uploadFile.perform(file);
   }
 
+  @action triggerPreviewAttachment(id: string, name: string) {
+    this.previewAttachment.perform(id, name);
+  }
+
+  @action closePreview() {
+    this.previewName = null;
+    this.previewUrl = null;
+  }
+
+  async fetchAttachmentUrl(id: string) {
+    const url = [
+      ENV.endpoints['uploadFile'],
+      id,
+      ENV.endpoints['downloadAttachment'],
+    ].join('/');
+
+    const data = (await this.ajax.request(url, {
+      namespace: 'api/hudson-api',
+    })) as { url: string };
+
+    return data.url;
+  }
+
   downloadAttachment = task(async (id: string) => {
     try {
-      const url = [
-        ENV.endpoints['uploadFile'],
-        id,
-        ENV.endpoints['downloadAttachment'],
-      ].join('/');
-
-      const data = (await this.ajax.request(url, {
-        namespace: 'api/hudson-api',
-      })) as { url: string };
-
-      this.window.open(data.url, '_blank');
+      this.window.open(await this.fetchAttachmentUrl(id), '_blank');
     } catch (error) {
       this.notifications.error(parseError(error));
+    }
+  });
+
+  previewAttachment = task(async (id: string, name: string) => {
+    try {
+      this.previewUrl = await this.fetchAttachmentUrl(id);
+      this.previewName = name;
+    } catch (error) {
+      this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }
   });
 
@@ -102,22 +143,16 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
   uploadFile = task(async (file: UploadFile) => {
     const fileName = file.name;
 
-    const data = {
-      name: fileName,
-    };
+    this.uploadingFile = file;
+    const data = { name: fileName };
 
     try {
       const fileData = await this.ajax.post<UploadAttachmentResponse>(
         ENV.endpoints['uploadFile'] as string,
-        {
-          namespace: 'api/hudson-api',
-          data,
-        }
+        { namespace: 'api/hudson-api', data }
       );
 
-      await file.uploadBinary(fileData.url, {
-        method: 'PUT',
-      });
+      await file.uploadBinary(fileData.url, { method: 'PUT' });
 
       const fileDetailsData = {
         file_uuid: fileData.file_uuid,
@@ -139,6 +174,8 @@ export default class SecurityAnalysisDetailsAttachmentsComponent extends Compone
       this.notifications.success('File Uploaded Successfully');
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
+    } finally {
+      this.uploadingFile = null;
     }
   });
 }

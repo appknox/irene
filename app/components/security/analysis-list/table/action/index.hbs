@@ -1,22 +1,24 @@
-<AkTooltip @title='Mark as Passed' @arrow={{true}}>
-  <AkIconButton
-    @size='small'
-    @variant='outlined'
-    disabled={{this.markAsPassed.isRunning}}
-    {{on 'click' this.openMarkPassedConfirmBox}}
-    data-test-securityAnalysisListTable-markAsPassedIconBtn
-  >
-    {{#if this.markAsPassed.isRunning}}
-      <AkLoader @size={{13}} />
-    {{else}}
-      <AkIcon
-        @iconName='done'
-        @color='success'
-        data-test-securityAnalysisListTable-markAsPassedIcon
-      />
-    {{/if}}
-  </AkIconButton>
-</AkTooltip>
+{{#if this.showMarkAsPassedButton}}
+  <AkTooltip @title='Mark as Passed' @arrow={{true}}>
+    <AkIconButton
+      @size='small'
+      @variant='outlined'
+      disabled={{this.markAsPassed.isRunning}}
+      {{on 'click' this.openMarkPassedConfirmBox}}
+      data-test-securityAnalysisListTable-markAsPassedIconBtn
+    >
+      {{#if this.markAsPassed.isRunning}}
+        <AkLoader @size={{13}} />
+      {{else}}
+        <AkIcon
+          @iconName='done'
+          @color='success'
+          data-test-securityAnalysisListTable-markAsPassedIcon
+        />
+      {{/if}}
+    </AkIconButton>
+  </AkTooltip>
+{{/if}}
 
 <ConfirmBox
   @isActive={{this.showMarkPassedConfirmBox}}

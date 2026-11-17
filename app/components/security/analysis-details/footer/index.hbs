@@ -14,7 +14,7 @@
     <AkButton
       @variant='outlined'
       @color='primary'
-      disabled={{@isSavingAnalysis}}
+      @disabled={{this.isSaveDisabled}}
       {{on 'click' (fn @saveAnalysis false)}}
       data-test-securityAnalysisDetails-footer-saveAndContinueBtn
     >
@@ -26,7 +26,7 @@
     </AkButton>
 
     <AkButton
-      disabled={{@isSavingAnalysis}}
+      @disabled={{this.isSaveDisabled}}
       {{on 'click' (fn @saveAnalysis true)}}
       data-test-securityAnalysisDetails-footer-saveAndGoBackBtn
     >

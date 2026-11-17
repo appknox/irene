@@ -1,0 +1,81 @@
+<AkStack
+  @direction='column'
+  @width='full'
+  @spacing='2.5'
+  data-test-securityAnalysisDetails-validatedFindings-detail
+>
+  <AkStack @direction='column' @width='full' local-class='aeis-group'>
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::AeisPanel
+      @finding={{this.finding}}
+      @panelId={{this.panel.AEIS}}
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.AEIS}}
+      @onTogglePanel={{@onTogglePanel}}
+      @onSavePanel={{@onSavePanel}}
+    />
+  </AkStack>
+
+  <AkDivider @color='dark' />
+
+  <Security::AnalysisDetails::ValidatedFindings::FindingDetail::Verdict
+    @finding={{this.finding}}
+    @disabled={{@disabled}}
+    @invalidListFields={{@invalidListFields}}
+  />
+
+  <AkStack @direction='column' @width='full' local-class='panel-group'>
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::RemediationPanel
+      @finding={{this.finding}}
+      @panelId={{this.panel.REMEDIATION}}
+      @steps={{@remediationSteps}}
+      @onStepsChange={{@onRemediationStepsChange}}
+      @disabled={{@disabled}}
+      @isExpanded={{@isPanelOpen this.panel.REMEDIATION}}
+      @onTogglePanel={{@onTogglePanel}}
+      @onSavePanel={{@onSavePanel}}
+    />
+
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::StepsToReproducePanel
+      @finding={{this.finding}}
+      @panelId={{this.panel.STEPS_TO_REPRODUCE}}
+      @steps={{@stepsToReproduce}}
+      @onStepsChange={{@onReproductionStepsChange}}
+      @disabled={{@disabled}}
+      @invalidListFields={{@invalidListFields}}
+      @isExpanded={{@isPanelOpen this.panel.STEPS_TO_REPRODUCE}}
+      @onTogglePanel={{@onTogglePanel}}
+      @onSavePanel={{@onSavePanel}}
+    />
+
+    <Security::AnalysisDetails::ValidatedFindings::FindingDetail::ExploitabilityPanel
+      @finding={{this.finding}}
+      @panelId={{this.panel.EXPLOITABILITY}}
+      @disabled={{@disabled}}
+      @invalidListFields={{@invalidListFields}}
+      @isExpanded={{@isPanelOpen this.panel.EXPLOITABILITY}}
+      @onTogglePanel={{@onTogglePanel}}
+      @onSavePanel={{@onSavePanel}}
+    />
+
+    <button
+      type='button'
+      local-class='expand-all-action'
+      {{on 'click' @onToggleExpandAll}}
+      data-test-securityAnalysisDetails-validatedFindings-expandAllBtn
+    >
+      <AkIcon
+        @iconName={{if @areAllPanelsOpen 'arrow-drop-up' 'arrow-drop-down'}}
+        @size='small'
+        @color='primary'
+      />
+
+      <AkTypography @variant='subtitle2' @color='primary'>
+        {{#if @areAllPanelsOpen}}
+          {{t 'securityAnalysisDetails.validatedFindings.collapseAll'}}
+        {{else}}
+          {{t 'securityAnalysisDetails.validatedFindings.expandAll'}}
+        {{/if}}
+      </AkTypography>
+    </button>
+  </AkStack>
+</AkStack>

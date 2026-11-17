@@ -1,42 +1,123 @@
-<AkTypography
-  @variant='h5'
-  data-test-securityAnalysisDetails-regulatoryCategories-header
+<Security::AnalysisDetails::SectionCard
+  @title={{t 'securityAnalysisDetails.regulatoryCategories.title'}}
+  @testId='regulatoryCategories'
 >
-  Regulatory Categories
-</AkTypography>
+  <:content>
+    <AkStack @direction='column' @width='full' local-class='category-list'>
+      {{#each this.regulatoryCategories as |cat|}}
+        {{#unless cat.hidden}}
+          <AkAccordion
+            @isExpanded={{this.isCategoryOpen cat.key}}
+            @onChange={{fn this.toggleCategory cat.key}}
+            @mountContentOnExpand={{true}}
+            local-class='category-row'
+            data-test-securityAnalysisDetails-regulatoryCategories='{{cat.key}}'
+          >
+            <:summary as |accordion|>
+              <button
+                type='button'
+                local-class='category-header'
+                {{on 'click' accordion.onSummaryClick}}
+                data-test-securityAnalysisDetails-regulatoryCategories-toggle='{{cat.key}}'
+              >
+                <AkStack @alignItems='center' @spacing='1'>
+                  <AkTypography
+                    @variant='body2'
+                    @fontWeight='bold'
+                    data-test-securityAnalysisDetails-regulatoryCategories-title='{{cat.key}}'
+                  >
+                    {{cat.title}}
+                  </AkTypography>
 
-<AkDivider @color='dark' class='my-2' />
+                  {{#if cat.selected.length}}
+                    <AkChip
+                      @variant='semi-filled'
+                      @size='small'
+                      @color='primary'
+                      @fontWeight='medium'
+                      @label={{t
+                        'securityAnalysisDetails.regulatoryCategories.selectedCount'
+                        count=cat.selected.length
+                      }}
+                      data-test-securityAnalysisDetails-regulatoryCategories-countBadge='{{cat.key}}'
+                    />
+                  {{else}}
+                    <AkChip
+                      @variant='filled'
+                      @size='small'
+                      @fontWeight='medium'
+                      @label={{t
+                        'securityAnalysisDetails.regulatoryCategories.notSet'
+                      }}
+                      data-test-securityAnalysisDetails-regulatoryCategories-notSetBadge='{{cat.key}}'
+                    />
+                  {{/if}}
+                </AkStack>
 
-{{#each this.regulatoryCategories as |cat|}}
-  {{#unless cat.hidden}}
-    <AkStack
-      @direction='column'
-      @spacing='1'
-      @width='full'
-      data-test-securityAnalysisDetails-regulatoryCategories='{{cat.key}}'
-    >
-      <AkTypography
-        @variant='h6'
-        @fontWeight='regular'
-        data-test-securityAnalysisDetails-regulatorySection-title
-      >
-        {{cat.title}}
-      </AkTypography>
+                <span local-class='expand-icon-btn'>
+                  <AkIcon
+                    @iconName='arrow-drop-down'
+                    @size='small'
+                    local-class='expand-icon
+                      {{if accordion.isExpanded "expanded"}}'
+                    data-test-securityAnalysisDetails-regulatoryCategories-chevron='{{cat.key}}'
+                  />
+                </span>
+              </button>
+            </:summary>
 
-      <AkSelect
-        @placeholder={{cat.placeholder}}
-        @selected={{cat.selected}}
-        @options={{cat.options}}
-        @onChange={{cat.onChange}}
-        @multiple={{true}}
-        class='w-full'
-        data-test-securityAnalysisDetails-regulatoryCategories-select
-        as |key|
-      >
-        {{this.getCategoryOptionLabel key cat.labelKeys}}
-      </AkSelect>
+            <:content>
+              <AkStack
+                @direction='column'
+                @width='full'
+                @spacing='1.5'
+                local-class='category-body'
+              >
+                <AkSelect
+                  @placeholder={{cat.placeholder}}
+                  @selected={{cat.selected}}
+                  @options={{cat.options}}
+                  @onChange={{cat.onChange}}
+                  @multiple={{true}}
+                  class='w-full'
+                  data-test-securityAnalysisDetails-regulatoryCategories-select='{{cat.key}}'
+                  as |key|
+                >
+                  {{this.getCategoryOptionLabel key cat.labelKeys}}
+                </AkSelect>
+
+                {{#if cat.selected.length}}
+                  <AkStack
+                    @alignItems='center'
+                    @spacing='1'
+                    @flexWrap='wrap'
+                    data-test-securityAnalysisDetails-regulatoryCategories-chips='{{cat.key}}'
+                  >
+                    {{#each cat.selected as |item|}}
+                      <AkChip
+                        @variant='outlined'
+                        @size='small'
+                        @fontWeight='medium'
+                        @label={{this.getCategoryOptionLabel
+                          item
+                          cat.labelKeys
+                        }}
+                        @onDelete={{fn
+                          this.removeCategoryValue
+                          cat.key
+                          cat.selected
+                          item
+                        }}
+                        data-test-securityAnalysisDetails-regulatoryCategories-chip='{{item.id}}'
+                      />
+                    {{/each}}
+                  </AkStack>
+                {{/if}}
+              </AkStack>
+            </:content>
+          </AkAccordion>
+        {{/unless}}
+      {{/each}}
     </AkStack>
-
-    <AkDivider @color='dark' class='my-2' />
-  {{/unless}}
-{{/each}}
+  </:content>
+</Security::AnalysisDetails::SectionCard>
