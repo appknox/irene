@@ -64,20 +64,24 @@ export default class AuthenticatedRoute extends Route {
   async model() {
     const userId = this.authenticatedUserId;
 
-    await all([
+    // These loads do not depend on each other, so start them together.
+    // The vulnerability list must be loaded before the page renders (analysis
+    // rows read it). The Storeknox organization is optional.
+    // NOTE: nothing here touches the `me` service on purpose: the Storeknox
+    // org check reads `me.org`, and starting `me` earlier would change its result.
+    const skOrganizationPromise = this.skOrganization
+      .load()
+      .catch(() => this.logger.info('No Storeknox Organization found'));
+
+    const [, , , user] = await all([
       this.store.findAll('vulnerability'),
       this.org.load(),
       this.configuration.getDashboardConfig(),
+      this.store.findRecord('user', userId),
+      skOrganizationPromise,
     ]);
 
-    // Gracefully load sk organization if it's enabled
-    try {
-      await this.skOrganization.load();
-    } catch (error) {
-      this.logger.info('No Storeknox Organization found');
-    }
-
-    return await this.store.findRecord('user', userId);
+    return user as UserModel;
   }
 
   async afterModel(user: UserModel) {
@@ -85,9 +89,21 @@ export default class AuthenticatedRoute extends Route {
       this.org.selected?.name ||
       user.email.replace(/.{1,255}@/, '').split('.')[0];
 
-    const membership = await this.me.getMembership();
+    // Child routes read `me.org` synchronously in their guards, so the
+    // organization "me" record must be loaded before the page renders.
+    await this.me.fetchOrganizationMe();
 
-    await this.integration.configure(user);
+    // The membership record is only used for the login analytics event.
+    // getMembership() reuses the loaded "me" record, so start it now and
+    // send the event when it arrives, instead of holding the page for it.
+    const membershipPromise = this.me.getMembership();
+
+    // Support widget set-up (config call + token call) is not needed to draw
+    // the page, so it runs in the background. Failures were route errors
+    // before; they are logged now.
+    this.integration.configure(user).catch((error: unknown) => {
+      this.logger.error('Support widget configuration failed', error);
+    });
 
     await this.configurePendo(user);
 
@@ -103,18 +119,24 @@ export default class AuthenticatedRoute extends Route {
 
     this.analytics.registerPostHogOrganization(user, this.org.selected);
 
-    this.analytics.track({
-      name: 'LOGIN_EVENT',
-      properties: {
-        userId: user.id,
-        userName: user.username,
-        userEmail: user.email,
-        userRole: membership.roleDisplay,
-        lastLoggedIn: membership.lastLoggedIn,
-        accountId: this.org.selected?.id,
-        accountName: company,
-      },
-    });
+    membershipPromise
+      .then((membership) => {
+        this.analytics.track({
+          name: 'LOGIN_EVENT',
+          properties: {
+            userId: user.id,
+            userName: user.username,
+            userEmail: user.email,
+            userRole: membership.roleDisplay,
+            lastLoggedIn: membership.lastLoggedIn,
+            accountId: this.org.selected?.id,
+            accountName: company,
+          },
+        });
+      })
+      .catch((error: unknown) => {
+        this.logger.warn('Analytics: failed to send login event', error);
+      });
   }
 
   async configurePendo(user: UserModel) {
