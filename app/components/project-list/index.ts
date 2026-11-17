@@ -1,5 +1,6 @@
 import { action } from '@ember/object';
 import { service } from '@ember/service';
+import { debounceTask } from 'ember-lifeline';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { isEmpty } from '@ember/utils';
@@ -312,16 +313,22 @@ export default class ProjectListComponent extends Component {
     if (query.length >= INPUT.MIN_LENGTH || query === '') {
       this.query = query;
 
-      this.projectService.fetchProjects.perform(
-        this.limit,
-        0,
-        this.query,
-        this.sortKey,
-        this.platform,
-        this.team,
-        this.scanType
-      );
+      // Wait until typing pauses instead of one request per keystroke
+      // (same 500 ms as security/project-search-list).
+      debounceTask(this, 'fetchProjectsForQuery', 500);
     }
+  }
+
+  @action fetchProjectsForQuery() {
+    this.projectService.fetchProjects.perform(
+      this.limit,
+      0,
+      this.query,
+      this.sortKey,
+      this.platform,
+      this.team,
+      this.scanType
+    );
   }
 
   getColumnComponent(field: string): string | undefined {
