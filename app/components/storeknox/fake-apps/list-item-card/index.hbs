@@ -26,6 +26,7 @@
           alt={{this.skApp.appMetadata.title}}
           local-class='app-info-logo'
           src={{this.skApp.appMetadata.iconUrl}}
+          loading='lazy'
           {{on 'error' this.handleImageError}}
           data-test-storeknoxFakeAppsListItemCard-appLogo
         />

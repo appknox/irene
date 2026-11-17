@@ -4,6 +4,7 @@
   <img
     key={{@data.appLogoUrl}}
     src={{@data.appLogoUrl}}
+    loading='lazy'
     hidden={{or this.noSrc this.showFallback}}
     local-class='app-info-logo'
     {{on 'error' this.handleImageError}}
