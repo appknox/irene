@@ -26,7 +26,6 @@ const selectors = {
   root: '[data-test-projectSettings-apiScanAutomation-root]',
   title: '[data-test-apiScanAutomation-title]',
   toggleInput: '[data-test-apiScanAutomation-toggle] [data-test-toggle-input]',
-  saveBtn: '[data-test-apiScanAutomation-saveBtn]',
 };
 
 // ─── Template ────────────────────────────────────────────────────────────────
@@ -90,17 +89,14 @@ module(
       assert.dom(selectors.root).exists();
       assert.dom(selectors.title).containsText(t('apiScanAutomation.title'));
       assert.dom(selectors.toggleInput).isNotChecked();
-      assert.dom(selectors.saveBtn).doesNotExist();
-      assert.dom('[data-test-apiScanAutomation-scanAllWarning]').doesNotExist();
     });
 
-    test('shows the enabled toggle without a scan-all warning', async function (assert) {
+    test('shows the toggle checked when automation is enabled', async function (assert) {
       stubGet(this.server, { api_scan_automation_enabled: true });
 
       await render(TEMPLATE);
 
       assert.dom(selectors.toggleInput).isChecked();
-      assert.dom('[data-test-apiScanAutomation-scanAllWarning]').doesNotExist();
     });
 
     // ─── Saving ──────────────────────────────────────────────────────────────

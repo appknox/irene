@@ -7,6 +7,9 @@ import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import parseError from 'irene/utils/parse-error';
+import fetchApiscanAutomationPreference, {
+  setApiscanAutomationPreferenceNamespace,
+} from 'irene/utils/apiscan-automation-preference';
 import type ApiscanAutomationPreferenceModel from 'irene/models/apiscan-automation-preference';
 
 export interface ProjectSettingsApiScanAutomationSettingsSignature {
@@ -37,13 +40,6 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
     return this.fetchOptions.isRunning || !this.options || this.save.isRunning;
   }
 
-  // The nested adapter resets its namespace after every response
-  setPreferenceNamespace() {
-    this.store
-      .adapterFor('apiscan-automation-preference')
-      .setNestedUrlNamespace(String(this.args.profileId));
-  }
-
   @action
   handleToggleChange(_: Event, enabled?: boolean) {
     this.enabled = Boolean(enabled);
@@ -56,11 +52,9 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
     }
 
     try {
-      this.setPreferenceNamespace();
-
-      this.options = await this.store.queryRecord(
-        'apiscan-automation-preference',
-        {}
+      this.options = await fetchApiscanAutomationPreference(
+        this.store,
+        this.args.profileId
       );
 
       this.enabled = this.options.apiScanAutomationEnabled;
@@ -75,7 +69,12 @@ export default class ProjectSettingsApiScanAutomationSettingsComponent extends C
         apiScanAutomationEnabled: this.enabled,
       });
 
-      this.setPreferenceNamespace();
+      if (this.args.profileId) {
+        setApiscanAutomationPreferenceNamespace(
+          this.store,
+          this.args.profileId
+        );
+      }
 
       await this.options?.save();
 

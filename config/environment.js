@@ -296,6 +296,7 @@ module.exports = function (environment) {
       deleteGHRepo: 'delete_github_repo',
       deleteJIRAProject: 'delete_jira_project',
       apiScanOptions: 'api_scan_options',
+      apiScanUrls: 'api_scan_urls',
       enableMFA: 'mfa/enable',
       disableMFA: 'mfa/disable',
       mfa: 'mfa',

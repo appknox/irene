@@ -8,6 +8,7 @@ import { isEmpty } from '@ember/utils';
 import ENV from 'irene/config/environment';
 import ENUMS from 'irene/enums';
 import parseError from 'irene/utils/parse-error';
+import fetchApiscanAutomationPreference from 'irene/utils/apiscan-automation-preference';
 import { getIOSManualDeviceVersionParams } from 'irene/utils/dynamic-scan-device';
 
 import type IntlService from 'ember-intl/services/intl';
@@ -186,13 +187,9 @@ export default class FileDetailsDynamicScanActionDrawerComponent extends Compone
     }
 
     try {
-      this.store
-        .adapterFor('apiscan-automation-preference')
-        .setNestedUrlNamespace(String(profileId));
-
-      const preference = await this.store.queryRecord(
-        'apiscan-automation-preference',
-        {}
+      const preference = await fetchApiscanAutomationPreference(
+        this.store,
+        profileId
       );
 
       if (preference.apiScanAutomationEnabled) {
