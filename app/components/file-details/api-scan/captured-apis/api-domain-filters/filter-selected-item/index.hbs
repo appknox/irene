@@ -2,7 +2,7 @@
   @spacing='1'
   @alignItems='center'
   local-class='options-selected-root'
-  class='p-2 pr-3'
+  class='px-2 pr-3'
   data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem
 >
   {{#if this.hasSelectedItems}}
@@ -30,6 +30,7 @@
 
       <AkTypography
         data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label
+        @noWrap={{true}}
       >
         {{t 'apiScanModule.optionsSelected'}}
       </AkTypography>
@@ -56,6 +57,7 @@
 
       <AkTypography
         data-test-fileDetails-apiScan-capturedApi-domainFilterSelectedItem-label
+        @noWrap={{true}}
       >
         {{t 'apiScanModule.domainFilters'}}
       </AkTypography>

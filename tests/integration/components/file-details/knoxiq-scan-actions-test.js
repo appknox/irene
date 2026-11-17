@@ -87,6 +87,7 @@ module(
       this.knoxiqStatuses = knoxiqScanStatuses({
         sast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
         dast: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
+        api: ENUMS.KNOXIQ_SCAN_STATUS.ERRORED,
       });
 
       await render(hbs`
@@ -101,7 +102,7 @@ module(
       assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
     });
 
-    test('it does not render KnoxIQ status chips when scan is not automated', async function (assert) {
+    test('it still renders KnoxIQ status chips when scan is not automated (manual trigger)', async function (assert) {
       this.file.isKnoxiqAutomated = false;
 
       await render(hbs`
@@ -114,9 +115,10 @@ module(
 
       assert
         .dom('[data-test-fileDetailScanActions-staticScanCompletedStatus]')
-        .exists();
-      assert.dom().doesNotContainText(t('knoxIq.statusChip.running'));
-      assert.dom().doesNotContainText(t('knoxIq.statusChip.failed'));
+        .doesNotExist(
+          'legacy chip must not appear when KnoxIQ is enabled, automated or not'
+        );
+      assert.dom().containsText(t('knoxIq.statusChip.running'));
     });
   }
 );

@@ -8,6 +8,7 @@ import type OrganizationTeamModel from './organization-team';
 export interface Features {
   app_monitoring: boolean;
   dynamicscan_automation: boolean;
+  automated_apiscan: boolean;
   manualscan: boolean;
   partner_dashboard: boolean;
   sso: boolean;
@@ -28,6 +29,7 @@ export interface AiFeatures {
   pii: boolean;
   knoxiq: boolean;
   ai_dast: boolean;
+  knoxiq_api_scan: boolean;
 }
 
 export default class OrganizationModel extends Model {

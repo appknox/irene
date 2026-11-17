@@ -497,6 +497,14 @@ const ENUMS = {
     FAILED: 5,
   },
 
+  API_SCAN_URL_STATUS: {
+    PENDING: 0,
+    IN_PROGRESS: 1,
+    COMPLETED: 2,
+    FAILED: 3,
+    CANCELLED: 4,
+  },
+
   SCAN_COVERAGE_STATUS: {
     NOT_STARTED: 0,
     PROCESSING_DS_EVENTS: 1,
@@ -549,6 +557,10 @@ const ENUMS = {
     RUNNING: 3,
     COMPLETED: 4,
     ERRORED: 5,
+    // Distinct from DISABLED (0, "no applicable scan data at all"): API
+    // data exists and org knoxiq is on, but the knoxiq_api_scan sub-feature
+    // is off. Mirrors mycroft's KnoxIQScanStatus — keep both in sync.
+    API_SCAN_DISABLED: 6,
   },
 
   KNOXIQ_SCAN_TYPE: {

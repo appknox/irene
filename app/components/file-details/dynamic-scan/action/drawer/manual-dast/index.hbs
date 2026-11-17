@@ -95,14 +95,32 @@
     local-class='scan-modal-section'
     data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICapture
   >
-    <AkTypography @fontWeight='bold'>
-      {{t 'modalCard.dynamicScan.runApiScan'}}
-    </AkTypography>
+    <AkStack @direction='column' @spacing='1'>
+      <AkTypography @fontWeight='bold'>
+        {{t 'modalCard.dynamicScan.runApiScan'}}
+      </AkTypography>
+
+      {{#if this.showApiCaptureLockedAlert}}
+        <AkStack
+          @alignItems='center'
+          @spacing='0.5'
+          data-test-fileDetails-dynamicScanDrawer-manualDast-apiCaptureLockedAlert
+        >
+          <AkIcon @iconName='info' @color='info' @size='small' />
+
+          <AkTypography @variant='body3' @color='textSecondary'>
+            {{t 'apiScanAutomation.apiCaptureRequired'}}
+          </AkTypography>
+        </AkStack>
+      {{/if}}
+    </AkStack>
 
     <AkToggle
       @size='small'
       @checked={{@isApiCaptureEnabled}}
+      @readonly={{@isApiCaptureLocked}}
       @onChange={{@onApiCaptureChange}}
+      {{on 'click' this.handleApiCaptureToggleClick}}
       data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICaptureCheckbox
     />
   </AkStack>

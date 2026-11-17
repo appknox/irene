@@ -1,19 +1,18 @@
 /* eslint-disable ember/no-observers */
 import Component from '@glimmer/component';
 import { addObserver, removeObserver } from '@ember/object/observers';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { waitForPromise } from '@ember/test-waiters';
 
-// Import the echarts core module, which provides the necessary interfaces for using echarts.
-import * as echarts from 'echarts/core';
-
-// Import charts
+// Type-only imports are erased at build time, so these don't pull echarts
+// into the main bundle - only the dynamic imports in loadECharts() below do.
+import type * as EChartsCore from 'echarts/core';
 import type {
   BarSeriesOption,
   PieSeriesOption,
   LineSeriesOption,
 } from 'echarts/charts';
-import { BarChart, PieChart, LineChart } from 'echarts/charts';
-
-// Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import type {
   TitleComponentOption,
   TooltipComponentOption,
@@ -21,42 +20,9 @@ import type {
   DatasetComponentOption,
   LegendComponentOption,
 } from 'echarts/components';
-import {
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DatasetComponent,
-  TransformComponent,
-  LegendComponent,
-} from 'echarts/components';
-
-// Features like Universal Transition and Label Layout
-import { LabelLayout, UniversalTransition } from 'echarts/features';
-
-// Import the Canvas renderer
-// Note that including the CanvasRenderer or SVGRenderer is a required step
-import { CanvasRenderer } from 'echarts/renderers';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-
-// Register the required components
-echarts.use([
-  BarChart,
-  PieChart,
-  LineChart,
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DatasetComponent,
-  TransformComponent,
-  LegendComponent,
-  LabelLayout,
-  UniversalTransition,
-  CanvasRenderer,
-]);
 
 // Create an Option type with only the required components and charts via ComposeOption
-export type ECOption = echarts.ComposeOption<
+export type ECOption = EChartsCore.ComposeOption<
   | BarSeriesOption
   | PieSeriesOption
   | LineSeriesOption
@@ -67,7 +33,43 @@ export type ECOption = echarts.ComposeOption<
   | LegendComponentOption
 >;
 
-export type ECInstance = echarts.ECharts;
+export type ECInstance = EChartsCore.ECharts;
+
+let echartsPromise: Promise<typeof EChartsCore> | null = null;
+
+/** Loads echarts and its required pieces on demand, registering them once and caching the result. */
+function loadECharts() {
+  if (!echartsPromise) {
+    echartsPromise = waitForPromise(
+      Promise.all([
+        import('echarts/core'),
+        import('echarts/charts'),
+        import('echarts/components'),
+        import('echarts/features'),
+        import('echarts/renderers'),
+      ]).then(([echarts, charts, components, features, renderers]) => {
+        echarts.use([
+          charts.BarChart,
+          charts.PieChart,
+          charts.LineChart,
+          components.TitleComponent,
+          components.TooltipComponent,
+          components.GridComponent,
+          components.DatasetComponent,
+          components.TransformComponent,
+          components.LegendComponent,
+          features.LabelLayout,
+          features.UniversalTransition,
+          renderers.CanvasRenderer,
+        ]);
+
+        return echarts;
+      })
+    );
+  }
+
+  return echartsPromise;
+}
 
 interface AkChartSignature {
   Element: HTMLDivElement;
@@ -81,9 +83,16 @@ interface AkChartSignature {
 
 export default class AkChartComponent extends Component<AkChartSignature> {
   @tracked echartInstance: ECInstance | null = null;
+  hasRegisteredOptionObserver = false;
 
   @action
-  initialiseEChart(element: HTMLDivElement) {
+  async initialiseEChart(element: HTMLDivElement) {
+    const echarts = await loadECharts();
+
+    if (this.isDestroying) {
+      return;
+    }
+
     this.echartInstance = echarts.init(element);
     this.echartInstance.setOption(this.args.option);
 
@@ -92,6 +101,7 @@ export default class AkChartComponent extends Component<AkChartSignature> {
     }
 
     addObserver(this.args, 'option', this, this.handleOptionChange);
+    this.hasRegisteredOptionObserver = true;
   }
 
   @action
@@ -103,7 +113,14 @@ export default class AkChartComponent extends Component<AkChartSignature> {
   disposeEChartInstance() {
     this.echartInstance?.dispose();
 
-    removeObserver(this.args, 'option', this, this.handleOptionChange);
+    // initialiseEChart awaits a dynamic import before registering this
+    // observer, so the component can be destroyed first if it unmounts
+    // (e.g. fast route/list changes) while the import is still pending -
+    // removeObserver would then throw trying to remove a listener that
+    // was never added.
+    if (this.hasRegisteredOptionObserver) {
+      removeObserver(this.args, 'option', this, this.handleOptionChange);
+    }
   }
 }
 

@@ -79,9 +79,9 @@
   --box-shadow-9: 0 5px 20px 0px rgba(0, 0, 0, 0.1);
   --box-shadow-10: 5px 0px 10px 0px rgba(0, 0, 0, 0.05);
   --box-shadow-11: inset 0 0 0 0.5px;
-  --box-shadow-12: 1px 0px 0px 0px #f8f8f8 inset,
-    -1px 0px 0px 0px #f8f8f8 inset, 0px 1px 0px 0px #f8f8f8 inset,
-    -1px -1px 0px 0px #f8f8f8 inset;
+  --box-shadow-12:
+    1px 0px 0px 0px #f8f8f8 inset, -1px 0px 0px 0px #f8f8f8 inset,
+    0px 1px 0px 0px #f8f8f8 inset, -1px -1px 0px 0px #f8f8f8 inset;
   --box-shadow-13: 0px -1px 10px 0px rgba(0, 0, 0, 0.05);
   --box-shadow-14: 4px 4px 15px 0px rgba(0, 0, 0, 0.031);
   --box-shadow-15: 0px 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -226,6 +226,7 @@
   --knoxiq-validated-findings-finding-detail-steps-icon: #d97706;
   --knoxiq-validated-findings-finding-detail-expand-all-background: #ff4d3f0d;
   --knoxiq-validated-findings-finding-detail-expand-all-text: #ff4d3f;
+  --knoxiq-validated-findings-finding-detail-evidence-inline-code-background: #0000000f;
 
   // special case variables for knoxiq/validated-findings/finding-nav
   --knoxiq-validated-findings-finding-nav-button-border: #f1f1f1;
@@ -285,7 +286,8 @@
   --offensive-security-finding-detail-amber-border: #fde68a;
   --offensive-security-finding-detail-amber-bg: #fef3c7;
   --offensive-security-finding-detail-amber-accent: #d97706;
-  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2);
+  --offensive-security-finding-detail-amber-shadow: 0 0 0 2px
+    rgba(217, 119, 6, 0.2);
   --offensive-security-finding-detail-green-dark: #15803d;
   --offensive-security-finding-detail-green-border: #bbf7d0;
   --offensive-security-finding-detail-green-bg: #f0fdf4;
@@ -316,9 +318,14 @@
   --offensive-security-finding-detail-slate-100: #f1f5f9;
   --offensive-security-finding-detail-slate-50: #f8fafc;
   --offensive-security-finding-detail-term-bg: #0b1120;
-  --offensive-security-finding-detail-score-gradient: linear-gradient(90deg, #d97706, #f59e0b);
+  --offensive-security-finding-detail-score-gradient: linear-gradient(
+    90deg,
+    #d97706,
+    #f59e0b
+  );
   --offensive-security-finding-detail-overlay-bg: rgba(15, 23, 42, 0.45);
-  --offensive-security-finding-detail-drawer-shadow: -10px 0 25px rgba(0, 0, 0, 0.1);
+  --offensive-security-finding-detail-drawer-shadow: -10px 0 25px
+    rgba(0, 0, 0, 0.1);
 
   //special case variable for health-score
   --low-health-score: #a8d65e;

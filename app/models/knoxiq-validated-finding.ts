@@ -57,6 +57,32 @@ export interface KnoxiqValidatedFindingExploitability {
   ai_fallback_used: boolean;
 }
 
+export interface KnoxiqValidatedFindingApiResponse {
+  status_code: number | null;
+  headers: Record<string, string> | null;
+  text: string | null;
+  reason: string | null;
+  url: string | null;
+  error: string | null;
+}
+
+export interface KnoxiqValidatedFindingApiRequest {
+  method: string | null;
+  url: string | null;
+  headers: Record<string, string> | null;
+  body: unknown;
+  params: Record<string, unknown> | null;
+  cookies: Record<string, unknown> | null;
+  // Only set on confirmedRequest — proves the exploit, not just that it was sent.
+  response: KnoxiqValidatedFindingApiResponse | null;
+}
+
+export interface KnoxiqValidatedFindingRequestResponsePair {
+  label: string;
+  request: KnoxiqValidatedFindingApiRequest | null;
+  response: KnoxiqValidatedFindingApiResponse | null;
+}
+
 export default class KnoxiqValidatedFindingModel extends Model {
   @attr('string')
   declare title: string;
@@ -78,6 +104,15 @@ export default class KnoxiqValidatedFindingModel extends Model {
 
   @attr()
   declare exploitability: KnoxiqValidatedFindingExploitability;
+
+  // API-scan findings only: every request/response sent while investigating. Null for SAST/DAST.
+  @attr()
+  declare requestResponsePairs:
+    KnoxiqValidatedFindingRequestResponsePair[] | null;
+
+  // The one re-sendable request for a confirmed TRUE_POSITIVE, unredacted unlike the pairs above.
+  @attr()
+  declare confirmedRequest: KnoxiqValidatedFindingApiRequest | null;
 }
 
 declare module 'ember-data/types/registries/model' {

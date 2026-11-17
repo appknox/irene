@@ -22,15 +22,26 @@
     </AkTypography>
 
     <FileDetails::AnalysesProvider @file={{@file}} as |apctx|>
-      <FileDetails::VulnerabilityAnalysis::Table
-        @file={{@file}}
-        @columns={{this.columns}}
-        @filterVulnerabilityType={{this.filterVulnerabilityType}}
-        @sorts={{this.sorts}}
-        @updateAnalysesSorts={{this.updateAnalysesSorts}}
-        @fileAnalyses={{apctx.analyses}}
-        @loadingFileAnalyses={{apctx.isFetchingAnalyses}}
-      />
+      {{#if this.useKnoxiqVulnerabilityTable}}
+        <KnoxIq::VulnerabilityAnalysis::Table
+          @file={{@file}}
+          @filterVulnerabilityType={{this.filterVulnerabilityType}}
+          @sorts={{this.sorts}}
+          @updateAnalysesSorts={{this.updateAnalysesSorts}}
+          @fileAnalyses={{apctx.analyses}}
+          @loadingFileAnalyses={{apctx.isFetchingAnalyses}}
+        />
+      {{else}}
+        <FileDetails::VulnerabilityAnalysis::Table
+          @file={{@file}}
+          @columns={{this.columns}}
+          @filterVulnerabilityType={{this.filterVulnerabilityType}}
+          @sorts={{this.sorts}}
+          @updateAnalysesSorts={{this.updateAnalysesSorts}}
+          @fileAnalyses={{apctx.analyses}}
+          @loadingFileAnalyses={{apctx.isFetchingAnalyses}}
+        />
+      {{/if}}
     </FileDetails::AnalysesProvider>
   </div>
 </div>

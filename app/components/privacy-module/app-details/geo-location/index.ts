@@ -2,15 +2,60 @@ import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
-import * as echarts from 'echarts';
+import { waitForPromise } from '@ember/test-waiters';
 import type RouterService from '@ember/routing/router-service';
 import type IntlService from 'ember-intl/services/intl';
 
+// Type-only import - erased at build time, doesn't pull the full echarts
+// package into the main bundle. Only loadEChartsWithMap() below does that,
+// and only when this component actually renders.
+import type * as EChartsCore from 'echarts/core';
+import type { MapSeriesOption } from 'echarts/charts';
+import type {
+  GeoComponentOption,
+  TooltipComponentOption,
+} from 'echarts/components';
 import styles from './index.scss';
 import type FileModel from 'irene/models/file';
 import type PrivacyModuleService from 'irene/services/privacy-module';
 import type { HostUrl } from 'irene/models/geo-location';
 import type GeoLocationModel from 'irene/models/geo-location';
+
+let echartsPromise: Promise<typeof EChartsCore> | null = null;
+
+/**
+ * Loads echarts with the map chart + geo component this component needs,
+ * registering them once and caching the result. The full 'echarts' package
+ * (all chart types/components) was previously imported statically here,
+ * shipping on every page regardless of route.
+ */
+function loadEChartsWithMap() {
+  if (!echartsPromise) {
+    echartsPromise = waitForPromise(
+      Promise.all([
+        import('echarts/core'),
+        import('echarts/charts'),
+        import('echarts/components'),
+        import('echarts/renderers'),
+      ]).then(([echarts, charts, components, renderers]) => {
+        echarts.use([
+          charts.MapChart,
+          components.GeoComponent,
+          components.TooltipComponent,
+          renderers.CanvasRenderer,
+        ]);
+
+        return echarts;
+      })
+    );
+  }
+
+  return echartsPromise;
+}
+
+type GeoMapChartOption = EChartsCore.ComposeOption<
+  MapSeriesOption | GeoComponentOption | TooltipComponentOption
+>;
 
 export interface PrivacyModuleAppDetailsGeoLocationSignature {
   Args: {
@@ -41,7 +86,7 @@ interface ChartShowTipEvent {
 }
 
 interface ChartElement extends HTMLElement {
-  __chart__?: echarts.ECharts | null;
+  __chart__?: EChartsCore.ECharts | null;
   __component__?: PrivacyModuleAppDetailsGeoLocationComponent;
 }
 
@@ -58,7 +103,7 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
   @service declare intl: IntlService;
 
   windowRef: Window | null = null;
-  chart: echarts.ECharts | null = null;
+  chart: EChartsCore.ECharts | null = null;
   resizeHandler: (() => void) | null = null;
 
   @tracked selectedCountry: GeoMapData | null = null;
@@ -155,8 +200,14 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
   async setupChart(element: HTMLElement): Promise<void> {
     this.windowRef = this.window;
 
-    const response = await fetch('/world.json');
-    const worldGeoJSON = await response.json();
+    const [echarts, worldGeoJSON] = await Promise.all([
+      loadEChartsWithMap(),
+      fetch('/world.json').then((response) => response.json()),
+    ]);
+
+    if (this.isDestroying) {
+      return;
+    }
 
     const geoMapData = this.transformGeoLocationData() || [];
     const allowedCountries = geoMapData.map((d) => d.name);
@@ -200,7 +251,7 @@ export default class PrivacyModuleAppDetailsGeoLocationComponent extends Compone
   private buildChartOption(
     geoMapData: GeoMapData[],
     allowedCountries: string[]
-  ): echarts.EChartsOption {
+  ): GeoMapChartOption {
     return {
       tooltip: {
         trigger: 'item',
