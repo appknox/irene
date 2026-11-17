@@ -9,6 +9,7 @@ import { attr, belongsTo, hasMany } from '@ember-data/model';
 import { service } from '@ember/service';
 import type IntlService from 'ember-intl/services/intl';
 import type Store from 'ember-data/store';
+import type FileAdapter from 'irene/adapters/file';
 
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 import ENUMS from 'irene/enums';
@@ -240,16 +241,39 @@ export default class FileModel extends ModelBaseMixin {
     return await adapter.getSbomFile(this.id);
   }
 
+  // In-flight sharing: the file header and the scan page both ask for the
+  // last scan while the page loads. Callers that arrive while a request is
+  // running share its answer; nothing is cached after it completes.
+  private pendingLastManualDynamicScan?: ReturnType<
+    FileAdapter['getFileLastManualDynamicScan']
+  >;
+
+  private pendingLastAutomatedDynamicScan?: ReturnType<
+    FileAdapter['getFileLastAutomatedDynamicScan']
+  >;
+
   async getFileLastManualDynamicScan() {
     const adapter = this.store.adapterFor('file');
 
-    return await adapter.getFileLastManualDynamicScan(this.id);
+    this.pendingLastManualDynamicScan ??= adapter
+      .getFileLastManualDynamicScan(this.id)
+      .finally(() => {
+        this.pendingLastManualDynamicScan = undefined;
+      });
+
+    return await this.pendingLastManualDynamicScan;
   }
 
   async getFileLastAutomatedDynamicScan() {
     const adapter = this.store.adapterFor('file');
 
-    return await adapter.getFileLastAutomatedDynamicScan(this.id);
+    this.pendingLastAutomatedDynamicScan ??= adapter
+      .getFileLastAutomatedDynamicScan(this.id)
+      .finally(() => {
+        this.pendingLastAutomatedDynamicScan = undefined;
+      });
+
+    return await this.pendingLastAutomatedDynamicScan;
   }
 
   async fetchFileRisk() {
