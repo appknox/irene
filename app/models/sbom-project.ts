@@ -18,6 +18,18 @@ export default class SbomProjectModel extends Model {
   @attr('string')
   declare iconUrl: string;
 
+  // List fields: what a row shows, so it does not load the project and its
+  // last file one by one. Absent from older backends and from history rows;
+  // the row components then fall back to the project and file records.
+  @attr('number')
+  declare platform: number | null;
+
+  @attr('string')
+  declare latestFileName: string | null;
+
+  @attr('string')
+  declare latestFileIconUrl: string | null;
+
   // Common field (returned in both default and history modes)
   @attr('string')
   declare dependencyType: string | null;
