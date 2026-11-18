@@ -422,39 +422,37 @@ export default class SecurityAnalysisDetailsRegulatoryCategoriesComponent extend
 
   loadAllRegulatoryCategoryData = task(async () => {
     try {
-      this.owaspsData = await this.store.findAll('owasp');
-
-      this.owaspmobile2024sData = await this.store.findAll('owaspmobile2024');
-
-      this.owaspapi2023sData = await this.store.findAll('owaspapi2023');
-
-      this.pcidssesData = await this.store.findAll('pcidss');
-
-      this.hipaasData = await this.store.findAll('hipaa');
-
-      this.mstgsData = await this.store.findAll('mstg');
-
-      this.masvsesData = await this.store.findAll('masvs');
-
-      this.asvsesData = await this.store.findAll('asvs');
-
-      this.cwesData = await this.store.findAll('cwe');
-
-      this.gdprsData = await this.store.findAll('gdpr');
-
-      this.nistsp80053sData = await this.store.findAll('nistsp80053');
-
-      this.nistsp800171sData = await this.store.findAll('nistsp800171');
-
-      this.samaData = await this.store.findAll('sama');
-
-      this.pcidss4sData = await this.store.findAll('pcidss4');
-
-      this.doraData = await this.store.findAll('dora');
-
-      this.eucraData = await this.store.findAll('eucra');
-
-      this.popiaData = await this.store.findAll('popia');
+      // The 17 lists are independent: request them together. Each list is
+      // assigned as soon as it arrives.
+      await Promise.all([
+        this.store.findAll('owasp').then((data) => (this.owaspsData = data)),
+        this.store
+          .findAll('owaspmobile2024')
+          .then((data) => (this.owaspmobile2024sData = data)),
+        this.store
+          .findAll('owaspapi2023')
+          .then((data) => (this.owaspapi2023sData = data)),
+        this.store.findAll('pcidss').then((data) => (this.pcidssesData = data)),
+        this.store.findAll('hipaa').then((data) => (this.hipaasData = data)),
+        this.store.findAll('mstg').then((data) => (this.mstgsData = data)),
+        this.store.findAll('masvs').then((data) => (this.masvsesData = data)),
+        this.store.findAll('asvs').then((data) => (this.asvsesData = data)),
+        this.store.findAll('cwe').then((data) => (this.cwesData = data)),
+        this.store.findAll('gdpr').then((data) => (this.gdprsData = data)),
+        this.store
+          .findAll('nistsp80053')
+          .then((data) => (this.nistsp80053sData = data)),
+        this.store
+          .findAll('nistsp800171')
+          .then((data) => (this.nistsp800171sData = data)),
+        this.store.findAll('sama').then((data) => (this.samaData = data)),
+        this.store
+          .findAll('pcidss4')
+          .then((data) => (this.pcidss4sData = data)),
+        this.store.findAll('dora').then((data) => (this.doraData = data)),
+        this.store.findAll('eucra').then((data) => (this.eucraData = data)),
+        this.store.findAll('popia').then((data) => (this.popiaData = data)),
+      ]);
     } catch (error) {
       this.notifications.error(parseError(error, this.tPleaseTryAgain));
     }

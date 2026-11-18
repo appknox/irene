@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { waitForPromise } from '@ember/test-waiters';
 
+import ENUMS from 'irene/enums';
 import type FileModel from 'irene/models/file';
 import type Store from 'ember-data/store';
 import type IreneAjaxService from 'irene/services/ajax';
@@ -41,6 +42,20 @@ export default class FileDetailsDynamicScanResultsScanCoverageProvider extends C
   }
 
   getScreenCoverage = task(async () => {
+    const { file } = this.args;
+
+    // The API answers 400 for every known framework without screen coverage
+    // support, so skip the request. UNKNOWN still asks: it answers 410, which
+    // sets isOldFileWithNoCoverage.
+    if (
+      file.devFramework !== ENUMS.FILE_DEV_FRAMEWORK.UNKNOWN &&
+      !file.screenCoverageSupported
+    ) {
+      this.scanCoverage = null;
+
+      return;
+    }
+
     try {
       const fileAdapter = this.store.adapterFor('file');
       let url = `${fileAdapter._buildURL('file', this.args.file.id)}/screen_coverage`;

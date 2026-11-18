@@ -663,7 +663,7 @@ module('Integration | Component | file-details', function (hooks) {
   module('superuser bypass for a KnoxIQ-disabled org', function () {
     // FileDetailsComponent reads `me.org.is_superuser` only once, synchronously,
     // in its constructor. In the real app this is always already resolved by
-    // then (the parent `authenticated` route awaits `me.getMembership()` in
+    // then (the parent `authenticated` route awaits `me.fetchOrganizationMe()` in
     // its model hook before any nested route renders), so mirror that here by
     // awaiting the me service's own fetch before rendering the component.
     async function makeSuperuser(context) {

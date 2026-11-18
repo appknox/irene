@@ -7,15 +7,24 @@ interface PrivacyModuleAppListTableApplicationArgs {
 
 export default class PrivacyModuleAppListTableApplicationComponent extends Component<PrivacyModuleAppListTableApplicationArgs> {
   get packageName() {
-    return this.args.privacyProject.project.get('packageName');
+    return (
+      this.args.privacyProject.packageName ??
+      this.args.privacyProject.project.get('packageName')
+    );
   }
 
   get name() {
-    return this.args.privacyProject.latestFile.get('name');
+    return (
+      this.args.privacyProject.latestFileName ??
+      this.args.privacyProject.latestFile.get('name')
+    );
   }
 
   get iconUrl() {
-    return this.args.privacyProject.latestFile.get('iconUrl');
+    return (
+      this.args.privacyProject.latestFileIconUrl ??
+      this.args.privacyProject.latestFile.get('iconUrl')
+    );
   }
 }
 

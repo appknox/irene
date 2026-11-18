@@ -20,7 +20,8 @@ export default class PrivacyModuleAppListTableActionComponent extends Component<
   @tracked anchorRef: HTMLElement | null = null;
 
   get fileId() {
-    return this.args.privacyProject?.latestFile.get('id');
+    // the id is on the record already; reading it must not load the file
+    return this.args.privacyProject?.belongsTo('latestFile').id();
   }
 
   get statusCompleted() {

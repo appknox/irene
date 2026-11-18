@@ -81,31 +81,23 @@ export default class SecurityAnalysisListTableActionComponent extends Component<
       await this.ajax.put(url, {
         namespace: 'api/hudson-api',
         data: JSON.stringify({
-          owasp: (await this.analysis.owasp).map((a) => a.get('id')),
-          owaspmobile2024: (await this.analysis.owaspmobile2024).map((a) =>
-            a.get('id')
-          ),
-          owaspapi2023: (await this.analysis.owaspapi2023).map((a) =>
-            a.get('id')
-          ),
-          pcidss: (await this.analysis.pcidss).map((a) => a.get('id')),
-          pcidss4: (await this.analysis.pcidss4).map((a) => a.get('id')),
-          hipaa: (await this.analysis.hipaa).map((a) => a.get('id')),
-          masvs: (await this.analysis.masvs).map((a) => a.get('id')),
-          mstg: (await this.analysis.mstg).map((a) => a.get('id')),
-          asvs: (await this.analysis.asvs).map((a) => a.get('id')),
-          cwe: (await this.analysis.cwe).map((a) => a.get('id')),
-          gdpr: (await this.analysis.gdpr).map((a) => a.get('id')),
-          nistsp80053: (await this.analysis.nistsp80053).map((a) =>
-            a.get('id')
-          ),
-          nistsp800171: (await this.analysis.nistsp800171).map((a) =>
-            a.get('id')
-          ),
-          sama: (await this.analysis.sama).map((a) => a.get('id')),
-          dora: (await this.analysis.dora).map((a) => a.get('id')),
-          eucra: (await this.analysis.eucra).map((a) => a.get('id')),
-          popia: (await this.analysis.popia).map((a) => a.get('id')),
+          owasp: this.analysis.hasMany('owasp').ids(),
+          owaspmobile2024: this.analysis.hasMany('owaspmobile2024').ids(),
+          owaspapi2023: this.analysis.hasMany('owaspapi2023').ids(),
+          pcidss: this.analysis.hasMany('pcidss').ids(),
+          pcidss4: this.analysis.hasMany('pcidss4').ids(),
+          hipaa: this.analysis.hasMany('hipaa').ids(),
+          masvs: this.analysis.hasMany('masvs').ids(),
+          mstg: this.analysis.hasMany('mstg').ids(),
+          asvs: this.analysis.hasMany('asvs').ids(),
+          cwe: this.analysis.hasMany('cwe').ids(),
+          gdpr: this.analysis.hasMany('gdpr').ids(),
+          nistsp80053: this.analysis.hasMany('nistsp80053').ids(),
+          nistsp800171: this.analysis.hasMany('nistsp800171').ids(),
+          sama: this.analysis.hasMany('sama').ids(),
+          dora: this.analysis.hasMany('dora').ids(),
+          eucra: this.analysis.hasMany('eucra').ids(),
+          popia: this.analysis.hasMany('popia').ids(),
           findings: this.analysis.findings,
           overridden_risk: this.analysis.overriddenRisk || 'None',
           overridden_risk_comment: this.analysis.overriddenRiskComment || '',

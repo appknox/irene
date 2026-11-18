@@ -31,6 +31,12 @@ export default class PublicApiDocsComponent extends Component {
   constructor(owner: unknown, args: object) {
     super(owner, args);
 
+    // Start downloading the docs library together with the schema. Both
+    // loaders cache their promise, so intializeSwaggerUI reuses these; any
+    // failure is reported there.
+    loadSwaggerUI().catch(() => {});
+    loadPublicApiDocsStyles().catch(() => {});
+
     this.fetchSchemaData.perform();
   }
 

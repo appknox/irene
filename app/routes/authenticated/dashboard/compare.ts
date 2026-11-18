@@ -41,8 +41,11 @@ export default class AuthenticatedDashboardCompareRoute extends Route {
 
     debug(`Comparing files ${file1Id} and ${file2Id}`);
 
-    const file1 = await this.store.findRecord('file', String(file1Id));
-    const file2 = await this.store.findRecord('file', String(file2Id));
+    // Both ids are in the URL, so load the two files together.
+    const [file1, file2] = await Promise.all([
+      this.store.findRecord('file', String(file1Id)),
+      this.store.findRecord('file', String(file2Id)),
+    ]);
 
     const file1Prj = file1?.project;
     const file2Prj = file2?.project;
@@ -64,8 +67,10 @@ export default class AuthenticatedDashboardCompareRoute extends Route {
       };
     }
 
-    const file1Analyses = await this.fetchFileAnalyses.perform(file1?.id);
-    const file2Analyses = await this.fetchFileAnalyses.perform(file2?.id);
+    const [file1Analyses, file2Analyses] = await Promise.all([
+      this.fetchFileAnalyses.perform(file1?.id),
+      this.fetchFileAnalyses.perform(file2?.id),
+    ]);
 
     return {
       file: file1,

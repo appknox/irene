@@ -20,15 +20,14 @@ export default class AuthenticatedStoreknoxFakeAppDetailsRoute extends ScrollToT
     sk_app: string;
     app_id: string;
   }): Promise<StoreknoxFakeAppDetailsRouteModel> {
-    const skInventoryApp = await this.store.findRecord(
-      'sk-inventory-app',
-      params.sk_app
-    );
-
-    const fakeApp = await this.store.queryRecord('sk-fake-app', {
-      id: params.app_id,
-      sk_app_id: skInventoryApp.id,
-    });
+    // skInventoryApp.id is params.sk_app, so the two requests are independent.
+    const [skInventoryApp, fakeApp] = await Promise.all([
+      this.store.findRecord('sk-inventory-app', params.sk_app),
+      this.store.queryRecord('sk-fake-app', {
+        id: params.app_id,
+        sk_app_id: params.sk_app,
+      }),
+    ]);
 
     return { skInventoryApp, fakeApp };
   }

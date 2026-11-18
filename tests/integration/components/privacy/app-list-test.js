@@ -127,6 +127,49 @@ module('Integration | Component | privacy/app-list', function (hooks) {
     });
   });
 
+  test('it renders rows from the list answer without loading each project and file', async function (assert) {
+    const requests = [];
+
+    this.server.get('/v2/privacy_project', () => {
+      const results = this.privacyProjects.map((record, index) => ({
+        ...record.attrs,
+        highlight: false,
+        project: this.projects[index].id,
+        latest_file: this.files[index].id,
+        package_name: this.projects[index].package_name,
+        platform: this.projects[index].platform,
+        latest_file_name: this.files[index].name,
+        latest_file_icon_url: `https://icons.test/${index}.png`,
+      }));
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    ['/v3/projects/:id', '/v3/files/:id'].forEach((path) => {
+      this.server.get(path, (schema, req) => {
+        requests.push(req.url);
+
+        return {};
+      });
+    });
+
+    await render(
+      hbs(`<PrivacyModule::AppList @queryParams={{this.queryParams}} />`)
+    );
+
+    const rows = findAll('[data-test-privacyModule-appListTable-row]');
+
+    assert.strictEqual(rows.length, this.privacyProjects.length);
+
+    assert
+      .dom('[data-test-privacy-packageName]', rows[1])
+      .hasText(this.projects[1].package_name);
+
+    assert.dom('[data-test-privacy-name]', rows[1]).hasText(this.files[1].name);
+
+    assert.deepEqual(requests, [], 'the rows requested nothing else');
+  });
+
   test('it renders privacy app list', async function (assert) {
     await render(
       hbs(`<PrivacyModule::AppList @queryParams={{this.queryParams}} />`)

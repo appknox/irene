@@ -16,6 +16,21 @@ export default class PrivacyProjectModel extends Model {
   @belongsTo('project', { async: true, inverse: null })
   declare project: AsyncBelongsTo<ProjectModel>;
 
+  // List fields: what a row shows, so it does not load the project and the
+  // latest file one by one. Absent from older backends; the row components
+  // then fall back to the project and file records.
+  @attr('string')
+  declare packageName: string | null;
+
+  @attr('number')
+  declare platform: number | null;
+
+  @attr('string')
+  declare latestFileName: string | null;
+
+  @attr('string')
+  declare latestFileIconUrl: string | null;
+
   @attr('number')
   declare latestFilePrivacyAnalysisStatus: number;
 

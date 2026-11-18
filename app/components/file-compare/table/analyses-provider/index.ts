@@ -107,8 +107,10 @@ export default class FileCompareTableAnalysesProviderComponent extends Component
       return;
     }
 
-    const file1Analyses = await this.fetchFileAnalyses(file1);
-    const file2Analyses = await this.fetchFileAnalyses(file2);
+    const [file1Analyses, file2Analyses] = await Promise.all([
+      this.fetchFileAnalyses(file1),
+      this.fetchFileAnalyses(file2),
+    ]);
 
     this.file1Analyses = file1Analyses.slice();
     this.file2Analyses = file2Analyses.slice();

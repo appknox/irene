@@ -19,6 +19,8 @@ export interface SecurityAnalysisListComponentSignature {
   };
 }
 
+const LIST_PAGE_SIZE = 300;
+
 export default class SecurityAnalysisListComponent extends Component<SecurityAnalysisListComponentSignature> {
   @service('notifications') declare notify: NotificationService;
   @service declare store: Store;
@@ -152,13 +154,63 @@ export default class SecurityAnalysisListComponent extends Component<SecurityAna
     }
 
     const analysisIds = file.hasMany('analyses').ids();
+    const wanted = new Set(analysisIds);
+    const loaded = new Map<string, SecurityAnalysisModel>();
+
+    // One paged list call (?file=) instead of one request per analysis.
+    // If it fails, or an older backend ignores ?file=, the analyses it did
+    // not return are loaded one by one below, as before.
+    const addLoaded = (records: SecurityAnalysisModel[]) => {
+      records.forEach((record) => {
+        if (wanted.has(String(record.id))) {
+          loaded.set(String(record.id), record);
+        }
+      });
+
+      this.analyses = [...loaded.values()];
+    };
+
+    try {
+      const query = (offset: number) =>
+        this.store.query('security/analysis', {
+          file: file.id,
+          limit: LIST_PAGE_SIZE,
+          offset,
+        });
+
+      const firstPage = await query(0);
+
+      addLoaded(firstPage.slice());
+
+      const total = Number(
+        (firstPage as unknown as { meta?: { count?: number } }).meta?.count ?? 0
+      );
+
+      // Page on only when the count matches this file's analyses; a larger
+      // count means the backend did not filter by file.
+      if (total > LIST_PAGE_SIZE && total <= analysisIds.length) {
+        const offsets = [];
+
+        for (let o = LIST_PAGE_SIZE; o < total; o += LIST_PAGE_SIZE) {
+          offsets.push(o);
+        }
+
+        const pages = await Promise.all(offsets.map((o) => query(o)));
+
+        pages.forEach((page) => addLoaded(page.slice()));
+      }
+    } catch {
+      // handled by the per-analysis fallback below
+    }
 
     const loads = await Promise.allSettled(
-      analysisIds.map(async (id) => {
-        const analysis = await this.store.findRecord('security/analysis', id);
+      analysisIds
+        .filter((id) => !loaded.has(String(id)))
+        .map(async (id) => {
+          const analysis = await this.store.findRecord('security/analysis', id);
 
-        this.analyses = [...this.analyses, analysis];
-      })
+          addLoaded([analysis]);
+        })
     );
 
     const failedCount = loads.filter(
