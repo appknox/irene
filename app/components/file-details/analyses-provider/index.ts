@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { action } from '@ember/object';
 import type Store from 'ember-data/store';
+import { debounceTask } from 'ember-lifeline';
 
 import type FileModel from 'irene/models/file';
 import type AnalysisOverviewModel from 'irene/models/analysis-overview';
@@ -29,6 +30,9 @@ export default class FileDetailsAnalysesProviderComponent extends Component<File
   @service declare logger: LoggerService;
 
   @tracked analyses: AnalysisOverviewModel[] = [];
+
+  // New analyses arriving over the websocket are added in one go.
+  pendingAnalyses: AnalysisOverviewModel[] = [];
 
   constructor(
     owner: unknown,
@@ -63,11 +67,26 @@ export default class FileDetailsAnalysesProviderComponent extends Component<File
       return;
     }
 
-    const analysisExistsInFile = this.analyses.find((a) => a.id === aom.id);
+    const analysisExistsInFile =
+      this.analyses.some((a) => a.id === aom.id) ||
+      this.pendingAnalyses.some((a) => a.id === aom.id);
 
     // Update analyses list any time a new analysis is created or updated
     if (!analysisExistsInFile) {
-      this.analyses = [...this.analyses, aom];
+      this.pendingAnalyses.push(aom);
+
+      debounceTask(this, 'flushPendingAnalyses', 200);
+    }
+  }
+
+  flushPendingAnalyses() {
+    const known = new Set(this.analyses.map((a) => a.id));
+    const added = this.pendingAnalyses.filter((a) => !known.has(a.id));
+
+    this.pendingAnalyses = [];
+
+    if (added.length) {
+      this.analyses = [...this.analyses, ...added];
     }
   }
 
