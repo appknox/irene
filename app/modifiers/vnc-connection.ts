@@ -1,5 +1,6 @@
 import { modifier } from 'ember-modifier';
-import RFB from '@novnc/novnc/lib/rfb';
+import { waitForPromise } from '@ember/test-waiters';
+import type RFB from '@novnc/novnc/lib/rfb';
 
 export interface VncConnectionModifierSignature {
   Element: HTMLDivElement;
@@ -22,28 +23,51 @@ export const vncConnectionModifier = modifier<VncConnectionModifierSignature>(
       return;
     }
 
-    let rfb: RFB;
-
-    try {
-      const options = password ? { credentials: { password } } : undefined;
-      rfb = new RFB(element, url, options);
-    } catch {
-      return;
-    }
-
-    rfb.viewOnly = !allowInteraction;
+    let rfb: RFB | undefined;
+    let cancelled = false;
 
     // One-shot: scale the viewport once the handshake completes, then
     // self-remove the listener.
     const onConnect = () => {
+      if (!rfb) {
+        return;
+      }
+
       rfb.removeEventListener('connect', onConnect);
       rfb.scaleViewport = true;
       rfb._display.autoscale(element.offsetWidth, element.offsetHeight);
     };
 
-    rfb.addEventListener('connect', onConnect);
+    // noVNC is only needed on the live scan screen, so load it here instead
+    // of in the main bundle.
+    const connect = async () => {
+      const { default: RFBClass } = await import('@novnc/novnc/lib/rfb');
+
+      // torn down (or url changed) while the library was loading
+      if (cancelled) {
+        return;
+      }
+
+      try {
+        const options = password ? { credentials: { password } } : undefined;
+        rfb = new RFBClass(element, url, options);
+      } catch {
+        return;
+      }
+
+      rfb.viewOnly = !allowInteraction;
+      rfb.addEventListener('connect', onConnect);
+    };
+
+    void waitForPromise(connect());
 
     return () => {
+      cancelled = true;
+
+      if (!rfb) {
+        return;
+      }
+
       // disconnect() only clears RFB's internal socket listeners, not ones
       // registered via addEventListener — remove ours explicitly so it can't
       // fire against a destroyed element if the handshake races teardown.

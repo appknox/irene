@@ -160,6 +160,13 @@ module.exports = function (defaults) {
                 name: 'swagger-ui',
                 enforce: true,
               },
+              // noVNC is only reachable via the dynamic import() in
+              // irene/modifiers/vnc-connection (same reasoning as swagger-ui).
+              novnc: {
+                test: /[\\/]node_modules[\\/]@novnc[\\/]/,
+                name: 'novnc',
+                enforce: true,
+              },
             },
           },
         },
