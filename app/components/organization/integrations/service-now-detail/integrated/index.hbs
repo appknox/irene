@@ -1,0 +1,54 @@
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='1.5'>
+    <AkTypography @variant='h6'>
+      {{t 'serviceNow.connectedAccount'}}
+    </AkTypography>
+
+    <AkStack @direction='column' @spacing='1'>
+      <AkStack @direction='column' @spacing='0.25'>
+        <AkTypography @variant='subtitle2'>{{t 'instanceURL'}}</AkTypography>
+        <AkTypography @color='textSecondary'>{{@instanceURL}}</AkTypography>
+      </AkStack>
+
+      <AkStack @direction='column' @spacing='0.25'>
+        <AkTypography @variant='subtitle2'>{{t 'username'}}</AkTypography>
+        <AkTypography @color='textSecondary'>{{@username}}</AkTypography>
+      </AkStack>
+    </AkStack>
+  </AkStack>
+</div>
+
+<AkDivider @color='dark' />
+
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='0.5' @width='full'>
+    <AkStack @justifyContent='space-between' @alignItems='center' @width='full'>
+      <AkTypography @fontWeight='medium'>
+        {{t 'serviceNow.autoPush'}}
+      </AkTypography>
+
+      <AkToggle
+        @size='small'
+        @checked={{@autoPush}}
+        @disabled={{true}}
+        data-test-orgIntegrations-serviceNowDetail-autoPushDisplay
+      />
+    </AkStack>
+
+    <AkTypography @variant='body2' @color='textSecondary'>
+      {{t 'serviceNow.autoPushDesc'}}
+    </AkTypography>
+  </AkStack>
+</div>
+
+<AkDivider @color='dark' />
+
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='0.5'>
+    <AkTypography @variant='h6'>
+      {{t 'serviceNow.serviceNowTable'}}
+    </AkTypography>
+
+    <AkTypography @color='textSecondary'>{{@tableName}}</AkTypography>
+  </AkStack>
+</div>

@@ -1,0 +1,138 @@
+<div class='py-3 px-4'>
+  <AkStack @direction='column' @spacing='1.5'>
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h6'>
+        {{t 'serviceNow.serviceNowTable'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'serviceNow.selectServiceNowTable'}}
+      </AkTypography>
+    </AkStack>
+
+    <div local-class='table-row'>
+      <AkSelect
+        @options={{@snTableItems}}
+        @onChange={{@onSetSNTable}}
+        @selected={{@selectedSNTable}}
+        @placeholder={{t 'serviceNow.selectServiceNowTable'}}
+        data-test-orgIntegrations-serviceNowDetail-tableSelect
+        as |aks|
+      >
+        {{aks.label}}
+      </AkSelect>
+
+      {{#if @isCustomTable}}
+        {{#if @selectedCustomTable}}
+          <AkTextField
+            @value={{@selectedCustomTable.label}}
+            @disabled={{true}}
+            local-class='selected-table-input'
+            data-test-orgIntegrations-serviceNowDetail-selectedTableInput
+          >
+            <:rightAdornment>
+              <AkIconButton
+                {{on 'click' @onClearCustomTable}}
+                data-test-orgIntegrations-serviceNowDetail-clearTableBtn
+              >
+                <AkIcon @iconName='close' />
+              </AkIconButton>
+            </:rightAdornment>
+          </AkTextField>
+        {{else}}
+          <AkAutocomplete
+            @options={{@customTableSuggestions}}
+            @searchQuery={{@customTableSearch}}
+            @onChange={{@onCustomTableSearch}}
+            @onSelect={{@onCustomTableSelect}}
+            @filterFn={{@filterAlwaysTrue}}
+            @setInputValueFn={{@getCustomTableLabel}}
+            @loading={{@searchCustomTablesIsRunning}}
+            @placeholder={{t 'serviceNow.searchCustomTablePlaceholder'}}
+            local-class='selected-table-input'
+            data-test-orgIntegrations-serviceNowDetail-customTableSearch
+            as |table|
+          >
+            <AkStack @direction='column'>
+              <AkTypography @variant='body2'>{{table.label}}</AkTypography>
+
+              <AkTypography @color='textSecondary'>
+                {{table.value}}
+              </AkTypography>
+            </AkStack>
+          </AkAutocomplete>
+        {{/if}}
+      {{/if}}
+    </div>
+  </AkStack>
+</div>
+
+{{#if @isCustomTable}}
+  {{#if @fetchTableColumnsIsRunning}}
+    <AkDivider @color='dark' />
+
+    <AkStack @justifyContent='center' class='p-4'>
+      <AkLoader @size={{24}} />
+    </AkStack>
+  {{else if @selectedCustomTable}}
+    <AkDivider @color='dark' />
+
+    <div class='py-3 px-4'>
+      <AkStack @direction='column' @spacing='1.5'>
+        <AkTypography @variant='h6'>
+          {{t 'serviceNow.columnMapping'}}
+        </AkTypography>
+
+        <AkStack @direction='column' @spacing='0.25'>
+          <AkTypography @color='textSecondary'>
+            &bull;
+            {{t 'serviceNow.fieldMappingNote1'}}
+          </AkTypography>
+
+          <AkTypography @color='textSecondary'>
+            &bull;
+            {{t 'serviceNow.fieldMappingNote2'}}
+          </AkTypography>
+
+          <AkTypography @color='textSecondary'>
+            &bull;
+            {{t 'serviceNow.fieldMappingNote3'}}
+          </AkTypography>
+        </AkStack>
+
+        <div local-class='mapping-table'>
+          <div local-class='mapping-header'>
+            <AkTypography @color='textSecondary'>
+              {{t 'serviceNow.appknoxField'}}
+            </AkTypography>
+
+            <AkTypography @color='textSecondary'>
+              {{t 'serviceNow.snColumn'}}
+            </AkTypography>
+          </div>
+
+          {{#each @appknoxSourceKeyOptions as |key|}}
+            <div
+              local-class='mapping-row'
+              data-test-orgIntegrations-serviceNowDetail-mappingRow
+            >
+              <AkTypography @variant='body2'>{{key.label}}</AkTypography>
+
+              <AkSelect
+                @options={{get @availableColumnsFor key.value}}
+                @onChange={{fn @onUpdateMapping key.value}}
+                @selected={{get @fieldMapping key.value}}
+                @placeholder={{t 'serviceNow.selectSNColumn'}}
+                @allowClear={{true}}
+                data-test-orgIntegrations-serviceNowDetail-mappingColumn
+                as |col|
+              >
+                {{col.label}}
+              </AkSelect>
+            </div>
+          {{/each}}
+        </div>
+      </AkStack>
+    </div>
+  {{/if}}
+{{/if}}
