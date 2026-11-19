@@ -1,4 +1,5 @@
 import commondrf from './commondrf';
+import type { ScenarioStepMetadata } from 'irene/models/scenario-step';
 
 type ModelOrRelationID = string | number;
 
@@ -10,6 +11,7 @@ export interface ScenarioStepResponse {
   identifier: string;
   value: string;
   is_secure: boolean;
+  metadata?: ScenarioStepMetadata;
 }
 
 export default class ScenarioStepAdapter extends commondrf {
