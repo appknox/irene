@@ -1129,5 +1129,159 @@ module(
         }
       }
     );
+
+    // ─── API capture locked by API Scan Automation ─────────────────────────────
+
+    const API_CAPTURE_TOGGLE =
+      '[data-test-fileDetails-dynamicScanDrawer-manualDast-enableAPICaptureCheckbox] input';
+
+    const API_CAPTURE_LOCKED_ALERT =
+      '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiCaptureLockedAlert]';
+
+    const stubDrawerEndpoints = (server, { automationEnabled }) => {
+      server.get('/v2/profiles/:id/ds_manual_device_preference', (_, req) => ({
+        id: req.params.id,
+        ds_manual_device_selection: ENUMS.DS_MANUAL_DEVICE_SELECTION.ANY_DEVICE,
+        ds_manual_device_identifier: '',
+      }));
+
+      server.get('/v2/projects/:id/available_manual_devices', (schema) => {
+        const results = schema.availableManualDevices.all().models;
+
+        return { count: results.length, next: null, previous: null, results };
+      });
+
+      server.get('/profiles/:id', (schema, req) =>
+        schema.profiles.find(`${req.params.id}`)?.toJSON()
+      );
+
+      server.get('/profiles/:id/api_scan_options', (_, req) => ({
+        ds_api_capture_filters: [],
+        id: req.params.id,
+      }));
+
+      server.get('/profiles/:id/proxy_settings', (_, req) => ({
+        id: req.params.id,
+        host: '',
+        port: '',
+        enabled: false,
+      }));
+
+      server.get('/profiles/:id/apiscanautomation_preference', (_, req) => ({
+        id: req.params.id,
+        api_scan_automation_enabled: automationEnabled,
+      }));
+    };
+
+    const loadOrganization = async (owner, server, { apiscan }) => {
+      server.create('organization', {
+        features: { automated_apiscan: apiscan },
+      });
+
+      await owner.lookup('service:organization').load();
+    };
+
+    const openDrawer = async () => {
+      await render(hbs`
+        <FileDetails::DynamicScan::Manual @file={{this.file}} @dynamicScanText={{this.dynamicScanText}} />
+      `);
+
+      await click('[data-test-fileDetails-dynamicScanAction="startBtn"]');
+    };
+
+    test('it keeps api capture on when api scan automation is enabled', async function (assert) {
+      stubDrawerEndpoints(this.server, { automationEnabled: true });
+
+      await loadOrganization(this.owner, this.server, { apiscan: true });
+
+      await openDrawer();
+
+      assert.dom(API_CAPTURE_TOGGLE).isChecked().hasAttribute('readonly');
+      assert.dom(API_CAPTURE_LOCKED_ALERT).doesNotExist();
+
+      await click(API_CAPTURE_TOGGLE);
+
+      assert.dom(API_CAPTURE_TOGGLE).isChecked();
+
+      assert
+        .dom(API_CAPTURE_LOCKED_ALERT)
+        .hasText(t('apiScanAutomation.apiCaptureRequired'));
+
+      assert
+        .dom(
+          '[data-test-fileDetails-dynamicScanDrawer-manualDast-apiFilter-title]'
+        )
+        .hasText(t('templates.apiScanURLFilter'));
+    });
+
+    test('it starts the scan with api capture when automation locks it', async function (assert) {
+      stubDrawerEndpoints(this.server, { automationEnabled: true });
+
+      await loadOrganization(this.owner, this.server, { apiscan: true });
+
+      let requestBody = null;
+
+      this.server.post('/v2/files/:id/dynamicscans', (_, req) => {
+        requestBody = JSON.parse(req.requestBody);
+
+        return {};
+      });
+
+      await openDrawer();
+      await click(API_CAPTURE_TOGGLE);
+
+      assert.strictEqual(requestBody, null);
+
+      await click('[data-test-fileDetails-dynamicScanDrawer-startBtn]');
+
+      assert.true(requestBody.enable_api_capture);
+    });
+
+    test('it lets the user turn api capture on and off when automation is disabled', async function (assert) {
+      stubDrawerEndpoints(this.server, { automationEnabled: false });
+
+      await loadOrganization(this.owner, this.server, { apiscan: true });
+
+      await openDrawer();
+
+      assert
+        .dom(API_CAPTURE_TOGGLE)
+        .isNotChecked()
+        .doesNotHaveAttribute('readonly');
+
+      await click(API_CAPTURE_TOGGLE);
+
+      assert.dom(API_CAPTURE_TOGGLE).isChecked();
+
+      await click(API_CAPTURE_TOGGLE);
+
+      assert.dom(API_CAPTURE_TOGGLE).isNotChecked();
+      assert.dom(API_CAPTURE_LOCKED_ALERT).doesNotExist();
+    });
+
+    test('it does not request the automation preference without the api scan feature', async function (assert) {
+      stubDrawerEndpoints(this.server, { automationEnabled: true });
+
+      await loadOrganization(this.owner, this.server, { apiscan: false });
+
+      let preferenceRequestCount = 0;
+
+      this.server.get(
+        '/profiles/:id/apiscanautomation_preference',
+        (_, req) => {
+          preferenceRequestCount += 1;
+
+          return { id: req.params.id, api_scan_automation_enabled: true };
+        }
+      );
+
+      await openDrawer();
+
+      assert.strictEqual(preferenceRequestCount, 0);
+      assert
+        .dom(API_CAPTURE_TOGGLE)
+        .isNotChecked()
+        .doesNotHaveAttribute('readonly');
+    });
   }
 );

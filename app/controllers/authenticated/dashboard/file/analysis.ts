@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type AnalysisModel from 'irene/models/analysis';
@@ -9,6 +10,10 @@ export default class AuthenticatedDashboardFileAnalysisCompare extends Controlle
   @service declare intl: IntlService;
 
   declare model: AnalysisModel;
+
+  // Set when opened from an API scan endpoint's vulnerabilities
+  queryParams = ['api_scan_url'];
+  @tracked api_scan_url: string | null = null;
 
   get breadcrumbs(): AkBreadcrumbsItemProps {
     const fileId = this.model?.file?.get('id') as string;
