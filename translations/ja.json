@@ -2455,6 +2455,7 @@
     },
     "reachability": {
       "title": "到達可能性",
+      "detailsTitle": "到達可能性の詳細",
       "viewInsight": "到達可能性インサイトを表示 →",
       "pathFound": "到達可能",
       "potential": "到達する可能性あり",
