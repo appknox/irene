@@ -1,7 +1,19 @@
 {{#if this.isFetching}}
   <PrivacyModule::Loader @loadingText='{{t "loading"}}...' />
 {{else}}
-  {{#if this.showEmptyContent}}
+  {{#if this.piiInProgress}}
+    <PrivacyModule::Status
+      @heading={{t 'privacyModule.piiInProgressHeading'}}
+      @description={{t 'privacyModule.piiInProgressDescription'}}
+      @svgComponent='ak-svg/privacy-in-progress'
+    />
+  {{else if this.piiFailed}}
+    <PrivacyModule::Status
+      @heading={{t 'privacyModule.piiFailedHeading'}}
+      @description={{t 'privacyModule.failedDescription'}}
+      @svgComponent='ak-svg/privacy-upload'
+    />
+  {{else if this.showEmptyContent}}
     <PrivacyModule::Status
       @heading={{t 'privacyModule.emptyPiiHeader'}}
       @description={{t 'privacyModule.emptyPiiDesc'}}

@@ -46,19 +46,39 @@
       />
 
       <AkStack @alignItems='center' @spacing='1'>
-        <AkButton
-          {{style paddingRight='12px'}}
-          {{on 'click' this.handleViewReportDrawerOpen}}
-          data-test-privacy-appDetails-header-viewReport-button
-        >
-          <:leftIcon>
-            <AkIcon @iconName='description-outline' />
-          </:leftIcon>
+        {{#if @reportLoading}}
+          <AkSkeleton
+            @variant='rounded'
+            @width='125px'
+            @height='36px'
+            data-test-privacy-appDetails-header-viewReport-skeleton
+          />
+        {{else}}
+          <AkTooltip
+            @title={{t 'privacyModule.reportDisabledInProgress'}}
+            @disabled={{not @reportDisabled}}
+            @placement='bottom'
+            @arrow={{true}}
+            @multiline={{true}}
+            @maxWidth='260px'
+            data-test-privacy-appDetails-header-viewReport-tooltip
+          >
+            <AkButton
+              @disabled={{@reportDisabled}}
+              {{style paddingRight='12px'}}
+              {{on 'click' this.handleViewReportDrawerOpen}}
+              data-test-privacy-appDetails-header-viewReport-button
+            >
+              <:leftIcon>
+                <AkIcon @iconName='description-outline' />
+              </:leftIcon>
 
-          <:default>
-            {{t 'viewReport'}}
-          </:default>
-        </AkButton>
+              <:default>
+                {{t 'viewReport'}}
+              </:default>
+            </AkButton>
+          </AkTooltip>
+        {{/if}}
       </AkStack>
     {{/if}}
   </AkStack>

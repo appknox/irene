@@ -68,6 +68,7 @@ export default class PrivacyModuleService extends Service {
   @tracked showCompleteDastScanNote: boolean = false;
   @tracked geoDataAvailable: boolean = false;
   @tracked pii: PiiRequestModel | null = null;
+  piiFileId: string | null = null;
   @tracked privacyProjectQueryResponse: PrivacyProjectQueryResponse | null =
     null;
 
@@ -92,8 +93,21 @@ export default class PrivacyModuleService extends Service {
     });
   }
 
+  get piiInProgress() {
+    return (
+      this.pii?.status === ENUMS.PM_PII_STATUS.STARTED ||
+      this.pii?.status === ENUMS.PM_PII_STATUS.PENDING
+    );
+  }
+
+  get piiFailed() {
+    return this.pii?.status === ENUMS.PM_PII_STATUS.FAILED;
+  }
+
   // Resets the count values to ensure the previous record's counts do not persist
   resetCountValues() {
+    this.pii = null;
+    this.piiFileId = null;
     this.trackerDataCount = 0;
     this.dangerousPermissionCount = 0;
     this.piiDataCount = 0;
@@ -221,7 +235,14 @@ export default class PrivacyModuleService extends Service {
 
   fetchPiiData = task(async (fileId, privacyProjectId, markPiiSeen = false) => {
     try {
+      this.piiFileId = String(fileId);
+
       const pii = await this.getPiiRequest.perform(fileId);
+
+      // ignore a stale response (page left or another file loaded meanwhile)
+      if (this.piiFileId !== String(fileId)) {
+        return;
+      }
 
       this.selectedPiiId = pii.id;
       this.pii = pii;
@@ -236,6 +257,10 @@ export default class PrivacyModuleService extends Service {
         };
 
         const piiData = await this.store.query('pii', queryParams);
+        if (this.piiFileId !== String(fileId)) {
+          return;
+        }
+
         const piiDataList = piiData.slice() as PiiModel[];
 
         this.piiDataList = piiDataList;

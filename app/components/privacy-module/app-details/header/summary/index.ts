@@ -14,6 +14,9 @@ export interface PrivacyModuleAppDetailsHeaderSummarySignature {
     project: ProjectModel;
     loading: boolean;
     showReportButton: boolean;
+    // PII still running: the report API rejects generation until it settles
+    reportDisabled?: boolean;
+    reportLoading?: boolean;
   };
 }
 

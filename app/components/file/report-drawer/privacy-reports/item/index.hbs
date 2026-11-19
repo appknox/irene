@@ -26,14 +26,34 @@
             {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
           </AkTypography>
 
-          <AkButton
-            {{on 'click' (perform this.handleGenerateReport)}}
-            @loading={{this.isGenerateButtonLoading}}
-            @disabled={{this.isGenerateButtonLoading}}
-            data-test-privacyReport-reportGenerateBtn
-          >
-            {{this.generateButtonLabel}}
-          </AkButton>
+          {{#if this.generateLoading}}
+            <AkSkeleton
+              @variant='rounded'
+              @width='140px'
+              @height='36px'
+              data-test-privacyReport-reportGenerateSkeleton
+            />
+          {{else}}
+            <AkTooltip
+              @title={{t 'privacyModule.reportDisabledInProgress'}}
+              @disabled={{not this.generateDisabled}}
+              @placement='bottom'
+              @arrow={{true}}
+              data-test-privacyReport-reportGenerateTooltip
+            >
+              <AkButton
+                {{on 'click' (perform this.handleGenerateReport)}}
+                @loading={{this.isGenerateButtonLoading}}
+                @disabled={{or
+                  this.isGenerateButtonLoading
+                  this.generateDisabled
+                }}
+                data-test-privacyReport-reportGenerateBtn
+              >
+                {{this.generateButtonLabel}}
+              </AkButton>
+            </AkTooltip>
+          {{/if}}
         </AkStack>
       </AkStack>
     {{/if}}
