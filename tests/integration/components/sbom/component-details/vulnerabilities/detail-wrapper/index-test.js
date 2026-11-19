@@ -96,11 +96,7 @@ module(
 
       await click('[data-test-detailWrapper-toggle]');
 
-      assert.dom(explanationSelector).hasText(
-        t('sbomModule.reachability.explanationNamed.reachable', {
-          app: 'LeafPic',
-        })
-      );
+      assert.dom(explanationSelector).doesNotExist();
     });
 
     module('reachability insight link', function (nestedHooks) {

@@ -12,7 +12,7 @@
           data-test-sbomComponentVulnerabilities-detailReachabilityTitle
           @variant='subtitle1'
         >
-          {{t 'sbomModule.reachability.title'}}
+          {{t 'sbomModule.reachability.detailsTitle'}}
         </AkTypography>
 
         <AkTooltip
@@ -40,14 +40,6 @@
           </:tooltipContent>
         </AkTooltip>
       </AkStack>
-
-      <AkTypography
-        data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
-        @variant='body2'
-        @color='textSecondary'
-      >
-        {{this.explanation}}
-      </AkTypography>
     </AkStack>
 
     <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::CallPath

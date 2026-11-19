@@ -2079,6 +2079,7 @@
     },
     "reachability": {
       "title": "Reachability",
+      "detailsTitle": "Reachability Details",
       "viewInsight": "View reachability insight →",
       "pathFound": "Reachable",
       "potential": "Potentially reachable",

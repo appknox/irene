@@ -93,7 +93,9 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.title).hasText(t('sbomModule.reachability.title'));
+      assert
+        .dom(selectors.title)
+        .hasText(t('sbomModule.reachability.detailsTitle'));
       assert.dom(selectors.callPath).exists();
       assert
         .dom(selectors.callPathStep(0))
@@ -429,7 +431,7 @@ module(
         .dom(
           '[data-test-sbomComponentVulnerabilities-detailReachabilityExplanation]'
         )
-        .hasText(summary);
+        .doesNotExist();
     });
 
     // ─── Help tooltip ────────────────────────────────────────────────────────
@@ -695,12 +697,8 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(explanationSelector).hasText(
-        t('sbomModule.reachability.explanationNamed.reachable', {
-          app: 'LeafPic',
-        })
-      );
-      assert.dom(explanationSelector).includesText("LeafPic's code");
+      assert.dom(explanationSelector).doesNotExist();
+      assert.dom(explanationSelector).doesNotExist();
     });
 
     test('it falls back to generic wording without an app name', async function (assert) {
@@ -720,17 +718,11 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(explanationSelector)
-        .hasText(t('sbomModule.reachability.explanation.noPathFound'));
+      assert.dom(explanationSelector).doesNotExist();
 
       this.set('appName', 'LeafPic');
 
-      assert.dom(explanationSelector).hasText(
-        t('sbomModule.reachability.explanationNamed.noPathFound', {
-          app: 'LeafPic',
-        })
-      );
+      assert.dom(explanationSelector).doesNotExist();
     });
 
     test('it explains an inconclusive verdict in terms of the function call', async function (assert) {
@@ -751,11 +743,7 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(explanationSelector)
-        .hasText(
-          'Analysis could not determine whether the vulnerable function is called.'
-        );
+      assert.dom(explanationSelector).doesNotExist();
     });
 
     // ─── Inline verdict chips ────────────────────────────────────────────────
