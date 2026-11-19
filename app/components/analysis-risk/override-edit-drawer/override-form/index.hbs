@@ -115,7 +115,7 @@
           </AkTypography>
         {{else}}
           <AkSelect
-            {{style width='160px'}}
+            {{style width='320px'}}
             data-test-analysisRisk-overrideEditDrawer-overrideForm-criteriaSelect
             data-test-cy='overrideEditDrawer-overrideForm-criteriaSelect'
             @options={{this.overrideRiskForOptions}}
@@ -155,6 +155,17 @@
               {{@dataModel.ignoreVulnerabilityHelperText}}
             </AkTypography>
           </AkStack>
+
+          {{#if @dataModel.ignoreIfUnchangedWaitingNote}}
+            <AkTypography
+              data-test-analysisRisk-overrideEditDrawer-overrideForm-ignoreIfUnchangedWaitingNote
+              class='mt-1'
+              @color='textSecondary'
+              {{style fontSize='0.857rem'}}
+            >
+              {{@dataModel.ignoreIfUnchangedWaitingNote}}
+            </AkTypography>
+          {{/if}}
         {{/if}}
       {{/if}}
     </AkStack>

@@ -20,6 +20,7 @@ export interface Features {
   cyod: boolean;
   fake_app_detection: boolean;
   member_override_request: boolean;
+  ignore_vulnerability_reopen_if_changed: boolean;
   offensive_security: boolean;
 }
 
