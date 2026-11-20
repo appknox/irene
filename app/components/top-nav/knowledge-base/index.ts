@@ -28,6 +28,11 @@ export default class TopNavKnowledgeBaseComponent extends Component<TopNavKnowle
 
     this.freshdesk.openSupportWidget();
   }
+
+  @action
+  onClosePanel() {
+    this.knowledgeBase.closePanel();
+  }
 }
 
 declare module '@glint/environment-ember-loose/registry' {

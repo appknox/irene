@@ -5106,6 +5106,22 @@ body {
   );
   --offensive-security-finding-detail-code-font-family: var(--font-family-mono);
 
+  // variables for top-nav/knowledge-base/panel
+  --top-nav-knowledge-base-panel-header-background: var(--primary-main);
+  --top-nav-knowledge-base-panel-header-text-color: var(--common-white);
+  --top-nav-knowledge-base-panel-header-btn-background: rgba(0, 0, 0, 0.2);
+  --top-nav-knowledge-base-panel-background: var(--background-light);
+  --top-nav-knowledge-base-panel-card-background: var(--background-main);
+  --top-nav-knowledge-base-panel-card-shadow: var(--box-shadow-2);
+  --top-nav-knowledge-base-panel-border-radius: var(--border-radius-8);
+  --top-nav-knowledge-base-panel-item-background: var(--background-light);
+  --top-nav-knowledge-base-panel-item-hover-background: var(--primary-main-5);
+  --top-nav-knowledge-base-panel-text-primary: var(--text-primary);
+  --top-nav-knowledge-base-panel-text-secondary: var(--text-secondary);
+  --top-nav-knowledge-base-panel-border-color: var(--border-color-1);
+  --top-nav-knowledge-base-panel-search-btn-background: var(--secondary-main);
+  --top-nav-knowledge-base-panel-link-color: var(--primary-main);
+
   &.theme-light {
     //variables for appknox-wrapper
     --appknox-wrapper-text-color: var(--text-primary);

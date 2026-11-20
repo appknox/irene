@@ -1118,6 +1118,17 @@
   "jiraPageConfigure": "JIRA連携設定ページ",
   "jiraWillBeRevoked": "JIRA認証は直ちに取り消されます",
   "knowledgeBase": "Knowledge Base",
+  "knowledgeBasePanel": {
+    "welcome": "Welcome to Support",
+    "gotQuestions": "Got questions?",
+    "searchPlaceholder": "Search for help",
+    "suggestedArticles": "Suggested articles",
+    "searchResults": "Search results",
+    "noArticles": "No articles match your search.",
+    "errorTitle": "Something went wrong!",
+    "errorDescription": "Please try again in a while.",
+    "openInHelpCenter": "Open in Help Center"
+  },
   "knoxIq": {
     "aeis": "AEIS",
     "aeisDescription": "Appknox Exploit Intelligence Score",

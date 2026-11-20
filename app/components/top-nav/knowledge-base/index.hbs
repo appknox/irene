@@ -11,3 +11,6 @@
     <:default>{{t 'knowledgeBase'}}</:default>
   </AkButton>
 {{/if}}
+{{#if this.knowledgeBase.isPanelOpen}}
+  <TopNav::KnowledgeBase::Panel @onClose={{this.onClosePanel}} />
+{{/if}}

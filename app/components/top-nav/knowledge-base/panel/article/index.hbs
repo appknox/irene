@@ -1,0 +1,28 @@
+<article local-class='article-root' data-test-knowledgeBasePanel-article>
+  <div local-class='article-header'>
+    <h3 local-class='article-title' data-test-knowledgeBasePanel-articleHeading>
+      {{@article.title}}
+    </h3>
+
+    <a
+      href={{@article.url}}
+      target='_blank'
+      rel='noopener noreferrer'
+      aria-label={{t 'knowledgeBasePanel.openInHelpCenter'}}
+      title={{t 'knowledgeBasePanel.openInHelpCenter'}}
+      local-class='article-open-link'
+      data-test-knowledgeBasePanel-openInHelpCenter
+    >
+      <AkIcon @iconName='open-in-new' @size='small' @color='inherit' />
+    </a>
+  </div>
+
+  {{! template-lint-disable no-invalid-interactive }}
+  <div
+    local-class='article-body'
+    {{on 'click' this.handleBodyClick}}
+    data-test-knowledgeBasePanel-articleBody
+  >
+    {{this.body}}
+  </div>
+</article>

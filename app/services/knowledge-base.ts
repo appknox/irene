@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 import type ConfigurationService from './configuration';
 import type HubspotService from './hubspot';
@@ -7,6 +8,8 @@ export default class KnowledgeBaseService extends Service {
   @service declare configuration: ConfigurationService;
   @service declare hubspot: HubspotService;
   @service('browser/window') declare window: Window;
+
+  @tracked isPanelOpen = false;
 
   /**
    * The knowledge base URL from the runtime config, or '' when it is not set
@@ -49,17 +52,31 @@ export default class KnowledgeBaseService extends Service {
     );
   }
 
-  // True when the HubSpot knowledge base is configured in either form.
+  /**
+   * True when config asks for the dashboard's own article panel (mode
+   * 'panel'), which shows the login-gated articles through mycroft.
+   */
+  get usesPanel() {
+    return this.configuration.integrationData?.knowledge_base_mode === 'panel';
+  }
+
+  // True when the HubSpot knowledge base is configured in any form.
   get isAvailable() {
-    return this.usesHubspotWidget || this.hasUrl;
+    return this.usesPanel || this.usesHubspotWidget || this.hasUrl;
   }
 
   /**
-   * Open the knowledge base: the widget's Help tab when configured and ready,
+   * Open the knowledge base: the article panel, the widget's Help tab when configured and ready,
    * otherwise the configured URL in a new tab (which gets no access to this
    * one).
    */
   open() {
+    if (this.usesPanel) {
+      this.isPanelOpen = true;
+
+      return;
+    }
+
     if (this.usesHubspotWidget && this.hubspot.openKnowledgeBase()) {
       return;
     }
@@ -67,5 +84,9 @@ export default class KnowledgeBaseService extends Service {
     if (this.hasUrl) {
       this.window.open(this.url, '_blank', 'noopener,noreferrer');
     }
+  }
+
+  closePanel() {
+    this.isPanelOpen = false;
   }
 }

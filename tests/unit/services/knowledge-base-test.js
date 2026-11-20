@@ -129,6 +129,37 @@ module('Unit | Service | knowledge-base', function (hooks) {
     assert.strictEqual(this.hubspot.helpTabOpened, 0);
   });
 
+  test('panel mode opens and closes the article panel', function (assert) {
+    this.configure({
+      knowledge_base_mode: 'panel',
+      knowledge_base_url: KB_URL,
+    });
+
+    assert.true(this.service.usesPanel);
+    assert.true(this.service.isAvailable);
+    assert.false(this.service.isPanelOpen);
+
+    this.service.open();
+
+    assert.true(this.service.isPanelOpen);
+    assert.strictEqual(this.hubspot.helpTabOpened, 0, 'Help tab not used');
+    assert.strictEqual(this.window.opened.length, 0, 'no new tab');
+
+    this.service.closePanel();
+
+    assert.false(this.service.isPanelOpen);
+  });
+
+  test('the panel is not used when the mode is not panel', function (assert) {
+    this.configure({ knowledge_base_mode: 'widget' });
+
+    assert.false(this.service.usesPanel);
+
+    this.service.open();
+
+    assert.false(this.service.isPanelOpen);
+  });
+
   test('widget mode uses the HubSpot Help tab when chat is enabled', function (assert) {
     this.configure({ knowledge_base_mode: 'widget' });
 
