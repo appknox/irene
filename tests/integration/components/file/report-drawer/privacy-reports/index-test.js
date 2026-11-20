@@ -2,7 +2,14 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { find, findAll, render, waitFor, click } from '@ember/test-helpers';
+import {
+  find,
+  findAll,
+  render,
+  waitFor,
+  click,
+  settled,
+} from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import { setupBrowserFakes } from 'ember-browser-services/test-support';
@@ -201,6 +208,56 @@ module(
         .exists()
         .hasText(t('privacyModule.title'));
     });
+
+    test.each(
+      'it disables generate button while PII is running only if dashboard PII is on',
+      [
+        {
+          dashboardPii: true,
+          status: ENUMS.PM_PII_STATUS.PENDING,
+          disabled: true,
+        },
+        {
+          dashboardPii: false,
+          status: ENUMS.PM_PII_STATUS.PENDING,
+          disabled: false,
+        },
+        {
+          dashboardPii: true,
+          status: ENUMS.PM_PII_STATUS.SUCCESS,
+          disabled: false,
+        },
+      ],
+      async function (assert, { dashboardPii, status, disabled }) {
+        this.owner.lookup('service:organization').selected.aiFeatures = {
+          pii: true,
+        };
+
+        this.server.get('/organizations/:id/ai_features', () => ({
+          pii: dashboardPii,
+        }));
+
+        this.server.get('/v2/files/:id/pii_request', () => ({
+          id: 2,
+          file: 1,
+          status,
+        }));
+
+        await render(
+          hbs`<File::ReportDrawer::PrivacyReports @file={{this.file}} @closeDrawer={{this.onClose}} />`
+        );
+
+        await waitFor('[data-test-privacyReport-reportGenerateBtn]', {
+          timeout: 1000,
+        });
+
+        await settled();
+
+        const btn = find('[data-test-privacyReport-reportGenerateBtn]');
+
+        assert.strictEqual(btn.disabled, disabled);
+      }
+    );
 
     test('it renders privacy pdf report if generated', async function (assert) {
       const privacyReport = this.server.create('privacy-report', {

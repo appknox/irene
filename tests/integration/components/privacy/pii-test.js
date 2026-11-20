@@ -5,6 +5,7 @@ import { render, findAll, click, find } from '@ember/test-helpers';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
+import ENUMS from 'irene/enums';
 import { setupRequiredEndpoints } from 'irene/tests/helpers/acceptance-utils';
 
 class NotificationsStub extends Service {
@@ -73,7 +74,7 @@ module('Integration | Component | privacy/pii', function (hooks) {
     });
 
     this.server.get('/v2/files/:id/pii_request', () => {
-      return { id: 2, file: 1, status: 2 };
+      return { id: 2, file: 1, status: ENUMS.PM_PII_STATUS.SUCCESS };
     });
 
     this.server.get('/v2/pii_request/:requestId/pii_data', (schema) => {
@@ -136,6 +137,32 @@ module('Integration | Component | privacy/pii', function (hooks) {
     assert
       .dom('[data-test-privacyModule-status-desc]')
       .hasText(t('privacyModule.emptyPiiDesc'));
+  });
+
+  test('it shows in-progress state while pii request is pending', async function (assert) {
+    this.server.get('/v2/files/:id/pii_request', () => {
+      return { id: 2, file: 1, status: ENUMS.PM_PII_STATUS.PENDING };
+    });
+
+    await render(hbs(`<PrivacyModule::AppDetails::Pii @file={{this.file}}/>`));
+
+    assert
+      .dom('[data-test-privacyModule-status-header]')
+      .hasText(t('privacyModule.piiInProgressHeading'));
+
+    assert.dom('[data-test-privacyModule-pii-list]').doesNotExist();
+  });
+
+  test('it shows failed state when pii request failed', async function (assert) {
+    this.server.get('/v2/files/:id/pii_request', () => {
+      return { id: 2, file: 1, status: ENUMS.PM_PII_STATUS.FAILED };
+    });
+
+    await render(hbs(`<PrivacyModule::AppDetails::Pii @file={{this.file}}/>`));
+
+    assert
+      .dom('[data-test-privacyModule-status-header]')
+      .hasText(t('privacyModule.piiFailedHeading'));
   });
 
   test('it shows correct data of pii', async function (assert) {

@@ -2,11 +2,13 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { task } from 'ember-concurrency';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 import type RouterService from '@ember/routing/router-service';
 
 import ENUMS from 'irene/enums';
+import parseError from 'irene/utils/parse-error';
 import type PrivacyProjectModel from 'irene/models/privacy-project';
 import type PrivacyModuleService from 'irene/services/privacy-module';
 import type OrganizationService from 'irene/services/organization';
@@ -37,7 +39,8 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
   @service declare router: RouterService;
 
   @tracked anchorRef: HTMLElement | null = null;
-  @tracked piiEnabled: boolean = false;
+  // null until the dashboard PII flag is known
+  @tracked piiEnabled: boolean | null = null;
 
   constructor(
     owner: unknown,
@@ -61,6 +64,7 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
 
     if (this.showPii) {
       this.privacyModule.fetchPiiData.perform(this.fileId, this.args.app.id);
+      this.fetchDashboardPiiFlag.perform();
     }
   }
 
@@ -98,6 +102,41 @@ export default class PrivacyModuleAppDetailsHeaderComponent extends Component<Pr
       this.app.latestFilePrivacyAnalysisStatus === ENUMS.PM_STATUS.IN_PROGRESS
     );
   }
+
+  // PII only holds the report back when both the org AI feature and the
+  // dashboard AI feature are on (same rule as the backend report check)
+  get piiInProgress() {
+    if (!this.showPii || this.piiEnabled === false) {
+      return false;
+    }
+
+    return this.privacyModule.piiInProgress;
+  }
+
+  // PII state not known yet: show a placeholder instead of a wrong-state button
+  get reportLoading() {
+    if (!this.showPii || this.piiEnabled === false) {
+      return false;
+    }
+
+    return (
+      this.fetchDashboardPiiFlag.isRunning ||
+      (this.privacyModule.fetchPiiData.isRunning && !this.privacyModule.pii)
+    );
+  }
+
+  fetchDashboardPiiFlag = task(async () => {
+    try {
+      const aiFeatures = await this.store.queryRecord(
+        'organization-ai-feature',
+        {}
+      );
+
+      this.piiEnabled = aiFeatures.pii;
+    } catch (err) {
+      this.notify.error(parseError(err));
+    }
+  });
 
   get showPii() {
     return this.aiFeatures?.pii;

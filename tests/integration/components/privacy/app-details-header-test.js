@@ -1,7 +1,13 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { render, findAll, click, waitFor } from '@ember/test-helpers';
+import {
+  render,
+  findAll,
+  click,
+  waitFor,
+  triggerEvent,
+} from '@ember/test-helpers';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
@@ -296,6 +302,73 @@ module(
         .dom('[data-test-privacyModule-status-desc]')
         .exists()
         .hasText(t('privacyModule.failedDescription'));
+    });
+
+    // pii: org AI feature (organization.aiFeatures), dashboardPii: dashboard flag
+    const setupPii = (ctx, { dashboardPii, piiStatus }) => {
+      ctx.owner.lookup('service:organization').selected.aiFeatures = {
+        pii: true,
+      };
+
+      ctx.server.get('/organizations/:id/ai_features', () => ({
+        pii: dashboardPii,
+      }));
+
+      ctx.server.get('/v2/files/:id/pii_request', () => ({
+        id: 2,
+        file: ctx.fileModel.id,
+        status: piiStatus,
+      }));
+
+      ctx.server.get('/v2/pii_request/:requestId/pii_data', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+    };
+
+    test('it disables view report with a hint while PII is in progress', async function (assert) {
+      setupPii(this, {
+        dashboardPii: true,
+        piiStatus: ENUMS.PM_PII_STATUS.PENDING,
+      });
+
+      await render(
+        hbs(
+          `<PrivacyModule::AppDetails::Header @app={{this.privacyProjectModel}} />`
+        )
+      );
+
+      assert
+        .dom('[data-test-privacy-appDetails-header-viewReport-button]')
+        .isDisabled();
+
+      await triggerEvent(
+        '[data-test-privacy-appDetails-header-viewReport-tooltip]',
+        'mouseenter'
+      );
+
+      assert
+        .dom('[data-test-ak-tooltip-content]')
+        .hasText(t('privacyModule.reportDisabledInProgress'));
+    });
+
+    test('it keeps view report enabled when dashboard PII flag is off', async function (assert) {
+      setupPii(this, {
+        dashboardPii: false,
+        piiStatus: ENUMS.PM_PII_STATUS.PENDING,
+      });
+
+      await render(
+        hbs(
+          `<PrivacyModule::AppDetails::Header @app={{this.privacyProjectModel}} />`
+        )
+      );
+
+      assert
+        .dom('[data-test-privacy-appDetails-header-viewReport-button]')
+        .isNotDisabled();
     });
   }
 );
