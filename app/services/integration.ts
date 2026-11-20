@@ -36,9 +36,10 @@ export default class IntegrationService extends Service {
     // Freshdesk knowledge base widget
     await this.freshdesk.configureSupportWidget();
 
-    // HubSpot chat. Not awaited so that identifying the visitor never delays
-    // the app from loading. It handles its own errors.
-    this.hubspot.configureChat();
+    // Not awaited: identifying the chat visitor must never delay app load.
+    this.hubspot
+      .configureChat()
+      .catch((error) => this.logger.error('HubSpot chat setup failed', error));
   }
 
   // Pendo

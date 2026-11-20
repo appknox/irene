@@ -32,16 +32,11 @@ export default class HubspotService extends Service {
     return !!this.portalId;
   }
 
-  // Check if the HubSpot chat widget is loaded
   get chatIsIntegrated() {
     return !!this.window?.HubSpotConversations?.widget;
   }
 
-  /**
-   * Identify the logged-in user to HubSpot and load the chat widget.
-   * Call it once per session, after login. If the user cannot be identified
-   * the chat still loads and asks the visitor for an email.
-   */
+  // Unidentified visitors still get the chat; HubSpot then asks for an email.
   async configureChat() {
     if (!this.chatEnabled) {
       this.logger.debug('HubSpot chat is disabled');
@@ -82,11 +77,7 @@ export default class HubspotService extends Service {
     this.window.HubSpotConversations?.widget.open();
   }
 
-  /**
-   * Open the widget on its Help tab (the knowledge base). Returns false when
-   * the widget is not loaded or does not offer the knowledge base, so the
-   * caller can fall back.
-   */
+  // false when the widget has no Help tab, so the caller can fall back.
   openKnowledgeBase() {
     const widget = this.window?.HubSpotConversations?.widget;
 

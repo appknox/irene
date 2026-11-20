@@ -1,8 +1,9 @@
 import Service from '@ember/service';
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
-import { click, render } from '@ember/test-helpers';
+import { click, render, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 const KB_URL = 'https://help.appknox.com/en/knowledge';
@@ -46,6 +47,7 @@ class FreshdeskStub extends Service {
 
 module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   setupRenderingTest(hooks);
+  setupMirage(hooks);
   setupIntl(hooks, 'en');
 
   hooks.beforeEach(function () {
@@ -60,6 +62,39 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
     this.hubspot = this.owner.lookup('service:hubspot');
   });
 
+  test('in panel mode it opens the article panel and closes it again', async function (assert) {
+    this.configuration.integrationData = {
+      knowledge_base_url: KB_URL,
+      knowledge_base_mode: 'panel',
+    };
+
+    this.server.get('/v2/hubspot/kb/', () => ({
+      suggested: [],
+      categories: [],
+    }));
+
+    await render(hbs`<TopNav::KnowledgeBase />`);
+
+    assert.dom('[data-test-topNav-knowledgeBase-panel-title]').doesNotExist();
+
+    await click('[data-test-topNav-KnowledgeBaseBtn]');
+
+    assert
+      .dom('[data-test-topNav-knowledgeBase-panel-title]')
+      .hasText(t('knowledgeBasePanel.welcome'));
+
+    assert.strictEqual(this.window.opened.length, 0, 'no new tab');
+    assert.strictEqual(this.hubspot.helpTabOpened, 0, 'no Help tab');
+    assert.strictEqual(this.freshdesk.widgetOpened, 0, 'no Freshdesk');
+
+    const knowledgeBase = this.owner.lookup('service:knowledge-base');
+
+    await click('[data-test-topNav-knowledgeBase-panel-closeBtn]');
+    await waitUntil(() => !knowledgeBase.isPanelOpen, { timeout: 1000 });
+
+    assert.dom('[data-test-topNav-knowledgeBase-panel-title]').doesNotExist();
+  });
+
   test('it opens the configured knowledge base in a new tab', async function (assert) {
     this.configuration.integrationData = { knowledge_base_url: KB_URL };
 
@@ -67,7 +102,6 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
 
     assert
       .dom('[data-test-topNav-KnowledgeBaseBtn]')
-      .exists()
       .hasText(t('knowledgeBase'));
 
     await click('[data-test-topNav-KnowledgeBaseBtn]');

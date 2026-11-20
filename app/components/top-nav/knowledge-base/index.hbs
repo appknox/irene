@@ -14,6 +14,6 @@
 {{#if this.knowledgeBase.isPanelOpen}}
   {{! Out of the top nav's flex row: the drawer's wormhole leaves an empty element here. }}
   <div local-class='panel-mount'>
-    <TopNav::KnowledgeBase::Panel @onClose={{this.onClosePanel}} />
+    <TopNav::KnowledgeBase::Panel @onClose={{this.handleClosePanel}} />
   </div>
 {{/if}}

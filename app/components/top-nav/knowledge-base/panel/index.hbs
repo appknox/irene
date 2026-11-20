@@ -5,63 +5,67 @@
   @drawerContainerClass={{this.drawerContainerClass}}
   as |dr|
 >
-  <div local-class='panel-root' data-test-knowledgeBasePanel>
+  <div local-class='panel-root' data-test-topNav-knowledgeBase-panel>
     <div local-class='panel-header'>
       <div local-class='panel-header-actions'>
         {{#if this.showBackButton}}
-          <button
-            type='button'
+          <AkButton
+            @variant='text'
+            @color='inherit'
+            @typographyFontWeight='bold'
             local-class='panel-header-btn panel-back-btn'
-            {{on 'click' this.goBack}}
-            data-test-knowledgeBasePanel-backBtn
+            {{on 'click' this.handleBack}}
+            data-test-topNav-knowledgeBase-panel-backBtn
           >
-            <AkIcon @iconName='arrow-back' @size='small' @color='inherit' />
-            <span>{{t 'back'}}</span>
-          </button>
+            <:leftIcon>
+              <AkIcon @iconName='arrow-back' @size='small' @color='inherit' />
+            </:leftIcon>
+
+            <:default>{{t 'back'}}</:default>
+          </AkButton>
         {{/if}}
 
-        <button
-          type='button'
+        <AkIconButton
           aria-label={{t 'close'}}
           local-class='panel-header-btn panel-close-btn'
           {{on 'click' dr.closeHandler}}
-          data-test-knowledgeBasePanel-closeBtn
+          data-test-topNav-knowledgeBase-panel-closeBtn
         >
           <AkIcon @iconName='close' @color='inherit' />
-        </button>
+        </AkIconButton>
       </div>
 
       {{#unless this.showBackButton}}
-        <h2 local-class='panel-title' data-test-knowledgeBasePanel-title>
+        <AkTypography
+          @variant='h4'
+          @color='inherit'
+          local-class='panel-title'
+          data-test-topNav-knowledgeBase-panel-title
+        >
           {{t 'knowledgeBasePanel.welcome'}}
-        </h2>
+        </AkTypography>
       {{/unless}}
     </div>
 
-    <div local-class='panel-card' data-test-knowledgeBasePanel-card>
-      {{#if this.article}}
-        <TopNav::KnowledgeBase::Panel::Article @article={{this.article}} />
-      {{else if this.fetchArticle.isRunning}}
-        <div local-class='panel-loader' data-test-knowledgeBasePanel-loader>
-          <AkLoader @size={{24}} />
-        </div>
-      {{else if this.hasError}}
-        <div local-class='panel-error' data-test-knowledgeBasePanel-error>
-          <AkSvg::NoResult local-class='panel-error-svg' />
-
-          <AkTypography @variant='h6' data-test-knowledgeBasePanel-errorTitle>
-            {{t 'knowledgeBasePanel.errorTitle'}}
-          </AkTypography>
-
-          <AkTypography @color='textSecondary'>
-            {{t 'knowledgeBasePanel.errorDescription'}}
-          </AkTypography>
-        </div>
+    <div local-class='panel-card' data-test-topNav-knowledgeBase-panel-card>
+      {{#if this.showBackButton}}
+        {{#if this.article}}
+          <TopNav::KnowledgeBase::Panel::Article @article={{this.article}} />
+        {{else if this.hasArticleError}}
+          <TopNav::KnowledgeBase::Panel::Error />
+        {{else}}
+          <div
+            local-class='panel-loader'
+            data-test-topNav-knowledgeBase-panel-loader
+          >
+            <AkLoader @size={{24}} />
+          </div>
+        {{/if}}
       {{else}}
         <AkTypography
           @variant='h5'
           local-class='panel-card-title'
-          data-test-knowledgeBasePanel-gotQuestions
+          data-test-topNav-knowledgeBase-panel-gotQuestions
         >
           {{t 'knowledgeBasePanel.gotQuestions'}}
         </AkTypography>
@@ -71,7 +75,7 @@
           @value={{this.searchQuery}}
           @autofocus={{true}}
           {{on 'input' this.handleSearchInput}}
-          data-test-knowledgeBasePanel-searchInput
+          data-test-topNav-knowledgeBase-panel-searchInput
         >
           <:rightAdornment>
             <span local-class='panel-search-icon'>
@@ -84,7 +88,7 @@
           @variant='body2'
           @color='textSecondary'
           local-class='panel-list-label'
-          data-test-knowledgeBasePanel-listLabel
+          data-test-topNav-knowledgeBase-panel-listLabel
         >
           {{#if this.isSearching}}
             {{t 'knowledgeBasePanel.searchResults'}}
@@ -93,15 +97,20 @@
           {{/if}}
         </AkTypography>
 
-        {{#if this.isLoading}}
-          <div local-class='panel-loader' data-test-knowledgeBasePanel-loader>
+        {{#if this.hasListError}}
+          <TopNav::KnowledgeBase::Panel::Error />
+        {{else if this.isLoading}}
+          <div
+            local-class='panel-loader'
+            data-test-topNav-knowledgeBase-panel-loader
+          >
             <AkLoader @size={{24}} />
           </div>
         {{else if this.showNoArticles}}
           <AkTypography
             @color='textSecondary'
             local-class='panel-empty'
-            data-test-knowledgeBasePanel-noArticles
+            data-test-topNav-knowledgeBase-panel-noArticles
           >
             {{t 'knowledgeBasePanel.noArticles'}}
           </AkTypography>
@@ -112,8 +121,8 @@
                 <button
                   type='button'
                   local-class='panel-article-item'
-                  {{on 'click' (fn this.openArticle item)}}
-                  data-test-knowledgeBasePanel-articleItem='{{item.id}}'
+                  {{on 'click' (fn this.handleOpenArticle item)}}
+                  data-test-topNav-knowledgeBase-panel-articleItem='{{item.id}}'
                 >
                   <AkIcon
                     @iconName='import-contacts'
@@ -124,7 +133,7 @@
                   <span local-class='panel-article-text'>
                     <span
                       local-class='panel-article-title'
-                      data-test-knowledgeBasePanel-articleTitle
+                      data-test-topNav-knowledgeBase-panel-articleTitle
                     >
                       {{item.title}}
                     </span>
@@ -132,7 +141,7 @@
                     {{#if item.snippet}}
                       <span
                         local-class='panel-article-snippet'
-                        data-test-knowledgeBasePanel-articleSnippet
+                        data-test-topNav-knowledgeBase-panel-articleSnippet
                       >
                         {{item.snippet}}
                       </span>

@@ -5,6 +5,7 @@ import type FreshdeskService from 'irene/services/freshdesk';
 import type KnowledgeBaseService from 'irene/services/knowledge-base';
 
 interface TopNavKnowledgeBaseSignature {
+  Element: HTMLElement;
   Args: { triggerBtnClass?: string };
 }
 
@@ -30,7 +31,7 @@ export default class TopNavKnowledgeBaseComponent extends Component<TopNavKnowle
   }
 
   @action
-  onClosePanel() {
+  handleClosePanel() {
     this.knowledgeBase.closePanel();
   }
 }

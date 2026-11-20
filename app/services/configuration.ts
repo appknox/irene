@@ -26,7 +26,7 @@ type ImageData = {
 type IntegrationData = {
   hubspot_portal_id: string;
   knowledge_base_url: string;
-  knowledge_base_mode: string;
+  knowledge_base_mode: 'panel' | 'widget' | '';
   pendo_key: string;
   freshdesk_configuration: {
     widget_id: string;

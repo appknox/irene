@@ -9,17 +9,17 @@
   margin: 0;
   font-size: 1.5em;
   font-weight: 600;
-  color: var(--top-nav-knowledge-base-panel-text-primary);
+  color: var(--top-nav-knowledge-base-panel-article-text-primary);
 }
 
 .article-open-link {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--top-nav-knowledge-base-panel-text-secondary);
+  color: var(--top-nav-knowledge-base-panel-article-text-secondary);
 }
 
 .article-body {
-  color: var(--top-nav-knowledge-base-panel-text-primary);
+  color: var(--top-nav-knowledge-base-panel-article-text-primary);
   line-height: 1.6;
   overflow-wrap: anywhere;
 
@@ -69,7 +69,7 @@
   }
 
   a {
-    color: var(--top-nav-knowledge-base-panel-link-color);
+    color: var(--top-nav-knowledge-base-panel-article-link-color);
     text-decoration: underline;
   }
 
@@ -102,7 +102,7 @@
   td {
     overflow-wrap: normal;
     padding: 0.375em 0.625em;
-    border: 1px solid var(--top-nav-knowledge-base-panel-border-color);
+    border: 1px solid var(--top-nav-knowledge-base-panel-article-border-color);
     vertical-align: top;
   }
 
@@ -110,16 +110,21 @@
     overflow-x: auto;
     padding: 0.75em;
     white-space: pre-wrap;
-    background-color: var(--top-nav-knowledge-base-panel-item-background);
-    border-radius: var(--top-nav-knowledge-base-panel-border-radius);
+    background-color: var(
+      --top-nav-knowledge-base-panel-article-item-background
+    );
+    border-radius: var(--top-nav-knowledge-base-panel-article-border-radius);
   }
 
   // HubSpot notes are blockquotes; shown as a callout like the Freshdesk widget.
   blockquote {
     padding: 0.75em 1em;
-    background-color: var(--top-nav-knowledge-base-panel-note-background);
-    border: 1px solid var(--top-nav-knowledge-base-panel-note-border-color);
-    border-radius: var(--top-nav-knowledge-base-panel-border-radius);
+    background-color: var(
+      --top-nav-knowledge-base-panel-article-note-background
+    );
+    border: 1px solid
+      var(--top-nav-knowledge-base-panel-article-note-border-color);
+    border-radius: var(--top-nav-knowledge-base-panel-article-border-radius);
 
     p:last-child {
       margin-bottom: 0;

@@ -1,8 +1,15 @@
-<article local-class='article-root' data-test-knowledgeBasePanel-article>
+<article
+  local-class='article-root'
+  data-test-topNav-knowledgeBase-panel-article
+>
   <div local-class='article-header'>
-    <h3 local-class='article-title' data-test-knowledgeBasePanel-articleHeading>
+    <AkTypography
+      @variant='h5'
+      local-class='article-title'
+      data-test-topNav-knowledgeBase-panel-articleHeading
+    >
       {{@article.title}}
-    </h3>
+    </AkTypography>
 
     <a
       href={{@article.url}}
@@ -11,18 +18,20 @@
       aria-label={{t 'knowledgeBasePanel.openInHelpCenter'}}
       title={{t 'knowledgeBasePanel.openInHelpCenter'}}
       local-class='article-open-link'
-      data-test-knowledgeBasePanel-openInHelpCenter
+      data-test-topNav-knowledgeBase-panel-openInHelpCenter
     >
       <AkIcon @iconName='open-in-new' @size='small' @color='inherit' />
     </a>
   </div>
 
+  {{! Delegated clicks on links inside the server-rendered article HTML }}
   {{! template-lint-disable no-invalid-interactive }}
   <div
     local-class='article-body'
     {{on 'click' this.handleBodyClick}}
-    data-test-knowledgeBasePanel-articleBody
+    data-test-topNav-knowledgeBase-panel-articleBody
   >
     {{this.body}}
   </div>
+  {{! template-lint-enable no-invalid-interactive }}
 </article>

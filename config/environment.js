@@ -283,6 +283,7 @@ module.exports = function (environment) {
       integrateJira: 'integrate_jira',
       integrateServiceNow: 'servicenow',
       integrateSlack: 'slack',
+      hubspotKnowledgeBase: 'hubspot/kb',
       integrateSplunk: 'splunk',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',

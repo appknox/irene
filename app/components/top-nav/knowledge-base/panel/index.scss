@@ -46,6 +46,8 @@
   position: absolute;
   top: 1.25em;
   right: 1.25em;
+  // AkIconButton forces its own text colour.
+  color: var(--top-nav-knowledge-base-panel-header-text-color) !important;
 }
 
 .panel-title {
@@ -127,19 +129,4 @@
   display: flex;
   justify-content: center;
   padding: 2em 0;
-}
-
-.panel-error {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5em;
-  padding: 2.5em 0;
-  text-align: center;
-}
-
-.panel-error-svg {
-  width: 140px;
-  height: auto;
-  margin-bottom: 1em;
 }

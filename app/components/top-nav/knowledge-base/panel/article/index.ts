@@ -6,6 +6,7 @@ import { htmlSafe } from '@ember/template';
 import type { KnowledgeBaseArticle } from 'irene/components/top-nav/knowledge-base/panel';
 
 export interface TopNavKnowledgeBasePanelArticleSignature {
+  Element: HTMLElement;
   Args: { article: KnowledgeBaseArticle };
 }
 
@@ -15,6 +16,20 @@ export default class TopNavKnowledgeBasePanelArticleComponent extends Component<
   // mycroft sanitizes the article HTML before serving it (hubspot_kb.py).
   get body() {
     return htmlSafe(this.args.article.body);
+  }
+
+  scrollToAnchor(container: HTMLElement, anchor: string) {
+    let id = anchor;
+
+    try {
+      id = decodeURIComponent(anchor);
+    } catch {
+      // A malformed %-sequence: look the anchor up as written.
+    }
+
+    container
+      .querySelector(`[id="${CSS.escape(id)}"]`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   @action
@@ -30,16 +45,17 @@ export default class TopNavKnowledgeBasePanelArticleComponent extends Component<
     event.preventDefault();
 
     if (href.startsWith('#')) {
-      const target = container.querySelector(
-        `[id="${CSS.escape(decodeURIComponent(href.slice(1)))}"]`
-      );
-
-      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      this.scrollToAnchor(container, href.slice(1));
 
       return;
     }
 
-    this.window.open(link.href, '_blank', 'noopener,noreferrer');
+    // Resolve against the help center, not the dashboard's own origin.
+    const url = new URL(href, this.args.article.url);
+
+    if (['http:', 'https:', 'mailto:'].includes(url.protocol)) {
+      this.window.open(url.href, '_blank', 'noopener,noreferrer');
+    }
   }
 }
 

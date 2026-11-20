@@ -1,0 +1,14 @@
+.error-root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  padding: 2.5em 0;
+  text-align: center;
+}
+
+.error-svg {
+  width: 140px;
+  height: auto;
+  margin-bottom: 1em;
+}
