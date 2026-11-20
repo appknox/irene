@@ -114,8 +114,19 @@
     border-radius: var(--top-nav-knowledge-base-panel-border-radius);
   }
 
+  // HubSpot notes are blockquotes; shown as a callout like the Freshdesk widget.
   blockquote {
-    padding-left: 1em;
-    border-left: 3px solid var(--top-nav-knowledge-base-panel-border-color);
+    padding: 0.75em 1em;
+    background-color: var(--top-nav-knowledge-base-panel-note-background);
+    border: 1px solid var(--top-nav-knowledge-base-panel-note-border-color);
+    border-radius: var(--top-nav-knowledge-base-panel-border-radius);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    p:first-child strong {
+      text-decoration: underline;
+    }
   }
 }
