@@ -12,5 +12,8 @@
   </AkButton>
 {{/if}}
 {{#if this.knowledgeBase.isPanelOpen}}
-  <TopNav::KnowledgeBase::Panel @onClose={{this.onClosePanel}} />
+  {{! Out of the top nav's flex row: the drawer's wormhole leaves an empty element here. }}
+  <div local-class='panel-mount'>
+    <TopNav::KnowledgeBase::Panel @onClose={{this.onClosePanel}} />
+  </div>
 {{/if}}
