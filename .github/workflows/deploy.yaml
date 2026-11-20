@@ -30,3 +30,4 @@ jobs:
           IRENE_ENABLE_PENDO: 'True'
           IRENE_POSTHOG_API_KEY: ${{ secrets.POSTHOG_API_KEY }}
           IRENE_POSTHOG_API_HOST: ${{ secrets.POSTHOG_API_HOST }}
+          IRENE_JIRA_SECURITY_INSTALL_URL: ${{ secrets.JIRA_SECURITY_INSTALL_URL }}
