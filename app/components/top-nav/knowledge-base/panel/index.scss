@@ -13,6 +13,8 @@
 .panel-header {
   flex-shrink: 0;
   background-color: var(--top-nav-knowledge-base-panel-header-background);
+  background-image: var(--top-nav-knowledge-base-panel-header-pattern);
+  background-size: 140px 140px;
   color: var(--top-nav-knowledge-base-panel-header-text-color);
   padding: 1.25em 1.25em 6.5em;
 }
