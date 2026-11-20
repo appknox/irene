@@ -7,7 +7,7 @@ import type MeService from 'irene/services/me';
 import type OrganizationService from 'irene/services/organization';
 import type IntegrationService from 'irene/services/integration';
 import type WhitelabelService from 'irene/services/whitelabel';
-import type FreshdeskService from 'irene/services/freshdesk';
+import type HubspotService from 'irene/services/hubspot';
 
 import styles from './index.scss';
 
@@ -65,7 +65,7 @@ export default class SideNavComponent extends Component<SideNavSignature> {
   @service declare integration: IntegrationService;
   @service declare intl: IntlService;
   @service declare whitelabel: WhitelabelService;
-  @service declare freshdesk: FreshdeskService;
+  @service declare hubspot: HubspotService;
   @service('browser/window') declare window: Window;
 
   faviconImage: HTMLImageElement = new Image();
@@ -154,7 +154,7 @@ export default class SideNavComponent extends Component<SideNavSignature> {
   }
 
   get enableChatSupport() {
-    return this.freshdesk.freshchatEnabled;
+    return this.hubspot.chatEnabled;
   }
 
   get showOffensiveSecurity() {
@@ -174,7 +174,7 @@ export default class SideNavComponent extends Component<SideNavSignature> {
   }
 
   @action openChatBox() {
-    this.freshdesk.openFreshchatWidget();
+    this.hubspot.openChat();
   }
 
   @action async showGuide() {

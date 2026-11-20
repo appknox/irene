@@ -24,7 +24,9 @@ type ImageData = {
 };
 
 type IntegrationData = {
-  freshchat_key: string;
+  hubspot_portal_id: string;
+  knowledge_base_url: string;
+  knowledge_base_mode: string;
   pendo_key: string;
   freshdesk_configuration: {
     widget_id: string;
@@ -101,7 +103,9 @@ export default class ConfigurationService extends Service {
   };
 
   integrationData: IntegrationData = {
-    freshchat_key: '',
+    hubspot_portal_id: '',
+    knowledge_base_url: '',
+    knowledge_base_mode: '',
     freshdesk_configuration: {
       widget_id: '',
     },
@@ -137,7 +141,12 @@ export default class ConfigurationService extends Service {
       this.imageData.logo_on_lightbg ||= data.images.logo_on_lightbg;
 
       this.integrationData.pendo_key ||= data.integrations.pendo_key;
-      this.integrationData.freshchat_key ||= data.integrations.freshchat_key;
+      this.integrationData.hubspot_portal_id ||=
+        data.integrations.hubspot_portal_id;
+      this.integrationData.knowledge_base_url ||=
+        data.integrations.knowledge_base_url;
+      this.integrationData.knowledge_base_mode ||=
+        data.integrations.knowledge_base_mode;
 
       this.integrationData.freshdesk_configuration.widget_id ||=
         data.integrations.freshdesk_configuration.widget_id;
