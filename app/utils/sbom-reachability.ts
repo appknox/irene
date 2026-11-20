@@ -283,6 +283,10 @@ export function presenceLabelKey(presence?: string | null): string {
  * support and power users.
  */
 const BLOCKER_CATEGORY_KEYS: [pattern: RegExp, key: string][] = [
+  [
+    /INSUFFICIENT_MEMORY|MEMORY_ADMISSION_DEFERRED|DEX_PARSER_MEMORY_PRESSURE|_LIMIT_EXCEEDED$|_TIMEOUT$/,
+    'resourceLimit',
+  ],
   [/TARGET_DATA_MISSING/, 'noTargetData'],
   [/^IOS_TARGET_SYMBOL_NOT_OBSERVED$/, 'notInBinary'],
   [/^IOS_TARGET_SYMBOL_AMBIGUOUS$/, 'ambiguousSymbol'],
@@ -301,10 +305,6 @@ const BLOCKER_CATEGORY_KEYS: [pattern: RegExp, key: string][] = [
   [/FLUTTER_|DART_|HERMES|REACT_NATIVE_|REACT_METHOD_/, 'framework'],
   [/TARGET_CAPABILITY_/, 'limitedEvidence'],
   [/ARTIFACT_|INSTALLED_SPLIT_|AAB_|ANDROID_DELIVERY_VIEW_/, 'artifact'],
-  [
-    /INSUFFICIENT_MEMORY|MEMORY_ADMISSION_DEFERRED|DEX_PARSER_MEMORY_PRESSURE|_LIMIT_EXCEEDED$|_TIMEOUT$/,
-    'resourceLimit',
-  ],
 ];
 
 export function blockerCategoryKey(blocker: string): string {
@@ -359,7 +359,7 @@ function formatDexType(descriptor: string, offset: number): [string, number] {
  * (`com.foo.Bar.baz(int)`). Non-DEX signatures pass through unchanged.
  */
 export function formatDexSignature(signature: string): string {
-  const match = signature.match(/^L([^;]+);->([^(<]+)(\(.*)?$/);
+  const match = signature.match(/^L([^;]+);->([^()]+)(\(.*)?$/);
 
   if (!match) {
     return signature;
@@ -398,16 +398,17 @@ export function shortSignature(signature: string): {
   packageName: string | null;
   display: string;
 } {
-  const dex = signature.match(/^L([^;]+);->([^(<]+)(\(.*)?$/);
+  const dex = signature.match(/^L([^;]+);->([^()]+)(\(.*)?$/);
 
   if (dex) {
     const [, rawOwner = '', name = ''] = dex;
     const segments = rawOwner.split('/');
     const className = segments.pop() ?? '';
+    const method = name === '<init>' ? className : name;
 
     return {
       packageName: segments.join('.') || null,
-      display: `${className}.${name}()`,
+      display: `${className}.${method}()`,
     };
   }
 

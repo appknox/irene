@@ -68,7 +68,17 @@ module(
         }
       );
 
-      const sbomComponents = this.server.createList('sbom-component', 10);
+      const sbomComponents = this.server.createList('sbom-component', 10, {
+        reachability: {
+          verdict: 'CONFIRMED_REACHABLE',
+          exposure: 'CONFIRMED_EXPOSURE',
+          path_found_count: 1,
+          potential_count: 0,
+          no_path_found_count: 0,
+          unknown_count: 0,
+          advisory_count: 1,
+        },
+      });
 
       const sbomService = this.owner.lookup('service:sbom-scan-details');
 

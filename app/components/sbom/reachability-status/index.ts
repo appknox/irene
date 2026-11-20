@@ -23,7 +23,8 @@ export interface SbomReachabilityStatusSignature {
      */
     exposure?: string | null;
     /**
-     * Closed-row mode: Unknown / Unsupported / missing verdict render as "-".
+     * Closed-row mode: a missing verdict renders as "-"; every present
+     * verdict keeps its chip (Unknown / Unsupported read as Inconclusive).
      */
     compact?: boolean;
     /**

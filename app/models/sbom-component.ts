@@ -6,7 +6,7 @@ import type IntlService from 'ember-intl/services/intl';
 import { ENUMS_DISPLAY } from 'irene/enums';
 import type SbomFileModel from './sbom-file';
 import {
-  shouldShowReachabilityChip,
+  isQuietReachabilityVerdict,
   type SbomComponentReachability,
 } from 'irene/utils/sbom-reachability';
 
@@ -149,7 +149,7 @@ export default class SbomComponentModel extends Model {
   }
 
   get hasReachabilitySummary() {
-    return shouldShowReachabilityChip(this.reachability?.verdict);
+    return !isQuietReachabilityVerdict(this.reachability?.verdict);
   }
 
   get cleanVersion() {

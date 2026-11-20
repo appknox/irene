@@ -3,29 +3,29 @@
   align-items: center;
   gap: 0.4em;
   padding: 0.25em 0.7em;
-  border-radius: var(--border-radius-capsule);
+  border-radius: var(--sbom-scan-details-component-list-reachability-counts-chip-border-radius);
   white-space: nowrap;
 }
 
 .count-chip-reachable {
-  background: var(--sbom-reachability-counts-reachable-background);
-  color: var(--sbom-reachability-counts-reachable-color);
+  background: var(--sbom-scan-details-component-list-reachability-counts-reachable-background);
+  color: var(--sbom-scan-details-component-list-reachability-counts-reachable-color);
 }
 
 .count-chip-potential {
-  background: var(--sbom-reachability-counts-potential-background);
-  color: var(--sbom-reachability-counts-potential-color);
+  background: var(--sbom-scan-details-component-list-reachability-counts-potential-background);
+  color: var(--sbom-scan-details-component-list-reachability-counts-potential-color);
 }
 
 .count-chip-inconclusive {
-  background: var(--sbom-reachability-counts-inconclusive-background);
-  color: var(--sbom-reachability-counts-inconclusive-color);
+  background: var(--sbom-scan-details-component-list-reachability-counts-inconclusive-background);
+  color: var(--sbom-scan-details-component-list-reachability-counts-inconclusive-color);
 }
 
 // A zero count stays legible but recedes, so a row's real findings lead.
 .count-chip-empty {
   background: transparent;
-  color: var(--sbom-reachability-counts-empty-color);
+  color: var(--sbom-scan-details-component-list-reachability-counts-empty-color);
 }
 
 .count-dot {
