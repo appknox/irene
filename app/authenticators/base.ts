@@ -6,7 +6,7 @@ import type RouterService from '@ember/routing/router-service';
 
 import ENV from 'irene/config/environment';
 import type OidcService from 'irene/services/oidc';
-import type FreshdeskService from 'irene/services/freshdesk';
+import type HubspotService from 'irene/services/hubspot';
 import { getB64Token } from 'irene/utils/b64-encode-unicode';
 import type IreneAjaxService from 'irene/services/ajax';
 import type { SessionService } from 'irene/adapters/auth-base';
@@ -35,7 +35,7 @@ export default class BaseAuthenticator extends Base {
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service declare oidc: OidcService;
-  @service declare freshdesk: FreshdeskService;
+  @service declare hubspot: HubspotService;
 
   restoreLastTransition(userId: number) {
     const redirected = this.oidc.checkForOidcTokenAndRedirect();
@@ -79,7 +79,7 @@ export default class BaseAuthenticator extends Base {
 
     await this.ajax.post(url);
 
-    this.freshdesk.destroyFreshchatWidget();
+    this.hubspot.clearChat();
 
     location.reload();
   }

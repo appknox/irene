@@ -1,0 +1,132 @@
+.article-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  margin-bottom: 1em;
+}
+
+.article-title {
+  margin: 0;
+  font-size: 1.5em;
+  font-weight: 600;
+  color: var(--top-nav-knowledge-base-panel-text-primary);
+}
+
+.article-open-link {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--top-nav-knowledge-base-panel-text-secondary);
+}
+
+.article-body {
+  color: var(--top-nav-knowledge-base-panel-text-primary);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+
+  p,
+  ul,
+  ol,
+  pre,
+  blockquote,
+  table {
+    margin: 0 0 1em;
+  }
+
+  ul,
+  ol {
+    padding-left: 1.5em;
+  }
+
+  ul {
+    list-style: disc;
+  }
+
+  ol {
+    list-style: decimal;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin: 1.25em 0 0.5em;
+    font-weight: 600;
+  }
+
+  h1 {
+    font-size: 1.375em;
+  }
+
+  h2 {
+    font-size: 1.25em;
+  }
+
+  h3,
+  h4,
+  h5 {
+    font-size: 1.125em;
+  }
+
+  a {
+    color: var(--top-nav-knowledge-base-panel-link-color);
+    text-decoration: underline;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+  }
+
+  th {
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  td {
+    min-width: 7em;
+  }
+
+  th:first-child,
+  td:first-child {
+    min-width: 3em;
+  }
+
+  th,
+  td {
+    overflow-wrap: normal;
+    padding: 0.375em 0.625em;
+    border: 1px solid var(--top-nav-knowledge-base-panel-border-color);
+    vertical-align: top;
+  }
+
+  pre {
+    overflow-x: auto;
+    padding: 0.75em;
+    white-space: pre-wrap;
+    background-color: var(--top-nav-knowledge-base-panel-item-background);
+    border-radius: var(--top-nav-knowledge-base-panel-border-radius);
+  }
+
+  // HubSpot notes are blockquotes; shown as a callout like the Freshdesk widget.
+  blockquote {
+    padding: 0.75em 1em;
+    background-color: var(--top-nav-knowledge-base-panel-note-background);
+    border: 1px solid var(--top-nav-knowledge-base-panel-note-border-color);
+    border-radius: var(--top-nav-knowledge-base-panel-border-radius);
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    p:first-child strong {
+      text-decoration: underline;
+    }
+  }
+}

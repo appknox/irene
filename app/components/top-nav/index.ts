@@ -5,7 +5,7 @@ import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
 import type UserModel from 'irene/models/user';
-import type FreshdeskService from 'irene/services/freshdesk';
+import type HubspotService from 'irene/services/hubspot';
 import type UserAuthService from 'irene/services/user-auth';
 
 import styles from './index.scss';
@@ -38,7 +38,7 @@ interface ProfileMenuItem {
 }
 
 export default class TopNavComponent extends Component<TopNavSignature> {
-  @service declare freshdesk: FreshdeskService;
+  @service declare hubspot: HubspotService;
   @service declare intl: IntlService;
   @service declare userAuth: UserAuthService;
 
@@ -51,7 +51,7 @@ export default class TopNavComponent extends Component<TopNavSignature> {
   }
 
   get showChatSupport() {
-    return this.freshdesk.freshchatEnabled;
+    return this.hubspot.chatEnabled;
   }
 
   get showNotifications() {
@@ -94,7 +94,7 @@ export default class TopNavComponent extends Component<TopNavSignature> {
   }
 
   @action openChatBox() {
-    this.freshdesk.openFreshchatWidget();
+    this.hubspot.openChat();
     this.handleProfileMenuClose();
   }
 

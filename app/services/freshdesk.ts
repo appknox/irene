@@ -1,13 +1,12 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
-import { injectSupportWidget, installFreshChat } from 'irene/utils/freshdesk';
+import { injectSupportWidget } from 'irene/utils/freshdesk';
 import { action } from '@ember/object';
 
 import type ConfigurationService from './configuration';
+import type KnowledgeBaseService from './knowledge-base';
 import type LoggerService from './logger';
-import type OrganizationService from './organization';
-import type UserModel from 'irene/models/user';
 import type IreneAjaxService from './ajax';
 
 type WidgetAuthResponse = {
@@ -19,9 +18,9 @@ type WidgetAuthResponse = {
 export default class FreshdeskService extends Service {
   @service('browser/window') declare window: Window;
   @service declare configuration: ConfigurationService;
+  @service declare knowledgeBase: KnowledgeBaseService;
   @service declare logger: LoggerService;
   @service declare ajax: IreneAjaxService;
-  @service declare organization: OrganizationService;
 
   @tracked widgetAuthToken = '';
 
@@ -35,42 +34,16 @@ export default class FreshdeskService extends Service {
     return this.freshdeskConfiguration?.widget_id || '';
   }
 
-  get freshchatKey() {
-    return this.configuration.integrationData?.freshchat_key || '';
-  }
-
   get supportWidgetIsEnabled() {
+    // Once the HubSpot knowledge base is configured (Help tab or URL) the
+    // button opens that instead, so the Freshdesk widget is not loaded at all.
+    if (this.knowledgeBase.isAvailable) {
+      return false;
+    }
+
     const key = this.supportWidgetKey;
 
     return !!key;
-  }
-
-  get freshchatEnabled() {
-    const key = this.freshchatKey;
-
-    return !!key;
-  }
-
-  // Check if fresh chat widget is injected
-  get freshChatIsIntegrated() {
-    return this.window?.fcWidget && 'object' === typeof this.window.fcWidget;
-  }
-
-  openFreshchatWidget() {
-    if (!this.freshChatIsIntegrated || this.window.fcWidget.isOpen()) {
-      return;
-    }
-
-    this.window.fcWidget.open();
-  }
-
-  // Destroy widget when user logs out
-  destroyFreshchatWidget() {
-    if (!this.freshChatIsIntegrated) {
-      return;
-    }
-
-    this.window.fcWidget.destroy();
   }
 
   // Check if support widget is injected
@@ -158,15 +131,4 @@ export default class FreshdeskService extends Service {
       this.logger.error(error);
     }
   });
-
-  @action
-  configureFreshchat(user: UserModel) {
-    if (!this.freshchatEnabled) {
-      this.logger.debug('Freshchat is disabled');
-
-      return;
-    }
-
-    installFreshChat(user, this.organization.selected, this.freshchatKey);
-  }
 }

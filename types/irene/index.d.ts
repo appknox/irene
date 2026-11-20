@@ -36,32 +36,30 @@ declare global {
     launchMethod: 'auto-badge';
   }
 
+  interface HubSpotConversationsSettings {
+    loadImmediately?: boolean;
+    identificationEmail?: string;
+    identificationToken?: string;
+  }
+
+  interface HubSpotConversationsApi {
+    widget: {
+      load(): void;
+      open(): void;
+      remove(): void;
+      openToKnowledgeBase?(): void;
+    };
+    clear(options?: { resetWidget?: boolean }): void;
+  }
+
   interface Window {
     FreshworksWidget: UnknownFnType;
-    fcWidget: {
-      open: UnknownFnType;
-      isOpen(): boolean;
-      destroy(): void;
-
-      on(
-        event: string,
-        cb: (val: { status: number; data: { restoreId: string } }) => void
-      ): void;
-
-      user: {
-        get(
-          cb: (val: { status: number; data: { restoreId: string } }) => void
-        ): void;
-
-        create(val: Record<string, string | undefined>): void;
-        setProperties(val: Record<string, string | undefined>): void;
-      };
-    };
     pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
     fwSettings: { widget_id: string };
-    fcSettings: object;
-    fcWidgetMessengerConfig: object;
+    hsConversationsSettings: HubSpotConversationsSettings;
+    hsConversationsOnReady: Array<() => void>;
+    HubSpotConversations?: HubSpotConversationsApi;
     grecaptcha?: { execute: (options: { action: string }) => Promise<string> };
   }
 
