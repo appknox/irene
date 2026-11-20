@@ -84,11 +84,24 @@
     border-collapse: collapse;
   }
 
-  th,
+  th {
+    white-space: nowrap;
+    text-align: left;
+  }
+
   td {
     min-width: 7em;
+  }
+
+  th:first-child,
+  td:first-child {
+    min-width: 3em;
+  }
+
+  th,
+  td {
     overflow-wrap: normal;
-    padding: 0.5em 0.75em;
+    padding: 0.375em 0.625em;
     border: 1px solid var(--top-nav-knowledge-base-panel-border-color);
     vertical-align: top;
   }
