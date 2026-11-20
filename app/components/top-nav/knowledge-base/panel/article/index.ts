@@ -50,8 +50,14 @@ export default class TopNavKnowledgeBasePanelArticleComponent extends Component<
       return;
     }
 
-    // Resolve against the help center, not the dashboard's own origin.
-    const url = new URL(href, this.args.article.url);
+    let url: URL;
+
+    try {
+      // Resolve against the help center, not the dashboard's own origin.
+      url = new URL(href, this.args.article.url);
+    } catch {
+      return;
+    }
 
     if (['http:', 'https:', 'mailto:'].includes(url.protocol)) {
       this.window.open(url.href, '_blank', 'noopener,noreferrer');

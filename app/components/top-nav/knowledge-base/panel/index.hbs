@@ -8,7 +8,7 @@
   <div local-class='panel-root' data-test-topNav-knowledgeBase-panel>
     <div local-class='panel-header'>
       <div local-class='panel-header-actions'>
-        {{#if this.showBackButton}}
+        {{#if this.isArticleView}}
           <AkButton
             @variant='text'
             @color='inherit'
@@ -35,10 +35,11 @@
         </AkIconButton>
       </div>
 
-      {{#unless this.showBackButton}}
+      {{#unless this.isArticleView}}
         <AkTypography
           @variant='h4'
           @color='inherit'
+          @fontWeight='bold'
           local-class='panel-title'
           data-test-topNav-knowledgeBase-panel-title
         >
@@ -48,7 +49,7 @@
     </div>
 
     <div local-class='panel-card' data-test-topNav-knowledgeBase-panel-card>
-      {{#if this.showBackButton}}
+      {{#if this.isArticleView}}
         {{#if this.article}}
           <TopNav::KnowledgeBase::Panel::Article @article={{this.article}} />
         {{else if this.hasArticleError}}

@@ -6,6 +6,20 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { click, render, waitUntil } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
+// ─── Selectors ───────────────────────────────────────────────────────────
+
+const selectors = {
+  knowledgeBaseBtn: '[data-test-topNav-KnowledgeBaseBtn]',
+  knowledgeBaseBtnIcon:
+    '[data-test-topNav-KnowledgeBaseBtn] [data-test-ak-icon]',
+  panelTitle: '[data-test-topNav-knowledgeBase-panel-title]',
+  panelCloseBtn: '[data-test-topNav-knowledgeBase-panel-closeBtn]',
+};
+
+// ─── Fixtures ────────────────────────────────────────────────────────────
+
+const TEMPLATE = hbs`<TopNav::KnowledgeBase />`;
+
 const KB_URL = 'https://help.appknox.com/en/knowledge';
 
 class WindowStub extends Service {
@@ -73,15 +87,13 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
       categories: [],
     }));
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-knowledgeBase-panel-title]').doesNotExist();
+    assert.dom(selectors.panelTitle).doesNotExist();
 
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await click(selectors.knowledgeBaseBtn);
 
-    assert
-      .dom('[data-test-topNav-knowledgeBase-panel-title]')
-      .hasText(t('knowledgeBasePanel.welcome'));
+    assert.dom(selectors.panelTitle).hasText(t('knowledgeBasePanel.welcome'));
 
     assert.strictEqual(this.window.opened.length, 0, 'no new tab');
     assert.strictEqual(this.hubspot.helpTabOpened, 0, 'no Help tab');
@@ -89,22 +101,20 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
 
     const knowledgeBase = this.owner.lookup('service:knowledge-base');
 
-    await click('[data-test-topNav-knowledgeBase-panel-closeBtn]');
+    await click(selectors.panelCloseBtn);
     await waitUntil(() => !knowledgeBase.isPanelOpen, { timeout: 1000 });
 
-    assert.dom('[data-test-topNav-knowledgeBase-panel-title]').doesNotExist();
+    assert.dom(selectors.panelTitle).doesNotExist();
   });
 
   test('it opens the configured knowledge base in a new tab', async function (assert) {
     this.configuration.integrationData = { knowledge_base_url: KB_URL };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert
-      .dom('[data-test-topNav-KnowledgeBaseBtn]')
-      .hasText(t('knowledgeBase'));
+    assert.dom(selectors.knowledgeBaseBtn).hasText(t('knowledgeBase'));
 
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await click(selectors.knowledgeBaseBtn);
 
     assert.deepEqual(this.window.opened, [
       [KB_URL, '_blank', 'noopener,noreferrer'],
@@ -116,8 +126,8 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
     this.configuration.integrationData = { knowledge_base_url: KB_URL };
     this.freshdesk.supportWidgetIsEnabled = true;
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await render(TEMPLATE);
+    await click(selectors.knowledgeBaseBtn);
 
     assert.strictEqual(this.window.opened.length, 1);
     assert.strictEqual(this.freshdesk.widgetOpened, 0);
@@ -129,11 +139,14 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
       knowledge_base_mode: 'widget',
     };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-KnowledgeBaseBtn]').exists();
+    assert.dom(selectors.knowledgeBaseBtn).hasText(t('knowledgeBase'));
+    assert
+      .dom(selectors.knowledgeBaseBtnIcon)
+      .hasAttribute('icon', /import-contacts/);
 
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await click(selectors.knowledgeBaseBtn);
 
     assert.strictEqual(this.hubspot.helpTabOpened, 1);
     assert.strictEqual(this.window.opened.length, 0);
@@ -143,11 +156,11 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   test('widget mode alone shows the button even without a url', async function (assert) {
     this.configuration.integrationData = { knowledge_base_mode: 'widget' };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-KnowledgeBaseBtn]').exists();
+    assert.dom(selectors.knowledgeBaseBtn).hasText(t('knowledgeBase'));
 
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await click(selectors.knowledgeBaseBtn);
 
     assert.strictEqual(this.hubspot.helpTabOpened, 1);
   });
@@ -159,8 +172,8 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
       knowledge_base_mode: 'widget',
     };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await render(TEMPLATE);
+    await click(selectors.knowledgeBaseBtn);
 
     assert.deepEqual(this.window.opened, [
       [KB_URL, '_blank', 'noopener,noreferrer'],
@@ -170,8 +183,8 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   test('without the widget mode the Help tab is never used', async function (assert) {
     this.configuration.integrationData = { knowledge_base_url: KB_URL };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await render(TEMPLATE);
+    await click(selectors.knowledgeBaseBtn);
 
     assert.strictEqual(this.hubspot.helpTabOpened, 0);
     assert.strictEqual(this.window.opened.length, 1);
@@ -180,20 +193,20 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   test('it falls back to the Freshdesk widget when no url is configured', async function (assert) {
     this.freshdesk.supportWidgetIsEnabled = true;
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-KnowledgeBaseBtn]').exists();
+    assert.dom(selectors.knowledgeBaseBtn).hasText(t('knowledgeBase'));
 
-    await click('[data-test-topNav-KnowledgeBaseBtn]');
+    await click(selectors.knowledgeBaseBtn);
 
     assert.strictEqual(this.freshdesk.widgetOpened, 1);
     assert.strictEqual(this.window.opened.length, 0);
   });
 
   test('it is hidden when neither a url nor the widget is configured', async function (assert) {
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-KnowledgeBaseBtn]').doesNotExist();
+    assert.dom(selectors.knowledgeBaseBtn).doesNotExist();
   });
 
   test('it ignores an unsafe configured url', async function (assert) {
@@ -201,8 +214,8 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
       knowledge_base_url: 'javascript:alert(1)',
     };
 
-    await render(hbs`<TopNav::KnowledgeBase />`);
+    await render(TEMPLATE);
 
-    assert.dom('[data-test-topNav-KnowledgeBaseBtn]').doesNotExist();
+    assert.dom(selectors.knowledgeBaseBtn).doesNotExist();
   });
 });

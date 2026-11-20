@@ -35,8 +35,7 @@ export default class FreshdeskService extends Service {
   }
 
   get supportWidgetIsEnabled() {
-    // Once the HubSpot knowledge base is configured (Help tab or URL) the
-    // button opens that instead, so the Freshdesk widget is not loaded at all.
+    // Any HubSpot knowledge base mode replaces the Freshdesk widget entirely.
     if (this.knowledgeBase.isAvailable) {
       return false;
     }

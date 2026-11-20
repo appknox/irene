@@ -47,7 +47,8 @@ export default class TopNavKnowledgeBasePanelComponent extends Component<TopNavK
   @tracked searchResults: KnowledgeBaseArticleSummary[] = [];
   @tracked selectedArticleId: string | null = null;
   @tracked article: KnowledgeBaseArticle | null = null;
-  @tracked hasListError = false;
+  @tracked hasSuggestedError = false;
+  @tracked hasSearchError = false;
   @tracked hasArticleError = false;
 
   constructor(owner: unknown, args: TopNavKnowledgeBasePanelSignature['Args']) {
@@ -60,8 +61,12 @@ export default class TopNavKnowledgeBasePanelComponent extends Component<TopNavK
     return styles['drawer-container'];
   }
 
-  get showBackButton() {
+  get isArticleView() {
     return this.selectedArticleId !== null;
+  }
+
+  get hasListError() {
+    return this.isSearching ? this.hasSearchError : this.hasSuggestedError;
   }
 
   get isSearching() {
@@ -118,17 +123,18 @@ export default class TopNavKnowledgeBasePanelComponent extends Component<TopNavK
       }
 
       this.suggested = data.suggested;
-      this.hasListError = false;
+      this.hasSuggestedError = false;
     } catch (error) {
       this.logger.debug('Knowledge base articles unavailable', error);
-      this.hasListError = true;
+      this.hasSuggestedError = true;
     }
   });
 
   searchArticles = task({ restartable: true }, async (query: string) => {
+    this.hasSearchError = false;
+
     if (!query.trim()) {
       this.searchResults = [];
-      this.hasListError = false;
 
       return;
     }
@@ -146,11 +152,10 @@ export default class TopNavKnowledgeBasePanelComponent extends Component<TopNavK
       }
 
       this.searchResults = data.results;
-      this.hasListError = false;
     } catch (error) {
       this.logger.debug('Knowledge base search unavailable', error);
       this.searchResults = [];
-      this.hasListError = true;
+      this.hasSearchError = true;
     }
   });
 

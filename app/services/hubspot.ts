@@ -90,7 +90,6 @@ export default class HubspotService extends Service {
     return true;
   }
 
-  // Clear the conversation and remove the widget when the user logs out
   clearChat() {
     const hubspot = this.window?.HubSpotConversations;
 
@@ -119,9 +118,7 @@ export default class HubspotService extends Service {
         return { email: response.email, token: response.token };
       }
     } catch {
-      // Fail-safe boundary: not identifying the visitor is expected when the
-      // backend or HubSpot is unavailable, and the chat must still load.
-      // The error is not logged because it can carry response data.
+      // Not logged: the error can carry response data. Chat still loads.
       this.logger.debug('HubSpot chat visitor identification unavailable');
     }
 

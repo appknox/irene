@@ -26,16 +26,11 @@
 }
 
 .panel-header-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
   border: none;
-  cursor: pointer;
   color: inherit;
   background-color: var(--top-nav-knowledge-base-panel-header-btn-background);
   border-radius: var(--top-nav-knowledge-base-panel-border-radius);
   padding: 0.5em;
-  font-weight: 600;
 }
 
 .panel-back-btn {
@@ -53,8 +48,6 @@
 .panel-title {
   margin: 0.375em 2em 0 0;
   font-size: 1.875em;
-  font-weight: 600;
-  color: inherit;
 }
 
 .panel-card {

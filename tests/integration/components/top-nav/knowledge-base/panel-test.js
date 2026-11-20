@@ -14,7 +14,7 @@ import {
 } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-const TEMPLATE = hbs`<TopNav::KnowledgeBase::Panel @onClose={{this.onClose}} />`;
+// ─── Selectors ───────────────────────────────────────────────────────────
 
 const P = '[data-test-topNav-knowledgeBase-panel';
 
@@ -38,7 +38,12 @@ const selectors = {
   error: `${P}-error]`,
   errorTitle: `${P}-errorTitle]`,
   errorDescription: `${P}-errorDescription]`,
+  bodyLink: (href) => `${P}-articleBody] a[href="${href}"]`,
 };
+
+// ─── Fixtures ────────────────────────────────────────────────────────────
+
+const TEMPLATE = hbs`<TopNav::KnowledgeBase::Panel @onClose={{this.onClose}} />`;
 
 const SUGGESTED = [
   {
@@ -253,7 +258,10 @@ module(
       await render(TEMPLATE);
       await fillIn(selectors.searchInput, 'keychain');
 
-      assert.dom(selectors.error).exists();
+      assert
+        .dom(selectors.errorTitle)
+        .hasText(t('knowledgeBasePanel.errorTitle'));
+
       assert.dom(selectors.articleItem).doesNotExist();
     });
 
@@ -286,7 +294,13 @@ module(
         .hasAttribute('target', '_blank')
         .hasAttribute('rel', 'noopener noreferrer');
 
+      assert
+        .dom(selectors.openInHelpCenter)
+        .hasAttribute('aria-label', t('knowledgeBasePanel.openInHelpCenter'))
+        .hasAttribute('title', t('knowledgeBasePanel.openInHelpCenter'));
+
       assert.dom(selectors.title).doesNotExist();
+      assert.dom(selectors.backBtn).hasText(t('back'));
 
       await click(selectors.backBtn);
 
@@ -318,8 +332,8 @@ module(
 
       assert.deepEqual(this.window.opened, []);
 
-      await click(`${selectors.articleBody} a[href^="https"]`);
-      await click(`${selectors.articleBody} a[href^="/en"]`);
+      await click(selectors.bodyLink('https://owasp.org/x'));
+      await click(selectors.bodyLink('/en/knowledge/other'));
 
       assert.deepEqual(this.window.opened, [
         ['https://owasp.org/x', '_blank', 'noopener,noreferrer'],
@@ -335,7 +349,7 @@ module(
 
       heading.scrollIntoView = () => (scrolled = true);
 
-      await click(`${selectors.articleBody} a[href="#Steps"]`);
+      await click(selectors.bodyLink('#Steps'));
 
       assert.true(scrolled, 'the anchor target is scrolled into view');
       assert.strictEqual(this.window.opened.length, 2, 'anchor does not open');
@@ -345,11 +359,78 @@ module(
       await render(TEMPLATE);
 
       assert.strictEqual(this.closed, 0);
+      assert.dom(selectors.closeBtn).hasAttribute('aria-label', t('close'));
 
       await click(selectors.closeBtn);
       await waitUntil(() => this.closed === 1, { timeout: 1000 });
 
       assert.strictEqual(this.closed, 1);
+    });
+    test('it shows a loader while an article loads', async function (assert) {
+      await render(TEMPLATE);
+
+      this.server.timing = 200;
+
+      click(selectors.articleItemById('1'));
+
+      await waitFor(selectors.loader);
+
+      assert.dom(selectors.loader).exists();
+      assert.dom(selectors.article).doesNotExist();
+
+      await settled();
+
+      assert.dom(selectors.loader).doesNotExist();
+      assert.dom(selectors.articleHeading).hasText(ARTICLE.title);
+    });
+
+    test('a suggested-articles error stays after searching and clearing', async function (assert) {
+      this.server.get('/v2/hubspot/kb/', {}, 503);
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.error).exists();
+
+      await fillIn(selectors.searchInput, 'keychain');
+
+      assert.dom(selectors.error).doesNotExist();
+      assert.dom(selectors.articleItem).exists({ count: 1 });
+
+      await fillIn(selectors.searchInput, '');
+
+      assert
+        .dom(selectors.errorTitle)
+        .hasText(t('knowledgeBasePanel.errorTitle'));
+    });
+
+    test('an unexpected suggested-articles payload is shown as an error', async function (assert) {
+      this.server.get('/v2/hubspot/kb/', () => ({ unexpected: true }));
+
+      await render(TEMPLATE);
+
+      assert
+        .dom(selectors.errorTitle)
+        .hasText(t('knowledgeBasePanel.errorTitle'));
+    });
+
+    test('an unexpected article payload is shown as an error', async function (assert) {
+      this.server.get('/v2/hubspot/kb/:id/', () => ({ id: '1' }));
+
+      await render(TEMPLATE);
+      await click(selectors.articleItemById('1'));
+
+      assert.dom(selectors.article).doesNotExist();
+      assert
+        .dom(selectors.errorTitle)
+        .hasText(t('knowledgeBasePanel.errorTitle'));
+    });
+
+    test('list items show the article icon', async function (assert) {
+      await render(TEMPLATE);
+
+      assert
+        .dom(`${selectors.articleItemById('1')} [data-test-ak-icon]`)
+        .hasAttribute('icon', /import-contacts/);
     });
   }
 );
