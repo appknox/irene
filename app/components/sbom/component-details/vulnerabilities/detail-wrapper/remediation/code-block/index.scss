@@ -2,8 +2,12 @@
   width: 100%;
   min-width: 0;
   overflow: hidden;
-  border-radius: var(--sbom-remediation-border-radius);
-  background: var(--sbom-remediation-code-background);
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-border-radius
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-body-background
+  );
 }
 
 .code-block-bar {
@@ -11,20 +15,32 @@
   align-items: center;
   justify-content: space-between;
   padding: 0.5em 0.9em;
-  color: var(--sbom-remediation-code-label-color);
-  background: var(--sbom-remediation-code-bar-background);
+  color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-label-color
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-bar-background
+  );
 }
 
 .code-block-label {
-  font-family: var(--font-family-mono);
+  font-family: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-label-font-family
+  );
 }
 
 .copy-button {
   padding: 0.2em 0.7em;
   border: none;
-  border-radius: var(--border-radius-4);
-  background: var(--sbom-remediation-copy-background);
-  color: var(--sbom-remediation-copy-color);
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-copy-button-border-radius
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-copy-button-background
+  );
+  color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-copy-button-color
+  );
   font-family: inherit;
   cursor: pointer;
 }
@@ -33,8 +49,12 @@
   margin: 0;
   padding: 1em 0.9em;
   overflow-x: auto;
-  color: var(--sbom-remediation-code-color);
-  font-family: var(--font-family-mono);
+  color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-body-color
+  );
+  font-family: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-code-block-body-font-family
+  );
   font-size: 0.85em;
   line-height: 1.6;
   white-space: pre;

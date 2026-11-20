@@ -6,6 +6,6 @@
 }
 
 .coordinate {
-  font-family: monospace !important;
+  font-family: var(--sbom-component-insights-coordinate-font-family) !important;
   overflow-wrap: anywhere;
 }

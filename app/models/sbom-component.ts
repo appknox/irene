@@ -3,7 +3,7 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 import type SbomFileModel from './sbom-file';
 import { ENUMS_DISPLAY } from 'irene/enums';
 import {
-  shouldShowReachabilityChip,
+  isQuietReachabilityVerdict,
   type SbomComponentReachability,
 } from 'irene/utils/sbom-reachability';
 
@@ -92,7 +92,7 @@ export default class SbomComponentModel extends Model {
   }
 
   get hasReachabilitySummary() {
-    return shouldShowReachabilityChip(this.reachability?.verdict);
+    return !isQuietReachabilityVerdict(this.reachability?.verdict);
   }
 
   get cleanVersion() {

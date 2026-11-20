@@ -4,10 +4,10 @@
   overflow: hidden;
   border: 1px solid
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-color
     );
   border-radius: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-radius
   );
 }
 
@@ -16,7 +16,7 @@
   border: none;
   background: transparent;
   color: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-toggle-color
   );
   font-family: inherit;
   font-size: 0.85em;
@@ -26,10 +26,10 @@
 
 .toggle-option-active {
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-toggle-active-background
   );
   color: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-toggle-active-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-toggle-active-color
   );
 }
 
@@ -37,7 +37,7 @@
   padding-left: 1em;
   border-left: 3px solid
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-narrative-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-narrative-border-color
     );
 }
 
@@ -65,10 +65,10 @@
 .analysis-detail {
   padding: 0.75em 1em;
   border-radius: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-radius
   );
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-library-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-library-background
   );
   overflow-wrap: break-word;
 }
@@ -80,10 +80,10 @@
   box-sizing: border-box;
   border: 1px solid
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-color
     );
   border-radius: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-radius
   );
 }
 
@@ -103,7 +103,7 @@
     flex: 1;
     height: 1px;
     background: var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-color
     );
     content: '';
   }
@@ -118,7 +118,7 @@
 .group-steps-library {
   padding: 0.75em 1em;
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-library-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-library-background
   );
 }
 
@@ -136,7 +136,7 @@
     width: 1px;
     height: calc(100% + 0.9em);
     background: var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-connector-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-connector-color
     );
     transform: translateX(-50%);
     content: '';
@@ -156,17 +156,17 @@
   box-sizing: border-box;
   border: 2px solid
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-marker-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-marker-color
     );
   border-radius: 50%;
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-marker-hollow-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-marker-hollow-background
   );
 }
 
 .step-marker-milestone {
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-marker-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-marker-color
   );
 }
 
@@ -179,7 +179,7 @@
 
 .signature {
   font-family: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-font-family-mono
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-font-family-mono
   );
   font-variant-ligatures: none;
   font-feature-settings:
@@ -195,14 +195,14 @@
 // error ink (set on the typography), so the end of the path reads at a glance.
 .step-marker-vulnerable {
   border-color: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-vulnerable-color
   );
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-vulnerable-color
   );
   box-shadow: 0 0 0 0.25em
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-vulnerable-halo-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-vulnerable-halo-color
     );
 }
 
@@ -212,9 +212,9 @@
   box-sizing: border-box;
   border: 1px dashed
     var(
-      --sbom-component-details-vulnerabilities-reachability-call-path-no-trace-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-no-trace-border-color
     );
   border-radius: var(
-    --sbom-component-details-vulnerabilities-reachability-call-path-border-radius
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-call-path-border-radius
   );
 }

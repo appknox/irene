@@ -3,7 +3,9 @@
 }
 
 .section-label {
-  font-weight: var(--font-weight-bold) !important;
+  font-weight: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-section-label-font-weight
+  ) !important;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }

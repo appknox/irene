@@ -4,26 +4,26 @@
   padding: 0.6em 1em;
   box-sizing: border-box;
   border-radius: var(
-    --sbom-component-details-vulnerabilities-reachability-targets-border-radius
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-border-radius
   );
 }
 
 .target-row-called {
   border: 1px solid
     var(
-      --sbom-component-details-vulnerabilities-reachability-targets-called-border-color
+      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-border-color
     );
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-targets-called-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-background
   );
   color: var(
-    --sbom-component-details-vulnerabilities-reachability-targets-called-color
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-color
   );
 }
 
 .target-row-uncalled {
   background: var(
-    --sbom-component-details-vulnerabilities-reachability-targets-uncalled-background
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-uncalled-background
   );
 }
 
@@ -41,7 +41,7 @@
 
 .signature {
   font-family: var(
-    --sbom-component-details-vulnerabilities-reachability-targets-font-family-mono
+    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-font-family-mono
   );
   font-variant-ligatures: none;
   font-feature-settings:
