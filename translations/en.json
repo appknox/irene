@@ -938,6 +938,14 @@
       "chainStep": "Chain step {step} of {total}",
       "theWeakness": "The weakness",
       "howExploited": "How it was exploited",
+      "observations": "What the agent observed",
+      "otherAttempts": "Other attempts",
+      "attemptStatus": {
+        "succeeded": "Reached the goal",
+        "spent": "No result",
+        "abandoned": "Abandoned",
+        "active": "Still running"
+      },
       "evidence": "Evidence",
       "howToFix": "How to fix it",
       "pagerOf": "{current} of {total}",
@@ -973,7 +981,54 @@
       "noPathReported": "The agent reached this goal but did not report the steps it took.",
       "routeOutcome": "Goal reached",
       "ruledOut": "Ruled out",
-      "ruledOutIntro": "Routes the agent considered for this goal and set aside."
+      "ruledOutIntro": "Routes the agent considered for this goal and set aside.",
+      "weaknessFindings": "Weaknesses found & remediation",
+      "expected": "What the agent expected",
+      "alsoTriedOnPath": "Also tried on this path",
+      "otherPathsTitle": "Paths that didn't reach the goal",
+      "otherPathsIntro": "Every other route the agent took for this goal — what it expected, what it saw and why it stopped.",
+      "hypotheses": "Hypotheses",
+      "hypothesesIntro": "What the agent set out to prove for this goal, and how the run settled each one.",
+      "hypothesesCount": "{confirmed} confirmed · {refuted} ruled out",
+      "hypothesisStatus": {
+        "confirmed": "Confirmed",
+        "refuted": "Ruled out",
+        "open": "Open"
+      },
+      "hypothesisScope": {
+        "app": "About the app",
+        "method": "About the test method"
+      },
+      "hypothesisCarried": "Carried over from an earlier run",
+      "whyRefuted": "Why it was ruled out",
+      "findings": "Findings",
+      "otherFindings": "Other findings",
+      "otherFindingsIntro": "Findings the agent recorded for this goal that no technique above claims.",
+      "findingSeverity": "Severity {level}",
+      "findingCount": "{count} findings",
+      "previousFinding": "Previous finding of this kind",
+      "nextFinding": "Next finding of this kind",
+      "findingReview": "What it means",
+      "auditReason": "Reviewer's note",
+      "audit": {
+        "valid": "Verified"
+      },
+      "exploitability": {
+        "unproven": "Not proven",
+        "inert": "Inert",
+        "not_applicable": "Not applicable",
+        "demonstrated": "Demonstrated"
+      },
+      "foundAt": "Where it was found",
+      "foundBeforeRun": "Found before the run",
+      "seenAtLaunch": "Seen at launch",
+      "observationOutcome": {
+        "success": "Success",
+        "empty": "Nothing returned",
+        "refused": "Refused",
+        "error": "Error"
+      },
+      "outputCut": "Showing the first {shown} of {total} characters."
     },
     "otherTechniques": {
       "crumb": "Other techniques",
