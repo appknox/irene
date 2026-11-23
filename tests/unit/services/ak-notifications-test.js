@@ -49,4 +49,31 @@ module('Unit | Service | ak-notifications', function (hooks) {
     assert.strictEqual(service.notifications.length, 3);
     assert.strictEqual(service.notifications_drop_down.length, 3);
   });
+
+  test('it leaves out NF_AM_NEWVERSN notifications', async function (assert) {
+    const visible = this.server.createList('nf-in-app-notification', 2, {
+      hasRead: false,
+      messageCode: 'RANDOM_NF_CODE',
+    });
+
+    this.server.createList('nf-in-app-notification', 2, {
+      hasRead: false,
+      messageCode: 'NF_AM_NEWVERSN',
+    });
+
+    const service = this.owner.lookup('service:ak-notifications');
+    await service.refresh.perform();
+
+    const visibleIds = visible.map((n) => n.id);
+
+    assert.deepEqual(
+      service.notifications.map((n) => n.id),
+      visibleIds
+    );
+
+    assert.deepEqual(
+      service.notifications_drop_down.map((n) => n.id),
+      visibleIds
+    );
+  });
 });
