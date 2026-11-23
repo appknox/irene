@@ -90,8 +90,8 @@ module('Integration | Component | sbom/reachability-status', function (hooks) {
 
       assert
         .dom(selectors.chip)
-        .hasClass(RegExp(`ak-chip-color-${color}`))
-        .hasClass(RegExp(`ak-chip-variant-${variant}`));
+        .hasClass(new RegExp(`ak-chip-color-${color}`))
+        .hasClass(new RegExp(`ak-chip-variant-${variant}`));
     }
   );
 

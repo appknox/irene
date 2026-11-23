@@ -1006,7 +1006,7 @@ module('Acceptance | sbom', function (hooks) {
       ).textContent.trim();
 
       assert.strictEqual(
-        new URL(currentURL(), 'http://x').searchParams.get('vuln'),
+        new URL(currentURL(), 'https://x').searchParams.get('vuln'),
         shown
       );
 

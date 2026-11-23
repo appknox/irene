@@ -15,7 +15,7 @@ export default class AuthenticatedDashboardSbomOriginalAnalysisRoute extends Rou
 
   beforeModel(transition: Transition) {
     const params = transition.to?.params ?? {};
-    const queryParams = { ...(transition.to?.queryParams ?? {}) };
+    const queryParams = { ...transition.to?.queryParams };
 
     // Insights is the default tab when reachability ran; this link means the
     // complete list. Without reachability the tab param is dropped on arrival.

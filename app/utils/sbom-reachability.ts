@@ -152,9 +152,7 @@ export function isQuietReachabilityVerdict(verdict?: string | null): boolean {
   return !verdict || QUIET_VERDICTS.has(verdict);
 }
 
-export function shouldShowReachabilityChip(verdict?: string | null): boolean {
-  return Boolean(verdict);
-}
+export const shouldShowReachabilityChip = Boolean;
 
 export function shouldShowReachabilityDetail(
   finding?: SbomReachabilityFinding | null
@@ -213,12 +211,11 @@ export function reachabilityLabelKey(verdict?: string | null): string {
     return 'sbomModule.reachability.noPathFound';
   }
 
-  switch (verdict) {
-    case ReachabilityVerdict.UNSUPPORTED:
-      return 'sbomModule.reachability.unsupported';
-    default:
-      return 'sbomModule.reachability.inconclusive';
+  if (verdict === ReachabilityVerdict.UNSUPPORTED) {
+    return 'sbomModule.reachability.unsupported';
   }
+
+  return 'sbomModule.reachability.inconclusive';
 }
 
 /**
@@ -354,12 +351,14 @@ function formatDexType(descriptor: string, offset: number): [string, number] {
   return [`${type}${'[]'.repeat(arrays)}`, index];
 }
 
+const DEX_SIGNATURE_PATTERN = /^L([^;]+);->([^()]+)(\(.*)?$/;
+
 /**
  * Render a DEX-style signature (`Lcom/foo/Bar;->baz(I)V`) as Java source form
  * (`com.foo.Bar.baz(int)`). Non-DEX signatures pass through unchanged.
  */
 export function formatDexSignature(signature: string): string {
-  const match = signature.match(/^L([^;]+);->([^()]+)(\(.*)?$/);
+  const match = DEX_SIGNATURE_PATTERN.exec(signature);
 
   if (!match) {
     return signature;
@@ -398,7 +397,7 @@ export function shortSignature(signature: string): {
   packageName: string | null;
   display: string;
 } {
-  const dex = signature.match(/^L([^;]+);->([^()]+)(\(.*)?$/);
+  const dex = DEX_SIGNATURE_PATTERN.exec(signature);
 
   if (dex) {
     const [, rawOwner = '', name = ''] = dex;
@@ -529,10 +528,10 @@ export function groupWitnessByOwner<T extends SbomReachabilityWitnessItem>(
   for (const item of items) {
     const kind = item.owner?.kind ?? null;
     const label = item.owner?.label ?? null;
-    const last = groups[groups.length - 1];
+    const last = groups.at(-1);
 
-    if (last && last.kind === kind && last.label === label) {
-      last.items.push(item);
+    if (last?.kind === kind && last?.label === label) {
+      last?.items.push(item);
       continue;
     }
 
@@ -757,11 +756,17 @@ const LEADING_VERDICT_TOKEN = /^([A-Z][A-Z_]{3,})[.:](?=\s|$)/;
  * never splits into prose plus a "Reachable" chip, and a negated verdict
  * ("not Reachable") becomes the not-reachable chip rather than "Reachable".
  */
-const INLINE_VERDICT_SOURCE =
-  '\\b(?:(?:CONFIRMED|POTENTIALLY|NOT|[Nn]ot)[_ ])?REACHABLE\\b' +
-  '|\\bNO[_ ]PATH[_ ]FOUND\\b|\\bINCONCLUSIVE\\b' +
-  '|\\b(?:[Pp]otentially|[Nn]ot) Reachable\\b|\\b(?:Potentially|Not) reachable\\b' +
-  '|\\bReachable\\b|\\bInconclusive\\b';
+const INLINE_VERDICT_PATTERNS = [
+  String.raw`\b(?:(?:CONFIRMED|POTENTIALLY|NOT|[Nn]ot)[_ ])?REACHABLE\b`,
+  String.raw`\bNO[_ ]PATH[_ ]FOUND\b`,
+  String.raw`\bINCONCLUSIVE\b`,
+  String.raw`\b(?:[Pp]otentially|[Nn]ot) Reachable\b`,
+  String.raw`\b(?:Potentially|Not) reachable\b`,
+  String.raw`\bReachable\b`,
+  String.raw`\bInconclusive\b`,
+];
+
+const INLINE_VERDICT_SOURCE = INLINE_VERDICT_PATTERNS.join('|');
 
 function reasoningTokenVerdict(raw: string): string | null {
   const token = raw.toUpperCase().replace(/\s+/g, '_');
@@ -814,7 +819,7 @@ export function tokenizeReasoning(
     return [];
   }
 
-  const leading = text.match(LEADING_VERDICT_TOKEN);
+  const leading = LEADING_VERDICT_TOKEN.exec(text);
   const leadingVerdict = leading
     ? reasoningTokenVerdict(leading[1] ?? '')
     : null;

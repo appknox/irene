@@ -279,7 +279,7 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       },
     });
 
-    this.sbomScanDetailsService
+    void this.sbomScanDetailsService
       .setQueryData({ reachability: exposure })
       .setLimitOffset({ offset: 0 })
       .reload();

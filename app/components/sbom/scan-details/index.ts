@@ -152,8 +152,12 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
         offset: Number(component_offset),
       })
       .reload();
+  }
 
-    this.pollReachabilityStatus();
+  /** Polling starts on insert so the constructor stays synchronous. */
+  @action
+  startReachabilityPolling() {
+    void this.pollReachabilityStatus();
   }
 
   /**
@@ -186,7 +190,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     if (newStatus === ReachabilityScanStatus.COMPLETED) {
       // Terminal state — refresh the component list once so verdict chips
       // appear without a page reload, then stop polling.
-      this.sbomScanDetailsService.reload();
+      void this.sbomScanDetailsService.reload();
 
       // A bare URL means Insights now, so keep Complete explicit.
       if (this.activeView === 'complete' && !this.args.tab) {
@@ -501,7 +505,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     this.activeView = tab;
     this.sbomScanDetailsService.onlyReachable = tab === 'insights';
 
-    this.sbomScanDetailsService
+    void this.sbomScanDetailsService
       .setQueryData({
         view_type: this.viewTypeFor(tab),
         component_query: '',

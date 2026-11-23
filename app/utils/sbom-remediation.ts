@@ -79,7 +79,9 @@ export function gradleDeclaredLine(
   coordinate: string,
   version?: string | null
 ) {
-  return `implementation("${coordinate}${version ? `:${version}` : ''}")`;
+  const versionSuffix = version ? `:${version}` : '';
+
+  return `implementation("${coordinate}${versionSuffix}")`;
 }
 
 export function gradleInsightCommand(coordinate: string) {
@@ -145,16 +147,14 @@ export function podfileSnippet(name: string, fixVersion: string) {
   ].join('\n');
 }
 
-const VERSION_SEGMENT = /[0-9]+|[a-z]+/gi;
+const VERSION_SEGMENT = /\d+|[a-z]+/gi;
 
-function compareSegment(left: string | undefined, right: string | undefined) {
-  const a = left ?? '0';
-  const b = right ?? '0';
-  const aNum = /^\d+$/.test(a);
-  const bNum = /^\d+$/.test(b);
+function compareSegment(left = '0', right = '0') {
+  const aNum = /^\d+$/.test(left);
+  const bNum = /^\d+$/.test(right);
 
   if (aNum && bNum) {
-    return Math.sign(Number(a) - Number(b));
+    return Math.sign(Number(left) - Number(right));
   }
 
   // A release outranks a qualifier (`2.12.0` > `2.12.0-rc1`).
@@ -162,7 +162,7 @@ function compareSegment(left: string | undefined, right: string | undefined) {
     return aNum ? 1 : -1;
   }
 
-  return Math.sign(a.localeCompare(b));
+  return Math.sign(left.localeCompare(right));
 }
 
 /**

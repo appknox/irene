@@ -42,12 +42,17 @@ export default class SbomComponentInsightsComponent extends Component<SbomCompon
       return ref;
     }
 
-    const prefix = ref.substring(0, split);
     const leaf = ref.substring(split + 1);
 
     // An empty group leaves "eco::" behind; drop the dangling separator so
     // it reads "eco : name".
-    return `${prefix.replace(/:+$/, '')} : ${leaf}`;
+    let end = split;
+
+    while (end > 0 && ref[end - 1] === ':') {
+      end--;
+    }
+
+    return `${ref.substring(0, end)} : ${leaf}`;
   }
 
   /** Keeps the URL shareable without adding a history entry per step. */
