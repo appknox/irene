@@ -2,6 +2,7 @@ import { find, render, waitFor } from '@ember/test-helpers';
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { Response } from 'miragejs';
 import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
@@ -378,6 +379,57 @@ module(
       assert
         .dom('[data-test-sbomScanDetails-aiBomComponent-emptyTextTitle]')
         .doesNotExist();
+    });
+
+    test('it clears the previous tab components when the ai bom list request fails', async function (assert) {
+      // Regression guard: the list lives in the shared sbom-scan-details
+      // service. When the AI BoM request fails (e.g. a 404 from the backend),
+      // the stale unfiltered SBOM-tab list used to stay on screen, so normal
+      // components rendered under the AI BOM tab.
+      this.server.createList('sbom-component', 3);
+
+      this.server.get(
+        `/v2/sb_files/${this.sbomFileModelId}/sb_file_components/ai_summary`,
+        () => ({ total: 0, by_type: {}, aibom_supported: true })
+      );
+
+      const sbomService = this.owner.lookup('service:sbom-scan-details');
+
+      // The SBOM tab's load: the full, unfiltered component list.
+      await sbomService.reload();
+
+      await render(hbs`
+        <Sbom::ScanDetails::AiBomComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+        />
+      `);
+
+      await waitFor('[data-test-sbomScanDetails-aiBomComponentTable]');
+
+      assert
+        .dom('[data-test-sbomScanDetails-aiBomComponentRow]')
+        .exists({ count: 3 }, 'the previously loaded components render');
+
+      // Switch to the AI BOM tab; the backend 404s the filtered request.
+      this.server.get(
+        '/v2/sb_files/:id/sb_file_components',
+        () => new Response(404, {}, { detail: 'Not found' })
+      );
+
+      await sbomService
+        .setQueryData({ is_ai_component: 'true', component_query: '' })
+        .setLimitOffset({ offset: 0 })
+        .reload();
+
+      assert
+        .dom('[data-test-sbomScanDetails-aiBomComponentRow]')
+        .doesNotExist('stale components from the sbom tab are cleared');
+
+      assert
+        .dom('[data-test-sbomScanDetails-aiBomComponent-emptyTextTitle]')
+        .exists('the generic empty state shows instead');
     });
   }
 );

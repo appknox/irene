@@ -94,6 +94,36 @@ export default class SbomScanDetailsService extends Service {
       this.searchQuery = component_query;
     }
 
+    this.setFilterData({
+      component_type,
+      dependency_type,
+      is_ai_component,
+      ai_artifact_class,
+      ai_confidence,
+      ordering,
+      reachability,
+    });
+
+    return this;
+  }
+
+  private setFilterData({
+    component_type,
+    dependency_type,
+    is_ai_component,
+    ai_artifact_class,
+    ai_confidence,
+    ordering,
+    reachability,
+  }: Partial<{
+    component_type: number;
+    dependency_type: string | null;
+    is_ai_component: string | null;
+    ai_artifact_class: string | null;
+    ai_confidence: string | null;
+    ordering: string | null;
+    reachability: string | null;
+  }>) {
     if (component_type !== undefined && component_type !== null) {
       this.selectedComponentType = component_type;
     }
@@ -123,8 +153,6 @@ export default class SbomScanDetailsService extends Service {
     if (reachability !== undefined) {
       this.selectedReachability = reachability;
     }
-
-    return this;
   }
 
   async reload() {
@@ -189,6 +217,11 @@ export default class SbomScanDetailsService extends Service {
       this.sbomComponentList = sbomComponentList;
       this.sbomComponentsCount = sbomComponentList.meta.count;
     } catch (error) {
+      // Clear the stale list so a failed load cannot leave the previous
+      // tab's (e.g. unfiltered SBOM) data on screen.
+      this.sbomComponentList = undefined;
+      this.sbomComponentsCount = 0;
+
       this.notify.error(
         'Failed to load SBOM components. Please try again later.',
         ENV.notifications
