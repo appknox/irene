@@ -453,6 +453,15 @@ export function keptFindings(findings?: PentestFinding[]): PentestFinding[] {
 
 /** The goal without the findings the reviewer marked false positives, on the goal and on each technique. */
 function withoutFalsePositives(goal: PentestGoalResult): PentestGoalResult {
+  const hasFalsePositive = [
+    ...(goal.findings ?? []),
+    ...(goal.techniques ?? []).flatMap((t) => t.findings ?? []),
+  ].some(isFalsePositive);
+
+  if (!hasFalsePositive) {
+    return goal;
+  }
+
   return {
     ...goal,
     findings: goal.findings && keptFindings(goal.findings),
@@ -466,12 +475,17 @@ function withoutFalsePositives(goal: PentestGoalResult): PentestGoalResult {
 
 /** The goal with each technique the agent reported in the shape the goal page reads. */
 function withAgentTechniques(goal: PentestGoalResult): ResolvedGoalResult {
+  // without an agent technique every technique already has the goal page's shape
+  if (!goal.techniques?.some(isAgentTechnique)) {
+    return goal as ResolvedGoalResult;
+  }
+
   const verdict = normalizeGoalVerdict(goal.verdict);
   const exploitedGoal = verdict === 'exploited' || verdict === 'partial';
 
   return {
     ...goal,
-    techniques: goal.techniques?.map((technique) =>
+    techniques: goal.techniques.map((technique) =>
       isAgentTechnique(technique)
         ? techniqueFromAgent(technique, exploitedGoal)
         : technique
