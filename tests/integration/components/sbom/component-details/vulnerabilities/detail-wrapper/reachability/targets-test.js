@@ -7,12 +7,6 @@ import { module, test } from 'qunit';
 // ─── Selectors ───
 const selectors = {
   root: '[data-test-sbomComponentVulnerabilities-reachabilityTargets]',
-  calledLabel:
-    '[data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledLabel]',
-  called: (index) =>
-    `[data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled="${index}"]`,
-  calledToggle:
-    '[data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledToggle]',
   alsoAffectedToggle:
     '[data-test-sbomComponentVulnerabilities-reachabilityTargetsAlsoAffectedToggle]',
   alsoAffected: (index) =>
@@ -55,12 +49,10 @@ module(
 
       await render(TEMPLATE);
 
+      // The called target is already the vulnerable step in the call path.
       assert
-        .dom(selectors.calledLabel)
-        .hasText(t('sbomModule.reachability.calledByYourApp'));
-
-      assert.dom(selectors.called(0)).hasText('com.example.Parser.parse()');
-      assert.dom(selectors.called(1)).doesNotExist();
+        .dom(selectors.root)
+        .doesNotIncludeText('com.example.Parser.parse()');
 
       assert
         .dom(selectors.alsoAffectedToggle)
@@ -81,31 +73,7 @@ module(
         .hasText('com.example.Parser.readTree()');
     });
 
-    test('it collapses and expands the called targets', async function (assert) {
-      this.finding = {
-        verdict: 'CONFIRMED_REACHABLE',
-        targets: [
-          { label: 'Lcom/example/Parser;->parse()', has_witness: true },
-        ],
-      };
-
-      await render(TEMPLATE);
-
-      assert.dom(selectors.calledToggle).hasAttribute('aria-expanded', 'true');
-      assert.dom(selectors.called(0)).exists();
-
-      await click(selectors.calledToggle);
-
-      assert.dom(selectors.calledToggle).hasAttribute('aria-expanded', 'false');
-      assert.dom(selectors.called(0)).doesNotExist();
-
-      await click(selectors.calledToggle);
-
-      assert.dom(selectors.calledToggle).hasAttribute('aria-expanded', 'true');
-      assert.dom(selectors.called(0)).exists();
-    });
-
-    test('it promotes the headline target when has_witness is absent', async function (assert) {
+    test('it keeps the headline target out of the uncalled list when has_witness is absent', async function (assert) {
       this.finding = {
         verdict: 'CONFIRMED_REACHABLE',
         witness_path: [
@@ -122,8 +90,20 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.called(0)).hasText('com.example.Parser.parse()');
-      assert.dom(selectors.alsoAffectedToggle).exists();
+      // The serializer promotes the first target to "called" — which no
+      // longer renders — so only the unreached one is left to list.
+      assert
+        .dom(selectors.alsoAffectedToggle)
+        .hasText(
+          t('sbomModule.reachability.alsoAffectedNotCalled', { count: 1 })
+        );
+
+      await click(selectors.alsoAffectedToggle);
+
+      assert
+        .dom(selectors.alsoAffected(0))
+        .hasText('com.example.Parser.mapObject()');
+      assert.dom(selectors.alsoAffected(1)).doesNotExist();
     });
 
     test('it calls nothing out when the payload has no path and no flags', async function (assert) {
@@ -135,7 +115,6 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(selectors.calledLabel).doesNotExist();
       assert.dom(selectors.alsoAffectedToggle).exists();
     });
 
@@ -159,7 +138,6 @@ module(
       assert.dom(selectors.unknown(0)).exists();
       assert.dom(selectors.unknown(1)).hasText('com.example.Parser.parse()');
 
-      assert.dom(selectors.calledLabel).doesNotExist();
       assert.dom(selectors.alsoAffectedToggle).doesNotExist();
 
       await click(selectors.unknownToggle);

@@ -65,64 +65,6 @@
       </AkStack>
     {{/if}}
 
-    {{#if this.calledTargets.length}}
-      <AkStack @direction='column' @spacing='0.5' @width='full'>
-        <button
-          type='button'
-          local-class='also-affected-toggle'
-          data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledToggle
-          aria-expanded='{{if this.showCalled "true" "false"}}'
-          {{on 'click' this.toggleCalled}}
-        >
-          <AkIcon
-            @iconName={{if this.showCalled 'arrow-drop-down' 'chevron-right'}}
-            @size='small'
-            @color='textSecondary'
-          />
-
-          <AkTypography
-            data-test-sbomComponentVulnerabilities-reachabilityTargetsCalledLabel
-            @variant='body2'
-            @color='textSecondary'
-          >
-            {{t 'sbomModule.reachability.calledByYourApp'}}
-          </AkTypography>
-        </button>
-
-        {{#if this.showCalled}}
-          {{#each this.calledTargets as |target|}}
-            <AkTooltip @arrow={{true}} @placement='top'>
-              <:default>
-                <div
-                  local-class='target-row target-row-called'
-                  data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled='{{target.testIndex}}'
-                >
-                  <AkTypography
-                    local-class='signature'
-                    @variant='body2'
-                    @fontWeight='bold'
-                    @breakWord={{true}}
-                  >
-                    {{target.display}}
-                  </AkTypography>
-                </div>
-              </:default>
-
-              <:tooltipContent>
-                <div
-                  {{style
-                    width='360px'
-                    white-space='pre-line'
-                    overflow-wrap='break-word'
-                  }}
-                >{{target.signature}}</div>
-              </:tooltipContent>
-            </AkTooltip>
-          {{/each}}
-        {{/if}}
-      </AkStack>
-    {{/if}}
-
     {{#if this.hasAlsoAffected}}
       <AkStack @direction='column' @spacing='0.5' @width='full'>
         <button

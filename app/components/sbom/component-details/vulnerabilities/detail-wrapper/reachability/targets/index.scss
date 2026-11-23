@@ -8,19 +8,6 @@
   );
 }
 
-.target-row-called {
-  border: 1px solid
-    var(
-      --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-border-color
-    );
-  background: var(
-    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-background
-  );
-  color: var(
-    --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-called-color
-  );
-}
-
 .target-row-uncalled {
   background: var(
     --sbom-component-details-vulnerabilities-detail-wrapper-reachability-targets-uncalled-background

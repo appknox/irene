@@ -32,14 +32,8 @@ function toRows(targets: SbomReachabilityTarget[]): TargetRow[] {
 }
 
 export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilityTargetsComponent extends Component<SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilityTargetsSignature> {
-  @tracked showCalled = true;
   @tracked showAlsoAffected = false;
   @tracked showUnknownStatus = true;
-
-  @action
-  toggleCalled() {
-    this.showCalled = !this.showCalled;
-  }
 
   @action
   toggleAlsoAffected() {
@@ -71,11 +65,6 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
     return splitFindingTargets(this.args.finding);
   }
 
-  /** Vulnerable functions the app has a proven call path to. */
-  get calledTargets() {
-    return this.isCallStatusUnknown ? [] : toRows(this.split.called);
-  }
-
   /** Vulnerable functions in the build that nothing on the app's side calls. */
   get alsoAffectedTargets() {
     return this.isCallStatusUnknown ? [] : toRows(this.split.alsoAffected);
@@ -86,11 +75,7 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
   }
 
   get shouldShow() {
-    return (
-      this.calledTargets.length > 0 ||
-      this.hasAlsoAffected ||
-      this.unknownStatusTargets.length > 0
-    );
+    return this.hasAlsoAffected || this.unknownStatusTargets.length > 0;
   }
 }
 

@@ -2512,7 +2512,6 @@
       "checkHere": "Check here",
       "noTrace": "No trace. The vulnerable code was not found in the analysed build.",
       "noTraceRecorded": "No call path was recorded.",
-      "calledByYourApp": "Called by your app",
       "alsoAffectedNotCalled": "Also affected, not called ({count})",
       "callStatusUnknown": "Vulnerable functions, call status unknown ({count})",
       "analysisDetail": "Analysis detail",

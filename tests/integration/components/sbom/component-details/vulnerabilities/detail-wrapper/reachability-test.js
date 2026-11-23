@@ -16,8 +16,6 @@ const selectors = {
     '[data-test-sbomComponentVulnerabilities-reachabilityCallPathEdge]',
   callPathStep: (index) =>
     `[data-test-sbomComponentVulnerabilities-reachabilityCallPathStep="${index}"]`,
-  calledTarget: (index) =>
-    `[data-test-sbomComponentVulnerabilities-reachabilityTargetsCalled="${index}"]`,
   blocker: (code) =>
     `[data-test-sbomComponentVulnerabilities-detailReachabilityBlocker="${code}"]`,
   blockers:
@@ -64,7 +62,7 @@ module(
     setupIntl(hooks, 'en');
 
     // ─── Path found ───────────────────────────────────────────────────────────
-    test('it renders the called target and the call path', async function (assert) {
+    test('it renders the call path', async function (assert) {
       const store = this.owner.lookup('service:store');
 
       this.sbomVulnerabilityAudit = pushAudit(
@@ -107,9 +105,6 @@ module(
       assert
         .dom(selectors.callPathStep(1))
         .includesText(t('sbomModule.reachability.vulnerableFunction'));
-      assert
-        .dom(selectors.calledTarget(0))
-        .hasText('com.example.Parser.parse(java.lang.String)');
       assert.dom(selectors.blockers).doesNotExist();
     });
 

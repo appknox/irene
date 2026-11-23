@@ -2515,7 +2515,6 @@
       "checkHere": "ここを確認",
       "noTrace": "トレースなし。解析対象のビルドに脆弱なコードは見つかりませんでした。",
       "noTraceRecorded": "呼び出しパスは記録されていません。",
-      "calledByYourApp": "アプリから呼び出されています",
       "alsoAffectedNotCalled": "影響あり・未呼び出し ({count})",
       "callStatusUnknown": "脆弱な関数・呼び出し状況不明 ({count})",
       "analysisDetail": "分析の詳細",

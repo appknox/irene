@@ -143,6 +143,9 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
       ...group,
       testKey: index,
       isComponent: group.kind === WitnessOwnerKind.COMPONENT,
+      isBoundary:
+        group.kind === WitnessOwnerKind.COMPONENT ||
+        group.kind === WitnessOwnerKind.PLATFORM,
       headerLabel: this.headerLabel(group),
     }));
   }
@@ -165,10 +168,11 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
     }
 
     if (group.kind === WitnessOwnerKind.PLATFORM) {
-      return (
-        group.label?.trim() ||
-        this.intl.t('sbomModule.reachability.platformCode')
-      );
+      return this.intl.t('sbomModule.reachability.entersComponent', {
+        component:
+          group.label?.trim() ||
+          this.intl.t('sbomModule.reachability.platformCode'),
+      });
     }
 
     return null;

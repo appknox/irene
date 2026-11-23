@@ -221,9 +221,36 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(selectors.groupHeader(1))
-        .hasText(t('sbomModule.reachability.platformCode'));
+      assert.dom(selectors.groupHeader(1)).hasText(
+        t('sbomModule.reachability.entersComponent', {
+          component: t('sbomModule.reachability.platformCode'),
+        })
+      );
+    });
+
+    test('a labelled platform group renders as a boundary header', async function (assert) {
+      this.finding = {
+        verdict: 'CONFIRMED_REACHABLE',
+        witness_nodes: [
+          { signature: 'Lcom/example/App;->run()', owner: APP_OWNER },
+          {
+            signature: 'Landroidx/fragment/app/FragmentActivity;->onStart()',
+            owner: {
+              kind: 'PLATFORM',
+              component_ref: null,
+              label: 'android framework',
+            },
+          },
+        ],
+      };
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.groupHeader(1)).hasText(
+        t('sbomModule.reachability.entersComponent', {
+          component: 'android framework',
+        })
+      );
     });
 
     test('it falls back to a flat ungrouped path without ownership', async function (assert) {
