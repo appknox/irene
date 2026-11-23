@@ -755,15 +755,23 @@ const LEADING_VERDICT_TOKEN = /^([A-Z][A-Z_]{3,})[.:](?=\s|$)/;
  * the verdict names. Longer phrases come first so "Potentially Reachable"
  * never splits into prose plus a "Reachable" chip, and a negated verdict
  * ("not Reachable") becomes the not-reachable chip rather than "Reachable".
+ *
+ * A capitalised verdict word trailed by another capitalised word is part of
+ * a Title Case name — e.g. the advisory title "Denial of Service via
+ * Reachable Assertion" the model echoes at the top of its reasoning — not
+ * the model stating a verdict, so it stays prose. Raw upper-case tokens are
+ * engine-speak and chip unconditionally.
  */
+const TRAILING_TITLE_WORD = String.raw`(?!\s+[A-Z])`;
+
 const INLINE_VERDICT_PATTERNS = [
   String.raw`\b(?:(?:CONFIRMED|POTENTIALLY|NOT|[Nn]ot)[_ ])?REACHABLE\b`,
   String.raw`\bNO[_ ]PATH[_ ]FOUND\b`,
   String.raw`\bINCONCLUSIVE\b`,
-  String.raw`\b(?:[Pp]otentially|[Nn]ot) Reachable\b`,
-  String.raw`\b(?:Potentially|Not) reachable\b`,
-  String.raw`\bReachable\b`,
-  String.raw`\bInconclusive\b`,
+  String.raw`\b(?:[Pp]otentially|[Nn]ot) Reachable\b${TRAILING_TITLE_WORD}`,
+  String.raw`\b(?:Potentially|Not) reachable\b${TRAILING_TITLE_WORD}`,
+  String.raw`\bReachable\b${TRAILING_TITLE_WORD}`,
+  String.raw`\bInconclusive\b${TRAILING_TITLE_WORD}`,
 ];
 
 const INLINE_VERDICT_SOURCE = INLINE_VERDICT_PATTERNS.join('|');

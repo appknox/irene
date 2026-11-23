@@ -106,6 +106,30 @@ module('Unit | Utility | sbom-reachability | trace', function () {
     ]);
   });
 
+  test('it keeps verdict words inside a title-cased name as prose', function (assert) {
+    assert.deepEqual(
+      tokenizeReasoning(
+        'Denial of Service via Reachable Assertion in PUBLISH packet ' +
+          'parsing. The code is absent, so the finding is Inconclusive.'
+      ),
+      [
+        {
+          kind: 'text',
+          text:
+            'Denial of Service via Reachable Assertion in PUBLISH packet ' +
+            'parsing. The code is absent, so the finding is ',
+        },
+        {
+          kind: 'verdict',
+          verdict: ReachabilityVerdict.UNKNOWN,
+          raw: 'Inconclusive',
+        },
+        { kind: 'text', text: '.' },
+      ],
+      '"Reachable" inside the advisory title is a name, not a verdict'
+    );
+  });
+
   test('it ignores verdict words embedded in other words', function (assert) {
     assert.deepEqual(tokenizeReasoning('Unreachable and REACHABLEX code.'), [
       { kind: 'text', text: 'Unreachable and REACHABLEX code.' },
