@@ -319,4 +319,56 @@ module('Unit | Model | offsec-scan', function (hooks) {
     assert.strictEqual(scan.pentestGoals[0].goal_id, 'goal-1');
     assert.strictEqual(scan.pentestGoals[1].goal_id, 'goal-2');
   });
+
+  test('pentestGoals reads pentestGoalResults ahead of an empty pentestResults', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      pentestResults: [],
+      pentestGoalResults: [
+        { goal_id: 'login-bypass', goal_name: 'Login bypass' },
+        { goal_id: 'find-secrets', goal_name: 'Find secrets' },
+      ],
+    });
+
+    assert.true(scan.hasPentestResult);
+
+    assert.deepEqual(
+      scan.pentestGoals.map((goal) => goal.goal_id),
+      ['login-bypass', 'find-secrets']
+    );
+  });
+
+  test('pentestGoals falls back to pentestResults when pentestGoalResults is empty', function (assert) {
+    const scan = this.store.createRecord('offsec-scan', {
+      pentestGoalResults: [],
+      pentestResults: [{ goal_id: 'legacy-goal', goal_name: 'Legacy goal' }],
+    });
+
+    assert.strictEqual(scan.pentestGoals.length, 1);
+    assert.strictEqual(scan.pentestGoals[0].goal_id, 'legacy-goal');
+  });
+
+  test('isLoadedTerminal only holds for a finished scan whose detail is loaded', function (assert) {
+    const { COMPLETED, RUNNING } = ENUMS.OFFSEC_SCAN_STATUS;
+
+    const detailed = this.store.createRecord('offsec-scan', {
+      status: COMPLETED,
+      findings: [],
+    });
+
+    const listOnly = this.store.createRecord('offsec-scan', {
+      status: COMPLETED,
+    });
+
+    const running = this.store.createRecord('offsec-scan', {
+      status: RUNNING,
+      findings: [],
+    });
+
+    assert.true(detailed.isLoadedTerminal);
+    assert.false(
+      listOnly.isLoadedTerminal,
+      'a list payload carries no findings'
+    );
+    assert.false(running.isLoadedTerminal, 'a live scan is always refetched');
+  });
 });

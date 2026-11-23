@@ -1,0 +1,75 @@
+{{#if this.rows.length}}
+  <div
+    local-class='observations'
+    data-test-offensiveSecurity-goalView-observations
+  >
+    <div local-class='observations-label'>
+      {{t 'offensiveSecurity.goalView.observations'}}
+      <span local-class='observations-count'>{{this.rows.length}}</span>
+    </div>
+
+    <ol local-class='observation-list'>
+      {{#each this.rows as |obs|}}
+        <li
+          local-class='observation'
+          data-test-offensiveSecurity-goalView-observation
+        >
+          <span
+            local-class='observation-dot is-{{this.outcomeTone obs.outcome}}'
+          ></span>
+
+          <span local-class='observation-body'>
+            <span local-class='observation-meta'>
+              {{#if obs.verb}}
+                <span
+                  local-class='observation-tool'
+                  data-test-offensiveSecurity-goalView-observation-tool
+                >{{this.toolName obs}}</span>
+              {{/if}}
+
+              {{#if (this.outcomeLabel obs.outcome)}}
+                <span
+                  local-class='observation-outcome is-{{this.outcomeTone
+                    obs.outcome
+                  }}'
+                  data-test-offensiveSecurity-goalView-observation-outcome
+                >{{this.outcomeLabel obs.outcome}}</span>
+              {{/if}}
+            </span>
+
+            {{#if obs.note}}
+              <span
+                class='offsec-prose'
+                local-class='observation-note'
+                data-test-offensiveSecurity-goalView-observation-note
+              >{{this.note obs}}</span>
+            {{/if}}
+
+            {{#if obs.output}}
+              <div
+                local-class='observation-output'
+                data-test-offensiveSecurity-goalView-observation-output
+              >
+                <KnoxIq::CodeBlock
+                  @compact={{true}}
+                  @maxHeight='320px'
+                  @code={{this.output obs}}
+                />
+
+                {{#if (this.isOutputCut obs)}}
+                  <span local-class='observation-output-note'>
+                    {{t
+                      'offensiveSecurity.goalView.outputCut'
+                      shown=this.outputLimit
+                      total=(this.outputLength obs)
+                    }}
+                  </span>
+                {{/if}}
+              </div>
+            {{/if}}
+          </span>
+        </li>
+      {{/each}}
+    </ol>
+  </div>
+{{/if}}

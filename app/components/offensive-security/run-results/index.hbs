@@ -1,7 +1,7 @@
 <AkStack
   @direction='column'
   @spacing='3'
-  class='p-3'
+  local-class='results-root'
   data-test-offensiveSecurity-runResults
 >
   {{#if this.activeGoal}}
@@ -14,7 +14,7 @@
       @onOtherTechniquesChange={{this.setOtherTechniques}}
     />
   {{else}}
-    <AkBreadcrumbs::AutoTrail class='mb-1' />
+    <AkBreadcrumbs::AutoTrail class='mb-1' local-class='breadcrumbs' />
 
     <div
       role='tablist'

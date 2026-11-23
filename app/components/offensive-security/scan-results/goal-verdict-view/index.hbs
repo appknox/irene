@@ -85,19 +85,21 @@
             </div>
 
             {{#if (eq card.technique.status 'confirmed')}}
-              <div local-class='field'>
-                <div local-class='field-label'>
-                  {{t 'offensiveSecurity.goalView.theWeakness'}}
+              {{#if (this.weaknessText card.technique)}}
+                <div local-class='field'>
+                  <div local-class='field-label'>
+                    {{t 'offensiveSecurity.goalView.theWeakness'}}
+                  </div>
+                  <p class='offsec-prose' local-class='field-text'>
+                    {{this.weaknessText card.technique}}
+                  </p>
+                  {{#if card.technique.location}}
+                    <code local-class='location'>
+                      {{card.technique.location}}
+                    </code>
+                  {{/if}}
                 </div>
-                <p class='offsec-prose' local-class='field-text'>
-                  {{this.weaknessText card.technique}}
-                </p>
-                {{#if card.technique.location}}
-                  <code local-class='location'>
-                    {{card.technique.location}}
-                  </code>
-                {{/if}}
-              </div>
+              {{/if}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -106,7 +108,9 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+                  @findings={{card.technique.findings}}
+                  @observations={{this.observations}}
                   @credentials={{card.technique.credentials}}
                   @evidence={{card.technique.evidence}}
                 />
@@ -140,14 +144,16 @@
                 </div>
               {{/if}}
             {{else if (eq card.technique.status 'safe')}}
-              <div local-class='field'>
-                <div local-class='field-label'>
-                  {{t 'offensiveSecurity.goalView.whatItChecks'}}
+              {{#if (this.flawText card.technique)}}
+                <div local-class='field'>
+                  <div local-class='field-label'>
+                    {{t 'offensiveSecurity.goalView.whatItChecks'}}
+                  </div>
+                  <p class='offsec-prose' local-class='field-text'>
+                    {{this.flawText card.technique}}
+                  </p>
                 </div>
-                <p class='offsec-prose' local-class='field-text'>
-                  {{this.flawText card.technique}}
-                </p>
-              </div>
+              {{/if}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -156,20 +162,24 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.otherReason card.technique}}
                 </p>
-                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+                  @findings={{card.technique.findings}}
+                  @observations={{this.observations}}
                   @credentials={{card.technique.credentials}}
                   @isSafe={{true}}
                 />
               </div>
             {{else}}
-              <div local-class='field'>
-                <div local-class='field-label'>
-                  {{t 'offensiveSecurity.goalView.theWeakness'}}
+              {{#if (this.flawText card.technique)}}
+                <div local-class='field'>
+                  <div local-class='field-label'>
+                    {{t 'offensiveSecurity.goalView.theWeakness'}}
+                  </div>
+                  <p class='offsec-prose' local-class='field-text'>
+                    {{this.flawText card.technique}}
+                  </p>
                 </div>
-                <p class='offsec-prose' local-class='field-text'>
-                  {{this.flawText card.technique}}
-                </p>
-              </div>
+              {{/if}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -180,6 +190,16 @@
                 </p>
               </div>
             {{/if}}
+
+            <OffensiveSecurity::ScanResults::GoalVerdictView::Hypotheses
+              @hypotheses={{card.technique.hypotheses}}
+              @observations={{this.observations}}
+            />
+
+            <OffensiveSecurity::ScanResults::GoalVerdictView::Attempts
+              @paths={{this.attemptsFor card.technique}}
+              @observations={{this.observations}}
+            />
           {{/let}}
         </div>
       </section>
@@ -190,6 +210,33 @@
           {{t 'offensiveSecurity.otherTechniques.empty'}}
         </p>
       </div>
+    {{/if}}
+
+    {{#if this.otherPaths.length}}
+      <section
+        local-class='panel'
+        data-test-offensiveSecurity-otherTechniques-paths
+      >
+        <div local-class='panel-h'>
+          <span local-class='panel-icon'>◇</span>
+          <h2 local-class='panel-title'>
+            {{t 'offensiveSecurity.goalView.otherPathsTitle'}}
+          </h2>
+          <span local-class='panel-count'>{{this.otherPaths.length}}</span>
+        </div>
+
+        <div local-class='panel-b'>
+          <p class='offsec-prose' local-class='intro'>
+            {{t 'offensiveSecurity.goalView.otherPathsIntro'}}
+          </p>
+
+          <OffensiveSecurity::ScanResults::GoalVerdictView::Attempts
+            @paths={{this.otherPaths}}
+            @observations={{this.observations}}
+            @hideLabel={{true}}
+          />
+        </div>
+      </section>
     {{/if}}
   </div>
 {{else}}
@@ -231,17 +278,58 @@
       {{/if}}
 
       {{#if this.description}}
-        <p
-          class='offsec-prose'
-          local-class='description is-full'
-          data-test-offensiveSecurity-goalView-description
-        >
-          {{this.description}}
-        </p>
+        <div local-class='is-full'>
+          <div
+            local-class='field-label'
+            data-test-offensiveSecurity-goalView-descriptionLabel
+          >
+            {{t 'description'}}
+          </div>
+          <p
+            class='offsec-prose'
+            local-class='description is-italic'
+            data-test-offensiveSecurity-goalView-description
+          >
+            {{this.description}}
+          </p>
+        </div>
+      {{/if}}
+
+      {{#if this.detailText}}
+        <div local-class='is-full detail'>
+          <div
+            local-class='field-label'
+            data-test-offensiveSecurity-goalView-detailLabel
+          >
+            {{t 'details'}}
+          </div>
+          <p
+            class='offsec-prose'
+            local-class='description is-italic'
+            data-test-offensiveSecurity-goalView-detail
+          >
+            {{this.detailText}}
+          </p>
+        </div>
       {{/if}}
     </header>
 
-    {{#if this.isExploitLayout}}
+    {{#if this.isWeaknessLayout}}
+      <div local-class='banner' data-test-offensiveSecurity-goalView-banner>
+        <span local-class='banner-icon'>▲</span>
+        <p class='offsec-prose' local-class='banner-text'>
+          <strong>{{t
+              'offensiveSecurity.goalView.weaknessBannerTitle'
+            }}</strong>
+          {{t
+            'offensiveSecurity.goalView.weaknessBannerBody'
+            count=this.weaknessCards.length
+          }}
+        </p>
+      </div>
+    {{/if}}
+
+    {{#if this.showPathsPanel}}
       <section local-class='panel' data-test-offensiveSecurity-goalView-paths>
         <div local-class='panel-h'>
           <span local-class='panel-icon'>◆</span>
@@ -266,9 +354,28 @@
             {{#let this.currentPathPage as |page|}}
               {{#if page.path}}
                 {{#if page.path.summary}}
-                  <p class='offsec-prose' local-class='intro'>
-                    {{page.path.summary}}
+                  <p
+                    class='offsec-prose'
+                    local-class='intro'
+                    data-test-offensiveSecurity-goalView-pathSummary
+                  >
+                    {{this.text page.path.summary}}
                   </p>
+                {{/if}}
+
+                {{#if page.path.expected}}
+                  <div local-class='field'>
+                    <div local-class='field-label'>
+                      {{t 'offensiveSecurity.goalView.expected'}}
+                    </div>
+                    <p
+                      class='offsec-prose'
+                      local-class='field-text'
+                      data-test-offensiveSecurity-goalView-pathExpected
+                    >
+                      {{this.text page.path.expected}}
+                    </p>
+                  </div>
                 {{/if}}
 
                 <div
@@ -306,9 +413,15 @@
                           data-test-offensiveSecurity-goalView-chainStep
                         >
                           {{#if step.verb}}
-                            <code local-class='chain-verb'>{{step.verb}}</code>
+                            <span local-class='chain-tool'>{{this.stepName
+                                step
+                              }}</span>
                           {{/if}}
-                          {{step.text}}
+                          {{#if step.text}}
+                            <span
+                              local-class='chain-detail'
+                            >{{step.text}}</span>
+                          {{/if}}
                         </span>
                       </li>
                     {{/each}}
@@ -318,17 +431,49 @@
                       <span
                         local-class='chain-text'
                         data-test-offensiveSecurity-goalView-chainOutcome
-                      >{{page.path.outcome}}</span>
+                      >{{this.text page.path.outcome}}</span>
                     </li>
                   </ol>
+
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Observations
+                    @ids={{page.path.observations}}
+                    @observations={{this.observations}}
+                  />
                 </div>
-              {{else}}
-                {{#if this.detail.intro}}
-                  <p
-                    class='offsec-prose'
-                    local-class='intro'
-                  >{{this.detail.intro}}</p>
+
+                {{#if page.others.length}}
+                  <div
+                    local-class='also-tried'
+                    data-test-offensiveSecurity-goalView-alsoTried
+                  >
+                    <div local-class='field-label'>
+                      {{t 'offensiveSecurity.goalView.alsoTriedOnPath'}}
+                    </div>
+                    <div local-class='also-tried-list'>
+                      {{#each page.others as |other|}}
+                        <span
+                          local-class='also-tried-item'
+                          data-test-offensiveSecurity-goalView-alsoTriedItem
+                        >
+                          <span local-class='also-tried-name'>
+                            {{other.technique.category}}
+                            ·
+                            {{other.technique.name}}
+                          </span>
+                          <span local-class='pill verdict-{{other.tone}}'>
+                            <span local-class='pill-dot'></span>
+                            {{t
+                              (concat
+                                'offensiveSecurity.verdict.' other.verdict
+                              )
+                            }}
+                          </span>
+                        </span>
+                      {{/each}}
+                    </div>
+                  </div>
                 {{/if}}
+              {{else}}
                 <div
                   local-class='note'
                   data-test-offensiveSecurity-goalView-note
@@ -342,11 +487,11 @@
 
               {{#if page.cards.length}}
                 <div local-class='sub-head'>
-                  {{if
-                    page.isChain
-                    (t 'offensiveSecurity.goalView.exploitFindingsChained')
-                    (t 'offensiveSecurity.goalView.exploitFindings')
-                  }}
+                  {{#if page.isChain}}
+                    {{t 'offensiveSecurity.goalView.exploitFindingsChained'}}
+                  {{else}}
+                    {{t this.pathCardsTitleKey}}
+                  {{/if}}
                 </div>
 
                 <div
@@ -393,25 +538,23 @@
                       </div>
 
                       <div local-class='tech-card-b'>
-                        <div local-class='field'>
-                          <div local-class='field-label'>
-                            {{t 'offensiveSecurity.goalView.theWeakness'}}
+                        {{#if (this.weaknessText card.technique)}}
+                          <div local-class='field'>
+                            <div local-class='field-label'>
+                              {{t 'offensiveSecurity.goalView.theWeakness'}}
+                            </div>
+                            <p class='offsec-prose' local-class='field-text'>
+                              {{this.weaknessText card.technique}}
+                            </p>
+                            {{#if card.technique.location}}
+                              <code local-class='location'>
+                                {{card.technique.location}}
+                              </code>
+                            {{/if}}
                           </div>
-                          <p class='offsec-prose' local-class='field-text'>
-                            {{this.weaknessText card.technique}}
-                          </p>
-                          {{#if card.technique.location}}
-                            <code local-class='location'>
-                              {{card.technique.location}}
-                            </code>
-                          {{/if}}
-                        </div>
+                        {{/if}}
 
-                        {{#if
-                          (or
-                            card.technique.repro.length card.technique.evidence
-                          )
-                        }}
+                        {{#if (this.hasEvidence card.technique)}}
                           <div local-class='field'>
                             <div local-class='field-label'>
                               {{if
@@ -428,7 +571,9 @@
                               </ol>
                             {{/if}}
                             <div local-class='{{if card.count "is-scroll"}}'>
-                              <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                              <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+                                @findings={{card.technique.findings}}
+                                @observations={{this.observations}}
                                 @credentials={{card.technique.credentials}}
                                 @evidence={{card.technique.evidence}}
                               />
@@ -476,19 +621,6 @@
         </div>
       </section>
     {{else if this.isWeaknessLayout}}
-      <div local-class='banner' data-test-offensiveSecurity-goalView-banner>
-        <span local-class='banner-icon'>▲</span>
-        <p class='offsec-prose' local-class='banner-text'>
-          <strong>{{t
-              'offensiveSecurity.goalView.weaknessBannerTitle'
-            }}</strong>
-          {{t
-            'offensiveSecurity.goalView.weaknessBannerBody'
-            count=this.weaknessCards.length
-          }}
-        </p>
-      </div>
-
       <section
         local-class='panel'
         data-test-offensiveSecurity-goalView-weaknesses
@@ -525,19 +657,21 @@
                 </span>
               </div>
 
-              <div local-class='field'>
-                <div local-class='field-label'>
-                  {{t 'offensiveSecurity.goalView.theWeakness'}}
+              {{#if (this.weaknessText card.technique)}}
+                <div local-class='field'>
+                  <div local-class='field-label'>
+                    {{t 'offensiveSecurity.goalView.theWeakness'}}
+                  </div>
+                  <p class='offsec-prose' local-class='field-text'>
+                    {{this.weaknessText card.technique}}
+                  </p>
+                  {{#if card.technique.location}}
+                    <code
+                      local-class='location'
+                    >{{card.technique.location}}</code>
+                  {{/if}}
                 </div>
-                <p class='offsec-prose' local-class='field-text'>
-                  {{this.weaknessText card.technique}}
-                </p>
-                {{#if card.technique.location}}
-                  <code
-                    local-class='location'
-                  >{{card.technique.location}}</code>
-                {{/if}}
-              </div>
+              {{/if}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -546,7 +680,9 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.foundText card.technique}}
                 </p>
-                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+                  @findings={{card.technique.findings}}
+                  @observations={{this.observations}}
                   @credentials={{card.technique.credentials}}
                   @evidence={{card.technique.evidence}}
                 />
@@ -579,6 +715,11 @@
                   {{/each}}
                 </div>
               {{/if}}
+
+              <OffensiveSecurity::ScanResults::GoalVerdictView::Attempts
+                @paths={{this.attemptsFor card.technique}}
+                @observations={{this.observations}}
+              />
             {{/let}}
           {{else}}
             <div local-class='note' data-test-offensiveSecurity-goalView-note>
@@ -637,14 +778,16 @@
                 </span>
               </div>
 
-              <div local-class='field'>
-                <div local-class='field-label'>
-                  {{t 'offensiveSecurity.goalView.whatItChecks'}}
+              {{#if (this.flawText card.technique)}}
+                <div local-class='field'>
+                  <div local-class='field-label'>
+                    {{t 'offensiveSecurity.goalView.whatItChecks'}}
+                  </div>
+                  <p class='offsec-prose' local-class='field-text'>
+                    {{this.flawText card.technique}}
+                  </p>
                 </div>
-                <p class='offsec-prose' local-class='field-text'>
-                  {{this.flawText card.technique}}
-                </p>
-              </div>
+              {{/if}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -657,11 +800,18 @@
                 <p class='offsec-prose' local-class='field-text'>
                   {{this.proofReason card.technique}}
                 </p>
-                <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+                  @findings={{card.technique.findings}}
+                  @observations={{this.observations}}
                   @credentials={{card.technique.credentials}}
                   @isSafe={{eq card.technique.status 'safe'}}
                 />
               </div>
+
+              <OffensiveSecurity::ScanResults::GoalVerdictView::Attempts
+                @paths={{this.attemptsFor card.technique}}
+                @observations={{this.observations}}
+              />
             {{/let}}
           {{else}}
             <div local-class='note' data-test-offensiveSecurity-goalView-note>
@@ -679,7 +829,57 @@
       </section>
     {{/if}}
 
-    {{#if this.detail.ruledOut.length}}
+    {{#if this.unclaimedFindings.length}}
+      <section
+        local-class='panel'
+        data-test-offensiveSecurity-goalView-otherFindings
+      >
+        <div local-class='panel-h'>
+          <span local-class='panel-icon'>◈</span>
+          <h2 local-class='panel-title'>
+            {{t 'offensiveSecurity.goalView.otherFindings'}}
+          </h2>
+        </div>
+
+        <div local-class='panel-b'>
+          <p class='offsec-prose' local-class='intro'>
+            {{t 'offensiveSecurity.goalView.otherFindingsIntro'}}
+          </p>
+
+          <OffensiveSecurity::ScanResults::GoalVerdictView::Findings
+            @findings={{this.unclaimedFindings}}
+            @observations={{this.observations}}
+          />
+        </div>
+      </section>
+    {{/if}}
+
+    {{#if this.hypotheses.length}}
+      <section
+        local-class='panel'
+        data-test-offensiveSecurity-goalView-hypothesesPanel
+      >
+        <div local-class='panel-h'>
+          <span local-class='panel-icon'>?</span>
+          <h2 local-class='panel-title'>
+            {{t 'offensiveSecurity.goalView.hypotheses'}}
+          </h2>
+        </div>
+
+        <div local-class='panel-b'>
+          <p class='offsec-prose' local-class='intro'>
+            {{t 'offensiveSecurity.goalView.hypothesesIntro'}}
+          </p>
+
+          <OffensiveSecurity::ScanResults::GoalVerdictView::Hypotheses
+            @hypotheses={{this.hypotheses}}
+            @observations={{this.observations}}
+          />
+        </div>
+      </section>
+    {{/if}}
+
+    {{#if this.showRuledOut}}
       <section
         local-class='panel'
         data-test-offensiveSecurity-goalView-ruledOut

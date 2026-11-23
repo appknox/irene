@@ -780,14 +780,7 @@ export default class OffensiveSecurityScanResultsComponent extends Component<Off
             ) as OffsecScanModel | null)
           : null;
 
-        // A scan is only usable from cache if:
-        // 1. It is terminal (completed or failed) - queued or running scans MUST remain live!
-        // 2. Its detail payload has been fetched, i.e. `cached.findings !== undefined`
-        const isFullyLoadedTerminalScan = Boolean(
-          cached && cached.isTerminal && cached.findings !== undefined
-        );
-
-        if (isFullyLoadedTerminalScan && cached) {
+        if (cached?.isLoadedTerminal) {
           this.scan = cached;
         } else {
           this.scan = (await this.store.findRecord('offsec-scan', scanId, {

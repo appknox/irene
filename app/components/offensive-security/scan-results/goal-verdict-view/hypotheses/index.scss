@@ -1,0 +1,126 @@
+.hypotheses {
+  margin-top: 14px;
+}
+
+.hypotheses-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.hypotheses-count {
+  padding: 0 6px;
+  border-radius: var(--border-radius-capsule);
+  letter-spacing: 0;
+  text-transform: none;
+  background-color: var(--neutral-grey-100);
+}
+
+// a long list scrolls inside the card instead of stretching the page
+.hypothesis-list {
+  max-height: 520px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.hypothesis {
+  border: 1px solid var(--border-color-1);
+  border-radius: 8px;
+
+  & + & {
+    margin-top: 8px;
+  }
+
+  &[open] .hypothesis-chevron {
+    transform: rotate(90deg);
+  }
+}
+
+.hypothesis-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.status {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-capsule);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-secondary);
+  background-color: var(--neutral-grey-100);
+
+  &.is-confirmed {
+    color: var(--offensive-security-verdict-exploited-color);
+    background-color: var(--offensive-security-verdict-exploited-bg-color);
+  }
+
+  &.is-refuted {
+    color: var(--offensive-security-verdict-held-color);
+    background-color: var(--offensive-security-verdict-held-bg-color);
+  }
+}
+
+.hypothesis-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-primary);
+}
+
+.hypothesis-chevron {
+  flex: none;
+  margin-top: 2px;
+  color: var(--text-secondary);
+  transition: transform 0.15s ease;
+}
+
+.hypothesis-body {
+  padding: 0 12px 12px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  padding: 2px 8px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.hypothesis-field-label {
+  margin: 10px 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.hypothesis-reason {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-primary);
+}

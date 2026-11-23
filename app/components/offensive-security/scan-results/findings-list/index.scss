@@ -336,3 +336,29 @@
   justify-self: center;
   text-align: center;
 }
+
+// below 900px the fixed status columns would squeeze the name to a few letters; a narrow screen keeps it readable
+@media (max-width: 900px) {
+  .intro-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .findings-grid {
+    grid-template-columns: minmax(0, 1fr) 64px 64px 18px;
+    gap: 10px;
+  }
+
+  .findings-column-header {
+    padding: 10px 12px;
+    font-size: 11px;
+  }
+
+  .group-row {
+    padding: 12px;
+  }
+
+  .group-icon-box {
+    display: none;
+  }
+}

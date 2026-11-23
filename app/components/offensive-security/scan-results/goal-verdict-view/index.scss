@@ -53,6 +53,16 @@
   margin-top: -16px;
 }
 
+// the agent's account sits under the description, with the same gap as between the other fields
+.detail {
+  margin-top: -2px;
+}
+
+// the goal's description and detail, read as the agent's own words
+.is-italic {
+  font-style: italic;
+}
+
 .cta {
   display: inline-flex;
   align-items: center;
@@ -169,12 +179,20 @@
   color: var(--text-primary);
 }
 
+.panel-count {
+  padding: 0 8px;
+  border-radius: var(--border-radius-capsule);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--neutral-grey-100);
+}
+
 .panel-b {
   padding: 16px;
 }
 
 .intro {
-  max-width: 78ch;
   margin: 0 0 16px;
   font-size: 14px;
   line-height: 20px;
@@ -291,13 +309,41 @@
   overscroll-behavior: contain;
 }
 
-.chain-verb {
-  margin-right: 6px;
-  padding: 1px 5px;
-  border: 1px solid var(--border-color-1);
-  border-radius: 4px;
+.chain-tool {
+  font-weight: 600;
+}
+
+// the raw step input ("target=…, uri=…") under the tool it was passed to
+.chain-detail {
+  display: block;
   font-size: 12px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
   color: var(--text-secondary);
+}
+
+.also-tried {
+  margin-top: 14px;
+}
+
+.also-tried-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.also-tried-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-color-1);
+  border-radius: 8px;
+}
+
+.also-tried-name {
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .ruled-out-list {
@@ -348,6 +394,7 @@
 
 .tech-card-h {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
   padding: 12px 15px;
@@ -355,8 +402,9 @@
   background-color: var(--offensive-security-scan-results-header-bg-color);
 }
 
+// a narrow card puts the pill under the title instead of squeezing the title beside it
 .tech-card-title {
-  flex: 1;
+  flex: 1 1 200px;
   min-width: 0;
 }
 
@@ -392,6 +440,7 @@
 
 .card-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -606,4 +655,33 @@
   white-space: nowrap;
   color: var(--offensive-security-verdict-partial-color);
   background-color: var(--offensive-security-verdict-partial-bg-color);
+}
+
+@media (max-width: 600px) {
+  .title {
+    font-size: 20px;
+  }
+
+  .panel-h {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .panel-title {
+    flex: 1 1 140px;
+  }
+
+  .panel-b,
+  .chain,
+  .tech-card-b {
+    padding: 12px;
+  }
+
+  .tech-card-h {
+    padding: 10px 12px;
+  }
+
+  .remediation {
+    padding: 12px;
+  }
 }

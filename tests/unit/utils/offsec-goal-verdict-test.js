@@ -1,7 +1,9 @@
 import { module, test } from 'qunit';
 
 import {
+  goalPathName,
   goalTechniqueMetrics,
+  readableAgentText,
   resolveGoalView,
   techniqueTone,
 } from 'irene/utils/offsec-goal-verdict';
@@ -330,5 +332,130 @@ module('Unit | Utility | offsec-goal-verdict', function () {
       'partial',
       'a confirmed weakness is amber on a technique'
     );
+  });
+
+  test('agent prose drops the observation ids it cites', function (assert) {
+    assert.strictEqual(
+      readableAgentText('1 finding: basic auth (inspect_strings, obs:8).'),
+      '1 finding: basic auth (Inspect strings).'
+    );
+
+    assert.strictEqual(
+      readableAgentText('A public key (obs:51) — not a secret; see (obs #29).'),
+      'A public key — not a secret; see.'
+    );
+  });
+
+  test('a path is named by its steps, each repeated step once', function (assert) {
+    const path = {
+      type: 'chain',
+      number: 4,
+      outcome: 'Nothing returned',
+      steps: [
+        { verb: 'read_defaults', text: 'target=app' },
+        { verb: 'read_defaults', text: 'target=app, uri=x' },
+        { verb: 'list_files', text: '' },
+      ],
+    };
+
+    assert.strictEqual(goalPathName(path), 'Read defaults → List files');
+
+    assert.strictEqual(
+      goalPathName({ ...path, steps: [] }),
+      'Nothing returned',
+      'a path without steps falls back to its outcome'
+    );
+  });
+
+  test('an agent technique keeps its findings and full hypotheses, dropping bare hypothesis ids', function (assert) {
+    const finding = { id: 'F1', kind: 'credential', pattern: 'api_key' };
+    const hypothesis = { id: 'H1', text: 'The key works.', status: 'refuted' };
+
+    const resolved = resolveGoalView({
+      goal_id: 'find-secrets',
+      goal_name: 'Find secrets',
+      verdict: 'weakness',
+      findings: [finding],
+      techniques: [
+        {
+          id: 'T1',
+          name: 'Static sweep',
+          category: 'hardcoded-secret',
+          status: 'worked',
+          how: 'swept the bundle strings',
+          findings: [finding],
+          hypotheses: [hypothesis, 'H2'],
+        },
+      ],
+    });
+
+    const [technique] = resolved.techniques;
+
+    assert.strictEqual(technique.status, 'confirmed');
+    assert.deepEqual(technique.findings, [finding]);
+    assert.deepEqual(technique.hypotheses, [hypothesis]);
+    assert.deepEqual(technique.repro, ['Swept the bundle strings.']);
+    assert.strictEqual(
+      technique.credentials,
+      undefined,
+      'its findings are listed instead of matched credentials'
+    );
+  });
+
+  test('a technique the agent left as "..." reads as having no text', function (assert) {
+    const resolved = resolveGoalView({
+      goal_id: 'exposed-data',
+      goal_name: 'Exposed data',
+      verdict: 'exploited',
+      techniques: [
+        {
+          id: 'T1',
+          name: 'Enumerate cross-app doors',
+          category: 'os-surface',
+          status: 'worked',
+          how: '...',
+          impact: '...',
+          fix: '…',
+          why_failed: '...',
+        },
+      ],
+    });
+
+    const [technique] = resolved.techniques;
+
+    assert.strictEqual(technique.tried, undefined);
+    assert.strictEqual(technique.repro, undefined);
+    assert.strictEqual(technique.impact, undefined);
+    assert.strictEqual(technique.fix, undefined);
+    assert.strictEqual(technique.safe_result, undefined);
+  });
+
+  test('findings no technique lists are left over for the goal page', function (assert) {
+    const listed = { id: 'F1', kind: 'credential', pattern: 'api_key' };
+    const loose = { id: 'F2', kind: 'pii', pattern: 'email_address' };
+
+    const resolved = resolveGoalView({
+      goal_id: 'find-secrets',
+      goal_name: 'Find secrets',
+      verdict: 'exploited',
+      findings: [listed, loose],
+      techniques: [
+        {
+          id: 'T1',
+          name: 'Static sweep',
+          category: 'hardcoded-secret',
+          status: 'worked',
+          findings: [listed],
+        },
+        {
+          id: 'T2',
+          name: 'Store reads',
+          category: 'insecure-storage',
+          status: 'failed',
+        },
+      ],
+    });
+
+    assert.deepEqual(resolved.unclaimed_findings, [loose]);
   });
 });

@@ -1,0 +1,237 @@
+{{#if this.rows.length}}
+  <div local-class='findings' data-test-offensiveSecurity-goalView-findings>
+    <div
+      local-class='findings-label'
+      data-test-offensiveSecurity-goalView-findings-label
+    >
+      {{t 'offensiveSecurity.goalView.findings'}}
+      <span
+        local-class='findings-count'
+        data-test-offensiveSecurity-goalView-findings-count
+      >{{this.rows.length}}</span>
+    </div>
+
+    {{#each this.groups as |group|}}
+      {{#let (this.current group) as |finding|}}
+        <details
+          local-class='finding'
+          data-test-offensiveSecurity-goalView-finding
+          {{on 'toggle' (fn this.handleToggle group)}}
+        >
+          <summary local-class='finding-summary'>
+            <span
+              local-class='finding-title'
+              data-test-offensiveSecurity-goalView-finding-title
+            >{{group.title}}</span>
+
+            <span local-class='finding-chips'>
+              {{#if finding.audit.status}}
+                <span
+                  local-class='chip audit-{{finding.audit.status}}'
+                  data-test-offensiveSecurity-goalView-finding-audit={{finding.audit.status}}
+                >
+                  {{this.auditLabel finding.audit.status}}
+                </span>
+              {{/if}}
+
+              {{#if finding.exploitability}}
+                <span
+                  local-class='chip'
+                  data-test-offensiveSecurity-goalView-finding-exploitability
+                >
+                  {{this.exploitabilityLabel finding.exploitability}}
+                </span>
+              {{/if}}
+
+              {{#if finding.severity}}
+                <span
+                  local-class='chip'
+                  data-test-offensiveSecurity-goalView-finding-severity
+                >
+                  {{t
+                    'offensiveSecurity.goalView.findingSeverity'
+                    level=finding.severity
+                  }}
+                </span>
+              {{/if}}
+            </span>
+
+            {{#if (gt group.findings.length 1)}}
+              <span local-class='finding-pager'>
+                {{#if (this.isOpen group)}}
+                  <span data-test-offensiveSecurity-goalView-finding-pager>
+                    <OffensiveSecurity::ScanResults::GoalVerdictView::Pager
+                      @current={{this.pageNumber group}}
+                      @total={{group.findings.length}}
+                      @previousLabel={{t
+                        'offensiveSecurity.goalView.previousFinding'
+                      }}
+                      @nextLabel={{t 'offensiveSecurity.goalView.nextFinding'}}
+                      @singleLabel=''
+                      @onPrevious={{fn this.previous group}}
+                      @onNext={{fn this.next group}}
+                    />
+                  </span>
+                {{else}}
+                  <span
+                    local-class='finding-count'
+                    data-test-offensiveSecurity-goalView-finding-count
+                  >
+                    {{t
+                      'offensiveSecurity.goalView.findingCount'
+                      count=group.findings.length
+                    }}
+                  </span>
+                {{/if}}
+              </span>
+            {{/if}}
+
+            <AkIcon
+              @iconName='chevron-right'
+              @size='small'
+              local-class='finding-chevron'
+            />
+          </summary>
+
+          <div local-class='finding-body'>
+            {{#if (this.secret finding)}}
+              <div data-test-offensiveSecurity-goalView-finding-secret>
+                <KnoxIq::CodeBlock
+                  @compact={{true}}
+                  @code={{this.secret finding}}
+                />
+              </div>
+            {{/if}}
+
+            {{#if finding.review}}
+              <div
+                local-class='finding-field'
+                data-test-offensiveSecurity-goalView-finding-field='review'
+              >
+                <div
+                  local-class='finding-field-label'
+                  data-test-offensiveSecurity-goalView-finding-fieldLabel
+                >
+                  {{t 'offensiveSecurity.goalView.findingReview'}}
+                </div>
+                <p
+                  class='offsec-prose'
+                  local-class='finding-text'
+                  data-test-offensiveSecurity-goalView-finding-review
+                >{{finding.review}}</p>
+              </div>
+            {{/if}}
+
+            {{#if finding.audit.reason}}
+              <div
+                local-class='finding-field'
+                data-test-offensiveSecurity-goalView-finding-field='auditReason'
+              >
+                <div
+                  local-class='finding-field-label'
+                  data-test-offensiveSecurity-goalView-finding-fieldLabel
+                >
+                  {{t 'offensiveSecurity.goalView.auditReason'}}
+                </div>
+                <p
+                  class='offsec-prose'
+                  local-class='finding-text'
+                  data-test-offensiveSecurity-goalView-finding-auditReason
+                >{{finding.audit.reason}}</p>
+              </div>
+            {{/if}}
+
+            {{#if finding.exploitability_because}}
+              <div
+                local-class='finding-field'
+                data-test-offensiveSecurity-goalView-finding-field='whyExploitable'
+              >
+                <div
+                  local-class='finding-field-label'
+                  data-test-offensiveSecurity-goalView-finding-fieldLabel
+                >
+                  {{t 'offensiveSecurity.goalView.whyExploitable'}}
+                </div>
+                <p
+                  class='offsec-prose'
+                  local-class='finding-text'
+                  data-test-offensiveSecurity-goalView-finding-whyExploitable
+                >
+                  {{finding.exploitability_because}}
+                </p>
+              </div>
+            {{/if}}
+
+            {{#if (this.severityReasons finding)}}
+              <div
+                local-class='finding-field'
+                data-test-offensiveSecurity-goalView-finding-field='whySevere'
+              >
+                <div
+                  local-class='finding-field-label'
+                  data-test-offensiveSecurity-goalView-finding-fieldLabel
+                >
+                  {{t 'offensiveSecurity.goalView.whySevere'}}
+                </div>
+                <p
+                  class='offsec-prose'
+                  local-class='finding-text'
+                  data-test-offensiveSecurity-goalView-finding-whySevere
+                >
+                  {{this.severityReasons finding}}
+                </p>
+              </div>
+            {{/if}}
+
+            {{#if (this.places finding)}}
+              <div
+                local-class='finding-field'
+                data-test-offensiveSecurity-goalView-finding-field='place'
+              >
+                <div
+                  local-class='finding-field-label'
+                  data-test-offensiveSecurity-goalView-finding-fieldLabel
+                >
+                  {{t 'offensiveSecurity.goalView.foundAt'}}
+                </div>
+                <code
+                  local-class='finding-place'
+                  data-test-offensiveSecurity-goalView-finding-place
+                >{{this.places finding}}</code>
+              </div>
+            {{/if}}
+
+            {{#if finding.pre_run}}
+              <span
+                local-class='chip'
+                data-test-offensiveSecurity-goalView-finding-preRun
+              >
+                {{t 'offensiveSecurity.goalView.foundBeforeRun'}}
+              </span>
+            {{/if}}
+
+            {{#if finding.at_launch}}
+              <span
+                local-class='chip'
+                data-test-offensiveSecurity-goalView-finding-atLaunch
+              >
+                {{t 'offensiveSecurity.goalView.seenAtLaunch'}}
+              </span>
+            {{/if}}
+
+            <OffensiveSecurity::ScanResults::GoalVerdictView::Observations
+              @ids={{this.observationIds finding}}
+              @observations={{@observations}}
+            />
+          </div>
+        </details>
+      {{/let}}
+    {{/each}}
+  </div>
+{{else}}
+  <OffensiveSecurity::ScanResults::GoalVerdictView::Credentials
+    @credentials={{@credentials}}
+    @evidence={{@evidence}}
+    @isSafe={{@isSafe}}
+  />
+{{/if}}

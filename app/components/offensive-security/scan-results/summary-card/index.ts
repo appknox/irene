@@ -4,6 +4,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import { keptFindings } from 'irene/utils/offsec-goal-verdict';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanArtifact } from 'irene/models/offsec-scan';
 
@@ -32,10 +33,14 @@ export default class OffensiveSecurityScanResultsSummaryCardComponent extends Co
     return this.args.artifacts?.length ?? 0;
   }
 
+  /** Findings across goals, counting only those the reviewer kept; the API's own count includes false positives. */
   get businessRisksConfirmed(): number {
     return (this.args.scan.pentestGoals ?? []).reduce(
       (total, goal) =>
-        total + (goal.findings_count ?? goal.findings?.length ?? 0),
+        total +
+        (goal.findings
+          ? keptFindings(goal.findings).length
+          : (goal.findings_count ?? 0)),
       0
     );
   }

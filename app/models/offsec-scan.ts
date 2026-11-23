@@ -51,7 +51,31 @@ export interface OffsecScanEmbeddedFinding {
   evidence_ids: string[];
 }
 
+/** The reviewer's call on a finding: `valid` for a real issue, `fp` for a false positive. */
+export interface PentestFindingAudit {
+  status?: string;
+  reason?: string;
+}
+
+/** Something the agent set out to prove for a goal, and how the run settled it. */
+export interface PentestHypothesis {
+  id: string;
+  text: string;
+  /** `app` when it is about the app, `method` when it is about how the agent can test it. */
+  scope?: string;
+  /** confirmed or refuted; anything else is still open. */
+  status?: string;
+  /** True when it came over from an earlier run. */
+  carried?: boolean;
+  /** Ids of the observations that settled it. */
+  evidence?: number[];
+  notebook_id?: string;
+  refuted_because?: string;
+}
+
 export interface PentestFinding {
+  /** F1, F2…; techniques name the findings behind them by this id. */
+  id?: string;
   pattern?: string;
   kind?: string;
   value?: string;
@@ -67,6 +91,15 @@ export interface PentestFinding {
   exploitability_because?: string;
   facts?: string[];
   reached?: string[];
+  audit?: PentestFindingAudit;
+  /** What the finding means for an attacker, in prose. */
+  review?: string;
+  /** Read from the package before the run started. */
+  pre_run?: boolean;
+  /** Seen when the app launched. */
+  at_launch?: boolean;
+  /** Ids of the techniques that turned it up. */
+  techniques?: string[];
 }
 
 export interface PentestPlan {
@@ -89,10 +122,13 @@ export interface PentestObservation {
   note: string;
   step: number;
   verb: string;
-  state: number;
+  state?: number;
+  epoch?: number;
   params?: Record<string, unknown>;
   outcome: string;
   elapsed_ms: number;
+  /** The tool's raw output; can run to megabytes, so it is only ever shown cut short. */
+  output?: string;
 }
 
 /**
@@ -104,7 +140,7 @@ export type GoalVerdict =
 
 export interface GoalPathStep {
   /** The id of the technique this step uses, when it has one. */
-  label?: string;
+  label?: string | null;
   text: string;
   /** The tool the agent called for this step, when the step was read out of a route string. */
   verb?: string;
@@ -112,10 +148,17 @@ export interface GoalPathStep {
 
 /** One way the agent reached the goal: a single technique, or several chained together. */
 export interface GoalPath {
+  /** The number techniques use to name the paths they were tried on. */
+  number?: number;
+  /** succeeded, spent, abandoned or active; only a succeeded path reached the goal. */
+  status?: string;
   type: 'individual' | 'chain';
   steps: GoalPathStep[];
+  expected?: string;
   outcome: string;
   summary?: string;
+  /** Ids of the goal's observations this path recorded. */
+  observations?: number[];
 }
 
 export type GoalTechniqueStatus =
@@ -149,6 +192,37 @@ export interface GoalTechnique {
   safe_conclusion?: string;
   /** The secrets behind a finding; a grouped card lists each one. */
   credentials?: GoalCredential[];
+  /** Numbers of the paths the technique was tried on. */
+  paths?: number[];
+  /** The findings it turned up; listed in place of the credentials when present. */
+  findings?: PentestFinding[];
+  hypotheses?: PentestHypothesis[];
+}
+
+/** A value the agent recovered, and the observation it was read in. */
+export interface PentestTechniqueEvidence {
+  pattern?: string;
+  value?: string;
+  observation_id?: number;
+  /** Id of the finding the value belongs to. */
+  finding?: string;
+}
+
+/** A technique as the agent reports it, before resolveGoalView turns it into a GoalTechnique. */
+export interface PentestTechnique {
+  id: string;
+  name: string;
+  category: string;
+  status: 'worked' | 'failed' | 'unproven';
+  how?: string;
+  why_failed?: string;
+  paths?: number[];
+  /** Full hypotheses on current payloads; older ones send only their ids. */
+  hypotheses?: (PentestHypothesis | string)[];
+  evidence?: PentestTechniqueEvidence[];
+  impact?: string;
+  fix?: string;
+  findings?: PentestFinding[];
 }
 
 export interface PentestGoalResult {
@@ -170,13 +244,24 @@ export interface PentestGoalResult {
   description?: string;
   detail?: string;
   paths?: GoalPath[];
-  techniques?: GoalTechnique[];
+  techniques?: (GoalTechnique | PentestTechnique)[];
   findings_count?: number;
   findings?: PentestFinding[];
   plans?: PentestPlan[];
+  hypotheses?: PentestHypothesis[];
   observations?: PentestObservation[];
   created_at?: string;
   updated_at?: string;
+}
+
+/** A goal with its techniques in the shape the goal page reads. */
+export interface ResolvedGoalResult extends Omit<
+  PentestGoalResult,
+  'techniques'
+> {
+  techniques?: GoalTechnique[];
+  /** Findings no technique lists or was matched to; shown on the goal page on their own. */
+  unclaimed_findings?: PentestFinding[];
 }
 
 export default class OffsecScanModel extends Model {
@@ -301,6 +386,10 @@ export default class OffsecScanModel extends Model {
   @attr()
   declare pentestResults:
     PentestGoalResult[] | Record<string, unknown>[] | string | undefined;
+
+  /** One entry per business-risk goal; the source the Business Risks tab reads first. */
+  @attr()
+  declare pentestGoalResults: PentestGoalResult[] | undefined;
 
   @attr()
   declare pentest_result:
@@ -565,6 +654,15 @@ export default class OffsecScanModel extends Model {
   }
 
   /**
+   * A finished run whose detail payload is already in the store (list payloads carry no
+   * `findings`), so pages can show it without fetching the multi-megabyte detail again.
+   * A queued or running scan is never served from cache: it must stay live.
+   */
+  get isLoadedTerminal(): boolean {
+    return this.isTerminal && this.findings !== undefined;
+  }
+
+  /**
    * Risk bucket for the table's colour coding. Falls back to the resilience band
    * when the agent did not emit a rating, so a completed run is never blank.
    */
@@ -742,7 +840,17 @@ export default class OffsecScanModel extends Model {
     return list.filter(isFindingRelevant);
   }
 
+  /**
+   * The run's business-risk goals: `pentest_goal_results` when the API sends any, otherwise the
+   * older `pentest_results` / `pentest_result` fields that earlier runs carry.
+   */
   get pentestGoals(): PentestGoalResult[] {
+    const goalResults = this.pentestGoalResults;
+
+    if (Array.isArray(goalResults) && goalResults.length > 0) {
+      return goalResults.filter(Boolean);
+    }
+
     let raw: unknown =
       this.pentestResults ??
       this.pentestResult ??

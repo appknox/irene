@@ -53,7 +53,6 @@ const SELECTORS = {
   goalRow: (index) =>
     `[data-test-offensiveSecurity-pentest-goal-row="${index}"]`,
   goalName: '[data-test-offensiveSecurity-pentest-goal-name]',
-  goalReason: '[data-test-offensiveSecurity-pentest-goal-reason]',
   goalStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalDetailBack: '[data-test-offensiveSecurity-pentest-back]',
   goalDetailCard: '[data-test-offensiveSecurity-goalView]',
@@ -161,12 +160,13 @@ module('Integration | Component | offensive-security/run-results', (hooks) => {
     const firstRow = SELECTORS.goalRow(0);
 
     assert.dom(SELECTORS.goalName, find(firstRow)).hasText(GOALS[0].goal_name);
-    assert.dom(SELECTORS.goalReason, find(firstRow)).hasText(GOALS[0].reason);
     assert.dom(SELECTORS.goalStatus, find(firstRow)).hasText('Untested');
 
     const secondRow = SELECTORS.goalRow(1);
 
-    assert.dom(SELECTORS.goalReason, find(secondRow)).doesNotExist();
+    assert
+      .dom('[data-test-offensiveSecurity-pentest-goal-reason]', find(firstRow))
+      .doesNotExist();
     assert.dom(SELECTORS.goalStatus, find(secondRow)).hasText('Weakness found');
   });
 

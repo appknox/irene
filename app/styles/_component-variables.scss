@@ -4630,6 +4630,35 @@ body {
   --offensive-security-verdict-held-color: var(--success-main);
   --offensive-security-verdict-held-bg-color: var(--success-light);
 
+  // variables for offensive-security/scan-results/goal-verdict-view/findings
+  --offensive-security-scan-results-goal-verdict-view-findings-label-color: var(
+    --text-secondary
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-text-color: var(
+    --text-primary
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-pill-bg-color: var(
+    --neutral-grey-100
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-pill-border-radius: var(
+    --border-radius-capsule
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-row-border-color: var(
+    --border-color-1
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-row-border-radius: var(
+    --border-radius-8
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-verified-color: var(
+    --error-main
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-verified-bg-color: var(
+    --error-bg
+  );
+  --offensive-security-scan-results-goal-verdict-view-findings-place-color: var(
+    --primary-main
+  );
+
   // variables for offensive-security/scan-results/agent-log
   // The log pane is a terminal transcript, so it stays dark in both themes.
   --offensive-security-agent-log-bg-color: var(--background-dark);

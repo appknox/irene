@@ -17,6 +17,7 @@
           @variant='subtitle2'
           @fontWeight='bold'
           @noWrap={{true}}
+          local-class='upload-lead'
           data-test-offensiveSecurity-topNav-uploadLead
         >
           {{t 'uploadAnApp'}}
@@ -26,6 +27,7 @@
           @variant='filled'
           @color='primary'
           local-class='new-assessment-btn'
+          aria-label={{t 'offensiveSecurity.newAssessment'}}
           data-test-topNav-newAssessmentBtn
           data-test-offensiveSecurity-topNav-newAssessmentBtn
           {{on 'click' this.navigateToNewAssessment}}
@@ -35,7 +37,9 @@
           </:leftIcon>
 
           <:default>
-            {{t 'offensiveSecurity.newAssessment'}}
+            <span local-class='new-assessment-label'>
+              {{t 'offensiveSecurity.newAssessment'}}
+            </span>
           </:default>
         </AkButton>
       </AkStack>

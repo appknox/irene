@@ -1,0 +1,184 @@
+.findings {
+  margin-top: 0.71429em;
+}
+
+.findings-label {
+  display: flex;
+  align-items: center;
+  gap: 0.42857em;
+  margin-bottom: 0.57143em;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-label-color
+  );
+}
+
+.findings-count {
+  padding: 0 0.42857em;
+  border-radius: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-pill-border-radius
+  );
+  letter-spacing: 0;
+  background-color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-pill-bg-color
+  );
+}
+
+.finding {
+  border: 1px solid
+    var(
+      --offensive-security-scan-results-goal-verdict-view-findings-row-border-color
+    );
+  border-radius: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-row-border-radius
+  );
+
+  & + & {
+    margin-top: 0.57143em;
+  }
+
+  &[open] .finding-chevron {
+    transform: rotate(90deg);
+  }
+}
+
+.finding-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.57143em 0.71429em;
+  padding: 0.71429em 0.85714em;
+  list-style: none;
+  cursor: pointer;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.finding-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-text-color
+  );
+}
+
+.finding-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42857em;
+}
+
+// a grey pill: the row's chips and the count a collapsed row shows
+.chip,
+.finding-count {
+  display: inline-block;
+  padding: 0.14286em 0.57143em;
+  border-radius: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-pill-border-radius
+  );
+  font-size: 12px;
+  white-space: nowrap;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-label-color
+  );
+  background-color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-pill-bg-color
+  );
+}
+
+.chip {
+  margin-right: 0.42857em;
+
+  .finding-chips & {
+    margin-right: 0;
+  }
+}
+
+.finding-count {
+  font-weight: 600;
+}
+
+.audit-valid {
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-verified-color
+  );
+  background-color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-verified-bg-color
+  );
+}
+
+// pushes itself and the chevron to the row's end
+.finding-pager {
+  margin-left: auto;
+}
+
+.finding-chevron {
+  margin-left: auto;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-label-color
+  );
+  transition: transform 0.15s ease;
+}
+
+.finding-pager + .finding-chevron {
+  margin-left: 0;
+}
+
+.finding-body {
+  padding: 0 0.85714em 0.85714em;
+}
+
+.finding-field {
+  margin-top: 0.71429em;
+}
+
+.finding-field-label {
+  margin-bottom: 0.28571em;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-label-color
+  );
+}
+
+.finding-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-text-color
+  );
+}
+
+.finding-place {
+  font-size: 12px;
+  word-break: break-all;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-findings-place-color
+  );
+}
+
+// on a phone the title, arrows and chevron share the first row and the chips get a row of their own
+@media (max-width: 600px) {
+  .finding-title {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .finding-pager,
+  .finding-chevron {
+    order: 1;
+  }
+
+  .finding-chips {
+    flex: 1 0 100%;
+    order: 2;
+  }
+}

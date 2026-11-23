@@ -19,6 +19,7 @@ const SEL = {
   proof: '[data-test-offensiveSecurity-goalView-proof]',
   note: '[data-test-offensiveSecurity-goalView-note]',
   description: '[data-test-offensiveSecurity-goalView-description]',
+  descriptionLabel: '[data-test-offensiveSecurity-goalView-descriptionLabel]',
   ruledOut: '[data-test-offensiveSecurity-goalView-ruledOut]',
   ruledOutItem: '[data-test-offensiveSecurity-goalView-ruledOutItem]',
   pagerLabel: '[data-test-offensiveSecurity-goalView-pager-label]',
@@ -37,6 +38,33 @@ const SEL = {
   goalCrumb: '[data-test-offensiveSecurity-pentest-goalCrumb]',
   goalsCardStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalsCardVerdict: '[data-test-offensiveSecurity-pentest-goal-verdict]',
+  cardCount: '[data-test-offensiveSecurity-goalView-cardCount]',
+  pathExpected: '[data-test-offensiveSecurity-goalView-pathExpected]',
+  alsoTriedItem: '[data-test-offensiveSecurity-goalView-alsoTriedItem]',
+  attempts: '[data-test-offensiveSecurity-goalView-attempts]',
+  detail: '[data-test-offensiveSecurity-goalView-detail]',
+  detailLabel: '[data-test-offensiveSecurity-goalView-detailLabel]',
+  observationTool: '[data-test-offensiveSecurity-goalView-observation-tool]',
+  observationOutcome:
+    '[data-test-offensiveSecurity-goalView-observation-outcome]',
+  observationOutput:
+    '[data-test-offensiveSecurity-goalView-observation-output]',
+  finding: '[data-test-offensiveSecurity-goalView-finding]',
+  findingTitle: '[data-test-offensiveSecurity-goalView-finding-title]',
+  findingAudit: '[data-test-offensiveSecurity-goalView-finding-audit]',
+  findingExploitability:
+    '[data-test-offensiveSecurity-goalView-finding-exploitability]',
+  findingReview: '[data-test-offensiveSecurity-goalView-finding-review]',
+  hypothesesPanel: '[data-test-offensiveSecurity-goalView-hypothesesPanel]',
+  hypothesisStatus: '[data-test-offensiveSecurity-goalView-hypothesis-status]',
+  hypothesesCount: '[data-test-offensiveSecurity-goalView-hypotheses-count]',
+  hypothesisReason: '[data-test-offensiveSecurity-goalView-hypothesis-reason]',
+  otherPaths: '[data-test-offensiveSecurity-otherTechniques-paths]',
+  attempt: '[data-test-offensiveSecurity-goalView-attempt]',
+  attemptTitle: '[data-test-offensiveSecurity-goalView-attempt-title]',
+  attemptOutcome: '[data-test-offensiveSecurity-goalView-attempt-outcome]',
+  goalIcon: '[data-test-offensiveSecurity-pentest-goal-icon]',
+  goalDetail: '[data-test-offensiveSecurity-pentest-goal-detail]',
 };
 
 const TECHNIQUES = [
@@ -218,11 +246,12 @@ module(
       });
 
       assert.dom(SEL.description).hasText('Reach the login was reached.');
+      assert.dom(SEL.descriptionLabel).hasText(t('description'));
       assert
         .dom(SEL.chain)
         .hasAttribute('data-test-offensiveSecurity-goalView-chain', 'chain');
       assert.dom(SEL.chainStep).exists({ count: 2 });
-      assert.dom(findAll(SEL.chainStep)[0]).hasText('list_files List Caches.');
+      assert.dom(findAll(SEL.chainStep)[0]).hasText('List files List Caches.');
       assert
         .dom(SEL.chainOutcome)
         .hasText(t('offensiveSecurity.goalView.routeOutcome'));
@@ -254,9 +283,7 @@ module(
       });
 
       assert.dom(SEL.exploitCard).exists({ count: 1 });
-      assert
-        .dom('[data-test-offensiveSecurity-goalView-cardCount]')
-        .hasText('×3');
+      assert.dom(SEL.cardCount).hasText('×3');
       assert.dom(SEL.exploitCard).containsText('ea3f****0d31');
       assert.dom(SEL.exploitCard).containsText('ea3f****0d33');
     });
@@ -438,11 +465,296 @@ module(
       assert.dom(SEL.otherEmpty).exists();
     });
 
+    module('agent-reported paths, findings and hypotheses', function () {
+      const OBSERVATIONS = [
+        {
+          id: 8,
+          verb: 'inspect_strings',
+          note: 'basic auth pair in the bundle (obs:8)',
+          outcome: 'success',
+          output: 'x'.repeat(5000),
+          step: 1,
+          elapsed_ms: 0,
+        },
+        {
+          id: 12,
+          verb: 'read_defaults',
+          note: 'collector refused',
+          outcome: 'refused',
+          step: 2,
+          elapsed_ms: 0,
+        },
+      ];
+
+      const FINDINGS = [
+        {
+          id: 'F1',
+          kind: 'credential',
+          pattern: 'http_basic_auth',
+          quote: 'Authorization: Basic YWth',
+          value: 'YWth',
+          severity: 3,
+          exploitability: 'unproven',
+          review: 'A real service credential shipped in the app.',
+          audit: { status: 'valid', reason: 'Genuine key.' },
+          observation_id: 8,
+        },
+        {
+          id: 'F2',
+          kind: 'pii',
+          pattern: 'email_address',
+          value: 'garbage@blob',
+          severity: 2,
+          exploitability: 'not_applicable',
+          audit: { status: 'fp', reason: 'Concatenated config keys.' },
+        },
+      ];
+
+      const AGENT_PATHS = [
+        {
+          number: 1,
+          status: 'succeeded',
+          type: 'chain',
+          steps: [
+            { verb: 'app_launch', text: '', label: null },
+            { verb: 'inspect_strings', text: '', label: null },
+          ],
+          summary: 'Reading the bundle maps the gate.',
+          expected: 'The bundle holds the endpoints and secrets.',
+          outcome: '1 finding: basic auth (inspect_strings, obs:8).',
+          observations: [8],
+        },
+        {
+          number: 2,
+          status: 'abandoned',
+          type: 'chain',
+          steps: [
+            { verb: 'read_defaults', text: 'target=app', label: null },
+            { verb: 'read_keychain', text: 'target=app', label: null },
+          ],
+          summary: 'Stores hold the pre-sign-in state.',
+          outcome: 'read_defaults was refused (obs:12).',
+          observations: [12],
+        },
+      ];
+
+      const AGENT_TECHNIQUES = [
+        {
+          id: 'T1',
+          name: 'Static inspection of the package',
+          category: 'hardcoded-secret',
+          status: 'worked',
+          how: 'searched the bundle strings',
+          paths: [1],
+          findings: FINDINGS,
+        },
+        {
+          id: 'T2',
+          name: 'Reading the app stores',
+          category: 'insecure-storage',
+          status: 'failed',
+          why_failed: 'every store collector refused',
+          paths: [1, 2],
+          hypotheses: [
+            {
+              id: 'H3',
+              text: 'The keychain holds a session token.',
+              status: 'refuted',
+              refuted_because: 'read_keychain refuses (obs:12).',
+              evidence: [12],
+            },
+          ],
+        },
+      ];
+
+      const HYPOTHESES = [
+        {
+          id: 'H1',
+          text: 'A deep link skips the login.',
+          scope: 'app',
+          status: 'refuted',
+          refuted_because: 'Every scheme relaunched the app empty.',
+          evidence: [12],
+        },
+        {
+          id: 'H2',
+          text: 'Stores refuse on this transport.',
+          scope: 'method',
+          status: 'confirmed',
+          evidence: [12],
+        },
+      ];
+
+      function agentGoal(overrides = {}) {
+        return {
+          verdict: 'weakness',
+          paths: AGENT_PATHS,
+          techniques: AGENT_TECHNIQUES,
+          findings: FINDINGS,
+          hypotheses: HYPOTHESES,
+          observations: OBSERVATIONS,
+          detail:
+            'No route was reached. Ruled out: A deep link skips the login.',
+          ...overrides,
+        };
+      }
+
+      test('a weakness goal shows its succeeded paths, with the techniques that worked there', async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        assert.dom(SEL.banner).exists();
+        assert.dom(SEL.paths).exists();
+        assert.dom(SEL.weaknesses).doesNotExist();
+        assert.dom(SEL.pagerLabel).hasText('1 of 1', 'only the succeeded path');
+
+        assert.dom(findAll(SEL.chainStep)[1]).hasText('Inspect strings');
+        assert
+          .dom(SEL.chainOutcome)
+          .hasText('1 finding: basic auth (Inspect strings).');
+        assert
+          .dom(SEL.pathExpected)
+          .hasText('The bundle holds the endpoints and secrets.');
+
+        assert
+          .dom(SEL.exploitCard)
+          .exists({ count: 1 })
+          .containsText('Hardcoded secret · Static inspection of the package');
+        assert
+          .dom(SEL.alsoTriedItem)
+          .containsText('Insecure storage · Reading the app stores');
+        assert
+          .dom(`${SEL.exploitCard} ${SEL.attempts}`)
+          .doesNotExist('paths that did not succeed are on the other page');
+      });
+
+      test("the goal's detail shows under its name, without the ruled-out list it carries", async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        assert.dom(SEL.detail).hasText('No route was reached.');
+        assert.dom(SEL.detailLabel).hasText(t('details'));
+      });
+
+      test('the page shows names, never the ids the agent uses', async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        assert.dom(SEL.anyView).doesNotContainText('Path 1');
+        assert.dom(SEL.anyView).doesNotContainText('#8');
+        assert.dom(SEL.anyView).doesNotContainText('obs:');
+        assert.dom(SEL.anyView).doesNotContainText('F1');
+        assert.dom(SEL.anyView).doesNotContainText('H1');
+
+        assert.dom(SEL.observationTool).hasText('Inspect strings');
+        assert.dom(SEL.observationOutcome).hasText('Success');
+      });
+
+      test('a raw observation output is cut short', async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        assert
+          .dom(SEL.observationOutput)
+          .containsText('Showing the first 4000 of 5000 characters.');
+      });
+
+      test('findings show the verified ones and never the false positives', async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        assert.dom(SEL.finding).exists({ count: 1 });
+        assert.dom(SEL.findingTitle).hasText('Http basic auth · Credential');
+        assert.dom(SEL.findingAudit).hasText('Verified');
+        assert.dom(SEL.findingExploitability).hasText('Not proven');
+        assert
+          .dom(SEL.findingReview)
+          .hasText('A real service credential shipped in the app.');
+        assert.dom(SEL.anyView).doesNotContainText('Email address');
+        assert.dom(SEL.anyView).doesNotContainText('False positive');
+      });
+
+      test('hypotheses list the confirmed ones first and replace the ruled-out list', async function (assert) {
+        await renderGoal(this, agentGoal());
+
+        const statuses = findAll(
+          `${SEL.hypothesesPanel} ${SEL.hypothesisStatus}`
+        );
+
+        assert.strictEqual(statuses[0].textContent.trim(), 'Confirmed');
+        assert.strictEqual(statuses[1].textContent.trim(), 'Ruled out');
+        assert.dom(SEL.hypothesesCount).hasText('1 confirmed · 1 ruled out');
+        assert
+          .dom(SEL.hypothesisReason)
+          .hasText('Every scheme relaunched the app empty.');
+        assert.dom(SEL.ruledOut).doesNotExist();
+      });
+
+      test('other techniques lists the techniques that did not work and every path that did not succeed', async function (assert) {
+        await renderGoal(this, agentGoal());
+        await click(SEL.otherCta);
+
+        assert
+          .dom(SEL.otherPanel)
+          .containsText('Insecure storage · Reading the app stores')
+          .containsText('Every store collector refused.')
+          .containsText('The keychain holds a session token.');
+        assert
+          .dom(SEL.otherPanel)
+          .doesNotContainText('Static inspection of the package');
+
+        const otherPaths = SEL.otherPaths;
+
+        assert.dom(`${otherPaths} ${SEL.attempt}`).exists({ count: 1 });
+        assert
+          .dom(`${otherPaths} ${SEL.attemptTitle}`)
+          .hasText('Read defaults → Read keychain');
+        assert
+          .dom(`${otherPaths} ${SEL.attemptOutcome}`)
+          .hasText('read_defaults was refused.');
+      });
+
+      test('a goal whose succeeded paths carry no techniques still opens other techniques for its other paths', async function (assert) {
+        await renderGoal(
+          this,
+          agentGoal({
+            verdict: 'exploited',
+            techniques: [{ ...AGENT_TECHNIQUES[0], paths: [1] }],
+          })
+        );
+
+        assert.dom(SEL.otherCta).exists();
+
+        await click(SEL.otherCta);
+
+        assert.dom(SEL.otherEmpty).exists();
+        assert.dom(SEL.otherPaths).exists();
+      });
+    });
+
     test('the login goal keeps the findings page', async function (assert) {
       await renderGoal(this, { verdict: undefined, goal_id: 'login' });
 
       assert.dom(SEL.anyView).doesNotExist();
       assert.dom(SEL.legacyHero).exists();
+    });
+
+    test('the goal list gives each kind of risk its own icon', async function (assert) {
+      this.set('goals', [
+        goal({ goal_id: 'login-bypass-ios-prod' }),
+        goal({ goal_id: 'find-secrets-ios-prod' }),
+        goal({ goal_id: 'exposed-data-ios-prod' }),
+        goal({ goal_id: 'reach-admin-panel' }),
+      ]);
+
+      await render(hbs`<OffensiveSecurity::ScanResults::PentestGoalsCard
+        @goals={{this.goals}}
+        @onGoalClick={{this.noop}}
+      />`);
+
+      const icons = findAll(SEL.goalIcon).map((el) =>
+        el.getAttribute('data-test-offensiveSecurity-pentest-goal-icon')
+      );
+
+      assert.deepEqual(icons, ['lock-open', 'key', 'swap-horiz', 'target']);
+      assert
+        .dom(SEL.goalDetail)
+        .doesNotExist('the detail is on the goal page, not the list');
     });
 
     test('the goal list shows the verdict, or the plain status without one', async function (assert) {

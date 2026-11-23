@@ -10,19 +10,25 @@ import {
   goalTechniqueMetrics,
   normalizeGoalVerdict,
   parseGoalDetail,
+  readableAgentText,
   techniqueTone,
   techniqueVerdict,
+  verbName,
 } from 'irene/utils/offsec-goal-verdict';
 import type {
   GoalPath,
+  GoalPathStep,
   GoalTechnique,
   GoalVerdict,
-  PentestGoalResult,
+  PentestFinding,
+  PentestHypothesis,
+  PentestObservation,
+  ResolvedGoalResult,
 } from 'irene/models/offsec-scan';
 
 export interface GoalVerdictViewSignature {
   Args: {
-    goal: PentestGoalResult;
+    goal: ResolvedGoalResult;
     /** Shows the other-techniques page instead of the goal page. */
     showOthers?: boolean;
     onOpenOtherTechniques: () => void;
@@ -66,6 +72,8 @@ export interface PathPage {
   path?: GoalPath;
   isChain: boolean;
   cards: TechniqueCard[];
+  /** Techniques also tried on the path that did not work there; named, not carded. */
+  others: TechniqueCard[];
 }
 
 const LAYOUT_BY_VERDICT: Record<GoalVerdict, GoalLayout> = {
@@ -75,6 +83,11 @@ const LAYOUT_BY_VERDICT: Record<GoalVerdict, GoalLayout> = {
   untested: 'proof',
   held: 'proof',
 };
+
+/** A technique that worked: exploited, or a weakness the agent confirmed. */
+function isWorked(technique: GoalTechnique): boolean {
+  return technique.status === 'exploited' || technique.status === 'confirmed';
+}
 
 export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extends Component<GoalVerdictViewSignature> {
   @service declare intl: IntlService;
@@ -116,9 +129,41 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return goalDescriptionText(this.args.goal.description);
   }
 
-  /** The API's paths; an exploited goal without any falls back to the route its detail spells out. */
+  /** The agent's account of the goal; its route and ruled-out list show as the paths and hypotheses. */
+  get detailText(): string {
+    return readableAgentText(this.detail.intro);
+  }
+
+  get allPaths(): GoalPath[] {
+    return this.args.goal.paths ?? [];
+  }
+
+  get observations(): PentestObservation[] {
+    return this.args.goal.observations ?? [];
+  }
+
+  get hypotheses(): PentestHypothesis[] {
+    return this.args.goal.hypotheses ?? [];
+  }
+
+  /** Findings no technique lists; no card would show them, so they get a panel of their own. */
+  get unclaimedFindings(): PentestFinding[] {
+    return this.args.goal.unclaimed_findings ?? [];
+  }
+
+  /** The refuted hypotheses already say what was ruled out, and why. */
+  get showRuledOut(): boolean {
+    return !this.hypotheses.length && this.detail.ruledOut.length > 0;
+  }
+
+  /**
+   * The paths that reached the goal; the rest show as attempts on the techniques tried on them. An
+   * exploited goal without any falls back to the route its detail spells out.
+   */
   get goalPaths(): GoalPath[] {
-    const paths = this.args.goal.paths ?? [];
+    const paths = this.allPaths.filter(
+      (path) => !path.status || path.status === 'succeeded'
+    );
     const { route, intro } = this.detail;
 
     if (paths.length || !this.isExploitLayout || !route.length) {
@@ -145,15 +190,31 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     );
   }
 
+  /** Every path that reached its end shows here, whatever the goal's verdict; the rest are on the other-techniques page. */
+  get showPathsPanel(): boolean {
+    // older payloads send paths without a status; only an exploited goal reads those as reached
+    return (
+      this.isExploitLayout ||
+      this.allPaths.some((path) => path.status === 'succeeded')
+    );
+  }
+
   get pathPages(): PathPage[] {
     const exploited = this.techniques.filter((t) => t.status === 'exploited');
 
     // with no path the page still shows the note, and any exploited cards under it
     if (!this.goalPaths.length) {
-      return [{ isChain: false, cards: this.groupedCards(exploited) }];
+      return [
+        { isChain: false, cards: this.groupedCards(exploited), others: [] },
+      ];
     }
 
     return this.goalPaths.map((path) => {
+      // a numbered path is named by the techniques tried on it, not by its steps
+      if (path.number !== undefined) {
+        return this.numberedPathPage(path, path.number);
+      }
+
       const ids = [...new Set(path.steps.map((s) => s.label).filter(Boolean))];
 
       // a path whose steps name no technique shows the exploited ones, one card per kind
@@ -162,32 +223,37 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
           path,
           isChain: false,
           cards: this.groupedCards(exploited),
+          others: [],
         };
       }
 
-      const techniques = ids
-        .map((id) => this.techniquesById.get(id as string))
-        .filter((technique): technique is GoalTechnique => Boolean(technique));
-
-      const isChain = path.type === 'chain' && techniques.length > 1;
-
-      return {
-        path,
-        isChain,
-        cards: techniques.map((technique) => ({
-          ...this.toCard(technique),
-          // a card is numbered by where its step sits in the path
-          chainStep: isChain
-            ? {
-                step:
-                  path.steps.findIndex((s) => s.label === technique.id) + 1 ||
-                  1,
-                total: path.steps.length,
-              }
-            : undefined,
-        })),
-      };
+      return this.labelledPathPage(path, ids as string[]);
     });
+  }
+
+  /** Techniques shown as cards under a path; everything else belongs on the other-techniques page. */
+  get pathTechniqueIds(): Set<string> {
+    if (!this.showPathsPanel) {
+      return new Set();
+    }
+
+    return new Set(
+      this.pathPages.flatMap((page) => page.cards.map((c) => c.technique.id))
+    );
+  }
+
+  /** A goal that was not exploited lists the weaknesses its paths turned up, not exploits. */
+  get pathCardsTitleKey(): string {
+    return this.isExploitLayout
+      ? 'offensiveSecurity.goalView.exploitFindings'
+      : 'offensiveSecurity.goalView.weaknessFindings';
+  }
+
+  /** The paths that never reached their end, listed on the other-techniques page. */
+  get otherPaths(): GoalPath[] {
+    return this.allPaths.filter(
+      (path) => path.status && path.status !== 'succeeded'
+    );
   }
 
   get weaknessCards(): TechniqueCard[] {
@@ -240,7 +306,11 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
 
   /** Not shown once everything is listed inline (not vulnerable, untested) or when the page would be empty. */
   get showOtherTechniques(): boolean {
-    return !this.isProofLayout && this.allOthers.length > 0;
+    if (!this.showPathsPanel) {
+      return !this.isProofLayout && this.allOthers.length > 0;
+    }
+
+    return this.allOthers.length > 0 || this.otherPaths.length > 0;
   }
 
   get otherTechniquesLabelKey(): string {
@@ -265,6 +335,32 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
       this.isUntestedGoal ? 'triedUntestedTitle' : 'triedHeldTitle'
     }`;
   }
+
+  /** The paths a technique was tried on that never reached the goal. */
+  attemptsFor = (technique: GoalTechnique): GoalPath[] => {
+    const numbers = technique.paths ?? [];
+
+    return this.allPaths.filter(
+      (path) =>
+        path.number !== undefined &&
+        numbers.includes(path.number) &&
+        path.status !== 'succeeded'
+    );
+  };
+
+  /** A step as the tool it called, in words; the raw step text shows under it. */
+  stepName = (step: GoalPathStep): string => verbName(step.verb);
+
+  /** Agent prose without the observation ids it cites. */
+  text = (raw?: string): string => readableAgentText(raw);
+
+  /** Steps, findings or an evidence line to show under "How it was exploited" / "Evidence". */
+  hasEvidence = (technique: GoalTechnique): boolean =>
+    Boolean(
+      technique.repro?.length ||
+      technique.findings?.length ||
+      technique.evidence
+    );
 
   /** What the agent did for a technique, with a generic line when the API gave none. */
   triedText = (technique: GoalTechnique): string =>
@@ -309,14 +405,16 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   weaknessText = (technique: GoalTechnique): string =>
     this.join(this.flawText(technique), technique.impact ?? '');
 
-  /** Everything assessed beyond the exploited paths; a weakness-only goal already lists its weaknesses. */
+  /** Everything assessed beyond the cards on the goal page; a weakness-only goal already lists its weaknesses. */
   get allOthers(): GoalTechnique[] {
-    const skipConfirmed = this.verdict === 'weakness';
+    const skipConfirmed = !this.showPathsPanel && this.verdict === 'weakness';
+    const shown = this.pathTechniqueIds;
 
     return this.techniques
       .filter(
         (t) =>
           t.status !== 'exploited' &&
+          !shown.has(t.id) &&
           !(skipConfirmed && t.status === 'confirmed')
       )
       .sort(
@@ -416,6 +514,44 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
   @action
   next(): void {
     this.pageIndex = Math.min(this.pageCount - 1, this.safeIndex + 1);
+  }
+
+  /** The techniques tried on a numbered path: the ones that worked as cards, the rest by name. */
+  private numberedPathPage(path: GoalPath, number: number): PathPage {
+    const linked = this.techniques.filter((t) => t.paths?.includes(number));
+
+    return {
+      path,
+      isChain: false,
+      cards: this.toCards(linked.filter(isWorked)),
+      others: this.toCards(linked.filter((t) => !isWorked(t))),
+    };
+  }
+
+  /** A path whose steps name their techniques; a chain numbers each card by its step. */
+  private labelledPathPage(path: GoalPath, ids: string[]): PathPage {
+    const techniques = ids
+      .map((id) => this.techniquesById.get(id))
+      .filter((technique): technique is GoalTechnique => Boolean(technique));
+
+    const isChain = path.type === 'chain' && techniques.length > 1;
+
+    return {
+      path,
+      isChain,
+      others: [],
+      cards: techniques.map((technique) => ({
+        ...this.toCard(technique),
+        // a card is numbered by where its step sits in the path
+        chainStep: isChain
+          ? {
+              step:
+                path.steps.findIndex((s) => s.label === technique.id) + 1 || 1,
+              total: path.steps.length,
+            }
+          : undefined,
+      })),
+    };
   }
 
   /** One card per category and name, its evidence lines and credentials gathered into one. */

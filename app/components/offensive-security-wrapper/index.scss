@@ -12,12 +12,13 @@
     transition: grid-template-columns 0.2s ease-in-out;
   }
 
+  // minmax(0, 1fr), not auto: an auto track grows to the top bar's widest row and drags the page past the screen
   &.collapsed {
-    grid-template-columns: 56px auto;
+    grid-template-columns: 56px minmax(0, 1fr);
   }
 
   &.expanded {
-    grid-template-columns: 250px auto;
+    grid-template-columns: 250px minmax(0, 1fr);
   }
 
   .offsec-wrapper-main {
@@ -31,6 +32,7 @@
 
   .offsec-wrapper-header {
     grid-area: topnav;
+    min-width: 0;
   }
 
   .offsec-wrapper-sidenav {
@@ -43,5 +45,26 @@
 
   .new-assessment-btn {
     white-space: nowrap;
+  }
+}
+
+// a phone has room for the button's icon, not the lead text or its label
+@media (max-width: 600px) {
+  .offsec-wrapper-root {
+    .upload-lead,
+    .new-assessment-label {
+      display: none;
+    }
+
+    // icon only, so drop the 80px minimum the label needed
+    .new-assessment-btn {
+      min-width: 0;
+      padding: 0.4em 0.6em;
+    }
+
+    // the page wrapper is main's direct child; its 1.5em gutter leaves a phone too little width
+    .offsec-wrapper-main > div {
+      padding: 0.75em 0.5em;
+    }
   }
 }

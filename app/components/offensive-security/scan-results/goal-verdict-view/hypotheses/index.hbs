@@ -1,0 +1,81 @@
+{{#if this.rows.length}}
+  <div local-class='hypotheses' data-test-offensiveSecurity-goalView-hypotheses>
+    <div local-class='hypotheses-label'>
+      {{t 'offensiveSecurity.goalView.hypotheses'}}
+      <span
+        local-class='hypotheses-count'
+        data-test-offensiveSecurity-goalView-hypotheses-count
+      >
+        {{t
+          'offensiveSecurity.goalView.hypothesesCount'
+          confirmed=this.confirmedCount
+          refuted=this.refutedCount
+        }}
+      </span>
+    </div>
+
+    <div local-class='hypothesis-list'>
+      {{#each this.rows as |hypothesis|}}
+        <details
+          local-class='hypothesis'
+          data-test-offensiveSecurity-goalView-hypothesis={{this.tone
+            hypothesis.status
+          }}
+        >
+          <summary local-class='hypothesis-summary'>
+            <span
+              local-class='status is-{{this.tone hypothesis.status}}'
+              data-test-offensiveSecurity-goalView-hypothesis-status
+            >
+              {{this.statusLabel hypothesis.status}}
+            </span>
+
+            <span
+              class='offsec-prose'
+              local-class='hypothesis-text'
+              data-test-offensiveSecurity-goalView-hypothesis-text
+            >{{this.text hypothesis.text}}</span>
+
+            <AkIcon
+              @iconName='chevron-right'
+              @size='small'
+              local-class='hypothesis-chevron'
+            />
+          </summary>
+
+          <div local-class='hypothesis-body'>
+            <div local-class='tags'>
+              {{#if hypothesis.scope}}
+                <span local-class='tag'>{{this.scopeLabel
+                    hypothesis.scope
+                  }}</span>
+              {{/if}}
+
+              {{#if hypothesis.carried}}
+                <span local-class='tag'>
+                  {{t 'offensiveSecurity.goalView.hypothesisCarried'}}
+                </span>
+              {{/if}}
+            </div>
+
+            {{#if hypothesis.refuted_because}}
+              <div local-class='hypothesis-field-label'>
+                {{t 'offensiveSecurity.goalView.whyRefuted'}}
+              </div>
+              <p
+                class='offsec-prose'
+                local-class='hypothesis-reason'
+                data-test-offensiveSecurity-goalView-hypothesis-reason
+              >{{this.text hypothesis.refuted_because}}</p>
+            {{/if}}
+
+            <OffensiveSecurity::ScanResults::GoalVerdictView::Observations
+              @ids={{hypothesis.evidence}}
+              @observations={{@observations}}
+            />
+          </div>
+        </details>
+      {{/each}}
+    </div>
+  </div>
+{{/if}}

@@ -1,3 +1,17 @@
+.results-root {
+  padding: 1.5em;
+
+  @media (max-width: 600px) {
+    padding: 0.5em 0;
+  }
+}
+
+// on a narrow screen the trail wraps between crumbs instead of splitting a word ("Result s")
+.breadcrumbs {
+  flex-wrap: wrap;
+  overflow-wrap: normal;
+}
+
 .tabs {
   display: flex;
   gap: 24px;

@@ -15,7 +15,14 @@ export default class AuthenticatedOffensiveSecurityResultsRoute extends ScrollTo
     view: { replace: false },
   };
 
+  // Coming from the scan page the finished scan's detail is already loaded; only a live or list-only record is refetched
   async model({ scan_id }: { scan_id: string }) {
+    const cached = this.store.peekRecord('offsec-scan', scan_id);
+
+    if (cached?.isLoadedTerminal) {
+      return cached;
+    }
+
     return this.store.findRecord('offsec-scan', scan_id, { reload: true });
   }
 

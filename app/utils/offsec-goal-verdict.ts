@@ -8,7 +8,10 @@ import type {
   GoalVerdict,
   PentestFinding,
   PentestGoalResult,
+  PentestHypothesis,
   PentestPlan,
+  PentestTechnique,
+  ResolvedGoalResult,
 } from 'irene/models/offsec-scan';
 
 const VERDICTS: GoalVerdict[] = [
@@ -81,7 +84,8 @@ export function goalTechniqueMetrics(
 
 const SUCCEEDED_PLAN = ['succeeded', 'achieved'];
 
-function humanize(raw?: string): string {
+/** An API token as words: "credential_assignment" -> "Credential assignment". */
+export function humanize(raw?: string): string {
   const text = (raw || '').replace(/[_-]+/g, ' ').trim();
 
   return capitalize(text);
@@ -115,7 +119,7 @@ function isDemonstrated(finding: PentestFinding): boolean {
 }
 
 /** The quote when it shows the secret; when the secret is cut off or garbled in it, the value itself. */
-function secretText(finding: PentestFinding): string | undefined {
+export function secretText(finding: PentestFinding): string | undefined {
   const { quote, value } = finding;
 
   if (value && !quote?.includes(value)) {
@@ -179,7 +183,7 @@ function findingsForTechnique(
  * Gives each technique the API sent the credentials of the findings behind it. When it sent no
  * techniques, or no paths and no route in its detail, they are built from the findings instead.
  */
-function withCredentials(goal: PentestGoalResult): PentestGoalResult {
+function withCredentials(goal: ResolvedGoalResult): ResolvedGoalResult {
   const findings = goal.findings ?? [];
 
   if (!findings.length) {
@@ -200,20 +204,47 @@ function withCredentials(goal: PentestGoalResult): PentestGoalResult {
     };
   }
 
+  const claimed = new Set<PentestFinding>();
+  // credentials the API filled in itself name no finding, so none can be called left over
+  const sentCredentials = goal.techniques.some((t) => t.credentials?.length);
+
+  const techniques = goal.techniques.map((technique) => {
+    // a technique that names its findings lists them instead of matched credentials
+    if (technique.credentials?.length || technique.findings?.length) {
+      return technique;
+    }
+
+    const matched = findingsForTechnique(technique, findings);
+
+    matched.forEach((finding) => claimed.add(finding));
+
+    return matched.length
+      ? { ...technique, credentials: matched.map(credentialFromFinding) }
+      : technique;
+  });
+
   return {
     ...goal,
-    techniques: goal.techniques.map((technique) => {
-      if (technique.credentials?.length) {
-        return technique;
-      }
-
-      const matched = findingsForTechnique(technique, findings);
-
-      return matched.length
-        ? { ...technique, credentials: matched.map(credentialFromFinding) }
-        : technique;
-    }),
+    techniques,
+    unclaimed_findings: sentCredentials
+      ? []
+      : unclaimedFindings(techniques, findings, claimed),
   };
+}
+
+/** The findings no technique lists or was matched to; the goal page shows them on their own, since no card would. */
+function unclaimedFindings(
+  techniques: GoalTechnique[],
+  findings: PentestFinding[],
+  claimed: Set<PentestFinding>
+): PentestFinding[] {
+  const listedIds = new Set(
+    techniques.flatMap((t) => (t.findings ?? []).map((f) => f.id))
+  );
+
+  return findings.filter(
+    (f) => !claimed.has(f) && !(f.id && listedIds.has(f.id))
+  );
 }
 
 function techniqueFromFinding(
@@ -337,11 +368,124 @@ function pathFromPlan(plan: PentestPlan): GoalPath {
   };
 }
 
+const AGENT_STATUSES: string[] = ['worked', 'failed', 'unproven'];
+
+function isAgentTechnique(
+  technique: GoalTechnique | PentestTechnique
+): technique is PentestTechnique {
+  return AGENT_STATUSES.includes(technique.status);
+}
+
+/** A technique that worked is exploited on a goal the agent exploited, a weakness on any other. */
+function agentTechniqueStatus(
+  technique: PentestTechnique,
+  exploitedGoal: boolean
+): GoalTechniqueStatus {
+  if (technique.status === 'worked') {
+    return exploitedGoal ? 'exploited' : 'confirmed';
+  }
+
+  // unproven: the agent saw the weakness but never carried it through
+  return technique.status === 'failed' ? 'safe' : 'confirmed';
+}
+
+/** One "Pattern: value" line per value the agent recovered, each value once. */
+function agentEvidence(technique: PentestTechnique): string | undefined {
+  const lines = (technique.evidence ?? [])
+    .filter((e) => e.value)
+    .map((e) => `${humanize(e.pattern) || 'Value'}: ${e.value}`);
+
+  return [...new Set(lines)].join('\n') || undefined;
+}
+
+/** The hypotheses sent in full; a bare id has nothing to show. */
+function fullHypotheses(
+  raw?: (PentestHypothesis | string)[]
+): PentestHypothesis[] | undefined {
+  const list = (raw ?? []).filter(
+    (h): h is PentestHypothesis => typeof h === 'object' && h !== null
+  );
+
+  return list.length ? list : undefined;
+}
+
+/** The agent sometimes leaves "..." where it wrote nothing; that reads as no text at all. */
+function agentText(raw?: string): string {
+  const text = (raw ?? '').trim();
+
+  return /^[.…\s]*$/.test(text) ? '' : text;
+}
+
+function techniqueFromAgent(
+  technique: PentestTechnique,
+  exploitedGoal: boolean
+): GoalTechnique {
+  const status = agentTechniqueStatus(technique, exploitedGoal);
+  const how = sentence(agentText(technique.how)) || undefined;
+
+  return {
+    id: technique.id,
+    category: humanize(technique.category),
+    name: technique.name,
+    flaw: '',
+    status,
+    impact: agentText(technique.impact) || undefined,
+    evidence: agentEvidence(technique),
+    tried: how,
+    repro: technique.status === 'worked' && how ? [how] : undefined,
+    safe_result: sentence(agentText(technique.why_failed)) || undefined,
+    fix: agentText(technique.fix) || undefined,
+    paths: technique.paths ?? [],
+    findings: technique.findings?.length ? technique.findings : undefined,
+    hypotheses: fullHypotheses(technique.hypotheses),
+  };
+}
+
+/** The reviewer judged it not a real issue; such findings are left out everywhere. */
+export function isFalsePositive(finding: PentestFinding): boolean {
+  return finding.audit?.status === 'fp';
+}
+
+/** The findings the reviewer kept. */
+export function keptFindings(findings?: PentestFinding[]): PentestFinding[] {
+  return (findings ?? []).filter((f) => !isFalsePositive(f));
+}
+
+/** The goal without the findings the reviewer marked false positives, on the goal and on each technique. */
+function withoutFalsePositives(goal: PentestGoalResult): PentestGoalResult {
+  return {
+    ...goal,
+    findings: goal.findings && keptFindings(goal.findings),
+    techniques: goal.techniques?.map((technique) =>
+      technique.findings
+        ? { ...technique, findings: keptFindings(technique.findings) }
+        : technique
+    ),
+  };
+}
+
+/** The goal with each technique the agent reported in the shape the goal page reads. */
+function withAgentTechniques(goal: PentestGoalResult): ResolvedGoalResult {
+  const verdict = normalizeGoalVerdict(goal.verdict);
+  const exploitedGoal = verdict === 'exploited' || verdict === 'partial';
+
+  return {
+    ...goal,
+    techniques: goal.techniques?.map((technique) =>
+      isAgentTechnique(technique)
+        ? techniqueFromAgent(technique, exploitedGoal)
+        : technique
+    ),
+  };
+}
+
 /**
  * The goal as the single-card page needs it. Fields the API sent win; the rest are built from the
  * findings and attack plans every goal already has, so older payloads open the same page.
  */
-export function resolveGoalView(goal: PentestGoalResult): PentestGoalResult {
+export function resolveGoalView(raw: PentestGoalResult): ResolvedGoalResult {
+  const goal = withAgentTechniques(withoutFalsePositives(raw));
+
   if (normalizeGoalVerdict(goal.verdict) || goal.goal_id === 'login') {
     return withCredentials(goal);
   }
@@ -439,6 +583,41 @@ export function parseGoalDetail(
       .map((item) => item.trim().replace(/;$/, ''))
       .filter(Boolean),
   };
+}
+
+// ", obs:8" inside a parenthesis, or a whole "(obs:51)" / "(obs #29)"
+const OBS_IN_PARENS = /,\s*obs\s*[:#]\s*\d+/gi;
+const OBS_PARENS = /\s*\(\s*obs\s*[:#]\s*\d+\s*\)/gi;
+// "(inspect_strings)" left behind once its observation is gone
+const VERB_PARENS = /\(([a-z]+(?:_[a-z]+)+)\)/g;
+
+/**
+ * Agent prose without the observation ids it cites, which mean nothing on the page:
+ * "1 finding: x (inspect_strings, obs:8)." -> "1 finding: x (Inspect strings).".
+ */
+export function readableAgentText(text?: string): string {
+  return (text ?? '')
+    .replace(OBS_IN_PARENS, '')
+    .replace(OBS_PARENS, '')
+    .replace(VERB_PARENS, (_, verb: string) => `(${humanize(verb)})`)
+    .trim();
+}
+
+/** A tool the agent called, as words: "inspect_strings" -> "Inspect strings". */
+export function verbName(verb?: string): string {
+  return humanize(verb);
+}
+
+/**
+ * A path named by what it did, step by step ("Read defaults → Read keychain → List files"), so the
+ * page never shows its internal number. Repeated steps in a row read once.
+ */
+export function goalPathName(path: GoalPath): string {
+  const names = path.steps
+    .map((step) => verbName(step.verb) || step.text)
+    .filter((name, index, all) => name && name !== all[index - 1]);
+
+  return names.join(' → ') || path.summary || path.outcome;
 }
 
 /** The description without the route it repeats ("X was reached via: a → b" -> "X was reached."). */
