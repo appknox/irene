@@ -54,7 +54,7 @@ module(
       });
     });
 
-    test('it links to the store monitoring page', async function (assert) {
+    test('it links to the unscanned version page of the app', async function (assert) {
       this.owner.setupRouter();
 
       this.context = new NfAmNewversnContext({
@@ -75,7 +75,10 @@ module(
 
       assert
         .dom('[data-test-nf-newversn-link]')
-        .hasAttribute('href', '/dashboard/store-monitoring')
+        .hasAttribute(
+          'href',
+          `/dashboard/storeknox/inventory-details/${this.context.am_app_id}/unscanned-version`
+        )
         .hasText(t('notificationModule.viewStoreMonitoringResults'));
     });
   }

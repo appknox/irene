@@ -37,8 +37,8 @@ export default abstract class AkNotificationsBaseService<T> extends Service {
   @tracked notification_limit = 10;
   @tracked notification_offset = 0;
 
-  @tracked notifications?: NFModelDataArray<T>;
-  @tracked notifications_drop_down?: NFModelDataArray<T>;
+  @tracked notifications?: NFModelDataArray<T> | T[];
+  @tracked notifications_drop_down?: NFModelDataArray<T> | T[];
 
   declare abstract fetchUnRead: NfInAppNotificationTask;
   declare abstract fetch: NfInAppNotificationTask;
