@@ -296,9 +296,9 @@ function isLibraryFrame(frame: RetestFrame, libraryPackage: string | null) {
 
   return Boolean(
     libraryPackage &&
-      frame.packageName &&
-      (frame.packageName === libraryPackage ||
-        frame.packageName.startsWith(`${libraryPackage}.`))
+    frame.packageName &&
+    (frame.packageName === libraryPackage ||
+      frame.packageName.startsWith(`${libraryPackage}.`))
   );
 }
 
