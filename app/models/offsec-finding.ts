@@ -14,6 +14,20 @@ export interface OffsecFindingEvidence {
   metadata: Record<string, unknown>;
 }
 
+/** One protection check the app was seen running, with its backtrace (`detail.detection_backtrace[]`). */
+export interface OffsecDetectionTrigger {
+  mechanism_id?: string;
+  /** The primitive the check ran, e.g. `file-exists` or `jb-probe`. */
+  kind?: string;
+  arg?: string;
+  layer?: string;
+  /** The first app-owned frame: the method to hook or patch. */
+  app_frame?: string | null;
+  /** Android only: `app_frame` resolved to a file in the decoded APK. */
+  smali_path?: string | null;
+  stack?: string[];
+}
+
 export default class OffsecFindingModel extends Model {
   @attr('string')
   declare signatureId: string;

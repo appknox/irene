@@ -616,6 +616,16 @@
   border-radius: var(--border-radius-4);
 }
 
+.evi-fail {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--error-main);
+  background-color: var(--error-light);
+  padding: 2px 7px;
+  border-radius: var(--border-radius-4);
+}
+
 .copy-payload-btn {
   margin-left: auto;
   font-family: var(--offensive-security-finding-detail-code-font-family);
@@ -637,6 +647,7 @@
   margin: 0;
   color: var(--text-secondary);
   font-size: 13px;
+  overflow-wrap: anywhere;
 }
 
 .evi-code {
@@ -651,6 +662,69 @@
   max-height: 280px;
   overflow-y: auto;
   overflow-x: auto;
+}
+
+/* ---------- BACKTRACE STACK ---------- */
+.bt-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bt-stack-h {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.bt-frames {
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.5rem 2rem;
+  border: 1px solid var(--border-color-1);
+  border-radius: 6px;
+  font-family: var(--offensive-security-finding-detail-code-font-family);
+  font-size: 12px;
+  line-height: 1.6;
+  max-height: 240px;
+  overflow: auto;
+}
+
+.bt-frame {
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+
+  &::marker {
+    color: var(--text-secondary);
+  }
+}
+
+.bt-module {
+  color: inherit;
+}
+
+.bt-system {
+  opacity: 0.7;
+}
+
+.bt-app {
+  color: var(--text-primary);
+
+  .bt-module {
+    font-weight: 600;
+  }
+}
+
+.bt-hit {
+  font-weight: 600;
+  background-color: var(--success-light);
+  border-radius: 3px;
+}
+
+.bt-tag {
+  margin-left: 0.5rem;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--success-main);
 }
 
 .evi-code-wrapper {

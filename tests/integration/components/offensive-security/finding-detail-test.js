@@ -360,6 +360,94 @@ module(
       assert.dom(this.element).includesText('/system/xbin/su');
     });
 
+    test('it renders an iOS trigger stack with the app frame marked', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'ios-jailbreak-block',
+        name: 'jailbreak block reaction',
+        outcome: 'bypassed',
+        detail: {
+          detection_backtrace: [
+            {
+              mechanism_id: 'ios-jailbreak-block',
+              kind: 'jb-probe',
+              arg: 'stat /private/var/lib/apt',
+              layer: 'native',
+              app_frame: 'Agrivita!0xea8cc',
+              stack: [
+                'Foundation!-[NSFileManager fileExistsAtPath:]',
+                'Agrivita!0xea8cc',
+                'Agrivita!0xea9f0',
+              ],
+            },
+          ],
+        },
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-stack]')
+        .includesText('Stack (3 frames)');
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-frame]')
+        .exists({ count: 3 });
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-frame="system"]')
+        .includesText('Foundation!-[NSFileManager fileExistsAtPath:]');
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-frame="app"]')
+        .exists({ count: 2 });
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-appFrame]')
+        .exists({ count: 1 });
+
+      const hit = this.element
+        .querySelector('[data-test-offensiveSecurity-findingDetail-appFrame]')
+        .closest('li');
+
+      assert.dom(hit).includesText('Agrivita!0xea8cc');
+    });
+
+    test('it shows no stack list for a trigger without a stack', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'root-file-probe',
+        name: 'Root artifact file probe',
+        outcome: 'bypassed',
+        detail: {
+          detection_backtrace: [
+            {
+              kind: 'file-exists',
+              arg: '/system/xbin/su',
+              app_frame: 'o.im.p',
+            },
+          ],
+        },
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('o.im.p');
+      assert
+        .dom('[data-test-offensiveSecurity-findingDetail-stack]')
+        .doesNotExist();
+    });
+
     test('it renders the smali patch and the patched APK download', async function (assert) {
       const finding = this.server.create('offsec-finding', {
         signature_id: 'root-file-probe',
@@ -454,6 +542,46 @@ module(
       `);
 
       assert.dom(this.element).doesNotIncludeText('CLICK_START_SETUP_DUMP');
+    });
+
+    test('it marks an evidence run that failed', async function (assert) {
+      const finding = this.server.create('offsec-finding', {
+        signature_id: 'ios-jailbreak-block',
+        name: 'jailbreak block reaction',
+        outcome: 'bypassed',
+        evidence: [
+          {
+            evidence_id: 'E1',
+            tool: 'frida_script',
+            source: 'frida',
+            summary: 'frida_script:1: unresolved',
+            content: 'block held',
+            ok: false,
+          },
+          {
+            evidence_id: 'E2',
+            tool: 'disable_function',
+            source: 'frida',
+            summary: 'Guard!0x100: bypassed; proof: screen_cleared',
+            content: 'effect=running',
+            ok: true,
+          },
+        ],
+      });
+
+      this.set('scanId', '9');
+      this.set('findingId', String(finding.id));
+
+      await render(hbs`
+        <OffensiveSecurity::FindingDetail
+          @scanId={{this.scanId}}
+          @findingId={{this.findingId}}
+        />
+      `);
+
+      assert.dom(this.element).includesText('FAIL');
+      assert.dom(this.element).includesText('OK');
+      assert.dom(this.element).includesText('frida_script:1: unresolved');
     });
 
     test('it showcases static evidence of presence', async function (assert) {

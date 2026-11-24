@@ -261,6 +261,44 @@
                 {{#if trigger.app_frame}}
                   <p local-class='evi-cap'>{{trigger.app_frame}}</p>
                 {{/if}}
+                {{#if trigger.frames.length}}
+                  <div
+                    local-class='bt-stack'
+                    data-test-offensiveSecurity-findingDetail-stack
+                  >
+                    <span local-class='bt-stack-h'>{{t
+                        'offensiveSecurity.findingDetail.stackFrames'
+                        count=trigger.frames.length
+                      }}</span>
+                    <ol local-class='bt-frames'>
+                      {{#each trigger.frames as |frame|}}
+                        <li
+                          local-class='bt-frame {{if
+                            (eq frame.owner "app")
+                            "bt-app"
+                            (if (eq frame.owner "system") "bt-system")
+                          }} {{if frame.isAppFrame "bt-hit"}}'
+                          data-test-offensiveSecurity-findingDetail-frame='{{frame.owner}}'
+                        >
+                          {{#if frame.module}}
+                            <span
+                              local-class='bt-module'
+                            >{{frame.module}}{{frame.separator}}</span>
+                          {{~/if~}}
+                          <span local-class='bt-loc'>{{frame.location}}</span>
+                          {{#if frame.isAppFrame}}
+                            <span
+                              local-class='bt-tag'
+                              data-test-offensiveSecurity-findingDetail-appFrame
+                            >{{t
+                                'offensiveSecurity.findingDetail.appFrame'
+                              }}</span>
+                          {{/if}}
+                        </li>
+                      {{/each}}
+                    </ol>
+                  </div>
+                {{/if}}
                 {{#if trigger.smali_path}}
                   <div local-class='evi-code-wrapper'>
                     <KnoxIq::CodeBlock
@@ -427,7 +465,13 @@
                   <span local-class='evi-surface'>{{item.source}}</span>
                 {{/if}}
                 {{#if item.ok}}
-                  <span local-class='evi-ok'>OK</span>
+                  <span local-class='evi-ok'>{{t
+                      'offensiveSecurity.findingDetail.evidenceOk'
+                    }}</span>
+                {{else if (eq item.ok false)}}
+                  <span local-class='evi-fail'>{{t
+                      'offensiveSecurity.findingDetail.evidenceFail'
+                    }}</span>
                 {{/if}}
               </div>
               {{#if item.summary}}

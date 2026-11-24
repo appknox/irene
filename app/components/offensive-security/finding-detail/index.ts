@@ -12,9 +12,16 @@ import type RouterService from '@ember/routing/router-service';
 
 import parseError from 'irene/utils/parse-error';
 import type OffsecFindingModel from 'irene/models/offsec-finding';
-import type { OffsecFindingEvidence } from 'irene/models/offsec-finding';
+import type {
+  OffsecDetectionTrigger,
+  OffsecFindingEvidence,
+} from 'irene/models/offsec-finding';
 import type OffsecScanModel from 'irene/models/offsec-scan';
 import type { OffsecScanEmbeddedFinding } from 'irene/models/offsec-scan';
+import {
+  parseOffsecStack,
+  type OffsecStackFrame,
+} from 'irene/utils/offsec-backtrace';
 import type OffsecScanAdapter from 'irene/adapters/offsec-scan';
 
 export interface OffensiveSecurityFindingDetailSignature {
@@ -29,6 +36,11 @@ export interface ReproduceStep {
   step: number;
   text: string;
   code?: string;
+}
+
+/** A `detection_backtrace` entry with its `stack` parsed into frames. */
+export interface DetectionTriggerView extends OffsecDetectionTrigger {
+  frames: OffsecStackFrame[];
 }
 
 export interface ScoringFactor {
@@ -435,10 +447,17 @@ export default class OffensiveSecurityFindingDetailComponent extends Component<O
     return this.exploitScript.trim().length > 0;
   }
 
-  get detectionBacktrace(): Array<Record<string, unknown>> {
+  get detectionBacktrace(): DetectionTriggerView[] {
     const raw = this.finding?.detail?.['detection_backtrace'];
 
-    return Array.isArray(raw) ? (raw as Array<Record<string, unknown>>) : [];
+    if (!Array.isArray(raw)) {
+      return [];
+    }
+
+    return (raw as OffsecDetectionTrigger[]).map((trigger) => ({
+      ...trigger,
+      frames: parseOffsecStack(trigger.stack, trigger.app_frame),
+    }));
   }
 
   get hasBacktrace() {
