@@ -1015,6 +1015,24 @@ module('Acceptance | storeknox/inventory/app-list', function (hooks) {
     }
   );
 
+  test('it requests 25 inventory apps per page by default', async function (assert) {
+    let inventoryLimit = null;
+
+    this.server.get('v2/sk_app', (schema, req) => {
+      const { approval_status, limit } = req.queryParams;
+
+      if (Number(approval_status) === ENUMS.SK_APPROVAL_STATUS.APPROVED) {
+        inventoryLimit = limit;
+      }
+
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    await visit('/dashboard/storeknox/inventory/app-list');
+
+    assert.strictEqual(inventoryLimit, '25');
+  });
+
   test('it filters decommissioned apps', async function (assert) {
     assert.expect(4);
 

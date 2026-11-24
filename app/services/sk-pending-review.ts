@@ -23,7 +23,7 @@ export default class SkPendingReviewService extends Service {
   @service declare router: RouterService;
   @service('notifications') declare notify: NotificationService;
 
-  @tracked limit = 10;
+  @tracked limit = 25;
   @tracked offset = 0;
   @tracked skPendingReviewAppsCount = 0;
 
@@ -31,7 +31,7 @@ export default class SkPendingReviewService extends Service {
     return this.fetchPendingReviewApps.isRunning;
   }
 
-  setLimitOffset({ limit = 10, offset = 0 }) {
+  setLimitOffset({ limit = 25, offset = 0 }) {
     this.limit = limit;
     this.offset = offset;
 

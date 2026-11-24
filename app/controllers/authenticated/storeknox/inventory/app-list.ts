@@ -12,7 +12,7 @@ export default class AuthenticatedStoreknoxAppListController extends Controller 
 
   queryParams = ['app_limit', 'app_offset', 'monitoring_status'];
 
-  app_limit = 10;
+  app_limit = 25;
   app_offset = 0;
   monitoring_status = -1;
 
