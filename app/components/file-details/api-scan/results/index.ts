@@ -13,6 +13,7 @@ import type ApiScanService from 'irene/services/api-scan';
 import type KnoxiqScanModel from 'irene/models/knoxiq-scan';
 import type KnoxiqScanService from 'irene/services/knoxiq-scan';
 import type MeService from 'irene/services/me';
+import { KNOXIQ_VULNERABILITY_ANALYSIS_DEFAULT_SORTS } from 'irene/components/knox-iq/vulnerability-analysis';
 
 export interface FileDetailsApiScanResultsSignature {
   Args: { file: FileModel };
@@ -28,6 +29,9 @@ export default class FileDetailsApiScanResultsComponent extends Component<FileDe
     ENUMS.VULNERABILITY_TYPE.API;
 
   @tracked sorts = [{ isAscending: false, valuePath: 'computedRisk' }];
+
+  @tracked knoxiqSorts: EmberTableSort[] =
+    KNOXIQ_VULNERABILITY_ANALYSIS_DEFAULT_SORTS;
 
   @tracked knoxiqScan: KnoxiqScanModel | null = null;
 
@@ -110,6 +114,11 @@ export default class FileDetailsApiScanResultsComponent extends Component<FileDe
   @action
   updateAnalysesSorts(sorts: EmberTableSort[]) {
     this.sorts = sorts;
+  }
+
+  @action
+  updateKnoxiqSorts(sorts: EmberTableSort[]) {
+    this.knoxiqSorts = sorts;
   }
 }
 
