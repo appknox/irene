@@ -22,10 +22,6 @@
         >
           <AkSvg::GenerateReport data-test-privacyReport-reportGenerateSvg />
 
-          <AkTypography data-test-privacyReport-reportGenerateDescription>
-            {{t 'privacyModule.generateReportDescription' htmlSafe=true}}
-          </AkTypography>
-
           {{#if this.generateLoading}}
             <AkSkeleton
               @variant='rounded'

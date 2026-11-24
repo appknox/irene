@@ -1803,7 +1803,7 @@
     "defaultPiiDetected": "Default PII types detected",
     "defaultHighRisk": "Default high risk countries flagged for all your apps",
     "downloadPdfPrimaryText": "Privacy Shield Report (pdf)",
-    "downloadReportDescription": "Here you can download different types of Privacy Shield reports.",
+    "downloadReportDescription": "You can generate & download the Privacy Shield report below",
     "emptyDangerPermsDesc": "There were no dangerous permissions detected in this application.",
     "emptyDangerPermsHeader": "No Dangerous Permissions",
     "emptyPiiDesc": "There were no PII detected in this application.",
@@ -1824,7 +1824,6 @@
     },
     "followingDomainsFound": "Following domains were found to be connecting to the region below.",
     "geoUpdatedNote": "Server Locations may have been updated based on the completion of DAST Scan.",
-    "generateReportDescription": "Kindly click on the button below to generate the the <strong>Privacy Shield report.</strong>",
     "geoDrawerHeader": "Regions perceived as high-risk from a privacy or regulatory standpoint",
     "reportDisabledInProgress": "Privacy analysis is still in progress.",
     "piiInProgressDescription": "PII analysis is still running. Refresh the page once it completes to see the results.",
@@ -2435,7 +2434,7 @@
       "description": "Uh, Oh!. Looks like you have not been granted access to any application (Project) or there have been no applications uploaded yet. Please contact the 'Owner' in your organization for more details."
     },
     "sbomGeneratedOn": "SCA Generated On",
-    "sbomDownloadReportDescription": "Here you can download different types of SCA scan reports.",
+    "sbomDownloadReportDescription": "You can generate & download the SCA reports below",
     "sbomDownloadPdfPrimaryText": "SBOM - Detailed Report (pdf)",
     "sbomDownloadJsonPrimaryText": "Cyclone DX (json)",
     "sbomDownloadJsonSecondaryText": "No Password Required",
@@ -2444,7 +2443,6 @@
     "scanReports": "SCA Reports",
     "neverInitiated": "Never Initiated",
     "noScanAlertDescription": "Upload the app to initiate SCA analysis.",
-    "generateReportDescription": "Report is not available yet. Please click on the Generate button to access the SCA report.",
     "scanReportEmptyText": {
       "title": "No SCA Report Found",
       "description": "We could not locate any report associated with this SCA analysis."
@@ -2946,7 +2944,7 @@
     "contactMessage": "<strong>Thanks for showing interest in Store Release Readiness. Our team will get back to you.</strong>",
     "description": "This policy is evaluated as part of your store release readiness scan. Review the findings in context of your target store guidelines and your app’s configuration.",
     "downloadPdfPrimaryText": "Store Release Readiness Report (pdf)",
-    "downloadReportDescription": "Here you can download the Store Release Readiness report.",
+    "downloadReportDescription": "You can generate & download the Store Release Readiness report below",
     "evidence": "Evidence",
     "explanation": "Explanation",
     "explanationActualFound": "Actual Found",
@@ -2958,7 +2956,6 @@
       "2": "Validate compliance with Apple App Store and Google Play Store requirements",
       "3": "Improve release confidence and reduce back-and-forth with store reviews"
     },
-    "generateReportDescription": "Kindly click on the button below to generate the <strong>Store Release Readiness report.</strong>",
     "introducing": "Introducing Store Release Readiness",
     "listEmptyDescription": "Upload your app to view Store Release Readiness results.",
     "listEmptyHeader": "Upload your app",
