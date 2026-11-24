@@ -2994,6 +2994,7 @@
     "summarySectionHeading": "SUMMARY",
     "summaryWarning": "Warning",
     "title": "Store Release Readiness",
+    "verdictNote": "We check what's detectable in the build. Store reviews cover more, so this is a risk indicator rather than a prediction.",
     "violationDetails": "Violation Details",
     "yesIgnore": "Yes, Ignore"
   },

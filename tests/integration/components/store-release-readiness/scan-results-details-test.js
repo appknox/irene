@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
-import { render, find } from '@ember/test-helpers';
+import { render, find, triggerEvent } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 import ENUMS from 'irene/enums';
@@ -308,5 +308,63 @@ module(
           .exists('Risk tower svg renders inside the risk block');
       }
     );
+
+    test.each(
+      'it shows the verdict note on hover next to the rejection risk',
+      [
+        VERDICT.HIGH_REJECTION_RISK,
+        VERDICT.MODERATE_REJECTION_RISK,
+        VERDICT.LOW_REJECTION_RISK,
+      ],
+      async function (assert, verdict) {
+        this.set('scanData', pushScan(this, { verdict }));
+
+        await render(hbs`
+          <StoreReleaseReadiness::ScanResults::Details @scanData={{this.scanData}} />
+        `);
+
+        assert
+          .dom(
+            '[data-test-store-release-readiness-scan-results-details-risk] [data-test-store-release-readiness-verdict-note-icon]'
+          )
+          .exists('Info icon renders next to the verdict');
+
+        await triggerEvent(
+          '[data-test-store-release-readiness-verdict-note-icon]',
+          'mouseenter'
+        );
+
+        assert
+          .dom(
+            '[data-test-store-release-readiness-verdict-note-tooltipContent]'
+          )
+          .hasText(t('storeReleaseReadiness.verdictNote'));
+      }
+    );
+
+    test('it hides the verdict note while the risk analysis is pending', async function (assert) {
+      this.set(
+        'scanData',
+        pushScan(this, {
+          verdict: null,
+          verdict_display: null,
+          status: SCAN_STATUS.IN_PROGRESS,
+        })
+      );
+
+      await render(hbs`
+        <StoreReleaseReadiness::ScanResults::Details @scanData={{this.scanData}} />
+      `);
+
+      assert
+        .dom(
+          '[data-test-store-release-readiness-scan-results-details-risk-label]'
+        )
+        .hasText(t('storeReleaseReadiness.riskAnalysisPendingChip'));
+
+      assert
+        .dom('[data-test-store-release-readiness-verdict-note-icon]')
+        .doesNotExist();
+    });
   }
 );

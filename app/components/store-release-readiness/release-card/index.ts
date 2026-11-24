@@ -20,6 +20,16 @@ type HeaderStatusMeta = {
 export default class StoreReleaseReadinessReleaseCardComponent extends Component<StoreReleaseReadinessReleaseCardSignature> {
   @service declare intl: IntlService;
 
+  get hasVerdict() {
+    const verdict = ENUMS.STORE_RELEASE_VERDICT;
+
+    return [
+      verdict.HIGH_REJECTION_RISK,
+      verdict.MODERATE_REJECTION_RISK,
+      verdict.LOW_REJECTION_RISK,
+    ].includes(this.args.item.verdict);
+  }
+
   get riskChipClass() {
     switch (this.args.item.verdict) {
       case ENUMS.STORE_RELEASE_VERDICT.HIGH_REJECTION_RISK:

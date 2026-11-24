@@ -11,28 +11,37 @@
       @width='full'
       local-class='card-header'
     >
-      <AkChip
-        @variant='semi-filled'
-        @color='default'
-        @size='small'
-        @label={{@item.verdictDisplay}}
-        local-class='{{this.riskChipClass}}'
-        data-test-store-release-readiness-risk-chip
-      >
-        <:icon>
-          {{#if this.riskChipSvgComponentName}}
-            {{#let (component this.riskChipSvgComponentName) as |RiskChipSvg|}}
-              <RiskChipSvg data-test-store-release-readiness-risk-chip-icon />
-            {{/let}}
-          {{else}}
-            <AkIcon
-              @iconName='content-paste-search'
-              @size='small'
-              data-test-store-release-readiness-risk-chip-icon
-            />
-          {{/if}}
-        </:icon>
-      </AkChip>
+      <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+        <AkChip
+          @variant='semi-filled'
+          @color='default'
+          @size='small'
+          @label={{@item.verdictDisplay}}
+          local-class='{{this.riskChipClass}}'
+          data-test-store-release-readiness-risk-chip
+        >
+          <:icon>
+            {{#if this.riskChipSvgComponentName}}
+              {{#let
+                (component this.riskChipSvgComponentName)
+                as |RiskChipSvg|
+              }}
+                <RiskChipSvg data-test-store-release-readiness-risk-chip-icon />
+              {{/let}}
+            {{else}}
+              <AkIcon
+                @iconName='content-paste-search'
+                @size='small'
+                data-test-store-release-readiness-risk-chip-icon
+              />
+            {{/if}}
+          </:icon>
+        </AkChip>
+
+        {{#if this.hasVerdict}}
+          <StoreReleaseReadiness::VerdictNote />
+        {{/if}}
+      </AkStack>
 
       <AkStack
         @direction='row'
