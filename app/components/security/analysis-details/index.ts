@@ -447,6 +447,7 @@ export default class SecurityAnalysisDetailsComponent extends Component<Security
   }
 
   recalculateCVSSScore = task(
+    { restartable: true },
     async (state: CvssV4VersionState | CvssV3VersionState) => {
       if (state.isEmpty) {
         state.isInvalidBase = false;

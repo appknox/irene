@@ -1,4 +1,5 @@
 import Component from '@glimmer/component';
+import platformIconClass from 'irene/utils/platform-icon-class';
 import type SbomProjectModel from 'irene/models/sbom-project';
 
 export interface SbomAppPlatformSignature {
@@ -11,6 +12,12 @@ export interface SbomAppPlatformSignature {
 
 export default class SbomAppPlatformComponent extends Component<SbomAppPlatformSignature> {
   get platformIconClass() {
+    const platform = this.args.sbomProject?.platform;
+
+    if (platform !== undefined && platform !== null) {
+      return platformIconClass(platform);
+    }
+
     return this.args.sbomProject?.project.get('platformIconClass');
   }
 

@@ -179,9 +179,13 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
   }
 
   initializeCapturedApiData = task(async () => {
-    await this.getAllAPIsSelectedStatus.perform();
-    await this.fetchAPIScanDomainfilters.perform();
-    await this.fetchCapturedApis.perform(this.limit, this.offset);
+    // The three requests do not depend on each other (each handles its own
+    // errors), so send them together instead of one after another.
+    await Promise.all([
+      this.getAllAPIsSelectedStatus.perform(),
+      this.fetchAPIScanDomainfilters.perform(),
+      this.fetchCapturedApis.perform(this.limit, this.offset),
+    ]);
   });
 
   refreshCapturedApiData = task(async () => {
@@ -228,8 +232,10 @@ export default class FileDetailsApiScanCapturedApisComponent extends Component<F
 
       this.showAPIListLoadingState = false;
 
-      await this.fetchAndSetSelectedApiCount.perform();
-      await this.getAllAPIsSelectedStatus.perform();
+      await Promise.all([
+        this.fetchAndSetSelectedApiCount.perform(),
+        this.getAllAPIsSelectedStatus.perform(),
+      ]);
     } catch (err) {
       // Necessary to prevent the checkbox's two-way binding to revert the captured API state after toggling
       // Two-way bindings try to keep the status in sync, but when the checkbox "checked" state changes state in the same event cycle that the DOM changed,

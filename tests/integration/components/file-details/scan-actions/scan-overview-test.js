@@ -23,6 +23,7 @@ module(
 
       const file = this.server.create('file', {
         project: '1',
+        dev_framework: ENUMS.FILE_DEV_FRAMEWORK.ANDROID_NATIVE,
       });
 
       this.server.create('project', { last_file: file, id: '1' });

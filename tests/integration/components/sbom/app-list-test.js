@@ -48,8 +48,12 @@ module('Integration | Component | sbom/app-list', function (hooks) {
 
     const sbomFiles = this.server.createList('sbom-file', 5);
 
-    const sbomProjects = sbomFiles.map((sbomFile) =>
-      this.server.create('sbom-project', { latest_sb_file: sbomFile.id })
+    // The list answer carries the package name of its project
+    const sbomProjects = sbomFiles.map((sbomFile, index) =>
+      this.server.create('sbom-project', {
+        latest_sb_file: sbomFile.id,
+        package_name: projects[index].package_name,
+      })
     );
 
     await this.owner.lookup('service:organization').load();
@@ -366,6 +370,55 @@ module('Integration | Component | sbom/app-list', function (hooks) {
     assert
       .dom('[data-test-sbomReportDrawer-description]')
       .hasText(t('sbomModule.sbomDownloadReportDescription'));
+  });
+
+  test('it renders rows from the list answer without loading each project, file and sbom file', async function (assert) {
+    const requests = [];
+
+    this.server.get('/v2/sb_projects', () => {
+      const results = this.sbomProjects.map((sbomProject, index) => ({
+        ...sbomProject.toJSON(),
+        platform: 0,
+        latest_file_name: `row-file-${index}`,
+        latest_file_icon_url: `https://icons.test/${index}.png`,
+        latest_sb_file_detail: {
+          id: sbomProject.latest_sb_file,
+          file: this.files[index].id,
+          status: SbomScanStatus.COMPLETED,
+          sb_project: sbomProject.id,
+          completed_at: '2026-01-01T00:00:00Z',
+          is_outdated: false,
+        },
+      }));
+
+      return { count: results.length, next: null, previous: null, results };
+    });
+
+    ['/v3/projects/:id', '/v3/files/:id', '/v2/sb_files/:id'].forEach(
+      (path) => {
+        this.server.get(path, (schema, req) => {
+          requests.push(req.url);
+
+          return {};
+        });
+      }
+    );
+
+    await render(hbs`
+      <Sbom::AppList @queryParams={{this.queryParams}} />
+    `);
+
+    const rows = findAll('[data-test-sbomApp-table] tbody tr');
+
+    assert.strictEqual(rows.length, this.sbomProjects.length);
+
+    assert
+      .dom('[data-test-sbomApp-packageName]', rows[0])
+      .hasText(this.projects[0].package_name);
+
+    assert.dom('[data-test-sbomApp-name]', rows[0]).hasText('row-file-0');
+
+    assert.deepEqual(requests, [], 'the rows requested nothing else');
   });
 
   test('it renders sbom app list loading & empty state', async function (assert) {

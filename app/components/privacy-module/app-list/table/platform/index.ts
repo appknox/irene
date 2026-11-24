@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 
+import platformIconClass from 'irene/utils/platform-icon-class';
 import type PrivacyProjectModel from 'irene/models/privacy-project';
 
 interface PrivacyModuleAppListTablePlatformArgs {
@@ -8,6 +9,12 @@ interface PrivacyModuleAppListTablePlatformArgs {
 
 export default class PrivacyModuleAppListTablePlatformComponent extends Component<PrivacyModuleAppListTablePlatformArgs> {
   get platformIconClass() {
+    const platform = this.args.privacyProject?.platform;
+
+    if (platform !== undefined && platform !== null) {
+      return platformIconClass(platform);
+    }
+
     return this.args.privacyProject?.project.get('platformIconClass');
   }
 }

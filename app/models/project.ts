@@ -4,6 +4,7 @@ import { attr, belongsTo, hasMany } from '@ember-data/model';
 
 import { isEmpty } from '@ember/utils';
 import ENUMS from 'irene/enums';
+import platformIconClass from 'irene/utils/platform-icon-class';
 import { ModelBaseMixin } from 'irene/mixins/base-model';
 
 import type FileModel from './file';
@@ -79,16 +80,7 @@ export default class ProjectModel extends ModelBaseMixin {
   }
 
   get platformIconClass() {
-    switch (this.platform) {
-      case ENUMS.PLATFORM.ANDROID:
-        return 'android';
-      case ENUMS.PLATFORM.IOS:
-        return 'apple';
-      case ENUMS.PLATFORM.WINDOWS:
-        return 'windows';
-      default:
-        return 'mobile';
-    }
+    return platformIconClass(this.platform);
   }
 
   get isAPIScanEnabled() {

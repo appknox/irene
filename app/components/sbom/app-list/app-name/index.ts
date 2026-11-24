@@ -13,11 +13,17 @@ export default class SbomProjectListAppNameComponent extends Component<SbomProje
   @service declare intl: IntlService;
 
   get packageName() {
-    return this.args.sbomProject.project.get('packageName');
+    return (
+      this.args.sbomProject.packageName ??
+      this.args.sbomProject.project.get('packageName')
+    );
   }
 
   get name() {
-    return this.args.sbomProject.project.get('lastFile')?.get('name');
+    return (
+      this.args.sbomProject.latestFileName ??
+      this.args.sbomProject.project.get('lastFile')?.get('name')
+    );
   }
 
   get isStale() {

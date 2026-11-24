@@ -515,6 +515,60 @@ module('Integration | Component | security/analysis-list', function (hooks) {
     );
   });
 
+  test('it loads the file analyses with one list request', async function (assert) {
+    const requests = [];
+
+    this.server.get('/hudson-api/analyses', (schema, req) => {
+      requests.push(`list:${req.queryParams.file}`);
+
+      const analyses = schema['security/analyses']
+        .where({ file: req.queryParams.file })
+        .models.map((m) => m.toJSON());
+
+      return {
+        count: analyses.length,
+        next: null,
+        previous: null,
+        results: analyses,
+      };
+    });
+
+    this.server.get('/hudson-api/analyses/:id', (schema, req) => {
+      requests.push(`detail:${req.params.id}`);
+
+      return schema['security/analyses'].find(`${req.params.id}`)?.toJSON();
+    });
+
+    await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);
+
+    assert.deepEqual(requests, ['list:1']);
+
+    this.secAnalyses.forEach((sa) => {
+      assert
+        .dom(`[data-test-securityAnalysisListTable-rowId='${sa.id}']`)
+        .exists();
+    });
+  });
+
+  test('it loads analyses one by one when the list request fails', async function (assert) {
+    const requests = [];
+
+    this.server.get(
+      '/hudson-api/analyses',
+      () => new Response(500, {}, { detail: 'boom' })
+    );
+
+    this.server.get('/hudson-api/analyses/:id', (schema, req) => {
+      requests.push(req.params.id);
+
+      return schema['security/analyses'].find(`${req.params.id}`)?.toJSON();
+    });
+
+    await render(hbs`<Security::AnalysisList @file={{this.secFileModel}} />`);
+
+    assert.deepEqual(requests.sort(), ['1', '2']);
+  });
+
   test.each(
     'it purges API analysis',
     [true, false],

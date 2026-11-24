@@ -5,6 +5,7 @@ import type DS from 'ember-data';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
+import { debounceTask } from 'ember-lifeline';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
@@ -114,7 +115,12 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   // Reloads the files list whenever the file counter changes
+  // Debounced: several counter updates in a row (uploads, scans) cause one reload.
   observeFileCounter() {
+    debounceTask(this, 'reloadFiles', 1000);
+  }
+
+  reloadFiles() {
     this.getFiles.perform(this.limit, this.offset, this.scanTypeValue);
   }
 
@@ -209,6 +215,7 @@ export default class FileListComponent extends Component<FileListSignature> {
   }
 
   getFiles = task(
+    { restartable: true },
     async (
       limit: string | number,
       offset: string | number,
