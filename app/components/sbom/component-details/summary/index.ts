@@ -104,11 +104,15 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         label: this.intl.t('license'),
         value: this.args.sbomComponent?.licenses.join(', '),
       },
-      this.args.sbomComponent?.hasFoundLocations && {
-        label: this.intl.t('sbomModule.foundInLocations'),
-        value: this.foundInValue,
-        tooltip: this.foundInTooltip,
-      },
+      // Found In is an AI-BOM field: evidence locations exist for regular
+      // components too (enola records them for anything it can locate in
+      // the package), so gate on the AI flag, like the fields below.
+      this.args.sbomComponent?.isAiComponent &&
+        this.args.sbomComponent?.hasFoundLocations && {
+          label: this.intl.t('sbomModule.foundInLocations'),
+          value: this.foundInValue,
+          tooltip: this.foundInTooltip,
+        },
       this.args.sbomComponent?.isMLModel && {
         label: this.intl.t('referenceLink'),
         value: this.args.sbomComponent?.primaryLink || '',
