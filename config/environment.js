@@ -287,6 +287,7 @@ module.exports = function (environment) {
       integrateSlack: 'slack',
       integrateSplunk: 'splunk',
       integrateJiraSecurity: 'jira_security',
+      hubspotKnowledgeBase: 'hubspot/kb',
       changePassword: 'v2/change_password',
       namespaceAdd: 'namespace_add',
       applyCoupon: 'apply_coupon',

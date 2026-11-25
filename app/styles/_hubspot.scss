@@ -1,0 +1,24 @@
+// HubSpot has no setting to hide its floating launcher, which covers drawer
+// buttons. The widget shows only while opened from the nav.
+body:not(.hubspot-chat-open) #hubspot-messages-iframe-container {
+  display: none !important;
+}
+
+// The open widget's frame also holds HubSpot's round close button below the
+// popup. Moving the frame down by that button's height leaves it off-screen;
+// the popup's own header close button stays.
+body #hubspot-messages-iframe-container {
+  top: auto !important;
+  bottom: -80px !important;
+}
+
+// With HubSpot's "Left" placement the popup starts after the side nav
+// (56px / 250px, as in the *-wrapper grids). HubSpot pins it with
+// .widget-align-left { left: 0 !important }, hence the matching selector.
+body.side-nav-collapsed #hubspot-messages-iframe-container.widget-align-left {
+  left: 56px !important;
+}
+
+body.side-nav-expanded #hubspot-messages-iframe-container.widget-align-left {
+  left: 250px !important;
+}

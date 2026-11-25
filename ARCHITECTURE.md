@@ -273,7 +273,7 @@ result for the session:
 | Endpoint | Supplies |
 |---|---|
 | `/v2/server_configuration` | websocket host, enterprise flag, device farm URL |
-| `/v2/frontend_configuration` | branding, theme colours, logos, registration links, and the integration keys — Pendo, Freshchat, Freshdesk widget |
+| `/v2/frontend_configuration` | branding, theme colours, logos, registration links, and the integration keys — Pendo, the HubSpot chat portal id, the knowledge base URL and mode (`panel` opens the in-app article panel fed by `/v2/hubspot/kb/`), Freshdesk widget |
 | `/v2/dashboard_configuration` | dashboard URL, device farm URL |
 
 The `whitelabel` service reads from it to override branding. Because this is

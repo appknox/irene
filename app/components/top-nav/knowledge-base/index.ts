@@ -1,22 +1,24 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { service } from '@ember/service';
-import type FreshdeskService from 'irene/services/freshdesk';
+import type KnowledgeBaseService from 'irene/services/knowledge-base';
 
 interface TopNavKnowledgeBaseSignature {
+  Element: HTMLElement;
   Args: { triggerBtnClass?: string };
 }
 
 export default class TopNavKnowledgeBaseComponent extends Component<TopNavKnowledgeBaseSignature> {
-  @service declare freshdesk: FreshdeskService;
-
-  get showKnowledgeBase() {
-    return this.freshdesk.supportWidgetIsEnabled;
-  }
+  @service declare knowledgeBase: KnowledgeBaseService;
 
   @action
   onOpenKnowledgeBase() {
-    this.freshdesk.openSupportWidget();
+    this.knowledgeBase.open();
+  }
+
+  @action
+  handleClosePanel() {
+    this.knowledgeBase.closePanel();
   }
 }
 

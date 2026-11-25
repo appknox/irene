@@ -1119,6 +1119,17 @@
   "jiraPageConfigure": "page to configure JIRA integration",
   "jiraWillBeRevoked": "Your JIRA authorization will be revoked in a moment",
   "knowledgeBase": "Knowledge Base",
+  "knowledgeBasePanel": {
+    "welcome": "Welcome to Support",
+    "gotQuestions": "Got questions?",
+    "searchPlaceholder": "Search for help",
+    "suggestedArticles": "Suggested articles",
+    "searchResults": "Search results",
+    "noArticles": "No articles match your search.",
+    "errorTitle": "Something went wrong!",
+    "errorDescription": "Please try again in a while.",
+    "openInHelpCenter": "Open in Help Center"
+  },
   "knoxIq": {
     "aeis": "AEIS",
     "aeisDescription": "Appknox Exploit Intelligence Score",

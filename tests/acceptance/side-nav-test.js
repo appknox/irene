@@ -68,6 +68,18 @@ module('Acceptance | side nav test', function (hooks) {
     assert.dom('[data-test-img-logo]').exists();
   });
 
+  test('it marks the body with the side nav state', async function (assert) {
+    await visit('/dashboard/projects');
+
+    assert.dom(document.body).hasClass('side-nav-collapsed');
+    assert.dom(document.body).doesNotHaveClass('side-nav-expanded');
+
+    await click(`[data-test-side-lower-menu-item='${t('expand')}']`);
+
+    assert.dom(document.body).hasClass('side-nav-expanded');
+    assert.dom(document.body).doesNotHaveClass('side-nav-collapsed');
+  });
+
   test('it should show the correct page on click of menu items', async function (assert) {
     assert.expect(12);
 

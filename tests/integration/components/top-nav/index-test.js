@@ -20,9 +20,8 @@ class NotificationsStub extends Service {
   }
 }
 
-class FreshdeskStub extends Service {
-  supportWidgetIsEnabled = false;
-  freshchatEnabled = false;
+class HubspotStub extends Service {
+  chatEnabled = false;
 }
 
 class ConfigurationStub extends Service {
@@ -65,7 +64,7 @@ module('Integration | Component | top-nav', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:freshdesk', FreshdeskStub);
+    this.owner.register('service:hubspot', HubspotStub);
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:configuration', ConfigurationStub);
 
@@ -131,9 +130,9 @@ module('Integration | Component | top-nav', function (hooks) {
         />
       `);
 
-      const freshdesk = this.owner.lookup('service:freshdesk');
-      freshdesk.freshchatEnabled = chatSupport;
-      freshdesk.logUserOutOfSupportWidget = () => {};
+      const hubspot = this.owner.lookup('service:hubspot');
+
+      hubspot.chatEnabled = chatSupport;
 
       assert.dom('[data-test-topNav]').exists();
 

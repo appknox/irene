@@ -1,0 +1,37 @@
+<article
+  local-class='article-root'
+  data-test-topNav-knowledgeBase-panel-article
+>
+  <div local-class='article-header'>
+    <AkTypography
+      @variant='h5'
+      local-class='article-title'
+      data-test-topNav-knowledgeBase-panel-articleHeading
+    >
+      {{@article.title}}
+    </AkTypography>
+
+    <a
+      href={{@article.url}}
+      target='_blank'
+      rel='noopener noreferrer'
+      aria-label={{t 'knowledgeBasePanel.openInHelpCenter'}}
+      title={{t 'knowledgeBasePanel.openInHelpCenter'}}
+      local-class='article-open-link'
+      data-test-topNav-knowledgeBase-panel-openInHelpCenter
+    >
+      <AkIcon @iconName='open-in-new' @size='small' @color='inherit' />
+    </a>
+  </div>
+
+  {{! Delegated clicks on links inside the server-rendered article HTML }}
+  {{! template-lint-disable no-invalid-interactive }}
+  <div
+    local-class='article-body'
+    {{on 'click' this.handleBodyClick}}
+    data-test-topNav-knowledgeBase-panel-articleBody
+  >
+    {{this.body}}
+  </div>
+  {{! template-lint-enable no-invalid-interactive }}
+</article>

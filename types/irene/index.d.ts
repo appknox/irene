@@ -23,8 +23,6 @@ declare global {
     Enumerate<F>
   >;
 
-  type UnknownFnType = (...args: unknown[]) => void;
-
   type IreneProductVariants = 'appknox' | 'storeknox';
 
   interface PendoInstance {
@@ -36,32 +34,29 @@ declare global {
     launchMethod: 'auto-badge';
   }
 
-  interface Window {
-    FreshworksWidget: UnknownFnType;
-    fcWidget: {
-      open: UnknownFnType;
-      isOpen(): boolean;
-      destroy(): void;
+  interface HubSpotConversationsSettings {
+    loadImmediately?: boolean;
+    identificationEmail?: string;
+    identificationToken?: string;
+  }
 
-      on(
-        event: string,
-        cb: (val: { status: number; data: { restoreId: string } }) => void
-      ): void;
-
-      user: {
-        get(
-          cb: (val: { status: number; data: { restoreId: string } }) => void
-        ): void;
-
-        create(val: Record<string, string | undefined>): void;
-        setProperties(val: Record<string, string | undefined>): void;
-      };
+  interface HubSpotConversationsApi {
+    widget: {
+      load(): void;
+      open(): void;
+      remove(): void;
+      openToKnowledgeBase?(): void;
     };
+    clear(options?: { resetWidget?: boolean }): void;
+    on(event: string, callback: () => void): void;
+  }
+
+  interface Window {
     pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
-    fwSettings: { widget_id: string };
-    fcSettings: object;
-    fcWidgetMessengerConfig: object;
+    hsConversationsSettings: HubSpotConversationsSettings;
+    hsConversationsOnReady: Array<() => void>;
+    HubSpotConversations?: HubSpotConversationsApi;
     grecaptcha?: { execute: (options: { action: string }) => Promise<string> };
   }
 

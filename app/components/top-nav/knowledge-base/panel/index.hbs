@@ -1,0 +1,159 @@
+<AkDrawer
+  @open={{true}}
+  @anchor='right'
+  @onClose={{@onClose}}
+  @drawerContainerClass={{this.drawerContainerClass}}
+  as |dr|
+>
+  <div local-class='panel-root' data-test-topNav-knowledgeBase-panel>
+    <div local-class='panel-header'>
+      <div local-class='panel-header-actions'>
+        {{#if this.isArticleView}}
+          <AkButton
+            @variant='text'
+            @color='inherit'
+            @typographyFontWeight='bold'
+            local-class='panel-header-btn panel-back-btn'
+            {{on 'click' this.handleBack}}
+            data-test-topNav-knowledgeBase-panel-backBtn
+          >
+            <:leftIcon>
+              <AkIcon @iconName='arrow-back' @size='small' @color='inherit' />
+            </:leftIcon>
+
+            <:default>{{t 'back'}}</:default>
+          </AkButton>
+        {{/if}}
+
+        <AkIconButton
+          aria-label={{t 'close'}}
+          local-class='panel-header-btn panel-close-btn'
+          {{on 'click' dr.closeHandler}}
+          data-test-topNav-knowledgeBase-panel-closeBtn
+        >
+          <AkIcon @iconName='close' @color='inherit' />
+        </AkIconButton>
+      </div>
+
+      {{#unless this.isArticleView}}
+        <AkTypography
+          @variant='h4'
+          @color='inherit'
+          @fontWeight='bold'
+          local-class='panel-title'
+          data-test-topNav-knowledgeBase-panel-title
+        >
+          {{t 'knowledgeBasePanel.welcome'}}
+        </AkTypography>
+      {{/unless}}
+    </div>
+
+    <div local-class='panel-card' data-test-topNav-knowledgeBase-panel-card>
+      {{#if this.isArticleView}}
+        {{#if this.article}}
+          <TopNav::KnowledgeBase::Panel::Article @article={{this.article}} />
+        {{else if this.hasArticleError}}
+          <TopNav::KnowledgeBase::Panel::Error />
+        {{else}}
+          <div
+            local-class='panel-loader'
+            data-test-topNav-knowledgeBase-panel-loader
+          >
+            <AkLoader @size={{24}} />
+          </div>
+        {{/if}}
+      {{else}}
+        <AkTypography
+          @variant='h5'
+          local-class='panel-card-title'
+          data-test-topNav-knowledgeBase-panel-gotQuestions
+        >
+          {{t 'knowledgeBasePanel.gotQuestions'}}
+        </AkTypography>
+
+        <AkTextField
+          @placeholder={{t 'knowledgeBasePanel.searchPlaceholder'}}
+          @value={{this.searchQuery}}
+          @autofocus={{true}}
+          {{on 'input' this.handleSearchInput}}
+          data-test-topNav-knowledgeBase-panel-searchInput
+        >
+          <:rightAdornment>
+            <span local-class='panel-search-icon'>
+              <AkIcon @iconName='search' @size='small' @color='inherit' />
+            </span>
+          </:rightAdornment>
+        </AkTextField>
+
+        <AkTypography
+          @variant='body2'
+          @color='textSecondary'
+          local-class='panel-list-label'
+          data-test-topNav-knowledgeBase-panel-listLabel
+        >
+          {{#if this.isSearching}}
+            {{t 'knowledgeBasePanel.searchResults'}}
+          {{else}}
+            {{t 'knowledgeBasePanel.suggestedArticles'}}
+          {{/if}}
+        </AkTypography>
+
+        {{#if this.hasListError}}
+          <TopNav::KnowledgeBase::Panel::Error />
+        {{else if this.isLoading}}
+          <div
+            local-class='panel-loader'
+            data-test-topNav-knowledgeBase-panel-loader
+          >
+            <AkLoader @size={{24}} />
+          </div>
+        {{else if this.showNoArticles}}
+          <AkTypography
+            @color='textSecondary'
+            local-class='panel-empty'
+            data-test-topNav-knowledgeBase-panel-noArticles
+          >
+            {{t 'knowledgeBasePanel.noArticles'}}
+          </AkTypography>
+        {{else}}
+          <ul local-class='panel-article-list'>
+            {{#each this.articles as |item|}}
+              <li>
+                <button
+                  type='button'
+                  local-class='panel-article-item'
+                  {{on 'click' (fn this.handleOpenArticle item)}}
+                  data-test-topNav-knowledgeBase-panel-articleItem='{{item.id}}'
+                >
+                  <AkIcon
+                    @iconName='import-contacts'
+                    @size='small'
+                    @color='textSecondary'
+                  />
+
+                  <span local-class='panel-article-text'>
+                    <span
+                      local-class='panel-article-title'
+                      data-test-topNav-knowledgeBase-panel-articleTitle
+                    >
+                      {{item.title}}
+                    </span>
+
+                    {{#if item.snippet}}
+                      <span
+                        local-class='panel-article-snippet'
+                        data-test-topNav-knowledgeBase-panel-articleSnippet
+                      >
+                        {{item.snippet}}
+                      </span>
+                    {{/if}}
+                  </span>
+                </button>
+              </li>
+            {{/each}}
+          </ul>
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</AkDrawer>

@@ -23,9 +23,10 @@ class NotificationsStub extends Service {
   }
 }
 
-class FreshdeskStub extends Service {
-  supportWidgetIsEnabled = false;
-  freshchatEnabled = true;
+const KB_URL = 'https://help.appknox.com/en/knowledge';
+
+class HubspotStub extends Service {
+  chatEnabled = true;
 }
 
 class ConfigurationStub extends Service {
@@ -135,7 +136,7 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
 
     this.owner.register('service:me', OrganizationMeStub);
     this.owner.register('service:notifications', NotificationsStub);
-    this.owner.register('service:freshdesk', FreshdeskStub);
+    this.owner.register('service:hubspot', HubspotStub);
     this.owner.register('service:integration', IntegrationStub);
     this.owner.register('service:configuration', ConfigurationStub);
 
@@ -202,9 +203,9 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
         },
       ];
 
-      const freshdesk = this.owner.lookup('service:freshdesk');
-
-      freshdesk.supportWidgetIsEnabled = knowledgeBase;
+      this.owner.lookup('service:configuration').integrationData = {
+        knowledge_base_url: knowledgeBase ? KB_URL : '',
+      };
 
       if (hasUploadAppStatus) {
         this.server.createList('submission', 2, {
@@ -294,11 +295,13 @@ module('Integration | Component | appknox-wrapper', function (hooks) {
   test('test knowledge base click', async function (assert) {
     assert.expect(5);
 
-    const freshdesk = this.owner.lookup('service:freshdesk');
+    this.owner.lookup('service:configuration').integrationData = {
+      knowledge_base_url: KB_URL,
+    };
 
-    freshdesk.supportWidgetIsEnabled = true;
+    const knowledgeBase = this.owner.lookup('service:knowledge-base');
 
-    freshdesk.openSupportWidget = function () {
+    knowledgeBase.open = function () {
       assert.ok('Knowledge base clicked');
       assert.strictEqual(arguments.length, 0);
     };

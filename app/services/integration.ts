@@ -5,7 +5,7 @@ import type UserModel from 'irene/models/user';
 
 import type ConfigurationService from './configuration';
 import type LoggerService from './logger';
-import type FreshdeskService from './freshdesk';
+import type HubspotService from './hubspot';
 
 export default class IntegrationService extends Service {
   // https://github.com/ember-cli/ember-page-title/blob/a886af4d83c7a3a3c716372e8a322258a4f92991/addon/services/page-title-list.js#L27
@@ -14,7 +14,7 @@ export default class IntegrationService extends Service {
   @service('-document') declare document: Document;
   @service declare configuration: ConfigurationService;
   @service declare logger: LoggerService;
-  @service declare freshdesk: FreshdeskService;
+  @service declare hubspot: HubspotService;
 
   currentUser: UserModel | null = null;
 
@@ -31,9 +31,10 @@ export default class IntegrationService extends Service {
 
     this.currentUser = user;
 
-    // Freshdesk integrations
-    await this.freshdesk.configureSupportWidget();
-    this.freshdesk.configureFreshchat(user);
+    // Not awaited: identifying the chat visitor must never delay app load.
+    this.hubspot
+      .configureChat()
+      .catch((error) => this.logger.error('HubSpot chat setup failed', error));
   }
 
   // Pendo
