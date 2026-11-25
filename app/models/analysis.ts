@@ -295,6 +295,25 @@ export default class AnalysisModel extends Model {
     return Boolean(this.ignoreIfUnchanged);
   }
 
+  /**
+   * Show the overridden icon: risk overridden, or Passed because an "All Future
+   * Analyses (Reopen if changed)" baseline applies
+   */
+  get showOverriddenIcon() {
+    return this.isNonPassedRiskOverridden || this.isIgnoredIfUnchanged;
+  }
+
+  /**
+   * Risk the overridden tooltip points to: the override, or Passed for a baseline
+   */
+  get overriddenRiskForTag() {
+    if (this.overriddenRisk != null) {
+      return this.overriddenRisk;
+    }
+
+    return this.isIgnoredIfUnchanged ? ENUMS.RISK.NONE : null;
+  }
+
   get isRiskPassedBySystem() {
     return this.risk === ENUMS.RISK.NONE;
   }

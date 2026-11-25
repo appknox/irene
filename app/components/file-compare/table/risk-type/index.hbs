@@ -76,8 +76,8 @@
           <AnalysisRisk::Tag
             @computedRisk={{analysis.computedRisk}}
             @status={{analysis.status}}
-            @isOverridden={{analysis.isNonPassedRiskOverridden}}
-            @overriddenRisk={{analysis.overriddenRisk}}
+            @isOverridden={{analysis.showOverriddenIcon}}
+            @overriddenRisk={{analysis.overriddenRiskForTag}}
             @originalRisk={{analysis.risk}}
           />
         {{else}}

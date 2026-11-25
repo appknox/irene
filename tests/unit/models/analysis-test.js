@@ -126,4 +126,20 @@ module('Unit | Model | analysis', function (hooks) {
       'Overridden Risk Icon Class'
     );
   });
+
+  test('baseline-passed analysis shows the overridden icon as Passed', function (assert) {
+    const store = this.owner.lookup('service:store');
+    const analysis = store.createRecord('analysis', {
+      risk: ENUMS.RISK.HIGH,
+      ignoreIfUnchanged: { passed: true },
+    });
+
+    assert.true(analysis.showOverriddenIcon);
+    assert.strictEqual(analysis.overriddenRiskForTag, ENUMS.RISK.NONE);
+
+    analysis.set('ignoreIfUnchanged', { passed: false });
+
+    assert.false(analysis.showOverriddenIcon);
+    assert.strictEqual(analysis.overriddenRiskForTag, null);
+  });
 });
