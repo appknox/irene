@@ -1,5 +1,5 @@
-// HubSpot has no setting to hide its floating launcher, which covers drawer
-// buttons. The widget shows only while opened from the nav.
-body:not(.hubspot-chat-open) #hubspot-messages-iframe-container {
+// The chat renders inside the hubspot-chat panel; HubSpot's floating launcher,
+// which covered drawer buttons, is never shown.
+#hubspot-messages-iframe-container {
   display: none !important;
 }

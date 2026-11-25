@@ -10,17 +10,12 @@ class WindowStub extends Service {
   hsConversationsOnReady = undefined;
   HubSpotConversations = undefined;
   appended = [];
-  bodyClasses = new Set();
 
   document = {
     getElementById: (id) => this.appended.find((el) => el.id === id) || null,
     createElement: (tag) => ({ tag }),
     body: {
       appendChild: (el) => this.appended.push(el),
-      classList: {
-        add: (name) => this.bodyClasses.add(name),
-        remove: (name) => this.bodyClasses.delete(name),
-      },
     },
   };
 }
@@ -45,16 +40,11 @@ class AjaxStub extends Service {
   }
 }
 
-const OPEN_CLASS = 'hubspot-chat-open';
-
 const buildWidgetStub = () => {
   const calls = [];
-  const listeners = [];
 
   return {
     calls,
-    listeners,
-    on: (event, callback) => listeners.push([event, callback]),
     widget: {
       load: () => calls.push('load'),
       open: () => calls.push('open'),
@@ -74,6 +64,8 @@ module('Unit | Service | hubspot', function (hooks) {
     this.owner.register('service:ajax', AjaxStub);
 
     this.service = this.owner.lookup('service:hubspot');
+    // The hubspot-chat panel is rendered in the app; tests start with it in place.
+    this.service.handleEmbedInserted();
     this.window = this.owner.lookup('service:browser/window');
     this.configuration = this.owner.lookup('service:configuration');
     this.ajax = this.owner.lookup('service:ajax');
@@ -111,6 +103,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.deepEqual(this.window.hsConversationsSettings, {
       loadImmediately: false,
+      inlineEmbedSelector: '#hubspot-chat-embed',
       identificationEmail: 'user@example.com',
       identificationToken: 'visitor-token',
     });
@@ -136,7 +129,26 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.strictEqual(this.window.hsConversationsOnReady.length, 1);
 
-    this.window.hsConversationsOnReady[0]();
+    await this.window.hsConversationsOnReady[0]();
+
+    assert.deepEqual(hubspot.calls, ['load']);
+  });
+
+  test('the widget is not loaded before the chat panel is in the page', async function (assert) {
+    this.service = this.owner.factoryFor('service:hubspot').create();
+
+    const hubspot = buildWidgetStub();
+
+    this.window.HubSpotConversations = hubspot;
+
+    const configured = this.service.configureChat();
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    assert.deepEqual(hubspot.calls, [], 'waits for the panel');
+
+    this.service.handleEmbedInserted();
+    await configured;
 
     assert.deepEqual(hubspot.calls, ['load']);
   });
@@ -149,6 +161,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.deepEqual(this.window.hsConversationsSettings, {
       loadImmediately: false,
+      inlineEmbedSelector: '#hubspot-chat-embed',
     });
 
     assert.strictEqual(this.window.appended.length, 1, 'the chat still loads');
@@ -161,6 +174,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.deepEqual(this.window.hsConversationsSettings, {
       loadImmediately: false,
+      inlineEmbedSelector: '#hubspot-chat-embed',
     });
 
     assert.strictEqual(this.window.appended.length, 1, 'the chat still loads');
@@ -183,6 +197,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.deepEqual(this.window.hsConversationsSettings, {
       loadImmediately: false,
+      inlineEmbedSelector: '#hubspot-chat-embed',
       identificationEmail: 'second@example.com',
       identificationToken: 'token-2',
     });
@@ -195,56 +210,16 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.true(this.service.chatIsIntegrated);
 
-    assert.false(this.window.bodyClasses.has(OPEN_CLASS));
+    assert.false(this.service.isOpen);
 
     this.service.openChat();
 
     assert.deepEqual(hubspot.calls, ['open']);
-    assert.true(this.window.bodyClasses.has(OPEN_CLASS), 'widget is shown');
-  });
+    assert.true(this.service.isOpen, 'panel is shown');
 
-  test('the widget is hidden again when HubSpot loads or closes it', async function (assert) {
-    assert.expect(5);
+    this.service.closeChat();
 
-    await this.service.configureChat();
-
-    const hubspot = buildWidgetStub();
-
-    this.window.HubSpotConversations = hubspot;
-    this.window.hsConversationsOnReady[0]();
-
-    assert.deepEqual(
-      hubspot.listeners.map(([event]) => event),
-      ['widgetLoaded', 'widgetClosed']
-    );
-
-    for (const [event, callback] of hubspot.listeners) {
-      this.service.openChat();
-
-      assert.true(
-        this.window.bodyClasses.has(OPEN_CLASS),
-        `open before ${event}`
-      );
-
-      callback();
-
-      assert.false(
-        this.window.bodyClasses.has(OPEN_CLASS),
-        `hidden on ${event}`
-      );
-    }
-  });
-
-  test('widget listeners are registered only once across reloads', async function (assert) {
-    const hubspot = buildWidgetStub();
-
-    this.window.HubSpotConversations = hubspot;
-
-    await this.service.configureChat();
-    await this.service.configureChat();
-
-    assert.deepEqual(hubspot.calls, ['load', 'load']);
-    assert.strictEqual(hubspot.listeners.length, 2);
+    assert.false(this.service.isOpen, 'panel is hidden');
   });
 
   test('openKnowledgeBase opens the Help tab when the widget offers it', function (assert) {
@@ -254,7 +229,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.true(this.service.openKnowledgeBase());
     assert.deepEqual(hubspot.calls, ['openToKnowledgeBase']);
-    assert.true(this.window.bodyClasses.has(OPEN_CLASS), 'widget is shown');
+    assert.true(this.service.isOpen, 'panel is shown');
   });
 
   test('openKnowledgeBase reports false before the widget is loaded', function (assert) {
@@ -283,12 +258,15 @@ module('Unit | Service | hubspot', function (hooks) {
 
     this.window.HubSpotConversations = hubspot;
 
+    this.service.openChat();
     this.service.clearChat();
 
     assert.deepEqual(hubspot.calls, [
+      'open',
       ['clear', { resetWidget: true }],
       'remove',
     ]);
+    assert.false(this.service.isOpen, 'panel is hidden');
   });
 
   test('clearChat does nothing when the widget was never loaded', function (assert) {

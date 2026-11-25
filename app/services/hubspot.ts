@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 import { injectHubspotChatScript } from 'irene/utils/hubspot';
 
@@ -24,9 +25,17 @@ export default class HubspotService extends Service {
   @service declare ajax: IreneAjaxService;
 
   CHAT_TOKEN_ENDPOINT = '/api/v2/hubspot/chat-token/';
-  WIDGET_OPEN_CLASS = 'hubspot-chat-open';
+  EMBED_ID = 'hubspot-chat-embed';
 
-  listenersRegistered = false;
+  @tracked isOpen = false;
+
+  // Resolves once the hubspot-chat panel is in the page; HubSpot needs it to
+  // exist when the widget loads, and integrations are set up before render.
+  embedInserted!: () => void;
+
+  embedReady = new Promise<void>((resolve) => {
+    this.embedInserted = resolve;
+  });
 
   get portalId() {
     return this.configuration.integrationData?.hubspot_portal_id || '';
@@ -40,27 +49,15 @@ export default class HubspotService extends Service {
     return !!this.window?.HubSpotConversations?.widget;
   }
 
-  // The class reveals the widget; see app/styles/_hubspot.scss.
   @action
-  hideWidget() {
-    this.window.document?.body?.classList.remove(this.WIDGET_OPEN_CLASS);
+  handleEmbedInserted() {
+    this.embedInserted();
   }
 
-  showWidget() {
-    this.window.document?.body?.classList.add(this.WIDGET_OPEN_CLASS);
-  }
+  async loadWidget() {
+    await this.embedReady;
 
-  registerWidgetListeners() {
-    const hubspot = this.window.HubSpotConversations;
-
-    if (this.listenersRegistered || !hubspot) {
-      return;
-    }
-
-    hubspot.on('widgetLoaded', this.hideWidget);
-    hubspot.on('widgetClosed', this.hideWidget);
-
-    this.listenersRegistered = true;
+    this.window.HubSpotConversations?.widget.load();
   }
 
   // Unidentified visitors still get the chat; HubSpot then asks for an email.
@@ -75,6 +72,7 @@ export default class HubspotService extends Service {
 
     this.window.hsConversationsSettings = {
       loadImmediately: false,
+      inlineEmbedSelector: `#${this.EMBED_ID}`,
       ...(identity && {
         identificationEmail: identity.email,
         identificationToken: identity.token,
@@ -84,18 +82,12 @@ export default class HubspotService extends Service {
     if (this.window.HubSpotConversations) {
       // The script is already on the page, so load the widget again with the
       // settings above instead of adding the script a second time.
-      this.registerWidgetListeners();
-      this.window.HubSpotConversations.widget.load();
+      await this.loadWidget();
 
       return;
     }
 
-    this.window.hsConversationsOnReady = [
-      () => {
-        this.registerWidgetListeners();
-        this.window.HubSpotConversations?.widget.load();
-      },
-    ];
+    this.window.hsConversationsOnReady = [() => this.loadWidget()];
 
     injectHubspotChatScript(this.window.document, this.portalId);
   }
@@ -105,8 +97,12 @@ export default class HubspotService extends Service {
       return;
     }
 
-    this.showWidget();
+    this.isOpen = true;
     this.window.HubSpotConversations?.widget.open();
+  }
+
+  closeChat() {
+    this.isOpen = false;
   }
 
   // false when the widget has no Help tab, so the caller can fall back.
@@ -117,13 +113,15 @@ export default class HubspotService extends Service {
       return false;
     }
 
-    this.showWidget();
+    this.isOpen = true;
     widget.openToKnowledgeBase();
 
     return true;
   }
 
   clearChat() {
+    this.isOpen = false;
+
     const hubspot = this.window?.HubSpotConversations;
 
     if (!hubspot) {

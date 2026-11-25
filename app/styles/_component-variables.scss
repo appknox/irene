@@ -5113,6 +5113,14 @@ body {
   );
   --offensive-security-finding-detail-code-font-family: var(--font-family-mono);
 
+  // variables for hubspot-chat
+  --hubspot-chat-zIndex: var(--zIndex-appbar);
+  --hubspot-chat-border-radius: var(--border-radius-8);
+  --hubspot-chat-border-color: var(--border-color-1);
+  --hubspot-chat-box-shadow: var(--box-shadow-9);
+  --hubspot-chat-background: var(--background-main);
+  --hubspot-chat-close-btn-color: var(--common-white);
+
   // variables for top-nav/knowledge-base/panel
   --top-nav-knowledge-base-panel-header-background: var(--primary-main);
   --top-nav-knowledge-base-panel-header-pattern: var(--kb-panel-header-pattern);
