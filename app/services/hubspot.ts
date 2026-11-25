@@ -1,4 +1,5 @@
 import Service, { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 import { injectHubspotChatScript } from 'irene/utils/hubspot';
 
@@ -23,6 +24,9 @@ export default class HubspotService extends Service {
   @service declare ajax: IreneAjaxService;
 
   CHAT_TOKEN_ENDPOINT = '/api/v2/hubspot/chat-token/';
+  WIDGET_OPEN_CLASS = 'hubspot-chat-open';
+
+  listenersRegistered = false;
 
   get portalId() {
     return this.configuration.integrationData?.hubspot_portal_id || '';
@@ -34,6 +38,29 @@ export default class HubspotService extends Service {
 
   get chatIsIntegrated() {
     return !!this.window?.HubSpotConversations?.widget;
+  }
+
+  // The class reveals the widget; see app/styles/_hubspot.scss.
+  @action
+  hideWidget() {
+    this.window.document?.body?.classList.remove(this.WIDGET_OPEN_CLASS);
+  }
+
+  showWidget() {
+    this.window.document?.body?.classList.add(this.WIDGET_OPEN_CLASS);
+  }
+
+  registerWidgetListeners() {
+    const hubspot = this.window.HubSpotConversations;
+
+    if (this.listenersRegistered || !hubspot) {
+      return;
+    }
+
+    hubspot.on('widgetLoaded', this.hideWidget);
+    hubspot.on('widgetClosed', this.hideWidget);
+
+    this.listenersRegistered = true;
   }
 
   // Unidentified visitors still get the chat; HubSpot then asks for an email.
@@ -57,13 +84,17 @@ export default class HubspotService extends Service {
     if (this.window.HubSpotConversations) {
       // The script is already on the page, so load the widget again with the
       // settings above instead of adding the script a second time.
+      this.registerWidgetListeners();
       this.window.HubSpotConversations.widget.load();
 
       return;
     }
 
     this.window.hsConversationsOnReady = [
-      () => this.window.HubSpotConversations?.widget.load(),
+      () => {
+        this.registerWidgetListeners();
+        this.window.HubSpotConversations?.widget.load();
+      },
     ];
 
     injectHubspotChatScript(this.window.document, this.portalId);
@@ -74,6 +105,7 @@ export default class HubspotService extends Service {
       return;
     }
 
+    this.showWidget();
     this.window.HubSpotConversations?.widget.open();
   }
 
@@ -85,6 +117,7 @@ export default class HubspotService extends Service {
       return false;
     }
 
+    this.showWidget();
     widget.openToKnowledgeBase();
 
     return true;

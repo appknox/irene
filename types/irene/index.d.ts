@@ -50,6 +50,7 @@ declare global {
       openToKnowledgeBase?(): void;
     };
     clear(options?: { resetWidget?: boolean }): void;
+    on(event: string, callback: () => void): void;
   }
 
   interface Window {

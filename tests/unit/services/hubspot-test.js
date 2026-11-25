@@ -10,11 +10,18 @@ class WindowStub extends Service {
   hsConversationsOnReady = undefined;
   HubSpotConversations = undefined;
   appended = [];
+  bodyClasses = new Set();
 
   document = {
     getElementById: (id) => this.appended.find((el) => el.id === id) || null,
     createElement: (tag) => ({ tag }),
-    body: { appendChild: (el) => this.appended.push(el) },
+    body: {
+      appendChild: (el) => this.appended.push(el),
+      classList: {
+        add: (name) => this.bodyClasses.add(name),
+        remove: (name) => this.bodyClasses.delete(name),
+      },
+    },
   };
 }
 
@@ -38,11 +45,16 @@ class AjaxStub extends Service {
   }
 }
 
+const OPEN_CLASS = 'hubspot-chat-open';
+
 const buildWidgetStub = () => {
   const calls = [];
+  const listeners = [];
 
   return {
     calls,
+    listeners,
+    on: (event, callback) => listeners.push([event, callback]),
     widget: {
       load: () => calls.push('load'),
       open: () => calls.push('open'),
@@ -183,9 +195,56 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.true(this.service.chatIsIntegrated);
 
+    assert.false(this.window.bodyClasses.has(OPEN_CLASS));
+
     this.service.openChat();
 
     assert.deepEqual(hubspot.calls, ['open']);
+    assert.true(this.window.bodyClasses.has(OPEN_CLASS), 'widget is shown');
+  });
+
+  test('the widget is hidden again when HubSpot loads or closes it', async function (assert) {
+    assert.expect(5);
+
+    await this.service.configureChat();
+
+    const hubspot = buildWidgetStub();
+
+    this.window.HubSpotConversations = hubspot;
+    this.window.hsConversationsOnReady[0]();
+
+    assert.deepEqual(
+      hubspot.listeners.map(([event]) => event),
+      ['widgetLoaded', 'widgetClosed']
+    );
+
+    for (const [event, callback] of hubspot.listeners) {
+      this.service.openChat();
+
+      assert.true(
+        this.window.bodyClasses.has(OPEN_CLASS),
+        `open before ${event}`
+      );
+
+      callback();
+
+      assert.false(
+        this.window.bodyClasses.has(OPEN_CLASS),
+        `hidden on ${event}`
+      );
+    }
+  });
+
+  test('widget listeners are registered only once across reloads', async function (assert) {
+    const hubspot = buildWidgetStub();
+
+    this.window.HubSpotConversations = hubspot;
+
+    await this.service.configureChat();
+    await this.service.configureChat();
+
+    assert.deepEqual(hubspot.calls, ['load', 'load']);
+    assert.strictEqual(hubspot.listeners.length, 2);
   });
 
   test('openKnowledgeBase opens the Help tab when the widget offers it', function (assert) {
@@ -195,6 +254,7 @@ module('Unit | Service | hubspot', function (hooks) {
 
     assert.true(this.service.openKnowledgeBase());
     assert.deepEqual(hubspot.calls, ['openToKnowledgeBase']);
+    assert.true(this.window.bodyClasses.has(OPEN_CLASS), 'widget is shown');
   });
 
   test('openKnowledgeBase reports false before the widget is loaded', function (assert) {
