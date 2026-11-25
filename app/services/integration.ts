@@ -5,7 +5,6 @@ import type UserModel from 'irene/models/user';
 
 import type ConfigurationService from './configuration';
 import type LoggerService from './logger';
-import type FreshdeskService from './freshdesk';
 import type HubspotService from './hubspot';
 
 export default class IntegrationService extends Service {
@@ -15,7 +14,6 @@ export default class IntegrationService extends Service {
   @service('-document') declare document: Document;
   @service declare configuration: ConfigurationService;
   @service declare logger: LoggerService;
-  @service declare freshdesk: FreshdeskService;
   @service declare hubspot: HubspotService;
 
   currentUser: UserModel | null = null;
@@ -32,9 +30,6 @@ export default class IntegrationService extends Service {
     await this.configuration.getIntegrationConfig();
 
     this.currentUser = user;
-
-    // Freshdesk knowledge base widget
-    await this.freshdesk.configureSupportWidget();
 
     // Not awaited: identifying the chat visitor must never delay app load.
     this.hubspot

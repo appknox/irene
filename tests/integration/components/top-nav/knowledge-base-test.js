@@ -50,15 +50,6 @@ class HubspotStub extends Service {
   }
 }
 
-class FreshdeskStub extends Service {
-  supportWidgetIsEnabled = false;
-  widgetOpened = 0;
-
-  openSupportWidget() {
-    this.widgetOpened += 1;
-  }
-}
-
 module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   setupRenderingTest(hooks);
   setupMirage(hooks);
@@ -67,12 +58,10 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
   hooks.beforeEach(function () {
     this.owner.register('service:browser/window', WindowStub);
     this.owner.register('service:configuration', ConfigurationStub);
-    this.owner.register('service:freshdesk', FreshdeskStub);
     this.owner.register('service:hubspot', HubspotStub);
 
     this.window = this.owner.lookup('service:browser/window');
     this.configuration = this.owner.lookup('service:configuration');
-    this.freshdesk = this.owner.lookup('service:freshdesk');
     this.hubspot = this.owner.lookup('service:hubspot');
   });
 
@@ -97,7 +86,6 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
 
     assert.strictEqual(this.window.opened.length, 0, 'no new tab');
     assert.strictEqual(this.hubspot.helpTabOpened, 0, 'no Help tab');
-    assert.strictEqual(this.freshdesk.widgetOpened, 0, 'no Freshdesk');
 
     const knowledgeBase = this.owner.lookup('service:knowledge-base');
 
@@ -119,18 +107,6 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
     assert.deepEqual(this.window.opened, [
       [KB_URL, '_blank', 'noopener,noreferrer'],
     ]);
-    assert.strictEqual(this.freshdesk.widgetOpened, 0, 'widget is not used');
-  });
-
-  test('the configured url wins over the Freshdesk widget', async function (assert) {
-    this.configuration.integrationData = { knowledge_base_url: KB_URL };
-    this.freshdesk.supportWidgetIsEnabled = true;
-
-    await render(TEMPLATE);
-    await click(selectors.knowledgeBaseBtn);
-
-    assert.strictEqual(this.window.opened.length, 1);
-    assert.strictEqual(this.freshdesk.widgetOpened, 0);
   });
 
   test('in widget mode it opens the HubSpot Help tab, not a new tab', async function (assert) {
@@ -150,7 +126,6 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
 
     assert.strictEqual(this.hubspot.helpTabOpened, 1);
     assert.strictEqual(this.window.opened.length, 0);
-    assert.strictEqual(this.freshdesk.widgetOpened, 0);
   });
 
   test('widget mode alone shows the button even without a url', async function (assert) {
@@ -188,19 +163,6 @@ module('Integration | Component | top-nav/knowledge-base', function (hooks) {
 
     assert.strictEqual(this.hubspot.helpTabOpened, 0);
     assert.strictEqual(this.window.opened.length, 1);
-  });
-
-  test('it falls back to the Freshdesk widget when no url is configured', async function (assert) {
-    this.freshdesk.supportWidgetIsEnabled = true;
-
-    await render(TEMPLATE);
-
-    assert.dom(selectors.knowledgeBaseBtn).hasText(t('knowledgeBase'));
-
-    await click(selectors.knowledgeBaseBtn);
-
-    assert.strictEqual(this.freshdesk.widgetOpened, 1);
-    assert.strictEqual(this.window.opened.length, 0);
   });
 
   test('it is hidden when neither a url nor the widget is configured', async function (assert) {

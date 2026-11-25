@@ -23,8 +23,6 @@ declare global {
     Enumerate<F>
   >;
 
-  type UnknownFnType = (...args: unknown[]) => void;
-
   type IreneProductVariants = 'appknox' | 'storeknox';
 
   interface PendoInstance {
@@ -54,10 +52,8 @@ declare global {
   }
 
   interface Window {
-    FreshworksWidget: UnknownFnType;
     pendo: PendoInstance;
     CRISP_WEBSITE_ID: string;
-    fwSettings: { widget_id: string };
     hsConversationsSettings: HubSpotConversationsSettings;
     hsConversationsOnReady: Array<() => void>;
     HubSpotConversations?: HubSpotConversationsApi;

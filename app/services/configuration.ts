@@ -28,9 +28,6 @@ type IntegrationData = {
   knowledge_base_url: string;
   knowledge_base_mode: 'panel' | 'widget' | '';
   pendo_key: string;
-  freshdesk_configuration: {
-    widget_id: string;
-  };
 };
 
 type ThemeData = {
@@ -106,9 +103,6 @@ export default class ConfigurationService extends Service {
     hubspot_portal_id: '',
     knowledge_base_url: '',
     knowledge_base_mode: '',
-    freshdesk_configuration: {
-      widget_id: '',
-    },
     pendo_key: '',
   };
 
@@ -147,9 +141,6 @@ export default class ConfigurationService extends Service {
         data.integrations.knowledge_base_url;
       this.integrationData.knowledge_base_mode ||=
         data.integrations.knowledge_base_mode;
-
-      this.integrationData.freshdesk_configuration.widget_id ||=
-        data.integrations.freshdesk_configuration.widget_id;
 
       this.themeData.scheme ||= data.theme.scheme;
       this.themeData.primary_color ||= data.theme.primary_color;

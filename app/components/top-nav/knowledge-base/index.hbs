@@ -1,4 +1,4 @@
-{{#if this.showKnowledgeBase}}
+{{#if this.knowledgeBase.isAvailable}}
   <AkButton
     class={{@triggerBtnClass}}
     {{on 'click' this.onOpenKnowledgeBase}}
