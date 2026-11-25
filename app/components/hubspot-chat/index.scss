@@ -19,16 +19,15 @@
   }
 }
 
+// Top-right corner, clear of HubSpot's new-chat icon in the "Your Chats" header.
 .close-btn {
   position: absolute;
-  top: 16px;
-  right: 12px;
+  top: 4px;
+  right: 4px;
   z-index: 1;
-  color: var(--hubspot-chat-close-btn-color);
-
-  :global(.ak-icon) {
-    color: inherit;
-  }
+  padding: 2px;
+  // Outranks ak-icon-button's own !important text colour.
+  color: var(--hubspot-chat-close-btn-color) !important;
 }
 
 .embed {

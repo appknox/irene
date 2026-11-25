@@ -6,12 +6,13 @@
   ...attributes
 >
   <AkIconButton
+    @size='small'
     local-class='close-btn'
     aria-label={{t 'close'}}
     {{on 'click' this.handleClose}}
     data-test-hubspotChat-closeBtn
   >
-    <AkIcon @iconName='close' />
+    <AkIcon @iconName='close' @size='small' />
   </AkIconButton>
 
   {{! HubSpot renders the chat inside this element (inlineEmbedSelector). }}
