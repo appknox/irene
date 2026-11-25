@@ -45,8 +45,12 @@ module('Integration | Component | sbom/empty-loading-view', function (hooks) {
 
     const styles = window.getComputedStyle(find(CONTAINER));
 
-    assert.strictEqual(styles.justifyContent, 'flex-start');
-    assert.strictEqual(styles.alignItems, 'flex-start');
+    // Newer Chrome serializes `flex-start` as `flow-start`; both mean the
+    // skeleton is top-aligned rather than centred.
+    const topAligned = ['flex-start', 'flow-start'];
+
+    assert.true(topAligned.includes(styles.justifyContent));
+    assert.true(topAligned.includes(styles.alignItems));
     assert.dom('[data-test-component-list-skeleton-loader]').exists();
   });
 
