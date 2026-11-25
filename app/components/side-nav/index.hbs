@@ -6,6 +6,9 @@
   }}'
   ...attributes
 >
+  {{! Lets page-level styles (app/styles/_hubspot.scss) offset past the nav. }}
+  {{body-class (if @isCollapsed 'side-nav-collapsed' 'side-nav-expanded')}}
+
   {{yield (hash classes=this.classes)}}
 
   <div local-class='{{if @isCollapsed "favicon-logo" "app-logo"}}'>
