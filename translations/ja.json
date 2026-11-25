@@ -2475,8 +2475,6 @@
       "notObserved": "アプリのバイナリに未検出",
       "ambiguous": "複数の一致候補",
       "noReviewedTarget": "ターゲットデータなし",
-      "notInBinary": "アプリのバイナリに未検出",
-      "notInBinaryHint": "このコンポーネントはSBOMに記載されていますが、アプリのバイナリ内にコードが見つかりませんでした。コードシュリンクで削除された可能性があります。",
       "moreTargets": "+{count} 件の追加ターゲット",
       "explanation": {
         "reachable": "アプリのコードから脆弱な関数への呼び出しパスが見つかりました。",

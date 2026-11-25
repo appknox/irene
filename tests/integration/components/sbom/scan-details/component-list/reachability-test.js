@@ -14,9 +14,6 @@ const selectors = {
   notRunTooltip: '[data-test-sbomComponent-reachabilityNotRunTooltip]',
   notApplicable: '[data-test-sbomComponent-reachabilityNotApplicable]',
   chip: '[data-test-sbomReachability-status]',
-  counts: '[data-test-sbomComponent-reachabilityCounts]',
-  countsTooltip: '[data-test-sbomComponent-reachabilityCountsTooltip]',
-  notInBinary: '[data-test-sbomComponent-reachabilityNotInBinary]',
 };
 
 // ─── Template ───
@@ -138,7 +135,7 @@ module(
     });
 
     // ─── Findings ───────────────────────────────────────────────────────────
-    test('it shows the worst-exposure chip, the counts badge and a bucket tooltip', async function (assert) {
+    test('it shows the worst-exposure chip for the component', async function (assert) {
       const store = this.owner.lookup('service:store');
 
       this.sbomComponent = setupCell(store, {
@@ -160,20 +157,6 @@ module(
       assert
         .dom(selectors.chip)
         .hasText(t('sbomModule.reachability.pathFound'));
-      assert.dom(selectors.counts).hasText('2/5');
-      assert.dom(selectors.notInBinary).doesNotExist();
-
-      await triggerEvent(find(selectors.countsTooltip), 'mouseenter');
-
-      assert
-        .dom('[data-test-ak-tooltip-content]')
-        .containsText(
-          `2 ${t('sbomModule.reachability.pathFound')} · 1 ${t(
-            'sbomModule.reachability.potential'
-          )} · 1 ${t('sbomModule.reachability.noPathFound')} · 1 ${t(
-            'sbomModule.reachability.inconclusive'
-          )}`
-        );
     });
 
     // ─── All unknown ───────────────────────────────────────────────────────
@@ -198,54 +181,6 @@ module(
       assert
         .dom(selectors.chip)
         .hasText(t('sbomModule.reachability.inconclusive'));
-      assert.dom(selectors.counts).hasText('0/3');
-    });
-
-    // ─── Not in binary ─────────────────────────────────────────────────────
-    test('it shows a not-in-binary badge when the engine did not find the code', async function (assert) {
-      const store = this.owner.lookup('service:store');
-
-      this.sbomComponent = setupCell(store, {
-        scanStatus: ReachabilityScanStatus.COMPLETED,
-        reachability: {
-          verdict: 'UNKNOWN',
-          exposure: 'UNKNOWN',
-          code_presence: 'NOT_OBSERVED',
-          path_found_count: 0,
-          potential_count: 0,
-          no_path_found_count: 0,
-          unknown_count: 2,
-          advisory_count: 2,
-        },
-      });
-
-      await render(TEMPLATE);
-
-      assert
-        .dom(selectors.notInBinary)
-        .hasText(t('sbomModule.reachability.notInBinary'));
-    });
-
-    test('it hides the not-in-binary badge when a path proves presence', async function (assert) {
-      const store = this.owner.lookup('service:store');
-
-      this.sbomComponent = setupCell(store, {
-        scanStatus: ReachabilityScanStatus.COMPLETED,
-        reachability: {
-          verdict: 'POTENTIALLY_REACHABLE',
-          exposure: 'POTENTIAL_EXPOSURE',
-          code_presence: 'NOT_OBSERVED',
-          path_found_count: 0,
-          potential_count: 1,
-          no_path_found_count: 0,
-          unknown_count: 0,
-          advisory_count: 1,
-        },
-      });
-
-      await render(TEMPLATE);
-
-      assert.dom(selectors.notInBinary).doesNotExist();
     });
   }
 );

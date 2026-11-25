@@ -50,68 +50,10 @@
       –
     </AkTypography>
   {{else}}
-    <AkStack @alignItems='center' @spacing='0.5'>
-      <Sbom::ReachabilityStatus
-        @verdict={{this.verdict}}
-        @exposure={{this.exposure}}
-        @compact={{true}}
-      />
-
-      {{#if this.countsBadge}}
-        <AkTooltip
-          @arrow={{true}}
-          @placement='top'
-          data-test-sbomComponent-reachabilityCountsTooltip
-        >
-          <:default>
-            <AkChip
-              data-test-sbomComponent-reachabilityCounts
-              @variant='semi-filled'
-              @size='small'
-              @color='default'
-              @label={{this.countsBadge}}
-            />
-          </:default>
-
-          <:tooltipContent>
-            <div
-              {{style
-                width='360px'
-                white-space='pre-line'
-                overflow-wrap='break-word'
-              }}
-            >{{this.summaryTooltip}}</div>
-          </:tooltipContent>
-        </AkTooltip>
-      {{/if}}
-
-      {{#if this.notInBinary}}
-        <AkTooltip
-          @arrow={{true}}
-          @placement='top'
-          data-test-sbomComponent-reachabilityNotInBinaryTooltip
-        >
-          <:default>
-            <AkChip
-              data-test-sbomComponent-reachabilityNotInBinary
-              @variant='outlined'
-              @size='small'
-              @color='default'
-              @label={{t 'sbomModule.reachability.notInBinary'}}
-            />
-          </:default>
-
-          <:tooltipContent>
-            <div
-              {{style
-                width='320px'
-                white-space='pre-line'
-                overflow-wrap='break-word'
-              }}
-            >{{t 'sbomModule.reachability.notInBinaryHint'}}</div>
-          </:tooltipContent>
-        </AkTooltip>
-      {{/if}}
-    </AkStack>
+    <Sbom::ReachabilityStatus
+      @verdict={{this.verdict}}
+      @exposure={{this.exposure}}
+      @compact={{true}}
+    />
   {{/if}}
 </div>

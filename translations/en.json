@@ -2472,8 +2472,6 @@
       "notObserved": "Not found in app binary",
       "ambiguous": "Multiple possible matches",
       "noReviewedTarget": "No target data",
-      "notInBinary": "Not found in app binary",
-      "notInBinaryHint": "This component is declared in the SBOM but its code was not found in the app binary — it may have been removed by code shrinking.",
       "moreTargets": "+{count} more target(s)",
       "explanation": {
         "reachable": "A call path from the app's code to the vulnerable function was found.",
