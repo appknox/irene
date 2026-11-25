@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { task } from 'ember-concurrency';
 import { service } from '@ember/service';
 import { action } from '@ember/object';
+import { waitForPromise } from '@ember/test-waiters';
 import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
@@ -187,8 +188,10 @@ export default class PrivacyModuleSettingsServerLocationComponent extends Compon
   });
 
   loadCountries = task(async () => {
-    const response = await fetch('/world.json');
-    const data = await response.json();
+    // tracked so test helpers settle only after countries load
+    const data = await waitForPromise(
+      fetch('/world.json').then((response) => response.json())
+    );
     const countryMap: Record<string, string> = {};
 
     data.features.forEach((item: WorldFeature) => {

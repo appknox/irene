@@ -3,9 +3,14 @@
 }
 
 .form {
-  min-width: 350px;
-  max-width: 400px;
+  width: 450px;
+  margin-top: 1em;
   border: 1px solid var(--organization-integrations-jira-border-color);
   border-radius: var(--organization-integrations-jira-border-radius);
   box-sizing: border-box;
+}
+
+.note {
+  width: 450px;
+  text-wrap: wrap;
 }

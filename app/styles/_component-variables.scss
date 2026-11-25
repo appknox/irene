@@ -967,6 +967,13 @@ body {
   --organization-integrations-github-box-shadow: var(--box-shadow-4);
   --organization-integrations-github-background-main: var(--background-main);
 
+  // variables for organization/integrations/jira-security
+  --organization-integrations-jira-security-border-radius: var(--border-radius);
+  --organization-integrations-jira-security-border-color: var(--border-color-1);
+  --organization-integrations-jira-security-step-badge-background: var(
+    --neutral-grey-200
+  );
+
   // variables for organization/integrations/jira
   --organization-integrations-jira-border-radius: var(--border-radius);
   --organization-integrations-jira-border-color: var(--border-color-1);

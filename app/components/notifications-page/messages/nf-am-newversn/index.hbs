@@ -14,10 +14,10 @@
     <div class='pt-1'>
       <AkLink
         @color='primary'
-        @route='authenticated.dashboard.app-monitoring.monitoring-details.index'
+        @route='authenticated.storeknox.inventory.app-list'
         @underline='always'
         @title='{{t "notificationModule.viewStoreMonitoring"}}'
-        @model={{@context.am_app_id}}
+        data-test-nf-newversn-link
       >
         <:default>
           {{t 'notificationModule.viewStoreMonitoringResults'}}

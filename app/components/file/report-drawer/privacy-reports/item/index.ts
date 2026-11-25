@@ -5,6 +5,8 @@ import { waitForPromise } from '@ember/test-waiters';
 import { action } from '@ember/object';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import { task } from 'ember-concurrency';
+import { tracked } from '@glimmer/tracking';
+import type Store from 'ember-data/store';
 import type IntlService from 'ember-intl/services/intl';
 
 import ENUMS from 'irene/enums';
@@ -13,6 +15,8 @@ import type PrivacyReportModel from 'irene/models/privacy-report';
 import type ClipboardJS from 'clipboard/src/clipboard';
 import type RealtimeService from 'irene/services/realtime';
 import type FileModel from 'irene/models/file';
+import type OrganizationService from 'irene/services/organization';
+import type PrivacyModuleService from 'irene/services/privacy-module';
 
 export interface FileReportDrawerPrivacyReportsItemSignature {
   Args: {
@@ -27,6 +31,13 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
   @service('notifications') declare notify: NotificationService;
   @service('browser/window') declare window: Window;
   @service declare realtime: RealtimeService;
+  @service declare store: Store;
+  @service declare organization: OrganizationService;
+  @service declare privacyModule: PrivacyModuleService;
+
+  // null until the dashboard PII flag is known
+  @tracked piiEnabled: boolean | null = null;
+  @tracked piiStatus: number | null = null;
 
   tPleaseTryAgain: string;
 
@@ -37,6 +48,10 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
     super(owner, args);
 
     this.tPleaseTryAgain = this.intl.t('pleaseTryAgain');
+
+    if (this.orgPiiOn && this.args.file) {
+      this.fetchPiiState.perform();
+    }
 
     addObserver(
       this.realtime,
@@ -50,6 +65,55 @@ export default class FileReportDrawerPrivacyReportsItemComponent extends Compone
     super.willDestroy();
 
     this.removePrivacyReportCounterObserver();
+  }
+
+  get orgPiiOn() {
+    return !!this.organization.selected?.aiFeatures?.pii;
+  }
+
+  // PII holds the report back only when both org and dashboard AI flags are on
+  fetchPiiState = task(async () => {
+    try {
+      const aiFeatures = await this.store.queryRecord(
+        'organization-ai-feature',
+        {}
+      );
+
+      this.piiEnabled = aiFeatures.pii;
+
+      if (this.piiEnabled) {
+        const pii = await this.privacyModule.getPiiRequest.perform(
+          this.args.file?.id
+        );
+
+        this.piiStatus = pii.status;
+      }
+    } catch (e) {
+      const error = e as AdapterError;
+
+      // no PII request yet is not an error here
+      if (error.errors?.[0]?.status !== '404') {
+        this.notify.error(parseError(e, this.tPleaseTryAgain));
+      }
+    }
+  });
+
+  // PII state not known yet: show a placeholder instead of a wrong-state button
+  get generateLoading() {
+    return (
+      this.orgPiiOn && this.piiEnabled !== false && this.fetchPiiState.isRunning
+    );
+  }
+
+  get generateDisabled() {
+    if (!this.orgPiiOn || this.piiEnabled === false) {
+      return false;
+    }
+
+    return (
+      this.piiStatus === ENUMS.PM_PII_STATUS.STARTED ||
+      this.piiStatus === ENUMS.PM_PII_STATUS.PENDING
+    );
   }
 
   get privacyReport() {

@@ -93,7 +93,7 @@ module('Unit | Service | knowledge-base', function (hooks) {
     for (const value of [
       'javascript:alert(1)',
       'data:text/html,<script>alert(1)</script>',
-      'ftp://help.appknox.com',
+      'file:///etc/hosts',
       'help.appknox.com/en/knowledge',
       'not a url',
     ]) {

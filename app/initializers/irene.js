@@ -193,6 +193,9 @@ const initialize = (application) => {
   ENV.enableMarketplace = handler.getValueForPlugin('IRENE_ENABLE_MARKETPLACE');
   ENV.posthogApiKey = handler.getEnv('IRENE_POSTHOG_API_KEY');
   ENV.posthogApiHost = handler.getEnv('IRENE_POSTHOG_API_HOST');
+  ENV.jiraSecurityInstallUrl = handler.getEnv(
+    'IRENE_JIRA_SECURITY_INSTALL_URL'
+  );
 
   installPendo();
 

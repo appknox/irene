@@ -1,11 +1,22 @@
 import { task } from 'ember-concurrency';
 
 import type NfInAppNotificationModel from 'irene/models/nf-in-app-notification';
+import type { NotificationMessageKey } from 'irene/components/notifications-page/notification_map';
 
 import AkNotificationsBaseService, {
   type NFModelArray,
   type NfInAppNotificationArgs,
 } from './ak-notifications-base';
+
+// The backend still sends these, but their target pages no longer exist.
+// Remove once the backend stops returning them in the VAPT feed.
+const HIDDEN_MESSAGE_CODES: Set<NotificationMessageKey> = new Set([
+  'NF_AM_NEWVERSN',
+]);
+
+const withoutHiddenMessageCodes = (
+  notifications: NFModelArray<NfInAppNotificationModel>
+) => notifications.filter((n) => !HIDDEN_MESSAGE_CODES.has(n.messageCode));
 
 export default class AkNotificationsService extends AkNotificationsBaseService<NfInAppNotificationModel> {
   markAllAsRead = task(async () => {
@@ -30,7 +41,7 @@ export default class AkNotificationsService extends AkNotificationsBaseService<N
       args
     )) as NFModelArray<NfInAppNotificationModel>;
 
-    this.notifications = notifications;
+    this.notifications = withoutHiddenMessageCodes(notifications);
     this.notificationsCount = notifications.meta.count;
   });
 
@@ -46,7 +57,7 @@ export default class AkNotificationsService extends AkNotificationsBaseService<N
       args
     )) as NFModelArray<NfInAppNotificationModel>;
 
-    this.notifications_drop_down = notifications;
+    this.notifications_drop_down = withoutHiddenMessageCodes(notifications);
     this.unReadCount = notifications.meta.count;
   });
 }

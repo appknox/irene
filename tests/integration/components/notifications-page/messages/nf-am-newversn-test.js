@@ -53,5 +53,30 @@ module(
         }),
       });
     });
+
+    test('it links to the storeknox inventory list', async function (assert) {
+      this.owner.setupRouter();
+
+      this.context = new NfAmNewversnContext({
+        package_name: 'com.mfva.test',
+        app_name: 'mfva',
+        am_app_version_id: 20,
+        am_app_id: 12,
+        project_id: 200,
+        platform: 1,
+        platform_display: 'android',
+        version_unscanned: '1.0.1',
+        version_scanned: '1.0.0',
+      });
+
+      await render(hbs`
+        <NotificationsPage::Messages::NfAmNewversn @context={{this.context}} />
+      `);
+
+      assert
+        .dom('[data-test-nf-newversn-link]')
+        .hasAttribute('href', '/dashboard/storeknox/inventory/app-list')
+        .hasText(t('notificationModule.viewStoreMonitoringResults'));
+    });
   }
 );

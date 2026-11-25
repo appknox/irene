@@ -111,6 +111,14 @@ export default class PrivacyModuleAppDetailsPiiComponent extends Component<Priva
     );
   }
 
+  get piiInProgress() {
+    return this.privacyModule.piiInProgress;
+  }
+
+  get piiFailed() {
+    return this.privacyModule.piiFailed;
+  }
+
   get hasNoPii() {
     return this.piiDataCount === 0;
   }
