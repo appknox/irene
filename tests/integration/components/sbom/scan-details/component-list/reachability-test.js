@@ -97,6 +97,10 @@ module(
           'reachability failed: GRAPH_CACHE_INVALID',
         ],
         [ReachabilityScanStatus.SKIPPED, 'unsupported artifact format'],
+        [
+          ReachabilityScanStatus.TIMED_OUT,
+          'Reachability analysis timed out before finishing. It can be retried.',
+        ],
       ],
       async function (assert, [scanStatus, reason]) {
         const store = this.owner.lookup('service:store');

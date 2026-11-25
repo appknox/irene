@@ -204,7 +204,8 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
 
     if (
       newStatus === ReachabilityScanStatus.FAILED ||
-      newStatus === ReachabilityScanStatus.SKIPPED
+      newStatus === ReachabilityScanStatus.SKIPPED ||
+      newStatus === ReachabilityScanStatus.TIMED_OUT
     ) {
       return;
     }
@@ -281,7 +282,8 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       // Reason tooltip only makes sense for terminal non-success states.
       error:
         stage.status === SbomScanStatus.FAILED ||
-        stage.status === ReachabilityScanStatus.SKIPPED
+        stage.status === ReachabilityScanStatus.SKIPPED ||
+        stage.status === ReachabilityScanStatus.TIMED_OUT
           ? stage.error
           : undefined,
     }));
@@ -299,6 +301,8 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
         return this.intl.t('chipStatus.failed');
       case ReachabilityScanStatus.SKIPPED:
         return this.intl.t('chipStatus.skipped');
+      case ReachabilityScanStatus.TIMED_OUT:
+        return this.intl.t('chipStatus.timedOut');
       default:
         return this.intl.t('notStarted');
     }
@@ -312,6 +316,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       case SbomScanStatus.IN_PROGRESS:
         return 'warn';
       case SbomScanStatus.FAILED:
+      case ReachabilityScanStatus.TIMED_OUT:
         return 'error';
       default:
         return 'default';

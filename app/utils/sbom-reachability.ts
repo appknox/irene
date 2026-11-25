@@ -21,6 +21,7 @@ export const ReachabilityScanStatus = {
   COMPLETED: 3,
   FAILED: 4,
   SKIPPED: 5,
+  TIMED_OUT: 6,
 } as const;
 
 export type ReachabilityScanStatusValue =

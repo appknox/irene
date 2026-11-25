@@ -240,7 +240,8 @@
     "vulnerable": "VULNERABLE",
     "secure": "SECURE",
     "unknown": "UNKNOWN",
-    "skipped": "SKIPPED"
+    "skipped": "SKIPPED",
+    "timedOut": "TIMED OUT"
   },
   "circleCIPipeline": "Circle CI Pipeline",
   "clear": "Clear",

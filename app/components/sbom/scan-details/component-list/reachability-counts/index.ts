@@ -45,11 +45,12 @@ export default class SbomScanDetailsComponentListReachabilityCountsComponent ext
     );
   }
 
-  /** FAILED / SKIPPED runs render as a muted dash with the reason on hover. */
+  /** FAILED / SKIPPED / TIMED_OUT runs render as a muted dash with the reason on hover. */
   get scanNotRun() {
     return (
       this.scanStatus === ReachabilityScanStatus.FAILED ||
-      this.scanStatus === ReachabilityScanStatus.SKIPPED
+      this.scanStatus === ReachabilityScanStatus.SKIPPED ||
+      this.scanStatus === ReachabilityScanStatus.TIMED_OUT
     );
   }
 

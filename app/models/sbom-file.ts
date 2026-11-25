@@ -48,7 +48,7 @@ export default class SbomFileModel extends Model {
 
   /**
    * Latest reachability scan status. Independent of SBOM `status`.
-   * Matches Mycroft SBReachabilityScan.Status (1–5, including SKIPPED).
+   * Matches Mycroft SBReachabilityScan.Status (1–6, including SKIPPED and TIMED_OUT).
    */
   @attr('number')
   declare reachabilityStatus: number | null;
