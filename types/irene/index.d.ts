@@ -38,7 +38,6 @@ declare global {
     loadImmediately?: boolean;
     identificationEmail?: string;
     identificationToken?: string;
-    inlineEmbedSelector?: string;
   }
 
   interface HubSpotConversationsApi {
@@ -49,6 +48,7 @@ declare global {
       openToKnowledgeBase?(): void;
     };
     clear(options?: { resetWidget?: boolean }): void;
+    on(event: string, callback: () => void): void;
   }
 
   interface Window {
