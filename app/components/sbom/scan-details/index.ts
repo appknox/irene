@@ -508,6 +508,13 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
   /** Show `tab` and reload its list with filters, search and paging reset. */
   private applyView(tab: SbomScanDetailsView) {
     this.activeView = tab;
+
+    // On the AI-BOM tab only the remembered view changes; the SBOM list
+    // (and its reachability filter) is rebuilt when that tab is reselected.
+    if (this.activeTab !== 'sbom') {
+      return;
+    }
+
     this.sbomScanDetailsService.onlyReachable = tab === 'insights';
 
     void this.sbomScanDetailsService
@@ -530,7 +537,9 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       view_type: 'tree' as const,
       component_type: -1,
       is_dependency: null,
-      is_ai_component: null,
+      // The SBOM tab never lists AI components; null would let them into the
+      // list view the user toggles to next.
+      is_ai_component: 'false',
       component_query: '',
     };
 
@@ -538,10 +547,22 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
     this.sbomScanDetailsService.setQueryData({ ...queryParams }).reload();
   }
 
+  /**
+   * Switch between the SBOM and AI-BOM tabs. Every list-shaping piece of
+   * state is re-derived here rather than inherited from the tab being left:
+   * the reachability-only filter belongs to the SBOM Insights view alone, and
+   * the SBOM tab returns to the view (Insights or Complete) it was left in.
+   */
   @action
   selectTab(tab: 'sbom' | 'aibom') {
     this.activeTab = tab;
     const is_ai_component = tab === 'aibom' ? 'true' : 'false';
+    const view_type =
+      tab === 'aibom' ? 'list' : this.viewTypeFor(this.activeView);
+
+    // Only the SBOM Insights view is limited to reachability findings.
+    this.sbomScanDetailsService.onlyReachable =
+      tab === 'sbom' && this.isInsightsView;
 
     // AI-BOM always uses list mode; reset tab-specific filters, ordering and the
     // page offset on switch so the URL cannot drift from the service state.
@@ -552,9 +573,10 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
       ai_confidence: null,
       component_type: -1,
       is_dependency: null,
+      reachability: null,
       ordering: null,
       component_offset: 0,
-      view_type: tab === 'aibom' ? ('list' as const) : this.sbomViewType,
+      view_type: view_type as 'list' | 'tree',
     };
 
     this.router.transitionTo({ queryParams });
@@ -566,6 +588,7 @@ export default class SbomScanDetailsComponent extends Component<SbomScanDetailsS
         ai_confidence: queryParams.ai_confidence,
         component_type: queryParams.component_type,
         dependency_type: queryParams.is_dependency,
+        reachability: queryParams.reachability,
         ordering: queryParams.ordering,
         view_type: queryParams.view_type,
       })

@@ -841,6 +841,80 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       );
     });
 
+    const stubAiSummary = (context) =>
+      context.server.get(
+        '/v2/sb_files/:id/sb_file_components/ai_summary',
+        () => ({
+          total: 0,
+          by_type: {},
+          aibom_supported: true,
+        })
+      );
+
+    test('returning from AI BoM restores the reachability-only insights list', async function (assert) {
+      stubAiSummary(this);
+
+      await render(TEMPLATE);
+
+      await click('[data-test-sbomScanDetails-aibomTab] button');
+
+      assert.notOk(
+        'has_reachability' in this.requests.at(-1),
+        'AI BoM is not limited to reachability findings'
+      );
+
+      await click('[data-test-sbomScanDetails-sbomTab] button');
+
+      const back = this.requests.at(-1);
+
+      assert.strictEqual(
+        back.has_reachability,
+        'true',
+        'insights stays reachability-only, not the whole SBOM'
+      );
+      assert.notOk(
+        'type' in back,
+        'insights is a flat list, not the tree query'
+      );
+      assert.strictEqual(this.transitions.at(-1).view_type, 'list');
+    });
+
+    test('returning from AI BoM restores the complete tab as it was left', async function (assert) {
+      stubAiSummary(this);
+      this.queryParams = {
+        ...this.queryParams,
+        view_type: 'tree',
+        tab: 'complete',
+      };
+      this.tab = 'complete';
+
+      await render(TEMPLATE);
+
+      await click('[data-test-sbomScanDetails-aibomTab] button');
+      await click('[data-test-sbomScanDetails-sbomTab] button');
+
+      const back = this.requests.at(-1);
+
+      assert.notOk('has_reachability' in back, 'complete is the full SBOM');
+      assert.strictEqual(back.type, '1', 'complete keeps its tree view');
+      assert.strictEqual(this.transitions.at(-1).view_type, 'tree');
+    });
+
+    test('a reachability filter does not survive a trip to AI BoM', async function (assert) {
+      stubAiSummary(this);
+
+      await render(TEMPLATE);
+
+      const service = this.owner.lookup('service:sbom-scan-details');
+
+      service.setQueryData({ reachability: 'CONFIRMED_EXPOSURE' });
+
+      await click('[data-test-sbomScanDetails-aibomTab] button');
+
+      assert.strictEqual(service.selectedReachability, null);
+      assert.notOk('reachability' in this.requests.at(-1));
+    });
+
     test('switching tabs clears the search field', async function (assert) {
       this.queryParams = { ...this.queryParams, view_type: 'list' };
 
