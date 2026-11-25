@@ -19,13 +19,14 @@
   }
 }
 
-// Top-right corner, clear of HubSpot's new-chat icon in the "Your Chats" header.
+// Centred in HubSpot's 70px header, right of its new-chat icon on the
+// "Your Chats" screen, which sits about 30px from the edge.
 .close-btn {
   position: absolute;
-  top: 4px;
-  right: 4px;
+  top: 26px;
+  right: 5px;
   z-index: 1;
-  padding: 2px;
+  padding: 0;
   // Outranks ak-icon-button's own !important text colour.
   color: var(--hubspot-chat-close-btn-color) !important;
 }
