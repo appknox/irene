@@ -195,6 +195,12 @@ module(
 
           // Check that the value is filled in
           assert.dom(inputElement).hasValue(value);
+
+          // Number columns are filtered with numbers, not the typed text
+          assert.strictEqual(
+            Object.values(this.allCurrFilters)[0]?.value,
+            isFloat || isInt ? Number(value) : value
+          );
         }
       }
     );
@@ -260,6 +266,16 @@ module(
               assert.ok(
                 [true, false, null].includes(value),
                 `Expected value to be one of [true, false, null] for operator ${operator}`
+              );
+            } else if (
+              !withChoices &&
+              (type === ENUMS.AI_REPORTING_FIELD_TYPE.FLOAT ||
+                type === ENUMS.AI_REPORTING_FIELD_TYPE.INTEGER)
+            ) {
+              // Number columns send numbers; enum columns send their labels
+              assert.ok(
+                typeof value === 'number',
+                `Expected value to be a number for operator ${operator}`
               );
             } else {
               assert.ok(
