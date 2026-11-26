@@ -58,7 +58,45 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
   }
 
   get showOriginalAndOverriddenSeverity() {
-    return !isEmpty(this.dataModel.risk) && !isEmpty(this.overriddenRisk);
+    return (
+      !isEmpty(this.dataModel.risk) &&
+      !isEmpty(this.overriddenRisk) &&
+      !this.baselineInfo
+    );
+  }
+
+  get baselineInfo() {
+    return this.dataModel.ignoreIfUnchanged ?? null;
+  }
+
+  /**
+   * The baseline is still waiting for a scan, so nothing has been applied yet
+   */
+  get isBaselinePending() {
+    return Boolean(this.baselineInfo?.pending && !this.baselineInfo.passed);
+  }
+
+  get overriddenAsTitle() {
+    return this.intl.t(
+      this.isBaselinePending
+        ? 'ignoreIfUnchangedWillBeOverriddenAs'
+        : 'editOverrideVulnerability.overriddenAs'
+    );
+  }
+
+  get pendingNote() {
+    const info = this.baselineInfo;
+
+    if (!this.isBaselinePending || !info) {
+      return null;
+    }
+
+    return this.intl.t('ignoreIfUnchangedPendingNote', {
+      scans: this.intl.formatList(
+        info.waiting_for.map((it) => this.intl.t(it).toLowerCase())
+      ),
+      fileId: info.baseline_file,
+    });
   }
 
   get overridenRiskLabel() {
@@ -97,6 +135,9 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
 
       case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.ALL_FUTURE_UPLOAD:
         return this.intl.t('allFutureAnalyses');
+
+      case ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED:
+        return this.intl.t('allFutureAnalysesReopenIfChanged');
 
       default:
         return '';

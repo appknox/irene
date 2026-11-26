@@ -32,6 +32,10 @@ export default class AnalysisOverviewModel extends Model {
   @attr('number', { defaultValue: null })
   declare overriddenRisk: number | null;
 
+  // set when an "All Future Analyses (Reopen if changed)" baseline applies
+  @attr({ defaultValue: null })
+  declare ignoreIfUnchanged: { passed: boolean } | null;
+
   @attr('number', { defaultValue: null })
   declare overrideRequestStatus: number | null;
 
@@ -72,6 +76,27 @@ export default class AnalysisOverviewModel extends Model {
     return this.isOverriddenRisk && !this.isRiskPassedBySystem;
   }
 
+  /**
+   * Show the overridden icon: risk overridden, or Passed because an "All Future
+   * Analyses (Reopen if changed)" baseline applies
+   */
+  get showOverriddenIcon() {
+    return (
+      this.isNonPassedRiskOverridden || Boolean(this.ignoreIfUnchanged?.passed)
+    );
+  }
+
+  /**
+   * Risk the overridden tooltip points to: the override, or Passed for a baseline
+   */
+  get overriddenRiskForTag() {
+    if (this.overriddenRisk != null) {
+      return this.overriddenRisk;
+    }
+
+    return this.ignoreIfUnchanged?.passed ? ENUMS.RISK.NONE : null;
+  }
+
   get isRiskPassedBySystem() {
     return this.risk === ENUMS.RISK.NONE;
   }
@@ -86,6 +111,14 @@ export default class AnalysisOverviewModel extends Model {
     return (
       this.overriddenRisk === ENUMS.RISK.NONE && !this.isRiskPassedBySystem
     );
+  }
+
+  /**
+   * Overridden as Passed, or Passed because an "All Future Analyses (Reopen if
+   * changed)" baseline applies. Only the file-details pages use this.
+   */
+  get isOverriddenOrIgnoredAsPassed() {
+    return this.isOverriddenAsPassed || Boolean(this.ignoreIfUnchanged?.passed);
   }
 
   /**

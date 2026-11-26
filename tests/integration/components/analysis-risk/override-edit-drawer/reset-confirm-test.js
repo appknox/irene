@@ -26,6 +26,7 @@ const selectors = {
   confirmTitle:
     '[data-test-analysisDetails-editAnalysis-resetConfirm-confirmTitle]',
   noteTitle: '[data-test-analysisDetails-editAnalysis-resetConfirm-noteTitle]',
+  noteText: '[data-test-analysisDetails-editAnalysis-resetConfirm-noteText]',
   successMsg:
     '[data-test-analysisDetails-editAnalysis-resetConfirm-successMsg]',
   resetAction: (label) =>
@@ -200,5 +201,65 @@ module(
         'analysis-risk/override-edit-drawer/override-details'
       );
     });
+
+    test.each(
+      'baseline reset dialog depends on which file it is',
+      [
+        {
+          isBaselineFile: true,
+          isLatest: true,
+          title: 'fileAnalysisDetails.baselineRemoveConfirmTitle',
+          note: 'fileAnalysisDetails.baselineRemoveNoteText',
+          button: 'fileAnalysisDetails.removeOverride',
+        },
+        {
+          isBaselineFile: true,
+          isLatest: false,
+          title: 'fileAnalysisDetails.currentFileResetConfirmTitle',
+          note: 'fileAnalysisDetails.baselineResetPastBaselineNoteText',
+          button: 'fileAnalysisDetails.resetForTheCurrentFile',
+        },
+        {
+          isBaselineFile: false,
+          isLatest: false,
+          title: 'fileAnalysisDetails.currentFileResetConfirmTitle',
+          note: 'fileAnalysisDetails.baselineResetThisFileNoteText',
+          button: 'fileAnalysisDetails.resetForTheCurrentFile',
+        },
+      ],
+      async function (
+        assert,
+        { isBaselineFile, isLatest, title, note, button }
+      ) {
+        const model = this.pushAnalysis();
+
+        model.set(
+          'overrideCriteria',
+          ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED
+        );
+
+        model.set('ignoreIfUnchanged', {
+          is_baseline_file: isBaselineFile,
+          baseline_versions: isBaselineFile ? [{ is_latest: isLatest }] : [],
+        });
+
+        this.dataModel = this.buildDataModel({
+          model,
+          overrideCriteria: ENUMS.ANALYSIS_OVERRIDE_CRITERIA.REOPEN_IF_CHANGED,
+          resetOverrideHandler: () => {},
+        });
+
+        await render(TEMPLATE);
+
+        assert.dom(selectors.confirmTitle).hasText(t(title));
+        assert.dom(selectors.noteText).hasText(t(note));
+        assert.dom(selectors.resetAction(t(button))).exists();
+        assert
+          .dom(
+            '[data-test-analysisDetails-editAnalysis-resetConfirm-resetAction]'
+          )
+          .exists({ count: 1 });
+      }
+    );
   }
 );
