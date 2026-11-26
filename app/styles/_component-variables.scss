@@ -1540,6 +1540,13 @@ body {
   --file-details-api-scan-captured-apis-container-background: var(
     --background-main
   );
+  --file-details-api-scan-captured-apis-select-all-height: 52px;
+  --file-details-api-scan-captured-apis-row-height: 58px;
+  --file-details-api-scan-captured-apis-row-border-color: var(--border-color-1);
+
+  // variables for file-details/api-scan/search-input
+  --file-details-api-scan-search-input-width: 260px;
+  --file-details-api-scan-search-input-height: 32px;
 
   // variables for file-details/api-scan/progress-status
   --file-details-api-scan-progress-status-border-radius: var(--border-radius);
@@ -1608,6 +1615,7 @@ body {
   --file-details-api-scan-captured-apis-domain-filters-select-option-hover-background: var(
     --hover-light-background
   );
+  --file-details-api-scan-captured-apis-domain-filters-trigger-height: 32px;
 
   // variables for file-details/insights-wrapper
   --file-details-insights-wrapper-border-color: var(--border-color-1);
@@ -4438,9 +4446,6 @@ body {
   );
   --knoxiq-validated-findings-finding-detail-chip-border-radius: var(
     --border-radius-capsule
-  );
-  --knoxiq-validated-findings-finding-detail-evidence-inline-code-background-color: var(
-    --knoxiq-validated-findings-finding-detail-evidence-inline-code-background
   );
 
   // variables for knox-iq/vulnerability-analysis-details/validated-findings

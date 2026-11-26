@@ -1,0 +1,11 @@
+<div local-class='search-input'>
+  <AkTextField
+    @placeholder={{t 'apiScanModule.searchEndpoints'}}
+    {{on 'keyup' this.handleSearchInput}}
+    ...attributes
+  >
+    <:leftAdornment>
+      <AkIcon @iconName='search' @color='textSecondary' />
+    </:leftAdornment>
+  </AkTextField>
+</div>

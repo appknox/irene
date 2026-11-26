@@ -43,6 +43,11 @@ export default class ProjectSettingsGeneralSettingsComponent extends Component<P
     return this.args.project;
   }
 
+  // Shown only when Automated API Scan is enabled for the org (hudson features page)
+  get showApiScanAutomation() {
+    return Boolean(this.organization.selected?.features?.automated_apiscan);
+  }
+
   get showCyodSection() {
     return showsProjectSigningCertificate(
       this.organization.isCyodRegistrationEnabled,
