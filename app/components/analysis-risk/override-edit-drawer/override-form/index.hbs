@@ -122,7 +122,7 @@
             @selected={{this.selectedOverrideCriteria}}
             @onChange={{this.handleOverrideCriteriaChange}}
             @placeholder='{{t "editOverrideVulnerability.selectACriteria"}}'
-            @error={{this.isObjectTruthy (get this.changeset.error 'criteria')}}
+            @error={{this.hasCriteriaError}}
             as |aks|
           >
             {{aks.label}}

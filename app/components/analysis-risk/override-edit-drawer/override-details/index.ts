@@ -69,6 +69,36 @@ export default class AnalysisRiskOverrideEditDrawerOverrideDetailsComponent exte
     return this.dataModel.ignoreIfUnchanged ?? null;
   }
 
+  /**
+   * The baseline is still waiting for a scan, so nothing has been applied yet
+   */
+  get isBaselinePending() {
+    return Boolean(this.baselineInfo?.pending && !this.baselineInfo.passed);
+  }
+
+  get overriddenAsTitle() {
+    return this.intl.t(
+      this.isBaselinePending
+        ? 'ignoreIfUnchangedWillBeOverriddenAs'
+        : 'editOverrideVulnerability.overriddenAs'
+    );
+  }
+
+  get pendingNote() {
+    const info = this.baselineInfo;
+
+    if (!this.isBaselinePending || !info) {
+      return null;
+    }
+
+    return this.intl.t('ignoreIfUnchangedPendingNote', {
+      scans: this.intl.formatList(
+        info.waiting_for.map((it) => this.intl.t(it).toLowerCase())
+      ),
+      fileId: info.baseline_file,
+    });
+  }
+
   get overridenRiskLabel() {
     return this.intl.t(riskText([String(this.overriddenRisk)]) as string);
   }

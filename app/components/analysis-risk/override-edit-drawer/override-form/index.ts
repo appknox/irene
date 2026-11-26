@@ -51,6 +51,10 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
   @tracked isEditingExistingOverride = false;
   @tracked changeset: ChangesetBufferProps | null = null;
 
+  // the criteria was cleared by a severity change, not by the user, so its
+  // "required" error stays hidden until the user touches the criteria
+  @tracked criteriaClearedByRiskChange = false;
+
   model = {};
 
   constructor(
@@ -139,8 +143,15 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
     return this.editDetailsUnchanged || this.isFormEmpty;
   }
 
+  get hasCriteriaError() {
+    return (
+      Boolean(this.changeset?.error['criteria']) &&
+      !this.criteriaClearedByRiskChange
+    );
+  }
+
   get riskOrCriteriaSelectValidationMessage() {
-    if (this.changeset?.error['risk'] && this.changeset?.error['criteria']) {
+    if (this.changeset?.error['risk'] && this.hasCriteriaError) {
       return this.intl.t(
         'editOverrideVulnerability.emptySeverityCriteriaErrorText'
       );
@@ -150,7 +161,7 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
       return this.intl.t('editOverrideVulnerability.emptySeverityErrorText');
     }
 
-    if (this.changeset?.error['criteria']) {
+    if (this.hasCriteriaError) {
       return this.intl.t('editOverrideVulnerability.emptyCriteriaErrorText');
     }
 
@@ -229,11 +240,13 @@ export default class AnalysisRiskOverrideEditDrawerOverrideFormComponent extends
       !this.overrideRiskForOptions.some((it) => it.value === criteria)
     ) {
       this.changeset?.set('criteria', null);
+      this.criteriaClearedByRiskChange = true;
     }
   }
 
   @action
   handleOverrideCriteriaChange(overrideCriteria: RiskOverrideCriteria) {
+    this.criteriaClearedByRiskChange = false;
     this.changeset?.set('criteria', overrideCriteria.value);
   }
 

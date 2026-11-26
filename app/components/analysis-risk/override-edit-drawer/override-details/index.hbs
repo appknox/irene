@@ -15,7 +15,7 @@
       @variant='subtitle1'
       {{style fontSize='0.857rem'}}
     >
-      {{t 'editOverrideVulnerability.overriddenAs'}}
+      {{this.overriddenAsTitle}}
     </AkTypography>
 
     <AkStack local-class='overridden-as-value-container' @alignItems='center'>
@@ -34,6 +34,16 @@
       </AkTypography>
       <AkStack />
     </AkStack>
+
+    {{#if this.pendingNote}}
+      <AkTypography
+        data-test-analysisRisk-overrideEditDrawer-overrideDetails-pendingNote
+        @variant='body2'
+        @color='textSecondary'
+      >
+        {{this.pendingNote}}
+      </AkTypography>
+    {{/if}}
 
     <AkDivider local-class='details-divider' class='my-2' />
 
