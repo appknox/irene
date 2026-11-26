@@ -1,0 +1,18 @@
+.endpoint-vulnerabilities {
+  background-color: var(
+    --file-details-api-scan-endpoint-vulnerabilities-background
+  );
+  border-radius: var(
+    --file-details-api-scan-endpoint-vulnerabilities-border-radius
+  );
+}
+
+.endpoint-header {
+  min-width: 0;
+  border-bottom: 1px solid
+    var(--file-details-api-scan-endpoint-vulnerabilities-border-color);
+
+  .endpoint-url {
+    min-width: 0;
+  }
+}
