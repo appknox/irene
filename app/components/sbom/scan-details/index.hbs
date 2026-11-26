@@ -105,35 +105,44 @@
       />
 
       {{#if this.showTabs}}
-        <AkTabs class='mt-2' data-test-sbomScanDetails-tabs as |Akt|>
-          <Akt.tabItem
-            @id='insights'
-            @isActive={{eq this.activeView 'insights'}}
-            @buttonVariant={{true}}
-            @onTabClick={{this.selectViewTab}}
-            data-test-sbomScanDetails-insightsTab
+        <div local-class='view-switch' class='mt-2'>
+          <AkTabs
+            local-class='view-switch-tabs'
+            data-test-sbomScanDetails-tabs
+            as |Akt|
           >
-            {{t 'sbomModule.reachabilityInsights.tab'}}
-          </Akt.tabItem>
+            <Akt.tabItem
+              @id='insights'
+              @isActive={{eq this.activeView 'insights'}}
+              @buttonVariant={{true}}
+              @onTabClick={{this.selectViewTab}}
+              data-test-sbomScanDetails-insightsTab
+            >
+              {{t 'sbomModule.reachabilityInsights.tab'}}
+            </Akt.tabItem>
 
-          <Akt.tabItem
-            @id='complete'
-            @isActive={{eq this.activeView 'complete'}}
-            @buttonVariant={{true}}
-            @hasBadge={{true}}
-            @badgeCount={{this.totalComponentCount}}
-            @onTabClick={{this.selectViewTab}}
-            data-test-sbomScanDetails-completeTab
-          >
-            {{t 'sbomModule.completeAnalysis.tab'}}
-          </Akt.tabItem>
-        </AkTabs>
+            <Akt.tabItem
+              @id='complete'
+              @isActive={{eq this.activeView 'complete'}}
+              @buttonVariant={{true}}
+              @hasBadge={{true}}
+              @badgeCount={{this.totalComponentCount}}
+              @onTabClick={{this.selectViewTab}}
+              data-test-sbomScanDetails-completeTab
+            >
+              {{t 'sbomModule.completeAnalysis.tab'}}
+            </Akt.tabItem>
+          </AkTabs>
+        </div>
       {{/if}}
 
       {{#if this.showToolbar}}
         <AkStack
           data-test-sbomScanDetails-switch-header
-          local-class='switch-view-header'
+          local-class='switch-view-header {{if
+            this.showTabs
+            "switch-view-header-attached"
+          }}'
           @alignItems='center'
           @justifyContent='space-between'
         >

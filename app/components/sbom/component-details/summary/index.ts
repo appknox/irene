@@ -21,6 +21,8 @@ export interface SbomComponentDetailsSummarySignature {
   Element: HTMLDivElement;
   Args: {
     sbomComponent: SbomComponentModel;
+    /** The insights page shows the counts in their own card instead. */
+    hideReachability?: boolean;
   };
 }
 
@@ -92,10 +94,11 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         label: this.intl.t('status'),
         component: 'sbom/component-status' as const,
       },
-      this.args.sbomComponent?.hasReachabilitySummary && {
-        label: this.intl.t('sbomModule.reachability.title'),
-        component: 'sbom/component-details/summary/reachability' as const,
-      },
+      !this.args.hideReachability &&
+        this.args.sbomComponent?.hasReachabilitySummary && {
+          label: this.intl.t('sbomModule.reachability.title'),
+          component: 'sbom/component-details/summary/reachability' as const,
+        },
       this.args.sbomComponent?.author && {
         label: this.intl.t('author'),
         value: this.args.sbomComponent?.author,

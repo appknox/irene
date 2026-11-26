@@ -8,6 +8,7 @@
     <AkStack
       @alignItems='center'
       @spacing='1'
+      local-class='{{unless item.count "count-muted"}}'
       data-test-sbomScanDetails-componentDetails-reachabilityCount={{item.key}}
     >
       <div

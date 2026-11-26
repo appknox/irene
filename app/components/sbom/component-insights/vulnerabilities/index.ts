@@ -62,6 +62,15 @@ export default class SbomComponentInsightsVulnerabilitiesComponent extends Compo
     return this.audits.length;
   }
 
+  /** Loading, error and empty states have no card header to carry the title. */
+  get showHeadingOutside() {
+    return (
+      this.fetchVulnerabilities.isRunning ||
+      this.loadFailed ||
+      this.hasNoVulnerabilities
+    );
+  }
+
   get hasNoVulnerabilities() {
     return this.total === 0;
   }

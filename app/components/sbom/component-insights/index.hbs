@@ -28,6 +28,25 @@
 
   <Sbom::ComponentInsights::Details @sbomComponent={{@sbomComponent}} />
 
+  {{#if @sbomComponent.hasReachabilitySummary}}
+    <AkStack
+      @width='full'
+      @alignItems='center'
+      @spacing='3'
+      @flexWrap='wrap'
+      local-class='overview'
+      data-test-sbomComponentInsights-reachabilityOverview
+    >
+      <AkTypography @variant='subtitle1'>
+        {{t 'sbomModule.componentInsights.reachabilityOverview'}}
+      </AkTypography>
+
+      <Sbom::ComponentDetails::Summary::Reachability
+        @sbomComponent={{@sbomComponent}}
+      />
+    </AkStack>
+  {{/if}}
+
   <Sbom::ComponentInsights::Vulnerabilities
     @sbomComponent={{@sbomComponent}}
     @selectedId={{@vuln}}

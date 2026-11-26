@@ -43,14 +43,14 @@ export default class SbomComponentDetailsSummaryReachabilityComponent extends Co
         count: reachability?.potential_count ?? 0,
       },
       {
-        key: 'no-path-found',
-        label: this.intl.t('sbomModule.reachability.noPathFound'),
-        count: reachability?.no_path_found_count ?? 0,
-      },
-      {
         key: 'unknown',
         label: this.intl.t('unknown'),
         count: reachability?.unknown_count ?? 0,
+      },
+      {
+        key: 'no-path-found',
+        label: this.intl.t('sbomModule.reachability.noPathFound'),
+        count: reachability?.no_path_found_count ?? 0,
       },
     ];
   }

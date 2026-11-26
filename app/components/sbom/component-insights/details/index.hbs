@@ -19,12 +19,24 @@
       </AkTypography>
 
       {{#unless this.isExpanded}}
-        <AkTypography
-          @color='textSecondary'
+        <AkStack
+          @alignItems='center'
+          @spacing='1'
+          @flexWrap='wrap'
           data-test-sbomComponentInsights-details-inlineSummary
         >
-          {{this.inlineSummary}}
-        </AkTypography>
+          {{#each this.summaryItems as |item|}}
+            <span
+              local-class='summary-chip'
+              data-test-sbomComponentInsights-details-summaryChip='{{item.key}}'
+            >
+              <AkIcon @iconName={{item.icon}} @size='small' @color='inherit' />
+              <AkTypography @variant='body2' @color='inherit' @tag='span'>
+                {{item.label}}
+              </AkTypography>
+            </span>
+          {{/each}}
+        </AkStack>
       {{/unless}}
     </AkStack>
 
@@ -55,7 +67,10 @@
       class='p-1'
       data-test-sbomComponentInsights-details-content
     >
-      <Sbom::ComponentDetails::Summary @sbomComponent={{@sbomComponent}} />
+      <Sbom::ComponentDetails::Summary
+        @sbomComponent={{@sbomComponent}}
+        @hideReachability={{true}}
+      />
     </AkStack>
   {{/if}}
 </AkStack>

@@ -16,7 +16,6 @@ const selectors = {
   body: '[data-test-sbomRemediation-body]',
   findTitle: '[data-test-sbomRemediation-findTitle]',
   findText: '[data-test-sbomRemediation-findText]',
-  detailsToggle: '[data-test-sbomRemediation-detailsToggle]',
   substeps: '[data-test-sbomRemediation-substeps]',
   upgradeText: '[data-test-sbomRemediation-upgradeText]',
   transitiveUpgrade: '[data-test-sbomRemediation-transitiveUpgrade]',
@@ -27,6 +26,7 @@ const selectors = {
   retestTitle: '[data-test-sbomRemediation-retestTitle]',
   retestRow: '[data-test-sbomRemediation-retestRow]',
   retestEntry: '[data-test-sbomRemediation-retestEntry]',
+  detailsToggle: '[data-test-sbomRemediation-detailsToggle]',
   retestCaller: '[data-test-sbomRemediation-retestCaller]',
   retestLib: '[data-test-sbomRemediation-retestLib]',
   coverage: '[data-test-sbomRemediation-coverage]',
@@ -38,10 +38,7 @@ const selectors = {
 };
 
 const expand = () => click(selectors.toggle);
-const expandDetails = async () => {
-  await expand();
-  await click(selectors.detailsToggle);
-};
+const expandDetails = expand;
 
 const TEMPLATE = hbs`
   <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation
@@ -212,7 +209,7 @@ module(
       );
     });
 
-    test('detailed steps are hidden until asked for', async function (assert) {
+    test('detailed steps sit flat in the expanded body, with no inner toggle', async function (assert) {
       this.audit = this.buildAudit(
         { exposure: FindingExposure.CONFIRMED },
         FIXED_AT('2.12.2')
@@ -220,26 +217,13 @@ module(
       this.component = this.buildComponent();
 
       await render(TEMPLATE);
+
+      assert.dom(selectors.substeps).doesNotExist();
+
       await expand();
 
-      assert
-        .dom(selectors.detailsToggle)
-        .hasAttribute('aria-expanded', 'false')
-        .hasText(t('sbomModule.remediation.showDetailedSteps'));
-      assert.dom(selectors.substeps).doesNotExist();
-      assert.dom(selectors.code('insight')).doesNotExist();
-
-      await click(selectors.detailsToggle);
-
-      assert
-        .dom(selectors.detailsToggle)
-        .hasAttribute('aria-expanded', 'true')
-        .hasText(t('sbomModule.remediation.hideDetailedSteps'));
       assert.dom(selectors.substeps).exists();
-
-      await click(selectors.detailsToggle);
-
-      assert.dom(selectors.substeps).doesNotExist();
+      assert.dom(selectors.detailsToggle).doesNotExist();
     });
 
     test('nothing is fabricated when the coordinate is missing', async function (assert) {
@@ -306,8 +290,6 @@ module(
       assert.dom(selectors.patchNote).exists();
 
       // The detailed walkthrough searches for the parent, not the component.
-      await click(selectors.detailsToggle);
-
       assert.dom(selectors.substep('a')).includesText('xmpcore');
       assert.dom(selectors.code('declared')).includesText('xmpcore:5.1.0');
     });

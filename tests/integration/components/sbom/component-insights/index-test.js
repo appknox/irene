@@ -61,6 +61,49 @@ module('Integration | Component | sbom/component-insights', function (hooks) {
       .doesNotExist();
   });
 
+  test('it shows the reachability counts in their own card, outside the details accordion', async function (assert) {
+    this.sbomComponent = this.owner
+      .lookup('service:store')
+      .createRecord('sbom-component', {
+        id: '2',
+        bomRef: 'maven::org.yaml:snakeyaml:1.30',
+        latestVersion: '2.6',
+        type: 'library',
+        version: '1.30',
+        name: 'snakeyaml',
+        reachability: {
+          verdict: 'reachable',
+          path_found_count: 7,
+          potential_count: 0,
+          no_path_found_count: 0,
+          unknown_count: 0,
+        },
+      });
+
+    this.server.get(
+      '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+      () => ({ count: 0, next: null, previous: null, results: [] })
+    );
+
+    await render(
+      hbs`<Sbom::ComponentInsights @sbomComponent={{this.sbomComponent}} />`
+    );
+
+    assert
+      .dom(
+        '[data-test-sbomComponentInsights-reachabilityOverview] [data-test-sbomScanDetails-componentDetails-reachabilityCountValue="path-found"]'
+      )
+      .hasText('7');
+
+    await click('[data-test-sbomComponentInsights-details-toggle]');
+
+    assert
+      .dom(
+        '[data-test-sbomComponentInsights-details-content] [data-test-sbomScanDetails-componentDetails-reachabilityValue]'
+      )
+      .doesNotExist();
+  });
+
   test('it omits the dangling separator when the group is empty', async function (assert) {
     this.sbomComponent = this.owner
       .lookup('service:store')

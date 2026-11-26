@@ -1160,35 +1160,37 @@ body {
   --sbom-scan-details-component-list-purl-font-family: var(--font-family-mono);
 
   // variables for sbom/scan-details/component-list/dependency-type
-  --sbom-scan-details-component-list-dependency-type-via-font-family: var(
-    --font-family-mono
-  );
 
   // variables for sbom/scan-details/component-list/reachability-counts
-  --sbom-scan-details-component-list-reachability-counts-reachable-background: var(
-    --error-main
+  --sbom-scan-details-component-list-reachability-counts-border-color: var(
+    --border-color-1
   );
-  --sbom-scan-details-component-list-reachability-counts-reachable-color: var(
+  --sbom-scan-details-component-list-reachability-counts-background: var(
     --common-white
   );
-  --sbom-scan-details-component-list-reachability-counts-potential-background: var(
-    --warn-light
+  --sbom-scan-details-component-list-reachability-counts-color: var(
+    --text-primary
   );
-  --sbom-scan-details-component-list-reachability-counts-potential-color: var(
-    --warn-dark
+  --sbom-scan-details-component-list-reachability-counts-strong-border-color: var(
+    --neutral-grey-300
   );
-  --sbom-scan-details-component-list-reachability-counts-inconclusive-background: var(
+  --sbom-scan-details-component-list-reachability-counts-strong-background: var(
     --neutral-grey-100
-  );
-  --sbom-scan-details-component-list-reachability-counts-inconclusive-color: var(
-    --text-secondary
-  );
-  --sbom-scan-details-component-list-reachability-counts-empty-color: var(
-    --text-disabled
   );
   --sbom-scan-details-component-list-reachability-counts-chip-border-radius: var(
     --border-radius-capsule
   );
+
+  // variables for sbom/reachability-pill
+  --sbom-reachability-pill-border-color: var(--border-color-1);
+  --sbom-reachability-pill-border-radius: var(--border-radius-capsule);
+  --sbom-reachability-pill-background-color: var(--common-white);
+  --sbom-reachability-pill-color: var(--text-primary);
+  --sbom-reachability-pill-dot-reachable-color: var(--error-main);
+  --sbom-reachability-pill-dot-potential-color: #e5a100;
+  --sbom-reachability-pill-dot-inconclusive-color: var(--neutral-grey-600);
+  --sbom-reachability-pill-dot-no-path-color: var(--success-main);
+  --sbom-reachability-pill-dot-unsupported-color: var(--neutral-grey-400);
 
   // variables for sbom/scan-details/component-list/type-header
   --sbom-scanDetails-componentList-typeHeader-background-color: var(
@@ -1552,6 +1554,12 @@ body {
   --sbom-component-insights-details-strip-background-color: var(
     --neutral-grey-100
   );
+  --sbom-component-insights-details-chip-border-color: var(--border-color-1);
+  --sbom-component-insights-details-chip-border-radius: var(
+    --border-radius-capsule
+  );
+  --sbom-component-insights-details-chip-background-color: var(--common-white);
+  --sbom-component-insights-details-chip-color: var(--text-secondary);
 
   // variables for sbom/component-insights/vulnerabilities
   --sbom-component-insights-vulnerabilities-section-border-color: var(

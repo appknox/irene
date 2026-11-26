@@ -107,10 +107,8 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperRemediation
   @tracked isExpanded = false;
 
   /** The long Android Studio walkthrough inside step 1. */
-  @tracked showDetailedSteps = false;
 
   bodyId = `sbom-remediation-body-${guidFor(this)}`;
-  substepsId = `sbom-remediation-substeps-${guidFor(this)}`;
 
   constructor(
     owner: unknown,
@@ -126,11 +124,6 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperRemediation
   @action
   toggleExpanded() {
     this.isExpanded = !this.isExpanded;
-  }
-
-  @action
-  toggleDetailedSteps() {
-    this.showDetailedSteps = !this.showDetailedSteps;
   }
 
   get reachability() {

@@ -38,7 +38,7 @@ module(
 
       assert
         .dom('[data-test-sbomComponentInsights-details-inlineSummary]')
-        .hasText('Direct · v2.9.1 · Latest 2.17.0 · Apache-2.0');
+        .hasText('Direct v2.9.1 Latest 2.17.0 Apache-2.0');
 
       assert
         .dom('[data-test-sbomComponentInsights-details-content]')

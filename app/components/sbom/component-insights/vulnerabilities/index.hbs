@@ -6,9 +6,11 @@
   data-test-sbomComponentInsights-vulnerabilities
   ...attributes
 >
-  <AkTypography @variant='h6' @fontWeight='medium'>
-    {{t 'vulnerabilities'}}
-  </AkTypography>
+  {{#if this.showHeadingOutside}}
+    <AkTypography @variant='h6' @fontWeight='medium'>
+      {{t 'vulnerabilities'}}
+    </AkTypography>
+  {{/if}}
 
   {{#if this.fetchVulnerabilities.isRunning}}
     <AkStack
@@ -67,7 +69,16 @@
     </AkStack>
   {{else}}
     <div local-class='section'>
-      <AkStack @width='full' @alignItems='center' local-class='pager-row'>
+      <AkStack
+        @width='full'
+        @alignItems='center'
+        @justifyContent='space-between'
+        local-class='pager-row'
+      >
+        <AkTypography @variant='h6' @fontWeight='medium'>
+          {{t 'vulnerabilities'}}
+        </AkTypography>
+
         <Sbom::ComponentInsights::Pager
           @index={{this.currentIndex}}
           @total={{this.total}}
@@ -147,6 +158,7 @@
               @exposure={{this.reachability.exposure}}
               @tooltip={{this.reachability.summary}}
               @compact={{true}}
+              @pill={{true}}
             />
           </AkStack>
 

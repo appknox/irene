@@ -25,23 +25,41 @@ export default class SbomComponentInsightsDetailsComponent extends Component<Sbo
 
   contentId = `sbom-insights-details-${guidFor(this)}`;
 
-  /** "Direct · v2.9.1 · Latest 2.17.0 · Apache-2.0", skipping unknown parts. */
-  get inlineSummary() {
+  /** Direct, version, latest and license as icon chips; unknown parts skipped. */
+  get summaryItems(): { key: string; icon: string; label: string }[] {
     const component = this.args.sbomComponent;
     const { cleanVersion, cleanLatestVersion } = component;
 
-    const parts = [
-      component.isDependency
-        ? this.intl.t('dependencyTypes.transitive')
-        : this.intl.t('dependencyTypes.direct'),
-      cleanVersion ? `v${cleanVersion}` : null,
-      cleanLatestVersion
-        ? `${this.intl.t('sbomModule.componentInsights.latest')} ${cleanLatestVersion}`
-        : null,
-      component.licenses?.length ? component.licenses.join(', ') : null,
+    const items = [
+      {
+        key: 'dependency',
+        icon: 'mdi:link-variant',
+        label: component.isDependency
+          ? this.intl.t('dependencyTypes.transitive')
+          : this.intl.t('dependencyTypes.direct'),
+      },
+      cleanVersion && {
+        key: 'version',
+        icon: 'mdi:tag-outline',
+        label: `v${cleanVersion}`,
+      },
+      cleanLatestVersion && {
+        key: 'latest',
+        icon: 'mdi:arrow-up-circle-outline',
+        label: `${this.intl.t('sbomModule.componentInsights.latest')} ${cleanLatestVersion}`,
+      },
+      component.licenses?.length && {
+        key: 'license',
+        icon: 'mdi:license',
+        label: component.licenses.join(', '),
+      },
     ];
 
-    return parts.filter(Boolean).join(' · ');
+    return items.filter(Boolean) as {
+      key: string;
+      icon: string;
+      label: string;
+    }[];
   }
 
   @action

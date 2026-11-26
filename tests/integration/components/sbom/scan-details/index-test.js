@@ -644,9 +644,13 @@ module('Integration | Component | sbom/scan-details', function (hooks) {
       assert.deepEqual(headerTexts(), [
         t('sbomModule.componentName'),
         t('status'),
-        t('sbomModule.reachabilityInsights.title'),
+        t('sbomModule.reachability.title'),
         t('dependencyType'),
       ]);
+
+      assert
+        .dom('[data-test-sbom-scanDetails-reachabilityHeader-icon]')
+        .doesNotExist();
 
       assert
         .dom('[data-test-sbomScanDetails-switch-treeViewButton]')

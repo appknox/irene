@@ -40,6 +40,16 @@
           </:tooltipContent>
         </AkTooltip>
       </AkStack>
+
+      {{#if this.showExplanation}}
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{this.explanation}}
+        </AkTypography>
+      {{/if}}
     </AkStack>
 
     <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::CallPath
@@ -61,7 +71,7 @@
         <AkTypography
           local-class='section-label'
           data-test-sbomComponentVulnerabilities-detailReachabilityReasoningLabel
-          @variant='body3'
+          @variant='body2'
           @color='textSecondary'
           @fontWeight='bold'
         >
@@ -76,13 +86,10 @@
         >
           {{~#each this.reasoningSegments as |segment|~}}
             {{~#if segment.isVerdict~}}
-              <span local-class='inline-chip'><AkChip
+              <span local-class='inline-chip'><Sbom::ReachabilityPill
                   data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict
-                  @variant={{segment.variant}}
-                  @size='small'
-                  @color={{segment.color}}
-                  @fontWeight={{segment.fontWeight}}
                   @label={{segment.text}}
+                  @tone={{segment.tone}}
                 /></span>
             {{~else~}}
               {{segment.text}}

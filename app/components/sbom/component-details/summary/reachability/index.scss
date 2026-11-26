@@ -28,3 +28,8 @@
     --sbom-component-details-summary-reachability-indicator-unknown-color
   );
 }
+
+// A verdict with no findings stays listed but recedes.
+.count-muted {
+  opacity: 0.5;
+}

@@ -5,15 +5,23 @@
     data-test-sbomReachability-tooltip
   >
     <:default>
-      <AkChip
-        local-class='reachability-chip'
-        data-test-sbomReachability-status
-        @variant={{this.variant}}
-        @fontWeight={{this.fontWeight}}
-        @size='small'
-        @color={{this.color}}
-        @label={{this.label}}
-      />
+      {{#if @pill}}
+        <Sbom::ReachabilityPill
+          data-test-sbomReachability-status
+          @label={{this.label}}
+          @tone={{this.tone}}
+        />
+      {{else}}
+        <AkChip
+          local-class='reachability-chip'
+          data-test-sbomReachability-status
+          @variant={{this.variant}}
+          @fontWeight={{this.fontWeight}}
+          @size='small'
+          @color={{this.color}}
+          @label={{this.label}}
+        />
+      {{/if}}
     </:default>
 
     <:tooltipContent>

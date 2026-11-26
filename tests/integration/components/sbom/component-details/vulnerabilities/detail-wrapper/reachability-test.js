@@ -263,6 +263,9 @@ module(
       // The explanation line already carries the whole story, so the empty
       // target box and the redundant blocker chip stay hidden.
       assert.dom(selectors.root).exists();
+      assert
+        .dom(explanationSelector)
+        .hasText(t('sbomModule.reachability.explanation.inconclusive'));
       assert.dom(selectors.blockers).doesNotExist();
       assert.dom(selectors.blocker('TARGET_DATA_MISSING')).doesNotExist();
     });
@@ -426,7 +429,7 @@ module(
         .dom(
           '[data-test-sbomComponentVulnerabilities-detailReachabilityExplanation]'
         )
-        .doesNotExist();
+        .hasText(summary);
     });
 
     // ─── Help tooltip ────────────────────────────────────────────────────────
@@ -514,10 +517,10 @@ module(
         .dom(selectors.reasoningVerdict)
         .hasText(t('sbomModule.reachability.pathFound'));
 
-      // The filled Reachable badge is bold, like Sbom::ReachabilityStatus.
+      // The neutral pill carries the verdict hue on its dot.
       assert
-        .dom(`${selectors.reasoningVerdict} [data-test-ak-typography]`)
-        .hasClass(/ak-typography-font-weight-bold/);
+        .dom(selectors.reasoningVerdict)
+        .hasAttribute('data-tone', 'reachable');
 
       assert
         .dom(selectors.reasoningText)
@@ -672,7 +675,7 @@ module(
     });
 
     // ─── App-named explanation ───────────────────────────────────────────────
-    test('it names the app from its sbom project in the explanation', async function (assert) {
+    test('it hides the explanation line for a decided verdict', async function (assert) {
       const store = this.owner.lookup('service:store');
       const sbProject = store.createRecord('sbom-project', { name: 'LeafPic' });
       const sbFile = store.createRecord('sbom-file', { sbProject });
@@ -692,7 +695,6 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(explanationSelector).doesNotExist();
       assert.dom(explanationSelector).doesNotExist();
     });
 
@@ -738,7 +740,9 @@ module(
 
       await render(TEMPLATE);
 
-      assert.dom(explanationSelector).doesNotExist();
+      assert
+        .dom(explanationSelector)
+        .hasText(t('sbomModule.reachability.explanation.inconclusive'));
     });
 
     // ─── Inline verdict chips ────────────────────────────────────────────────

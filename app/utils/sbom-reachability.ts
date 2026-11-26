@@ -187,6 +187,28 @@ export function reachabilityChipColor(verdict?: string | null): AkChipColor {
   return 'default';
 }
 
+export type ReachabilityTone =
+  'reachable' | 'potential' | 'inconclusive' | 'no-path' | 'unsupported';
+
+/** Colour family of a verdict, for the dot on the neutral pill. */
+export function reachabilityTone(verdict?: string | null): ReachabilityTone {
+  if (isPathFoundVerdict(verdict)) {
+    return 'reachable';
+  }
+
+  if (POTENTIAL_VERDICTS.has(verdict ?? '')) {
+    return 'potential';
+  }
+
+  if (NO_PATH_VERDICTS.has(verdict ?? '')) {
+    return 'no-path';
+  }
+
+  return verdict === ReachabilityVerdict.UNSUPPORTED
+    ? 'unsupported'
+    : 'inconclusive';
+}
+
 export type ReachabilityChipVariant = 'filled' | 'semi-filled';
 
 /**

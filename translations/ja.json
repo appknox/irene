@@ -2429,6 +2429,7 @@
       "outdated": "既知の脆弱性はありません。このコンポーネントは古いバージョンです: {current} → {latest}。"
     },
     "componentInsights": {
+      "reachabilityOverview": "到達可能性の概要",
       "title": "到達可能性インサイト",
       "openGithubAdvisory": "GitHub セキュリティアドバイザリを開く",
       "openAdvisory": "アドバイザリを開く",
@@ -2457,7 +2458,7 @@
     "reachability": {
       "title": "到達可能性",
       "detailsTitle": "到達可能性の詳細",
-      "viewInsight": "到達可能性インサイトを表示 →",
+      "viewInsight": "到達可能性インサイトを表示",
       "pathFound": "到達可能",
       "potential": "到達する可能性あり",
       "noPathFound": "到達不可",
@@ -2578,7 +2579,6 @@
       "tab": "完全な分析"
     },
     "searchComponents": "コンポーネントを検索",
-    "viaComponent": "{component} 経由",
     "remediation": {
       "title": "修復",
       "transitiveUpgrade": "{parent} が取り込んでいるため、{parent} を編集せずにバージョンを固定してください。",
@@ -2609,7 +2609,7 @@
       "cocoapods": {
         "caution": "別の pod が異なるバージョンを必要とする場合は、その pod を更新してください。"
       },
-      "action": "{component} {current} をアップグレード →",
+      "action": "{component} {current} をアップグレード",
       "actionNoCurrent": "{component} のアップグレード先:",
       "steps": {
         "find": "場所を確認",
@@ -2623,8 +2623,6 @@
         "other": "パッケージマニフェストで {component} を探してください。",
         "transitive": "{component} はビルドファイルには記載されていません。{parent} 経由で取り込まれています。"
       },
-      "showDetailedSteps": "詳細な手順を表示",
-      "hideDetailedSteps": "詳細な手順を隠す",
       "upgradeBody": "{component} を {version} に変更します。"
     }
   },

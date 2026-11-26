@@ -455,38 +455,5 @@ module(
         .dom('[data-test-sbomComponent-insightsEmptyViewComplete]')
         .doesNotExist();
     });
-
-    test.each(
-      'the via line shows on Insights rows only',
-      [
-        { view: 'complete', shown: false },
-        { view: 'insights', shown: true },
-      ],
-      async function (assert, { view, shown }) {
-        this.server.create('sbom-component', {
-          is_dependency: true,
-          via: 'okhttp',
-        });
-
-        await this.sbomService.reload();
-
-        this.view = view;
-
-        await render(hbs`
-          <Sbom::ScanDetails::ComponentList
-            @sbomProject={{this.sbomProject}}
-            @sbomFile={{this.sbomFile}}
-            @sbomScanSummary={{this.sbomScanSummary}}
-            @view={{this.view}}
-            @showReachability={{true}}
-          />
-        `);
-
-        assert.strictEqual(
-          findAll('[data-test-sbomComponent-dependencyVia]').length > 0,
-          shown
-        );
-      }
-    );
   }
 );

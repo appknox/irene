@@ -32,23 +32,23 @@
         >{{this.scanStatusReason}}</div>
       </:tooltipContent>
     </AkTooltip>
-  {{else if this.hasSummary}}
-    <AkStack @spacing='0.5' @flexWrap='wrap' @alignItems='center'>
-      {{#each this.counts as |item|}}
+  {{else if this.hasCounts}}
+    <AkStack @spacing='0.5' @flexWrap='nowrap' @alignItems='center'>
+      {{#each this.visibleCounts as |item|}}
         <div
-          local-class='count-chip count-chip-{{item.key}}
-            {{unless item.count "count-chip-empty"}}'
+          local-class='count-chip
+            {{if item.strong "count-chip-strong"}}'
           data-test-sbomComponent-reachabilityCount='{{item.key}}'
         >
           <span local-class='count-dot count-dot-{{item.key}}'></span>
 
-          <AkTypography @variant='body3' @color='inherit'>
+          <AkTypography @variant='body2' @color='inherit'>
             {{item.label}}
           </AkTypography>
 
           <AkTypography
             local-class='count-value'
-            @variant='body3'
+            @variant='body2'
             @color='inherit'
             @fontWeight='bold'
             data-test-sbomComponent-reachabilityCountValue='{{item.key}}'
@@ -57,6 +57,29 @@
           </AkTypography>
         </div>
       {{/each}}
+
+      {{#if this.hasHidden}}
+        <AkTooltip @arrow={{true}} @placement='top'>
+          <:default>
+            <div
+              local-class='count-chip'
+              data-test-sbomComponent-reachabilityCountMore
+            >
+              <AkTypography
+                @variant='body3'
+                @color='inherit'
+                @fontWeight='bold'
+              >
+                {{this.hiddenLabel}}
+              </AkTypography>
+            </div>
+          </:default>
+
+          <:tooltipContent>
+            <div {{style white-space='pre-line'}}>{{this.hiddenTooltip}}</div>
+          </:tooltipContent>
+        </AkTooltip>
+      {{/if}}
     </AkStack>
   {{else}}
     <AkTypography

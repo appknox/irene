@@ -42,10 +42,10 @@ module(
       assert
         .dom(selectors.chip)
         .hasText(t('sbomModule.reachability.potential'))
-        .hasClass(/ak-chip-color-warn/);
+        .hasAttribute('data-tone', 'potential');
     });
 
-    test('a reachable exposure renders the solid error chip', async function (assert) {
+    test('a reachable exposure renders the reachable pill', async function (assert) {
       this.set('audit', {
         reachability: {
           verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
@@ -58,8 +58,7 @@ module(
       assert
         .dom(selectors.chip)
         .hasText(t('sbomModule.reachability.pathFound'))
-        .hasClass(/ak-chip-color-error/)
-        .hasClass(/ak-chip-variant-filled/);
+        .hasAttribute('data-tone', 'reachable');
     });
 
     test('without exposure it falls back to the verdict', async function (assert) {

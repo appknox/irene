@@ -2426,6 +2426,7 @@
       "outdated": "No known vulnerabilities. This component is outdated: {current} → {latest}."
     },
     "componentInsights": {
+      "reachabilityOverview": "Reachability Overview",
       "title": "Reachability Insights",
       "openGithubAdvisory": "Open the GitHub Security Advisory",
       "openAdvisory": "Open the advisory",
@@ -2454,7 +2455,7 @@
     "reachability": {
       "title": "Reachability",
       "detailsTitle": "Reachability Details",
-      "viewInsight": "View reachability insight →",
+      "viewInsight": "View reachability insight",
       "pathFound": "Reachable",
       "potential": "Potentially reachable",
       "noPathFound": "Not reachable",
@@ -2578,7 +2579,6 @@
       "tab": "Complete analysis"
     },
     "searchComponents": "Search components",
-    "viaComponent": "via {component}",
     "remediation": {
       "title": "Remediation",
       "transitiveUpgrade": "Because {parent} brings it in, pin the version instead of editing {parent}.",
@@ -2609,7 +2609,7 @@
       "cocoapods": {
         "caution": "If another pod needs a different version, update that pod instead."
       },
-      "action": "Upgrade {component} {current} →",
+      "action": "Upgrade {component} {current}",
       "actionNoCurrent": "Upgrade {component} to",
       "steps": {
         "find": "Find it",
@@ -2623,8 +2623,6 @@
         "other": "Look for {component} in your package manifest.",
         "transitive": "You won't find {component} in your build file. It comes in through {parent}."
       },
-      "showDetailedSteps": "Show detailed steps",
-      "hideDetailedSteps": "Hide detailed steps",
       "upgradeBody": "Change {component} to {version}."
     }
   },

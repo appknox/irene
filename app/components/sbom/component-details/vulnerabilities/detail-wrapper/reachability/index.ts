@@ -10,9 +10,11 @@ import {
   reachabilityChipVariant,
   reachabilityExplanationKey,
   reachabilityLabelKey,
+  reachabilityTone,
   reachabilityNamedExplanationKey,
   shouldShowReachabilityDetail,
   tokenizeReasoning,
+  type ReachabilityTone,
 } from 'irene/utils/sbom-reachability';
 
 export interface SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilitySignature {
@@ -34,6 +36,7 @@ type ReasoningSegmentView = {
   variant: ReturnType<typeof reachabilityChipVariant>;
   /** Filled (Reachable) badges are bold everywhere, as in ReachabilityStatus. */
   fontWeight: 'bold' | 'regular';
+  tone: ReachabilityTone;
 };
 
 type ReachabilityBlocker = {
@@ -84,6 +87,20 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
   }
 
   /**
+   * Undecided verdicts have no path story — no witness, often no targets —
+   * so the summary line is the only place the reason shows. Decided
+   * verdicts already explain themselves through the call path and chips.
+   */
+  get showExplanation() {
+    const verdict = this.reachability?.verdict;
+
+    return (
+      verdict === ReachabilityVerdict.UNKNOWN ||
+      verdict === ReachabilityVerdict.UNSUPPORTED
+    );
+  }
+
+  /**
    * The target whose sections belong to the displayed path. The backend
    * promotes the first witness-bearing target, so prefer that one.
    */
@@ -129,7 +146,7 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
    * Rendered as text and components only — never as HTML.
    */
   get reasoningSegments(): ReasoningSegmentView[] {
-    return tokenizeReasoning(this.reasoning).map((segment) => {
+    const segments = tokenizeReasoning(this.reasoning).map((segment) => {
       if (segment.kind !== 'verdict') {
         return {
           isVerdict: false,
@@ -137,6 +154,7 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
           color: 'default',
           variant: 'semi-filled',
           fontWeight: 'regular',
+          tone: 'inconclusive',
         };
       }
 
@@ -148,8 +166,23 @@ export default class SbomComponentDetailsVulnerabilitiesDetailWrapperReachabilit
         color: reachabilityChipColor(segment.verdict),
         variant,
         fontWeight: variant === 'filled' ? 'bold' : 'regular',
+        tone: reachabilityTone(segment.verdict),
       };
     });
+
+    // "...the finding is [Reachable]." reads cleaner without the stop after a pill.
+    const last = segments.at(-1);
+
+    if (
+      last &&
+      !last.isVerdict &&
+      last.text.trim() === '.' &&
+      segments.at(-2)?.isVerdict
+    ) {
+      segments.pop();
+    }
+
+    return segments;
   }
 
   get blockers(): ReachabilityBlocker[] {

@@ -1,0 +1,43 @@
+@mixin dot-color($name) {
+  background: var(--sbom-reachability-pill-dot-#{$name}-color);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.15em 0.8em;
+  border: 1px solid var(--sbom-reachability-pill-border-color);
+  border-radius: var(--sbom-reachability-pill-border-radius);
+  background-color: var(--sbom-reachability-pill-background-color);
+  color: var(--sbom-reachability-pill-color);
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+}
+
+.dot-reachable {
+  @include dot-color(reachable);
+}
+
+.dot-potential {
+  @include dot-color(potential);
+}
+
+.dot-inconclusive {
+  @include dot-color(inconclusive);
+}
+
+.dot-no-path {
+  @include dot-color(no-path);
+}
+
+.dot-unsupported {
+  @include dot-color(unsupported);
+}

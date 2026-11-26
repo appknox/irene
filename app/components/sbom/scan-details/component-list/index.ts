@@ -185,10 +185,11 @@ export default class SbomScanDetailsComponentListComponent extends Component<Sbo
       },
       this.statusColumn,
       {
-        name: this.intl.t('sbomModule.reachabilityInsights.title'),
-        // Per-advisory counts rather than one rolled-up chip.
+        name: this.intl.t('sbomModule.reachability.title'),
+        // Per-advisory counts rather than one rolled-up chip. Display-only:
+        // the insights list is already narrowed to reachability findings, so
+        // the header carries no filter.
         component: 'sbom/scan-details/component-list/reachability-counts',
-        headerComponent: 'sbom/scan-details/component-list/reachability-header',
       },
       this.dependencyTypeColumn,
     ];

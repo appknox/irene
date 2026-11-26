@@ -12,10 +12,13 @@ export interface SbomScanDetailsComponentListReachabilityCountsSignature {
   };
 }
 
+const MAX_VISIBLE = 1;
+
 type ReachabilityCount = {
   key: 'reachable' | 'potential' | 'inconclusive';
   label: string;
   count: number;
+  strong?: boolean;
 };
 
 export default class SbomScanDetailsComponentListReachabilityCountsComponent extends Component<SbomScanDetailsComponentListReachabilityCountsSignature> {
@@ -58,15 +61,45 @@ export default class SbomScanDetailsComponentListReachabilityCountsComponent ext
     return this.sbFile?.reachabilityError || null;
   }
 
-  get hasSummary() {
-    return Boolean(this.summary);
-  }
-
   /**
-   * One chip per outcome, always all three, so the columns line up down the
-   * table and a zero reads as "none of these" rather than "not analysed".
+   * Only the outcomes that were found, strongest first and emphasised; zeros
+   * are left out so a row shows what matters instead of a column of zeros.
    */
   get counts(): ReachabilityCount[] {
+    return this.allCounts
+      .filter((item) => item.count > 0)
+      .map((item, index) => ({ ...item, strong: index === 0 }));
+  }
+
+  /** Only the strongest outcome stays in the row. */
+  get visibleCounts() {
+    return this.counts.slice(0, MAX_VISIBLE);
+  }
+
+  /** Everything beyond them folds into one "+N" marker. */
+  get hiddenCounts() {
+    return this.counts.slice(MAX_VISIBLE);
+  }
+
+  get hasHidden() {
+    return this.hiddenCounts.length > 0;
+  }
+
+  get hiddenLabel() {
+    return `+${this.hiddenCounts.length}`;
+  }
+
+  get hiddenTooltip() {
+    return this.hiddenCounts
+      .map((item) => `${item.label} ${item.count}`)
+      .join('\n');
+  }
+
+  get hasCounts() {
+    return this.counts.length > 0;
+  }
+
+  private get allCounts(): ReachabilityCount[] {
     const summary = this.summary;
 
     return [

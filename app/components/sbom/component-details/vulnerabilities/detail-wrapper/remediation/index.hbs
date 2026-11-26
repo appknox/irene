@@ -99,143 +99,98 @@
             {{/if}}
 
             {{#if this.hasDetailedSteps}}
-              <button
-                type='button'
-                local-class='details-toggle'
-                aria-expanded='{{if this.showDetailedSteps "true" "false"}}'
-                aria-controls={{if this.showDetailedSteps this.substepsId}}
-                data-test-sbomRemediation-detailsToggle
-                {{on 'click' this.toggleDetailedSteps}}
-              >
-                <AkIcon
-                  @iconName={{if
-                    this.showDetailedSteps
-                    'arrow-drop-down'
-                    'chevron-right'
-                  }}
-                  @size='small'
-                  @color='primary'
-                />
+              <ol local-class='substeps' data-test-sbomRemediation-substeps>
+                <li local-class='substep' data-test-sbomRemediation-substep='a'>
+                  <span local-class='substep-letter'>a</span>
+                  <div local-class='substep-body'>
+                    <AkTypography @variant='body2' @fontWeight='bold'>
+                      {{t
+                        'sbomModule.remediation.maven.buildFileTitle'
+                        target=this.searchTarget
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
 
-                <AkTypography @tag='span' @variant='body2' @color='primary'>
-                  {{if
-                    this.showDetailedSteps
-                    (t 'sbomModule.remediation.hideDetailedSteps')
-                    (t 'sbomModule.remediation.showDetailedSteps')
-                  }}
-                </AkTypography>
-              </button>
+                    <AkTypography @variant='body2'>
+                      {{t
+                        'sbomModule.remediation.maven.buildFileBody'
+                        target=this.searchTarget
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
 
-              {{#if this.showDetailedSteps}}
-                <ol
-                  id={{this.substepsId}}
-                  local-class='substeps'
-                  data-test-sbomRemediation-substeps
-                >
-                  <li
-                    local-class='substep'
-                    data-test-sbomRemediation-substep='a'
-                  >
-                    <span local-class='substep-letter'>a</span>
-                    <div local-class='substep-body'>
-                      <AkTypography @variant='body2' @fontWeight='bold'>
-                        {{t
-                          'sbomModule.remediation.maven.buildFileTitle'
-                          target=this.searchTarget
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
+                    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
+                      @label='app/build.gradle.kts'
+                      @code={{this.declaredLine}}
+                      @testId='declared'
+                    />
+                  </div>
+                </li>
 
-                      <AkTypography @variant='body2'>
-                        {{t
-                          'sbomModule.remediation.maven.buildFileBody'
-                          target=this.searchTarget
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
+                <li local-class='substep' data-test-sbomRemediation-substep='b'>
+                  <span local-class='substep-letter'>b</span>
+                  <div local-class='substep-body'>
+                    <AkTypography @variant='body2' @fontWeight='bold'>
+                      {{t 'sbomModule.remediation.maven.catalogTitle'}}
+                    </AkTypography>
 
-                      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
-                        @label='app/build.gradle.kts'
-                        @code={{this.declaredLine}}
-                        @testId='declared'
-                      />
-                    </div>
-                  </li>
+                    <AkTypography @variant='body2'>
+                      {{t
+                        'sbomModule.remediation.maven.catalogBody'
+                        target=this.searchTarget
+                        alias=this.catalogAlias
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
+                  </div>
+                </li>
 
-                  <li
-                    local-class='substep'
-                    data-test-sbomRemediation-substep='b'
-                  >
-                    <span local-class='substep-letter'>b</span>
-                    <div local-class='substep-body'>
-                      <AkTypography @variant='body2' @fontWeight='bold'>
-                        {{t 'sbomModule.remediation.maven.catalogTitle'}}
-                      </AkTypography>
+                <li local-class='substep' data-test-sbomRemediation-substep='c'>
+                  <span local-class='substep-letter'>c</span>
+                  <div local-class='substep-body'>
+                    <AkTypography @variant='body2' @fontWeight='bold'>
+                      {{t 'sbomModule.remediation.maven.confirmTitle'}}
+                    </AkTypography>
 
-                      <AkTypography @variant='body2'>
-                        {{t
-                          'sbomModule.remediation.maven.catalogBody'
-                          target=this.searchTarget
-                          alias=this.catalogAlias
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
-                    </div>
-                  </li>
+                    <AkTypography @variant='body2'>
+                      {{t
+                        'sbomModule.remediation.maven.confirmBody'
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
 
-                  <li
-                    local-class='substep'
-                    data-test-sbomRemediation-substep='c'
-                  >
-                    <span local-class='substep-letter'>c</span>
-                    <div local-class='substep-body'>
-                      <AkTypography @variant='body2' @fontWeight='bold'>
-                        {{t 'sbomModule.remediation.maven.confirmTitle'}}
-                      </AkTypography>
+                    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
+                      @label='Terminal'
+                      @code={{this.insightCommand}}
+                      @testId='insight'
+                    />
 
-                      <AkTypography @variant='body2'>
-                        {{t
-                          'sbomModule.remediation.maven.confirmBody'
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
+                    <AkTypography @variant='body3' @color='textSecondary'>
+                      {{t
+                        'sbomModule.remediation.maven.windowsNote'
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
+                  </div>
+                </li>
 
-                      <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Remediation::CodeBlock
-                        @label='Terminal'
-                        @code={{this.insightCommand}}
-                        @testId='insight'
-                      />
+                <li local-class='substep' data-test-sbomRemediation-substep='d'>
+                  <span local-class='substep-letter'>d</span>
+                  <div local-class='substep-body'>
+                    <AkTypography @variant='body2' @fontWeight='bold'>
+                      {{t 'sbomModule.remediation.maven.usagesTitle'}}
+                    </AkTypography>
 
-                      <AkTypography @variant='body3' @color='textSecondary'>
-                        {{t
-                          'sbomModule.remediation.maven.windowsNote'
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
-                    </div>
-                  </li>
-
-                  <li
-                    local-class='substep'
-                    data-test-sbomRemediation-substep='d'
-                  >
-                    <span local-class='substep-letter'>d</span>
-                    <div local-class='substep-body'>
-                      <AkTypography @variant='body2' @fontWeight='bold'>
-                        {{t 'sbomModule.remediation.maven.usagesTitle'}}
-                      </AkTypography>
-
-                      <AkTypography @variant='body2'>
-                        {{t
-                          'sbomModule.remediation.maven.usagesBody'
-                          pkg=this.importPackage
-                          htmlSafe=true
-                        }}
-                      </AkTypography>
-                    </div>
-                  </li>
-                </ol>
-              {{/if}}
+                    <AkTypography @variant='body2'>
+                      {{t
+                        'sbomModule.remediation.maven.usagesBody'
+                        pkg=this.importPackage
+                        htmlSafe=true
+                      }}
+                    </AkTypography>
+                  </div>
+                </li>
+              </ol>
             {{/if}}
           </AkStack>
         </div>

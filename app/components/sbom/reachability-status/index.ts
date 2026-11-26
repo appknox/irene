@@ -7,6 +7,7 @@ import {
   reachabilityChipVariant,
   reachabilityExplanationKey,
   reachabilityLabelKey,
+  reachabilityTone,
   shouldShowReachabilityChip,
   verdictForExposure,
 } from 'irene/utils/sbom-reachability';
@@ -33,6 +34,8 @@ export interface SbomReachabilityStatusSignature {
      * chip explains *why* it is inconclusive instead of stating that it is.
      */
     tooltip?: string | null;
+    /** Neutral labelled pill (dot carries the hue) instead of the coloured chip. */
+    pill?: boolean;
   };
   Element: HTMLElement;
 }
@@ -64,6 +67,10 @@ export default class SbomReachabilityStatusComponent extends Component<SbomReach
     return (
       this.args.tooltip || this.intl.t(reachabilityExplanationKey(this.verdict))
     );
+  }
+
+  get tone() {
+    return reachabilityTone(this.verdict);
   }
 
   get color(): AkChipColor {
