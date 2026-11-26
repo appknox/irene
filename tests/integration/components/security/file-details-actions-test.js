@@ -6,6 +6,7 @@ import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { selectChoose } from 'ember-power-select/test-support';
+import { Response } from 'miragejs';
 
 import ENUMS from 'irene/enums';
 import styles from 'irene/components/ak-select/index.scss';
@@ -15,6 +16,19 @@ const AkSelectClasses = {
   trigger: styles['ak-select-trigger'],
   triggerError: styles['ak-select-trigger-error'],
 };
+
+class NotificationsStub extends Service {
+  errorMsg = null;
+  successMsg = null;
+
+  error(msg) {
+    this.errorMsg = msg;
+  }
+
+  success(msg) {
+    this.successMsg = msg;
+  }
+}
 
 class WindowStub extends Service {
   url = null;
@@ -318,6 +332,62 @@ module(
         .dom(manualScanSelectOptions[selectedManualScanIdx])
         .hasAria('selected', 'true')
         .hasText(manualScanStatusLabels[selectedManualScanIdx]);
+    });
+    module('manual scan completion', function (hooks) {
+      const MANUAL_SELECT_TRIGGER = `[data-test-securityFileDetailsActions-manualScan-select] .${AkSelectClasses.trigger}`;
+
+      hooks.beforeEach(function () {
+        this.owner.register('service:notifications', NotificationsStub);
+
+        const store = this.owner.lookup('service:store');
+
+        this.notify = this.owner.lookup('service:notifications');
+
+        // Loaded as In Progress: a refused save rolls back to the loaded value.
+        const secFile = this.server.schema['security/files'].find('1');
+
+        secFile.update({ manual: ENUMS.MANUAL.ASSESSING });
+        store.push(store.normalize('security/file', secFile.toJSON()));
+      });
+
+      test('it marks the scan Completed with no manual scan details saved', async function (assert) {
+        let sentStatus = null;
+
+        this.server.put('/hudson-api/files/:id', (schema, req) => {
+          sentStatus = JSON.parse(req.requestBody).manual;
+
+          return {
+            ...schema['security/files'].find(`${req.params.id}`)?.toJSON(),
+            manual: sentStatus,
+          };
+        });
+
+        await render(
+          hbs`<Security::FileDetailsActions @file={{this.secFileModel}} />`
+        );
+
+        await selectChoose(MANUAL_SELECT_TRIGGER, 'Completed');
+
+        assert.strictEqual(Number(sentStatus), ENUMS.MANUAL.DONE);
+        assert.dom(MANUAL_SELECT_TRIGGER).hasText('Completed');
+        assert.strictEqual(this.notify.errorMsg, null);
+      });
+
+      test('it puts the select back when the server refuses the status', async function (assert) {
+        this.server.put(
+          '/hudson-api/files/:id',
+          () => new Response(400, {}, { manual: ['Manual scan is not done'] })
+        );
+
+        await render(
+          hbs`<Security::FileDetailsActions @file={{this.secFileModel}} />`
+        );
+
+        await selectChoose(MANUAL_SELECT_TRIGGER, 'Completed');
+
+        assert.ok(this.notify.errorMsg, 'shows why it failed');
+        assert.dom(MANUAL_SELECT_TRIGGER).hasText('In Progress');
+      });
     });
   }
 );

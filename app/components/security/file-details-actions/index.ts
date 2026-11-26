@@ -182,6 +182,9 @@ export default class FileDetailsActionsComponent extends Component<FileDetailsAc
 
       this.notifications.success('Manual Scan Status Updated');
     } catch (err) {
+      // Put the select back on the saved status when the server refuses.
+      this.file.rollbackAttributes();
+
       this.notifications.error(parseError(err, this.tPleaseTryAgain));
     }
   });

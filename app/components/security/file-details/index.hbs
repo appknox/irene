@@ -3,5 +3,11 @@
 
   <Security::FileDetailsActions @file={{@file}} />
 
+  {{#if this.isManualScanAvailable}}
+    {{#if this.manualScanDetail}}
+      <Security::ManualScanDetails @detail={{this.manualScanDetail}} />
+    {{/if}}
+  {{/if}}
+
   <Security::AnalysisList @file={{@file}} />
 </AkStack>

@@ -1,0 +1,98 @@
+<AkStack
+  @direction='column'
+  @spacing='2'
+  @width='full'
+  local-class='section-wrapper'
+  class='p-2 my-2'
+  data-test-securityManualScanDetails-container
+>
+  <AkStack
+    @alignItems='flex-start'
+    @justifyContent='space-between'
+    @spacing='2'
+    @width='full'
+  >
+    <AkStack @direction='column' @spacing='0.5'>
+      <AkTypography @variant='h5' data-test-securityManualScanDetails-title>
+        {{t 'securityManualScanDetails.title'}}
+      </AkTypography>
+
+      <AkTypography @variant='body2' @color='textSecondary'>
+        {{t 'securityManualScanDetails.description'}}
+      </AkTypography>
+    </AkStack>
+  </AkStack>
+
+  <div local-class='fields-grid'>
+    <Security::ManualScanDetails::NameList
+      @label={{t 'securityManualScanDetails.testers'}}
+      @names={{this.testers}}
+      @maxNames={{this.maxNames}}
+      @maxLength={{this.maxNameLength}}
+      @onChange={{this.setTesters}}
+      data-test-securityManualScanDetails-testers
+    />
+
+    <Security::ManualScanDetails::NameList
+      @label={{t 'securityManualScanDetails.reviewers'}}
+      @names={{this.reviewers}}
+      @maxNames={{this.maxNames}}
+      @maxLength={{this.maxNameLength}}
+      @onChange={{this.setReviewers}}
+      data-test-securityManualScanDetails-reviewers
+    />
+
+    <Security::ManualScanDetails::TextArea
+      @label={{t 'securityManualScanDetails.coveredScope'}}
+      @value={{this.coveredScope}}
+      @placeholder={{t 'securityManualScanDetails.coveredScopePlaceholder'}}
+      @maxLength={{this.maxScopeLength}}
+      data-test-securityManualScanDetails-coveredScope
+    />
+
+    <Security::ManualScanDetails::TextArea
+      @label={{t 'securityManualScanDetails.exemptedScope'}}
+      @value={{this.exemptedScope}}
+      @placeholder={{t 'securityManualScanDetails.exemptedScopePlaceholder'}}
+      @maxLength={{this.maxScopeLength}}
+      data-test-securityManualScanDetails-exemptedScope
+    />
+
+    <Security::ManualScanDetails::TextArea
+      @label={{t 'securityManualScanDetails.coveredApiEndpoints'}}
+      @value={{this.coveredApiEndpointsText}}
+      @placeholder={{t
+        'securityManualScanDetails.coveredApiEndpointsPlaceholder'
+      }}
+      @helperText={{this.coveredEndpointsHelperText}}
+      @maxLength={{this.maxEndpointsTextLength}}
+      @monospace={{true}}
+      @rows={{6}}
+      data-test-securityManualScanDetails-coveredApiEndpoints
+    />
+
+    <Security::ManualScanDetails::TextArea
+      @label={{t 'securityManualScanDetails.exemptedApiEndpoints'}}
+      @value={{this.exemptedApiEndpointsText}}
+      @placeholder={{t
+        'securityManualScanDetails.exemptedApiEndpointsPlaceholder'
+      }}
+      @helperText={{this.exemptedEndpointsHelperText}}
+      @maxLength={{this.maxEndpointsTextLength}}
+      @monospace={{true}}
+      @rows={{6}}
+      data-test-securityManualScanDetails-exemptedApiEndpoints
+    />
+  </div>
+
+  <AkStack @alignItems='center' @spacing='1.5'>
+    <AkButton
+      @loading={{this.saveDetails.isRunning}}
+      @disabled={{not this.hasChanges}}
+      {{on 'click' (perform this.saveDetails)}}
+      data-test-securityManualScanDetails-saveBtn
+    >
+      {{t 'save'}}
+    </AkButton>
+  </AkStack>
+</AkStack>

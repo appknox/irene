@@ -2539,6 +2539,25 @@
   },
   "securityDashboard": "Security Dashboard",
   "securityDashboardDesc": "For security researchers to perform manual assessments (PT)",
+  "securityManualScanDetails": {
+    "coveredApiEndpoints": "Covered API endpoints",
+    "coveredApiEndpointsPlaceholder": "/api/v1/login\n/api/v1/payments",
+    "coveredScope": "Covered scope",
+    "coveredScopePlaceholder": "Describe what the manual assessment covered",
+    "description": "Record who assessed and reviewed this file and what the manual assessment covered. Every field is optional: whatever is filled in is printed in the report once the manual scan is marked as completed.",
+    "endpointCount": "{count, plural, =0 {No endpoints} one {# endpoint} other {# endpoints}}",
+    "endpointsHelper": "One endpoint per line",
+    "exemptedApiEndpoints": "Exempted API endpoints",
+    "exemptedApiEndpointsPlaceholder": "/api/v1/admin",
+    "exemptedScope": "Exempted scope",
+    "exemptedScopePlaceholder": "Describe what was left out of the manual assessment",
+    "maxNames": "You can add up to {max} names",
+    "namePlaceholder": "Enter a name and press Enter",
+    "reviewers": "Reviewers",
+    "savedSuccessfully": "Manual scan details saved",
+    "testers": "Testers",
+    "title": "Manual scan details"
+  },
   "securityAnalysisDetails": {
     "aeis": {
       "allFalsePositives": "KnoxIQ ruled every finding on this analysis a false positive, so there is no exploitability score to report.",

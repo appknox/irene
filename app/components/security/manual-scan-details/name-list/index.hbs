@@ -1,0 +1,64 @@
+<AkStack @direction='column' @spacing='1' ...attributes>
+  <AkTypography @variant='body2' @fontWeight='medium'>
+    {{@label}}
+  </AkTypography>
+
+  {{#if @names.length}}
+    <AkStack
+      @spacing='1'
+      @flexWrap='wrap'
+      @width='full'
+      data-test-securityManualScanDetailsNameList-names
+    >
+      {{#each @names as |name|}}
+        <AkTooltip
+          @title={{name}}
+          @placement='top'
+          @multiline={{true}}
+          @disabled={{this.isShortName name}}
+          local-class='name-chip'
+        >
+          <AkChip
+            @label={{name}}
+            @variant='outlined'
+            @onDelete={{fn this.removeName name}}
+            data-test-securityManualScanDetailsNameList-name='{{name}}'
+          />
+        </AkTooltip>
+      {{/each}}
+    </AkStack>
+  {{/if}}
+
+  <AkStack @spacing='1' @alignItems='center'>
+    <div local-class='name-input'>
+      <AkTextField
+        @value={{this.nameInput}}
+        @placeholder={{t 'securityManualScanDetails.namePlaceholder'}}
+        @disabled={{this.isAtLimit}}
+        maxlength={{@maxLength}}
+        aria-label={{@label}}
+        {{on 'keydown' this.handleKeydown}}
+        data-test-securityManualScanDetailsNameList-input
+      />
+    </div>
+
+    <AkButton
+      @variant='outlined'
+      @disabled={{this.isAddDisabled}}
+      {{on 'click' this.addName}}
+      data-test-securityManualScanDetailsNameList-addBtn
+    >
+      {{t 'add'}}
+    </AkButton>
+  </AkStack>
+
+  {{#if this.isAtLimit}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-securityManualScanDetailsNameList-limit
+    >
+      {{t 'securityManualScanDetails.maxNames' max=@maxNames}}
+    </AkTypography>
+  {{/if}}
+</AkStack>
