@@ -1,0 +1,93 @@
+<div data-test-sbomComponent-reachabilityCounts>
+  {{#if this.scanning}}
+    <AkChip
+      data-test-sbomComponent-reachabilityCountsAnalyzing
+      @variant='semi-filled'
+      @size='small'
+      @color='default'
+      @label={{t 'sbomModule.reachability.analyzing'}}
+    />
+  {{else if this.scanNotRun}}
+    <AkTooltip
+      @arrow={{true}}
+      @placement='top'
+      data-test-sbomComponent-reachabilityCountsNotRunTooltip
+    >
+      <:default>
+        <AkTypography
+          data-test-sbomComponent-reachabilityCountsNotRun
+          @fontWeight='bold'
+        >
+          -
+        </AkTypography>
+      </:default>
+
+      <:tooltipContent>
+        <div
+          {{style
+            width='360px'
+            white-space='pre-line'
+            overflow-wrap='break-word'
+          }}
+        >{{this.scanStatusReason}}</div>
+      </:tooltipContent>
+    </AkTooltip>
+  {{else if this.hasCounts}}
+    <AkStack @spacing='0.5' @flexWrap='nowrap' @alignItems='center'>
+      {{#each this.visibleCounts as |item|}}
+        <div
+          local-class='count-chip
+            {{if item.strong "count-chip-strong"}}'
+          data-test-sbomComponent-reachabilityCount='{{item.key}}'
+        >
+          <span local-class='count-dot count-dot-{{item.key}}'></span>
+
+          <AkTypography @variant='body2' @color='inherit'>
+            {{item.label}}
+          </AkTypography>
+
+          <AkTypography
+            local-class='count-value'
+            @variant='body2'
+            @color='inherit'
+            @fontWeight='bold'
+            data-test-sbomComponent-reachabilityCountValue='{{item.key}}'
+          >
+            {{item.count}}
+          </AkTypography>
+        </div>
+      {{/each}}
+
+      {{#if this.hasHidden}}
+        <AkTooltip @arrow={{true}} @placement='top'>
+          <:default>
+            <div
+              local-class='count-chip'
+              data-test-sbomComponent-reachabilityCountMore
+            >
+              <AkTypography
+                @variant='body3'
+                @color='inherit'
+                @fontWeight='bold'
+              >
+                {{this.hiddenLabel}}
+              </AkTypography>
+            </div>
+          </:default>
+
+          <:tooltipContent>
+            <div {{style white-space='pre-line'}}>{{this.hiddenTooltip}}</div>
+          </:tooltipContent>
+        </AkTooltip>
+      {{/if}}
+    </AkStack>
+  {{else}}
+    <AkTypography
+      data-test-sbomComponent-reachabilityCountsEmpty
+      @fontWeight='bold'
+      @color='textSecondary'
+    >
+      -
+    </AkTypography>
+  {{/if}}
+</div>

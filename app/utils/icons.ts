@@ -283,3 +283,5 @@ export const MajesticonsIconsSet = ['pulse'] as const;
 export const MiIconsSet = ['select'] as const;
 
 export const AntDesignIconsSet = ['security-scan-outlined'] as const;
+
+export const CodiconIconsSet = ['arrow-small-right'] as const;

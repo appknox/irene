@@ -1,0 +1,34 @@
+.section {
+  border: 1px solid
+    var(--sbom-component-insights-vulnerabilities-section-border-color);
+  border-radius: var(
+    --sbom-component-insights-vulnerabilities-section-border-radius
+  );
+  background-color: var(
+    --sbom-component-insights-vulnerabilities-section-background-color
+  );
+  overflow: hidden;
+}
+
+.pager-row {
+  padding: 0.5em 1em;
+  background-color: var(
+    --sbom-component-insights-vulnerabilities-pager-row-background-color
+  );
+  border-bottom: 1px solid
+    var(--sbom-component-insights-vulnerabilities-pager-row-border-color);
+}
+
+.advisory-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  color: var(--sbom-component-insights-vulnerabilities-advisory-link-color);
+  text-decoration: none;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}

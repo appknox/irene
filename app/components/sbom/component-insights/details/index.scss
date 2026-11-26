@@ -1,0 +1,26 @@
+.details-root {
+  border: 1px solid var(--sbom-component-insights-details-border-color);
+  border-radius: var(--sbom-component-insights-details-border-radius);
+  background-color: var(--sbom-component-insights-details-background-color);
+  overflow: hidden;
+}
+
+.details-strip {
+  padding: 0.5em 1em;
+  background-color: var(
+    --sbom-component-insights-details-strip-background-color
+  );
+}
+
+.summary-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2em 0.8em;
+  border: 1px solid var(--sbom-component-insights-details-chip-border-color);
+  border-radius: var(--sbom-component-insights-details-chip-border-radius);
+  background-color: var(
+    --sbom-component-insights-details-chip-background-color
+  );
+  color: var(--sbom-component-insights-details-chip-color);
+}

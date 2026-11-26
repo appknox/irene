@@ -13,6 +13,11 @@ import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 
 import { VulnerabilitySeverity } from 'irene/models/sbom-vulnerability';
+import {
+  ReachabilityVerdict,
+  reachabilityLabelKey,
+  shouldShowReachabilityChip,
+} from 'irene/utils/sbom-reachability';
 
 module(
   'Integration | Component | sbom/component-details/vulnerabilities',
@@ -26,9 +31,7 @@ module(
 
       this.sbomFile = this.server.create('sbom-file');
 
-      this.sbomComponent = this.server.create('sbom-component', {
-        id: 1,
-      });
+      this.sbomComponent = this.server.create('sbom-component', { id: 1 });
 
       this.sbomVulnerabilityAudits = this.server.createList(
         'sbom-vulnerability-audit',
@@ -92,16 +95,20 @@ module(
         '[data-test-sbomComponentVulnerabilities-listHead]'
       );
 
-      assert.strictEqual(vulnerabilityColHeaders.length, 3);
+      assert.strictEqual(vulnerabilityColHeaders.length, 4);
 
       assert
         .dom(vulnerabilityColHeaders[0])
         .hasText(t('sbomModule.vulnerabilityId'));
 
-      assert.dom(vulnerabilityColHeaders[1]).hasText(t('sbomModule.severity'));
+      assert
+        .dom(vulnerabilityColHeaders[1])
+        .hasText(t('sbomModule.reachability.title'));
+
+      assert.dom(vulnerabilityColHeaders[2]).hasText(t('sbomModule.severity'));
 
       assert
-        .dom(vulnerabilityColHeaders[2])
+        .dom(vulnerabilityColHeaders[3])
         .hasText(t('sbomModule.cvssV3Score'));
 
       const vulnerabilityRows = findAll(
@@ -132,8 +139,18 @@ module(
         .dom(rowCell[0])
         .hasText(`${sbomVulnerabilityAudit.sbVulnerability.vulnerabilityId}`);
 
+      const reachabilityVerdict = sbomVulnerabilityAudit.reachability?.verdict;
+
       assert
         .dom(rowCell[1])
+        .hasText(
+          shouldShowReachabilityChip(reachabilityVerdict)
+            ? t(reachabilityLabelKey(reachabilityVerdict))
+            : '-'
+        );
+
+      assert
+        .dom(rowCell[2])
         .hasText(sbomVulnerabilityAudit.sbVulnerability.severityDisplayValue);
 
       const isUnknown =
@@ -141,7 +158,7 @@ module(
         VulnerabilitySeverity.UNKNOWN;
 
       assert
-        .dom(rowCell[2])
+        .dom(rowCell[3])
         .hasText(
           isUnknown ? '-' : `${sbomVulnerabilityAudit.sbVulnerability.score}`
         );
@@ -228,6 +245,18 @@ module(
         )
         .hasText(sbomVulnerabilityAudit.sbVulnerability.description);
 
+      // reachability and remediation live on the insights page
+      assert
+        .dom(
+          '[data-test-sbomComponentVulnerabilities-detailReachabilityTitle]',
+          vulnerabilityRows[0]
+        )
+        .doesNotExist();
+
+      assert
+        .dom('[data-test-sbomRemediation]', vulnerabilityRows[0])
+        .doesNotExist();
+
       // affected & fixed version
       assert
         .dom(
@@ -309,6 +338,41 @@ module(
           vulnerabilityRows[0]
         )
         .doesNotExist();
+    });
+
+    test('the expanded row links to the reachability insight', async function (assert) {
+      this.server.get(
+        '/v2/sb_file_component/:comp_id/sb_vulnerability_audits',
+        (schema) => {
+          const results = schema.sbomVulnerabilityAudits.all().models;
+
+          results[0].reachability = {
+            verdict: ReachabilityVerdict.CONFIRMED_REACHABLE,
+            blockers: [],
+            witness_path: [],
+          };
+
+          return { count: results.length, next: null, previous: null, results };
+        }
+      );
+
+      await render(hbs`
+        <Sbom::ComponentDetails::Vulnerabilities @sbomComponent={{this.sbomComponent}} />
+      `);
+
+      const [firstRow] = findAll(
+        '[data-test-sbomComponentVulnerabilities-listItem]'
+      );
+
+      await click(
+        firstRow.querySelector(
+          '[data-test-sbomComponentVulnerabilities-toggleDetailsBtn]'
+        )
+      );
+
+      assert
+        .dom('[data-test-sbomComponentVulnerabilities-insightLink]', firstRow)
+        .hasText(t('sbomModule.reachability.viewInsight'));
     });
 
     test.each(

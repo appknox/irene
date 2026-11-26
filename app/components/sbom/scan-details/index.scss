@@ -54,3 +54,25 @@
   border-color: var(--sbom-scan-details-border-color) !important;
   height: 32px;
 }
+
+// Insights / Complete analysis switch: one card with the toolbar beneath it.
+.view-switch {
+  padding: 0.7em 1em;
+  border: 1px solid var(--sbom-scan-details-border-color);
+  border-top-left-radius: var(--sbom-scan-details-link-border-radius);
+  border-top-right-radius: var(--sbom-scan-details-link-border-radius);
+  background-color: var(--sbom-scan-details-background-color);
+}
+
+.view-switch-tabs {
+  border-bottom: 0 !important;
+  width: fit-content;
+}
+
+// Attached under the switch: no gap, and the switch's bottom edge is the rule.
+.switch-view-header-attached {
+  margin-top: 0;
+  border-top-width: 1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

@@ -9,7 +9,10 @@ import type SbomComponentModel from 'irene/models/sbom-component';
 interface ComponentSummaryItem {
   label: string;
   value?: string | null;
-  component?: 'sbom/component-status' | null;
+  component?:
+    | 'sbom/component-status'
+    | 'sbom/component-details/summary/reachability'
+    | null;
   isLink?: boolean;
   tooltip?: string | null;
 }
@@ -18,6 +21,8 @@ export interface SbomComponentDetailsSummarySignature {
   Element: HTMLDivElement;
   Args: {
     sbomComponent: SbomComponentModel;
+    /** The insights page shows the counts in their own card instead. */
+    hideReachability?: boolean;
   };
 }
 
@@ -85,6 +90,15 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
           ? '-'
           : this.args.sbomComponent?.cleanLatestVersion,
       },
+      {
+        label: this.intl.t('status'),
+        component: 'sbom/component-status' as const,
+      },
+      !this.args.hideReachability &&
+        this.args.sbomComponent?.hasReachabilitySummary && {
+          label: this.intl.t('sbomModule.reachability.title'),
+          component: 'sbom/component-details/summary/reachability' as const,
+        },
       this.args.sbomComponent?.author && {
         label: this.intl.t('author'),
         value: this.args.sbomComponent?.author,
@@ -93,11 +107,15 @@ export default class SbomComponentDetailsSummaryComponent extends Component<Sbom
         label: this.intl.t('license'),
         value: this.args.sbomComponent?.licenses.join(', '),
       },
-      this.args.sbomComponent?.hasFoundLocations && {
-        label: this.intl.t('sbomModule.foundInLocations'),
-        value: this.foundInValue,
-        tooltip: this.foundInTooltip,
-      },
+      // Found In is an AI-BOM field: evidence locations exist for regular
+      // components too (enola records them for anything it can locate in
+      // the package), so gate on the AI flag, like the fields below.
+      this.args.sbomComponent?.isAiComponent &&
+        this.args.sbomComponent?.hasFoundLocations && {
+          label: this.intl.t('sbomModule.foundInLocations'),
+          value: this.foundInValue,
+          tooltip: this.foundInTooltip,
+        },
       this.args.sbomComponent?.isMLModel && {
         label: this.intl.t('referenceLink'),
         value: this.args.sbomComponent?.primaryLink || '',

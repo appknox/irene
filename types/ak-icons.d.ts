@@ -16,6 +16,7 @@ import {
   MajesticonsIconsSet,
   MiIconsSet,
   AntDesginIconSet,
+  CodiconIconsSet,
 } from 'irene/utils/icons';
 
 type MaterialSymbolsIcon = (typeof MaterialSymbolsSet)[number];
@@ -35,6 +36,7 @@ type IxIcon = (typeof IxIconsSet)[number];
 type MajesticonsIcon = (typeof MajesticonsIconsSet)[number];
 type MiIcon = (typeof MiIconsSet)[number];
 type AntDesignIcon = (typeof AntDesginIconSet)[number];
+type CodiconIcon = (typeof CodiconIconsSet)[number];
 
 export const AkIconsSet = [
   ...MaterialSymbolsSet,
@@ -54,6 +56,7 @@ export const AkIconsSet = [
   ...MajesticonsIconsSet,
   ...MiIconsSet,
   ...AntDesginIconSet,
+  ...CodiconIconsSet,
 ] as const;
 
 export type AkIconVariantType =
@@ -73,6 +76,7 @@ export type AkIconVariantType =
   | `majesticons:${MajesticonsIcon}`
   | `mi:${MiIcon}`
   | `ant-design:${AntDesignIcon}`
+  | `codicon:${CodiconIcon}`
   | MaterialSymbolsIcon;
 
 // Export the icon types for reference
@@ -94,4 +98,5 @@ export type {
   MajesticonsIcon,
   MiIcon,
   AntDesignIcon,
+  CodiconIcon,
 };

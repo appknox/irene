@@ -38,6 +38,31 @@ export default class SbomFileModel extends Model {
   @attr('boolean')
   declare isStale: boolean;
 
+  /**
+   * Latest composition scan status. Independent of SBOM `status`.
+   * Matches Mycroft SBCompositionScan.Status (1–4); null until the first
+   * composition scan exists.
+   */
+  @attr('number')
+  declare compositionStatus: number | null;
+
+  /**
+   * Latest reachability scan status. Independent of SBOM `status`.
+   * Matches Mycroft SBReachabilityScan.Status (1–6, including SKIPPED and TIMED_OUT).
+   */
+  @attr('number')
+  declare reachabilityStatus: number | null;
+
+  /** Failure / skip reason of the latest reachability scan ("" when clean). */
+  @attr('string')
+  declare reachabilityError: string;
+
+  @attr('date')
+  declare reachabilityStartedAt: Date | null;
+
+  @attr('date')
+  declare reachabilityCompletedAt: Date | null;
+
   get statusValue() {
     switch (this.status) {
       case SbomScanStatus.PENDING:

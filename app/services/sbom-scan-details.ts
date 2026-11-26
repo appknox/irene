@@ -25,7 +25,14 @@ export default class SbomScanDetailsService extends Service {
 
   @tracked limit = 25;
   @tracked offset = 0;
-  @tracked viewType: 'list' | 'tree' = 'tree';
+  @tracked viewType: 'list' | 'tree' = 'list';
+
+  /**
+   * Restricts the list to components the reachability run concluded on.
+   * Set by the Reachability insights tab; the default Complete analysis tab
+   * leaves it false so the full SBOM is listed.
+   */
+  @tracked onlyReachable = false;
   @tracked searchQuery: string = '';
   @tracked selectedDependencyType: boolean | null = null;
   @tracked selectedComponentType = -1;
@@ -33,6 +40,7 @@ export default class SbomScanDetailsService extends Service {
   @tracked selectedAiArtifactClass: string | null = null;
   @tracked selectedAiConfidence: string | null = null;
   @tracked ordering: string | null = null;
+  @tracked selectedReachability: string | null = null;
   @tracked sbomComponentsCount = 0;
   @tracked sbomFile: SbomFileModel | null = null;
 
@@ -60,6 +68,7 @@ export default class SbomScanDetailsService extends Service {
     ai_artifact_class,
     ai_confidence,
     ordering,
+    reachability,
   }: Partial<{
     sbomFile: SbomFileModel | null;
     component_query: string;
@@ -70,6 +79,7 @@ export default class SbomScanDetailsService extends Service {
     ai_artifact_class: string | null;
     ai_confidence: string | null;
     ordering: string | null;
+    reachability: string | null;
   }>) {
     // Skip omitted keys to avoid same-value tracked-property writes and Ember's render-time autotracking assertion.
     if (sbomFile !== undefined) {
@@ -80,11 +90,41 @@ export default class SbomScanDetailsService extends Service {
       this.viewType = view_type;
     }
 
-    if (component_query !== undefined) {
+    if (component_query !== undefined && component_query !== null) {
       this.searchQuery = component_query;
     }
 
-    if (component_type !== undefined) {
+    this.setFilterData({
+      component_type,
+      dependency_type,
+      is_ai_component,
+      ai_artifact_class,
+      ai_confidence,
+      ordering,
+      reachability,
+    });
+
+    return this;
+  }
+
+  private setFilterData({
+    component_type,
+    dependency_type,
+    is_ai_component,
+    ai_artifact_class,
+    ai_confidence,
+    ordering,
+    reachability,
+  }: Partial<{
+    component_type: number;
+    dependency_type: string | null;
+    is_ai_component: string | null;
+    ai_artifact_class: string | null;
+    ai_confidence: string | null;
+    ordering: string | null;
+    reachability: string | null;
+  }>) {
+    if (component_type !== undefined && component_type !== null) {
       this.selectedComponentType = component_type;
     }
 
@@ -110,7 +150,9 @@ export default class SbomScanDetailsService extends Service {
       this.ordering = ordering;
     }
 
-    return this;
+    if (reachability !== undefined) {
+      this.selectedReachability = reachability;
+    }
   }
 
   async reload() {
@@ -150,6 +192,12 @@ export default class SbomScanDetailsService extends Service {
         : {}),
 
       ...(this.ordering ? { ordering: this.ordering } : {}),
+
+      ...(this.selectedReachability
+        ? { reachability: this.selectedReachability }
+        : {}),
+
+      ...(this.onlyReachable ? { has_reachability: true } : {}),
     };
 
     // Query Params
@@ -169,6 +217,11 @@ export default class SbomScanDetailsService extends Service {
       this.sbomComponentList = sbomComponentList;
       this.sbomComponentsCount = sbomComponentList.meta.count;
     } catch (error) {
+      // Clear the stale list so a failed load cannot leave the previous
+      // tab's (e.g. unfiltered SBOM) data on screen.
+      this.sbomComponentList = undefined;
+      this.sbomComponentsCount = 0;
+
       this.notify.error(
         'Failed to load SBOM components. Please try again later.',
         ENV.notifications

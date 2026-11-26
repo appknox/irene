@@ -5,6 +5,10 @@ import type IntlService from 'ember-intl/services/intl';
 
 import { ENUMS_DISPLAY } from 'irene/enums';
 import type SbomFileModel from './sbom-file';
+import {
+  isQuietReachabilityVerdict,
+  type SbomComponentReachability,
+} from 'irene/utils/sbom-reachability';
 
 export interface SbomComponentProperty {
   [key: string]: string;
@@ -111,6 +115,14 @@ export default class SbomComponentModel extends Model {
   @attr('string')
   declare aiAssociatedModelPath: string;
 
+  /** Component this transitive dependency is pulled in through. */
+  @attr('string')
+  declare via: string | null;
+
+  /** Version of that parent, for quoting its declared dependency line. */
+  @attr('string')
+  declare viaVersion: string | null;
+
   @attr()
   declare evidence: SbomComponentEvidence;
 
@@ -125,12 +137,19 @@ export default class SbomComponentModel extends Model {
   @attr('boolean')
   declare isStaleVersionData: boolean;
 
+  @attr()
+  declare reachability: SbomComponentReachability | null;
+
   get isVulnerable() {
     return this.vulnerabilitiesCount > 0;
   }
 
   get isStale() {
     return this.isStaleVulnData || this.isStaleVersionData;
+  }
+
+  get hasReachabilitySummary() {
+    return !isQuietReachabilityVerdict(this.reachability?.verdict);
   }
 
   get cleanVersion() {

@@ -1,7 +1,7 @@
 .vulnerability-list-header,
 .vulnerability-detail-wrapper {
   display: grid;
-  grid-template-columns: 3fr 2fr 1fr;
+  grid-template-columns: 3fr 1.6fr 1.4fr 1fr;
 }
 
 .vulnerability-list-header {
@@ -21,7 +21,9 @@
   border: 1px solid
     var(--sbom-component-details-vulnerabilities-list-border-color-light);
   border-top: none;
-    background-color: var(--sbom-component-details-vulnerabilities-list-background-color);
+  background-color: var(
+    --sbom-component-details-vulnerabilities-list-background-color
+  );
 
   .vulnerability-detail-wrapper {
     width: 100%;

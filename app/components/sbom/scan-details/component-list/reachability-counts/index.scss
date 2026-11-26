@@ -1,0 +1,51 @@
+.count-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.2em 0.8em;
+  border: 1px solid
+    var(--sbom-scan-details-component-list-reachability-counts-border-color);
+  border-radius: var(
+    --sbom-scan-details-component-list-reachability-counts-chip-border-radius
+  );
+  background: var(
+    --sbom-scan-details-component-list-reachability-counts-background
+  );
+  color: var(--sbom-scan-details-component-list-reachability-counts-color);
+  white-space: nowrap;
+}
+
+// The strongest outcome in the row leads: grey fill, firmer border and label.
+.count-chip-strong {
+  border-color: var(
+    --sbom-scan-details-component-list-reachability-counts-strong-border-color
+  );
+  background: var(
+    --sbom-scan-details-component-list-reachability-counts-strong-background
+  );
+  font-weight: 600;
+}
+
+.count-dot {
+  flex-shrink: 0;
+  width: 0.55em;
+  height: 0.55em;
+  border-radius: 50%;
+}
+
+.count-dot-reachable {
+  background: var(--sbom-reachability-pill-dot-reachable-color);
+}
+
+.count-dot-potential {
+  background: var(--sbom-reachability-pill-dot-potential-color);
+}
+
+.count-dot-inconclusive {
+  background: var(--sbom-reachability-pill-dot-inconclusive-color);
+}
+
+.count-value {
+  margin-left: 0.1em;
+}

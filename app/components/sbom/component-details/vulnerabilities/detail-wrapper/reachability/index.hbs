@@ -1,0 +1,131 @@
+{{#if this.shouldShow}}
+  <AkStack
+    local-class='reachability-root'
+    @direction='column'
+    @spacing='2'
+    @width='full'
+    data-test-sbomComponentVulnerabilities-detailReachability
+  >
+    <AkStack @direction='column' @spacing='0.5' @width='full'>
+      <AkStack @alignItems='center' @spacing='0.5'>
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityTitle
+          @variant='subtitle1'
+        >
+          {{t 'sbomModule.reachability.detailsTitle'}}
+        </AkTypography>
+
+        <AkTooltip
+          @arrow={{true}}
+          @placement='top'
+          data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorks
+        >
+          <:default>
+            <AkIcon
+              @iconName='info'
+              @size='small'
+              @color='textSecondary'
+              data-test-sbomComponentVulnerabilities-detailReachabilityHowItWorksIcon
+            />
+          </:default>
+
+          <:tooltipContent>
+            <div
+              {{style
+                width='320px'
+                white-space='pre-line'
+                overflow-wrap='break-word'
+              }}
+            >{{t 'sbomModule.reachability.howItWorks'}}</div>
+          </:tooltipContent>
+        </AkTooltip>
+      </AkStack>
+
+      {{#if this.showExplanation}}
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityExplanation
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{this.explanation}}
+        </AkTypography>
+      {{/if}}
+    </AkStack>
+
+    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::CallPath
+      @finding={{this.reachability}}
+      @narrative={{this.pathExplanation}}
+    />
+
+    <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper::Reachability::Targets
+      @finding={{this.reachability}}
+    />
+
+    {{#if this.reasoning}}
+      <AkStack
+        @direction='column'
+        @spacing='0.5'
+        @width='full'
+        data-test-sbomComponentVulnerabilities-detailReachabilityReasoning
+      >
+        <AkTypography
+          local-class='section-label'
+          data-test-sbomComponentVulnerabilities-detailReachabilityReasoningLabel
+          @variant='body2'
+          @color='textSecondary'
+          @fontWeight='bold'
+        >
+          {{t 'sbomModule.reachability.reasoning'}}
+        </AkTypography>
+
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityReasoningText
+          @variant='body2'
+          @color='textPrimary'
+          @breakWord={{true}}
+        >
+          {{~#each this.reasoningSegments as |segment|~}}
+            {{~#if segment.isVerdict~}}
+              <span local-class='inline-chip'><Sbom::ReachabilityPill
+                  data-test-sbomComponentVulnerabilities-detailReachabilityReasoningVerdict
+                  @label={{segment.text}}
+                  @tone={{segment.tone}}
+                /></span>
+            {{~else~}}
+              {{segment.text}}
+            {{~/if~}}
+          {{~/each~}}
+        </AkTypography>
+      </AkStack>
+    {{/if}}
+
+    {{#if this.hasBlockers}}
+      <AkStack
+        @direction='column'
+        @spacing='0.5'
+        @width='full'
+        data-test-sbomComponentVulnerabilities-detailReachabilityBlockers
+      >
+        <AkTypography
+          data-test-sbomComponentVulnerabilities-detailReachabilityBlockersLabel
+          @variant='body2'
+          @color='textSecondary'
+        >
+          {{t 'sbomModule.reachability.whyInconclusive'}}
+        </AkTypography>
+
+        <AkStack @spacing='0.5' @flexWrap='wrap'>
+          {{#each this.blockers as |blocker|}}
+            <AkChip
+              data-test-sbomComponentVulnerabilities-detailReachabilityBlocker='{{blocker.code}}'
+              @variant='semi-filled'
+              @size='small'
+              @color='warn'
+              @label={{blocker.label}}
+            />
+          {{/each}}
+        </AkStack>
+      </AkStack>
+    {{/if}}
+  </AkStack>
+{{/if}}

@@ -1,4 +1,4 @@
-import { render, findAll, find, waitFor } from '@ember/test-helpers';
+import { click, render, findAll, find, waitFor } from '@ember/test-helpers';
 
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -6,6 +6,7 @@ import { setupIntl, t } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 import { module, test } from 'qunit';
 import { capitalize } from '@ember/string';
+import { reachabilityLabelKey } from 'irene/utils/sbom-reachability';
 
 module(
   'Integration | Component | sbom/scan-details/component-list',
@@ -67,7 +68,17 @@ module(
         }
       );
 
-      const sbomComponents = this.server.createList('sbom-component', 10);
+      const sbomComponents = this.server.createList('sbom-component', 10, {
+        reachability: {
+          verdict: 'CONFIRMED_REACHABLE',
+          exposure: 'CONFIRMED_EXPOSURE',
+          path_found_count: 1,
+          potential_count: 0,
+          no_path_found_count: 0,
+          unknown_count: 0,
+          advisory_count: 1,
+        },
+      });
 
       const sbomService = this.owner.lookup('service:sbom-scan-details');
 
@@ -111,6 +122,7 @@ module(
       assert.dom(headerRow[1]).hasText(t('sbomModule.componentType'));
       assert.dom(headerRow[2]).hasText(t('dependencyType'));
       assert.dom(headerRow[3]).hasText(t('status'));
+      assert.dom(headerRow[4]).hasText(t('sbomModule.reachability.title'));
 
       const contentRows = findAll('[data-test-sbomComponent-row]');
 
@@ -168,6 +180,14 @@ module(
           )
           .hasText(t('chipStatus.secure'));
       }
+
+      assert
+        .dom('[data-test-sbomComponent-reachability]', firstRow[4])
+        .exists();
+
+      assert
+        .dom('[data-test-sbomReachability-status]', firstRow[4])
+        .hasText(t(reachabilityLabelKey(sbomComponent.reachability?.verdict)));
     });
 
     test('test sbom scan component outdated version', async function (assert) {
@@ -264,6 +284,176 @@ module(
         .hasText(t('sbomModule.componentListEmptyText.description'));
 
       assert.dom('[data-test-sbomComponent-emptySvg]').exists();
+    });
+
+    test.each(
+      'row click opens the screen that matches the active tab',
+      [
+        {
+          view: 'complete',
+          route: 'authenticated.dashboard.sbom.component-details.overview',
+        },
+        {
+          view: 'insights',
+          route: 'authenticated.dashboard.sbom.component-insights',
+        },
+      ],
+      async function (assert, { view, route }) {
+        const router = this.owner.lookup('service:router');
+        const calls = [];
+
+        router.transitionTo = (...args) => {
+          calls.push(args);
+        };
+
+        this.set('view', view);
+
+        await render(hbs`
+          <Sbom::ScanDetails::ComponentList
+            @sbomProject={{this.sbomProject}}
+            @sbomFile={{this.sbomFile}}
+            @sbomScanSummary={{this.sbomScanSummary}}
+            @view={{this.view}}
+          />
+        `);
+
+        await click('[data-test-sbomComponent-row]');
+
+        const rowCall = calls.find((args) => typeof args[0] === 'string');
+
+        const expected = [
+          route,
+          this.sbomProject.id,
+          this.sbomFile.id,
+          String(this.sbomComponents[0].id),
+          0,
+        ];
+
+        if (view === 'insights') {
+          // Opening a row must not inherit a previously paged-to `vuln`.
+          expected.push({ queryParams: { vuln: null } });
+        }
+
+        assert.deepEqual(rowCall, expected);
+      }
+    );
+
+    test('insights empty state explains the finding and links to the complete analysis', async function (assert) {
+      this.server.get('/v2/sb_files/:scan_id/sb_file_components', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      this.sbomService.reload();
+
+      this.clicks = 0;
+      this.onViewComplete = () => (this.clicks += 1);
+
+      await render(hbs`
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @view='insights'
+          @showReachability={{true}}
+          @onViewComplete={{this.onViewComplete}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-sbomComponent-insightsEmptyTitle]')
+        .hasText(t('sbomModule.reachabilityInsights.emptyTitle'));
+
+      assert
+        .dom('[data-test-sbomComponent-insightsEmptyDescription]')
+        .hasText(t('sbomModule.reachabilityInsights.emptyDescription'));
+
+      assert.dom('[data-test-sbomComponent-emptySvg]').exists();
+      assert.dom('[data-test-sbomComponent-emptyTextTitle]').doesNotExist();
+
+      // one clean container: no table or pagination, a single empty view
+      assert.dom('[data-test-sbomComponent-table]').doesNotExist();
+      assert.dom('[data-test-sbom-emptyLoadingView]').exists({ count: 1 });
+
+      assert
+        .dom(
+          '[data-test-sbom-emptyLoadingView] [data-test-sbomComponent-insightsEmptyViewComplete]'
+        )
+        .isVisible();
+
+      await click('[data-test-sbomComponent-insightsEmptyViewComplete]');
+
+      assert.strictEqual(this.clicks, 1);
+    });
+
+    test('complete view keeps the generic empty state', async function (assert) {
+      this.server.get('/v2/sb_files/:scan_id/sb_file_components', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      this.sbomService.reload();
+
+      await render(hbs`
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @view='complete'
+          @showReachability={{true}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-sbomComponent-emptyTextTitle]')
+        .hasText(t('sbomModule.componentListEmptyText.title'));
+
+      assert
+        .dom('[data-test-sbomComponent-insightsEmptyViewComplete]')
+        .doesNotExist();
+    });
+
+    test('insights view with a search query keeps the no-match text', async function (assert) {
+      this.server.get('/v2/sb_files/:scan_id/sb_file_components', () => ({
+        count: 0,
+        next: null,
+        previous: null,
+        results: [],
+      }));
+
+      this.sbomService.setQueryData({
+        view_type: 'list',
+        component_type: -1,
+        is_dependency: null,
+        component_query: 'zzz',
+        sbomFile: this.sbomFile,
+      });
+
+      await this.sbomService.reload();
+
+      await render(hbs`
+        <Sbom::ScanDetails::ComponentList
+          @sbomProject={{this.sbomProject}}
+          @sbomFile={{this.sbomFile}}
+          @sbomScanSummary={{this.sbomScanSummary}}
+          @view='insights'
+          @showReachability={{true}}
+        />
+      `);
+
+      assert
+        .dom('[data-test-sbomComponent-emptyTextTitle]')
+        .hasText(t('sbomModule.noComponentsMatch', { query: 'zzz' }));
+
+      assert.dom('[data-test-sbomComponent-insightsEmptyTitle]').doesNotExist();
+
+      assert
+        .dom('[data-test-sbomComponent-insightsEmptyViewComplete]')
+        .doesNotExist();
     });
   }
 );

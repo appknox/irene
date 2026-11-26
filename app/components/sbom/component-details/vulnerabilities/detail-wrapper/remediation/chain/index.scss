@@ -1,0 +1,29 @@
+.chain {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  flex-wrap: wrap;
+}
+
+.chain-link {
+  padding: 0.25em 0.6em;
+  border-radius: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-chain-link-border-radius
+  );
+  background: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-chain-link-background
+  );
+  font-family: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-chain-link-font-family
+  );
+  font-size: 0.85em;
+}
+
+.chain-link-last {
+  background: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-chain-link-last-background
+  );
+  color: var(
+    --sbom-component-details-vulnerabilities-detail-wrapper-remediation-chain-link-last-color
+  );
+}

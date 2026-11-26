@@ -1,0 +1,19 @@
+.header {
+  padding: 1em;
+  border: 1px solid var(--sbom-component-insights-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-background-color);
+}
+
+.coordinate {
+  font-family: var(--sbom-component-insights-coordinate-font-family) !important;
+  overflow-wrap: anywhere;
+}
+
+// Reachability counts sit in their own always-visible card.
+.overview {
+  padding: 1em;
+  border: 1px solid var(--sbom-component-insights-border-color);
+  border-radius: var(--sbom-component-insights-border-radius);
+  background-color: var(--sbom-component-insights-background-color);
+}

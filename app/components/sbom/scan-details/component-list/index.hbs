@@ -22,25 +22,58 @@
       </:emptySvg>
 
       <:emptyText>
-        <AkStack
-          class='mt-2'
-          @direction='column'
-          @alignItems='center'
-          @spacing='1'
-        >
-          <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
-            {{t 'sbomModule.componentListEmptyText.title'}}
-          </AkTypography>
-
-          <AkTypography
-            data-test-sbomComponent-emptyTextDescription
-            {{style width='600px'}}
-            @color='textSecondary'
-            @align='center'
+        {{#if this.isInsightsEmpty}}
+          <AkStack
+            class='mt-2'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
           >
-            {{t 'sbomModule.componentListEmptyText.description'}}
-          </AkTypography>
-        </AkStack>
+            <AkTypography
+              data-test-sbomComponent-insightsEmptyTitle
+              @variant='h5'
+            >
+              {{t 'sbomModule.reachabilityInsights.emptyTitle'}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-sbomComponent-insightsEmptyDescription
+              {{style width='600px'}}
+              @color='textSecondary'
+              @align='center'
+            >
+              {{t 'sbomModule.reachabilityInsights.emptyDescription'}}
+            </AkTypography>
+
+            <AkButton
+              data-test-sbomComponent-insightsEmptyViewComplete
+              class='mt-1'
+              {{on 'click' this.viewCompleteAnalysis}}
+            >
+              {{t 'sbomModule.reachabilityInsights.viewComplete'}}
+            </AkButton>
+          </AkStack>
+        {{else}}
+          <AkStack
+            class='mt-2'
+            @direction='column'
+            @alignItems='center'
+            @spacing='1'
+          >
+            <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
+              {{t 'sbomModule.componentListEmptyText.title'}}
+            </AkTypography>
+
+            <AkTypography
+              data-test-sbomComponent-emptyTextDescription
+              {{style width='600px'}}
+              @color='textSecondary'
+              @align='center'
+            >
+              {{t 'sbomModule.componentListEmptyText.description'}}
+            </AkTypography>
+          </AkStack>
+        {{/if}}
       </:emptyText>
 
       <:default>
@@ -64,6 +97,9 @@
                       @selectedDependencyType={{this.selectedDependencyType}}
                       @onComponentTypeChange={{this.onComponentTypeChange}}
                       @selectedComponentType={{this.selectedComponentType}}
+                      @onReachabilityChange={{this.onReachabilityChange}}
+                      @selectedReachability={{this.selectedReachability}}
+                      @title={{column.name}}
                     />
                   {{/let}}
                 {{else}}
@@ -83,7 +119,10 @@
               <r.cell data-test-sbomComponent-cell as |value|>
                 {{#if r.columnValue.component}}
                   {{#let (component r.columnValue.component) as |Component|}}
-                    <Component @sbomComponent={{r.rowValue}} />
+                    <Component
+                      @sbomComponent={{r.rowValue}}
+                      @sbomFile={{@sbomFile}}
+                    />
                   {{/let}}
                 {{else}}
                   <AkTypography title={{value}} @noWrap={{true}}>
@@ -106,7 +145,7 @@
             <AkSvg::NoResult data-test-sbomComponent-emptySvg />
 
             <AkTypography data-test-sbomComponent-emptyTextTitle @variant='h5'>
-              {{this.tNoComponentsFound}}
+              {{this.tEmptyResultTitle}}
             </AkTypography>
 
             <AkTypography

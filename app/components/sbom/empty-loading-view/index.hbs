@@ -1,13 +1,14 @@
-{{! @glint-nocheck: or}}
+{{! @glint-nocheck: or, and}}
 {{#if (or @empty @loading)}}
   <AkStack
-    local-class='empty-loading-container'
+    local-class='empty-loading-container
+    {{if (and @loading @skeleton) "skeleton"}}'
+    data-test-sbom-emptyLoadingView
     {{style height=(or @height '500px')}}
     @direction='column'
     @spacing='2.5'
     @alignItems={{this.contentAlignment}}
     @justifyContent={{this.contentAlignment}}
-    data-test-sbom-emptyLoadingView
   >
     {{#if @loading}}
       {{#if this.skeleton}}

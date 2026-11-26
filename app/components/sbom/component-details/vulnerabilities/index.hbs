@@ -69,6 +69,9 @@
             >
               <Sbom::ComponentDetails::Vulnerabilities::DetailWrapper
                 @sbomVulnerabilityAudit={{svl}}
+                @sbomComponent={{@sbomComponent}}
+                @showInsightLink={{true}}
+                @showReachability={{false}}
                 local-class='vulnerability-detail-wrapper'
                 as |dw|
               >
@@ -83,6 +86,7 @@
                         @isContentCollapsed={{dw.isContentCollapsed}}
                         @collapsibleContentHandler={{dw.collapsibleContentHandler}}
                         @sbomVulnerability={{svl.sbVulnerability}}
+                        @sbomVulnerabilityAudit={{svl}}
                       />
                     </div>
                   {{/let}}
