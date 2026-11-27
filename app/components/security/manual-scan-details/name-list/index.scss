@@ -1,0 +1,21 @@
+.name-input {
+  flex: 1;
+  min-width: 0;
+}
+
+// Cut long names with an ellipsis instead of widening the row. Structural
+// selectors on purpose: data-test attributes are stripped in production.
+.name-chip {
+  min-width: 0;
+  max-width: 100%;
+
+  > :first-child {
+    min-width: 0;
+
+    > span {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

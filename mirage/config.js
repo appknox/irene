@@ -365,6 +365,37 @@ function routes() {
     schema['security/files'].find(`${req.params.id}`)?.toJSON()
   );
 
+  // Like the server: a file with nothing saved reads as empty.
+  this.get('/hudson-api/files/:id/manual_scan_details', (schema, req) => {
+    const detail = schema['security/manualScanDetails'].find(
+      `${req.params.id}`
+    );
+
+    return (
+      detail?.toJSON() ?? {
+        id: req.params.id,
+        testers: [],
+        reviewers: [],
+        covered_scope: '',
+        exempted_scope: '',
+        covered_api_endpoints: [],
+        exempted_api_endpoints: [],
+      }
+    );
+  });
+
+  this.put('/hudson-api/files/:id/manual_scan_details', (schema, req) => {
+    const fields = JSON.parse(req.requestBody);
+    const details = schema['security/manualScanDetails'];
+    const record = details.find(`${req.params.id}`);
+
+    return (
+      record
+        ? record.update(fields)
+        : details.create({ id: req.params.id, ...fields })
+    ).toJSON();
+  });
+
   this.get('/hudson-api/projects/:id', (schema, req) =>
     schema['security/projects'].find(`${req.params.id}`)?.toJSON()
   );

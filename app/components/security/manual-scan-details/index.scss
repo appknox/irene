@@ -1,0 +1,20 @@
+.section-wrapper {
+  border: 1px solid var(--security-manual-scan-details-border-color);
+  background-color: var(--security-manual-scan-details-background-color);
+}
+
+.fields-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+// Lets a field shrink to its column instead of widening the grid.
+.fields-grid > * {
+  min-width: 0;
+}

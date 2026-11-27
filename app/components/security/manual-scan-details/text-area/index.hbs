@@ -1,0 +1,26 @@
+<AkStack @direction='column' @spacing='1' ...attributes>
+  <AkTypography @variant='body2' @fontWeight='medium'>
+    {{@label}}
+  </AkTypography>
+
+  <Textarea
+    @value={{@value}}
+    rows={{or @rows 5}}
+    maxlength={{@maxLength}}
+    placeholder={{@placeholder}}
+    aria-label={{@label}}
+    spellcheck='false'
+    local-class='text-area {{if @monospace "text-area-mono"}}'
+    data-test-securityManualScanDetailsTextArea-input
+  />
+
+  {{#if @helperText}}
+    <AkTypography
+      @variant='body2'
+      @color='textSecondary'
+      data-test-securityManualScanDetailsTextArea-helperText
+    >
+      {{@helperText}}
+    </AkTypography>
+  {{/if}}
+</AkStack>
