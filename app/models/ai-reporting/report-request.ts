@@ -107,6 +107,10 @@ export default class AiReportingReportRequestModel extends Model {
   @attr('string')
   declare errorMessage: string;
 
+  // Why a question got no report (it asks to change data, or for data the platform does not hold).
+  @attr('string')
+  declare refusalReason: string;
+
   @attr('date')
   declare createdOn: Date;
 

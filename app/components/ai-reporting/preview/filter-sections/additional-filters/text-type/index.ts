@@ -41,15 +41,39 @@ export default class AiReportingPreviewFilterSectionsAdditionalFiltersTextTypeCo
     ].includes(this.args.operator);
   }
 
+  get isNumberField() {
+    return [
+      ENUMS.AI_REPORTING_FIELD_TYPE.INTEGER,
+      ENUMS.AI_REPORTING_FIELD_TYPE.FLOAT,
+      ENUMS.AI_REPORTING_FIELD_TYPE.NUMBER,
+    ].includes(this.args.field?.type);
+  }
+
+  // A number column is filtered with numbers: "36" typed in the box is sent as 36.
+  toFilterValue(text: string) {
+    const trimmed = text.trim();
+
+    if (!this.isNumberField || trimmed === '' || isNaN(Number(trimmed))) {
+      return text;
+    }
+
+    return Number(trimmed);
+  }
+
   @action
   handleValueChange(event: Event) {
     const value = (event.target as HTMLInputElement).value;
     this.value = value;
 
     const valueToUpdate =
-      this.isInOperator && value.length > 0 ? value.split(',') : value;
+      this.isInOperator && value.length > 0
+        ? value.split(',').map((item) => this.toFilterValue(item))
+        : this.toFilterValue(value);
 
-    this.args.onAddUpdateFilter(this.args.operator, valueToUpdate);
+    this.args.onAddUpdateFilter(
+      this.args.operator,
+      valueToUpdate as AdditionalFilterFilterDetailsExpressionValues
+    );
   }
 }
 

@@ -52,29 +52,20 @@ class PollServiceStub extends Service {
 
 // Assert categories and their prompts
 const assertPromptItemExists = async (assert) => {
-  // Available categories and their prompts
+  // Available categories, in dropdown order, each with five example prompts
   const categories = [
-    {
-      label: t('reportModule.categories.scan.label'),
-      prompts: [
-        t('reportModule.categories.scan.prompt1'),
-        t('reportModule.categories.scan.prompt2'),
-        t('reportModule.categories.scan.prompt3'),
-        t('reportModule.categories.scan.prompt4'),
-        t('reportModule.categories.scan.prompt5'),
-      ],
-    },
-    {
-      label: t('reportModule.categories.users.label'),
-      prompts: [
-        t('reportModule.categories.users.prompt1'),
-        t('reportModule.categories.users.prompt2'),
-        t('reportModule.categories.users.prompt3'),
-        t('reportModule.categories.users.prompt4'),
-        t('reportModule.categories.users.prompt5'),
-      ],
-    },
-  ];
+    'scan',
+    'sbom',
+    'privacyShield',
+    'storeknox',
+    'storeReleaseReadiness',
+    'users',
+  ].map((id) => ({
+    label: t(`reportModule.categories.${id}.label`),
+    prompts: [1, 2, 3, 4, 5].map((n) =>
+      t(`reportModule.categories.${id}.prompt${n}`)
+    ),
+  }));
 
   // Assert prompts based on selected category
   for (const category of categories) {
@@ -82,6 +73,10 @@ const assertPromptItemExists = async (assert) => {
       selectTriggerClass: '.select-category-class',
       labelToSelect: category.label,
     });
+
+    assert
+      .dom('[data-test-aiReporting-chatGenerate-promptItem]')
+      .exists({ count: 5 }, `${category.label} shows its five prompts`);
 
     category.prompts.forEach((prompt) => {
       const promptContainer = find(
