@@ -43,8 +43,15 @@ export default class AiReportingPreviewColumnValue extends Component<AiReporting
     return value;
   }
 
+  // 0 and false are values; only a missing value shows as an empty cell.
+  get text() {
+    const value = this.value;
+
+    return value === null || value === undefined ? '' : String(value);
+  }
+
   get displayValue() {
-    const value = String(this.value || '');
+    const value = this.text;
 
     if (value.length <= this.CONTENT_THRESHOLD || this.isExpanded) {
       return value;
@@ -54,7 +61,7 @@ export default class AiReportingPreviewColumnValue extends Component<AiReporting
   }
 
   get shouldShowToggle() {
-    const value = String(this.value || '');
+    const value = this.text;
 
     return value.length > this.CONTENT_THRESHOLD;
   }
@@ -64,7 +71,7 @@ export default class AiReportingPreviewColumnValue extends Component<AiReporting
   };
 
   get computedWidth() {
-    const value = String(this.value || '');
+    const value = this.text;
     const MIN_WIDTH = 150; // Minimum width in pixels
     const MAX_WIDTH = 550; // Maximum width in pixels
     const CHAR_WIDTH = 8; // Average character width in pixels
