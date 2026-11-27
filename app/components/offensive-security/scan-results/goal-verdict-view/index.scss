@@ -635,3 +635,12 @@
     padding: 12px;
   }
 }
+
+// The CVSS chip and the verdict pill sit together at the right of a card head
+.head-badges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.57143em;
+}

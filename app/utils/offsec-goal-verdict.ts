@@ -1,4 +1,6 @@
 import { capitalize } from '@ember/string';
+
+import { cvssFields } from 'irene/utils/offsec-cvss';
 import type {
   GoalCredential,
   GoalPath,
@@ -210,7 +212,11 @@ function withCredentials(goal: ResolvedGoalResult): ResolvedGoalResult {
 
   const techniques = goal.techniques.map((technique) => {
     // a technique that names its findings lists them instead of matched credentials
-    if (technique.credentials?.length || technique.findings?.length) {
+    if (technique.findings?.length) {
+      return { ...technique, ...cvssFields(technique.findings) };
+    }
+
+    if (technique.credentials?.length) {
       return technique;
     }
 
@@ -219,7 +225,11 @@ function withCredentials(goal: ResolvedGoalResult): ResolvedGoalResult {
     matched.forEach((finding) => claimed.add(finding));
 
     return matched.length
-      ? { ...technique, credentials: matched.map(credentialFromFinding) }
+      ? {
+          ...technique,
+          ...cvssFields(matched),
+          credentials: matched.map(credentialFromFinding),
+        }
       : technique;
   });
 
@@ -269,6 +279,7 @@ function techniqueFromFinding(
     evidence: secretText(finding),
     tried: rest.join(' ') || undefined,
     credentials: [credentialFromFinding(finding)],
+    ...cvssFields([finding]),
   };
 
   if (technique.status === 'exploited') {

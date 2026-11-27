@@ -51,10 +51,30 @@ export interface OffsecScanEmbeddedFinding {
   evidence_ids: string[];
 }
 
+/** How the session's CVSS score was reached; empty when nothing was scored. */
+export interface OffsecCvssScoring {
+  distinct_scored_findings?: number;
+  /** Distinct findings per band, keyed Critical, High, Medium and Low. */
+  count_by_cvss_severity?: Record<string, number>;
+  /** False when an audit did not run, so the score is a lower bound. */
+  all_findings_audited?: boolean;
+}
+
+/** The audit's CVSS v4 rating of one finding. */
+export interface PentestFindingCvss {
+  version?: string;
+  vector?: string;
+  score?: number;
+  /** Critical, High, Medium or Low. */
+  rating?: string;
+  because?: string;
+}
+
 /** The reviewer's call on a finding: `valid` for a real issue, `fp` for a false positive. */
 export interface PentestFindingAudit {
   status?: string;
   reason?: string;
+  cvss?: PentestFindingCvss | null;
 }
 
 /** Something the agent set out to prove for a goal, and how the run settled it. */
@@ -100,6 +120,9 @@ export interface PentestFinding {
   at_launch?: boolean;
   /** Ids of the techniques that turned it up. */
   techniques?: string[];
+  /** False when a proof of concept tried and failed to reproduce it. */
+  reproduced?: boolean;
+  poc_reason?: string;
 }
 
 export interface PentestPlan {
@@ -197,6 +220,10 @@ export interface GoalTechnique {
   /** The findings it turned up; listed in place of the credentials when present. */
   findings?: PentestFinding[];
   hypotheses?: PentestHypothesis[];
+  /** The highest-scoring CVSS rating among the findings behind it. */
+  cvss?: PentestFindingCvss;
+  reproduced?: boolean;
+  poc_reason?: string;
 }
 
 /** A value the agent recovered, and the observation it was read in. */
@@ -334,6 +361,16 @@ export default class OffsecScanModel extends Model {
 
   @attr('string')
   declare resilienceBand: string;
+
+  /** The highest CVSS v4 score among the session's reproduced findings; null when unscored. */
+  @attr('number')
+  declare maxCvss: number | null;
+
+  @attr('string')
+  declare cvssSeverity: string;
+
+  @attr()
+  declare cvssScoring: OffsecCvssScoring;
 
   /**
    * Headline counters, protection-centric because the agent runs the investigate lane:

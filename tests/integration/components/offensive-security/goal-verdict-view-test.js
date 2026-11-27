@@ -39,6 +39,9 @@ const SEL = {
   goalsCardStatus: '[data-test-offensiveSecurity-pentest-goal-status]',
   goalsCardVerdict: '[data-test-offensiveSecurity-pentest-goal-verdict]',
   cardCount: '[data-test-offensiveSecurity-goalView-cardCount]',
+  cvssChip: '[data-test-offensiveSecurity-goalView-cvss-chip]',
+  cvssField: '[data-test-offensiveSecurity-goalView-cvss-field]',
+  findingRow: '[data-test-offensiveSecurity-goalView-finding]',
   pathExpected: '[data-test-offensiveSecurity-goalView-pathExpected]',
   alsoTriedItem: '[data-test-offensiveSecurity-goalView-alsoTriedItem]',
   attempts: '[data-test-offensiveSecurity-goalView-attempts]',
@@ -620,6 +623,35 @@ module(
           .containsText('Hardcoded secret · Static inspection of the package');
         assert.dom(SEL.alsoTriedItem).doesNotExist();
         assert.dom(SEL.attempts).doesNotExist();
+      });
+
+      test('a technique card shows its highest finding score once, leaving the detail to each finding', async function (assert) {
+        const scored = FINDINGS.map((f) =>
+          f.id === 'F1'
+            ? {
+                ...f,
+                audit: {
+                  ...f.audit,
+                  cvss: { score: 8.7, rating: 'High', vector: 'CVSS:4.0/AV:N' },
+                },
+              }
+            : f
+        );
+
+        await renderGoal(
+          this,
+          agentGoal({
+            techniques: [{ ...AGENT_TECHNIQUES[0], findings: scored }],
+            findings: scored,
+          })
+        );
+
+        assert
+          .dom(`${SEL.exploitCard} ${SEL.cvssChip}`)
+          .exists({ count: 2 }, 'the card head and its one kept finding');
+        assert.dom(findAll(SEL.cvssChip)[0]).hasText('High 8.7');
+        assert.dom(SEL.cvssField).exists({ count: 1 });
+        assert.dom(`${SEL.findingRow} ${SEL.cvssField}`).exists({ count: 1 });
       });
 
       test("the goal's run notes are not shown under its name", async function (assert) {

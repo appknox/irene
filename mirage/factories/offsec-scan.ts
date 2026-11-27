@@ -1,4 +1,6 @@
-import { Factory } from 'miragejs';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-expect-error "trait" prop missing from miragejs
+import { Factory, trait } from 'miragejs';
 import { faker } from '@faker-js/faker';
 
 import ENUMS from 'irene/enums';
@@ -32,6 +34,9 @@ export default Factory.extend({
     faker.helpers.arrayElement(['CRITICAL', 'HIGH', 'MEDIUM', 'LOW']),
   overall_resilience: () => faker.number.int({ min: 0, max: 100 }),
   resilience_band: () => faker.helpers.arrayElement(BANDS),
+  max_cvss: null,
+  cvss_severity: '',
+  cvss_scoring: () => ({}),
   protections_detected: (i) => detectedFor(i),
   protections_bypassed: (i) => assessedFor(i) % 4,
   findings_assessed: (i) => assessedFor(i),
@@ -91,4 +96,14 @@ export default Factory.extend({
       })
     );
   },
+
+  scored: trait({
+    max_cvss: () => faker.number.float({ min: 9, max: 10, fractionDigits: 1 }),
+    cvss_severity: 'Critical',
+    cvss_scoring: () => ({
+      distinct_scored_findings: 6,
+      count_by_cvss_severity: { Critical: 1, High: 2, Medium: 0, Low: 3 },
+      all_findings_audited: true,
+    }),
+  }),
 });

@@ -4,7 +4,7 @@
       local-class='findings-label'
       data-test-offensiveSecurity-goalView-findings-label
     >
-      {{t 'offensiveSecurity.goalView.findings'}}
+      {{t 'findings'}}
       <span
         local-class='findings-count'
         data-test-offensiveSecurity-goalView-findings-count
@@ -25,7 +25,11 @@
             >{{group.title}}</span>
 
             <span local-class='finding-chips'>
-              {{#if finding.severity}}
+              <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                @cvss={{finding.audit.cvss}}
+                @reproduced={{finding.reproduced}}
+              />
+              {{#if (this.showsAgentSeverity finding)}}
                 <span
                   local-class='chip'
                   data-test-offensiveSecurity-goalView-finding-severity
@@ -36,6 +40,7 @@
                   }}
                 </span>
               {{/if}}
+
             </span>
 
             {{#if (gt group.findings.length 1)}}
@@ -104,6 +109,12 @@
               </div>
             {{/if}}
 
+            <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+              @detail={{true}}
+              @cvss={{finding.audit.cvss}}
+              @pocReason={{finding.poc_reason}}
+            />
+
             {{#if finding.audit.reason}}
               <div
                 local-class='finding-field'
@@ -144,7 +155,7 @@
               </div>
             {{/if}}
 
-            {{#if (this.severityReasons finding)}}
+            {{#if (this.showsSeverityReasons finding)}}
               <div
                 local-class='finding-field'
                 data-test-offensiveSecurity-goalView-finding-field='whySevere'

@@ -767,6 +767,7 @@
   },
   "files": "Files",
   "filterBy": "Filter By",
+  "findings": "Findings",
   "fingerprints": "Fingerprints",
   "firmware": "Firmware",
   "first": "First",
@@ -845,7 +846,8 @@
       "defensesDetected": "Defenses detected",
       "defensesExploited": "Defenses exploited",
       "defensesResisted": "Defenses resisted",
-      "businessRisksConfirmed": "Business risks confirmed"
+      "businessRisksConfirmed": "Business risks confirmed",
+      "auditIncomplete": "Some findings were not reviewed"
     },
     "uploadComplete": "Upload complete",
     "beginAssessment": "Begin assessment",
@@ -977,7 +979,6 @@
       "noPathReported": "The agent reached this goal but did not report the steps it took.",
       "routeOutcome": "Goal reached",
       "weaknessFindings": "Weaknesses found & remediation",
-      "findings": "Findings",
       "otherFindings": "Other findings",
       "otherFindingsIntro": "Findings the agent recorded for this goal that no technique above claims.",
       "findingSeverity": "Severity {level}",
@@ -988,7 +989,9 @@
       "auditReason": "Reviewer's note",
       "foundAt": "Where it was found",
       "foundBeforeRun": "Found before the run",
-      "seenAtLaunch": "Seen at launch"
+      "seenAtLaunch": "Seen at launch",
+      "notReproduced": "Not reproduced",
+      "proofOfConcept": "Proof of concept"
     },
     "otherTechniques": {
       "crumb": "Other techniques",

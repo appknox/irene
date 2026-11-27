@@ -1,0 +1,61 @@
+{{#if @detail}}
+  {{#if this.hasScore}}
+    <div local-class='field' data-test-offensiveSecurity-goalView-cvss-field>
+      <div
+        local-class='field-label'
+        data-test-offensiveSecurity-goalView-cvss-fieldLabel
+      >
+        {{t 'cvssScore'}}
+      </div>
+      <div
+        local-class='score band-{{this.band}}'
+        data-test-offensiveSecurity-goalView-cvss-score
+      >{{this.label}}</div>
+      {{#if @cvss.because}}
+        <p
+          class='offsec-prose'
+          local-class='text'
+          data-test-offensiveSecurity-goalView-cvss-because
+        >{{@cvss.because}}</p>
+      {{/if}}
+      <code
+        local-class='vector'
+        data-test-offensiveSecurity-goalView-cvss-vector
+      >{{@cvss.vector}}</code>
+    </div>
+  {{/if}}
+
+  {{#if @pocReason}}
+    <div local-class='field' data-test-offensiveSecurity-goalView-cvss-pocField>
+      <div
+        local-class='field-label'
+        data-test-offensiveSecurity-goalView-cvss-pocLabel
+      >
+        {{t 'offensiveSecurity.goalView.proofOfConcept'}}
+      </div>
+      <p
+        class='offsec-prose'
+        local-class='text'
+        data-test-offensiveSecurity-goalView-cvss-poc
+      >{{@pocReason}}</p>
+    </div>
+  {{/if}}
+{{else}}
+  {{#if this.hasScore}}
+    <span
+      local-class='chip band-{{this.band}}'
+      data-test-offensiveSecurity-goalView-cvss-chip
+    >
+      <span local-class='dot'></span>
+      {{this.label}}
+    </span>
+  {{/if}}
+  {{#if this.isNotReproduced}}
+    <span
+      local-class='chip not-reproduced'
+      data-test-offensiveSecurity-goalView-cvss-notReproduced
+    >
+      {{t 'offensiveSecurity.goalView.notReproduced'}}
+    </span>
+  {{/if}}
+{{/if}}

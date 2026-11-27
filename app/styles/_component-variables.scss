@@ -4618,6 +4618,41 @@ body {
     --offensive-security-artifact-green-color
   );
 
+  // variables for offensive-security/scan-results/summary-card
+  --offensive-security-scan-results-summary-card-caption-color: var(
+    --text-secondary
+  );
+  --offensive-security-scan-results-summary-card-critical-color: var(
+    --severity-critical
+  );
+  --offensive-security-scan-results-summary-card-high-color: var(
+    --severity-high
+  );
+  --offensive-security-scan-results-summary-card-medium-color: var(
+    --severity-medium
+  );
+  --offensive-security-scan-results-summary-card-low-color: var(--severity-low);
+
+  // variables for offensive-security/scan-results/goal-verdict-view/cvss
+  --offensive-security-scan-results-goal-verdict-view-cvss-label-color: var(
+    --text-secondary
+  );
+  --offensive-security-scan-results-goal-verdict-view-cvss-critical-color: var(
+    --severity-critical
+  );
+  --offensive-security-scan-results-goal-verdict-view-cvss-high-color: var(
+    --severity-high
+  );
+  --offensive-security-scan-results-goal-verdict-view-cvss-medium-color: var(
+    --severity-medium
+  );
+  --offensive-security-scan-results-goal-verdict-view-cvss-low-color: var(
+    --severity-low
+  );
+  --offensive-security-scan-results-goal-verdict-view-cvss-chip-border-radius: var(
+    --border-radius-capsule
+  );
+
   // variables for the five goal verdicts (Exploited ... Not vulnerable)
   --offensive-security-verdict-exploited-color: var(--error-main);
   --offensive-security-verdict-exploited-bg-color: var(--error-bg);

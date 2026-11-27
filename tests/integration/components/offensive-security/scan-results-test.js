@@ -44,6 +44,11 @@ const SELECTORS = {
   failureBanner: '[data-test-offensiveSecurity-scanResults-failureBanner]',
   summaryCard: '[data-test-offensiveSecurity-summaryCard]',
   summaryStat: '[data-test-offensiveSecurity-summaryCard-stat]',
+  summaryStatLabel: '[data-test-offensiveSecurity-summaryCard-statLabel]',
+  summaryStatValue: '[data-test-offensiveSecurity-summaryCard-statValue]',
+  summaryBreakdown: '[data-test-offensiveSecurity-summaryCard-breakdown]',
+  summaryBand: '[data-test-offensiveSecurity-summaryCard-band]',
+  summaryCaption: '[data-test-offensiveSecurity-summaryCard-caption]',
   artifactsCard: '[data-test-offensiveSecurity-artifactsCard]',
   artifactRow: '[data-test-offensiveSecurity-artifactsCard-row]',
   artifactEmpty: '[data-test-offensiveSecurity-artifactsCard-empty]',
@@ -264,6 +269,82 @@ module('Integration | Component | offensive-security/scan-results', (hooks) => {
       .containsText('iOS application archive (IPA)');
     assert.dom(SELECTORS.artifactsCard).containsText('15.0 MB');
     assert.dom(SELECTORS.artifactsCard).containsText('20.0 MB');
+  });
+
+  // ─── CVSS score ────────────────────────────────────────────────────────────
+
+  test('an unscored scan counts business risks, with no breakdown', async function (assert) {
+    const scan = createScan(this);
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    const labels = findAll(SELECTORS.summaryStatLabel);
+
+    assert.strictEqual(labels.length, 4);
+    assert
+      .dom(labels[3])
+      .hasText(t('offensiveSecurity.summary.businessRisksConfirmed'));
+    assert.dom(SELECTORS.summaryBreakdown).doesNotExist();
+    assert.dom(SELECTORS.summaryCaption).doesNotExist();
+  });
+
+  test('a scored scan counts its distinct findings, split by band', async function (assert) {
+    const scan = this.server.create('offsec-scan', 'scored', {
+      status: SCAN_STATUS.COMPLETED,
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    const labels = findAll(SELECTORS.summaryStatLabel);
+    const values = findAll(SELECTORS.summaryStatValue);
+
+    assert.dom(labels[3]).hasText(t('findings'));
+    assert.dom(values[3]).hasText('6');
+
+    const bands = findAll(SELECTORS.summaryBand);
+    const expected = [
+      ['critical', `1 ${t('critical')}`],
+      ['high', `2 ${t('high')}`],
+      ['low', `3 ${t('low')}`],
+    ];
+
+    assert.strictEqual(
+      bands.length,
+      expected.length,
+      'a band with no findings is left out'
+    );
+
+    expected.forEach(([band, text], i) => {
+      assert
+        .dom(bands[i])
+        .hasAttribute('data-test-offensiveSecurity-summaryCard-band', band)
+        .hasText(text);
+    });
+
+    assert.dom(SELECTORS.summaryCaption).doesNotExist();
+  });
+
+  test('a scored scan whose audit did not finish says some findings were not reviewed', async function (assert) {
+    const scan = this.server.create('offsec-scan', 'scored', {
+      status: SCAN_STATUS.COMPLETED,
+      cvss_scoring: {
+        distinct_scored_findings: 2,
+        count_by_cvss_severity: { Critical: 0, High: 2, Medium: 0, Low: 0 },
+        all_findings_audited: false,
+      },
+    });
+    serveScan(this, scan);
+
+    this.set('scanId', String(scan.id));
+    await render(TEMPLATE);
+
+    assert
+      .dom(SELECTORS.summaryCaption)
+      .hasText(t('offensiveSecurity.summary.auditIncomplete'));
   });
 
   // ─── Live run ──────────────────────────────────────────────────────────────

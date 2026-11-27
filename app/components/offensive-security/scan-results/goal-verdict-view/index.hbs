@@ -70,6 +70,10 @@
               </span>
 
               <span local-class='card-head-right'>
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                  @cvss={{card.technique.cvss}}
+                  @reproduced={{card.technique.reproduced}}
+                />
                 <span local-class='pill verdict-{{card.tone}}'>
                   <span local-class='pill-dot'></span>
                   {{t (concat 'offensiveSecurity.verdict.' card.verdict)}}
@@ -100,6 +104,14 @@
                   {{/if}}
                 </div>
               {{/if}}
+
+              {{#unless card.technique.findings.length}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                  @detail={{true}}
+                  @cvss={{card.technique.cvss}}
+                  @pocReason={{card.technique.poc_reason}}
+                />
+              {{/unless}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -411,14 +423,22 @@
                           </span>
                         </div>
 
-                        {{#unless card.chainStep}}
-                          <span local-class='pill verdict-{{card.tone}}'>
-                            <span local-class='pill-dot'></span>
-                            {{t
-                              (concat 'offensiveSecurity.verdict.' card.verdict)
-                            }}
-                          </span>
-                        {{/unless}}
+                        <span local-class='head-badges'>
+                          <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                            @cvss={{card.technique.cvss}}
+                            @reproduced={{card.technique.reproduced}}
+                          />
+                          {{#unless card.chainStep}}
+                            <span local-class='pill verdict-{{card.tone}}'>
+                              <span local-class='pill-dot'></span>
+                              {{t
+                                (concat
+                                  'offensiveSecurity.verdict.' card.verdict
+                                )
+                              }}
+                            </span>
+                          {{/unless}}
+                        </span>
                       </div>
 
                       <div local-class='tech-card-b'>
@@ -437,6 +457,14 @@
                             {{/if}}
                           </div>
                         {{/if}}
+
+                        {{#unless card.technique.findings.length}}
+                          <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                            @detail={{true}}
+                            @cvss={{card.technique.cvss}}
+                            @pocReason={{card.technique.poc_reason}}
+                          />
+                        {{/unless}}
 
                         {{#if (this.hasEvidence card.technique)}}
                           <div local-class='field'>
@@ -534,9 +562,15 @@
                   ·
                   {{card.technique.name}}
                 </span>
-                <span local-class='pill verdict-{{card.tone}}'>
-                  <span local-class='pill-dot'></span>
-                  {{t (concat 'offensiveSecurity.verdict.' card.verdict)}}
+                <span local-class='head-badges'>
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                    @cvss={{card.technique.cvss}}
+                    @reproduced={{card.technique.reproduced}}
+                  />
+                  <span local-class='pill verdict-{{card.tone}}'>
+                    <span local-class='pill-dot'></span>
+                    {{t (concat 'offensiveSecurity.verdict.' card.verdict)}}
+                  </span>
                 </span>
               </div>
 
@@ -555,6 +589,14 @@
                   {{/if}}
                 </div>
               {{/if}}
+
+              {{#unless card.technique.findings.length}}
+                <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                  @detail={{true}}
+                  @cvss={{card.technique.cvss}}
+                  @pocReason={{card.technique.poc_reason}}
+                />
+              {{/unless}}
 
               <div local-class='field'>
                 <div local-class='field-label'>
@@ -649,9 +691,15 @@
                   ·
                   {{card.technique.name}}
                 </span>
-                <span local-class='pill verdict-{{card.tone}}'>
-                  <span local-class='pill-dot'></span>
-                  {{t (concat 'offensiveSecurity.verdict.' card.verdict)}}
+                <span local-class='head-badges'>
+                  <OffensiveSecurity::ScanResults::GoalVerdictView::Cvss
+                    @cvss={{card.technique.cvss}}
+                    @reproduced={{card.technique.reproduced}}
+                  />
+                  <span local-class='pill verdict-{{card.tone}}'>
+                    <span local-class='pill-dot'></span>
+                    {{t (concat 'offensiveSecurity.verdict.' card.verdict)}}
+                  </span>
                 </span>
               </div>
 

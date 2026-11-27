@@ -458,4 +458,27 @@ module('Unit | Utility | offsec-goal-verdict', function () {
 
     assert.deepEqual(resolved.unclaimed_findings, [loose]);
   });
+
+  test('a technique carries the highest score and proof of concept of the findings behind it', function (assert) {
+    const cvss = { score: 9.3, rating: 'Critical', vector: 'CVSS:4.0/AV:N' };
+    const goal = resolveGoalView({
+      goal_id: 'find-secrets',
+      verdict: 'exploited',
+      findings: [
+        {
+          ...FINDING,
+          exploitability: 'demonstrated',
+          audit: { status: 'valid', cvss },
+          reproduced: false,
+          poc_reason: 'the script never read the value',
+        },
+      ],
+    });
+
+    const [technique] = goal.techniques;
+
+    assert.deepEqual(technique.cvss, cvss);
+    assert.false(technique.reproduced);
+    assert.strictEqual(technique.poc_reason, 'the script never read the value');
+  });
 });

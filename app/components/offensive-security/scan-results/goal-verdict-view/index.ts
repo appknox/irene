@@ -5,6 +5,7 @@ import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import type IntlService from 'ember-intl/services/intl';
 
+import { mergedCvssFields } from 'irene/utils/offsec-cvss';
 import {
   goalDescriptionText,
   goalTechniqueMetrics,
@@ -530,6 +531,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
       return {
         ...this.toCard({
           ...first,
+          ...mergedCvssFields(group),
           evidence: evidence || undefined,
           credentials: credentials.length ? credentials : undefined,
         }),

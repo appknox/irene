@@ -1,0 +1,94 @@
+.chip,
+.score {
+  &.band-critical {
+    --band-color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-critical-color
+    );
+  }
+
+  &.band-high {
+    --band-color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-high-color
+    );
+  }
+
+  &.band-medium {
+    --band-color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-medium-color
+    );
+  }
+
+  &.band-low {
+    --band-color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-low-color
+    );
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35714em;
+  padding: 0.14286em 0.71429em;
+  border: 1px solid var(--band-color);
+  border-radius: var(
+    --offensive-security-scan-results-goal-verdict-view-cvss-chip-border-radius
+  );
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--band-color);
+
+  &.not-reproduced {
+    border-color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-label-color
+    );
+    font-weight: 400;
+    font-style: italic;
+    color: var(
+      --offensive-security-scan-results-goal-verdict-view-cvss-label-color
+    );
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--band-color);
+}
+
+.field {
+  margin: 0.71429em 0 1em;
+}
+
+.field-label {
+  margin-bottom: 0.42857em;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-cvss-label-color
+  );
+}
+
+.score {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--band-color);
+}
+
+.text {
+  margin: 0.28571em 0 0;
+}
+
+.vector {
+  display: block;
+  margin-top: 0.42857em;
+  font-size: 12px;
+  word-break: break-all;
+  color: var(
+    --offensive-security-scan-results-goal-verdict-view-cvss-label-color
+  );
+}

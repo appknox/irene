@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 import { humanize, secretText } from 'irene/utils/offsec-goal-verdict';
+import { cvssScore } from 'irene/utils/offsec-cvss';
 import type { GoalCredential, PentestFinding } from 'irene/models/offsec-scan';
 
 export interface GoalVerdictViewFindingsSignature {
@@ -29,10 +30,12 @@ export default class GoalVerdictViewFindingsComponent extends Component<GoalVerd
   /** The rows that are expanded, by title: they show arrows, the rest a count. */
   @tracked openGroups: Record<string, boolean> = {};
 
-  /** The findings, the most severe first. */
+  /** The highest CVSS score first; unscored findings by the agent's severity. */
   get rows(): PentestFinding[] {
     return [...(this.args.findings ?? [])].sort(
-      (a, b) => (b.severity ?? 0) - (a.severity ?? 0)
+      (a, b) =>
+        (cvssScore(b) ?? -1) - (cvssScore(a) ?? -1) ||
+        (b.severity ?? 0) - (a.severity ?? 0)
     );
   }
 
@@ -66,6 +69,13 @@ export default class GoalVerdictViewFindingsComponent extends Component<GoalVerd
       .join(' · ');
 
   secret = (finding: PentestFinding): string => secretText(finding) ?? '';
+
+  /** A CVSS score replaces the agent's own 1–5 severity and its reasons. */
+  showsAgentSeverity = (finding: PentestFinding): boolean =>
+    cvssScore(finding) === null && Boolean(finding.severity);
+
+  showsSeverityReasons = (finding: PentestFinding): boolean =>
+    cvssScore(finding) === null && this.severityReasons(finding) !== '';
 
   severityReasons = (finding: PentestFinding): string =>
     (finding.severity_because ?? []).join(' ');

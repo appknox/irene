@@ -44,6 +44,12 @@ const selectors = {
   atLaunch: '[data-test-offensiveSecurity-goalView-finding-atLaunch]',
   observation: '[data-test-offensiveSecurity-goalView-observation]',
   credentials: '[data-test-offensiveSecurity-goalView-credentials]',
+  cvssChip: '[data-test-offensiveSecurity-goalView-cvss-chip]',
+  notReproduced: '[data-test-offensiveSecurity-goalView-cvss-notReproduced]',
+  cvssScore: '[data-test-offensiveSecurity-goalView-cvss-score]',
+  cvssBecause: '[data-test-offensiveSecurity-goalView-cvss-because]',
+  cvssVector: '[data-test-offensiveSecurity-goalView-cvss-vector]',
+  poc: '[data-test-offensiveSecurity-goalView-cvss-poc]',
 };
 
 // ─── Template ──────────────────────────────────────────────────────────────────
@@ -128,9 +134,7 @@ module(
 
       await render(TEMPLATE);
 
-      assert
-        .dom(selectors.label)
-        .containsText(t('offensiveSecurity.goalView.findings'));
+      assert.dom(selectors.label).containsText(t('findings'));
       assert.dom(selectors.total).hasText('3');
 
       const rows = findAll(selectors.row);
@@ -333,6 +337,77 @@ module(
           t('offensiveSecurity.goalView.pagerOf', { current: 2, total: 2 })
         );
       assert.dom(selectors.review).hasText('The second key.');
+    });
+
+    test('a scored finding shows its CVSS band and score in place of the agent severity', async function (assert) {
+      this.set('findings', [
+        {
+          ...FULL_FINDING,
+          reproduced: false,
+          poc_reason: 'the script never read the token',
+          audit: {
+            status: 'valid',
+            reason: 'Genuine key.',
+            cvss: {
+              version: '4.0',
+              vector:
+                'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:L/E:P',
+              score: 9.3,
+              rating: 'Critical',
+              because: 'a server-side key lets an attacker act as the backend',
+            },
+          },
+        },
+      ]);
+
+      await render(TEMPLATE);
+
+      assert.dom(selectors.cvssChip).hasText('Critical 9.3');
+      assert.dom(selectors.severity).doesNotExist();
+      assert
+        .dom(selectors.notReproduced)
+        .hasText(t('offensiveSecurity.goalView.notReproduced'));
+
+      assert.dom(selectors.cvssScore).hasText('Critical 9.3');
+      assert
+        .dom(selectors.cvssBecause)
+        .hasText('a server-side key lets an attacker act as the backend');
+      assert
+        .dom(selectors.cvssVector)
+        .hasText(
+          'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:N/SC:H/SI:H/SA:L/E:P'
+        );
+      assert.dom(selectors.poc).hasText('the script never read the token');
+      assert
+        .dom(selectors.whySevere)
+        .doesNotExist('the agent severity reasons give way to the CVSS reason');
+    });
+
+    test('scored findings sort by CVSS score, highest first', async function (assert) {
+      const scored = (pattern, score, rating) => ({
+        kind: 'credential',
+        pattern,
+        severity: 5,
+        audit: { status: 'valid', cvss: { score, rating } },
+      });
+
+      this.set('findings', [
+        scored('low_one', 2.7, 'Low'),
+        scored('critical_one', 9.3, 'Critical'),
+        { kind: 'credential', pattern: 'unscored_one', severity: 5 },
+      ]);
+
+      await render(TEMPLATE);
+
+      const titles = findAll(selectors.title).map((el) =>
+        el.textContent.trim()
+      );
+
+      assert.deepEqual(titles, [
+        'Critical one · Credential',
+        'Low one · Credential',
+        'Unscored one · Credential',
+      ]);
     });
   }
 );

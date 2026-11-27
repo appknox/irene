@@ -52,8 +52,37 @@
         local-class='stat-tile {{stat.tone}}'
         data-test-offensiveSecurity-summaryCard-stat
       >
-        <dt local-class='stat-label'>{{stat.label}}</dt>
-        <dd local-class='stat-value'>{{stat.value}}</dd>
+        <dt
+          local-class='stat-label'
+          data-test-offensiveSecurity-summaryCard-statLabel
+        >{{stat.label}}</dt>
+        <dd
+          local-class='stat-value'
+          data-test-offensiveSecurity-summaryCard-statValue
+        >{{stat.value}}</dd>
+        {{#if stat.breakdown}}
+          <dd
+            local-class='stat-breakdown'
+            data-test-offensiveSecurity-summaryCard-breakdown
+          >
+            {{#each stat.breakdown as |item|}}
+              <span
+                local-class='band band-{{item.band}}'
+                data-test-offensiveSecurity-summaryCard-band={{item.band}}
+              >
+                <span local-class='band-dot'></span>
+                {{item.count}}
+                {{t item.band}}
+              </span>
+            {{/each}}
+          </dd>
+        {{/if}}
+        {{#if stat.caption}}
+          <dd
+            local-class='stat-caption'
+            data-test-offensiveSecurity-summaryCard-caption
+          >{{stat.caption}}</dd>
+        {{/if}}
       </div>
     {{/each}}
   </dl>
