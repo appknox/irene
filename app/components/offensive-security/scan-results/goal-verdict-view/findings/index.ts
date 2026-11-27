@@ -1,22 +1,14 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import type IntlService from 'ember-intl/services/intl';
 
 import { humanize, secretText } from 'irene/utils/offsec-goal-verdict';
-import type {
-  GoalCredential,
-  PentestFinding,
-  PentestObservation,
-} from 'irene/models/offsec-scan';
+import type { GoalCredential, PentestFinding } from 'irene/models/offsec-scan';
 
 export interface GoalVerdictViewFindingsSignature {
   Args: {
     /** The findings the reviewer kept; false positives are dropped when the goal is resolved. */
     findings?: PentestFinding[];
-    /** Every observation the goal reported; a finding's observation is looked up here. */
-    observations?: PentestObservation[];
     /** Shown through the credentials block when the technique names no findings. */
     credentials?: GoalCredential[];
     evidence?: string;
@@ -31,8 +23,6 @@ export interface FindingGroup {
 }
 
 export default class GoalVerdictViewFindingsComponent extends Component<GoalVerdictViewFindingsSignature> {
-  @service declare intl: IntlService;
-
   /** Which finding each group shows, by its title; a group not stepped through shows its first. */
   @tracked positions: Record<string, number> = {};
 
@@ -77,12 +67,6 @@ export default class GoalVerdictViewFindingsComponent extends Component<GoalVerd
 
   secret = (finding: PentestFinding): string => secretText(finding) ?? '';
 
-  /** "Verified"; a status without a label of its own shows as words. */
-  auditLabel = (status?: string): string => this.label('audit', status);
-
-  exploitabilityLabel = (value?: string): string =>
-    this.label('exploitability', value);
-
   severityReasons = (finding: PentestFinding): string =>
     (finding.severity_because ?? []).join(' ');
 
@@ -90,15 +74,6 @@ export default class GoalVerdictViewFindingsComponent extends Component<GoalVerd
     (finding.places?.length ? finding.places : [finding.where])
       .filter(Boolean)
       .join(', ');
-
-  observationIds = (finding: PentestFinding): number[] =>
-    finding.observation_id === undefined ? [] : [finding.observation_id];
-
-  label(group: string, value?: string): string {
-    const key = `offensiveSecurity.goalView.${group}.${value}`;
-
-    return value && this.intl.exists(key) ? this.intl.t(key) : humanize(value);
-  }
 
   /** The arrows sit inside the row's summary; without this a click would also open or close it. */
   moveTo(group: FindingGroup, position: number, event?: Event): void {

@@ -21,8 +21,6 @@ import type {
   GoalTechnique,
   GoalVerdict,
   PentestFinding,
-  PentestHypothesis,
-  PentestObservation,
   ResolvedGoalResult,
 } from 'irene/models/offsec-scan';
 
@@ -72,8 +70,6 @@ export interface PathPage {
   path?: GoalPath;
   isChain: boolean;
   cards: TechniqueCard[];
-  /** Techniques also tried on the path that did not work there; named, not carded. */
-  others: TechniqueCard[];
 }
 
 const LAYOUT_BY_VERDICT: Record<GoalVerdict, GoalLayout> = {
@@ -129,21 +125,8 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return goalDescriptionText(this.args.goal.description);
   }
 
-  /** The agent's account of the goal; its route and ruled-out list show as the paths and hypotheses. */
-  get detailText(): string {
-    return readableAgentText(this.detail.intro);
-  }
-
   get allPaths(): GoalPath[] {
     return this.args.goal.paths ?? [];
-  }
-
-  get observations(): PentestObservation[] {
-    return this.args.goal.observations ?? [];
-  }
-
-  get hypotheses(): PentestHypothesis[] {
-    return this.args.goal.hypotheses ?? [];
   }
 
   /** Findings no technique lists; no card would show them, so they get a panel of their own. */
@@ -151,13 +134,8 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return this.args.goal.unclaimed_findings ?? [];
   }
 
-  /** The refuted hypotheses already say what was ruled out, and why. */
-  get showRuledOut(): boolean {
-    return !this.hypotheses.length && this.detail.ruledOut.length > 0;
-  }
-
   /**
-   * The paths that reached the goal; the rest show as attempts on the techniques tried on them. An
+   * The paths that reached the goal; the rest are not shown. An
    * exploited goal without any falls back to the route its detail spells out.
    */
   get goalPaths(): GoalPath[] {
@@ -204,9 +182,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
 
     // with no path the page still shows the note, and any exploited cards under it
     if (!this.goalPaths.length) {
-      return [
-        { isChain: false, cards: this.groupedCards(exploited), others: [] },
-      ];
+      return [{ isChain: false, cards: this.groupedCards(exploited) }];
     }
 
     return this.goalPaths.map((path) => {
@@ -223,7 +199,6 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
           path,
           isChain: false,
           cards: this.groupedCards(exploited),
-          others: [],
         };
       }
 
@@ -247,13 +222,6 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return this.isExploitLayout
       ? 'offensiveSecurity.goalView.exploitFindings'
       : 'offensiveSecurity.goalView.weaknessFindings';
-  }
-
-  /** The paths that never reached their end, listed on the other-techniques page. */
-  get otherPaths(): GoalPath[] {
-    return this.allPaths.filter(
-      (path) => path.status && path.status !== 'succeeded'
-    );
   }
 
   get weaknessCards(): TechniqueCard[] {
@@ -310,7 +278,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
       return !this.isProofLayout && this.allOthers.length > 0;
     }
 
-    return this.allOthers.length > 0 || this.otherPaths.length > 0;
+    return this.allOthers.length > 0;
   }
 
   get otherTechniquesLabelKey(): string {
@@ -335,18 +303,6 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
       this.isUntestedGoal ? 'triedUntestedTitle' : 'triedHeldTitle'
     }`;
   }
-
-  /** The paths a technique was tried on that never reached the goal. */
-  attemptsFor = (technique: GoalTechnique): GoalPath[] => {
-    const numbers = technique.paths ?? [];
-
-    return this.allPaths.filter(
-      (path) =>
-        path.number !== undefined &&
-        numbers.includes(path.number) &&
-        path.status !== 'succeeded'
-    );
-  };
 
   /** A step as the tool it called, in words; the raw step text shows under it. */
   stepName = (step: GoalPathStep): string => verbName(step.verb);
@@ -516,7 +472,7 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     this.pageIndex = Math.min(this.pageCount - 1, this.safeIndex + 1);
   }
 
-  /** The techniques tried on a numbered path: the ones that worked as cards, the rest by name. */
+  /** The techniques that worked on a numbered path, as cards. */
   private numberedPathPage(path: GoalPath, number: number): PathPage {
     const linked = this.techniques.filter((t) => t.paths?.includes(number));
 
@@ -524,7 +480,6 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
       path,
       isChain: false,
       cards: this.toCards(linked.filter(isWorked)),
-      others: this.toCards(linked.filter((t) => !isWorked(t))),
     };
   }
 
@@ -539,7 +494,6 @@ export default class OffensiveSecurityScanResultsGoalVerdictViewComponent extend
     return {
       path,
       isChain,
-      others: [],
       cards: techniques.map((technique) => ({
         ...this.toCard(technique),
         // a card is numbered by where its step sits in the path

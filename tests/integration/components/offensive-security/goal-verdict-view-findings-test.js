@@ -50,23 +50,11 @@ const selectors = {
 
 const TEMPLATE = hbs`<OffensiveSecurity::ScanResults::GoalVerdictView::Findings
   @findings={{this.findings}}
-  @observations={{this.observations}}
   @credentials={{this.credentials}}
   @evidence={{this.evidence}}
 />`;
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────────
-
-const OBSERVATIONS = [
-  {
-    id: 7,
-    verb: 'inspect_manifest',
-    note: 'read the manifest',
-    outcome: 'success',
-    step: 0,
-    elapsed_ms: 0,
-  },
-];
 
 const FULL_FINDING = {
   id: 'F1',
@@ -104,7 +92,6 @@ module(
     hooks.beforeEach(function () {
       this.setProperties({
         findings: [],
-        observations: OBSERVATIONS,
         credentials: undefined,
         evidence: undefined,
       });
@@ -165,10 +152,10 @@ module(
 
       assert
         .dom(selectors.audit)
-        .hasText(t('offensiveSecurity.goalView.audit.valid'));
+        .doesNotExist('every finding shown is verified, so no chip says so');
       assert
         .dom(selectors.exploitability)
-        .hasText(t('offensiveSecurity.goalView.exploitability.unproven'));
+        .doesNotExist('the reason stays under why it is exploitable');
       assert
         .dom(selectors.severity)
         .hasText(t('offensiveSecurity.goalView.findingSeverity', { level: 3 }));
@@ -213,7 +200,9 @@ module(
         .dom(selectors.atLaunch)
         .hasText(t('offensiveSecurity.goalView.seenAtLaunch'));
 
-      assert.dom(selectors.observation).exists({ count: 1 });
+      assert
+        .dom(selectors.observation)
+        .doesNotExist('raw observation output is not shown');
     });
 
     test('a finding without the optional fields leaves them out', async function (assert) {
@@ -234,16 +223,6 @@ module(
       assert.dom(selectors.preRun).doesNotExist();
       assert.dom(selectors.atLaunch).doesNotExist();
       assert.dom(selectors.observation).doesNotExist();
-    });
-
-    test('an exploitability without a label of its own shows as words', async function (assert) {
-      this.set('findings', [
-        { ...FULL_FINDING, exploitability: 'partly_demonstrated' },
-      ]);
-
-      await render(TEMPLATE);
-
-      assert.dom(selectors.exploitability).hasText('Partly demonstrated');
     });
 
     // ─── Stepping through a kind ───────────────────────────────────────────────

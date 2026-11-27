@@ -53,16 +53,6 @@
   margin-top: -16px;
 }
 
-// the agent's account sits under the description, with the same gap as between the other fields
-.detail {
-  margin-top: -2px;
-}
-
-// the goal's description and detail, read as the agent's own words
-.is-italic {
-  font-style: italic;
-}
-
 .cta {
   display: inline-flex;
   align-items: center;
@@ -320,46 +310,6 @@
   line-height: 18px;
   overflow-wrap: anywhere;
   color: var(--text-secondary);
-}
-
-.also-tried {
-  margin-top: 14px;
-}
-
-.also-tried-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.also-tried-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color-1);
-  border-radius: 8px;
-}
-
-.also-tried-name {
-  font-size: 13px;
-  color: var(--text-primary);
-}
-
-.ruled-out-list {
-  margin: 0;
-  padding-left: 20px;
-  font-size: 14px;
-  line-height: 20px;
-  color: var(--text-primary);
-
-  li {
-    margin: 0 0 10px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
 }
 
 .sub-head {

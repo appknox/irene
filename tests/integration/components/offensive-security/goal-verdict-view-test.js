@@ -246,7 +246,7 @@ module(
       });
 
       assert.dom(SEL.description).hasText('Reach the login was reached.');
-      assert.dom(SEL.descriptionLabel).hasText(t('description'));
+      assert.dom(SEL.descriptionLabel).doesNotExist();
       assert
         .dom(SEL.chain)
         .hasAttribute('data-test-offensiveSecurity-goalView-chain', 'chain');
@@ -259,10 +259,9 @@ module(
         .dom(SEL.exploitCard)
         .exists({ count: 2 }, 'the exploited techniques back the route');
       assert.dom(SEL.note).doesNotExist();
-      assert.dom(SEL.ruledOutItem).exists({ count: 2 });
       assert
-        .dom(findAll(SEL.ruledOutItem)[0])
-        .hasText('The shipped credential (credential assignment) signs in.');
+        .dom(SEL.ruledOut)
+        .doesNotExist('the ruled-out list is not on the goal page');
     });
 
     test('exploited techniques of the same kind behind a route share one card', async function (assert) {
@@ -613,25 +612,21 @@ module(
           .hasText('1 finding: basic auth (Inspect strings).');
         assert
           .dom(SEL.pathExpected)
-          .hasText('The bundle holds the endpoints and secrets.');
+          .doesNotExist('what the agent expected is not shown');
 
         assert
           .dom(SEL.exploitCard)
           .exists({ count: 1 })
           .containsText('Hardcoded secret · Static inspection of the package');
-        assert
-          .dom(SEL.alsoTriedItem)
-          .containsText('Insecure storage · Reading the app stores');
-        assert
-          .dom(`${SEL.exploitCard} ${SEL.attempts}`)
-          .doesNotExist('paths that did not succeed are on the other page');
+        assert.dom(SEL.alsoTriedItem).doesNotExist();
+        assert.dom(SEL.attempts).doesNotExist();
       });
 
-      test("the goal's detail shows under its name, without the ruled-out list it carries", async function (assert) {
+      test("the goal's run notes are not shown under its name", async function (assert) {
         await renderGoal(this, agentGoal());
 
-        assert.dom(SEL.detail).hasText('No route was reached.');
-        assert.dom(SEL.detailLabel).hasText(t('details'));
+        assert.dom(SEL.detail).doesNotExist();
+        assert.dom(SEL.detailLabel).doesNotExist();
       });
 
       test('the page shows names, never the ids the agent uses', async function (assert) {
@@ -642,17 +637,13 @@ module(
         assert.dom(SEL.anyView).doesNotContainText('obs:');
         assert.dom(SEL.anyView).doesNotContainText('F1');
         assert.dom(SEL.anyView).doesNotContainText('H1');
-
-        assert.dom(SEL.observationTool).hasText('Inspect strings');
-        assert.dom(SEL.observationOutcome).hasText('Success');
       });
 
-      test('a raw observation output is cut short', async function (assert) {
+      test('raw observation output is not shown', async function (assert) {
         await renderGoal(this, agentGoal());
 
-        assert
-          .dom(SEL.observationOutput)
-          .containsText('Showing the first 4000 of 5000 characters.');
+        assert.dom(SEL.observationTool).doesNotExist();
+        assert.dom(SEL.observationOutput).doesNotExist();
       });
 
       test('findings show the verified ones and never the false positives', async function (assert) {
@@ -660,8 +651,8 @@ module(
 
         assert.dom(SEL.finding).exists({ count: 1 });
         assert.dom(SEL.findingTitle).hasText('Http basic auth · Credential');
-        assert.dom(SEL.findingAudit).hasText('Verified');
-        assert.dom(SEL.findingExploitability).hasText('Not proven');
+        assert.dom(SEL.findingAudit).doesNotExist();
+        assert.dom(SEL.findingExploitability).doesNotExist();
         assert
           .dom(SEL.findingReview)
           .hasText('A real service credential shipped in the app.');
@@ -669,23 +660,15 @@ module(
         assert.dom(SEL.anyView).doesNotContainText('False positive');
       });
 
-      test('hypotheses list the confirmed ones first and replace the ruled-out list', async function (assert) {
+      test('hypotheses and the ruled-out list are not shown', async function (assert) {
         await renderGoal(this, agentGoal());
 
-        const statuses = findAll(
-          `${SEL.hypothesesPanel} ${SEL.hypothesisStatus}`
-        );
-
-        assert.strictEqual(statuses[0].textContent.trim(), 'Confirmed');
-        assert.strictEqual(statuses[1].textContent.trim(), 'Ruled out');
-        assert.dom(SEL.hypothesesCount).hasText('1 confirmed · 1 ruled out');
-        assert
-          .dom(SEL.hypothesisReason)
-          .hasText('Every scheme relaunched the app empty.');
+        assert.dom(SEL.hypothesesPanel).doesNotExist();
+        assert.dom(SEL.hypothesisStatus).doesNotExist();
         assert.dom(SEL.ruledOut).doesNotExist();
       });
 
-      test('other techniques lists the techniques that did not work and every path that did not succeed', async function (assert) {
+      test('other techniques lists the techniques that did not work, without hypotheses or failed paths', async function (assert) {
         await renderGoal(this, agentGoal());
         await click(SEL.otherCta);
 
@@ -693,23 +676,16 @@ module(
           .dom(SEL.otherPanel)
           .containsText('Insecure storage · Reading the app stores')
           .containsText('Every store collector refused.')
-          .containsText('The keychain holds a session token.');
+          .doesNotContainText('The keychain holds a session token.');
         assert
           .dom(SEL.otherPanel)
           .doesNotContainText('Static inspection of the package');
 
-        const otherPaths = SEL.otherPaths;
-
-        assert.dom(`${otherPaths} ${SEL.attempt}`).exists({ count: 1 });
-        assert
-          .dom(`${otherPaths} ${SEL.attemptTitle}`)
-          .hasText('Read defaults → Read keychain');
-        assert
-          .dom(`${otherPaths} ${SEL.attemptOutcome}`)
-          .hasText('read_defaults was refused.');
+        assert.dom(SEL.otherPaths).doesNotExist();
+        assert.dom(SEL.attempt).doesNotExist();
       });
 
-      test('a goal whose succeeded paths carry no techniques still opens other techniques for its other paths', async function (assert) {
+      test('a goal with no other techniques has no other-techniques button, even with failed paths', async function (assert) {
         await renderGoal(
           this,
           agentGoal({
@@ -718,12 +694,7 @@ module(
           })
         );
 
-        assert.dom(SEL.otherCta).exists();
-
-        await click(SEL.otherCta);
-
-        assert.dom(SEL.otherEmpty).exists();
-        assert.dom(SEL.otherPaths).exists();
+        assert.dom(SEL.otherCta).doesNotExist();
       });
     });
 

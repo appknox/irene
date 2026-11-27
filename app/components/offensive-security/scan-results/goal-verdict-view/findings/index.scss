@@ -103,15 +103,6 @@
   font-weight: 600;
 }
 
-.audit-valid {
-  color: var(
-    --offensive-security-scan-results-goal-verdict-view-findings-verified-color
-  );
-  background-color: var(
-    --offensive-security-scan-results-goal-verdict-view-findings-verified-bg-color
-  );
-}
-
 // pushes itself and the chevron to the row's end
 .finding-pager {
   margin-left: auto;
