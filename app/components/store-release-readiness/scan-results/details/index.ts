@@ -57,6 +57,16 @@ function statusDotStackClass(
 export default class StoreReleaseReadinessScanResultsDetailsComponent extends Component<StoreReleaseReadinessScanResultsDetailsSignature> {
   @service declare intl: IntlService;
 
+  get hasVerdict() {
+    const verdict = ENUMS.STORE_RELEASE_VERDICT;
+
+    return [
+      verdict.HIGH_REJECTION_RISK,
+      verdict.MODERATE_REJECTION_RISK,
+      verdict.LOW_REJECTION_RISK,
+    ].includes(this.args.scanData.verdict);
+  }
+
   get rejectionRisk(): ScanResultsDetailsRejectionRisk {
     switch (this.args.scanData.verdict) {
       case ENUMS.STORE_RELEASE_VERDICT.HIGH_REJECTION_RISK:

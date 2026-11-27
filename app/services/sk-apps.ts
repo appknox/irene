@@ -32,7 +32,7 @@ export default class SkAppsService extends Service {
   @tracked
   skFakeApps?: DS.AdapterPopulatedRecordArray<SkFakeAppInventoryModel>;
 
-  @tracked limit = 10;
+  @tracked limit = 25;
   @tracked offset = 0;
   @tracked monitoringStatusFilter = -1;
   @tracked skAppsCount = 0;

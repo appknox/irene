@@ -176,7 +176,7 @@ module('Integration | Component | sbom/scan-report-drawer', function (hooks) {
         '[data-test-sbomReportList-reportGenerateDescription]',
         reportList[0]
       )
-      .hasText(t('sbomModule.generateReportDescription'));
+      .doesNotExist();
 
     assert
       .dom('[data-test-sbomReportList-reportGenerateBtn]', reportList[0])

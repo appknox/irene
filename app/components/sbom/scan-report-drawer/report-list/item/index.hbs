@@ -85,10 +85,6 @@
       >
         <AkSvg::GenerateReport data-test-sbomReportList-reportGenerateSvg />
 
-        <AkTypography data-test-sbomReportList-reportGenerateDescription>
-          {{t 'sbomModule.generateReportDescription'}}
-        </AkTypography>
-
         <AkButton
           {{on 'click' (perform this.handleGenerateReport @reportDetails.type)}}
           @loading={{this.handleGenerateReport.isRunning}}

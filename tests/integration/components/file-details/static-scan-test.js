@@ -1,4 +1,4 @@
-import { click, render, waitFor } from '@ember/test-helpers';
+import { click, findAll, render, waitFor } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { setupIntl, t } from 'ember-intl/test-support';
@@ -234,6 +234,52 @@ module('Integration | Component | file-details/static-scan', function (hooks) {
       await assertVulnerabilityTableType(assert, tableType);
     }
   );
+
+  test('KnoxIQ table is sorted by highest exploitability likelihood by default', async function (assert) {
+    const makeAnalysis = (name, risk, likelihood) => {
+      const vulnerability = this.server.create('vulnerability', {
+        name,
+        types: [ENUMS.VULNERABILITY_TYPE.STATIC],
+      });
+
+      return this.server.create('analysis-overview', {
+        file: this.file.id,
+        vulnerability: vulnerability.id,
+        status: ENUMS.ANALYSIS_STATUS.COMPLETED,
+        computed_risk: risk,
+        exploitability_likelihood: likelihood,
+      });
+    };
+
+    const criticalLow = makeAnalysis(
+      'Critical Low Likelihood',
+      ENUMS.RISK.CRITICAL,
+      ENUMS.KNOXIQ_EXPLOITABILITY.LOW
+    );
+
+    const lowHigh = makeAnalysis(
+      'Low High Likelihood',
+      ENUMS.RISK.LOW,
+      ENUMS.KNOXIQ_EXPLOITABILITY.HIGH
+    );
+
+    setupKnoxiqScanStatusMirage(this.server, {
+      sast: ENUMS.KNOXIQ_SCAN_STATUS.COMPLETED,
+      dast: ENUMS.KNOXIQ_SCAN_STATUS.NOT_TRIGGERED,
+    });
+
+    await render(hbs`<FileDetails::StaticScan @file={{this.file}} />`);
+
+    await waitFor('[data-test-knoxiq-vulnerability-analysis-row]', {
+      timeout: 5000,
+    });
+
+    const rowIds = findAll('[data-test-knoxiq-vulnerability-analysis-row]').map(
+      (row) => row.getAttribute('data-test-knoxiq-vulnerability-analysis-row')
+    );
+
+    assert.deepEqual(rowIds, [lowHigh.id, criticalLow.id]);
+  });
 
   test.each(
     'shows the correct empty state when there are no vulnerabilities',

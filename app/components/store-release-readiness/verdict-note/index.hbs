@@ -1,0 +1,27 @@
+<AkTooltip
+  @arrow={{true}}
+  @placement='bottom'
+  data-test-store-release-readiness-verdict-note
+  ...attributes
+>
+  <:tooltipContent>
+    <div
+      local-class='verdict-note-content'
+      data-test-store-release-readiness-verdict-note-tooltipContent
+    >
+      <AkTypography @color='inherit' @variant='body2'>
+        {{t 'storeReleaseReadiness.verdictNote'}}
+      </AkTypography>
+    </div>
+  </:tooltipContent>
+
+  <:default>
+    <AkIcon
+      @iconName='info'
+      @color='textSecondary'
+      @size='small'
+      local-class='verdict-note-icon'
+      data-test-store-release-readiness-verdict-note-icon
+    />
+  </:default>
+</AkTooltip>

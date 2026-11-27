@@ -15,6 +15,7 @@ import type IreneAjaxService from 'irene/services/ajax';
 import type { AjaxError } from 'irene/services/ajax';
 import type FileRiskModel from 'irene/models/file-risk';
 import type KnoxiqScanModel from 'irene/models/knoxiq-scan';
+import { KNOXIQ_VULNERABILITY_ANALYSIS_DEFAULT_SORTS } from 'irene/components/knox-iq/vulnerability-analysis';
 
 export interface FileDetailsStaticScanSignature {
   Args: {
@@ -35,6 +36,9 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
   @tracked sorts: EmberTableSort[] = [
     { isAscending: false, valuePath: 'computedRisk' },
   ];
+
+  @tracked knoxiqSorts: EmberTableSort[] =
+    KNOXIQ_VULNERABILITY_ANALYSIS_DEFAULT_SORTS;
 
   constructor(owner: unknown, args: FileDetailsStaticScanSignature['Args']) {
     super(owner, args);
@@ -105,6 +109,11 @@ export default class FileDetailsStaticScan extends Component<FileDetailsStaticSc
   @action
   updateSorts(sorts: EmberTableSort[]) {
     this.sorts = sorts;
+  }
+
+  @action
+  updateKnoxiqSorts(sorts: EmberTableSort[]) {
+    this.knoxiqSorts = sorts;
   }
 
   handleRescanApp = task(async () => {

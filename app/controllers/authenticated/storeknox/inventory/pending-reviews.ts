@@ -8,7 +8,7 @@ export default class AuthenticatedStoreknoxInventoryPendingReviewsController ext
 
   queryParams = ['app_limit', 'app_offset', 'app_search_id', 'app_query'];
 
-  app_limit = 10;
+  app_limit = 25;
   app_offset = 0;
   app_search_id = null;
   app_query = '';

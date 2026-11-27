@@ -189,14 +189,9 @@ module(
         .dom('[data-test-privacyReport-reportGenerateSvg]', reportList[0])
         .exists();
 
-      assert.strictEqual(
-        find(
-          '[data-test-privacyReport-reportGenerateDescription]'
-        ).innerHTML.trim(),
-        t('privacyModule.generateReportDescription', {
-          htmlSafe: true,
-        }).toString()
-      );
+      assert
+        .dom('[data-test-privacyReport-reportGenerateDescription]')
+        .doesNotExist();
 
       assert
         .dom('[data-test-privacyReport-reportGenerateBtn]', reportList[0])

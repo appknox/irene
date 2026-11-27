@@ -52,15 +52,21 @@
           />
         {{/let}}
 
-        <AkTypography
-          @color='inherit'
-          @fontWeight='medium'
-          local-class='scan-results-details-risk'
-          class={{risk.variantClass}}
-          data-test-store-release-readiness-scan-results-details-risk-label
-        >
-          {{risk.label}}
-        </AkTypography>
+        <AkStack @direction='row' @alignItems='center' @spacing='0.5'>
+          <AkTypography
+            @color='inherit'
+            @fontWeight='medium'
+            local-class='scan-results-details-risk'
+            class={{risk.variantClass}}
+            data-test-store-release-readiness-scan-results-details-risk-label
+          >
+            {{risk.label}}
+          </AkTypography>
+
+          {{#if this.hasVerdict}}
+            <StoreReleaseReadiness::VerdictNote />
+          {{/if}}
+        </AkStack>
       {{/let}}
     </AkStack>
   </AkStack>

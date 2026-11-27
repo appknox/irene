@@ -90,6 +90,37 @@ module('Acceptance | storeknox/inventory/pending-review', function (hooks) {
       .hasText(t('storeknox.noPendingItemsDescription'));
   });
 
+  test('it requests 25 pending review apps per page by default', async function (assert) {
+    let pendingReviewLimit = null;
+
+    this.server.get('/v2/sk_app', (schema, req) => {
+      const { approval_status, limit } = req.queryParams;
+
+      if (
+        Number(approval_status) === ENUMS.SK_APPROVAL_STATUS.PENDING_APPROVAL
+      ) {
+        pendingReviewLimit = limit;
+      }
+
+      return { count: 0, next: null, previous: null, results: [] };
+    });
+
+    this.server.get('/v2/sk_organization', (schema) => {
+      const skOrganizations = schema.skOrganizations.all().models;
+
+      return {
+        count: skOrganizations.length,
+        next: null,
+        previous: null,
+        results: skOrganizations,
+      };
+    });
+
+    await visit('/dashboard/storeknox/inventory/pending-reviews');
+
+    assert.strictEqual(pendingReviewLimit, '25');
+  });
+
   test.each(
     'it renders with pending review apps',
     [

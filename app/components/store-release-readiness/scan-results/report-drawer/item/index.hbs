@@ -19,13 +19,6 @@
         >
           <AkSvg::GenerateReport />
 
-          <AkTypography>
-            {{t
-              'storeReleaseReadiness.generateReportDescription'
-              htmlSafe=true
-            }}
-          </AkTypography>
-
           <AkButton
             {{on 'click' (perform this.handleGenerateReport)}}
             @loading={{this.isReportGenerating}}

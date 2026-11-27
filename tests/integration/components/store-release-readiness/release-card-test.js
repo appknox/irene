@@ -395,5 +395,57 @@ module(
           .exists('Risk chip svg renders');
       }
     );
+
+    test.each(
+      'it shows the verdict note on hover next to the risk chip',
+      [
+        VERDICT.HIGH_REJECTION_RISK,
+        VERDICT.MODERATE_REJECTION_RISK,
+        VERDICT.LOW_REJECTION_RISK,
+      ],
+      async function (assert, verdict) {
+        this.set('item', pushScan(this, { verdict }));
+
+        await render(
+          hbs`<StoreReleaseReadiness::ReleaseCard @item={{this.item}} />`
+        );
+
+        assert
+          .dom(
+            '[data-test-store-release-readiness-card] [data-test-store-release-readiness-verdict-note-icon]'
+          )
+          .exists('Info icon renders next to the verdict');
+
+        await triggerEvent(
+          '[data-test-store-release-readiness-verdict-note-icon]',
+          'mouseenter'
+        );
+
+        assert
+          .dom(
+            '[data-test-store-release-readiness-verdict-note-tooltipContent]'
+          )
+          .hasText(t('storeReleaseReadiness.verdictNote'));
+      }
+    );
+
+    test('it hides the verdict note while there is no verdict yet', async function (assert) {
+      this.set(
+        'item',
+        pushScan(this, {
+          verdict: null,
+          verdict_display: null,
+          status: SCAN_STATUS.IN_PROGRESS,
+        })
+      );
+
+      await render(
+        hbs`<StoreReleaseReadiness::ReleaseCard @item={{this.item}} />`
+      );
+
+      assert
+        .dom('[data-test-store-release-readiness-verdict-note-icon]')
+        .doesNotExist();
+    });
   }
 );
