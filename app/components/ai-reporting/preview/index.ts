@@ -176,6 +176,15 @@ export default class AiReportingPreview extends Component<AiReportingPreviewSign
       `reportModule.${errorType}Desc`
     );
 
+    // Luna's own words, when it has them: what went wrong, or why the question gets no report.
+    const reason = reportRequest.error
+      ? reportRequest.errorMessage
+      : reportRequest.refusalReason;
+
+    if (reason) {
+      this.errorScreenDesc = reason;
+    }
+
     return false;
   }
 

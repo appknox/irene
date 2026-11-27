@@ -183,8 +183,17 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
       { relevant: true },
       { relevant: false },
       { relevant: false, error: true },
+      {
+        relevant: false,
+        reason: 'Reports only read data; they cannot delete it.',
+      },
+      {
+        relevant: false,
+        error: true,
+        message: 'We could not build a report for this question.',
+      },
     ],
-    async function (assert, { relevant, error, shouldFail }) {
+    async function (assert, { relevant, error, shouldFail, reason, message }) {
       assert.expect();
 
       const previewTitle = 'Example Report';
@@ -193,6 +202,8 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
       const reportRequest = this.server.create('ai-reporting/report-request', {
         is_relevant: relevant,
         error: error,
+        error_message: message ?? '',
+        refusal_reason: reason ?? '',
       });
 
       // Server mock
@@ -320,9 +331,10 @@ module('Acceptance | ai-reporting/preview', function (hooks) {
           ? t('reportModule.somethingWentWrongHeader')
           : t('reportModule.rephrasingErrorHeader');
 
+        // Luna's own words when it sent them, else the generic text.
         const errorScreenDesc = error
-          ? t('reportModule.somethingWentWrongDesc')
-          : t('reportModule.rephrasingErrorDesc');
+          ? message || t('reportModule.somethingWentWrongDesc')
+          : reason || t('reportModule.rephrasingErrorDesc');
 
         assert
           .dom('[data-test-aiReporting-preview-table-errorScreenHeader]')
